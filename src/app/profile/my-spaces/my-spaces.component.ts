@@ -78,11 +78,15 @@ export class MySpacesComponent implements OnDestroy, OnInit {
     this.initPfListConfigs();
 
     this.subscriptions.push(
-      this.contexts.current.subscribe(val => this.context = val)
+      this.contexts.current.subscribe((val: Context): void => {
+        this.context = val;
+      })
     );
 
     this.subscriptions.push(
-      this.userService.loggedInUser.subscribe(user => { this.loggedInUser = user; })
+      this.userService.loggedInUser.subscribe((user: User): void => {
+        this.loggedInUser = user;
+      })
     );
 
     this.subscriptions.push(
@@ -90,7 +94,8 @@ export class MySpacesComponent implements OnDestroy, OnInit {
         this.listConfig.emptyStateConfig = this.mySpacesEmptyStateConfig;
         this._spaces = this.mySpaces;
         this.updateSpaces();
-    }));
+      })
+    );
 
     this.subscriptions.push(
       this.broadcaster.on('displaySharedSpaces').subscribe((): void => {
@@ -193,7 +198,7 @@ export class MySpacesComponent implements OnDestroy, OnInit {
   // Events
 
   handlePinChange($event: any): void {
-    let index: any = findIndex(this._spaces, (obj) => {
+    let index: any = findIndex(this._spaces, (obj: Space): boolean => {
       return obj.id === $event.id;
     });
     if (index > -1) {
@@ -210,7 +215,7 @@ export class MySpacesComponent implements OnDestroy, OnInit {
     let filters = this.appliedFilters;
     this.displayedSpaces = [];
     if (filters && filters.length > 0) {
-      this._spaces.forEach((space) => {
+      this._spaces.forEach((space: Space): void => {
         if (this.matchesFilters(space, filters)) {
           this.displayedSpaces.push(space);
         }
@@ -233,7 +238,7 @@ export class MySpacesComponent implements OnDestroy, OnInit {
   matchesFilters(space: Space, filters: Filter[]): boolean {
     let matches = true;
 
-    filters.forEach((filter) => {
+    filters.forEach((filter: Filter) => {
       if (!this.matchesFilter(space, filter)) {
         matches = false;
         return false;
@@ -262,8 +267,8 @@ export class MySpacesComponent implements OnDestroy, OnInit {
     if (this.context && this.context.user && this.spaceToDelete) {
       let space = this.spaceToDelete;
       this.spaceService.deleteSpace(space)
-        .subscribe(spaces => {
-          let index: any = findIndex(this._spaces, (obj) => {
+        .subscribe((): void => {
+          let index: any = findIndex(this._spaces, (obj: Space): boolean => {
             return obj.id === space.id;
           });
           if (has(this._spaces[index], 'showPin')) {
@@ -275,7 +280,7 @@ export class MySpacesComponent implements OnDestroy, OnInit {
           this.spaceToDelete = undefined;
           this.modalRef.hide();
         },
-        err => {
+        (err: any): void => {
           this.logger.error(err);
           this.spaceToDelete = undefined;
           this.modalRef.hide();
@@ -294,7 +299,7 @@ export class MySpacesComponent implements OnDestroy, OnInit {
   // Sort
 
   compare(space1: Space, space2: Space): number {
-    var compValue = 0;
+    let compValue: number = 0;
     if (this.currentSortField && this.currentSortField.id === 'name') {
       compValue = space1.attributes.name.localeCompare(space2.attributes.name);
     }
@@ -320,28 +325,28 @@ export class MySpacesComponent implements OnDestroy, OnInit {
     this.modalRef.hide();
   }
 
-  showAddSpaceOverlay() {
+  showAddSpaceOverlay(): void {
     this.broadcaster.broadcast('showAddSpaceOverlay', true);
   }
 
-  showSearchSpacesOverlay() {
+  showSearchSpacesOverlay(): void {
     this.searchSpacesDialog.show();
   }
 
   // Pinned items
 
-  restorePins() {
+  restorePins(): void {
     if (this.loggedInUser.attributes === undefined) {
       return;
     }
-    let contextInformation = this.loggedInUser.attributes['contextInformation'];
-    let pins = (contextInformation !== undefined && contextInformation.pins !== undefined)
+    let contextInformation: any = this.loggedInUser.attributes['contextInformation'];
+    let pins: any[] = (contextInformation !== undefined && contextInformation.pins !== undefined)
       ? contextInformation.pins[this.pageName] : undefined;
 
-    this._spaces.forEach((space: any) => {
+    this._spaces.forEach((space: any): void => {
       space.showPin = false; // Must set default boolean to properly sort pins
       if (pins !== undefined && pins.length > 0) {
-        pins.forEach((id) => {
+        pins.forEach((id: string): void => {
           if (space.id === id) {
             space.showPin = true;
           }
@@ -358,19 +363,22 @@ export class MySpacesComponent implements OnDestroy, OnInit {
     if (profile.contextInformation.pins === undefined) {
       profile.contextInformation.pins = {};
     }
-    let pins = [];
-    this._spaces.forEach((space: any) => {
+    let pins: any[] = [];
+    this._spaces.forEach((space: any): void => {
       if (space.showPin === true) {
         pins.push(space.id);
       }
     });
     profile.contextInformation.pins[this.pageName] = pins;
 
-    this.subscriptions.push(this.gettingStartedService.update(profile).subscribe(user => {
-      // Do nothing
-    }, error => {
-      this.logger.error('Failed to save pinned items');
-    }));
+    this.subscriptions.push(this.gettingStartedService.update(profile)
+      .subscribe((user: User): void => {
+        // Do nothing
+      },
+      (error: string): void => {
+        this.logger.error('Failed to save pinned items');
+      })
+    );
   }
 
   handleAction($event: Action): void {
@@ -385,9 +393,8 @@ export class MySpacesComponent implements OnDestroy, OnInit {
    * @returns {ExtProfile} The updated transient profile
    */
   private getTransientProfile(): ExtProfile {
-    let profile = this.gettingStartedService.createTransientProfile();
+    let profile: ExtProfile = this.gettingStartedService.createTransientProfile();
     delete profile.username;
-
     return profile;
   }
 }
