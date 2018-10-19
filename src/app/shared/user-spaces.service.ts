@@ -9,16 +9,21 @@ import {
   Injectable
 } from '@angular/core';
 import {
+  forkJoin,
   Observable,
-  of
+  of,
+  Subscription
 } from 'rxjs';
 import {
   catchError,
-  map
+  filter,
+  map,
+  switchMap,
+  zip
 } from 'rxjs/operators';
 
 import { Logger } from 'ngx-base';
-import { Space, WIT_API_URL } from 'ngx-fabric8-wit';
+import { Context, Space, SpaceService, WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
 
 export interface UserSpacesResponse {
@@ -49,7 +54,8 @@ export class UserSpacesService {
     @Inject(WIT_API_URL) private readonly witUrl: string,
     private readonly auth: AuthenticationService,
     private readonly errorHandler: ErrorHandler,
-    private readonly logger: Logger
+    private readonly logger: Logger,
+    private readonly spaceService: SpaceService
   ) { }
 
   getInvolvedSpacesCount(): Observable<number> {
@@ -84,4 +90,22 @@ export class UserSpacesService {
           })
         );
     }
+
+    // returns a list of spaces the user is a collaborator on
+    getSharedSpaces(username: string): Observable<Space[]> {
+      return this.spaceService.getSpacesByUser(username)
+        .pipe(
+          zip(this.getInvolvedSpaces()),
+          map(([ownedSpaces, involvedSpaces]: [Space[], SpaceInformation[]]): string[] => {
+            let involvedSpaceIds: string[] = involvedSpaces.map((space: SpaceInformation): string => space.id);
+            let ownedSpaceIds: string[] = ownedSpaces.map((space: Space): string => space.id);
+            return involvedSpaceIds.filter((id: string) => ownedSpaceIds.indexOf(id) < 0);
+          }),
+          filter((ids: string[]): boolean => ids.length > 0),
+          switchMap((ids: string[]): Observable<Space[]> =>
+            forkJoin(ids.map((id: string): Observable<Space> => this.spaceService.getSpaceById(id)))
+          )
+        );
+    }
+
 }

@@ -18,19 +18,11 @@ import { Filter, FilterEvent } from 'patternfly-ng/filter';
 import { ListConfig } from 'patternfly-ng/list';
 import { SortEvent, SortField } from 'patternfly-ng/sort';
 import {
-  forkJoin,
   Observable,
   Subscription
 } from 'rxjs';
-import {
-  filter,
-  map,
-  switchMap,
-  tap,
-  zip
-} from 'rxjs/operators';
 import { ExtProfile, GettingStartedService } from '../../getting-started/services/getting-started.service';
-import { SpaceInformation, UserSpacesService } from '../../shared/user-spaces.service';
+import { UserSpacesService } from '../../shared/user-spaces.service';
 import { MySpacesSearchSpacesDialog } from './my-spaces-search-dialog/my-spaces-search-spaces-dialog.component';
 
 @Component({
@@ -157,26 +149,16 @@ export class MySpacesComponent implements OnDestroy, OnInit {
   initSpaces(): void {
     if (this.context && this.context.user) {
       this.subscriptions.push(
-        this.getMySpaces()
-          .pipe(
-            tap((mySpaces: Space[]): void => {
-              this._spaces = this.mySpaces = mySpaces;
-              this.updateSpaces();
-            }),
-            zip(this.userSpacesService.getInvolvedSpaces()),
-            // find the difference between involvedSpaces and mySpaces, if any - these IDs belong to shared spaces
-            map(([mySpaces, involvedSpaces]: [Space[], SpaceInformation[]]): string[] => {
-              let involvedSpacesIds: string[] = involvedSpaces.map((space: SpaceInformation): string => space.id);
-              let mySpaceIds: string[] = mySpaces.map((space: Space): string => space.id);
-              return involvedSpacesIds.filter((id: string) => mySpaceIds.indexOf(id) < 0);
-            }),
-            filter((ids: string[]): boolean => ids.length > 0),
-            switchMap((ids: string[]): Observable<Space[]> =>
-              forkJoin(ids.map((id: string): Observable<Space> => this.spaceService.getSpaceById(id)))
-            )
-          )
-          .subscribe((spaces: Space[]) => {
-            this.sharedSpaces = spaces;
+        this.spaceService.getSpacesByUser(this.context.user.attributes.username)
+          .subscribe((mySpaces: Space[]): void => {
+            this._spaces = this.mySpaces = mySpaces;
+            this.updateSpaces();
+          })
+      );
+      this.subscriptions.push(
+        this.userSpacesService.getSharedSpaces(this.context.user.attributes.username)
+          .subscribe((sharedSpaces: Space[]): void => {
+            this.sharedSpaces = sharedSpaces;
           })
       );
     } else {

@@ -5,12 +5,14 @@ import {
 } from '@angular/common/http/testing';
 import { ErrorHandler } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { cloneDeep } from 'lodash';
 import { first } from 'rxjs/operators';
 
 import { createMock } from 'testing/mock';
+import { spaceMock } from './context.service.mock';
 
 import { Logger } from 'ngx-base';
-import { WIT_API_URL } from 'ngx-fabric8-wit';
+import { WIT_API_URL, SpaceService, Space } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
 
 import {
@@ -18,6 +20,7 @@ import {
   UserSpacesService,
   SpaceInformation
 } from './user-spaces.service';
+import { of } from 'rxjs';
 
 describe('UserSpacesService', () => {
 
@@ -47,6 +50,13 @@ describe('UserSpacesService', () => {
             const logger: jasmine.SpyObj<Logger> = createMock(Logger);
             logger.error.and.stub();
             return logger;
+          }
+        },
+        {
+          provide: SpaceService,
+          useFactory: (): SpaceService => {
+            const spaceService: jasmine.SpyObj<SpaceService> = createMock(SpaceService);
+            return spaceService;
           }
         },
         {
@@ -172,6 +182,30 @@ describe('UserSpacesService', () => {
 
       const req: TestRequest = controller.expectOne('http://example.com/user/spaces');
       req.error(new ErrorEvent('Mock HTTP Error'));
+    });
+  });
+
+  describe('#getSharedSpaces', (): void => {
+    it('should return spaces the user is a collaborator on', (done: DoneFn): void => {
+      const username: string = 'mock-username';
+      const spaceMock1 = cloneDeep(spaceMock);
+      spaceMock.id = '1';
+      spaceMock.attributes.name = 'spaceMock1-name';
+      const spaceMock2 = cloneDeep(spaceMock);
+      spaceMock.id = '2';
+      spaceMock.attributes.name = 'spaceMock2-name';
+      const spaceMock3 = cloneDeep(spaceMock);
+      spaceMock.id = '3';
+      spaceMock.attributes.name = 'spaceMock3-name';
+      // mock user is involved on three spaces, but only owns two
+      spyOn(service, 'getInvolvedSpaces').and.returnValue(of([spaceMock1, spaceMock2, spaceMock3]));
+      const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
+      spaceService.getSpacesByUser.and.returnValue(of([spaceMock1, spaceMock2]));
+      spaceService.getSpaceById.and.returnValue([spaceMock3]);
+      service.getSharedSpaces(username).subscribe((spaces: Space[]): void => {
+        expect(spaces).toEqual([spaceMock3]);
+        done();
+      });
     });
   });
 
