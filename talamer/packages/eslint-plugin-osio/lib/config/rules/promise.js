@@ -30,7 +30,7 @@ module.exports = {
   // Async/Await Rules
 
   // Prefer await to then() for reading Promise values
-  'promise/prefer-await-to-then': 'error',
+  'promise/prefer-await-to-then': 'off',
   // Prefer async/await to the callback pattern
-  'promise/prefer-await-to-callbacks': 'error',
+  'promise/prefer-await-to-callbacks': 'off',
 };

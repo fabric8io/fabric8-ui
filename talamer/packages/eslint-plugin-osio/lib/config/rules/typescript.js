@@ -28,6 +28,9 @@ module.exports = {
   // Enforce the any type is not used. (no-any from TSLint)
   'typescript/no-explicit-any': 'off',
 
+  // Disallows explicit type declarations for variables or parameters initialized to a number, string, or boolean. (no-inferrable-types from TSLint)
+  'typescript/no-inferrable-types': ['error'],
+
   // Disallow the use of custom TypeScript modules and namespaces
   'typescript/no-namespace': 'off',
 
@@ -36,6 +39,9 @@ module.exports = {
 
   // Disallow the use of variables before they are defined.
   'typescript/no-use-before-define': 'off',
+
+  // Disallows the use of require statements except in import statements (no-var-requires from TSLint)
+  'typescript/no-var-requires': 'error',
 
   // Enforce the use of the keyword namespace over module to declare custom TypeScript modules. (no-internal-module from TSLint)
   'typescript/prefer-namespace-keyword': 'off',
@@ -121,4 +127,10 @@ module.exports = {
 
   // https://github.com/eslint/typescript-eslint-parser/issues/414
   'no-restricted-globals': 'off',
+
+  // False positives when using decorators in constructor params
+  // These will already be covered by TS
+  // eg constructor(@Inject('') private x: number, @Inject('') private y: number) {}
+  'no-redeclare': 'off',
+  'no-dupe-args': 'off',
 };
