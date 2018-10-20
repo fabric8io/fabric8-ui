@@ -173,10 +173,13 @@ function rewireJest() {
       transform: {
         '^.+\\.(js|jsx)$': isEjecting
           ? '<rootDir>/node_modules/babel-jest'
-          : path.resolve(__dirname, '../config/jest/transforms/babelTransform.js'),
-        '^.+\\.tsx?$': path.resolve(__dirname, '../config/jest/transforms/typescriptTransform.js'),
+          : resolve('config/jest/babelTransform.js'),
+        '^.+\\.(ts|tsx|html)$': path.resolve(
+          __dirname,
+          '../config/jest/transforms/typescriptTransform.js',
+        ),
         '^.+\\.css$': resolve('config/jest/cssTransform.js'),
-        '^(?!.*\\.(js|jsx|css|json)$)': resolve('config/jest/fileTransform.js'),
+        '^(?!.*\\.(js|jsx|css|json|ts|tsx|html)$)': resolve('config/jest/fileTransform.js'),
       },
       collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}'],
       testMatch: [
@@ -186,9 +189,28 @@ function rewireJest() {
       globals: {
         'ts-jest': {
           tsConfig: locateTsConfig(paths.appPath),
+          stringifyContentPathRegex: '\\.html?$',
         },
       },
-      moduleFileExtensions: ['web.js', 'js', 'json', 'web.jsx', 'jsx', 'node', 'mjs', 'ts', 'tsx'],
+      moduleFileExtensions: [
+        'ts',
+        'tsx',
+        'web.js',
+        'js',
+        'json',
+        'web.jsx',
+        'jsx',
+        'node',
+        'mjs',
+        'html',
+      ],
+
+      // TODO remove these once we can declare them in fabric8-ui
+      // or fix the need for these mappings altogether
+      moduleNameMapper: {
+        '^testing/(.*)': '<rootDir>/src/testing/$1',
+        '^ngx-bootstrap$': 'ngx-bootstrap/index.js',
+      },
     };
 
     return config;
