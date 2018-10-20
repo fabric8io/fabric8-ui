@@ -1,4 +1,10 @@
 {
   "extends": "./packages/scripts/config/tsconfig/tsconfig.json",
-  "exclude": ["bak", "node_modules", "build", "dist", "coverage"]
+  "compilerOptions": {
+    "types": [
+      "jest",
+      "node"
+    ],
+  },
+  "exclude": ["build", "coverage", "dist", "node_modules"]
 }
