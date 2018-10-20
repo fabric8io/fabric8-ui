@@ -2,7 +2,6 @@
 
 require('./jestGlobalMocks');
 
-require('core-js/es6/reflect');
 require('core-js/es7/reflect');
 require('zone.js/dist/zone.js');
 require('zone.js/dist/proxy.js');

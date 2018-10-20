@@ -42,19 +42,6 @@ Object.defineProperty(document.body.style, 'transform', {
   }),
 });
 
-// a very crude hack to allow c3 tests to function
-function createProxy() {
-  return new Proxy(
-    {},
-    {
-      get: () => () => createProxy(),
-      set: () => true,
-    },
-  );
-}
-jest.mock('c3', createProxy);
-// jest.mock('d3', createProxy);
-
 function warnSpyApi(name) {
   console.warn(`Using API '${name}' is non-standard jest. Update test to use 'jest.spyOn' API.`);
 }
