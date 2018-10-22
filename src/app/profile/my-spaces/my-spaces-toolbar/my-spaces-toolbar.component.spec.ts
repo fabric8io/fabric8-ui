@@ -31,6 +31,7 @@ class TestHostComponent {
 })
 class FakePfngToolbarComponent {
   @Input() config: any;
+  @Input() actionTemplate: any;
   @Input() viewTemplate: any;
   @Output() onFilterChange = new EventEmitter<FilterEvent>();
   @Output() onSortChange = new EventEmitter<SortEvent>();

@@ -18,17 +18,13 @@ import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.componen
 import { initContext, TestContext } from 'testing/test-context';
 
 import {
-  Space,
-  SpaceService
-} from 'ngx-fabric8-wit';
-import {
   User,
   UserService
 } from 'ngx-login-client';
 import { LoadingWidgetComponent } from '../dashboard-widgets/loading-widget/loading-widget.component';
 import { LoadingWidgetModule } from '../dashboard-widgets/loading-widget/loading-widget.module';
+import { UserSpacesService } from '../shared/user-spaces.service';
 import { HomeComponent } from './home.component';
-import { UserSpacesService } from './user-spaces.service';
 
 @Component({
   template: '<alm-home></alm-home>'

@@ -1,5 +1,6 @@
 import {
   Component,
+  ErrorHandler,
   OnDestroy,
   OnInit,
   TemplateRef,
@@ -10,15 +11,19 @@ import { cloneDeep, findIndex, has } from 'lodash';
 import { Broadcaster, Logger } from 'ngx-base';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Context, Contexts, Space, SpaceService } from 'ngx-fabric8-wit';
-import { AuthenticationService, User, UserService } from 'ngx-login-client';
+import { User, UserService } from 'ngx-login-client';
 import { Action, ActionConfig } from 'patternfly-ng/action';
 import { EmptyStateConfig } from 'patternfly-ng/empty-state';
 import { Filter, FilterEvent } from 'patternfly-ng/filter';
 import { ListConfig } from 'patternfly-ng/list';
 import { SortEvent, SortField } from 'patternfly-ng/sort';
-import { Subscription } from 'rxjs';
+import {
+  Subscription
+} from 'rxjs';
 import { ExtProfile, GettingStartedService } from '../../getting-started/services/getting-started.service';
+import { UserSpacesService } from '../../shared/user-spaces.service';
 import { MySpacesSearchSpacesDialog } from './my-spaces-search-dialog/my-spaces-search-spaces-dialog.component';
+import { SpacesType } from './my-spaces-toolbar/my-spaces-toolbar.component';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -32,18 +37,20 @@ export class MySpacesComponent implements OnDestroy, OnInit {
   resultsCount: number = 0;
 
   @ViewChild(MySpacesSearchSpacesDialog) private searchSpacesDialog: MySpacesSearchSpacesDialog;
-  private _spaces: Space[] = [];
+
+  private readonly pageName = 'myspaces';
+  private _spaces: Space[] = [];         // current selection of mySpaces | sharedSpaces
+  private displayedSpaces: Space[] = []; // spaces visible in the UI after filters & sorting
+  private mySpaces: Space[] = [];        // spaces owned by the user
+  private sharedSpaces: Space[] = [];    // spaces where the user is a collaborator
   private appliedFilters: Filter[];
-  private allSpaces: Space[] = [];
   private context: Context;
   private currentSortField: SortField;
-  private emptyStateConfig: EmptyStateConfig;
+  private mySpacesEmptyStateConfig: EmptyStateConfig;
+  private sharedSpacesEmptyStateConfig: EmptyStateConfig;
   private isAscendingSort: boolean = true;
   private loggedInUser: User;
   private modalRef: BsModalRef;
-  private pageName = 'myspaces';
-  private pageSize: number = 2000;
-  private space: string = '';
   private spaceToDelete: Space;
   private subscriptions: Subscription[] = [];
 
@@ -55,28 +62,35 @@ export class MySpacesComponent implements OnDestroy, OnInit {
     private modalService: BsModalService,
     private spaceService: SpaceService,
     private userService: UserService,
-    private authentication: AuthenticationService
-  ) {
-    this.subscriptions.push(this.contexts.current.subscribe(val => this.context = val));
-    this.subscriptions.push(userService.loggedInUser.subscribe(user => {
-      this.loggedInUser = user;
-    }));
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => {
-      sub.unsubscribe();
-    });
-  }
+    private errorHandler: ErrorHandler,
+    private userSpacesService: UserSpacesService
+  ) { }
 
   ngOnInit() {
+    this.subscriptions.push(
+      this.contexts.current.subscribe((val: Context): void => {
+        this.context = val;
+      })
+    );
+
+    this.subscriptions.push(
+      this.userService.loggedInUser.subscribe((user: User): void => {
+        this.loggedInUser = user;
+      })
+    );
+
+    this.initPfListConfigs();
+    this.initSpaces();
+  }
+
+  initPfListConfigs(): void {
     this.currentSortField = {
       id: 'name',
       sortType: 'alpha',
       title: 'Name'
     };
 
-    this.emptyStateConfig = {
+    this.mySpacesEmptyStateConfig = {
       actions: {
         primaryActions: [{
           id: 'createSpace',
@@ -90,33 +104,77 @@ export class MySpacesComponent implements OnDestroy, OnInit {
       info: 'Start by creating a space.'
     } as EmptyStateConfig;
 
+    this.sharedSpacesEmptyStateConfig = {
+      title: 'No Spaces Found',
+      info: 'You are not listed as a collaborator of any spaces.',
+      helpLink: {
+        text: 'Find a Space to determine the owner of a space, then contact the space owner to request being added as a collaborator'
+      }
+    } as EmptyStateConfig;
+
     this.listConfig = {
       dblClick: false,
-      emptyStateConfig: this.emptyStateConfig,
+      emptyStateConfig: this.mySpacesEmptyStateConfig,
       headingRow: true,
       multiSelect: false,
       selectItems: false,
       showCheckbox: false,
       usePinItems: true
     } as ListConfig;
+  }
 
-    this.initSpaces({pageSize: this.pageSize});
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe();
+    });
+  }
+
+  initSpaces(): void {
+    if (this.context && this.context.user) {
+      this.subscriptions.push(
+        this.spaceService.getSpacesByUser(this.context.user.attributes.username)
+          .subscribe((mySpaces: Space[]): void => {
+            this._spaces = this.mySpaces = mySpaces;
+            this.updateSpaces();
+          })
+      );
+      this.subscriptions.push(
+        this.userSpacesService.getSharedSpaces(this.context.user.attributes.username)
+          .subscribe((sharedSpaces: Space[]): void => {
+            this.sharedSpaces = sharedSpaces;
+          })
+      );
+    } else {
+      this.errorHandler.handleError('Failed to retrieve list of spaces owned by user');
+    }
+  }
+
+  toggleChange(event: SpacesType): void {
+    if (event === SpacesType.MYSPACES) {
+      this.listConfig.emptyStateConfig = this.mySpacesEmptyStateConfig;
+      this._spaces = this.mySpaces;
+      this.updateSpaces();
+    } else if (event === SpacesType.SHAREDSPACES) {
+      this.listConfig.emptyStateConfig = this.sharedSpacesEmptyStateConfig;
+      this._spaces = this.sharedSpaces;
+      this.updateSpaces();
+    }
   }
 
   // Accessors
 
   get spaces(): Space[] {
-    return this._spaces;
+    return this.displayedSpaces;
   }
 
   // Events
 
   handlePinChange($event: any): void {
-    let index: any = findIndex(this.allSpaces, (obj) => {
+    let index: any = findIndex(this._spaces, (obj: Space): boolean => {
       return obj.id === $event.id;
     });
     if (index > -1) {
-      let space: any = this.allSpaces[index];
+      let space: any = this.displayedSpaces[index];
       space.showPin = (space.showPin === undefined) ? true : !space.showPin;
       this.savePins();
       this.updateSpaces();
@@ -127,17 +185,17 @@ export class MySpacesComponent implements OnDestroy, OnInit {
 
   applyFilters(): void {
     let filters = this.appliedFilters;
-    this._spaces = [];
+    this.displayedSpaces = [];
     if (filters && filters.length > 0) {
-      this.allSpaces.forEach((space) => {
+      this._spaces.forEach((space: Space): void => {
         if (this.matchesFilters(space, filters)) {
-          this._spaces.push(space);
+          this.displayedSpaces.push(space);
         }
       });
     } else {
-      this._spaces = cloneDeep(this.allSpaces);
+      this.displayedSpaces = cloneDeep(this._spaces);
     }
-    this.resultsCount = this._spaces.length;
+    this.resultsCount = this.displayedSpaces.length;
   }
 
   matchesFilter(space: Space, filter: Filter): boolean {
@@ -152,7 +210,7 @@ export class MySpacesComponent implements OnDestroy, OnInit {
   matchesFilters(space: Space, filters: Filter[]): boolean {
     let matches = true;
 
-    filters.forEach((filter) => {
+    filters.forEach((filter: Filter) => {
       if (!this.matchesFilter(space, filter)) {
         matches = false;
         return false;
@@ -177,39 +235,24 @@ export class MySpacesComponent implements OnDestroy, OnInit {
     this.modalRef = this.modalService.show(deleteSpace, {class: 'modal-lg'});
   }
 
-  initSpaces(event: any): void {
-    this.pageSize = event.pageSize;
-    if (this.context && this.context.user) {
-      this.spaceService
-        .getSpacesByUser(this.context.user.attributes.username, this.pageSize)
-        .subscribe(spaces => {
-          this.allSpaces = spaces;
-          this.restorePins();
-          this.updateSpaces();
-        });
-    } else {
-      this.logger.error('Failed to retrieve list of spaces owned by user');
-    }
-  }
-
   removeSpace(): void {
     if (this.context && this.context.user && this.spaceToDelete) {
       let space = this.spaceToDelete;
       this.spaceService.deleteSpace(space)
-        .subscribe(spaces => {
-          let index: any = findIndex(this.allSpaces, (obj) => {
+        .subscribe((): void => {
+          let index: any = findIndex(this._spaces, (obj: Space): boolean => {
             return obj.id === space.id;
           });
-          if (has(this.allSpaces[index], 'showPin')) {
+          if (has(this._spaces[index], 'showPin')) {
             this.savePins();
           }
-          this.allSpaces.splice(index, 1);
+          this._spaces.splice(index, 1);
           this.broadcaster.broadcast('spaceDeleted', space);
           this.updateSpaces();
           this.spaceToDelete = undefined;
           this.modalRef.hide();
         },
-        err => {
+        (err: any): void => {
           this.logger.error(err);
           this.spaceToDelete = undefined;
           this.modalRef.hide();
@@ -220,6 +263,7 @@ export class MySpacesComponent implements OnDestroy, OnInit {
   }
 
   updateSpaces(): void {
+    this.restorePins();
     this.applyFilters();
     this.sort();
   }
@@ -227,7 +271,7 @@ export class MySpacesComponent implements OnDestroy, OnInit {
   // Sort
 
   compare(space1: Space, space2: Space): number {
-    var compValue = 0;
+    let compValue: number = 0;
     if (this.currentSortField && this.currentSortField.id === 'name') {
       compValue = space1.attributes.name.localeCompare(space2.attributes.name);
     }
@@ -238,7 +282,7 @@ export class MySpacesComponent implements OnDestroy, OnInit {
   }
 
   sort(): void {
-    this._spaces.sort((space1: Space, space2: Space) => this.compare(space1, space2));
+    this.displayedSpaces.sort((space1: Space, space2: Space) => this.compare(space1, space2));
   }
 
   sortChange($event: SortEvent): void {
@@ -253,28 +297,28 @@ export class MySpacesComponent implements OnDestroy, OnInit {
     this.modalRef.hide();
   }
 
-  showAddSpaceOverlay() {
+  showAddSpaceOverlay(): void {
     this.broadcaster.broadcast('showAddSpaceOverlay', true);
   }
 
-  showSearchSpacesOverlay() {
+  showSearchSpacesOverlay(): void {
     this.searchSpacesDialog.show();
   }
 
   // Pinned items
 
-  restorePins() {
+  restorePins(): void {
     if (this.loggedInUser.attributes === undefined) {
       return;
     }
-    let contextInformation = this.loggedInUser.attributes['contextInformation'];
-    let pins = (contextInformation !== undefined && contextInformation.pins !== undefined)
+    let contextInformation: any = this.loggedInUser.attributes['contextInformation'];
+    let pins: any[] = (contextInformation !== undefined && contextInformation.pins !== undefined)
       ? contextInformation.pins[this.pageName] : undefined;
 
-    this.allSpaces.forEach((space: any) => {
+    this._spaces.forEach((space: any): void => {
       space.showPin = false; // Must set default boolean to properly sort pins
       if (pins !== undefined && pins.length > 0) {
-        pins.forEach((id) => {
+        pins.forEach((id: string): void => {
           if (space.id === id) {
             space.showPin = true;
           }
@@ -291,19 +335,22 @@ export class MySpacesComponent implements OnDestroy, OnInit {
     if (profile.contextInformation.pins === undefined) {
       profile.contextInformation.pins = {};
     }
-    let pins = [];
-    this.allSpaces.forEach((space: any) => {
+    let pins: any[] = [];
+    this._spaces.forEach((space: any): void => {
       if (space.showPin === true) {
         pins.push(space.id);
       }
     });
     profile.contextInformation.pins[this.pageName] = pins;
 
-    this.subscriptions.push(this.gettingStartedService.update(profile).subscribe(user => {
-      // Do nothing
-    }, error => {
-      this.logger.error('Failed to save pinned items');
-    }));
+    this.subscriptions.push(this.gettingStartedService.update(profile)
+      .subscribe((user: User): void => {
+        // Do nothing
+      },
+      (error: string): void => {
+        this.logger.error('Failed to save pinned items');
+      })
+    );
   }
 
   handleAction($event: Action): void {
@@ -318,9 +365,8 @@ export class MySpacesComponent implements OnDestroy, OnInit {
    * @returns {ExtProfile} The updated transient profile
    */
   private getTransientProfile(): ExtProfile {
-    let profile = this.gettingStartedService.createTransientProfile();
+    let profile: ExtProfile = this.gettingStartedService.createTransientProfile();
     delete profile.username;
-
     return profile;
   }
 }

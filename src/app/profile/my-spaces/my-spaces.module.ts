@@ -4,6 +4,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { Fabric8WitModule } from 'ngx-fabric8-wit';
 import { InfiniteScrollModule } from 'ngx-widgets';
 import { ListModule } from 'patternfly-ng/list';
+import { UserSpacesService } from '../../shared/user-spaces.service';
 import { MySpacesItemActionsModule } from './my-spaces-item-actions/my-spaces-item-actions.module';
 import { MySpacesItemHeadingModule } from './my-spaces-item-heading/my-spaces-item-heading.module';
 import { MySpacesItemModule } from './my-spaces-item/my-spaces-item.module';
@@ -26,6 +27,7 @@ import { MySpacesComponent }     from './my-spaces.component';
     MySpacesRoutingModule,
     MySpacesSearchSpacesDialogModule
   ],
-  declarations: [ MySpacesComponent ]
+  declarations: [ MySpacesComponent ],
+  providers: [ UserSpacesService ]
 })
 export class MySpacesModule {}

@@ -1,182 +1,246 @@
-import { DebugNode, NO_ERRORS_SCHEMA } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { Component, ErrorHandler, NO_ERRORS_SCHEMA, TemplateRef } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { cloneDeep } from 'lodash';
 import { Broadcaster, Logger } from 'ngx-base';
-import { BsModalService } from 'ngx-bootstrap/modal';
-import { Context, Contexts, SpaceService } from 'ngx-fabric8-wit';
-import { AuthenticationService, User, UserService } from 'ngx-login-client';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { Context, Contexts, Space, SpaceService } from 'ngx-fabric8-wit';
+import { User, UserService } from 'ngx-login-client';
+import { Filter, SortEvent, SortField } from 'patternfly-ng';
 import { Action } from 'patternfly-ng/action';
-import { of, throwError as observableThrowError } from 'rxjs';
+import {
+  ConnectableObservable,
+  Observable,
+  of,
+  throwError as observableThrowError
+} from 'rxjs';
+import { createMock } from 'testing/mock';
+import { initContext, TestContext } from 'testing/test-context';
 import { ExtProfile, GettingStartedService } from '../../getting-started/services/getting-started.service';
 import { spaceMock } from '../../shared/context.service.mock';
+import { UserSpacesService } from '../../shared/user-spaces.service';
 import { MySpacesComponent } from './my-spaces.component';
+import { SpacesType } from './my-spaces-toolbar/my-spaces-toolbar.component';
 
-describe('MySpacesComponent', () => {
-  let fixture: ComponentFixture<MySpacesComponent>;
-  let component: DebugNode['componentInstance'];
-  let mockContexts: any = jasmine.createSpy('Contexts');
-  let mockGettingStartedService: any = jasmine.createSpyObj('GettingStartedService', ['createTransientProfile', 'update']);
-  let mockLogger: any = jasmine.createSpyObj('Logger', ['error']);
-  let mockBsModalService: any = jasmine.createSpyObj('BsModalService', ['show']);
-  let mockSpaceService: any = jasmine.createSpyObj('SpaceService', ['getSpacesByUser']);
-  let mockUserService: any = jasmine.createSpy('UserService');
-  let mockModalRef: any = jasmine.createSpyObj('BsModalRef', ['hide']);
-  let mockTemplateRef = jasmine.createSpy('TemplateRef');
-  let mockBroadcaster: any = jasmine.createSpyObj('Broadcaster', ['broadcast']);
-  let mockAuthenticationService: any = jasmine.createSpyObj('AuthenticationService', ['getGithubToken']);
-  let mockUser: User;
+@Component({
+  template: '<alm-my-spaces></alm-my-spaces>'
+})
+class HostComponent { }
+
+describe('MySpacesComponent', (): void => {
+
+  type TestingContext = TestContext<MySpacesComponent, HostComponent>;
+  const mockModalRef: jasmine.SpyObj<BsModalRef> = jasmine.createSpyObj('BsModalRef', ['hide']);
+  const mockTemplateRef: jasmine.SpyObj<TemplateRef<any>> = jasmine.createSpyObj('TemplateRef', ['elementRef', 'createEmbeddedView']);
   let mockExtProfile: ExtProfile;
+  let mockUser: User;
   let mockContext: Context;
-  let spaceMock1: any;
-  let spaceMock2: any;
-  let mockEvent: any = {
-    'flow': 'mock-flow',
-    'space': 'mock-space'
-  };
+  let spaceMock1: Space;
+  let spaceMock2: Space;
+  let spaceMock3: Space;
 
-  let mockFilterEvent: any = {
-    'appliedFilters': 'mock-applied-filters'
-  };
-
-  let mockSortEvent: any = {
-    field: 'mock-field',
-    isAscending: true
-  };
-
-  let mockFilter1: any = {
+  let mockFilter1: Filter = {
     field: { id: 'name' },
     value: 'space'
   };
 
-  let mockFilter2: any = {
+  let mockFilter2: Filter = {
     field: { id: 'name' },
     value: '2'
   };
 
-  let mockFilter3: any = {
+  let mockFilter3: Filter = {
     field: { id: 'not-name' },
     value: 'zzz'
-  };
+};
 
-  mockAuthenticationService.getGitHubToken = () => {};
-  mockSpaceService.deleteSpace = () => {};
-
-  beforeEach(() => {
-
+  beforeEach((): void => {
     mockExtProfile = {
-        'bio': 'mock-bio',
-        'company': 'mock-company',
-        'email': 'mock-email',
-        'emailPrivate': false,
-        'fullName': 'mock-fullName',
-        'imageURL': 'mock-imageUrl',
-        'url': 'mock-url',
-        'username': 'mock-username',
-        'contextInformation': undefined,
-        'registrationCompleted': true,
-        'featureLevel': 'mock-featureLevel'
-    };
+      bio: 'mock-bio',
+      company: 'mock-company',
+      email: 'mock-email',
+      emailPrivate: false,
+      fullName: 'mock-fullName',
+      imageURL: 'mock-imageUrl',
+      url: 'mock-url',
+      username: 'mock-username',
+      contextInformation: {
+        pins: {
+          'myspaces': []
+        }
+      },
+      registrationCompleted: true,
+      featureLevel: 'mock-featureLevel'
+    } as ExtProfile;
+
     mockUser = {
-      'attributes': mockExtProfile,
-      'id': 'mock-id',
-      'type': 'mock-type'
-    };
+      attributes: mockExtProfile,
+      id: 'mock-id',
+      type: 'mock-type'
+    } as User;
+
     mockContext = {
       user: mockUser,
       type: jasmine.createSpy('ContextType'),
       path: 'mock-path',
       name: 'mock-name'
-    };
-    spaceMock1 = cloneDeep(spaceMock);
-    spaceMock2 = cloneDeep(spaceMock);
+    } as Context;
+    spaceMock1 = cloneDeep(spaceMock); // owned space
+    spaceMock2 = cloneDeep(spaceMock); // owned space
+    spaceMock3 = cloneDeep(spaceMock); // collaborating space
+    (spaceMock1 as any).showPin = true;
     spaceMock2.id = '2';
+    (spaceMock2 as any).showPin = false;
     spaceMock2.attributes.name = 'spaceMock2-name';
-    mockContexts.current = of(mockContext);
-    mockUserService.loggedInUser = of(mockUser);
-    mockGettingStartedService.createTransientProfile.and.returnValue(mockExtProfile);
-    mockGettingStartedService.update.and.returnValue(of({}));
-    mockSpaceService.getSpacesByUser.and.returnValue(of([spaceMock1, spaceMock2])); // called by ngOnInit() to initialize allSpaces
-
-    TestBed.configureTestingModule({
-      imports: [FormsModule],
-      declarations: [MySpacesComponent],
-      providers: [
-        { provide: Contexts, useValue: mockContexts },
-        { provide: GettingStartedService, useValue: mockGettingStartedService },
-        { provide: Logger, useValue: mockLogger },
-        { provide: BsModalService, useValue: mockBsModalService },
-        { provide: SpaceService, useValue: mockSpaceService },
-        { provide: UserService, useValue: mockUserService },
-        { provide: AuthenticationService, useValue: mockAuthenticationService },
-        { provide: Broadcaster, useValue: mockBroadcaster }
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
-    });
-    fixture = TestBed.createComponent(MySpacesComponent);
-    component = fixture.debugElement.componentInstance;
+    spaceMock3.id = '3';
+    spaceMock3.attributes.name = 'spaceMock3-name';
   });
 
-  /**
-   * Accessors
-   */
+  const testContext: TestingContext = initContext(MySpacesComponent, HostComponent, {
+    imports: [FormsModule, HttpClientTestingModule],
+    declarations: [MySpacesComponent],
+    providers: [
+      {
+        provide: Contexts,
+        useFactory: (): jasmine.SpyObj<Contexts> => {
+          const mockContexts: jasmine.SpyObj<Contexts> = createMock(Contexts);
+          mockContexts.current = of(mockContext) as Observable<Context> & jasmine.Spy;
+          return mockContexts;
+        }
+      },
+      {
+        provide: GettingStartedService,
+        useFactory: (): jasmine.SpyObj<GettingStartedService> => {
+          const mockGettingStartedService: jasmine.SpyObj<GettingStartedService> = createMock(GettingStartedService);
+          mockGettingStartedService.createTransientProfile.and.returnValue(mockExtProfile);
+          mockGettingStartedService.update.and.returnValue(of({}));
+          return mockGettingStartedService;
+        }
+      },
+      {
+        provide: Logger,
+        useFactory: (): jasmine.SpyObj<Logger> => {
+          const mockLogger: jasmine.SpyObj<Logger> = createMock(Logger);
+          mockLogger.error.and.stub();
+          return mockLogger;
+        }
+      },
+      {
+        provide: Broadcaster,
+        useFactory: (): jasmine.SpyObj<Broadcaster> => {
+          const mockBroadcaster: jasmine.SpyObj<Broadcaster> = createMock(Broadcaster);
+          mockBroadcaster.on.and.stub();
+          mockBroadcaster.broadcast.and.callThrough();
+          return mockBroadcaster;
+        }
+      },
+      {
+        provide: BsModalService,
+        useFactory: (): jasmine.SpyObj<BsModalService> => {
+          const mockBsModalService: jasmine.SpyObj<BsModalService> = createMock(BsModalService);
+          mockBsModalService.show.and.returnValue(mockModalRef);
+          return mockBsModalService;
+        }
+      },
+      {
+        provide: SpaceService,
+        useFactory: (): jasmine.SpyObj<SpaceService> => {
+          const mockSpaceService: any = createMock(SpaceService);
+          mockSpaceService.getSpacesByUser.and.returnValue(of([spaceMock1, spaceMock2]));
+          mockSpaceService.getSpaceById.and.returnValue(of([spaceMock3]));
+          mockSpaceService.deleteSpace.and.stub();
+          return mockSpaceService;
+        }
+      },
+      {
+        provide: UserService,
+        useFactory: (): jasmine.SpyObj<UserService> => {
+          const mockUserService: jasmine.SpyObj<UserService> = createMock(UserService);
+          mockUserService.loggedInUser = of(mockUser) as ConnectableObservable<User> & jasmine.Spy;
+          return mockUserService;
+        }
+      },
+      {
+        provide: ErrorHandler,
+        useFactory: (): jasmine.SpyObj<ErrorHandler> => {
+          const mockErrorHandler: jasmine.SpyObj<ErrorHandler> = createMock(ErrorHandler);
+          mockErrorHandler.handleError.and.callThrough();
+          return mockErrorHandler;
+        }
+      },
+      {
+        provide: UserSpacesService,
+        useFactory: (): jasmine.SpyObj<UserSpacesService> => {
+          const mockUserSpacesService: jasmine.SpyObj<UserSpacesService> = createMock(UserSpacesService);
+          mockUserSpacesService.getSharedSpaces.and.returnValue(of([spaceMock3]));
+          return mockUserSpacesService;
+        }
+      }
+    ],
+    schemas: [NO_ERRORS_SCHEMA]
+  });
 
-  describe('#spaces', () => {
-    it('should return the contents of _spaces', () => {
-      component.appliedFilters = [];
-      component.ngOnInit();
-      component.applyFilters(); // initialize _spaces first using applyFilters()
-      let result = component.spaces;
+  describe('#spaces', (): void => {
+    it('should return the contents of _spaces', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
+      const result: Space[] = component.spaces;
       expect(result).toEqual([spaceMock1, spaceMock2]);
+    });
+
+    it('should toggle to show Shared Spaces', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
+      component.toggleChange(SpacesType.SHAREDSPACES);
+      expect(component.spaces).toEqual([spaceMock3]);
+    });
+  });
+
+  describe('#handlePinChange', (): void => {
+    it('should delegate to savePins and updateSpaces if the selected space exists in the user\'s spaces', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
+      spyOn(component, 'savePins').and.callThrough();
+      spyOn(component, 'updateSpaces');
+      component.handlePinChange(spaceMock1);
+      expect(component.savePins).toHaveBeenCalled();
+      expect(component.updateSpaces).toHaveBeenCalled();
     });
   });
 
   /**
    * Events
    */
-
-  describe('#handlePinChange', () => {
-    it('should delegate to savePins and updateSpaces if the selected space exists in the user\'s spaces', () => {
-      spyOn(component, 'savePins').and.callFake(() => {});
+  describe('#handlePinChange', (): void => {
+    it('should delegate to savePins and updateSpaces if the selected space exists in the user\'s spaces', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
+      spyOn(component, 'savePins').and.callThrough();
       spyOn(component, 'updateSpaces');
-      component.allSpaces = [spaceMock1];
       component.handlePinChange(spaceMock1);
       expect(component.savePins).toHaveBeenCalled();
       expect(component.updateSpaces).toHaveBeenCalled();
     });
 
     it('should not adjust the pins if the space does not exist in the user\'s spaces', () => {
+      const component: MySpacesComponent = testContext.testedDirective;
       spyOn(component, 'savePins');
-      component.allSpaces = [];
-      component.handlePinChange(spaceMock1);
+      component.handlePinChange(spaceMock3);
       expect(component.savePins).toHaveBeenCalledTimes(0);
     });
 
-    it('should show the pin for the space if pinned', () => {
-      spyOn(component, 'savePins').and.callFake(() => {});
+    it('should toggle the pin state', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
+      spyOn(component, 'savePins').and.callThrough();
       spyOn(component, 'updateSpaces');
-      spaceMock1.showPin = false;
-      component.allSpaces = [spaceMock1];
       component.handlePinChange(spaceMock1);
-      expect(spaceMock1.showPin).toBeDefined();
-      expect(spaceMock1.showPin).toBeTruthy();
-    });
-
-    it('should remove the pin from the space if unpinned', () => {
-      spyOn(component, 'savePins').and.callFake(() => {});
-      spyOn(component, 'updateSpaces');
-      spaceMock1.showPin = true;
-      component.allSpaces = [spaceMock1];
-      component.handlePinChange(spaceMock1);
-      expect(spaceMock1.showPin).toBeDefined();
-      expect(spaceMock1.showPin).toBeFalsy();
+      expect((component.spaces[0] as any).showPin).toBe(false);
     });
   });
 
-  describe('#handleCreateSpaceAction', () => {
-    it('should broadcast event when create space is clicked', () => {
-        component.handleAction({ id: 'createSpace'} as Action);
-        expect(mockBroadcaster.broadcast).toHaveBeenCalledWith('showAddSpaceOverlay', true);
+  describe('#handleCreateSpaceAction', (): void => {
+    it('should broadcast event when create space is clicked', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
+      const mockBroadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
+      component.handleAction({ id: 'createSpace'} as Action);
+      expect(mockBroadcaster.broadcast).toHaveBeenCalledWith('showAddSpaceOverlay', true);
     });
   });
 
@@ -184,75 +248,72 @@ describe('MySpacesComponent', () => {
    * Filter
    */
 
-  describe('#applyFilters', () => {
-    it('should use matchesFilters to select qualifying spaces', () => {
+  describe('#applyFilters', (): void => {
+    it('should use matchesFilters to select qualifying spaces', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
       spyOn(component, 'matchesFilters');
-      component.appliedFilters = [mockFilter1, mockFilter2]; // 'space' && '2'
-      component.allSpaces = [spaceMock1, spaceMock2];
-      component.ngOnInit();
+      component.filterChange({ appliedFilters: [mockFilter1, mockFilter2] });
       component.applyFilters();
       expect(component.matchesFilters).toHaveBeenCalled();
     });
 
-    it('should return all spaces if there are no filters', () => {
-      component.appliedFilters = [];
-      component.ngOnInit();
+    it('should return all spaces if there are no filters', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
+      component.filterChange({ appliedFilters: [] });
       component.applyFilters();
-      expect(component._spaces).toEqual([spaceMock1, spaceMock2]);
+      expect(component.spaces).toEqual([spaceMock1, spaceMock2]);
     });
   });
 
-  describe('#matchesFilter', () => {
-    it('should return true if there is a space that matches the filter value', () => {
-      let result: boolean = component.matchesFilter(spaceMock1, mockFilter1);
-      expect(result).toBeTruthy();
+  describe('#matchesFilter', (): void => {
+    it('should return true if there is a space that matches the filter value', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
+      const result: boolean = component.matchesFilter(spaceMock1, mockFilter1);
+      expect(result).toBe(true);
     });
 
-    it('should return false if there is no space that matches the filter value', () => {
-      let result: boolean = component.matchesFilter(spaceMock1, mockFilter2);
-      expect(result).toBeFalsy();
+    it('should return false if there is no space that matches the filter value', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
+      const result: boolean = component.matchesFilter(spaceMock1, mockFilter2);
+      expect(result).toBe(false);
     });
 
-    it('should simply return true if the filter id isn\'t name, because this is not supported functionality', () => {
-      let result: boolean = component.matchesFilter(spaceMock1, mockFilter3);
-      expect(result).toBeTruthy();
+    it('should simply return true if the filter id isn\'t name, because this is not supported functionality', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
+      const result: boolean = component.matchesFilter(spaceMock1, mockFilter3);
+      expect(result).toBe(true);
     });
 
-    it('should be case-insensitive', () => {
-      let mockFilterCaseInsensitive = cloneDeep(mockFilter1);
+    it('should be case-insensitive', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
+      const mockFilterCaseInsensitive: Filter = cloneDeep(mockFilter1);
       mockFilterCaseInsensitive.value = mockFilter1.value.toUpperCase();
-      let result: boolean = component.matchesFilter(spaceMock1, mockFilterCaseInsensitive);
+      const result: boolean = component.matchesFilter(spaceMock1, mockFilterCaseInsensitive);
       expect(result).toBe(true);
     });
   });
 
-  describe('#matchesFilters', () => {
-    it('should delegate to the matchesFilter method for each filter', () => {
-      let mockFilters = [mockFilter1, mockFilter2];
+  describe('#matchesFilters', (): void => {
+    it('should delegate to the matchesFilter method for each filter', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
+      let mockFilters: Filter[] = [mockFilter1, mockFilter2];
       spyOn(component, 'matchesFilter');
       component.matchesFilters(spaceMock1, mockFilters);
       expect(component.matchesFilter).toHaveBeenCalledTimes(2);
     });
 
     it('should return true if all of the filters are satisfied', () => {
-      let mockFilters = [mockFilter1, mockFilter3];
-      let result = component.matchesFilters(spaceMock2, mockFilters);
-      expect(result).toBeTruthy();
+      const component: MySpacesComponent = testContext.testedDirective;
+      let mockFilters: Filter[] = [mockFilter1, mockFilter3];
+      const result: boolean = component.matchesFilters(spaceMock2, mockFilters);
+      expect(result).toBe(true);
     });
 
-    it('should return false if at least one of the filters results in zero matches', () => {
-      let mockFilters = [mockFilter1, mockFilter2, mockFilter3];
-      let result = component.matchesFilters(spaceMock1, mockFilters);
+    it('should return false if at least one of the filters results in zero matches', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
+      let mockFilters: Filter[] = [mockFilter1, mockFilter2, mockFilter3];
+      const result: boolean = component.matchesFilters(spaceMock1, mockFilters);
       expect(result).toBe(false);
-    });
-  });
-
-  describe('#filterChange', () => {
-    it('should set the applied filters and update the spaces', () => {
-      spyOn(component, 'updateSpaces');
-      component.filterChange(mockFilterEvent);
-      expect(component.appliedFilters).toBe('mock-applied-filters');
-      expect(component.updateSpaces).toHaveBeenCalled();
     });
   });
 
@@ -260,89 +321,79 @@ describe('MySpacesComponent', () => {
    * Spaces
    */
 
-  describe('#canDeleteSpace', () => {
-    it('should be true if the creator and user are the same people', () => {
-      let result = component.canDeleteSpace('mock-id');
-      expect(result).toBeTruthy();
+  describe('#canDeleteSpace', (): void => {
+    it('should be true if the creator and user are the same people', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
+      const result: boolean = component.canDeleteSpace('mock-id');
+      expect(result).toBe(true);
     });
 
-    it('should be false if the creator and user are different people', () => {
-      let result = component.canDeleteSpace('not-mock-id');
-      expect(result).toBeFalsy();
+    it('should be false if the creator and user are different people', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
+      const result: boolean = component.canDeleteSpace('not-mock-id');
+      expect(result).toBe(false);
     });
   });
 
-  describe('#confirmDeleteSpace', () => {
-    it('should indicate that the passed space is to be deleted', () => {
+  describe('#confirmDeleteSpace', (): void => {
+    it('should show the modal to confirm deletion of the space', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
+      const mockBsModalService: jasmine.SpyObj<BsModalService> = TestBed.get(BsModalService);
       component.confirmDeleteSpace(spaceMock1, mockTemplateRef);
-      expect(component.spaceToDelete).toBe(spaceMock1);
+      expect(mockBsModalService.show).toHaveBeenCalled();
     });
+  });
 
-    it('should show the modal to confirm deletion of the space', () => {
+  describe('#initSpaces', (): void => {
+    it('should retrieve the user\'s space information and show all spaces', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
+      component.initSpaces();
+      expect(component.spaces).toEqual([spaceMock1, spaceMock2]);
+    });
+  });
+
+  describe('#removeSpace', (): void => {
+    it('should delegate to spaceService.deleteSpace for deletion', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
+      const mockSpaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
+      spyOn(mockSpaceService, 'deleteSpace').and.returnValue(of(spaceMock1));
       component.confirmDeleteSpace(spaceMock1, mockTemplateRef);
-      expect(component.modalService.show).toHaveBeenCalled();
-    });
-  });
-
-  describe('#initSpaces', () => {
-    it('should log an error if it failed to retrieve a list of the user\'s spaces', () => {
-      component.context = {};
-      component.initSpaces(mockEvent);
-      expect(component.logger.error).toHaveBeenCalled();
-    });
-
-    it('should retrieve the user\'s space information and show all spaces', () => {
-      component.initSpaces(mockEvent);
-      expect(component.allSpaces).toEqual([spaceMock1, spaceMock2]);
-    });
-
-    // crashes from uncaught error if spaceService.getSpacesByUser fails
-    xit('should handle an error from spaceService.getSpacesByUser', () => {
-      mockSpaceService.getSpacesByUser.and.returnValue(observableThrowError('error'));
-      component.initSpaces(mockEvent);
-      // crashes ..
-    });
-  });
-
-  describe('#removeSpace', () => {
-    it('should delegate to spaceService.deleteSpace for deletion', () => {
-      spyOn(component.spaceService, 'deleteSpace').and.returnValue(of(spaceMock1));
-      component.modalRef = mockModalRef;
-      component.spaceToDelete = spaceMock1;
-      component.ngOnInit();
       component.removeSpace();
-      expect(component.spaceService.deleteSpace).toHaveBeenCalledWith(spaceMock1);
+      expect(mockSpaceService.deleteSpace).toHaveBeenCalledWith(spaceMock1);
     });
 
-    it('should remove the selected space out of allSpaces', () => {
-      spyOn(component.spaceService, 'deleteSpace').and.returnValue(of(spaceMock1));
+    it('should remove the selected space out of _spaces', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
+      const mockSpaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
+      spyOn(mockSpaceService, 'deleteSpace').and.returnValue(of(spaceMock1));
       spyOn(component, 'savePins').and.callThrough();
-      component.modalRef = mockModalRef;
-      component.spaceToDelete = spaceMock1;
-      component.ngOnInit();
-      expect(component.allSpaces).toEqual([spaceMock1, spaceMock2]);
+      component.confirmDeleteSpace(spaceMock1, mockTemplateRef);
+      expect(component.spaces).toEqual([spaceMock1, spaceMock2]);
       component.removeSpace();
-      expect(component.allSpaces).toEqual([spaceMock2]);
+      expect(component.spaces).toEqual([spaceMock2]);
     });
 
-    it('should log an error if spaceService.deleteSpace fails', () => {
-      spyOn(component.spaceService, 'deleteSpace').and.returnValue(observableThrowError('error'));
-      component.modalRef = mockModalRef;
-      component.spaceToDelete = spaceMock1;
-      component.ngOnInit();
+    it('should log an error if spaceService.deleteSpace fails', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
+      const mockLogger: jasmine.SpyObj<Logger> = TestBed.get(Logger);
+      const mockSpaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
+      spyOn(mockSpaceService, 'deleteSpace').and.returnValue(observableThrowError('error'));
+      component.confirmDeleteSpace(spaceMock1, mockTemplateRef);
       component.removeSpace();
-      expect(component.logger.error).toHaveBeenCalledWith('error');
+      expect(mockLogger.error).toHaveBeenCalledWith('error');
     });
 
-    it('should log an error if there is no space to delete', () => {
-      component.ngOnInit();
+    it('should log an error if there is no space to delete', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
+      const mockLogger: jasmine.SpyObj<Logger> = TestBed.get(Logger);
       component.removeSpace();
-      expect(component.logger.error).toHaveBeenCalled();
+      expect(mockLogger.error).toHaveBeenCalled();
     });
   });
 
-  describe('#updateSpaces', () => {
-    it('should apply filters and sort', () => {
+  describe('#updateSpaces', (): void => {
+    it('should apply filters and sort', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
       spyOn(component, 'applyFilters');
       spyOn(component, 'sort');
       component.updateSpaces();
@@ -355,78 +406,98 @@ describe('MySpacesComponent', () => {
    * Sort
    */
 
-  describe('#compare', () => {
-    it('should return 0 (no difference) if the spaces are the same, sorted ascending', () => {
-      // run ngOnInit to initialize the component's currentSortField and isAscending attributes
-      component.ngOnInit();
-      component.isAscendingSort = true;
-      let result: number = component.compare(spaceMock1, spaceMock1);
+  describe('#compare', (): void => {
+    it('should return 0 (no difference) if the spaces are the same, sorted ascending', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
+      const mockSortEvent: SortEvent = {
+        field: {
+          id: 'name',
+          sortType: 'mock-sortType'
+        } as SortField,
+        isAscending: true
+      };
+      component.sortChange(mockSortEvent);
+      const result: number = component.compare(spaceMock1, spaceMock1);
       expect(result).toBe(0);
     });
 
-    it('should return 0 (no difference) if the spaces are the same, sorted descending', () => {
-      // run ngOnInit to initialize the component's currentSortField and isAscending attributes
-      component.ngOnInit();
-      component.isAscendingSort = false;
-      let result: number = component.compare(spaceMock1, spaceMock1);
+    it('should return 0 (no difference) if the spaces are the same, sorted descending', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
+      const mockSortEvent: SortEvent = {
+        field: {
+          id: 'name',
+          sortType: 'mock-sortType'
+        } as SortField,
+        isAscending: false
+      };
+      component.sortChange(mockSortEvent);
+      const result: number = component.compare(spaceMock1, spaceMock1);
       expect(result).toBe(0);
     });
 
-    it('should return -1 if the first space is first alphabetically, sorted ascending', () => {
-      component.isAscendingSort = true;
-      // run ngOnInit to initialize the component's currentSortField and isAscending attributes
-      component.ngOnInit();
-      let result: number = component.compare(spaceMock1, spaceMock2);
+    it('should return -1 if the first space is first alphabetically, sorted ascending', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
+      const result: number = component.compare(spaceMock1, spaceMock2);
       expect(result).toBe(-1);
     });
 
-    it('should return 1 if the first space is first alphabetically, sorted descending', () => {
-      // run ngOnInit to initialize the component's currentSortField and isAscending attributes
-      component.ngOnInit();
-      component.isAscendingSort = false;
-      let result: number = component.compare(spaceMock1, spaceMock2);
+    it('should return 1 if the first space is first alphabetically, sorted descending', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
+      const mockSortEvent: SortEvent = {
+        field: {
+          id: 'name',
+          sortType: 'mock-sortType'
+        } as SortField,
+        isAscending: false
+      };
+      component.sortChange(mockSortEvent);
+      const result: number = component.compare(spaceMock1, spaceMock2);
       expect(result).toBe(1);
     });
 
-    it('should simply return 0 if currentSortField is undefined', () => {
-      let result: number = component.compare(spaceMock1, spaceMock2);
+    it('should simply return 0 if currentSortField is undefined', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
+      let mockSortEvent: SortEvent = {
+        field: {} as SortField,
+        isAscending: false
+      };
+      component.sortChange(mockSortEvent);
+      const result: number = component.compare(spaceMock1, spaceMock2);
       expect(result).toBe(0);
     });
   });
 
-  describe('#sort', () => {
-    it('should use the value from compare() to sort the spaces', () => {
+  describe('#sort', (): void => {
+    it('should use the value from compare() to sort the spaces', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
       spyOn(component, 'compare');
-      component.appliedFilters = [];
-      component.ngOnInit();
-      component.applyFilters(); // initialize _spaces first using applyFilters()
       component.sort();
       expect(component.compare).toHaveBeenCalled();
     });
 
-    it('should sort the spaces in-place using the array sort function', () => {
-      spyOn(Array.prototype, 'sort').and.callThrough();
-      component.appliedFilters = [];
-      component.ngOnInit(); // run ngOnInit to initialize currentSortField
-      component.isAscendingSort = false;
-      component.applyFilters(); // initialize _spaces first using applyFilters()
+    it('should sort the spaces in-place', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
+      const mockSortEvent: SortEvent = {
+        field: {
+          id: 'name',
+          sortType: 'mock-sortType'
+        } as SortField,
+        isAscending: false
+      };
+      component.sortChange(mockSortEvent);
       component.sort();
-      expect(Array.prototype.sort).toHaveBeenCalled();
-      expect(component._spaces).toEqual([spaceMock2, spaceMock1]);
+      expect(component.spaces).toEqual([spaceMock2, spaceMock1]);
     });
   });
 
-  describe('#sortChange', () => {
-    it('should update the current sort field & isAscending component attributes', () => {
-      // run ngOnInit to initialize the component's currentSortField and isAscending attributes
-      component.ngOnInit();
-      component.sortChange(mockSortEvent);
-      expect(component.currentSortField = 'mock-field');
-      expect(component.isAscendingSort).toBeTruthy();
-    });
-
-    it ('should update the spaces', () => {
+  describe('#sortChange', (): void => {
+    it ('should update the spaces', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
       spyOn(component, 'updateSpaces');
+      const mockSortEvent: SortEvent = {
+        field: {} as SortField,
+        isAscending: false
+      };
       component.sortChange(mockSortEvent);
       expect(component.updateSpaces).toHaveBeenCalled();
     });
@@ -436,18 +507,12 @@ describe('MySpacesComponent', () => {
    * Wizard
    */
 
-  describe('#closeModal', () => {
-    it('should hide the modal', () => {
-      component.modalRef = mockModalRef;
-      component.closeModal(mockEvent);
-      expect(component.modalRef.hide).toHaveBeenCalled();
-    });
-  });
-
-  describe('#showAddSpaceOverlay', () => {
-    it('should broadcast an event to open the new Space overlay', () => {
+  describe('#showAddSpaceOverlay', (): void => {
+    it('should broadcast an event to open the new Space overlay', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
+      const mockBroadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
       component.showAddSpaceOverlay();
-      expect(component.broadcaster.broadcast).toHaveBeenCalledWith('showAddSpaceOverlay', true);
+      expect(mockBroadcaster.broadcast).toHaveBeenCalledWith('showAddSpaceOverlay', true);
     });
   });
 
@@ -455,93 +520,39 @@ describe('MySpacesComponent', () => {
    * Pinned Items
    */
 
-  describe('#restorePins', () => {
-    it('should set boolean on spaces to properly sort pins', () => {
-      mockContext.user.attributes['contextInformation'] = {
-        pins: {
-          'myspaces': [] // no pins
-        }
-      };
-      component.pageName = 'myspaces';
-      component.allSpaces = [spaceMock1, spaceMock2];
-      expect(spaceMock1.showPin).toBeUndefined();
-      expect(spaceMock2.showPin).toBeUndefined();
+  describe('#restorePins', (): void => {
+    it('should appropriately show pins for pinned spaces based on contextInformation', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
       component.restorePins();
-      expect(spaceMock1.showPin).toBeDefined();
-      expect(spaceMock2.showPin).toBeDefined();
-    });
-
-    it('should not show any pins if the spaces are not pinned', () => {
-      mockContext.user.attributes['contextInformation'] = {
-        pins: {
-          'myspaces': [] // no pins
-        }
-      };
-      component.pageName = 'myspaces';
-      component.ngOnInit();
-      component.restorePins();
-      expect(spaceMock1.showPin).toBeFalsy();
-      expect(spaceMock2.showPin).toBeFalsy();
-    });
-
-    it('should appropriately show pins for pinned spaces', () => {
-      mockContext.user.attributes['contextInformation'] = {
-        pins: {
-          'myspaces': [
-            spaceMock1.id
-          ]
-        }
-      };
-      component.pageName = 'myspaces';
-      component.ngOnInit();
-      component.restorePins();
-      expect(spaceMock1.showPin).toBeTruthy();
-      expect(spaceMock2.showPin).toBeFalsy();
-    });
-
-    it('should return and do nothing if the user has no attributes', () => {
-      component.loggedInUser.attributes = undefined;
-      spyOn(component.allSpaces, 'forEach');
-      component.restorePins();
-      expect(component.allSpaces.forEach).toHaveBeenCalledTimes(0);
+      expect((component.spaces[0] as any).showPin).toBe(false);
+      expect((component.spaces[1] as any).showPin).toBe(false);
     });
   });
 
-  describe('#savePins', () => {
-    it('should initialize the contextInformation and pins if undefined', () => {
-      expect(mockExtProfile.contextInformation).toBeUndefined();
+
+  describe('#savePins', (): void => {
+    it('should initialize the contextInformation and pins if undefined', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
+      mockExtProfile.contextInformation = undefined;
       component.savePins();
       expect(mockExtProfile.contextInformation).toBeDefined();
       expect(mockExtProfile.contextInformation.pins).toBeDefined();
     });
 
-    it('should save the pins that are currently showing', () => {
-      spaceMock1.showPin = true;
-      spaceMock2.showPin = false;
-      mockContext.user.attributes['contextInformation'] = {
-        pins: {
-          'myspaces': [
-            spaceMock1.id
-          ]
-        }
-      };
-      component.pageName = 'myspaces';
-      mockGettingStartedService.update.and.returnValue(of(mockContext.user.attributes));
-      component.ngOnInit();
+    it('should update the profile via GettingStartedService update()', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
+      const mockGettingStartedService: jasmine.SpyObj<GettingStartedService> = TestBed.get(GettingStartedService);
       component.savePins();
-      expect(mockExtProfile.contextInformation.pins['myspaces']).toEqual([spaceMock1.id]);
+      expect(mockGettingStartedService.update).toHaveBeenCalled();
     });
 
-    it('should update the profile via GettingStartedService update()', () => {
-      component.savePins();
-      expect(component.gettingStartedService.update).toHaveBeenCalled();
-    });
-
-    it('should log an error if there was a problem with subscribing to the update', () => {
+    it('should log an error if there was a problem with subscribing to the update', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
+      const mockGettingStartedService: jasmine.SpyObj<GettingStartedService> = TestBed.get(GettingStartedService);
+      const mockLogger: jasmine.SpyObj<Logger> = TestBed.get(Logger);
       mockGettingStartedService.update.and.returnValue(observableThrowError('error'));
       component.savePins();
       expect(mockLogger.error).toHaveBeenCalled();
     });
   });
-
 });

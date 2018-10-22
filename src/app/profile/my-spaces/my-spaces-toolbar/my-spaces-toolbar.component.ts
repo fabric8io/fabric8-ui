@@ -14,6 +14,11 @@ import { FilterConfig, FilterEvent, FilterField } from 'patternfly-ng/filter';
 import { SortConfig, SortEvent } from 'patternfly-ng/sort';
 import { ToolbarConfig } from 'patternfly-ng/toolbar';
 
+export enum SpacesType {
+  MYSPACES = 'mySpaces',
+  SHAREDSPACES = 'sharedSpaces'
+}
+
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'my-spaces-toolbar',
@@ -27,6 +32,7 @@ export class MySpacesToolbarComponent implements OnInit, OnChanges {
   @Output('onSearchSpaces') onSearchSpaces = new EventEmitter();
   @Output('onFilterChange') onFilterChange = new EventEmitter();
   @Output('onSortChange') onSortChange = new EventEmitter();
+  @Output('onToggleChange') onToggleChange: EventEmitter<SpacesType> = new EventEmitter<SpacesType>();
 
   @ViewChild('addCodebaseTemplate') addCodebaseTemplate: TemplateRef<any>;
 
@@ -34,9 +40,10 @@ export class MySpacesToolbarComponent implements OnInit, OnChanges {
   isAscendingSort: boolean = true;
   sortConfig: SortConfig;
   toolbarConfig: ToolbarConfig;
+  activeButton: string = SpacesType.MYSPACES;
+  SpacesType: typeof SpacesType = SpacesType;
 
-  constructor() {
-  }
+  constructor() { }
 
   // Initialization
 
@@ -91,5 +98,15 @@ export class MySpacesToolbarComponent implements OnInit, OnChanges {
 
   sortChange($event: SortEvent): void {
     this.onSortChange.emit($event);
+  }
+
+  showMySpaces(): void {
+    this.activeButton = SpacesType.MYSPACES;
+    this.onToggleChange.emit(SpacesType.MYSPACES);
+  }
+
+  showSharedSpaces(): void {
+    this.activeButton = SpacesType.SHAREDSPACES;
+    this.onToggleChange.emit(SpacesType.SHAREDSPACES);
   }
 }
