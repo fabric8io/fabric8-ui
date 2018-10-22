@@ -10,8 +10,7 @@ import {
 
 import {
   Observable,
-  of,
-  throwError
+  of
 } from 'rxjs';
 import {
   catchError,
@@ -26,10 +25,7 @@ import {
   Space,
   WIT_API_URL
 } from 'ngx-fabric8-wit';
-import {
-  AuthenticationService,
-  User
-} from 'ngx-login-client';
+import { AuthenticationService } from 'ngx-login-client';
 
 export interface WorkItemsResponse {
   data: WorkItem[];
@@ -74,19 +70,8 @@ export class MySpacesItemService {
   getCollaboratorCount(space: Space): Observable<number> {
     return this.collaboratorService.getInitialBySpaceId(space.id)
       .pipe(
-        map((users: User[]): number => users.length),
-        concatMap((count: number): Observable<number> => this.loadFurtherCollaborators(count))
-      );
-  }
-
-  // TODO: replace these cascading requests with a single request returning the meta totalCount property
-  // of the response
-  private loadFurtherCollaborators(accum: number): Observable<number> {
-    return this.collaboratorService.getNextCollaborators()
-      .pipe(
-        map((users: User[]): number => users.length),
-        concatMap((count: number): Observable<number> => this.loadFurtherCollaborators(accum + count)),
-        catchError((err: any): Observable<number> => this.handleError(err, accum))
+        concatMap((): Observable<number> => this.collaboratorService.getTotalCount()),
+        catchError((err: any): Observable<number> => this.handleError(err))
       );
   }
 
@@ -96,17 +81,15 @@ export class MySpacesItemService {
     return this.http
       .get<WorkItemsResponse>(queryUrl, { headers: this.headers })
       .pipe(
-        map((resp: WorkItemsResponse): number => resp.meta ? resp.meta.totalCount : 0),
-        catchError((err: any): Observable<number> => this.handleError(err, 0))
+        map((resp: WorkItemsResponse): number => resp.meta.totalCount),
+        catchError((err: any): Observable<number> => this.handleError(err))
       );
   }
 
-  private handleError(err: any, defaultValue: number): Observable<number> {
-    if (err !== 'No more collaborators found') {
-      this.errorHandler.handleError(err);
-      this.logger.error(err);
-    }
-    return of(defaultValue);
+  private handleError(err: any): Observable<number> {
+    this.errorHandler.handleError(err);
+    this.logger.error(err);
+    return of(0);
   }
 
 }

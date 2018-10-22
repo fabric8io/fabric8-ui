@@ -42,7 +42,7 @@ describe('MySpacesItemService', (): void => {
           useFactory: (): CollaboratorService => {
             const svc: jasmine.SpyObj<CollaboratorService> = createMock(CollaboratorService);
             svc.getInitialBySpaceId.and.stub();
-            svc.getNextCollaborators.and.stub();
+            svc.getTotalCount.and.stub();
             return svc;
           }
         },
@@ -82,14 +82,7 @@ describe('MySpacesItemService', (): void => {
   describe('getCollaboratorCount', (): void => {
     it('should retrieve number of collaborators from service', (done: DoneFn): void => {
       TestBed.get(CollaboratorService).getInitialBySpaceId.and.returnValue(of([{}, {}] as User[]));
-      const nextCollabsSpy: jasmine.Spy = TestBed.get(CollaboratorService).getNextCollaborators;
-      nextCollabsSpy.and.callFake(() => {
-        if (nextCollabsSpy.calls.count() === 1) {
-          return of([{}, {}, {}] as User[]);
-        } else {
-          return throwError('');
-        }
-      });
+      TestBed.get(CollaboratorService).getTotalCount.and.returnValue(of(10));
 
       const space: Space = { id: 'abc123 ' } as Space;
       svc.getCollaboratorCount(space)
@@ -98,8 +91,8 @@ describe('MySpacesItemService', (): void => {
           (count: number): void => {
             const collabSvc: CollaboratorService = TestBed.get(CollaboratorService);
             expect(collabSvc.getInitialBySpaceId).toHaveBeenCalledWith(space.id);
-            expect(collabSvc.getNextCollaborators).toHaveBeenCalled();
-            expect(count).toEqual(5); // 2 from initial, 3 from next
+            expect(collabSvc.getTotalCount).toHaveBeenCalled();
+            expect(count).toEqual(10);
             done();
           },
           done.fail
@@ -108,15 +101,15 @@ describe('MySpacesItemService', (): void => {
 
     it('should report errors', (done: DoneFn): void => {
       const collabSvc: jasmine.SpyObj<CollaboratorService> = TestBed.get(CollaboratorService);
-      collabSvc.getInitialBySpaceId.and.returnValue(of([{}, {}] as User[]));
-      collabSvc.getNextCollaborators.and.returnValue(throwError(''));
+      collabSvc.getInitialBySpaceId.and.returnValue(of([{}, {}]));
+      collabSvc.getTotalCount.and.returnValue(throwError('some error message'));
 
       const space: Space = { id: 'abc123 ' } as Space;
       svc.getCollaboratorCount(space)
         .pipe(first())
         .subscribe(
           (count: number): void => {
-            expect(count).toEqual(2);
+            expect(count).toEqual(0);
             expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
             expect(TestBed.get(Logger).error).toHaveBeenCalled();
             done();
