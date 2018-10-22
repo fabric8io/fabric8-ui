@@ -94,8 +94,8 @@ export class UserSpacesService {
     }
 
     // returns a list of spaces the user is a collaborator on
-    getSharedSpaces(username: string): Observable<Space[]> {
-      return this.spaceService.getSpacesByUser(username)
+    getSharedSpaces(username: string, pageSize: number = 20): Observable<Space[]> {
+      return this.spaceService.getSpacesByUser(username, pageSize)
         .pipe(
           zip(this.getInvolvedSpaces()),
           map(([ownedSpaces, involvedSpaces]: [Space[], SpaceInformation[]]): string[] => {

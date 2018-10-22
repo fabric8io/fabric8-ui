@@ -174,6 +174,7 @@ describe('MySpacesComponent', (): void => {
         useFactory: (): jasmine.SpyObj<UserSpacesService> => {
           const mockUserSpacesService: jasmine.SpyObj<UserSpacesService> = createMock(UserSpacesService);
           mockUserSpacesService.getSharedSpaces.and.returnValue(of([spaceMock3]));
+          mockUserSpacesService.getInvolvedSpacesCount.and.returnValue(of([3]));
           return mockUserSpacesService;
         }
       }
