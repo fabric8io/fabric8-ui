@@ -20,6 +20,7 @@ export class AppLauncherGitproviderService implements GitProviderService {
     'x-git-provider': this.PROVIDER
   });
 
+  private gitHubUserLogin: string;
   private repositories: object = {};
 
   constructor(
@@ -84,6 +85,7 @@ export class AppLauncherGitproviderService implements GitProviderService {
   getGitHubDetails(): Observable<GitHubDetails> {
     return this.getGitHubUserData().pipe(mergeMap(user => {
       if (user && user.login) {
+        this.gitHubUserLogin = user.login;
         let orgs: { [name: string]: string } = {};
         return this.getUserOrgs(user.login).pipe(mergeMap(orgsArr => {
           if (orgsArr && orgsArr.length >= 0) {
@@ -96,7 +98,8 @@ export class AppLauncherGitproviderService implements GitProviderService {
               authenticated: true,
               avatar: user.avatarUrl,
               login: user.login,
-              organizations: orgs
+              organizations: orgs,
+              repositoryList: this.repositories['']
             } as GitHubDetails;
             return observableOf(gitHubDetails);
           } else {
@@ -153,7 +156,12 @@ export class AppLauncherGitproviderService implements GitProviderService {
   }
 
   private createUrl(org: string) {
-    const url = Location.joinWithSlash(this.API_BASE, 'repositories');
-    return `${url}?organization=${org}`;
+    // const url = this.END_POINT + this.API_BASE + 'repositories';
+    // return `${url}?organization=${org}`;
+    let url = this.END_POINT + this.API_BASE + 'repositories';
+    if (this.gitHubUserLogin !== org) {
+      url += '?organization=' + org;
+    }
+    return url; //`${url}?organization=${org}`;
   }
 }
