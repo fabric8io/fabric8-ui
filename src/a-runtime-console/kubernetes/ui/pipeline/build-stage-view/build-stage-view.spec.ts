@@ -130,9 +130,9 @@ describe('BuildStageViewComponent', () => {
 
   let mockJenkinsService = {
     getJenkinsStatus(): Observable<any> {
-      let jenkinsStatus = observableOf([<any> {
+      let jenkinsStatus = observableOf([{
         'data': {'state': 'idled'}
-      }]);
+      } as any]);
       return jenkinsStatus;
     }
   };

@@ -30,7 +30,7 @@ function initTestBed() {
   });
 }
 
-let mockContext = <Context> {
+let mockContext = {
   name: 'my-space-apr24-4-43',
   path: '/user/my-space-apr24-4-43',
   space: {
@@ -43,7 +43,7 @@ let mockContext = <Context> {
       'version': 0
     }
   }
-};
+} as Context;
 
 class mockContextService {
   get current(): Observable<Context> { return observableOf(mockContext); }

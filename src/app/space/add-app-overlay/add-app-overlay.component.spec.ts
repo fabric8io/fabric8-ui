@@ -27,7 +27,7 @@ export class BroadcasterTestProvider {
   on<T>(key: any): Observable<T> {
     return this._eventBus.asObservable()
       .pipe(filter(event => event.key === key),
-            map(event => <T> event.data)
+            map(event => event.data as T)
       );
   }
 }

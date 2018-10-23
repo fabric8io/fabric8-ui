@@ -7,7 +7,7 @@ import { NamespacedResourceStore } from './namespacedresource.store';
 @Injectable()
 export class PodStore extends NamespacedResourceStore<Pod, Pods, PodService> {
   constructor(podPod: PodService, namespaceScope: NamespaceScope) {
-    super(podPod, [], <Pod> {}, namespaceScope, Pod);
+    super(podPod, [], {} as Pod, namespaceScope, Pod);
   }
 
   protected get kind() {

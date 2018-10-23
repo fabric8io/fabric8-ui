@@ -6,7 +6,7 @@ import { KubernetesResourceStore } from './kuberentesresource.store';
 @Injectable()
 export class NamespaceStore extends KubernetesResourceStore<Namespace, Namespaces, NamespaceService> {
   constructor(namespaceNamespace: NamespaceService) {
-    super(namespaceNamespace, [], <Namespace> {}, Namespace);
+    super(namespaceNamespace, [], {} as Namespace, Namespace);
   }
 
 

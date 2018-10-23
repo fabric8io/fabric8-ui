@@ -7,7 +7,7 @@ import { NamespacedResourceStore } from './namespacedresource.store';
 @Injectable()
 export class ConfigMapStore extends NamespacedResourceStore<ConfigMap, ConfigMaps, ConfigMapService> {
   constructor(deploymentService: ConfigMapService, namespaceScope: NamespaceScope) {
-    super(deploymentService, [], <ConfigMap> {}, namespaceScope, ConfigMap);
+    super(deploymentService, [], {} as ConfigMap, namespaceScope, ConfigMap);
   }
 
   protected get kind() {

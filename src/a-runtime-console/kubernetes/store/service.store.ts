@@ -7,7 +7,7 @@ import { NamespacedResourceStore } from './namespacedresource.store';
 @Injectable()
 export class ServiceStore extends NamespacedResourceStore<Service, Services, ServiceService> {
   constructor(serviceService: ServiceService, namespaceScope: NamespaceScope) {
-    super(serviceService, [], <Service> {}, namespaceScope, Service);
+    super(serviceService, [], {} as Service, namespaceScope, Service);
   }
 
   protected get kind() {
