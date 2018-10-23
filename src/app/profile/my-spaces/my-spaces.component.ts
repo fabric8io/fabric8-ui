@@ -18,8 +18,10 @@ import { Filter, FilterEvent } from 'patternfly-ng/filter';
 import { ListConfig } from 'patternfly-ng/list';
 import { SortEvent, SortField } from 'patternfly-ng/sort';
 import {
+  Observable,
   Subscription
 } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { ExtProfile, GettingStartedService } from '../../getting-started/services/getting-started.service';
 import { UserSpacesService } from '../../shared/user-spaces.service';
 import { MySpacesSearchSpacesDialog } from './my-spaces-search-dialog/my-spaces-search-spaces-dialog.component';
@@ -44,6 +46,7 @@ export class MySpacesComponent implements OnDestroy, OnInit {
   private mySpaces: Space[] = [];        // spaces owned by the user
   private sharedSpaces: Space[] = [];    // spaces where the user is a collaborator
   private appliedFilters: Filter[];
+  private spacesCount: Observable<number>;
   private context: Context;
   private currentSortField: SortField;
   private mySpacesEmptyStateConfig: EmptyStateConfig;
@@ -130,16 +133,24 @@ export class MySpacesComponent implements OnDestroy, OnInit {
   }
 
   initSpaces(): void {
+    this.spacesCount = this.userSpacesService.getInvolvedSpacesCount();
+
     if (this.context && this.context.user) {
       this.subscriptions.push(
-        this.spaceService.getSpacesByUser(this.context.user.attributes.username)
+        this.spacesCount
+          .pipe(
+            switchMap((pageSize: number) => this.spaceService.getSpacesByUser(this.context.user.attributes.username, pageSize))
+          )
           .subscribe((mySpaces: Space[]): void => {
             this._spaces = this.mySpaces = mySpaces;
             this.updateSpaces();
           })
       );
       this.subscriptions.push(
-        this.userSpacesService.getSharedSpaces(this.context.user.attributes.username)
+        this.spacesCount
+          .pipe(
+            switchMap((pageSize: number) => this.userSpacesService.getSharedSpaces(this.context.user.attributes.username, pageSize))
+          )
           .subscribe((sharedSpaces: Space[]): void => {
             this.sharedSpaces = sharedSpaces;
           })
