@@ -1,4 +1,6 @@
+const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const {CheckerPlugin} = require('awesome-typescript-loader');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const fs = require('fs');
 const path = require('path');
 
@@ -6,7 +8,24 @@ process.env.SKIP_PREFLIGHT_CHECK = true;
 
 function rewireEnv() {
   // load env before paths because env will clear the module cache for paths
-  require('react-scripts/config/env');
+  const getClientEnvironment = require('react-scripts/config/env');
+
+  require.cache[require.resolve('react-scripts/config/env')].exports = (publicUrl) => {
+    const env = getClientEnvironment(publicUrl);
+    const paths = require('react-scripts/config/paths');
+
+    // Look for a `env.js` script in the app.
+    // If present, load all environment variables which will be passed to the webpack DefinePlugin.
+    const envScriptPath = path.resolve(paths.appPath, 'env.js');
+    if (fs.existsSync(envScriptPath)) {
+      const customEnv = require(envScriptPath)();
+      Object.keys(customEnv).forEach((key) => {
+        env.raw[key] = customEnv[key];
+        env.stringified['process.env'][key] = JSON.stringify(customEnv[key]);
+      });
+    }
+    return env;
+  };
 }
 
 function rewirePaths() {
@@ -29,6 +48,8 @@ function rewireWebpack(prod) {
   const paths = require('react-scripts/config/paths');
   const webpackConfig = `react-scripts/config/webpack.config.${prod ? 'prod' : 'dev'}.js`;
   const config = require(webpackConfig);
+
+  // Support eslint for ts and tsx files
   config.module.rules[1] = {
     test: /\.(js|jsx|mjs|ts|tsx)$/,
     enforce: 'pre',
@@ -45,69 +66,138 @@ function rewireWebpack(prod) {
     include: paths.appSrc,
   };
 
+  const reactScriptsCssLoaders = [
+    {
+      loader: 'css-loader',
+      options: {
+        minimize: true,
+        sourceMap: !prod,
+        context: '/',
+      },
+    },
+
+    // copied from react-scripts/config/webpack.config.dev.js
+    {
+      // Options for PostCSS as we reference these options twice
+      // Adds vendor prefixing based on your specified browser support in
+      // package.json
+      loader: require.resolve('postcss-loader'),
+      options: {
+        // Necessary for external CSS imports to work
+        // https://github.com/facebook/create-react-app/issues/2677
+        ident: 'postcss',
+        plugins: () => [
+          // eslint-disable-next-line node/no-extraneous-require
+          require('postcss-flexbugs-fixes'),
+          // eslint-disable-next-line node/no-extraneous-require
+          require('postcss-preset-env')({
+            autoprefixer: {
+              flexbox: 'no-2009',
+            },
+            stage: 3,
+          }),
+        ],
+      },
+    },
+  ];
+
   const {oneOf} = config.module.rules[2];
   oneOf.unshift(
+    {
+      test: /\.(woff2|woff|ttf|eot|svg)$/,
+      loader: require.resolve('url-loader'),
+      options: {
+        limit: 10000,
+        name: 'static/media/[name].[hash:8].[ext]',
+        // TODO why is this path needed?
+        includePaths: [path.resolve(__dirname, '../../../node_modules/patternfly/dist/fonts/')],
+      },
+    },
     // add loaders for angular support
     {
       test: /\.html$/,
-      loader: 'raw-loader',
+      use: ['html-loader'],
     },
     {
       test: /\.component\.css$/,
+      use: ['to-string-loader', ...reactScriptsCssLoaders],
+    },
+    {
+      test: /\.component\.less$/,
       use: [
         'to-string-loader',
+        ...reactScriptsCssLoaders,
         {
-          loader: 'css-loader',
+          loader: 'less-loader',
           options: {
-            minimize: true,
-            sourceMap: !prod,
-            context: '/',
-          },
-        },
-
-        // copied from react-scripts/config/webpack.config.dev.js
-        {
-          // Options for PostCSS as we reference these options twice
-          // Adds vendor prefixing based on your specified browser support in
-          // package.json
-          loader: require.resolve('postcss-loader'),
-          options: {
-            // Necessary for external CSS imports to work
-            // https://github.com/facebook/create-react-app/issues/2677
-            ident: 'postcss',
-            plugins: () => [
-              // eslint-disable-next-line node/no-extraneous-require
-              require('postcss-flexbugs-fixes'),
-              // eslint-disable-next-line node/no-extraneous-require
-              require('postcss-preset-env')({
-                autoprefixer: {
-                  flexbox: 'no-2009',
-                },
-                stage: 3,
-              }),
+            // FIXME why doesn't patternfly use ~ for referencing packages in node_modules?
+            // This is such a hack....
+            paths: [
+              path.resolve(__dirname, '../../../node_modules'),
+              path.resolve(__dirname, '../../../node_modules/patternfly/dist/less'),
+              path.resolve(__dirname, '../../../node_modules/patternfly/dist/less/dependencies'),
+              path.resolve(
+                __dirname,
+                '../../../node_modules/patternfly/dist/less/dependencies/bootstrap',
+              ),
+              path.resolve(
+                __dirname,
+                '../../../node_modules/patternfly/dist/less/dependencies/font-awesome',
+              ),
             ],
+            sourceMap: !prod,
           },
         },
       ],
     },
     {
-      test: /\.component\.ts$/,
+      test: /^(?!.*component).*\.less$/,
       use: [
+        prod ? MiniCssExtractPlugin.loader : 'style-loader',
+        ...reactScriptsCssLoaders,
         {
-          loader: require.resolve('ts-loader'),
+          loader: 'less-loader',
           options: {
-            // disable type checker - we will use it in fork plugin
-            transpileOnly: true,
+            // FIXME why doesn't patternfly use ~ for referencing packages in node_modules?
+            // This is such a hack....
+            paths: [
+              path.resolve(__dirname, '../../../node_modules'),
+              path.resolve(__dirname, '../../../node_modules/patternfly/dist/less'),
+              path.resolve(__dirname, '../../../node_modules/patternfly/dist/less/dependencies'),
+              path.resolve(
+                __dirname,
+                '../../../node_modules/patternfly/dist/less/dependencies/bootstrap',
+              ),
+              path.resolve(
+                __dirname,
+                '../../../node_modules/patternfly/dist/less/dependencies/font-awesome',
+              ),
+            ],
+            sourceMap: !prod,
           },
         },
-        'angular2-template-loader',
-        'angular2-router-loader',
       ],
     },
 
-    // default tsx? loader
+    // Typescript support
     {
-      test: /\.tsx?$/,
+      test: /\.ts$/,
+      use: [
+        {
+          loader: require.resolve('ts-loader'),
+          options: {
+            // disable type checker - we will use it in fork plugin
+            transpileOnly: true,
+            allowTsInNodeModules: true,
+          },
+        },
+        'angular-router-loader?loader=import',
+        'angular2-template-loader',
+      ],
+      exclude: [/\.(spec|e2e|test)\.ts$/],
+    },
+    {
+      test: /\.tsx$/,
       use: [
         {
           loader: require.resolve('ts-loader'),
@@ -117,11 +207,14 @@ function rewireWebpack(prod) {
           },
         },
       ],
+      exclude: [/\.(spec|e2e|test)\.tsx$/],
     },
   );
 
-  oneOf[oneOf.length - 1].exclude = [/\.(ts|tsx|js|jsx|mjs)$/, /\.html$/, /\.json$/];
+  oneOf[oneOf.length - 1].exclude.push(/\.(ts|tsx)$/);
+
   config.plugins.push(new CheckerPlugin());
+  config.plugins.push(new ProgressBarPlugin());
 
   config.resolve.extensions = [
     '.mjs',
@@ -133,6 +226,10 @@ function rewireWebpack(prod) {
     '.ts',
     '.tsx',
   ];
+
+  // Disable to prevent ts-loader with transpileOnly=true to not cause warnings about
+  // exported interfaces not found
+  config.module.strictExportPresence = false;
 
   require.cache[require.resolve(webpackConfig)].exports = config;
 }
