@@ -7,7 +7,7 @@ import { NamespacedResourceStore } from './namespacedresource.store';
 @Injectable()
 export class BuildStore extends NamespacedResourceStore<Build, Builds, BuildService> {
   constructor(buildconfigBuild: BuildService, namespaceScope: DevNamespaceScope) {
-    super(buildconfigBuild, [], <Build> {}, namespaceScope, Build);
+    super(buildconfigBuild, [], {} as Build, namespaceScope, Build);
   }
 
   protected get kind() {

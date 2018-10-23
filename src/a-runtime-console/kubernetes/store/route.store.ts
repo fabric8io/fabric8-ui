@@ -7,7 +7,7 @@ import { NamespacedResourceStore } from './namespacedresource.store';
 @Injectable()
 export class RouteStore extends NamespacedResourceStore<Route, Routes, RouteService> {
   constructor(routeService: RouteService, namespaceScope: NamespaceScope) {
-    super(routeService, [], <Route> {}, namespaceScope, Route);
+    super(routeService, [], {} as Route, namespaceScope, Route);
   }
 
   protected get kind() {
