@@ -266,7 +266,6 @@ function rewireJest() {
 
     config = {
       ...config,
-
       transform: {
         '^.+\\.(js|jsx)$': isEjecting
           ? '<rootDir>/node_modules/babel-jest'
@@ -278,7 +277,12 @@ function rewireJest() {
         '^.+\\.css$': resolve('config/jest/cssTransform.js'),
         '^(?!.*\\.(js|jsx|css|json|ts|tsx|html)$)': resolve('config/jest/fileTransform.js'),
       },
-      collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}'],
+      collectCoverageFrom: [
+        'src/**/*.{js,jsx,ts,tsx}',
+        '!src/**/*.d.ts',
+        'packages/**/src/**/*.{js,jsx,ts,tsx}',
+        '!packages/**/src/**/*.d.ts',
+      ],
       testMatch: [
         '<rootDir>/**/__tests__/**/*.{js,jsx,ts,tsx}',
         '<rootDir>/**/*.(spec|test).{js,jsx,ts,tsx}',
