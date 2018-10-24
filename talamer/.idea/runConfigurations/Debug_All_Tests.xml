@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Debug All Tests" type="JavaScriptTestRunnerJest" factoryName="Jest">
+    <node-interpreter value="project" />
+    <node-options value="--inspect-brk" />
+    <working-dir value="$PROJECT_DIR$" />
+    <jest-options value="--runInBand" />
+    <envs />
+    <scope-kind value="ALL" />
+    <method v="2" />
+  </configuration>
+</component>
