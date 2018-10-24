@@ -40,17 +40,14 @@ export class AppLauncherProjectSummaryService implements ProjectSummaryService {
   /**
    * Set up the project for the given summary
    *
-   * @param  {Summary} summary
-   * @param  {string} spaceId
-   * @param  {string} spaceName
-   * @param  {boolean} isImport
-   * @returns Observable
+   * @param {Projectile} projectile The project summary
+   * @returns {Observable<boolean>}
    */
-  setup(summary: Projectile<any>, retry?: number): Observable<any> {
+  setup(projectile: Projectile<any>, retry?: number): Observable<any> {
     this.headers = this.headers.set('X-Execution-Step-Index', String(retry || 0));
-    let summaryEndPoint = this.END_POINT + (summary.getState('MissionRuntime') ? this.API_BASE_CREATE : this.API_BASE_IMPORT);
+    let summaryEndPoint = this.END_POINT + (projectile.getState('MissionRuntime') ? this.API_BASE_CREATE : this.API_BASE_IMPORT);
     return this.http
-      .post(summaryEndPoint, summary.toHttpPayload(), { headers: this.headers }).pipe(
+      .post(summaryEndPoint, projectile.toHttpPayload(), { headers: this.headers }).pipe(
       catchError(this.handleError));
   }
 

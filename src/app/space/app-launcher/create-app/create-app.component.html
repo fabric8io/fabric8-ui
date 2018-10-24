@@ -10,14 +10,20 @@
       styleClass="mission-runtime"
       title="Select Mission & Runtime" [canChangeVersion]="false">
     </f8launcher-missionruntime-step>
-    <f8launcher-dependencychecker-step
-      #dependencychecker
-      id="SelectDependencies"
-      [depEditorFlag]="true"
-      [hidden]="false"
-      styleClass="select-dependencies"
-      title="Select Dependencies">
-    </f8launcher-dependencychecker-step>
+    <f8-feature-toggle
+      featureName="AppLauncher.DependencyEditor"
+      [userLevel]="user">
+    </f8-feature-toggle>
+    <ng-template #user>
+      <f8launcher-dependencychecker-step
+        #dependencychecker
+        id="SelectDependencies"
+        [depEditorFlag]="true"
+        [hidden]="false"
+        styleClass="select-dependencies"
+        title="Select Dependencies">
+      </f8launcher-dependencychecker-step>
+    </ng-template>
     <f8launcher-releasestrategy-step
       #releasestrategy
       id="ReleaseStrategy"
@@ -54,6 +60,13 @@
   <div class="f8launcher-container_completed-footer">
     <button class="btn btn-primary btn-lg" (click)="complete()">
       Return to your dashboard
+    </button>
+    <a class="btn btn-primary btn-lg margin-left-10"
+      [routerLink]="['../../../', 'create', 'pipelines']"
+      [queryParams]="addQuery()">View Pipeline</a>
+    <button class="btn btn-primary btn-lg margin-left-10 f8launcher-openIDE"
+      (click)="createWorkSpace()">
+      Edit Application in Web IDE
     </button>
   </div>
 </f8launcher>

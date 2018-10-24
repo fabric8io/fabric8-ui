@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FeatureFlagModule } from 'ngx-feature-flag';
 import {
-  CheService as LauncherCheService,
   DependencyCheckService,
   DependencyEditorService,
   GitProviderService,
@@ -14,8 +13,7 @@ import {
   ProjectProgressService,
   ProjectSummaryService,
   TargetEnvironmentService,
-  TokenProvider,
-  WorkSpacesService
+  TokenProvider
 } from 'ngx-launcher';
 import { AppLaunchCheService } from '../services/app-launcher-che.service';
 import { AppLauncherDependencyCheckService } from '../services/app-launcher-dependency-check.service';
@@ -42,6 +40,7 @@ import { CreateAppComponent } from './create-app.component';
   ],
   declarations: [ CreateAppComponent ],
   providers: [
+    CheService,
     HelperService,
     { provide: DependencyCheckService, useClass: AppLauncherDependencyCheckService},
     { provide: DependencyEditorService, useClass: AppLauncherDependencyEditorService},
@@ -51,11 +50,9 @@ import { CreateAppComponent } from './create-app.component';
     { provide: ProjectProgressService, useClass: AppLauncherProjectProgressService },
     { provide: ProjectSummaryService, useClass: AppLauncherProjectSummaryService },
     { provide: TargetEnvironmentService, useClass: AppLauncherTargetEnvironmentService},
-    { provide: LauncherCheService, useClass: AppLaunchCheService },
-    { provide: WorkSpacesService, useClass: AppLaunchWorkSpaceService },
+    CheService,
     TokenProvider,
-    WorkspacesService,
-    CheService
+    WorkspacesService
   ]
 })
 export class CreateAppModule {}

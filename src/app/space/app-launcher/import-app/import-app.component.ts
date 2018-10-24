@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { Broadcaster } from 'ngx-base';
 import { Context, Space } from 'ngx-fabric8-wit';
 import { FeatureTogglesService } from 'ngx-feature-flag';
+import { DependencyCheck, Projectile } from 'ngx-launcher';
 import { User, UserService } from 'ngx-login-client';
 import { Observable, Subscription } from 'rxjs';
 import { ContextService } from '../../../shared/context.service';
@@ -28,7 +29,8 @@ export class ImportAppComponent implements OnDestroy, OnInit {
               private userService: UserService,
               private router: Router,
               private broadcaster: Broadcaster,
-              private  featureToggleService: FeatureTogglesService) {
+              private  featureToggleService: FeatureTogglesService,
+              private projectile: Projectile<DependencyCheck>) {
     this.subscriptions.push(userService.loggedInUser.subscribe(user => {
       this.loggedInUser = user;
     }));
@@ -65,5 +67,12 @@ export class ImportAppComponent implements OnDestroy, OnInit {
    */
   complete(): void {
     this.router.navigate(['/', this.loggedInUser.attributes.username, this.currentSpace.attributes.name]);
+  }
+
+  addQuery() {
+    const query = '{\"application\":[\"' + this.projectile.sharedState.state.projectName + '\"]}';
+    return {
+      q: query
+    };
   }
 }

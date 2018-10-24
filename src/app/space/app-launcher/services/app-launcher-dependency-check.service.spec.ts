@@ -56,7 +56,8 @@ describe('Service: AppLauncherDependencyCheckService', () => {
     groupId: 'io.openshift.booster',
     projectName: '',
     projectVersion: '1.0.0',
-    spacePath: '/c814a58b-6220-4670-80cf-a2196899a59d'
+    spacePath: '/c814a58b-6220-4670-80cf-a2196899a59d',
+    targetEnvironment: 'os'
   } as DependencyCheck;
 
   beforeEach(() => {

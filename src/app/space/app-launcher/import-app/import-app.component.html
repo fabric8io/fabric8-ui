@@ -36,10 +36,8 @@
     <button class="btn btn-primary btn-lg" (click)="complete()">
       Return to your dashboard
     </button>
-    <span>
-      <a class="btn btn-primary btn-lg margin-left-10 f8launcher-viewpipeline" [routerLink]="['/', 'pipelines']">
-        View Pipeline
-      </a>
-    </span>
+    <a class="btn btn-primary btn-lg margin-left-10"
+      [routerLink]="['../../../', 'create', 'pipelines']"
+      [queryParams]="addQuery()">View Pipeline</a>
   </div>
 </f8launcher>
