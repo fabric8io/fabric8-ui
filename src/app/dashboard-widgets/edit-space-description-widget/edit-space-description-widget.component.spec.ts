@@ -2,12 +2,14 @@ import { Component, DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Broadcaster } from 'ngx-base';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { CollaboratorService, Contexts, Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
 import { ConnectableObservable,  Observable, of as observableOf } from 'rxjs';
 import { createMock } from 'testing/mock';
 import { initContext, TestContext } from 'testing/test-context';
 import { SpaceNamespaceService } from '../../shared/runtime-console/space-namespace.service';
+import { AddCollaboratorsDialogModule } from '../../space/settings/collaborators/add-collaborators-dialog/add-collaborators-dialog.module';
 import { EditSpaceDescriptionWidgetComponent } from './edit-space-description-widget.component';
 
 @Component({
@@ -43,6 +45,10 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
   ];
 
   const testContext = initContext(EditSpaceDescriptionWidgetComponent, HostComponent, {
+    imports: [
+      ModalModule.forRoot(),
+      AddCollaboratorsDialogModule
+    ],
     providers: [
       { provide: Spaces, useFactory: () => {
           let mockSpaces: jasmine.SpyObj<Spaces> = createMock(Spaces);
@@ -142,6 +148,18 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
       let textarea: DebugElement = testContext.fixture.debugElement.query(By.css('textarea'));
       textarea.triggerEventHandler('keyup.enter', {});
       expect(testContext.testedDirective.onUpdateDescription).toHaveBeenCalled();
+    });
+  });
+
+  describe('#addCollaboratorsToParent', () => {
+    it('should add new collaborators', function() {
+      expect(testContext.testedDirective.collaborators.length).toEqual(3);
+
+      testContext.testedDirective.addCollaboratorsToParent([
+        { id: 'mock-id-4', attributes: { username: 'mock-username-4' } }
+      ] as User[]);
+
+      expect(testContext.testedDirective.collaborators.length).toBe(4);
     });
   });
 

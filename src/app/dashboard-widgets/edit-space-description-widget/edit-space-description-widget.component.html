@@ -3,15 +3,15 @@
     <div>
       <span class="f8-space-masthead-name">{{space?.attributes.name}}</span> <span class="f8-space-masthead-owner">{{spaceOwner | async}}</span>
     </div>
-    <span class="pficon pficon-users fa-lg"></span> {{collaboratorCount | async}}
+    <span class="pficon pficon-users fa-lg"></span> {{collaborators?.length}}
     <ng-container *ngIf='userOwnsSpace; else userDoesNotOwnSpaceHeaderInfo'>
       <span class="f8-space-masthead-vertical-divider-collab"></span>
-      <a class="add-collaborators-link" [routerLink]="['/', loggedInUser?.attributes?.username, space?.attributes.name, 'settings', 'collaborators']">
+      <a class="add-collaborators-link" (click)="launchAddCollaborators()">
         <span class="pficon pficon-add-circle-o fa-lg"></span> Add Collaborator
       </a>
     </ng-container>
     <ng-template #userDoesNotOwnSpaceHeaderInfo>
-      <span id="space-description-collaborators-placeholder">Collaborator{{(collaboratorCount | async) > 1 ? 's' : ''}}</span>
+      <span id="space-description-collaborators-placeholder">Collaborator{{collaborators?.length > 1 ? 's' : ''}}</span>
     </ng-template>
   </div>
   <div *ngIf="userOwnsSpace || space?.attributes.description" class="f8-space-masthead-vertical-divider"></div>
@@ -46,5 +46,13 @@
     <ng-template #userDoesNotOwnSpaceDescription>
       <p class="truncate-multiline">{{ space?.attributes.description }}</p>
     </ng-template>
+  </div>
+</div>
+
+<div class="modal fade" bsModal #modalAdd="bs-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <add-collaborators-dialog #addCollabDialog [host]="modalAdd" [spaceId]="space.id" (onAdded)="addCollaboratorsToParent($event)"></add-collaborators-dialog>
+    </div>
   </div>
 </div>

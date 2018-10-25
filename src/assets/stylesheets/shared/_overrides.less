@@ -21,10 +21,14 @@
 // Override PatternFly Card Row Until Updated in PatternFly Core
 .cards-pf { background-color: @color-pf-black-200; }
 
-.list-pf-item { background-color: @color-pf-white; }
+.list-pf-item {
+  background-color: @color-pf-white;
+  border-right-color: @color-pf-black-200;
+  border-left-color: @color-pf-black-200;
+}
 
 .blank-slate-pf {
-  /* stylelint-disable */	
+  /* stylelint-disable */
   /* required to overwrite PatternFly blank slate to achieve new default white background */
   background-color: @color-pf-white !important;
   border: 0;

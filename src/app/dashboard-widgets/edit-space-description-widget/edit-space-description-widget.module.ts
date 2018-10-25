@@ -2,9 +2,11 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { Fabric8WitModule } from 'ngx-fabric8-wit';
 import { FeatureFlagModule } from 'ngx-feature-flag';
 import { AlmEditableModule, AlmIconModule } from 'ngx-widgets';
+import { AddCollaboratorsDialogModule } from '../../space/settings/collaborators/add-collaborators-dialog/add-collaborators-dialog.module';
 import { EditSpaceDescriptionWidgetComponent } from './edit-space-description-widget.component';
 
 
@@ -14,8 +16,10 @@ import { EditSpaceDescriptionWidgetComponent } from './edit-space-description-wi
     FormsModule,
     AlmIconModule,
     AlmEditableModule,
+    AddCollaboratorsDialogModule,
     Fabric8WitModule,
     FeatureFlagModule,
+    ModalModule.forRoot(),
     RouterModule
   ],
   declarations: [EditSpaceDescriptionWidgetComponent],

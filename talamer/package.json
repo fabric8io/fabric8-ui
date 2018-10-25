@@ -18,7 +18,7 @@
     "test:ci": "CI=true osio-scripts test",
     "test:watch": "osio-scripts test",
     "test:coverage": "osio-scripts test:coverage",
-    "test:debug": "osio-scripts test:debug",
+    "test:debug": "osio-scripts test:debug --watchAll=false",
     "test:update": "osio-scripts test:update"
   },
   "keywords": [
