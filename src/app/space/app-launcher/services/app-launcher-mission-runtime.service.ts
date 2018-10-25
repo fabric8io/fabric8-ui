@@ -36,29 +36,7 @@ export class AppLauncherMissionRuntimeService extends MissionRuntimeService {
     }
     return this.http
       .get(this.END_POINT + this.API_BASE, { headers: this.headers }).pipe(
-      map((resp: HttpResponse<any>) => {
-        let catalog = resp as any;
-        let blank = {
-          description: 'Creates a customized mission',
-          id: 'blank-mission',
-          metadata: {},
-          name: 'Blank Mission'
-        };
-        catalog.missions.push(blank);
-
-        catalog.runtimes.forEach(function(r) {
-          r.versions.forEach(v => {
-            let run = {
-              description: `Runs a blank mission for ${r.name}`,
-              name: `${r.name} Blank Booster`,
-              mission: 'blank-mission',
-              runtime: r.id,
-              version: v.id
-            };
-            catalog.boosters.push(run);
-          });
-        });
-
+      map((catalog: Catalog) => {
         return catalog as Catalog;
       }),
       catchError(this.handleError));
