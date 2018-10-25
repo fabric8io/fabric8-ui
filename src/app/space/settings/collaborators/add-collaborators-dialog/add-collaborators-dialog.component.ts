@@ -31,25 +31,26 @@ export class AddCollaboratorsDialogComponent implements OnInit {
     private collaboratorService: CollaboratorService
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.searchTerm.pipe(
       debounceTime(200),
       distinctUntilChanged(),
       tap(() => this.loading = true),
       switchMap(term => this.userService.getUsersBySearchString(term))
-    ).subscribe(users => {
+    ).subscribe((users: User[]) => {
       this.collaborators = users;
+      this.sortCollaborators();
       this.loading = false;
     }, () => {
       this.collaborators = [];
     });
   }
 
-  public onOpen() {
+  onOpen(): void {
     this.reset();
   }
 
-  addCollaborators() {
+  addCollaborators(): void {
     this.collaboratorService.addCollaborators(this.spaceId, this.selectedCollaborators).subscribe(() => {
       this.onAdded.emit(this.selectedCollaborators as User[]);
       this.reset();
@@ -57,13 +58,22 @@ export class AddCollaboratorsDialogComponent implements OnInit {
     });
   }
 
-  cancel() {
+  cancel(): void {
     this.reset();
     this.host.hide();
   }
 
-  private reset() {
+  private reset(): void {
     this.collaborators = [];
     this.selectedCollaborators = [];
+  }
+
+  private sortCollaborators(): void {
+    this.collaborators.sort((a: User, b: User): number => {
+      return (
+        a.attributes.fullName.localeCompare(b.attributes.fullName) ||
+        a.attributes.username.localeCompare(b.attributes.username)
+      );
+    });
   }
 }
