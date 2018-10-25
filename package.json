@@ -141,7 +141,7 @@
     "ngx-bootstrap": "3.0.1",
     "ngx-fabric8-wit": "8.2.1",
     "ngx-feature-flag": "1.0.0",
-    "ngx-launcher": "2.0.9",
+    "ngx-launcher": "3.0.11",
     "ngx-login-client": "2.5.1",
     "ngx-modal": "0.0.29",
     "ngx-restangular": "3.0.0",
