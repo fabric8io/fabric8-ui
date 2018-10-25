@@ -44,12 +44,20 @@
     <button class="btn btn-primary btn-lg" (click)="complete()">
       Return to your dashboard
     </button>
-    <a class="btn btn-primary btn-lg margin-left-10"
-      [routerLink]="['../../../', 'create', 'pipelines']"
-      [queryParams]="addQuery()">View Pipeline</a>
+    <f8-feature-toggle
+      featureName="AppLauncher.NextButtons"
+      [userLevel]="user">
+    </f8-feature-toggle>
+    <ng-template #user>
+      <a class="btn btn-primary btn-lg margin-left-10"
+        [routerLink]="['../../../', 'create', 'pipelines']"
+        [queryParams]="addQuery()" (click)="viewPipeline()">
+        View Pipeline
+      </a>
     <button class="btn btn-primary btn-lg margin-left-10 f8launcher-openIDE"
       (click)="createWorkSpace()">
       Edit Application in Web IDE
     </button>
+    </ng-template>
   </div>
 </f8launcher>

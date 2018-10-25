@@ -36,8 +36,16 @@
     <button class="btn btn-primary btn-lg" (click)="complete()">
       Return to your dashboard
     </button>
-    <a class="btn btn-primary btn-lg margin-left-10"
+    <f8-feature-toggle
+      featureName="AppLauncher.NextButtons"
+      [userLevel]="user">
+    </f8-feature-toggle>
+    <ng-template #user>
+      <a class="btn btn-primary btn-lg margin-left-10"
       [routerLink]="['../../../', 'create', 'pipelines']"
-      [queryParams]="addQuery()">View Pipeline</a>
+      [queryParams]="addQuery()" (click)="viewPipeline()">
+        View Pipeline
+      </a>
+    </ng-template>
   </div>
 </f8launcher>

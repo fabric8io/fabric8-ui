@@ -7,7 +7,6 @@ import {
 import { Router } from '@angular/router';
 import { Broadcaster } from 'ngx-base';
 import { Context, Space } from 'ngx-fabric8-wit';
-import { FeatureTogglesService } from 'ngx-feature-flag';
 import { DependencyCheck, Projectile } from 'ngx-launcher';
 import { User, UserService } from 'ngx-login-client';
 import { Subscription } from 'rxjs';
@@ -33,7 +32,6 @@ export class CreateAppComponent implements OnDestroy, OnInit {
               private userService: UserService,
               private router: Router,
               private broadcaster: Broadcaster,
-              private  featureToggleService: FeatureTogglesService,
               private projectile: Projectile<DependencyCheck>,
               private workSpacesService: WorkspacesService) {
     this.subscriptions.push(userService.loggedInUser.subscribe(user => {
@@ -82,6 +80,8 @@ export class CreateAppComponent implements OnDestroy, OnInit {
 
   createWorkSpace() {
     const codeBaseId = this.projectile.sharedState.state.codebaseId;
+    this.broadcaster.broadcast('CreateFlowOpenInIDEButtonClicked',
+    { projectName: this.projectile.sharedState.state.projectName });
     this.subscriptions.push(this.cheService.getState().pipe(switchMap(che => {
       if (!che.clusterFull) {
         return this.workSpacesService.createWorkspace(codeBaseId)
@@ -90,5 +90,11 @@ export class CreateAppComponent implements OnDestroy, OnInit {
           }));
       }
     })).subscribe());
+  }
+
+  viewPipeline() {
+    this.broadcaster.broadcast('CreateFlowViewPipelineButtonClicked',
+    { projectName: this.projectile.sharedState.state.projectName,
+      flow: 'create application' });
   }
 }

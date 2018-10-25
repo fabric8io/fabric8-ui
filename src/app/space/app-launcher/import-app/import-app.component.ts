@@ -75,4 +75,10 @@ export class ImportAppComponent implements OnDestroy, OnInit {
       q: query
     };
   }
+
+  viewPipeline() {
+    this.broadcaster.broadcast('ImportFlowViewPipelineButtonClicked',
+    { projectName: this.projectile.sharedState.state.projectName,
+      flow: 'import application' });
+  }
 }
