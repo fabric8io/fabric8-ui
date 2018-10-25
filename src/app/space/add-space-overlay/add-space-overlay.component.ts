@@ -8,16 +8,13 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-base';
-import { ProcessTemplate } from 'ngx-fabric8-wit';
 import { Context, SpaceService } from 'ngx-fabric8-wit';
 import { Space, SpaceAttributes } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
-import { Observable,  of as observableOf, Subscription } from 'rxjs';
+import { of as observableOf, Subscription } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { ContextService } from '../../shared/context.service';
 import { SpaceNamespaceService } from '../../shared/runtime-console/space-namespace.service';
-import { SpaceTemplateService } from '../../shared/space-template.service';
-import { SpacesService } from '../../shared/spaces.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -34,22 +31,19 @@ export class AddSpaceOverlayComponent implements OnInit {
   @ViewChild('addSpaceOverlayNameInput') spaceNameInput: ElementRef;
 
   currentSpace: Space;
-  selectedTemplate: ProcessTemplate = null;
-  spaceTemplates: ProcessTemplate[];
   space: Space;
   subscriptions: Subscription[] = [];
   canSubmit: Boolean = true;
 
-  constructor(private router: Router,
-              private spaceService: SpaceService,
-              private notifications: Notifications,
-              private userService: UserService,
-              private spaceNamespaceService: SpaceNamespaceService,
-              private spacesService: SpacesService,
-              private spaceTemplateService: SpaceTemplateService,
-              private context: ContextService,
-              private broadcaster: Broadcaster) {
-    this.spaceTemplates = [];
+  constructor(
+    private router: Router,
+    private spaceService: SpaceService,
+    private notifications: Notifications,
+    private userService: UserService,
+    private spaceNamespaceService: SpaceNamespaceService,
+    private context: ContextService,
+    private broadcaster: Broadcaster
+  ) {
     this.space = this.createTransientSpace();
   }
 
@@ -58,20 +52,6 @@ export class AddSpaceOverlayComponent implements OnInit {
       if (ctx.space) {
         this.currentSpace = ctx.space;
       }
-    }));
-    this.subscriptions.push(this.spaceTemplateService.getSpaceTemplates()
-      .subscribe((templates: ProcessTemplate[]) => {
-        this.spaceTemplates = templates.filter(t => t.attributes['can-construct']);
-        this.selectedTemplate = !!this.spaceTemplates.length ? this.spaceTemplates[0] : null;
-      }, () => {
-        this.spaceTemplates = [{
-          id: '0',
-          attributes: {
-            name: 'Default template',
-            description: 'This is a default space template'
-          }
-        } as ProcessTemplate];
-        this.selectedTemplate = this.spaceTemplates[0];
     }));
     setTimeout(() => this.spaceNameInput.nativeElement.focus());
   }
@@ -100,15 +80,6 @@ export class AddSpaceOverlayComponent implements OnInit {
     }
     this.space.attributes.name = this.space.name.replace(/ /g, '_');
     this.space.attributes.description = this.description.nativeElement.value;
-    if (this.selectedTemplate !== null &&
-        this.selectedTemplate.id !== '0') {
-      this.space.relationships['space-template'] = {
-        data: {
-          id: this.selectedTemplate.id,
-          type: this.selectedTemplate.type
-        }
-      };
-    }
 
     this.canSubmit = false;
     this.space.relationships['owned-by'].data.id = this.userService.currentLoggedInUser.id;

@@ -7,18 +7,6 @@
             <h1>Create a New Space</h1>
             <div class="col-sm-6">
                 <div class="form-group">
-                  <label for="developmentProcess" class="control-label">Development Process</label>
-                  <select class="form-control"
-                      id="developmentProcess"
-                      [(ngModel)]="selectedTemplate"
-                      name="developmentProcess">
-                    <option *ngFor="let p of spaceTemplates" [ngValue]="p">
-                      {{p.attributes.name}}
-                    </option>
-                  </select>
-                  <span class="fa fa-angle-down form-control-feedback development-process-selector" aria-hidden="true"></span>
-                </div>
-                <div class="form-group">
                   <label for="name" class="control-label">Space Name</label>
                   <input id="add-space-overlay-name" name="name" type="text" class="form-control" placeholder="Enter a unique name for your space"
                          #addSpaceOverlayNameInput
@@ -45,12 +33,6 @@
                 <div class="form-group">
                   <label for="description" class="control-label">Description</label>
                   <input id="add-space-overlay-description" name="description" type="text" class="form-control create-launcher-description" placeholder="Enter a Space Description" #description/>
-                </div>
-                <div class="form-group">
-                  <p *ngIf="selectedTemplate?.attributes.description">
-                    <i class="pficon pficon-info"></i>
-                    {{selectedTemplate.attributes.description}}
-                  </p>
                 </div>
             </div>
             <div class="col-sm-6">

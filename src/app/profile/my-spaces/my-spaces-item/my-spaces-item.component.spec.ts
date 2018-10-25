@@ -3,20 +3,34 @@ import { async, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { Fabric8WitModule } from 'ngx-fabric8-wit';
+import { never, of } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { createMock } from 'testing/mock';
 import { MySpacesItemComponent } from './my-spaces-item.component';
+import { MySpacesItemService } from './my-spaces-item.service';
 
 describe('My Spaces Item Component', () => {
   let fixture;
   let space;
 
   beforeEach(() => {
+    const itemService: jasmine.SpyObj<MySpacesItemService> = createMock(MySpacesItemService);
+    itemService.getCollaboratorCount.and.returnValue(never());
+    itemService.getWorkItemCount.and.returnValue(never());
+
     TestBed.configureTestingModule({
       imports: [Fabric8WitModule, FormsModule],
       declarations: [MySpacesItemComponent],
-      providers: [],
+      providers: [
+        {
+          provide: MySpacesItemService,
+          useFactory: (): MySpacesItemService => itemService
+        }
+      ],
       // Tells the compiler not to error on unknown elements and attributes
       schemas: [NO_ERRORS_SCHEMA]
     });
+    TestBed.overrideProvider(MySpacesItemService, { useValue: itemService });
     space = {
       attributes: {
         createdAt: '2017-12-07T21:25:59.811024Z',
@@ -55,10 +69,62 @@ describe('My Spaces Item Component', () => {
     let comp = fixture.componentInstance;
     let debug = fixture.debugElement;
     comp.space = space;
+    TestBed.get(MySpacesItemService).getCollaboratorCount.and.returnValue(never());
     fixture.detectChanges();
     let element = debug.queryAll(By.css('.list-pf-title'));
     fixture.whenStable().then(() => {
       expect(element.length).toEqual(1);
     });
   }));
+
+  it('should retrieve number of collaborators from service', (done: DoneFn): void => {
+    TestBed.get(MySpacesItemService).getCollaboratorCount.and.returnValue(of(5));
+
+    const comp: MySpacesItemComponent = fixture.componentInstance;
+    comp.space = space;
+
+    let emissionCount: number = 0;
+    fixture.detectChanges();
+    comp.collaboratorCount
+      .pipe(
+        take(2)
+      )
+      .subscribe((count: string): void => {
+        emissionCount++;
+        if (emissionCount === 1) {
+          expect(count).toEqual('-');
+        } else if (emissionCount === 2) {
+          // 2 from initial, 3 from first call to next and 0 from second call to next
+          expect(count).toEqual('5');
+          done();
+        } else {
+          done.fail('too many emissions');
+        }
+      });
+  });
+
+  it('should retrieve number of workitems from service', (done: DoneFn): void => {
+    TestBed.get(MySpacesItemService).getWorkItemCount.and.returnValue(of(10));
+
+    const comp: MySpacesItemComponent = fixture.componentInstance;
+    comp.space = space;
+
+    let emissionCount: number = 0;
+    fixture.detectChanges();
+    comp.workItemCount
+      .pipe(
+        take(2)
+      )
+      .subscribe((count: string): void => {
+        emissionCount++;
+        if (emissionCount === 1) {
+          expect(count).toEqual('-');
+        } else if (emissionCount === 2) {
+          expect(count).toEqual('10');
+          done();
+        } else {
+          done.fail('too many emissions');
+        }
+      });
+  });
 });
