@@ -5,7 +5,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 
   import {
     AuthHelperService,
-    DependencyEditorTokenProvider,
     TokenProvider,
     URLProvider
   } from 'ngx-launcher';
@@ -40,8 +39,7 @@ describe('LauncherComponent', () => {
           provide: URLProvider,
           useFactory: (api: ApiLocatorService) => new AnalyticsUrlService(api),
           deps: [ApiLocatorService]
-        },
-        { provide: DependencyEditorTokenProvider, useExisting: TokenProvider }
+        }
       ]
     }).compileComponents();
   }));

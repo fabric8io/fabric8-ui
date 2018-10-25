@@ -10,7 +10,7 @@ import { Context, Space } from 'ngx-fabric8-wit';
 import { FeatureTogglesService } from 'ngx-feature-flag';
 import { DependencyCheck, Projectile } from 'ngx-launcher';
 import { User, UserService } from 'ngx-login-client';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { ContextService } from '../../../shared/context.service';
 import { CheService } from './../../create/codebases/services/che.service';
@@ -26,8 +26,6 @@ export class CreateAppComponent implements OnDestroy, OnInit {
   loggedInUser: User;
   spaces: Space[] = [];
   subscriptions: Subscription[] = [];
-  depEditorEnable: Observable<{} | boolean>;
-  nextButtonsEnable: Observable<{} | boolean>;
   codeBaseId: string;
 
   constructor(private context: ContextService,
@@ -50,8 +48,6 @@ export class CreateAppComponent implements OnDestroy, OnInit {
     this.broadcaster.broadcast('analyticsTracker', {
       event: 'create app opened'
     });
-    this.depEditorEnable = this.featureToggleService.isFeatureUserEnabled('AppLauncher.DependencyEditor');
-    this.nextButtonsEnable = this.featureToggleService.isFeatureUserEnabled('AppLauncher.NextButtons');
   }
 
   ngOnDestroy(): void {

@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
-  CheService as LauncherCheService,
   DependencyCheckService,
   GitProviderService,
   HelperService,
@@ -12,8 +11,7 @@ import {
   ProjectProgressService,
   ProjectSummaryService,
   TargetEnvironmentService,
-  TokenProvider,
-  WorkSpacesService
+  TokenProvider
 } from 'ngx-launcher';
 import { AppLaunchCheService } from '../services/app-launcher-che.service';
 import { AppLauncherDependencyCheckService } from '../services/app-launcher-dependency-check.service';
@@ -48,8 +46,6 @@ import { ImportAppComponent } from './import-app.component';
     { provide: ProjectProgressService, useClass: AppLauncherProjectProgressService },
     { provide: ProjectSummaryService, useClass: AppLauncherProjectSummaryService },
     { provide: TargetEnvironmentService, useClass: AppLauncherTargetEnvironmentService},
-    { provide: LauncherCheService, useClass: AppLaunchCheService },
-    { provide: WorkSpacesService, useClass: AppLaunchWorkSpaceService },
     TokenProvider
   ]
 })

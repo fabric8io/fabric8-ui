@@ -10,20 +10,6 @@
       styleClass="mission-runtime"
       title="Select Mission & Runtime" [canChangeVersion]="false">
     </f8launcher-missionruntime-step>
-    <f8-feature-toggle
-      featureName="AppLauncher.DependencyEditor"
-      [userLevel]="user">
-    </f8-feature-toggle>
-    <ng-template #user>
-      <f8launcher-dependencychecker-step
-        #dependencychecker
-        id="SelectDependencies"
-        [depEditorFlag]="true"
-        [hidden]="false"
-        styleClass="select-dependencies"
-        title="Select Dependencies">
-      </f8launcher-dependencychecker-step>
-    </ng-template>
     <f8launcher-releasestrategy-step
       #releasestrategy
       id="ReleaseStrategy"
@@ -43,9 +29,6 @@
       <f8launcher-mission-runtime-review
         [stepId]="missionRuntimeStep.id">
       </f8launcher-mission-runtime-review>
-      <f8launcher-dependency-editor-review
-        [stepId]="dependencychecker.id">
-      </f8launcher-dependency-editor-review>
       <f8launcher-release-strategy-review
         [stepId]="releasestrategy.id">
       </f8launcher-release-strategy-review>
