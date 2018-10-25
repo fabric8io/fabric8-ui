@@ -7,8 +7,7 @@ import {
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'my-spaces-item-heading',
-  templateUrl: './my-spaces-item-heading.component.html',
-  styleUrls: ['./my-spaces-item-heading.component.less']
+  templateUrl: './my-spaces-item-heading.component.html'
 })
 export class MySpacesItemHeadingComponent implements OnInit {
 

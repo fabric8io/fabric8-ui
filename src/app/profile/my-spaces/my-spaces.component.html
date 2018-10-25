@@ -20,10 +20,10 @@
             (onPinChange)="handlePinChange($event.item)"
             (onActionSelect)="handleAction($event)">
           <ng-template #itemHeadingTemplate>
-            <my-spaces-item-heading class="spaces-heading"></my-spaces-item-heading>
+            <my-spaces-item-heading></my-spaces-item-heading>
           </ng-template>
           <ng-template #itemTemplate let-item="item" let-index="index">
-            <my-spaces-item class="spaces-item" [space]="item"></my-spaces-item>
+            <my-spaces-item [space]="item"></my-spaces-item>
           </ng-template>
           <ng-template #actionHeadingTemplate>
             <!-- Extra margin for kebab -->
