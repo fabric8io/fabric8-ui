@@ -19,6 +19,7 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit, OnDestroy {
   @Input() userOwnsSpace: boolean;
   space: Space;
   spaceOwner: Observable<string>;
+  filteredCollaborators: User[];
 
   private subscriptions: Subscription[] = [];
   private _descriptionUpdater: Subject<string> = new Subject();
@@ -49,6 +50,7 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit, OnDestroy {
           this.subscriptions.push(
             this.collaboratorService.getInitialBySpaceId(space.id).subscribe((users: User[]) => {
               this.collaborators = users;
+              this.filteredCollaborators = this.collaborators;
             })
           );
           this.spaceOwner = this.userService
@@ -125,6 +127,20 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit, OnDestroy {
 
   addCollaboratorsToParent(addedUsers: User[]): void {
     this.collaborators = uniqBy(this.collaborators.concat(addedUsers), 'id');
+    this.filteredCollaborators = this.collaborators;
+  }
+
+  onCollaboratorSearchChange(searchTerm: string): void {
+    if (searchTerm === '') {
+      this.filteredCollaborators = this.collaborators;
+      return;
+    }
+    this.filteredCollaborators = this.collaborators
+      .filter(
+        (user: User): boolean =>
+          user.attributes.fullName.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())
+          || user.attributes.username.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())
+        );
   }
 
   ngOnDestroy(): void {

@@ -40,9 +40,9 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
     }
   };
   const mockUsers: any = [
-    { id: 'mock-id-d', attributes: { username: 'mock-username-d', fullName: 'D' } },
-    { id: 'mock-id-a', attributes: { username: 'mock-username-a', fullName: 'A' } },
-    { id: 'mock-id-c', attributes: { username: 'mock-username-c', fullName: 'C' } }
+    { id: 'mock-id-d', attributes: { username: 'mock-username-d', fullName: 'Dave' } },
+    { id: 'mock-id-a', attributes: { username: 'mock-username-a', fullName: 'Ava' } },
+    { id: 'mock-id-c', attributes: { username: 'mock-username-c', fullName: 'Charles' } }
   ];
 
   const testContext = initContext(EditSpaceDescriptionWidgetComponent, HostComponent, {
@@ -121,6 +121,21 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
 
     it('should sort list of collaborators for display', function() {
       expect(testContext.testedDirective.collaborators).toEqual(sortBy(mockUsers, (user: User): string => user.attributes.fullName));
+      expect(testContext.testedDirective.filteredCollaborators).toEqual(sortBy(mockUsers, (user: User): string => user.attributes.fullName));
+    });
+
+    it('should filter collaborators on search term change', function() {
+      testContext.testedDirective.onCollaboratorSearchChange('Dave');
+      expect(testContext.testedDirective.filteredCollaborators).toEqual([ { id: 'mock-id-d', attributes: { username: 'mock-username-d', fullName: 'Dave' } } ]);
+
+      testContext.testedDirective.onCollaboratorSearchChange('av');
+      expect(testContext.testedDirective.filteredCollaborators).toEqual([
+        { id: 'mock-id-a', attributes: { username: 'mock-username-a', fullName: 'Ava' } },
+        { id: 'mock-id-d', attributes: { username: 'mock-username-d', fullName: 'Dave' } }
+      ]);
+
+      testContext.testedDirective.onCollaboratorSearchChange('');
+      expect(testContext.testedDirective.filteredCollaborators).toEqual(sortBy(mockUsers, (user: User): string => user.attributes.fullName));
     });
   });
 
@@ -171,11 +186,12 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
       expect(testContext.testedDirective.collaborators.length).toEqual(3);
 
       const newUser: User = {
-        id: 'mock-id-b', attributes: { username: 'mock-username-b', fullName: 'B' }
+        id: 'mock-id-b', attributes: { username: 'mock-username-b', fullName: 'Brenda' }
       } as User;
       testContext.testedDirective.addCollaboratorsToParent([ newUser ]);
 
       expect(testContext.testedDirective.collaborators).toEqual(sortBy(mockUsers.concat(newUser), (user: User): string => user.attributes.fullName));
+      expect(testContext.testedDirective.filteredCollaborators).toEqual(sortBy(mockUsers.concat(newUser), (user: User): string => user.attributes.fullName));
     });
   });
 

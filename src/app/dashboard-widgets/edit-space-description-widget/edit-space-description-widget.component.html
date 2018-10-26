@@ -72,8 +72,21 @@
 
 <ng-template #popoverContent>
   <div class="popover-list-wrapper">
+  <form role="form" class="search-pf has-button margin-bottom-10">
+    <div class="form-group">
+      <div class="search-pf-input-group">
+        <label for="search1" class="sr-only">Search collaborators</label>
+        <input type="search" class="form-control" placeholder="Search collaborators" (input)="onCollaboratorSearchChange($event.target.value)">
+      </div>
+    </div>
+    <div class="form-group">
+      <button class="btn btn-default" type="button"><span class="fa fa-search"></span></button>
+    </div>
+  </form>
+    <!-- Hide the list entirely if there are no matching search terms in order to avoid displaying an empty state -->
     <pfng-list
-      [items]="collaborators"
+      *ngIf="filteredCollaborators.length > 0"
+      [items]="filteredCollaborators"
       [itemTemplate]="collaboratorItem">
       <ng-template #collaboratorItem let-item="item">
         <div class="list-pf-left">
@@ -84,7 +97,7 @@
           </ng-template>
         </div>
         <div class="list-pf-content-wrapper">
-          <div class="list-pf-title">
+          <div class="list-pf-title" [title]="item.attributes.username">
             {{item.attributes.fullName}}
           </div>
         </div>
