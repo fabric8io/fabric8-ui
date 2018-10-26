@@ -44,8 +44,7 @@ export class WorkspacesService {
     const url: string = `${this.workspacesUrl}/${codebaseId}/create`;
     return this.http
       .post<WorkspaceLinks>(url, null, { headers: this.headers }).pipe(
-      catchError((error: HttpErrorResponse): Observable<WorkspaceLinks> => this.handleError(error)),
-      retry(8)); // che-starter timeout is 3 min -- 30 sec default request timeout is not enough
+      catchError((error: HttpErrorResponse): Observable<WorkspaceLinks> => this.handleError(error)));
   }
 
   /**
@@ -83,7 +82,6 @@ export class WorkspacesService {
   openWorkspace(url: string): Observable<WorkspaceLinks> {
     return this.http
       .post<WorkspaceLinks>(url, null, { headers: this.headers }).pipe(
-      retry(8), // che-starter timeout is 3 min -- 30 sec default request timeout is not enough
       catchError((error: HttpErrorResponse): Observable<WorkspaceLinks> => this.handleError(error)));
   }
 
