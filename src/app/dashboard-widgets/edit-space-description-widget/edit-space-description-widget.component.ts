@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { find } from 'lodash';
+import { sortBy, uniqBy } from 'lodash';
 import { Broadcaster } from 'ngx-base';
 import { ModalDirective } from 'ngx-bootstrap';
 import { CollaboratorService, Contexts, Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
@@ -19,10 +19,10 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit, OnDestroy {
   @Input() userOwnsSpace: boolean;
   space: Space;
   spaceOwner: Observable<string>;
-  collaborators: User[];
 
   private subscriptions: Subscription[] = [];
   private _descriptionUpdater: Subject<string> = new Subject();
+  private _collaborators: User[];
 
   private loggedInUser: User;
   @ViewChild('description') description: any;
@@ -87,6 +87,14 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit, OnDestroy {
     );
   }
 
+  set collaborators(collaborators: User[]) {
+    this._collaborators = sortBy(collaborators, (user: User): string => user.attributes.fullName);
+  }
+
+  get collaborators(): User[] {
+    return this._collaborators;
+  }
+
   onUpdateDescription(description): void {
     this._descriptionUpdater.next(description);
   }
@@ -116,14 +124,7 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit, OnDestroy {
   }
 
   addCollaboratorsToParent(addedUsers: User[]): void {
-    addedUsers.forEach((user: User) => {
-      let matchingUser = find(this.collaborators, (existing: User) => {
-        return existing.id === user.id;
-      });
-      if (!matchingUser) {
-        this.collaborators.push(user);
-      }
-    });
+    this.collaborators = uniqBy(this.collaborators.concat(addedUsers), 'id');
   }
 
   ngOnDestroy(): void {

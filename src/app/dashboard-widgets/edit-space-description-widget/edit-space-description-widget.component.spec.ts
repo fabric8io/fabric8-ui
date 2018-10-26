@@ -1,6 +1,7 @@
 import { Component, DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { sortBy } from 'lodash';
 import { Broadcaster } from 'ngx-base';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { CollaboratorService, Contexts, Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
@@ -39,9 +40,9 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
     }
   };
   const mockUsers: any = [
-    { id: 'mock-id-1', attributes: { username: 'mock-username-1' } },
-    { id: 'mock-id-2', attributes: { username: 'mock-username-2' } },
-    { id: 'mock-id-3', attributes: { username: 'mock-username-3' } }
+    { id: 'mock-id-d', attributes: { username: 'mock-username-d', fullName: 'D' } },
+    { id: 'mock-id-a', attributes: { username: 'mock-username-a', fullName: 'A' } },
+    { id: 'mock-id-c', attributes: { username: 'mock-username-c', fullName: 'C' } }
   ];
 
   const testContext = initContext(EditSpaceDescriptionWidgetComponent, HostComponent, {
@@ -117,6 +118,10 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
       let link: DebugElement = testContext.fixture.debugElement.query(By.css('a'));
       expect(link).toBeNull();
     });
+
+    it('should sort list of collaborators for display', function() {
+      expect(testContext.testedDirective.collaborators).toEqual(sortBy(mockUsers, (user: User): string => user.attributes.fullName));
+    });
   });
 
   describe('#saveDescription', () => {
@@ -156,10 +161,21 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
       expect(testContext.testedDirective.collaborators.length).toEqual(3);
 
       testContext.testedDirective.addCollaboratorsToParent([
-        { id: 'mock-id-4', attributes: { username: 'mock-username-4' } }
+        { id: 'mock-id-b', attributes: { username: 'mock-username-b' } }
       ] as User[]);
 
       expect(testContext.testedDirective.collaborators.length).toBe(4);
+    });
+
+    it('should maintain sort', function() {
+      expect(testContext.testedDirective.collaborators.length).toEqual(3);
+
+      const newUser: User = {
+        id: 'mock-id-b', attributes: { username: 'mock-username-b', fullName: 'B' }
+      } as User;
+      testContext.testedDirective.addCollaboratorsToParent([ newUser ]);
+
+      expect(testContext.testedDirective.collaborators).toEqual(sortBy(mockUsers.concat(newUser), (user: User): string => user.attributes.fullName));
     });
   });
 

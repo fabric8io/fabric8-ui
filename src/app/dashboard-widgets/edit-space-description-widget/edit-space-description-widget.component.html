@@ -3,15 +3,28 @@
     <div>
       <span class="f8-space-masthead-name">{{space?.attributes.name}}</span> <span class="f8-space-masthead-owner">{{spaceOwner | async}}</span>
     </div>
-    <span class="pficon pficon-users fa-lg"></span> {{collaborators?.length}}
-    <ng-container *ngIf='userOwnsSpace; else userDoesNotOwnSpaceHeaderInfo'>
+    <ng-container *ngIf="userOwnsSpace; else userDoesNotOwnSpaceHeaderInfo">
+      <span class="pointer"
+            [popover]="popoverContent"
+            [popoverTitle]="collaborators?.length + ' Collaborator' + (collaborators?.length > 1 ? 's' : '')"
+            [outsideClick]="true"
+            placement="right">
+        <span class="pficon pficon-users fa-lg"></span> {{collaborators?.length}}
+      </span>
       <span class="f8-space-masthead-vertical-divider-collab"></span>
       <a class="add-collaborators-link" (click)="launchAddCollaborators()">
         <span class="pficon pficon-add-circle-o fa-lg"></span> Add Collaborator
       </a>
     </ng-container>
     <ng-template #userDoesNotOwnSpaceHeaderInfo>
-      <span id="space-description-collaborators-placeholder">Collaborator{{collaborators?.length > 1 ? 's' : ''}}</span>
+      <span class="pointer"
+            [popover]="popoverContent"
+            [popoverTitle]="collaborators?.length + ' Collaborator' + (collaborators?.length > 1 ? 's' : '')"
+            [outsideClick]="true"
+            placement="right">
+        <span class="pficon pficon-users fa-lg"></span> {{collaborators?.length}}
+        <span id="space-description-collaborators-placeholder">Collaborator{{collaborators?.length > 1 ? 's' : ''}}</span>
+      </span>
     </ng-template>
   </div>
   <div *ngIf="userOwnsSpace || space?.attributes.description" class="f8-space-masthead-vertical-divider"></div>
@@ -56,3 +69,26 @@
     </div>
   </div>
 </div>
+
+<ng-template #popoverContent>
+  <div class="popover-list-wrapper">
+    <pfng-list
+      [items]="collaborators"
+      [itemTemplate]="collaboratorItem">
+      <ng-template #collaboratorItem let-item="item">
+        <div class="list-pf-left">
+          <img *ngIf="(item.attributes.imageURL !== undefined && item.attributes.imageURL.length !== 0); else defaultImageUrl"
+              [src]="item.attributes.imageURL" class="icon-user" width="24px" height="24px">
+          <ng-template #defaultImageUrl>
+            <img src="../../../assets/images/profile-user.png" class="icon-user" width="24px" height="24px">
+          </ng-template>
+        </div>
+        <div class="list-pf-content-wrapper">
+          <div class="list-pf-title">
+            {{item.attributes.fullName}}
+          </div>
+        </div>
+      </ng-template>
+    </pfng-list>
+  </div>
+</ng-template>
