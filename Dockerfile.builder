@@ -23,13 +23,17 @@ RUN set -ex \
 ENV NODE_VERSION 8.3.0
 
 RUN yum -y update && \
-    yum install -y bzip2 fontconfig tar gcc-c++ java-1.8.0-openjdk nmap-ncat psmisc gtk3 git \
+    yum install -y bzip2 fontconfig tar gcc-c++ java-1.8.0-openjdk nmap-ncat psmisc gtk3 \
       python-setuptools xorg-x11-xauth wget unzip which \
       xorg-x11-server-Xvfb xfonts-100dpi libXfont GConf2 \
       xorg-x11-fonts-75dpi xfonts-scalable xfonts-cyrillic \
       ipa-gothic-fonts xorg-x11-utils xorg-x11-fonts-Type1 xorg-x11-fonts-misc \
       epel-release libappindicator && \
       yum -y clean all
+
+# Get and set up git v2.12
+RUN yum -y install centos-release-scl sclo-git212.x86_64
+RUN export PATH=${PATH}:/opt/rh/sclo-git212/root/usr/bin/
 
 RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz" \
   && curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/SHASUMS256.txt.asc" \
@@ -40,7 +44,7 @@ RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-
   && ln -s /usr/local/bin/node /usr/local/bin/nodejs
 
 # Uncomment it if you want to use firefox
-#RUN  wget https://github.com/mozilla/geckodriver/releases/download/v0.14.0/geckodriver-v0.14.0-linux64.tar.gz \
+#RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.14.0/geckodriver-v0.14.0-linux64.tar.gz \
 #  && tar -xvf geckodriver-v0.14.0-linux64.tar.gz \
 #  && chmod +x geckodriver \
 #  && rm geckodriver-v0.14.0-linux64.tar.gz \
