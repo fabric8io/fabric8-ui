@@ -5,14 +5,11 @@ import { RouterTestingModule } from '@angular/router/testing';
 
   import {
     AuthHelperService,
-    TokenProvider,
-    URLProvider
+    TokenProvider
   } from 'ngx-launcher';
-  import { AUTH_API_URL } from 'ngx-login-client';
-import { ApiLocatorService } from '../../shared/api-locator.service';
+import { AUTH_API_URL } from 'ngx-login-client';
 import { AppLauncherComponent } from './app-launcher.component';
 import { AuthAPIProvider } from './services/app-launcher-authprovider.service';
-import { AnalyticsUrlService } from './shared/analytics-url.service';
 
 describe('LauncherComponent', () => {
   let component: AppLauncherComponent;
@@ -34,11 +31,6 @@ describe('LauncherComponent', () => {
           provide: AuthHelperService,
           useFactory: (AUTH_API_URL) => new AuthAPIProvider(AUTH_API_URL),
           deps: [AUTH_API_URL]
-        },
-        {
-          provide: URLProvider,
-          useFactory: (api: ApiLocatorService) => new AnalyticsUrlService(api),
-          deps: [ApiLocatorService]
         }
       ]
     }).compileComponents();

@@ -139,6 +139,9 @@ export class AppLauncherGitproviderService implements GitProviderService {
   }
 
   private getRepositories(org: string = ''): Observable<string[]> {
+    if (org === this.gitHubUserLogin) {
+      org = '';
+    }
     if (this.repositories[org]) {
       return of(this.repositories[org]);
     }
@@ -156,12 +159,7 @@ export class AppLauncherGitproviderService implements GitProviderService {
   }
 
   private createUrl(org: string) {
-    // const url = this.END_POINT + this.API_BASE + 'repositories';
-    // return `${url}?organization=${org}`;
-    let url = this.END_POINT + this.API_BASE + 'repositories';
-    if (this.gitHubUserLogin !== org) {
-      url += '?organization=' + org;
-    }
-    return url; //`${url}?organization=${org}`;
+    const url = this.END_POINT + this.API_BASE + 'repositories';
+    return `${url}?organization=${org}`;
   }
 }
