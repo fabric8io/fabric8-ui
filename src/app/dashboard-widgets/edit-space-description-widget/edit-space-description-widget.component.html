@@ -6,10 +6,10 @@
     <ng-container *ngIf="userOwnsSpace; else userDoesNotOwnSpaceHeaderInfo">
       <span class="pointer"
             [popover]="popoverContent"
-            [popoverTitle]="collaborators?.length + ' Collaborator' + (collaborators?.length > 1 ? 's' : '')"
+            [popoverTitle]="collaboratorCount + ' Collaborator' + (collaboratorCount > 1 ? 's' : '')"
             [outsideClick]="true"
             placement="right">
-        <span class="pficon pficon-users fa-lg"></span> {{collaborators?.length}}
+        <span class="pficon pficon-users fa-lg"></span> {{collaboratorCount}}
       </span>
       <span class="f8-space-masthead-vertical-divider-collab"></span>
       <a class="add-collaborators-link" (click)="launchAddCollaborators()">
@@ -19,11 +19,11 @@
     <ng-template #userDoesNotOwnSpaceHeaderInfo>
       <span class="pointer"
             [popover]="popoverContent"
-            [popoverTitle]="collaborators?.length + ' Collaborator' + (collaborators?.length > 1 ? 's' : '')"
+            [popoverTitle]="collaboratorCount + ' Collaborator' + (collaboratorCount > 1 ? 's' : '')"
             [outsideClick]="true"
             placement="right">
-        <span class="pficon pficon-users fa-lg"></span> {{collaborators?.length}}
-        <span id="space-description-collaborators-placeholder">Collaborator{{collaborators?.length > 1 ? 's' : ''}}</span>
+        <span class="pficon pficon-users fa-lg"></span> {{collaboratorCount}}
+        <span id="space-description-collaborators-placeholder">Collaborator{{collaboratorCount > 1 ? 's' : ''}}</span>
       </span>
     </ng-template>
   </div>

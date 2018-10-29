@@ -87,6 +87,7 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
       { provide: CollaboratorService, useFactory: () => {
           let mockCollaboratorService: jasmine.SpyObj<CollaboratorService> = createMock(CollaboratorService);
           mockCollaboratorService.getInitialBySpaceId.and.returnValue(observableOf(mockUsers) as Observable<User[]>);
+          mockCollaboratorService.getTotalCount.and.returnValue(observableOf(mockUsers.length));
           return mockCollaboratorService;
         }
       }

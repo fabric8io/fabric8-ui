@@ -5,7 +5,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { CollaboratorService, Contexts, Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
 import { Observable,  of as observableOf, Subject, Subscription } from 'rxjs';
-import { debounceTime, map, switchMap, tap } from 'rxjs/operators';
+import { debounceTime, first, map, switchMap, tap } from 'rxjs/operators';
 import { SpaceNamespaceService } from '../../shared/runtime-console/space-namespace.service';
 
 @Component({
@@ -20,6 +20,7 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit, OnDestroy {
   space: Space;
   spaceOwner: Observable<string>;
   filteredCollaborators: User[];
+  collaboratorCount: number;
 
   private subscriptions: Subscription[] = [];
   private _descriptionUpdater: Subject<string> = new Subject();
@@ -51,6 +52,11 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit, OnDestroy {
             this.collaboratorService.getInitialBySpaceId(space.id).subscribe((users: User[]) => {
               this.collaborators = users;
               this.filteredCollaborators = this.collaborators;
+              this.collaboratorService.getTotalCount()
+                .pipe(first())
+                .subscribe((count: number): void => {
+                  this.collaboratorCount = count;
+                });
             })
           );
           this.spaceOwner = this.userService
