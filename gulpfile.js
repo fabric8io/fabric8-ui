@@ -29,6 +29,9 @@ const testUrls = {
   'prod-preview': 'http://prod-preview.openshift.io',
 };
 
+// only beta and released levels are supported
+const featureLevels = ['beta', 'released'];
+
 function e2eClean() {
   if (fs.existsSync(E2E_PROJECT)) {
     console.log(`Deleting project ${E2E_PROJECT}`);
@@ -101,6 +104,12 @@ function promptResetEnvironment(field) {
   return readlineSync.keyInYN(`Reset environment after tests (WARNING: this is desctructive to your account. If unsure choose NO): `);
 }
 
+function promptFeatureLevel() {
+  return featureLevels[
+    readlineSync.keyInSelect(featureLevels, 'Select your OSIO account feature level: ', {cancel: false})
+  ];
+}
+
 function e2eEditConfig() {
   // read the existing config and
   return src(CONFIG)
@@ -116,6 +125,9 @@ function e2eEditConfig() {
             break;
           case 'OSIO_URL':
             value = promptOsioUrl(p2);
+            break;
+          case 'FEATURE_LEVEL':
+            value = promptFeatureLevel();
             break;
           default:
             if (p2 === '') {
