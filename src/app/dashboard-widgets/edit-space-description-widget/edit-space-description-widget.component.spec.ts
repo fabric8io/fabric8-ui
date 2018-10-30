@@ -1,7 +1,6 @@
 import { Component, DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { sortBy } from 'lodash';
 import { Broadcaster } from 'ngx-base';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { CollaboratorService, Contexts, Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
@@ -120,23 +119,21 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
       expect(link).toBeNull();
     });
 
-    it('should sort list of collaborators for display', function() {
-      expect(testContext.testedDirective.collaborators).toEqual(sortBy(mockUsers, (user: User): string => user.attributes.fullName));
-      expect(testContext.testedDirective.filteredCollaborators).toEqual(sortBy(mockUsers, (user: User): string => user.attributes.fullName));
-    });
-
     it('should filter collaborators on search term change', function() {
+      testContext.testedDirective.popoverInit(10);
+      expect(testContext.testedDirective.filteredCollaborators).toEqual(mockUsers);
+
       testContext.testedDirective.onCollaboratorSearchChange('Dave');
       expect(testContext.testedDirective.filteredCollaborators).toEqual([ { id: 'mock-id-d', attributes: { username: 'mock-username-d', fullName: 'Dave' } } ]);
 
       testContext.testedDirective.onCollaboratorSearchChange('av');
       expect(testContext.testedDirective.filteredCollaborators).toEqual([
-        { id: 'mock-id-a', attributes: { username: 'mock-username-a', fullName: 'Ava' } },
-        { id: 'mock-id-d', attributes: { username: 'mock-username-d', fullName: 'Dave' } }
+        { id: 'mock-id-d', attributes: { username: 'mock-username-d', fullName: 'Dave' } },
+        { id: 'mock-id-a', attributes: { username: 'mock-username-a', fullName: 'Ava' } }
       ]);
 
       testContext.testedDirective.onCollaboratorSearchChange('');
-      expect(testContext.testedDirective.filteredCollaborators).toEqual(sortBy(mockUsers, (user: User): string => user.attributes.fullName));
+      expect(testContext.testedDirective.filteredCollaborators).toEqual(mockUsers);
     });
   });
 
@@ -174,25 +171,28 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
 
   describe('#addCollaboratorsToParent', () => {
     it('should add new collaborators', function() {
-      expect(testContext.testedDirective.collaborators.length).toEqual(3);
+      expect(testContext.testedDirective.collaborators).toEqual([]);
 
-      testContext.testedDirective.addCollaboratorsToParent([
-        { id: 'mock-id-b', attributes: { username: 'mock-username-b' } }
-      ] as User[]);
+      const newUsers: User[] = [
+        {
+          id: 'mock-id-e',
+          attributes: {
+            username: 'mock-username-e',
+            fullName: 'Edith'
+          }
+        },
+        {
+          id: 'mock-id-b',
+          attributes: {
+            username: 'mock-username-b',
+            fullName: 'Brenda'
+          }
+        }
+      ] as User[];
 
-      expect(testContext.testedDirective.collaborators.length).toBe(4);
-    });
+      testContext.testedDirective.addCollaboratorsToParent(newUsers);
 
-    it('should maintain sort', function() {
-      expect(testContext.testedDirective.collaborators.length).toEqual(3);
-
-      const newUser: User = {
-        id: 'mock-id-b', attributes: { username: 'mock-username-b', fullName: 'Brenda' }
-      } as User;
-      testContext.testedDirective.addCollaboratorsToParent([ newUser ]);
-
-      expect(testContext.testedDirective.collaborators).toEqual(sortBy(mockUsers.concat(newUser), (user: User): string => user.attributes.fullName));
-      expect(testContext.testedDirective.filteredCollaborators).toEqual(sortBy(mockUsers.concat(newUser), (user: User): string => user.attributes.fullName));
+      expect(testContext.testedDirective.collaborators).toEqual(newUsers);
     });
   });
 

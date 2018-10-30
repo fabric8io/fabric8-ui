@@ -180,17 +180,28 @@
 
 .popover-list-wrapper {
   max-height: 160px;
-  overflow: auto;
 }
 
-.list-pf-container {
-  padding: 6px;
+.collaborator-list-scroll {
+  max-height: inherit;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
-.list-pf {
-  border-style: none;
+.collaborator-item {
+  padding-top: 6px;
+  padding-right: 6px;
+  padding-bottom: 12px;
 }
 
-.list-pf-item {
-  border-style: none;
+.collaborator-item:hover {
+  background-color: @color-pf-blue-50;
+}
+
+.collaborator-avatar {
+  padding-right: 12px;
+}
+
+.collaborator-name {
+  font-size: 1.2em;
 }

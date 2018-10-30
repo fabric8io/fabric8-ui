@@ -1,11 +1,11 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { sortBy, uniqBy } from 'lodash';
+import { uniqBy } from 'lodash';
 import { Broadcaster } from 'ngx-base';
 import { ModalDirective } from 'ngx-bootstrap';
 import { CollaboratorService, Contexts, Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
-import { Observable,  of as observableOf, Subject, Subscription } from 'rxjs';
-import { debounceTime, first, map, switchMap, tap } from 'rxjs/operators';
+import { empty, Observable, of as observableOf, Subject, Subscription } from 'rxjs';
+import { catchError, concatMap, debounceTime, first, map, switchMap, tap } from 'rxjs/operators';
 import { SpaceNamespaceService } from '../../shared/runtime-console/space-namespace.service';
 
 @Component({
@@ -19,12 +19,12 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit, OnDestroy {
   @Input() userOwnsSpace: boolean;
   space: Space;
   spaceOwner: Observable<string>;
-  filteredCollaborators: User[];
-  collaboratorCount: number;
+  collaborators: User[] = [];
+  filteredCollaborators: User[] = [];
+  collaboratorCount: number = 0;
 
   private subscriptions: Subscription[] = [];
   private _descriptionUpdater: Subject<string> = new Subject();
-  private _collaborators: User[];
 
   private loggedInUser: User;
   @ViewChild('description') description: any;
@@ -46,19 +46,12 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.userService.loggedInUser.subscribe((val: User) => this.loggedInUser = val));
     this.subscriptions.push(this.spaces.current
       .subscribe(space => {
+        this.collaborators = [];
+        this.filteredCollaborators = [];
+        this.collaboratorCount = 0;
         this.space = space;
         if (space) {
-          this.subscriptions.push(
-            this.collaboratorService.getInitialBySpaceId(space.id).subscribe((users: User[]) => {
-              this.collaborators = users;
-              this.filteredCollaborators = this.collaborators;
-              this.collaboratorService.getTotalCount()
-                .pipe(first())
-                .subscribe((count: number): void => {
-                  this.collaboratorCount = count;
-                });
-            })
-          );
+          this.refreshCollaboratorCount();
           this.spaceOwner = this.userService
             .getUserByUserId(space.relationships['owned-by'].data.id)
             .pipe(
@@ -95,12 +88,16 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit, OnDestroy {
     );
   }
 
-  set collaborators(collaborators: User[]) {
-    this._collaborators = sortBy(collaborators, (user: User): string => user.attributes.fullName);
-  }
-
-  get collaborators(): User[] {
-    return this._collaborators;
+  refreshCollaboratorCount(): void {
+    this.subscriptions.push(
+      this.collaboratorService.getInitialBySpaceId(this.space.id)
+        .pipe(
+          concatMap(() => this.collaboratorService.getTotalCount())
+        )
+        .subscribe((count: number): void => {
+          this.collaboratorCount = count;
+        })
+    );
   }
 
   onUpdateDescription(description): void {
@@ -147,6 +144,23 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit, OnDestroy {
           user.attributes.fullName.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())
           || user.attributes.username.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())
         );
+  }
+
+  popoverInit(pageSize: number): void {
+    this.fetchCollaboratorsFrom(this.collaboratorService.getInitialBySpaceId(this.space.id, pageSize));
+  }
+
+  fetchMoreCollaborators(): void {
+    this.fetchCollaboratorsFrom(this.collaboratorService.getNextCollaborators());
+  }
+
+  private fetchCollaboratorsFrom(obs: Observable<User[]>): void {
+    obs
+      .pipe(
+        first(),
+        catchError((): Observable<User[]> => empty())
+      )
+      .subscribe((users: User[]): void => this.addCollaboratorsToParent(users));
   }
 
   ngOnDestroy(): void {
