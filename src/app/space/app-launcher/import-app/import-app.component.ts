@@ -13,6 +13,10 @@ import { User, UserService } from 'ngx-login-client';
 import { Observable, Subscription } from 'rxjs';
 import { ContextService } from '../../../shared/context.service';
 
+type QueryJson = {
+  q: string
+};
+
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'f8-import-app',
@@ -29,7 +33,7 @@ export class ImportAppComponent implements OnDestroy, OnInit {
               private userService: UserService,
               private router: Router,
               private broadcaster: Broadcaster,
-              private  featureToggleService: FeatureTogglesService,
+              private featureToggleService: FeatureTogglesService,
               private projectile: Projectile<DependencyCheck>) {
     this.subscriptions.push(userService.loggedInUser.subscribe(user => {
       this.loggedInUser = user;
@@ -69,16 +73,19 @@ export class ImportAppComponent implements OnDestroy, OnInit {
     this.router.navigate(['/', this.loggedInUser.attributes.username, this.currentSpace.attributes.name]);
   }
 
-  addQuery() {
+  addQuery(): QueryJson {
     const query = '{\"application\":[\"' + this.projectile.sharedState.state.projectName + '\"]}';
     return {
       q: query
     };
   }
 
-  viewPipeline() {
+  viewPipeline(): void {
     this.broadcaster.broadcast('ImportFlowViewPipelineButtonClicked',
-    { projectName: this.projectile.sharedState.state.projectName,
-      flow: 'import application' });
+      {
+        projectName: this.projectile.sharedState.state.projectName,
+        flow: 'import application'
+      }
+    );
   }
 }

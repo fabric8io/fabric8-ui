@@ -1,9 +1,8 @@
-import { Location } from '@angular/common';
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GitHubDetails, GitProviderService, HelperService } from 'ngx-launcher';
 import { AuthenticationService } from 'ngx-login-client';
-import { empty as observableEmpty, Observable, of, of as observableOf, throwError as observableThrowError } from 'rxjs';
+import { empty, Observable, of, throwError } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 
 import { ProviderService } from '../../../shared/account/provider.service';
@@ -56,7 +55,7 @@ export class AppLauncherGitproviderService implements GitProviderService {
     return this.http
       .get(url, { headers: this.headers }).pipe(
         catchError((error: HttpErrorResponse) => {
-          return observableThrowError(error);
+          return throwError(error);
         }));
   }
 
@@ -72,7 +71,7 @@ export class AppLauncherGitproviderService implements GitProviderService {
     return this.http
       .get(url, { headers: this.headers }).pipe(
         catchError((error: HttpErrorResponse) => {
-          return observableThrowError(error);
+          return throwError(error);
         }));
   }
 
@@ -101,13 +100,13 @@ export class AppLauncherGitproviderService implements GitProviderService {
               organizations: orgs,
               repositoryList: this.repositories['']
             } as GitHubDetails;
-            return observableOf(gitHubDetails);
+            return of(gitHubDetails);
           } else {
-            return observableEmpty();
+            return empty();
           }
         }));
       } else {
-        return observableEmpty();
+        return empty();
       }
     }));
   }
@@ -149,7 +148,7 @@ export class AppLauncherGitproviderService implements GitProviderService {
       map((json) => json ? json as string[] : []),
       map((repositories) => this.repositories[org] = repositories),
       catchError((error: HttpErrorResponse) => {
-        return observableThrowError(error);
+        return throwError(error);
       }));
   }
 
@@ -158,7 +157,7 @@ export class AppLauncherGitproviderService implements GitProviderService {
     return repositories.map((ele) => ele.replace(new RegExp('^[^/]+/'), ''));
   }
 
-  private createUrl(org: string) {
+  private createUrl(org: string): string {
     const url = this.END_POINT + this.API_BASE + 'repositories';
     return `${url}?organization=${org}`;
   }

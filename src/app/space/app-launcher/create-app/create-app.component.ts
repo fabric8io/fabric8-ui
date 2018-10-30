@@ -15,6 +15,9 @@ import { ContextService } from '../../../shared/context.service';
 import { CheService } from './../../create/codebases/services/che.service';
 import { WorkspacesService } from './../../create/codebases/services/workspaces.service';
 
+type QueryJson = {
+  q: string
+};
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'f8-create-app',
@@ -71,14 +74,14 @@ export class CreateAppComponent implements OnDestroy, OnInit {
     this.router.navigate(['/', this.loggedInUser.attributes.username, this.currentSpace.attributes.name]);
   }
 
-  addQuery() {
+  addQuery(): QueryJson {
     const query = '{\"application\":[\"' + this.projectile.sharedState.state.projectName + '\"]}';
     return {
       q: query
     };
   }
 
-  createWorkSpace() {
+  createWorkSpace(): void {
     const codeBaseId = this.projectile.sharedState.state.codebaseId;
     this.broadcaster.broadcast('CreateFlowOpenInIDEButtonClicked',
     { projectName: this.projectile.sharedState.state.projectName });
@@ -92,9 +95,12 @@ export class CreateAppComponent implements OnDestroy, OnInit {
     })).subscribe());
   }
 
-  viewPipeline() {
+  viewPipeline(): void {
     this.broadcaster.broadcast('CreateFlowViewPipelineButtonClicked',
-    { projectName: this.projectile.sharedState.state.projectName,
-      flow: 'create application' });
+      {
+        projectName: this.projectile.sharedState.state.projectName,
+        flow: 'create application'
+      }
+    );
   }
 }

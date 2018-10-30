@@ -19,7 +19,7 @@ export class XAppInterceptor implements HttpInterceptor {
     const url = request.url;
 
     // Attach a X-App to all requests that don't have one
-    if ((url.startsWith(this.forgeApiUrl)) && !request.headers.has('X-App')) {
+    if (url.startsWith(this.forgeApiUrl) && !request.headers.has('X-App')) {
       const newReq = request.clone({
         setHeaders: {
           'X-App': 'OSIO'
