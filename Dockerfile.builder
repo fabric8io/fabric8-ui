@@ -93,6 +93,8 @@ WORKDIR $WORKSPACE/
 
 VOLUME /dist
 
+EXPOSE 3000
+
 ENTRYPOINT ["/home/fabric8/fabric8-ui/docker-entrypoint.sh"]
 
 #ENTRYPOINT ["scl"]
