@@ -44,6 +44,7 @@ function e2eClean() {
 async function e2eFetch() {
   if (fs.existsSync(E2E_PROJECT)) {
     const packageLock = path.resolve(TEST_DIR, 'package-lock.json');
+    execSync('git checkout master', {stdio: 'inherit', cwd: E2E_PROJECT});
     execSync(`git checkout HEAD -- ${packageLock}`, {stdio: 'inherit', cwd: E2E_PROJECT});
     execSync(`git pull origin master`, {stdio: 'inherit', cwd: E2E_PROJECT});
   } else {
