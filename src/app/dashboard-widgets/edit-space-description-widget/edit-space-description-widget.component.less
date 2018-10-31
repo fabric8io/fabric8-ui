@@ -182,27 +182,25 @@
   max-height: 160px;
 }
 
-.collaborator-list-scroll {
-  max-height: inherit;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
-.collaborator-item {
-  padding-top: 6px;
-  padding-bottom: 6px;
-  padding-left: 12px;
-  padding-right: 12px;
-}
-
-.collaborator-item:hover {
-  background-color: @color-pf-blue-50;
-}
-
-.collaborator-avatar {
-  padding-right: 12px;
-}
-
-.collaborator-name {
-  font-size: 1.2em;
+.collaborator {
+  &-list-scroll {
+    max-height: inherit;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  &-item {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 12px;
+    padding-right: 12px;
+    &:hover {
+      background-color: @color-pf-blue-50;
+    }
+  }
+  &-avatar {
+    padding-right: 12px;
+  }
+  &-name {
+    font-size: 1.2em;
+  }
 }
