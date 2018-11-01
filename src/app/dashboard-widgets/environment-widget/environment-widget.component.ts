@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { Context, Contexts, Space, Spaces } from 'ngx-fabric8-wit';
+import { Space, Spaces } from 'ngx-fabric8-wit';
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
@@ -18,13 +18,13 @@ export class EnvironmentWidgetComponent implements OnInit, OnDestroy {
 
   spaceId: Observable<string>;
   appInfos: Observable<ApplicationAttributesOverview[]>;
-  contextPath: Observable<string>;
 
   private readonly subscriptions: Subscription[] = [];
 
-  constructor(private context: Contexts,
-              private spaces: Spaces,
-              private applicationOverviewService: ApplicationOverviewService) {
+  constructor(
+    private spaces: Spaces,
+    private applicationOverviewService: ApplicationOverviewService
+  ) {
     this.spaceId = this.spaces.current.pipe(map((space: Space): string => space.id));
   }
 
@@ -34,8 +34,6 @@ export class EnvironmentWidgetComponent implements OnInit, OnDestroy {
         this.appInfos = this.applicationOverviewService.getAppsAndEnvironments(spaceId);
       })
     );
-
-    this.contextPath = this.context.current.pipe(map((context: Context): string => context.path));
   }
 
   ngOnDestroy(): void {
