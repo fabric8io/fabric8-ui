@@ -115,9 +115,9 @@ function e2eEditConfig() {
   // read the existing config and
   return src(CONFIG)
     .pipe(
-      replace(/\${([a-zA-Z-_]+):-(.*?)}/g, (match, p1, p2) => {
+      replace(/^(\s*?[^#]*?)\${([a-zA-Z-_]+):-(.*?)}/gm, (match, p1, p2, p3) => {
         let value = null;
-        switch (p1) {
+        switch (p2) {
           case 'TEST_SUITE':
             value = promptTestSuite();
             break;
@@ -125,17 +125,17 @@ function e2eEditConfig() {
             value = promptResetEnvironment();
             break;
           case 'OSIO_URL':
-            value = promptOsioUrl(p2);
+            value = promptOsioUrl(p3);
             break;
           case 'FEATURE_LEVEL':
             value = promptFeatureLevel();
             break;
           default:
-            if (p2 === '') {
-              value = promptInput(p1);
+            if (p3 === '') {
+              value = promptInput(p2);
             }
         }
-        return `\${${p1}:-${value == null ? p2 : value}}`;
+        return `${p1}\${${p2}:-${value == null ? p3 : value}}`;
       }),
     )
     .pipe(dest(CONFIG_DIR));
