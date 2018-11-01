@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { Space, Spaces } from 'ngx-fabric8-wit';
-import { Observable, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, mergeMap } from 'rxjs/operators';
 import {
   ApplicationAttributesOverview,
   ApplicationOverviewService
@@ -14,30 +14,19 @@ import {
   styleUrls: ['./environment-widget.component.less'],
   providers: [ApplicationOverviewService]
 })
-export class EnvironmentWidgetComponent implements OnInit, OnDestroy {
+export class EnvironmentWidgetComponent {
 
-  spaceId: Observable<string>;
   appInfos: Observable<ApplicationAttributesOverview[]>;
 
-  private readonly subscriptions: Subscription[] = [];
-
   constructor(
-    private spaces: Spaces,
-    private applicationOverviewService: ApplicationOverviewService
+    spaces: Spaces,
+    applicationOverviewService: ApplicationOverviewService
   ) {
-    this.spaceId = this.spaces.current.pipe(map((space: Space): string => space.id));
-  }
-
-  ngOnInit(): void {
-    this.subscriptions.push(
-      this.spaceId.subscribe((spaceId: string): void => {
-        this.appInfos = this.applicationOverviewService.getAppsAndEnvironments(spaceId);
-      })
-    );
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.forEach((subscription: Subscription): void => subscription.unsubscribe());
+    this.appInfos = spaces.current
+      .pipe(
+        map((space: Space): string => space.id),
+        mergeMap((spaceId: string): Observable<ApplicationAttributesOverview[]> => applicationOverviewService.getAppsAndEnvironments(spaceId))
+      );
   }
 
 }
