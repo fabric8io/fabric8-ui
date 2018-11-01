@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Space, Spaces } from 'ngx-fabric8-wit';
 import { ConnectableObservable, Observable, Subscription } from 'rxjs';
-import { map, mergeMap, tap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 import {
   ApplicationAttributesOverview,
   ApplicationOverviewService
@@ -29,7 +29,7 @@ export class EnvironmentWidgetComponent implements OnInit, OnDestroy {
       .pipe(
         map((space: Space): string => space.id),
         tap(() => this.loading = true),
-        mergeMap((spaceId: string): Observable<ApplicationAttributesOverview[]> => applicationOverviewService.getAppsAndEnvironments(spaceId)),
+        switchMap((spaceId: string): Observable<ApplicationAttributesOverview[]> => applicationOverviewService.getAppsAndEnvironments(spaceId)),
         tap(() => this.loading = false)
       )
       .publishReplay();
