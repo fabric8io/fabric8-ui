@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Space, Spaces } from 'ngx-fabric8-wit';
 import { ConnectableObservable, Observable, Subscription } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { map, publishReplay, switchMap, tap } from 'rxjs/operators';
 import {
   ApplicationAttributesOverview,
   ApplicationOverviewService
@@ -30,9 +30,11 @@ export class EnvironmentWidgetComponent implements OnInit, OnDestroy {
         map((space: Space): string => space.id),
         tap(() => this.loading = true),
         switchMap((spaceId: string): Observable<ApplicationAttributesOverview[]> => applicationOverviewService.getAppsAndEnvironments(spaceId)),
-        tap(() => this.loading = false)
-      )
-      .publishReplay();
+        tap(() => this.loading = false),
+        publishReplay()
+      ) as ConnectableObservable<ApplicationAttributesOverview[]>;
+      // shouldn't need the type assertion here but the return type of the surrounding pipe is
+      // Observable, even though publishReplay gives a ConnectableObservable
   }
 
   ngOnInit(): void {
