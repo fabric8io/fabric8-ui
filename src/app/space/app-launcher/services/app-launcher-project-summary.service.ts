@@ -41,6 +41,7 @@ export class AppLauncherProjectSummaryService implements ProjectSummaryService {
    * Set up the project for the given summary
    *
    * @param {Projectile} projectile The project summary
+   * @param {number} retry number of time you want to retry the setup on the setup failure
    * @returns {Observable<boolean>}
    */
   setup(projectile: Projectile<any>, retry?: number): Observable<any> {

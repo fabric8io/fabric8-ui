@@ -4,14 +4,11 @@ import {
   OnInit,
   ViewEncapsulation
 } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Broadcaster } from 'ngx-base';
-import { Context, Space } from 'ngx-fabric8-wit';
 import { DependencyCheck, Projectile } from 'ngx-launcher';
-import { User, UserService } from 'ngx-login-client';
 import { Subscription } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import { ContextService } from '../../../shared/context.service';
 import { CheService } from './../../create/codebases/services/che.service';
 import { WorkspacesService } from './../../create/codebases/services/workspaces.service';
 
@@ -24,26 +21,16 @@ type QueryJson = {
   templateUrl: './create-app.component.html'
 })
 export class CreateAppComponent implements OnDestroy, OnInit {
-  currentSpace: Space;
-  loggedInUser: User;
-  spaces: Space[] = [];
   subscriptions: Subscription[] = [];
-  codeBaseId: string;
+  projectName: string;
 
-  constructor(private context: ContextService,
-              private cheService: CheService,
-              private userService: UserService,
-              private router: Router,
-              private broadcaster: Broadcaster,
-              private projectile: Projectile<DependencyCheck>,
-              private workSpacesService: WorkspacesService) {
-    this.subscriptions.push(userService.loggedInUser.subscribe(user => {
-      this.loggedInUser = user;
-    }));
-    this.subscriptions.push(context.current.subscribe((ctx: Context) => {
-      this.currentSpace = ctx.space;
-    }));
-  }
+  constructor(
+    private cheService: CheService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private broadcaster: Broadcaster,
+    private projectile: Projectile<DependencyCheck>,
+    private workSpacesService: WorkspacesService) {}
 
   ngOnInit() {
     this.broadcaster.broadcast('analyticsTracker', {
@@ -61,7 +48,7 @@ export class CreateAppComponent implements OnDestroy, OnInit {
    * Helper to cancel and route back to space
    */
   cancel($event: any): void {
-    this.router.navigate(['/', this.loggedInUser.attributes.username, this.currentSpace.attributes.name]);
+    this.router.navigate(['../../../'], {relativeTo: this.route});
     this.broadcaster.broadcast('analyticsTracker', {
       event: 'create app closed'
     });
@@ -71,11 +58,12 @@ export class CreateAppComponent implements OnDestroy, OnInit {
    * Helper to complete and route back to space
    */
   complete(): void {
-    this.router.navigate(['/', this.loggedInUser.attributes.username, this.currentSpace.attributes.name]);
+    this.router.navigate(['../../../'], {relativeTo: this.route});
   }
 
   addQuery(): QueryJson {
-    const query = '{\"application\":[\"' + this.projectile.sharedState.state.projectName + '\"]}';
+    this.projectName = this.projectile.sharedState.state.projectName;
+    const query = '{\"application\":[\"' + this.projectName + '\"]}';
     return {
       q: query
     };

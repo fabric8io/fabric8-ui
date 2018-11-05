@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Injectable } from '@angular/core';
 import { GitHubDetails, GitProviderService, HelperService } from 'ngx-launcher';
 import { AuthenticationService } from 'ngx-login-client';
-import { empty, Observable, of, throwError } from 'rxjs';
+import { EMPTY, Observable, of, throwError } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 
 import { ProviderService } from '../../../shared/account/provider.service';
@@ -102,11 +102,11 @@ export class AppLauncherGitproviderService implements GitProviderService {
             } as GitHubDetails;
             return of(gitHubDetails);
           } else {
-            return empty();
+            return EMPTY;
           }
         }));
       } else {
-        return empty();
+        return EMPTY;
       }
     }));
   }
