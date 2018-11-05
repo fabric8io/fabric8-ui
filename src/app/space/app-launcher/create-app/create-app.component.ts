@@ -6,6 +6,7 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Broadcaster } from 'ngx-base';
+import { Notifications, NotificationType } from 'ngx-base';
 import { DependencyCheck, Projectile } from 'ngx-launcher';
 import { Subscription } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
@@ -26,6 +27,7 @@ export class CreateAppComponent implements OnDestroy, OnInit {
 
   constructor(
     private cheService: CheService,
+    private notifications: Notifications,
     private route: ActivatedRoute,
     private router: Router,
     private broadcaster: Broadcaster,
@@ -79,6 +81,11 @@ export class CreateAppComponent implements OnDestroy, OnInit {
           .pipe(map(workSpaceLinks => {
             window.open(workSpaceLinks.links.open, '_blank');
           }));
+      } else {
+        this.notifications.message({
+          message: `Che cluster is full`,
+          type: NotificationType.WARNING
+        });
       }
     })).subscribe());
   }

@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { Notifications, NotificationType } from 'ngx-base';
 import { Feature, FeatureFlagModule, FeatureTogglesService } from 'ngx-feature-flag';
 import {
   Booster,
@@ -156,7 +157,11 @@ describe('CreateAppComponent', () => {
           provide: DependencyCheckService,
           useFactory: () => dependencyCheckService,
           deps: []
-        }
+        }, { provide: Notifications, useFactory: (): jasmine.SpyObj<Notifications> => {
+          const mock: jasmine.SpyObj<Notifications> = createMock(Notifications);
+          mock.message.and.returnValue(of({}));
+          return mock;
+        }}
       ]
     }).compileComponents();
   }));
