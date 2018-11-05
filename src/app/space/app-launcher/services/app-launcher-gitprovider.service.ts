@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { GitHubDetails, GitProviderService, HelperService } from 'ngx-launcher';
 import { AuthenticationService } from 'ngx-login-client';
 import { EMPTY, Observable, of, throwError } from 'rxjs';
-import { catchError, map, mergeMap } from 'rxjs/operators';
+import { catchError, map, mergeMap, tap } from 'rxjs/operators';
 
 import { ProviderService } from '../../../shared/account/provider.service';
 
@@ -144,9 +144,9 @@ export class AppLauncherGitproviderService implements GitProviderService {
     if (this.repositories[org]) {
       return of(this.repositories[org]);
     }
-    return this.http.get(this.createUrl(org), { headers: this.headers }).pipe(
+    return this.http.get<string[]>(this.createUrl(org), { headers: this.headers }).pipe(
       map((json) => json ? json as string[] : []),
-      map((repositories) => this.repositories[org] = repositories),
+      tap((repositories) => this.repositories[org] = repositories),
       catchError((error: HttpErrorResponse) => {
         return throwError(error);
       }));

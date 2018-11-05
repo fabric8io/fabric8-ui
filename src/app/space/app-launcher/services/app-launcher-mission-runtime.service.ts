@@ -35,10 +35,7 @@ export class AppLauncherMissionRuntimeService extends MissionRuntimeService {
       this.headers = this.headers.set('X-App', this.ORIGIN);
     }
     return this.http
-      .get(this.END_POINT + this.API_BASE, { headers: this.headers }).pipe(
-      map((catalog: Catalog) => {
-        return catalog as Catalog;
-      }),
+      .get<Catalog>(this.END_POINT + this.API_BASE, { headers: this.headers }).pipe(
       catchError(this.handleError));
   }
 

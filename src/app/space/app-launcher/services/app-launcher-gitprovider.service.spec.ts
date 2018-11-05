@@ -1,5 +1,5 @@
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
-import { TestBed } from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 import {
   Config, GitHubDetails, HelperService
 } from 'ngx-launcher';
@@ -50,9 +50,10 @@ describe('Service: AppLauncherGitproviderService', () => {
     controller = TestBed.get(HttpTestingController);
   });
 
-  it('should get GitHubDetails', async () => {
+  it('should get GitHubDetails', async ((done: DoneFn) => {
     service.getGitHubDetails().subscribe((val: GitHubDetails) => {
       expect(val).toEqual(gitHubDetails);
+      done();
     });
 
     const req1: TestRequest = controller.expectOne('http://example.com/services/git/user');
@@ -64,7 +65,7 @@ describe('Service: AppLauncherGitproviderService', () => {
     expect(req2.request.headers.get('Authorization')).toEqual('Bearer mock-token');
     req2.flush(orgs);
 
-  });
+  }));
 
   it('should get user orgs', (done: DoneFn) => {
     service.getUserOrgs(user.login).subscribe((val) => {
