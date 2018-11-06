@@ -73,8 +73,8 @@ export class CreateAppComponent implements OnDestroy, OnInit {
 
   createWorkSpace(): void {
     const codeBaseId = this.projectile.sharedState.state.codebaseId;
-    this.broadcaster.broadcast('CreateFlowOpenInIDEButtonClicked',
-    { projectName: this.projectile.sharedState.state.projectName });
+    this.broadcaster.broadcast('analyticsTracker',
+    { event: 'Create app flow open in IDE button clicked' });
     this.subscriptions.push(this.cheService.getState().pipe(switchMap(che => {
       if (!che.clusterFull) {
         return this.workSpacesService.createWorkspace(codeBaseId)
@@ -91,10 +91,9 @@ export class CreateAppComponent implements OnDestroy, OnInit {
   }
 
   viewPipeline(): void {
-    this.broadcaster.broadcast('CreateFlowViewPipelineButtonClicked',
+    this.broadcaster.broadcast('analyticsTracker',
       {
-        projectName: this.projectile.sharedState.state.projectName,
-        flow: 'create application'
+        event: 'Create app flow View pipeline button clicked'
       }
     );
   }

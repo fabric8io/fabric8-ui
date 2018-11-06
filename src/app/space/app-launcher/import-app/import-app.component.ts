@@ -66,10 +66,9 @@ export class ImportAppComponent implements OnDestroy, OnInit {
   }
 
   viewPipeline(): void {
-    this.broadcaster.broadcast('ImportFlowViewPipelineButtonClicked',
+    this.broadcaster.broadcast('analyticsTracker',
       {
-        projectName: this.projectile.sharedState.state.projectName,
-        flow: 'import application'
+        event: 'Import app flow View pipeline button clicked'
       }
     );
   }
