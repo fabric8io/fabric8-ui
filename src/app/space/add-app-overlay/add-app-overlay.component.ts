@@ -141,9 +141,9 @@ export class AddAppOverlayComponent implements OnInit, OnDestroy {
    * @returns boolean
    */
   isValidProjectName(projectName: string): boolean {
-    // allows only '-', '_' and 4-40 characters (must start with alphabetic and end with alphanumeric)
-    // no continuous '-' or '_' is allowed
-    const pattern = /^[a-zA-Z](?!.*--)(?!.*__)[a-zA-Z0-9-_]{2,38}[a-zA-Z0-9]$/;
+    // allows only '-' and 4-40 characters (must start with alphabetic and end with alphanumeric)
+    // no continuous '-' is allowed
+    const pattern = /^[a-zA-Z](?!.*--)[a-zA-Z0-9-]{2,38}[a-zA-Z0-9]$/;
     return pattern.test(projectName);
   }
 }
