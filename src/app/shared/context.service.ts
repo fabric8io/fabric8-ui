@@ -147,7 +147,7 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
         .pipe(
           withLatestFrom(this._recent),
           map(([deletedSpace, recentContexts]: [Space, Context[]]): RecentData<Context> =>
-            this.onBroadcastSpaceDeleted(deletedSpace, recentContexts, this.compareContextToSpace)
+            this.onBroadcastDeleted(deletedSpace, recentContexts, this.compareContextToSpace)
           ),
           filter((recentData: RecentData<Context>): boolean => recentData.isSaveRequired)
         )

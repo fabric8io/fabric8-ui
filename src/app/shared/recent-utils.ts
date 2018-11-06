@@ -25,9 +25,9 @@ export abstract class RecentUtils<T> {
     return this._recent;
   }
 
-  abstract compareElements<T>(t1: T, t2: T);
+  abstract compareElements<K = T>(t1: T, t2: K): boolean;
 
-  onBroadcastChanged(changed: T, recent: T[], compareFn: Function = this.compareElements): RecentData<T> {
+  onBroadcastChanged(changed: T, recent: T[], compareFn: ((a: T, b: T) => boolean) = this.compareElements): RecentData<T> {
     let index: number = recent.findIndex((t: T) => compareFn(t, changed));
     if (index === 0) { // continue only if changed is new, or requires a move within recent
       return { recent: recent, isSaveRequired: false };
@@ -44,8 +44,8 @@ export abstract class RecentUtils<T> {
     return { recent: recent, isSaveRequired: true };
   }
 
-  onBroadcastSpaceDeleted(deletedSpace: Space, recent: T[], compareFn: Function = this.compareElements): RecentData<T> {
-    let index: number = recent.findIndex((t: T) => compareFn(t, deletedSpace));
+  onBroadcastDeleted<K>(deleted: K, recent: T[], compareFn: ((a: T, b: K) => boolean) = this.compareElements): RecentData<T> {
+    let index: number = recent.findIndex((t: T) => compareFn(t, deleted));
     if (index === -1) {
       return { recent: recent, isSaveRequired: false };
     }

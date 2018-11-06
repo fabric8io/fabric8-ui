@@ -67,7 +67,7 @@ export class SpacesService extends RecentUtils<Space> implements Spaces {
         .pipe(
           withLatestFrom(this.recent),
           map(([deletedSpace, recentSpaces]): RecentData<Space> =>
-            this.onBroadcastSpaceDeleted(deletedSpace, recentSpaces)
+            this.onBroadcastDeleted(deletedSpace, recentSpaces)
           ),
           filter((recentData: RecentData<Space>) => recentData.isSaveRequired)
         )
