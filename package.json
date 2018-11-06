@@ -68,6 +68,7 @@
     "reinstall": "npm run clean && npm install",
     "rimraf": "rimraf",
     "semantic-release": "semantic-release",
+    "semantic-release-origin-master": "semantic-release --branch origin/master",
     "server:dev:hmr": "npm run server:dev -- --inline --hot",
     "server:dev": "webpack-dev-server --config config/webpack.dev.js --progress --profile --watch --content-base src/",
     "server:dev2:hmr": "npm run server:dev2 -- --hot",

@@ -65,13 +65,17 @@ if [ ! -d dist ]; then
 
   # In order to run semantic-release we need a non detached HEAD, see https://github.com/semantic-release/semantic-release/issues/329
   docker exec "${BUILDER_CONT}" git checkout master
-  # Set the GIT_BRANCH to master since cico sets it to origin/master
-  docker exec "${BUILDER_CONT}" env GIT_BRANCH=master
+  docker exec "${BUILDER_CONT}" git branch -va
+  docker exec "${BUILDER_CONT}" env
 
   ## Run the prod build
   docker exec "${BUILDER_CONT}" npm run build:prod
 
-  docker exec "${BUILDER_CONT}" npm run semantic-release || :
+  docker exec "${BUILDER_CONT}" git branch -va
+  # Set the GIT_BRANCH to master since cico sets it to origin/master
+  docker exec "${BUILDER_CONT}" env GIT_BRANCH=master
+  docker exec "${BUILDER_CONT}" env
+  docker exec "${BUILDER_CONT}" npm run semantic-release-origin-master || :
   docker exec -u root "${BUILDER_CONT}" cp -r /home/fabric8/fabric8-ui/dist /
 fi
 
