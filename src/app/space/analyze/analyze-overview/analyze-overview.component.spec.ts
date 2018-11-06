@@ -1,21 +1,13 @@
-import {
-  Component,
-  NO_ERRORS_SCHEMA
-} from '@angular/core';
-import { TestBed } from '@angular/core/testing';
+import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { Broadcaster } from 'ngx-base';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { Context, Contexts, Space } from 'ngx-fabric8-wit';
-import { Feature, FeatureTogglesService } from 'ngx-feature-flag';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
-import { Observable,  of as observableOf, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { createMock } from 'testing/mock';
 import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
-import {
-  initContext,
-  TestContext
-} from 'testing/test-context';
+import { initContext, TestContext } from 'testing/test-context';
 import { AnalyzeOverviewComponent } from './analyze-overview.component';
 
 @Component({
@@ -29,24 +21,13 @@ describe('AnalyzeOverviewComponent', () => {
   let ctxSubj: Subject<Context> = new Subject<Context>();
   let fakeUserObs: Subject<User> = new Subject<User>();
 
-  let mockFeatureTogglesService = jasmine.createSpyObj('FeatureTogglesService', ['getFeature']);
-  let mockFeature: Feature = {
-    'attributes': {
-      'name': 'mock-attribute',
-      'enabled': true,
-      'user-enabled': true
-    }
-  };
-  mockFeatureTogglesService.getFeature.and.returnValue(observableOf(mockFeature));
-
-  const testContext = initContext(AnalyzeOverviewComponent, HostComponent, {
+  const testContext: TestingContext = initContext(AnalyzeOverviewComponent, HostComponent, {
     declarations: [ MockFeatureToggleComponent ],
     providers: [
       { provide: BsModalService, useFactory: (): jasmine.SpyObj<BsModalService> => createMock(BsModalService) },
       { provide: Broadcaster, useFactory: (): jasmine.SpyObj<Broadcaster> => createMock(Broadcaster) },
       { provide: AuthenticationService, useValue: ({ isLoggedIn: () => true }) },
       { provide: Contexts, useValue: ({ current: ctxSubj }) },
-      { provide: FeatureTogglesService, useValue: mockFeatureTogglesService },
       { provide: UserService, useValue: ({ loggedInUser: fakeUserObs }) }
     ],
     schemas: [
@@ -97,8 +78,6 @@ describe('AnalyzeOverviewComponent', () => {
   });
 
   it('should recognize that the user owns the space', function() {
-    const userService: jasmine.SpyObj<UserService> = TestBed.get(UserService);
-
     fakeUserObs.next({
       id: 'loggedInUser'
     } as User);
@@ -121,8 +100,6 @@ describe('AnalyzeOverviewComponent', () => {
   });
 
   it('should recognize that the user does not own the space', function() {
-    const userService: jasmine.SpyObj<UserService> = TestBed.get(UserService);
-
     fakeUserObs.next({
       id: 'loggedInUser'
     } as User);
@@ -145,8 +122,6 @@ describe('AnalyzeOverviewComponent', () => {
   });
 
   it('should show the Create an Application button if the user owns the space', function() {
-    const userService: jasmine.SpyObj<UserService> = TestBed.get(UserService);
-
     fakeUserObs.next({
       id: 'loggedInUser'
     } as User);
@@ -169,8 +144,6 @@ describe('AnalyzeOverviewComponent', () => {
   });
 
   it('should hide the Create an Application button if the user does not own the space', function() {
-    const userService: jasmine.SpyObj<UserService> = TestBed.get(UserService);
-
     fakeUserObs.next({
       id: 'loggedInUser'
     } as User);

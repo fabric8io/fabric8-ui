@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 echo -n Updating Webdriver and Selenium...
 webdriver-manager update
 webdriver-manager update --versions.chrome 2.24

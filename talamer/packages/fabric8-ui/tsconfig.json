@@ -19,5 +19,8 @@
       "node",
       "segment-analytics"
     ]
-  }
+  },
+  "include": [
+    "src"
+  ]
 }

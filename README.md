@@ -297,13 +297,34 @@ The E2E tests are available in this repo: https://github.com/fabric8io/fabric8-t
 
 The full set of instructions on installing and executing the E2E tests are avalable here: https://github.com/fabric8io/fabric8-test/blob/master/ee_tests/README.md
 
+### Easy E2E Test Setup
 
+Run the following script and follow the on screen prompts to configure the test environment. The process will checkout the `fabric8-test` project as a sibling to `fabric8-ui`.
 
+```
+npm run e2e
+```
 
+To clean up the `fabric8-test` project:
+```
+npm run e2e:clean
+```
 
+To delete the e2e configuration file and re-prompt for all data:
+```
+npm run e2e:reconfig
+```
 
+To run the e2e tests using the last configuration without prompting:
+```
+npm run e2e:last
+```
 
+#### Mac Users
 
+You may encounter the error `readlink: illegal option -- f`. To fix this, run the following commands:
 
-
-
+```
+brew install coreutils
+ln -s "$(which greadlink)" "$(dirname "$(which greadlink)")/readlink"
+```
