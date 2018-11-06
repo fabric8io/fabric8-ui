@@ -260,8 +260,24 @@ function rewireJest() {
   ) => {
     let config = createJestConfig(resolve, rootDir, isEjecting);
 
+    // check for the existence of a tests setup file
+    // also check for the same path with a .ts ext
     if (!fs.existsSync(paths.testsSetup)) {
-      config.setupTestFrameworkScriptFile = path.resolve(__dirname, '../config/jest/setup.js');
+      let hasSetup = false;
+      const ext = path.extname(paths.testsSetup).toLowerCase();
+      if (ext !== '.ts') {
+        const testsSetupTs = `${paths.testsSetup.substr(
+          0,
+          paths.testsSetup.length - ext.length,
+        )}.ts`;
+        if (fs.existsSync(testsSetupTs)) {
+          hasSetup = true;
+          config.setupTestFrameworkScriptFile = testsSetupTs;
+        }
+      }
+      if (!hasSetup) {
+        config.setupTestFrameworkScriptFile = path.resolve(__dirname, '../config/jest/setup.js');
+      }
     }
 
     config = {
@@ -270,7 +286,13 @@ function rewireJest() {
         '^.+\\.(js|jsx)$': isEjecting
           ? '<rootDir>/node_modules/babel-jest'
           : resolve('config/jest/babelTransform.js'),
-        '^.+\\.(ts|tsx|html)$': path.resolve(
+
+        '^.+\\.(html)$': path.resolve(__dirname, '../config/jest/transforms/htmlTransform.js'),
+        '^.+\\.component\\.ts$': path.resolve(
+          __dirname,
+          '../config/jest/transforms/angularComponentTransform.js',
+        ),
+        '^.+\\.(ts|tsx)$': path.resolve(
           __dirname,
           '../config/jest/transforms/typescriptTransform.js',
         ),
@@ -284,13 +306,14 @@ function rewireJest() {
         '!packages/**/src/**/*.d.ts',
       ],
       testMatch: [
-        '<rootDir>/**/__tests__/**/*.{js,jsx,ts,tsx}',
-        '<rootDir>/**/*.(spec|test).{js,jsx,ts,tsx}',
+        '<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}',
+        '<rootDir>/src/**/*.(spec|test).{js,jsx,ts,tsx}',
+        '<rootDir>/packages/**/src/**/__tests__/**/*.{js,jsx,ts,tsx}',
+        '<rootDir>/packages/**/src/**/*.(spec|test).{js,jsx,ts,tsx}',
       ],
       globals: {
         'ts-jest': {
           tsConfig: locateTsConfig(paths.appPath),
-          stringifyContentPathRegex: '\\.html?$',
         },
       },
       moduleFileExtensions: [
