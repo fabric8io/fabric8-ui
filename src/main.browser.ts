@@ -2,7 +2,7 @@
  * Angular bootstraping
  */
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { bootloader } from '@angularclass/hmr';
+import { bootloader, hmrModule } from '@angularclass/hmr';
 import 'reflect-metadata';
 
 /**
@@ -29,6 +29,9 @@ import './assets/stylesheets/shared/osio.less';
 export function main(): Promise < any > {
   return platformBrowserDynamic()
     .bootstrapModule(AppModule, { preserveWhitespaces: true })
+    .then((ngModuleRef: any) => {
+      return process.env.HMR ? hmrModule(ngModuleRef, module) : ngModuleRef;
+    })
     .then(decorateModuleRef)
     .catch(err => console.error(err));
 }

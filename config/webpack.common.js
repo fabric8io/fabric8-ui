@@ -29,6 +29,8 @@ const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const IgnoreNotFoundExportPlugin = require('./IgnoreNotFoundExportPlugin');
 
 /**
  * Webpack Constants
@@ -122,8 +124,20 @@ module.exports = function (options) {
           use: aotMode ? [
             '@ngtools/webpack'
           ] : [
-              '@angularclass/hmr-loader?pretty=' + !isProd + '&prod=' + isProd,
-              'ts-loader',
+              'cache-loader',
+              {
+                loader: 'thread-loader',
+                options: {
+                    // there should be 1 cpu for the fork-ts-checker-webpack-plugin
+                    workers: require('os').cpus().length - 1,
+                },
+              },
+              {
+                loader: 'ts-loader',
+                options: {
+                    happyPackMode: true
+                }
+              },
               'angular2-template-loader',
               'angular2-router-loader'
             ],
@@ -375,13 +389,20 @@ module.exports = function (options) {
      */
     plugins: [
       /**
-       * Plugin: ForkCheckerPlugin
-       * Description: Do type checking in a separate process, so webpack don't need to wait.
+       * Plugin: ForkTsCheckerWebpackPlugin
+       * Description: Webpack plugin that runs typescript type checker on a separate process.
        *
-       * See: https://github.com/s-panferov/awesome-typescript-loader#forkchecker-boolean-defaultfalse
+       * See: https://github.com/Realytics/fork-ts-checker-webpack-plugin
        */
-      //new CheckerPlugin(),
+      new ForkTsCheckerWebpackPlugin({
+        // Must set to `true` if using ts-loader `happyPackMode === true`
+        checkSyntacticErrors: true,
+        // We want to block webpack's emit and wait for the checker to complete and add any errors
+        // to webpack's compilation.
+        async: false
+      }),
 
+      new IgnoreNotFoundExportPlugin(),
 
       /**
        * Plugin: ContextReplacementPlugin
