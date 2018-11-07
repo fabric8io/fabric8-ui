@@ -264,7 +264,7 @@ describe('AddAppOverlayComponent', () => {
       expect(component.isProjectNameValid).toBeTruthy();
     });
 
-    it('validate Project Name to be truthy', () => {
+    it('validate Project Name to be falsy', () => {
       let valProjectName = component.isValidProjectName('app-apr_10');
       expect(valProjectName).toBeFalsy();
     });
