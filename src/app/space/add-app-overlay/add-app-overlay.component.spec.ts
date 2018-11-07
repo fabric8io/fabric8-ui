@@ -61,11 +61,7 @@ describe('AddAppOverlayComponent', () => {
     },
     validateProjectName(projectName: string): boolean {
       // allows only '-', ' ' and 4-40 characters (must start and end with alphanumeric)
-<<<<<<< HEAD
       const pattern = /^[a-z](?!.*--)[a-z0-9-]{2,38}[a-z0-9]$/;
-=======
-      const pattern = /^[a-zA-Z0-9][a-zA-Z0-9-\s]{2,38}[a-zA-Z0-9]$/;
->>>>>>> fix(add-app-overlay): disallow underscore in application name
       return pattern.test(projectName);
     }
   };
@@ -267,6 +263,7 @@ describe('AddAppOverlayComponent', () => {
       component.validateProjectName();
       expect(component.isProjectNameValid).toBeTruthy();
     });
+
 
     it('validate Project Name to be truthy', () => {
       let valProjectName = component.isValidProjectName('app-apr-10');
