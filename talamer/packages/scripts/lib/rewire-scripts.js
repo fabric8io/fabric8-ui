@@ -1,8 +1,9 @@
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
-const {CheckerPlugin} = require('awesome-typescript-loader');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const fs = require('fs');
 const path = require('path');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const IgnoreNotFoundExportPlugin = require('./IgnoreNotFoundExportPlugin');
 
 process.env.SKIP_PREFLIGHT_CHECK = true;
 
@@ -24,6 +25,10 @@ function rewireEnv() {
         env.stringified['process.env'][key] = JSON.stringify(customEnv[key]);
       });
     }
+
+    // TODO migrate usage of ENV to NODE_ENV
+    env.stringified.ENV = JSON.stringify(process.env.NODE_ENV);
+
     return env;
   };
 }
@@ -183,12 +188,21 @@ function rewireWebpack(prod) {
     {
       test: /\.ts$/,
       use: [
+        {loader: require.resolve('cache-loader')},
+        {
+          loader: require.resolve('thread-loader'),
+          options: {
+            // there should be 1 cpu for the fork-ts-checker-webpack-plugin
+            workers: require('os').cpus().length - 1,
+          },
+        },
         {
           loader: require.resolve('ts-loader'),
           options: {
-            // disable type checker - we will use it in fork plugin
-            transpileOnly: true,
             allowTsInNodeModules: true,
+            // support for thread-loader
+            // implies transpileOnly = false
+            happyPackMode: true,
           },
         },
         'angular-router-loader?loader=import',
@@ -199,11 +213,21 @@ function rewireWebpack(prod) {
     {
       test: /\.tsx$/,
       use: [
+        {loader: require.resolve('cache-loader')},
+        {
+          loader: require.resolve('thread-loader'),
+          options: {
+            // there should be 1 cpu for the fork-ts-checker-webpack-plugin
+            workers: require('os').cpus().length - 1,
+          },
+        },
         {
           loader: require.resolve('ts-loader'),
           options: {
-            // disable type checker - we will use it in fork plugin
-            transpileOnly: true,
+            allowTsInNodeModules: true,
+            // support for thread-loader
+            // implies transpileOnly = false
+            happyPackMode: true,
           },
         },
       ],
@@ -213,7 +237,16 @@ function rewireWebpack(prod) {
 
   oneOf[oneOf.length - 1].exclude.push(/\.(ts|tsx)$/);
 
-  config.plugins.push(new CheckerPlugin());
+  config.plugins.push(
+    new ForkTsCheckerWebpackPlugin({
+      // Must set to `true` if using ts-loader `happyPackMode === true`
+      checkSyntacticErrors: true,
+      // We want to block webpack's emit and wait for the checker to complete and add any errors
+      // to webpack's compilation.
+      async: false,
+    }),
+  );
+  config.plugins.push(new IgnoreNotFoundExportPlugin());
   config.plugins.push(new ProgressBarPlugin());
 
   config.resolve.extensions = [
