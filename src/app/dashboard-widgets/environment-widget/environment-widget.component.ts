@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { Contexts, Spaces } from 'ngx-fabric8-wit';
-import { Observable } from 'rxjs';
-import { first, map } from 'rxjs/operators';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Space, Spaces } from 'ngx-fabric8-wit';
+import { ConnectableObservable, Observable, Subscription } from 'rxjs';
+import { map, publishReplay, switchMap, tap } from 'rxjs/operators';
 import {
   ApplicationAttributesOverview,
   ApplicationOverviewService
@@ -14,23 +14,37 @@ import {
   styleUrls: ['./environment-widget.component.less'],
   providers: [ApplicationOverviewService]
 })
-export class EnvironmentWidgetComponent implements OnInit {
+export class EnvironmentWidgetComponent implements OnInit, OnDestroy {
 
-  spaceId: Observable<string>;
-  appInfos: Observable<ApplicationAttributesOverview[]>;
-  contextPath: Observable<string>;
+  appInfos: ConnectableObservable<ApplicationAttributesOverview[]>;
+  loading: boolean = true;
 
-  constructor(private context: Contexts,
-              private spaces: Spaces,
-              private applicationOverviewService: ApplicationOverviewService) {
-    this.spaceId = this.spaces.current.pipe(first(), map(space => space.id));
+  private readonly subscriptions: Subscription[] = [];
+
+  constructor(
+    spaces: Spaces,
+    applicationOverviewService: ApplicationOverviewService
+  ) {
+    this.appInfos = spaces.current
+      .pipe(
+        map((space: Space): string => space.id),
+        tap(() => this.loading = true),
+        switchMap((spaceId: string): Observable<ApplicationAttributesOverview[]> => applicationOverviewService.getAppsAndEnvironments(spaceId)),
+        tap(() => this.loading = false),
+        publishReplay()
+      ) as ConnectableObservable<ApplicationAttributesOverview[]>;
+      // shouldn't need the type assertion here but the return type of the surrounding pipe is
+      // Observable, even though publishReplay gives a ConnectableObservable
   }
 
-  ngOnInit() {
-    this.spaceId.subscribe((spaceId: string) => {
-      this.appInfos = this.applicationOverviewService.getAppsAndEnvironments(spaceId);
-    });
-
-    this.contextPath = this.context.current.pipe(map(context => context.path));
+  ngOnInit(): void {
+    this.subscriptions.push(
+      this.appInfos.connect()
+    );
   }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription: Subscription): void => subscription.unsubscribe());
+  }
+
 }

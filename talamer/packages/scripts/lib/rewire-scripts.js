@@ -1,8 +1,9 @@
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
-const {CheckerPlugin} = require('awesome-typescript-loader');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const fs = require('fs');
 const path = require('path');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const IgnoreNotFoundExportPlugin = require('./IgnoreNotFoundExportPlugin');
 
 process.env.SKIP_PREFLIGHT_CHECK = true;
 
@@ -24,6 +25,10 @@ function rewireEnv() {
         env.stringified['process.env'][key] = JSON.stringify(customEnv[key]);
       });
     }
+
+    // TODO migrate usage of ENV to NODE_ENV
+    env.stringified.ENV = JSON.stringify(process.env.NODE_ENV);
+
     return env;
   };
 }
@@ -183,12 +188,21 @@ function rewireWebpack(prod) {
     {
       test: /\.ts$/,
       use: [
+        {loader: require.resolve('cache-loader')},
+        {
+          loader: require.resolve('thread-loader'),
+          options: {
+            // there should be 1 cpu for the fork-ts-checker-webpack-plugin
+            workers: require('os').cpus().length - 1,
+          },
+        },
         {
           loader: require.resolve('ts-loader'),
           options: {
-            // disable type checker - we will use it in fork plugin
-            transpileOnly: true,
             allowTsInNodeModules: true,
+            // support for thread-loader
+            // implies transpileOnly = false
+            happyPackMode: true,
           },
         },
         'angular-router-loader?loader=import',
@@ -199,11 +213,21 @@ function rewireWebpack(prod) {
     {
       test: /\.tsx$/,
       use: [
+        {loader: require.resolve('cache-loader')},
+        {
+          loader: require.resolve('thread-loader'),
+          options: {
+            // there should be 1 cpu for the fork-ts-checker-webpack-plugin
+            workers: require('os').cpus().length - 1,
+          },
+        },
         {
           loader: require.resolve('ts-loader'),
           options: {
-            // disable type checker - we will use it in fork plugin
-            transpileOnly: true,
+            allowTsInNodeModules: true,
+            // support for thread-loader
+            // implies transpileOnly = false
+            happyPackMode: true,
           },
         },
       ],
@@ -213,7 +237,16 @@ function rewireWebpack(prod) {
 
   oneOf[oneOf.length - 1].exclude.push(/\.(ts|tsx)$/);
 
-  config.plugins.push(new CheckerPlugin());
+  config.plugins.push(
+    new ForkTsCheckerWebpackPlugin({
+      // Must set to `true` if using ts-loader `happyPackMode === true`
+      checkSyntacticErrors: true,
+      // We want to block webpack's emit and wait for the checker to complete and add any errors
+      // to webpack's compilation.
+      async: false,
+    }),
+  );
+  config.plugins.push(new IgnoreNotFoundExportPlugin());
   config.plugins.push(new ProgressBarPlugin());
 
   config.resolve.extensions = [
@@ -260,8 +293,24 @@ function rewireJest() {
   ) => {
     let config = createJestConfig(resolve, rootDir, isEjecting);
 
+    // check for the existence of a tests setup file
+    // also check for the same path with a .ts ext
     if (!fs.existsSync(paths.testsSetup)) {
-      config.setupTestFrameworkScriptFile = path.resolve(__dirname, '../config/jest/setup.js');
+      let hasSetup = false;
+      const ext = path.extname(paths.testsSetup).toLowerCase();
+      if (ext !== '.ts') {
+        const testsSetupTs = `${paths.testsSetup.substr(
+          0,
+          paths.testsSetup.length - ext.length,
+        )}.ts`;
+        if (fs.existsSync(testsSetupTs)) {
+          hasSetup = true;
+          config.setupTestFrameworkScriptFile = testsSetupTs;
+        }
+      }
+      if (!hasSetup) {
+        config.setupTestFrameworkScriptFile = path.resolve(__dirname, '../config/jest/setup.js');
+      }
     }
 
     config = {
@@ -270,7 +319,13 @@ function rewireJest() {
         '^.+\\.(js|jsx)$': isEjecting
           ? '<rootDir>/node_modules/babel-jest'
           : resolve('config/jest/babelTransform.js'),
-        '^.+\\.(ts|tsx|html)$': path.resolve(
+
+        '^.+\\.(html)$': path.resolve(__dirname, '../config/jest/transforms/htmlTransform.js'),
+        '^.+\\.component\\.ts$': path.resolve(
+          __dirname,
+          '../config/jest/transforms/angularComponentTransform.js',
+        ),
+        '^.+\\.(ts|tsx)$': path.resolve(
           __dirname,
           '../config/jest/transforms/typescriptTransform.js',
         ),
@@ -284,13 +339,14 @@ function rewireJest() {
         '!packages/**/src/**/*.d.ts',
       ],
       testMatch: [
-        '<rootDir>/**/__tests__/**/*.{js,jsx,ts,tsx}',
-        '<rootDir>/**/*.(spec|test).{js,jsx,ts,tsx}',
+        '<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}',
+        '<rootDir>/src/**/*.(spec|test).{js,jsx,ts,tsx}',
+        '<rootDir>/packages/**/src/**/__tests__/**/*.{js,jsx,ts,tsx}',
+        '<rootDir>/packages/**/src/**/*.(spec|test).{js,jsx,ts,tsx}',
       ],
       globals: {
         'ts-jest': {
           tsConfig: locateTsConfig(paths.appPath),
-          stringifyContentPathRegex: '\\.html?$',
         },
       },
       moduleFileExtensions: [

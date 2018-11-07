@@ -17,13 +17,11 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
   private loggedInUser: User;
   context: Context;
   private space: Space;
-  private _myWorkItemsCard: boolean = false;
   private _userOwnsSpace: boolean = false;
 
   constructor(private authentication: AuthenticationService,
               private broadcaster: Broadcaster,
               private contexts: Contexts,
-              private featureTogglesService: FeatureTogglesService,
               private userService: UserService) { }
 
   ngOnInit() {
@@ -34,12 +32,6 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(this.userService.loggedInUser.subscribe((user: User) => {
       this.loggedInUser = user;
-    }));
-
-    this.subscriptions.push(this.featureTogglesService.getFeature('Analyze.MyWorkItemsCard').subscribe((feature: Feature) => {
-      if (feature.attributes['enabled'] && feature.attributes['user-enabled']) {
-        this._myWorkItemsCard = true;
-      }
     }));
 
     this._userOwnsSpace = this.checkSpaceOwner();
@@ -71,10 +63,6 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
       return this.context.space.relationships['owned-by'].data.id === this.loggedInUser.id;
     }
     return false;
-  }
-
-  get myWorkItemsCard(): boolean {
-    return this._myWorkItemsCard;
   }
 
   get userOwnsSpace(): boolean {
