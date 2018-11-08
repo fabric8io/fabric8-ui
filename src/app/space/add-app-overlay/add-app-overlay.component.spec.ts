@@ -61,7 +61,7 @@ describe('AddAppOverlayComponent', () => {
     },
     validateProjectName(projectName: string): boolean {
       // allows only '-', ' ' and 4-40 characters (must start and end with alphanumeric)
-      const pattern = /^[a-zA-Z0-9][a-zA-Z0-9-\s]{2,38}[a-zA-Z0-9]$/;
+      const pattern = /^[a-z](?!.*--)[a-z0-9-]{2,38}[a-z0-9]$/;
       return pattern.test(projectName);
     }
   };
@@ -276,6 +276,11 @@ describe('AddAppOverlayComponent', () => {
 
     it('validate Project Name to be falsy', () => {
       let valProjectName = component.isValidProjectName('#app-test-1');
+      expect(valProjectName).toBeFalsy();
+    });
+
+    it('validate Project Name to be falsy', () => {
+      let valProjectName = component.isValidProjectName('appTest-1');
       expect(valProjectName).toBeFalsy();
     });
 
