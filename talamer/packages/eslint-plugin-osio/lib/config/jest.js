@@ -16,7 +16,7 @@ module.exports = {
 
   overrides: [
     {
-      files: ['**/*.test.ts', '**/*.spec.ts'],
+      files: ['*.test.ts', '*.spec.ts'],
       rules: {
         'class-methods-use-this': 'off',
       },
