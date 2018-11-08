@@ -48,8 +48,8 @@ export class MySpacesItemActionsComponent implements OnDestroy, OnInit {
         tooltip: showPin ? 'Remove Pin' : 'Add Pin'
       }, {
         id: 'removeSpace',
-        title: 'Remove space',
-        tooltip: 'Remove space'
+        title: 'Remove Space',
+        tooltip: 'Remove Space'
       }]
     } as ActionConfig;
   }
