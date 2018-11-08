@@ -1,10 +1,10 @@
 module.exports = {
   'import/prefer-default-export': 'off',
 
-  'object-curly-spacing': ['error', 'never'],
+  'object-curly-spacing': ['error', 'always'],
 
   // max line length
-  'max-len': ['error', {code: 100, comments: 100, ignoreUrls: true}],
+  'max-len': ['error', { code: 100, comments: 100, ignoreUrls: true }],
 
   'no-plusplus': 'off',
 
@@ -13,4 +13,6 @@ module.exports = {
   'class-methods-use-this': 'off',
 
   'no-return-assign': ['error', 'except-parens'],
+
+  'react/jsx-one-expression-per-line': 'off',
 };

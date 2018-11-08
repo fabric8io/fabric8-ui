@@ -1,5 +1,5 @@
 process.env.NODE_ENV = 'production';
-const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 require('../lib/rewire-scripts')(true);
 

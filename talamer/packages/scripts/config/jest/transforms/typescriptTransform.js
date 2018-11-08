@@ -1,3 +1,3 @@
-const {process} = require('ts-jest');
+const { process } = require('ts-jest');
 
 module.exports.process = process;

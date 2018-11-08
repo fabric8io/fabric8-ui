@@ -12,4 +12,11 @@ module.exports = {
     require('./rules/jsx-a11y'),
     require('./rules/airbnb-overrides'),
   ),
+
+  overrides: [
+    {
+      files: ['*.tsx'],
+      rules: merge(require('./rules/typescript-react')),
+    },
+  ],
 };

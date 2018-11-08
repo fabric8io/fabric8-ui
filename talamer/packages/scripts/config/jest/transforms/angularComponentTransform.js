@@ -1,4 +1,4 @@
-const {process} = require('./typescriptTransform');
+const { process } = require('./typescriptTransform');
 
 const TEMPLATE_URL_REGEX = /templateUrl\s*:\s*('|"|`)(\.\/){0,}(.*)('|"|`)/g;
 const STYLE_URLS_REGEX = /styleUrls\s*:\s*\[[^\]]*\]/g;

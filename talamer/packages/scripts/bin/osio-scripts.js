@@ -46,7 +46,7 @@ if (supportedScripts.includes(script)) {
       .concat(require.resolve(`../scripts/${script}`))
       .concat(args.slice(scriptIndex + 1).concat(options))
       .filter((x) => x != null),
-    {stdio: 'inherit'},
+    { stdio: 'inherit' },
   );
   if (result.signal) {
     if (result.signal === 'SIGKILL') {

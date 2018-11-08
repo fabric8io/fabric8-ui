@@ -1,10 +1,9 @@
 {
   "extends": [
     "plugin:osio/base",
+    "plugin:osio/react",
     "plugin:osio/typescript",
-    "plugin:osio/typescript-test",
-    "plugin:osio/typescript-react",
-    "plugin:osio/typescript-prettier",
+    "plugin:osio/prettier",
     "plugin:osio/jest"
   ],
   "root": true

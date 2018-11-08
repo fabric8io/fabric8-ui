@@ -12,8 +12,8 @@ require('jest-zone-patch');
 
 require('./serializers/AngularSnapshotSerializer');
 // require('./HTMLCommentSerializer');
-const {getTestBed} = require('@angular/core/testing');
-const {BrowserDynamicTestingModule} = require('@angular/platform-browser-dynamic/testing');
-const {platformBrowserDynamicTesting} = require('@angular/platform-browser-dynamic/testing');
+const { getTestBed } = require('@angular/core/testing');
+const { BrowserDynamicTestingModule } = require('@angular/platform-browser-dynamic/testing');
+const { platformBrowserDynamicTesting } = require('@angular/platform-browser-dynamic/testing');
 
 getTestBed().initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());

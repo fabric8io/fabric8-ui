@@ -106,7 +106,7 @@ function rewireWebpack(prod) {
     },
   ];
 
-  const {oneOf} = config.module.rules[2];
+  const { oneOf } = config.module.rules[2];
   oneOf.unshift(
     {
       test: /\.(woff2|woff|ttf|eot|svg)$/,
@@ -188,7 +188,7 @@ function rewireWebpack(prod) {
     {
       test: /\.ts$/,
       use: [
-        {loader: require.resolve('cache-loader')},
+        { loader: require.resolve('cache-loader') },
         {
           loader: require.resolve('thread-loader'),
           options: {
@@ -213,7 +213,7 @@ function rewireWebpack(prod) {
     {
       test: /\.tsx$/,
       use: [
-        {loader: require.resolve('cache-loader')},
+        { loader: require.resolve('cache-loader') },
         {
           loader: require.resolve('thread-loader'),
           options: {

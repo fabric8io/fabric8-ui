@@ -14,7 +14,7 @@ module.exports = {
         '[everything-else]',
       ],
       groups: {
-        'static-members': [{static: true}],
+        'static-members': [{ static: true }],
       },
       accessorPairPositioning: 'getThenSet',
     },

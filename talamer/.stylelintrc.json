@@ -1,4 +1,4 @@
 {
   "extends": ["stylelint-config-osio/prettier"],
-  "ignoreFiles": ["**/*.(js|ts|tsx|jsx|md|html)"]
+  "ignoreFiles": ["**/*.(js|ts|tsx|jsx|md|html|svg)"]
 }

@@ -14,6 +14,6 @@ module.exports = {
 
   rules: merge(require('./rules/node'), {
     'no-process-env': 'off',
-    'no-param-reassign': ['error', {props: false}],
+    'no-param-reassign': ['error', { props: false }],
   }),
 };

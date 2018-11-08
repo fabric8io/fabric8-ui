@@ -12,7 +12,7 @@ module.exports = {
   // Disallow Jasmine globals
   'jest/no-jasmine-globals': 'error',
   // Limited snapshot sizes to keep snapshops manageable and reviewable.
-  'jest/no-large-snapshots': ['error', {maxSize: 12}],
+  'jest/no-large-snapshots': ['error', { maxSize: 12 }],
   // For better failure messages, use `toHaveLength()` to on object lengths.
   'jest/prefer-to-have-length': 'error',
   // Suggest using toMatchInlineSnapshot()
@@ -36,7 +36,7 @@ module.exports = {
   // Disallow explicitly returning from tests
   'jest/no-test-return-statement': 'error',
   // Enforce lowercase test names
-  'jest/lowercase-name': ['error', {ignore: ['describe']}],
+  'jest/lowercase-name': ['error', { ignore: ['describe'] }],
   // Disallow importing Jest
   'jest/no-jest-import': 'error',
 };

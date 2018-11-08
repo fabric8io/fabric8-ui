@@ -1,6 +1,6 @@
 module.exports = {
   // Restrict file extensions that may contain JSX
-  'react/jsx-filename-extension': ['error', {extensions: ['.js', '.jsx', '.tsx']}],
+  'react/jsx-filename-extension': ['error', { extensions: ['.js', '.jsx', '.tsx'] }],
   // Disable JS specific rules
   'react/default-props-match-prop-types': 'off',
 
