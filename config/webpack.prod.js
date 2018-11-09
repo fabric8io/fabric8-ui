@@ -171,6 +171,7 @@ module.exports = function (env) {
             },
             compress: {
               ecma: 5,
+              drop_console: true,
               warnings: false,
               // Disabled because of an issue with Uglify breaking seemingly valid code:
               // https://github.com/facebook/create-react-app/issues/2376
