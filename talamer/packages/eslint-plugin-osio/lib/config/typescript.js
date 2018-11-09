@@ -3,7 +3,7 @@ const merge = require('merge');
 module.exports = {
   overrides: [
     {
-      files: ['**/*.ts', '**/*.tsx'],
+      files: ['*.ts', '*.tsx'],
       parser: 'typescript-eslint-parser',
 
       plugins: ['typescript'],
