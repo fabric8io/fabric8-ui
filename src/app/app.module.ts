@@ -114,7 +114,6 @@ import { RavenExceptionHandler } from './shared/exception.handler';
 import { HttpInterceptorProviders } from './shared/interceptors/index';
 import { RequestCache } from './shared/request-cache.service';
 import { togglesApiUrlProvider } from './shared/toggles.api.provider';
-import { analyticsRecommendeApiUrlProvider } from './space/app-launcher/shared/analytics-url.service';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -179,7 +178,6 @@ export type StoreType = {
     ENV_PROVIDERS,
     AboutService,
     AnalyticService,
-    analyticsRecommendeApiUrlProvider,
     APP_PROVIDERS,
     ApiLocatorService,
     AreaService,

@@ -1,9 +1,9 @@
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
-import { TestBed } from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 import {
-  Config, GitHubDetails, HelperService, URLProvider
+  Config, GitHubDetails, HelperService
 } from 'ngx-launcher';
-import { AUTH_API_URL, AuthenticationService } from 'ngx-login-client';
+import { AuthenticationService } from 'ngx-login-client';
 import { createMock } from 'testing/mock';
 import { FABRIC8_FORGE_API_URL } from '../../../shared/runtime-console/fabric8-ui-forge-api';
 import { NewForgeConfig } from '../shared/new-forge.config';
@@ -23,10 +23,9 @@ describe('Service: AppLauncherGitproviderService', () => {
     authenticated: true,
     avatar: 'avatar-url',
     login: 'some-user',
-    organizations: ['fabric8-ui', 'some-user'],
-    organization: 'some-user'
+    organizations: {'fabric8-ui': 'fabric8-ui', 'some-user': undefined}
   } as GitHubDetails;
-  let orgs = ['fabric8-ui'];
+  let orgs = {'fabric8-ui': 'fabric8-ui'};
   let repos = ['fabric8-ui', 'fabric-uxd'];
 
   beforeEach(() => {
@@ -51,8 +50,8 @@ describe('Service: AppLauncherGitproviderService', () => {
     controller = TestBed.get(HttpTestingController);
   });
 
-  it('should get GitHubDetails', (done: DoneFn) => {
-    service.getGitHubDetails().subscribe((val) => {
+  it('should get GitHubDetails', async ((done: DoneFn) => {
+    service.getGitHubDetails().subscribe((val: GitHubDetails) => {
       expect(val).toEqual(gitHubDetails);
       done();
     });
@@ -66,7 +65,7 @@ describe('Service: AppLauncherGitproviderService', () => {
     expect(req2.request.headers.get('Authorization')).toEqual('Bearer mock-token');
     req2.flush(orgs);
 
-  });
+  }));
 
   it('should get user orgs', (done: DoneFn) => {
     service.getUserOrgs(user.login).subscribe((val) => {
@@ -85,14 +84,14 @@ describe('Service: AppLauncherGitproviderService', () => {
       expect(val).toBeTruthy();
       done();
     });
-    const req: TestRequest = controller.expectOne('http://example.com/services/git/repositories/?organization=fabric8-ui');
+    const req: TestRequest = controller.expectOne('http://example.com/services/git/repositories?organization=fabric8-ui');
     expect(req.request.method).toBe('GET');
     expect(req.request.headers.get('Authorization')).toEqual('Bearer mock-token');
     req.flush(['fabric8-ui/test-repo']);
   });
 
   it('should get gitHub repos for selected organisation', (done: DoneFn) => {
-    service.getGitHubRepoList(orgs[0]).subscribe((val) => {
+    service.getGitHubRepoList('fabric8-ui').subscribe((val) => {
       expect(val).toEqual(repos);
       done();
     });

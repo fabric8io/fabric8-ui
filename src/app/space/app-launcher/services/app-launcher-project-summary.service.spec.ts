@@ -1,7 +1,7 @@
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { Context } from 'ngx-fabric8-wit';
-import { AuthHelperService, Config, HelperService, Summary } from 'ngx-launcher';
+import { AuthHelperService, Config, HelperService, Projectile } from 'ngx-launcher';
 import { AUTH_API_URL, AuthenticationService } from 'ngx-login-client';
 import { Observable,  of as observableOf } from 'rxjs';
 import { createMock } from 'testing/mock';
@@ -14,16 +14,7 @@ import { AppLauncherProjectSummaryService } from './app-launcher-project-summary
 describe('Service: AppLauncherProjectSummaryService', () => {
   let service: AppLauncherProjectSummaryService;
   let controller: HttpTestingController;
-
-  let summaryData = {
-    dependencyCheck: null,
-    gitHubDetails: {login: 'some-user'},
-    mission: null,
-    organization: null,
-    pipeline: null,
-    runtime: null,
-    targetEnvironment: null
-  } as Summary;
+  const projectile = new Projectile<any>();
 
   class mockContextService {
     get current(): Observable<Context> { return observableOf(context1); }
@@ -54,7 +45,7 @@ describe('Service: AppLauncherProjectSummaryService', () => {
   });
 
   it('Should return uuid', (done: DoneFn) => {
-    service.setup(summaryData, 3).subscribe((val: any) => {
+    service.setup(projectile, 3).subscribe((val: any) => {
       expect(val).toBeDefined();
       expect(val.uuid).toEqual('e6daff35-5d93-4c38-965a-6a975cf80be1');
       done();
