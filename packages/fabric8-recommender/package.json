@@ -7,7 +7,7 @@
     "bundle-webpack": "npm run build",
     "clean": "npm run clean:lib && npm run clean:app",
     "clean:lib": "npm run rimraf -- projects/fabric8-stack-analysis-ui/node_modules",
-    "clean:app": "npm run rimraf -- node_modules dist",
+    "clean:app": "npm run rimraf -- package-lock.json node_modules dist",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "install:lib": "cd projects/fabric8-stack-analysis-ui && npm i",

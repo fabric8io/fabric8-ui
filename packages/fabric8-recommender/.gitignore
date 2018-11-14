@@ -39,6 +39,7 @@ testem.log
 Thumbs.db
 
 # Node Files #
+package-lock.json
 /node_modules
 projects/fabric8-stack-analysis-ui/node_modules
 /bower_components
