@@ -34,6 +34,7 @@ Icon?
 Thumbs.db
 
 # Node Files #
+package-lock.json
 /node_modules
 projects/ngx-feature-flag/node_modules
 /bower_components
