@@ -71,7 +71,7 @@ describe('FeatureContainerComponent', () => {
     hostComponent = hostFixture.componentInstance;
   });
 
-  it('should render content if toggles is on and user-enabled on', async(() => {
+  xit('should render content if toggles is on and user-enabled on', async(() => {
     // given
     featureServiceMock.getFeature.and.returnValue(of(feature));
     featureFlagMappingMock.convertFeatureNameToComponent.and.returnValue(MyFeatureComponentUnderDevComponent);
