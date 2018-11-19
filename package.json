@@ -324,9 +324,7 @@
       "node_modules/(?!@ngrx|ngx|fabric8|patternfly-ng|ng2)"
     ],
     "moduleNameMapper": {
-      "^testing/(.*)": "<rootDir>/src/testing/$1",
-      "^ngx-widgets$": "<rootDir>/node_modules/ngx-widgets/src/app/index.js",
-      "^ngx-bootstrap$": "<rootDir>/node_modules/ngx-bootstrap/index.js"
+      "^testing/(.*)": "<rootDir>/src/testing/$1"
     }
   }
 }
