@@ -14,7 +14,7 @@ export function createMock<T extends Object>(type: Type<T>): jasmine.SpyObj<T> {
     throw new Error(`Cannot mock falsy value "${type}"`);
   }
   const methodNames: string[] = uniq(getClassMethods(type.prototype));
-  const mock: jasmine.SpyObj<T> = jasmine.createSpyObj<T>(type.name, methodNames);
+  const mock: jasmine.SpyObj<T> = jasmine.createSpyObj(type.name, methodNames);
   methodNames.forEach((mtd: string): void => mock[mtd].and.throwError(`${type.name}#${mtd} not implemented`));
   return mock;
 }
