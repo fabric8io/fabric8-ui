@@ -42,7 +42,7 @@ npm-debug.log
 /coverage/
 
 # Typing #
-/src/typings/tsd/
+/talamer/packages/fabric8-ui/src/typings/tsd/
 /typings/
 /tsd_typings/
 
@@ -50,10 +50,10 @@ npm-debug.log
 /lint
 /dist
 /public/__build__/
-/src/*/__build__/
+/talamer/packages/fabric8-ui/src/*/__build__/
 /__build__/**
 /public/dist/
-/src/*/dist/
+/talamer/packages/fabric8-ui/src/*/dist/
 /dist/**
 /.awcache
 .webpack.json

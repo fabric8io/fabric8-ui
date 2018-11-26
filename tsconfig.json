@@ -9,7 +9,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
-    "baseUrl": "./src",
+    "baseUrl": "./talamer/packages/fabric8-ui/src",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "inlineSources": true,
