@@ -38,12 +38,11 @@
     "@types/jest": "^23.3.9"
   },
   "optionalDependencies": {
-    "@angular/core": "^6.1.8",
-    "@angular/platform-browser-dynamic": "^6.1.8",
+    "@angular/core": ">= 6",
+    "@angular/platform-browser-dynamic": ">= 6",
     "core-js": "^2.5.7",
-    "jasmine-core": "^3.2.1",
+    "jasmine-core": ">= 3",
     "jest-zone-patch": "0.0.8",
-    "rxjs": "^6.2.2",
     "zone.js": "^0.8.26"
   },
   "browserslist": {
