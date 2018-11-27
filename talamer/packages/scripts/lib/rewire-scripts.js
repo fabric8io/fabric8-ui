@@ -315,6 +315,7 @@ function rewireJest() {
 
     config = {
       ...config,
+      testURL: 'http://localhost:8080',
       transform: {
         '^.+\\.(js|jsx)$': isEjecting
           ? '<rootDir>/node_modules/babel-jest'
@@ -366,7 +367,6 @@ function rewireJest() {
       // or fix the need for these mappings altogether
       moduleNameMapper: {
         '^testing/(.*)': '<rootDir>/src/testing/$1',
-        '^ngx-bootstrap$': 'ngx-bootstrap/index.js',
       },
     };
 
