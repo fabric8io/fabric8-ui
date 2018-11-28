@@ -7,7 +7,7 @@ const appDirectory = fs.realpathSync(process.cwd());
 execSync(
   `${path.resolve(__dirname, '../node_modules/.bin/http-server')} ${path.resolve(
     appDirectory,
-    argv && argv.length >= 2 ? argv[1] : 'dist',
+    argv && argv.length >= 2 ? argv[1] : 'build',
   )} --cors`,
   { stdio: [0, 1, 2] },
 );

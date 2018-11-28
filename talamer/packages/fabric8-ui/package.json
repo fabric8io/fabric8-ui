@@ -11,9 +11,9 @@
   "scripts": {
     "start": "osio-scripts start",
     "analyze": "osio-scripts analyze",
-    "build": "osio-scripts build",
+    "build": "STATIC_DIR=_static osio-scripts build",
     "postinstall": "node ./scripts/postinstall.js",
-    "prod": "osio-scripts prod -- build",
+    "prod": "osio-scripts prod",
     "test": "osio-scripts test --watchAll=false --transformIgnorePatterns \"node_modules/(?!@ngrx|ngx|fabric8|patternfly-ng|ng2|@osio)\"",
     "test:debug": "osio-scripts test:debug --watchAll=false --transformIgnorePatterns \"node_modules/(?!@ngrx|ngx|fabric8|patternfly-ng|ng2|@osio)\""
   },

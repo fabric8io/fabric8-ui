@@ -53,6 +53,19 @@ function rewireWebpack(prod) {
   const paths = require('react-scripts/config/paths');
   const webpackConfig = `react-scripts/config/webpack.config.${prod ? 'prod' : 'dev'}.js`;
   const config = require(webpackConfig);
+  const { oneOf } = config.module.rules[2];
+
+  // rename static dir location according to env var STATIC_DIR
+  const staticDir = process.env.STATIC_DIR || 'static';
+
+  config.output = {
+    ...config.output,
+    filename: prod ? `${staticDir}/js/[name].[chunkhash:8].js` : `${staticDir}/js/bundle.js`,
+    chunkFilename: prod
+      ? `${staticDir}/js/[name].[chunkhash:8].chunk.js`
+      : `${staticDir}/js/[name].chunk.js`,
+  };
+  oneOf[0].options.name = `${staticDir}/media/[name].[hash:8].[ext]`;
 
   // Support eslint for ts and tsx files
   config.module.rules[1] = {
@@ -106,14 +119,13 @@ function rewireWebpack(prod) {
     },
   ];
 
-  const { oneOf } = config.module.rules[2];
   oneOf.unshift(
     {
       test: /\.(woff2|woff|ttf|eot|svg)$/,
       loader: require.resolve('url-loader'),
       options: {
         limit: 10000,
-        name: 'static/media/[name].[hash:8].[ext]',
+        name: `${staticDir}/media/[name].[hash:8].[ext]`,
         // TODO why is this path needed?
         includePaths: [path.resolve(__dirname, '../../../node_modules/patternfly/dist/fonts/')],
       },
