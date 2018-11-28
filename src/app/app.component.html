@@ -5,7 +5,14 @@
     [notifications]="notifications.current"
     (onActionSelect)="handleAction($event)">
 </pfng-toast-notification-list>
-<f8-add-space-overlay class="launcher fade in" *ngIf="showAddSpaceOverlay"></f8-add-space-overlay>
+
+<div class="modal fade" bsModal #modalAddSpaceOverlay="bs-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog f8-modal-lg">
+    <div class="modal-content">
+      <f8-add-space-overlay></f8-add-space-overlay>
+    </div>
+  </div>
+</div>
 <f8-add-app-overlay [preselectedFlow]="addAppFlow" class="code-imports fade in" *ngIf="showAddAppOverlay"></f8-add-app-overlay>
 
 <main>

@@ -1,64 +1,80 @@
-<div class="launcher-dialog">
-  <div class="create-launcher">
-    <form class="col-sm-8 col-sm-offset-2 create-launcher-step active" role="form" (ngSubmit)="createSpace()" novalidate>
-      <section class="container-fluid padding-top-standard-offset">
-        <form class="form" #spaceForm="ngForm">
-          <div class="row">
-            <h1>Create a New Space</h1>
-            <div class="col-sm-6">
-                <div class="form-group">
-                  <label for="name" class="control-label">Space Name</label>
-                  <input id="add-space-overlay-name" name="name" type="text" class="form-control" placeholder="Enter a unique name for your space"
-                         #addSpaceOverlayNameInput
-                         [(ngModel)]="space.name" #name="ngModel" required uniqueSpaceName validSpaceName
-                         (keyup.enter)="createSpaceButton.click()"/>
-                  <div *ngIf="name.errors && name.dirty" class="alert-danger">
-                    <div [hidden]="!name.errors.required">
-                      Space Name is required to create a Space.
-                    </div>
-                    <div [hidden]="!name.errors.minLength">
-                      {{name.errors.minLength?.message}}
-                    </div>
-                    <div [hidden]="!name.errors.maxLength">
-                      {{name.errors.maxLength?.message}}
-                    </div>
-                    <div [hidden]="!name.errors.unique">
-                      {{name.errors.unique?.message}}
-                    </div>
-                    <div [hidden]="!name.errors.invalid">
-                      {{name.errors.invalid?.message}}
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="description" class="control-label">Description</label>
-                  <input id="add-space-overlay-description" name="description" type="text" class="form-control create-launcher-description" placeholder="Enter a Space Description" #description/>
-                </div>
-            </div>
-            <div class="col-sm-6">
-               <div class="spaces-information-block">
-                 <div class="col-sm-12 spaces-information-block_notice">
-                   <div class="col-sm-2">
-                     <i class="pficon pficon-warning-triangle-o"></i>
-                   </div>
-                   <div class="col-sm-10">
-                     <b>This space will be public</b>, which means that anyone can access the code and participate in creating the product.
-                   </div>
-                 </div>
-               </div>
-            </div>
+
+<div class="modal-header">
+  Create space
+  <button type="button" class="close pull-right" aria-label="Close" (click)="hideAddSpaceOverlay(); spaceForm.reset()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body container-fluid f8-add-space-overlay">
+  <div class="row f8-add-space-overlay--container">
+    <div class="alert alert-danger alert-dismissable" *ngIf="name.errors && name.dirty">
+      <span class="pficon pficon-error-circle-o"></span>
+      <span [hidden]="!name.errors.required">Space Name is required to create a Space.</span>
+      <span [hidden]="!name.errors.minLength">{{name.errors.minLength?.message}}</span>
+      <span [hidden]="!name.errors.maxLength">{{name.errors.maxLength?.message}}</span>
+      <span [hidden]="!name.errors.unique">{{name.errors.unique?.message}}</span>
+      <span [hidden]="!name.errors.invalid">{{name.errors.invalid?.message}}</span>
+    </div>
+    <section class="col-sm-6 f8-add-space-overlay--left-section">
+        <form #spaceForm="ngForm" (ngSubmit)="createSpace(); spaceForm.reset()">
+          <div class="col-sm-9">
+            <label class="font-size-small f8-add-space-overlay-label" for="add-space-overlay-name">
+              <span class="required">*</span>
+              Name
+            </label>
+            <input id="add-space-overlay-name" class="form-control" name="name"
+              type="text" placeholder="Enter a unique name for your space"
+              #addSpaceOverlayNameInput
+              [(ngModel)]="space.name" #name="ngModel" required uniqueSpaceName validSpaceName
+              (keyup.enter)="createSpaceButton.click()" autocomplete="off"/>
+            <p class="font-size-small">Names must contain 4-40 characters, contain only letters, numbers, underscores
+              or hyphens, not start with a number, and not start or end with underscores or hyphens.
+            </p>
+            <label class="font-size-small f8-add-space-overlay-label" for="add-space-overlay-description">
+              Description
+            </label>
+            <input id="add-space-overlay-description" class="form-control"
+              name="description" type="text" placeholder="Enter a Space Description" #description/>
+          </div>
+          <div class="col-sm-12 f8-add-space-overlay--buttons">
+            <button type="button" id="cancelSpaceButton" class="btn btn-default btn-lg" (click)="hideAddSpaceOverlay(); spaceForm.reset()">Cancel</button>
+            <button type="button" class="btn btn-default btn-lg margin-left-20" [disabled]="!spaceForm.form.valid || !canSubmit" (click)="createSpaceAndExit(); spaceForm.reset()">Create Space and Exit</button>
+            <button type="submit" id="createSpaceButton" class="btn btn-primary btn-lg margin-left-20" [disabled]="!spaceForm.form.valid || !canSubmit" #createSpaceButton>Create Space and Continue</button>
           </div>
         </form>
       </section>
-      <footer class="container-fluid padding-top-standard-offset padding-bottom-standard-offset">
-        <div class="row">
-          <div class="col-sm-12 create-launcher-step-tool-bar button-right">
-            <button #createSpaceButton id="createSpaceButton" class="btn btn-primary" [disabled]="!spaceForm.form.valid || !canSubmit" type="submit">Ok</button>
-            <button id="cancelSpaceButton" class="btn btn-link" aria-label="Cancel"
-                    (click)="hideAddSpaceOverlay()">Cancel</button>
+      <section class="col-sm-6 f8-add-space-overlay--right-section">
+        <div class="col-sm-9">
+          <div class="col-sm-1 f8-add-space-overlay--info-icon">
+            <i class="pficon pficon-info"></i>
           </div>
+          <p class="col-sm-11 f8-add-space-overlay--info">
+            This space will be public, which means that anyone can access the code
+            and participate in creating the product.
+          </p>
         </div>
-      </footer>
-    </form>
+        <div class="font-size-small col-sm-9">
+          <h5>What is a space?</h5>
+          <p>
+            A space in Openshift.io is where a team works. Every application, codebase,
+            iteration, work item and collaborator is attached to a space.
+          </p>
+          <p>
+            Use spaces to plan and track development, collaborate and develop,
+            test and deploy applications.
+          </p>
+          <p>
+            <a>Learn more <i class="fa fa-external-link"></i></a>
+          </p>
+          <h5>What happens next?</h5>
+          <p>
+            After you create a space, you can create or import applications, start planning
+            work for your team and add collaborators.
+          </p>
+          <p>
+            <a>Learn more <i class="fa fa-external-link"></i></a>
+          </p>
+        </div>
+      </section>
   </div>
 </div>

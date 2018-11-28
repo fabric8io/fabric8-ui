@@ -20,6 +20,7 @@ import {
   Logger
 } from 'ngx-base';
 import { BsModalService } from 'ngx-bootstrap/modal';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import {
   Context,
   Spaces
@@ -66,6 +67,7 @@ class MockContextResolver implements Resolve<Context> {
 describe('AppComponent', () => {
   initContext(AppComponent, HostComponent, {
     imports: [
+      ModalModule,
       RouterTestingModule.withRoutes([
         { path: '_home', component: MockChildComponent },
         { path: '_error', component: MockChildComponent },

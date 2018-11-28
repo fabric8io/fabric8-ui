@@ -3,6 +3,7 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Event, NavigationEnd, NavigationError, Router } from '@angular/router';
 import { Broadcaster, Logger } from 'ngx-base';
 import { BsModalService } from 'ngx-bootstrap/modal';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Spaces } from 'ngx-fabric8-wit';
 import { FeatureFlagConfig } from 'ngx-feature-flag';
 import { AuthenticationService } from 'ngx-login-client';
@@ -41,6 +42,7 @@ export class AppComponent {
   protected subscriptions: Subscription[] = [];
 
   @ViewChild('connectToGithubModal') connectToGithubModal: TemplateRef<any>;
+  @ViewChild('modalAddSpaceOverlay') modalAddSpaceOverlay: ModalDirective;
 
   constructor(
     private about: AboutService,
@@ -134,9 +136,11 @@ export class AppComponent {
 
     this.subscriptions.push(this.broadcaster.on('showAddSpaceOverlay').subscribe((arg: any) => {
       if (typeof arg === 'boolean') {
-        this.showAddSpaceOverlay = arg;
         if (arg) {
           this.addAppFlow = null;
+          this.modalAddSpaceOverlay.show();
+        } else {
+          this.modalAddSpaceOverlay.hide();
         }
       } else if (typeof arg === 'object') {
         this.showAddSpaceOverlay = arg.show;

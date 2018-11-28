@@ -66,7 +66,7 @@ export class AddSpaceOverlayComponent implements OnInit {
    * Creates a persistent collaboration space
    * by invoking the spaceService
    */
-  createSpace() {
+  createSpace(showAddAppOverlay: boolean = true) {
     if (!this.userService.currentLoggedInUser && !this.userService.currentLoggedInUser.id) {
       this.notifications.message({
         message: `Failed to create "${this.space.name}". Invalid user: "${this.userService.currentLoggedInUser}"`,
@@ -95,7 +95,9 @@ export class AddSpaceOverlayComponent implements OnInit {
       .subscribe(createdSpace => {
           this.router.navigate([createdSpace.relationalData.creator.attributes.username,
             createdSpace.attributes.name]);
-          this.showAddAppOverlay();
+          if (showAddAppOverlay) {
+            this.showAddAppOverlay();
+          }
           this.hideAddSpaceOverlay();
         },
         err => {
@@ -104,6 +106,10 @@ export class AddSpaceOverlayComponent implements OnInit {
             type: NotificationType.DANGER
         } as Notification);
     }));
+  }
+
+  createSpaceAndExit() {
+    this.createSpace(false);
   }
 
   hideAddSpaceOverlay(): void {
