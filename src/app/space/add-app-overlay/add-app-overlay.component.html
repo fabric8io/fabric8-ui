@@ -81,7 +81,9 @@
           and starts an initial build.
         </p>
         <p>
-          <a>Learn more <i class="fa fa-external-link"></i></a>
+          <a href="https://docs.openshift.io/getting-started-guide.html#creating_new_application-hello-world" target="_blank">
+            Learn more <i class="fa fa-external-link"></i>
+          </a>
         </p>
         <h5>What is a codebase?</h5>
         <p>
@@ -92,7 +94,9 @@
           and containerized development/testing enviroment to make updates to your codebase.
         </p>
         <p>
-          <a>Learn more <i class="fa fa-external-link"></i></a>
+          <a href="https://docs.openshift.io/getting-started-guide.html#about_application_codebases" target="_blank">
+            Learn more <i class="fa fa-external-link"></i>
+          </a>
         </p>
         <h5>When I import a codebase?</h5>
         <p>
@@ -100,7 +104,9 @@
           option and use that code as a foundation for an application in Openshift.io.
         </p>
         <p>
-          <a>Learn more <i class="fa fa-external-link"></i></a>
+          <a href="https://docs.openshift.io/getting-started-guide.html#importing-existing-project" target="_blank">
+            Learn more <i class="fa fa-external-link"></i>
+          </a>
         </p>
       </div>
     </section>
@@ -109,6 +115,6 @@
 <div class="modal-footer f8-add-app-overlay--modal-footer">
   <button type="button" class="btn btn-default btn-lg" (click)="hideAddAppOverlay(); appForm.reset()">Cancel</button>
   <button type="button" id="import-app-next" class="btn btn-primary btn-lg margin-left-20"
-    [disabled]="selectedFlow === '' || !isProjectNameValid || !isProjectNameAvailable"
+    [disabled]="selectedFlow === '' || !isProjectNameValid || !isProjectNameAvailable || navigationInProgress"
     (click)="routeToLaunchApp()">Next <i *ngIf="navigationInProgress" class="pficon pficon-in-progress fa-spin"></i></button>
 </div>
