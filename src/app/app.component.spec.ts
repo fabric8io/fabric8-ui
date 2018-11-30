@@ -67,7 +67,7 @@ class MockContextResolver implements Resolve<Context> {
 describe('AppComponent', () => {
   initContext(AppComponent, HostComponent, {
     imports: [
-      ModalModule,
+      ModalModule.forRoot(),
       RouterTestingModule.withRoutes([
         { path: '_home', component: MockChildComponent },
         { path: '_error', component: MockChildComponent },

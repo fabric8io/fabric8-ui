@@ -108,7 +108,7 @@ describe('AddSpaceOverlayComponent', () => {
       };
       component.ngOnInit();
 
-      const submitBtnEl = fixture.debugElement.query(By.css('button[type=submit]'));
+      const submitBtnEl = fixture.debugElement.query(By.css('#createSpaceButton'));
 
       expect(submitBtnEl.nativeElement.disabled).toBeFalsy();
       expect(component.canSubmit).toBe(true);

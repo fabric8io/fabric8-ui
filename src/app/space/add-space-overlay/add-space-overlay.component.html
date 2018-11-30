@@ -7,16 +7,17 @@
 </div>
 <div class="modal-body container-fluid f8-add-space-overlay">
   <div class="row f8-add-space-overlay--container">
-    <div class="alert alert-danger alert-dismissable" *ngIf="name.errors && name.dirty">
-      <span class="pficon pficon-error-circle-o"></span>
-      <span [hidden]="!name.errors.required">Space Name is required to create a Space.</span>
-      <span [hidden]="!name.errors.minLength">{{name.errors.minLength?.message}}</span>
-      <span [hidden]="!name.errors.maxLength">{{name.errors.maxLength?.message}}</span>
-      <span [hidden]="!name.errors.unique">{{name.errors.unique?.message}}</span>
-      <span [hidden]="!name.errors.invalid">{{name.errors.invalid?.message}}</span>
-    </div>
-    <section class="col-sm-6 f8-add-space-overlay--left-section">
-        <form #spaceForm="ngForm" (ngSubmit)="createSpace(); spaceForm.reset()">
+    <section class="col-sm-6 f8-add-space-overlay--left-section" [ngClass]="{'has-error': name.errors && name.dirty}">
+        <form #spaceForm="ngForm">
+          <div class="alert alert-danger alert-dismissable"
+            *ngIf="name.errors && name.dirty">
+            <span class="pficon pficon-error-circle-o"></span>
+            <span [hidden]="!name.errors.required">Space Name is required to create a Space.</span>
+            <span [hidden]="!name.errors.minLength">{{name.errors.minLength?.message}}</span>
+            <span [hidden]="!name.errors.maxLength">{{name.errors.maxLength?.message}}</span>
+            <span [hidden]="!name.errors.unique">{{name.errors.unique?.message}}</span>
+            <span [hidden]="!name.errors.invalid">{{name.errors.invalid?.message}}</span>
+          </div>
           <div class="col-sm-9">
             <label class="font-size-small f8-add-space-overlay-label" for="add-space-overlay-name">
               <span class="required">*</span>
@@ -27,7 +28,7 @@
               #addSpaceOverlayNameInput
               [(ngModel)]="space.name" #name="ngModel" required uniqueSpaceName validSpaceName
               (keyup.enter)="createSpaceButton.click()" autocomplete="off"/>
-            <p class="font-size-small">Names must contain 4-40 characters, contain only letters, numbers, underscores
+            <p class="font-size-small f8-add-space-overlay--tip help-block">Names must contain 4-40 characters, contain only letters, numbers, underscores
               or hyphens, not start with a number, and not start or end with underscores or hyphens.
             </p>
             <label class="font-size-small f8-add-space-overlay-label" for="add-space-overlay-description">
@@ -35,11 +36,6 @@
             </label>
             <input id="add-space-overlay-description" class="form-control"
               name="description" type="text" placeholder="Enter a Space Description" #description/>
-          </div>
-          <div class="col-sm-12 f8-add-space-overlay--buttons">
-            <button type="button" id="cancelSpaceButton" class="btn btn-default btn-lg" (click)="hideAddSpaceOverlay(); spaceForm.reset()">Cancel</button>
-            <button type="button" class="btn btn-default btn-lg margin-left-20" [disabled]="!spaceForm.form.valid || !canSubmit" (click)="createSpaceAndExit(); spaceForm.reset()">Create Space and Exit</button>
-            <button type="submit" id="createSpaceButton" class="btn btn-primary btn-lg margin-left-20" [disabled]="!spaceForm.form.valid || !canSubmit" #createSpaceButton>Create Space and Continue</button>
           </div>
         </form>
       </section>
@@ -64,7 +60,9 @@
             test and deploy applications.
           </p>
           <p>
-            <a>Learn more <i class="fa fa-external-link"></i></a>
+            <a href="https://docs.openshift.io/user-guide.html#working_with_spaces" target="_blank">
+              Learn more <i class="fa fa-external-link"></i>
+            </a>
           </p>
           <h5>What happens next?</h5>
           <p>
@@ -72,9 +70,27 @@
             work for your team and add collaborators.
           </p>
           <p>
-            <a>Learn more <i class="fa fa-external-link"></i></a>
+            <a href="https://docs.openshift.io/getting-started-guide.html" target="blank">
+              Learn more <i class="fa fa-external-link"></i>
+            </a>
           </p>
         </div>
       </section>
   </div>
+</div>
+<div class="modal-footer f8-add-space-overlay--modal-footer">
+  <button type="button" id="cancelSpaceButton" class="btn btn-default btn-lg"
+    (click)="hideAddSpaceOverlay(); spaceForm.reset()">
+    Cancel
+  </button>
+  <button type="button" class="btn btn-default btn-lg margin-left-20"
+    [disabled]="!spaceForm.form.valid || !canSubmit"
+    (click)="createSpaceAndExit(); spaceForm.reset()">
+    Create Space and Exit
+  </button>
+  <button type="button" id="createSpaceButton" class="btn btn-primary btn-lg margin-left-20"
+    [disabled]="!spaceForm.form.valid || !canSubmit"
+    (click)="createSpace()" #createSpaceButton>
+    Create Space and Continue
+  </button>
 </div>
