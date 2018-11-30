@@ -8,27 +8,29 @@
   &-label {
     font-weight: normal;
   }
-  &--container {
+  &__container {
     padding: 30px 20px 10px;
   }
-  &--tip {
+  &__tip {
     margin-bottom: 40px;
   }
-  &--right-section {
+  &__right-section {
     border-left: 3px solid @color-pf-black-200;
-    padding-left: 40px;
+    padding: 0 40px;
   }
-  &--info-icon {
+  &__info-icon {
+    display: inline-block;
     font-size: 22px;
     color: @color-pf-blue-500;
-    padding: 0;
+    width: 28px;
+    vertical-align: top;
   }
-  &--info {
+  &__info {
+    display: inline-block;
     font-weight: 600;
-    font-size: 12px;
-    padding: 0;
+    max-width: calc(100% - 32px);
   }
-  &--modal-footer {
+  &__modal-footer {
     border-top: 3px solid @color-pf-black-200;
     margin-top: 0;
     padding: 30px;

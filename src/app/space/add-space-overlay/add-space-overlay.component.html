@@ -6,8 +6,8 @@
   </button>
 </div>
 <div class="modal-body container-fluid f8-add-space-overlay">
-  <div class="row f8-add-space-overlay--container">
-    <section class="col-sm-6 f8-add-space-overlay--left-section" [ngClass]="{'has-error': name.errors && name.dirty}">
+  <div class="row f8-add-space-overlay__container">
+    <section class="col-sm-6 f8-add-space-overlay__left-section" [ngClass]="{'has-error': name.errors && name.dirty}">
         <form #spaceForm="ngForm">
           <div class="alert alert-danger alert-dismissable"
             *ngIf="name.errors && name.dirty">
@@ -19,7 +19,7 @@
             <span [hidden]="!name.errors.invalid">{{name.errors.invalid?.message}}</span>
           </div>
           <div class="col-sm-9">
-            <label class="font-size-small f8-add-space-overlay-label" for="add-space-overlay-name">
+            <label class="f8-add-space-overlay-label" for="add-space-overlay-name">
               <span class="required">*</span>
               Name
             </label>
@@ -28,10 +28,11 @@
               #addSpaceOverlayNameInput
               [(ngModel)]="space.name" #name="ngModel" required uniqueSpaceName validSpaceName
               (keyup.enter)="createSpaceButton.click()" autocomplete="off"/>
-            <p class="font-size-small f8-add-space-overlay--tip help-block">Names must contain 4-40 characters, contain only letters, numbers, underscores
+            <p class="font-size-small f8-add-space-overlay__tip help-block">
+              Names must contain 4-40 characters, contain only letters, numbers, underscores
               or hyphens, not start with a number, and not start or end with underscores or hyphens.
             </p>
-            <label class="font-size-small f8-add-space-overlay-label" for="add-space-overlay-description">
+            <label class="f8-add-space-overlay-label" for="add-space-overlay-description">
               Description
             </label>
             <input id="add-space-overlay-description" class="form-control"
@@ -39,46 +40,43 @@
           </div>
         </form>
       </section>
-      <section class="col-sm-6 f8-add-space-overlay--right-section">
-        <div class="col-sm-9">
-          <div class="col-sm-1 f8-add-space-overlay--info-icon">
-            <i class="pficon pficon-info"></i>
-          </div>
-          <p class="col-sm-11 f8-add-space-overlay--info">
-            This space will be public, which means that anyone can access the code
-            and participate in creating the product.
-          </p>
+      <section class="col-sm-6 f8-add-space-overlay__right-section">
+        <div class="f8-add-space-overlay__info-icon">
+          <i class="pficon pficon-info"></i>
         </div>
-        <div class="font-size-small col-sm-9">
-          <h5>What is a space?</h5>
-          <p>
-            A space in Openshift.io is where a team works. Every application, codebase,
-            iteration, work item and collaborator is attached to a space.
-          </p>
-          <p>
-            Use spaces to plan and track development, collaborate and develop,
-            test and deploy applications.
-          </p>
-          <p>
-            <a href="https://docs.openshift.io/user-guide.html#working_with_spaces" target="_blank">
-              Learn more <i class="fa fa-external-link"></i>
-            </a>
-          </p>
-          <h5>What happens next?</h5>
-          <p>
-            After you create a space, you can create or import applications, start planning
-            work for your team and add collaborators.
-          </p>
-          <p>
-            <a href="https://docs.openshift.io/getting-started-guide.html" target="blank">
-              Learn more <i class="fa fa-external-link"></i>
-            </a>
-          </p>
-        </div>
+        <p class="f8-add-space-overlay__info">
+          This space will be public, which means that anyone can access the code
+          and participate in creating the product.
+        </p>
+        <h5>What is a space?</h5>
+        <p>
+          A space in Openshift.io is where a team works. Every application, codebase,
+          iteration, work item and collaborator is attached to a space.
+        </p>
+        <p>
+          Use spaces to plan and track development, collaborate and develop,
+          test and deploy applications.
+        </p>
+        <p>
+          <a href="https://docs.openshift.io/user-guide.html#working_with_spaces" target="_blank">
+            Learn more <i class="fa fa-external-link"></i>
+          </a>
+        </p>
+        <br/>
+        <h5>What happens next?</h5>
+        <p>
+          After you create a space, you can create or import applications, start planning
+          work for your team and add collaborators.
+        </p>
+        <p>
+          <a href="https://docs.openshift.io/getting-started-guide.html" target="blank">
+            Learn more <i class="fa fa-external-link"></i>
+          </a>
+        </p>
       </section>
   </div>
 </div>
-<div class="modal-footer f8-add-space-overlay--modal-footer">
+<div class="modal-footer f8-add-space-overlay__modal-footer">
   <button type="button" id="cancelSpaceButton" class="btn btn-default btn-lg"
     (click)="hideAddSpaceOverlay(); spaceForm.reset()">
     Cancel
