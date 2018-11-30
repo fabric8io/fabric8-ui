@@ -147,10 +147,6 @@ export class AppComponent {
       }
     }));
 
-    this.subscriptions.push(this.broadcaster.on('showAddAppOverlay').subscribe((show: boolean) => {
-      this.showAddAppOverlay = show;
-    }));
-
     this.disconnectedStateConfig = {
       actions: {
         primaryActions: [{

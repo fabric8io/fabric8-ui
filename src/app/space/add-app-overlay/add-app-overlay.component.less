@@ -1,165 +1,46 @@
 @import (reference) '../../../assets/stylesheets/shared/osio.less';
 @icon-path: '../../../assets/stylesheets/shared/_icons.less';
 
-p,
-form,
-input,
-.btn {
-  font-size: 14px;
-}
-
-.imports-dialog {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, .8);
-  overflow-y: auto;
-  .form-group {
-    margin-top: 35px;
+.f8-add-app-overlay {
+  .required {
+    color: @color-pf-red;
   }
-  .form-control {
-    background-color: transparent;
-    border: 0;
-    border-bottom: 1px solid @color-pf-white;
-    border-radius: 0;
-    font-size: 1.2em;
-    color: @color-pf-white;
-    &:focus {
-      border-bottom-color: @color-pf-blue;
-      box-shadow: none;
-    }
+  &--container {
+    padding: 30px 20px;
   }
-  input::placeholder {
-    font-style: italic;
-    color: @color-pf-white;
+  &--tip {
+    margin-bottom: 40px;
   }
-  input:hover,
-  input:focus {
-    border-bottom-color: @color-pf-blue;
+  &--label {
+    font-size: 14px;
+    font-weight: normal;
   }
-  .code-imports {
-    color: @color-pf-white;
-    overflow-y: auto;
-    .alert-row {
-      position: relative;
-      .alert-column {
-        position: absolute;
-        top: -50px;
-        .alert-danger {
-          background-color: rgba(0, 0, 0, 1);
-          border: 1px solid @color-pf-red-100;
-          color: @color-pf-red-100;
-        }
-      }
-    }
-    &--step {
-      margin-top: 5%;
-      padding: 35px;
-      &_title {
-        font-size: 1.5em;
-      }
-      label {
-        margin-bottom: 15px;
-      }
-      &_pencil {
-        &:hover {
-          &:after {
-            content: '\f040';
-            font-family: FontAwesome;
-            position: absolute;
-            top: 67px;
-            right: 20px;
-            color: @color-pf-white;
-            font-size: 1.5em;
-          }
-        }
-      }
-      &_input {
-        margin-bottom: 10px;
-      }
-      &_help-block {
-        position: absolute;
-        top: 96px;
-      }
-      &_tooltip-label {
-        cursor: pointer;
-        float: right;
-        margin-top: -8px;
-        span {
-          margin-left: 5px;
-        }
-      }
-      .popover {
-        max-width: none;
-        width: 250px;
-        ul {
-          padding-left: 18px;
-        }
-      }
-      &_content {
-        background-color: transparent;
-        color: @color-pf-white;
-        border: 0;
-        &:hover {
-          box-shadow: 0 1px 6px rgba(255, 255, 255, .35);
-        }
-        .codebase-card-container {
-          min-height: 200px;
-          display: flex;
-          align-items: center;
-          &-radio {
-            height: 70%;
-            &-input {
-              display: flex;
-              align-items: center;
-              height: 100px;
-            }
-          }
-          &-create-app-image {
-            height: 80px;
-          }
-          &-import-app-image {
-            height: 80px;
-          }
-          &-desp {
-            align-self: flex-start;
-            height: 100%;
-            .card-pf-item {
-              font-size: 1em;
-            }
-          }
-        }
-      }
-      &_toolbar {
-        margin-top: 40px;
-        text-align: center;
-        color: @color-pf-black-700;
-        button:last-of-type {
-          margin-left: 15px;
-        }
-        .btn.disabled,.btn[disabled] {
-          /* stylelint-disable */
-          background-color: transparent !important;
-          background: transparent !important;
-          /* stylelint-enable */
-        }
-      }
-    }
-    .sticky.close {
-      color: @color-pf-white;
-      position: fixed;
-      right: 130px;
-      top: 121px;
-      z-index: 1030;
-      font-size: 25px;
-      .pficon {
-        background: @color-pf-black-900;
-        border: 3px solid @color-pf-black-900;
-        border-radius: 50%;
-        padding: 2px 4px;
-      }
-    }
+  &--card {
+    padding: 20px 30px;
+  }
+  &--card-col-left {
+    border-right: 2px solid @color-pf-black-200;
+    padding: 0;
+  }
+  &--card-col-middle h5 {
+    font-weight: 600;
+    margin-top: 0;
+  }
+  &--card-col-left {
+    padding: 0;
+  }
+  &--image {
+    width: 80px;
+  }
+  &--left-section {
+    border-right: 3px solid @color-pf-black-200;
+  }
+  &--right-section {
+    padding-left: 40px;
+  }
+  &--modal-footer {
+    border-top: 3px solid @color-pf-black-200;
+    margin-top: 0;
+    padding: 30px;
   }
 }

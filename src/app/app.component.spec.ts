@@ -78,7 +78,8 @@ describe('AppComponent', () => {
           }
         },
         { path: '**', redirectTo: '/_error' }
-      ])
+      ]),
+      ModalModule.forRoot()
     ],
     declarations: [ MockChildComponent ],
     providers: [

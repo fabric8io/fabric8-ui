@@ -1,150 +1,114 @@
-<div class="imports-dialog">
-  <div class="code-imports">
-    <form class="code-imports--step active" role="form">
-      <section class="container-fluid">
-        <form class="form" #spaceForm="ngForm">
-          <div class="row alert-row">
-            <div class="col-sm-10 col-md-8 col-md-offset-2 alert-column">
-              <div class="alert-box" *ngIf="isProjectNameValid === false">
-                <div class="alert alert-danger">
-                  <span class="pficon pficon-error-circle-o"></span>
-                  <strong>Syntax Error.</strong> See a full list of naming requirements below the input field.
-                </div>
-              </div>
+<div class="modal-header">
+  Create an Application
+  <button type="button" class="close pull-right" aria-label="Close" (click)="appForm.reset(); hideAddAppOverlay()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body container-fluid f8-add-app-overlay">
+  <div class="row f8-add-app-overlay--container">
+    <section class="col-sm-6 f8-add-app-overlay--left-section">
+      <form class="form" role="form" #appForm="ngForm">
+        <div class="alert alert-danger alert-dismissable" *ngIf="projectName && isProjectNameValid === false">
+          <span class="pficon pficon-error-circle-o"></span>
+          <strong>Syntax Error.</strong> See a full list of naming requirements below the input field.
+        </div>
+        <div class="alert alert-danger alert-dismissable" *ngIf="projectName && isProjectNameAvailable === false">
+          <span class="pficon pficon-error-circle-o"></span>
+          Application name is already used in your current Space. Please enter a new one.
+        </div>
+        <div class="col-sm-10" [ngClass]="{'has-error': projectName && isProjectNameValid === false}">
+          <label class="f8-add-app-overlay--label" for="projectName">
+            <span class="required">*</span>
+            Name
+          </label>
+          <input id="projectName" name="projectName" type="text" class="form-control code-imports--step_input" placeholder="Enter Application Name"
+            #projectNameInput
+            aria-label="Application Name Input" required
+            [(ngModel)]="projectName"
+            [value]="projectName | lowercase"
+            (keyup)="validateProjectName()"
+            autocomplete="off">
+          <p class="font-size-small f8-add-app-overlay--tip help-block">
+            Name must contain 4-40 characters, contain only letters, numbers, hyphens,
+            not start with a number, and not start or end with hyphens.
+          </p>
+          <label class="f8-add-app-overlay--label">
+            <span class="required">*</span>
+            Select one of the following options
+          </label>
+          <div class="row card-pf card-pf-view card-pf-view-select card-pf-view-single-select f8-add-app-overlay--card"
+            [ngClass]="{'active': importApp.checked}" (click)="updateLauncherFlowSelection('importapp')">
+            <div class="col-sm-1 f8-add-app-overlay--card-col-left">
+              <input name="import" type="radio" [(ngModel)]="selectedFlow" value="importapp" #importApp>
+            </div>
+            <div class="col-sm-8 f8-add-app-overlay--card-col-middle">
+              <h5>Import an existing codebase</h5>
+              <p class="font-size-small">
+                Use code you already have as the foundation for your new application.
+              </p>
+            </div>
+            <div class="col-sm-3 f8-add-app-overlay--card-col-right">
+              <img class="f8-add-app-overlay--image" src="../../../assets/images/import-application.png" alt="Import Application">
             </div>
           </div>
-          <div class="row">
-            <div class="col-sm-8 col-sm-offset-4 col-md-offset-5 col-md-4">
-              <h1 class="code-imports--step_title">Create an Application</h1>
+          <h4 class="text-center">- OR -</h4>
+          <div class="row card-pf card-pf-view card-pf-view-select card-pf-view-single-select f8-add-app-overlay--card margin-top-20"
+            [ngClass]="{'active': createApp.checked}" (click)="updateLauncherFlowSelection('createapp')">
+            <div class="col-sm-1 f8-add-app-overlay--card-col-left">
+              <input name="import" type="radio" [(ngModel)]="selectedFlow" value="createapp" #createApp>
             </div>
-          </div>
-          <div class="row row-cards-pf">
-            <div class="col-sm-10 col-md-8 col-md-offset-2">
-              <form>
-                <div class="form-group" [ngClass]="{'has-error': isProjectNameValid === false || isProjectNameAvailable === false}">
-                  <h1 class="code-imports--step_title">
-                    Name your application
-                  </h1>
-                  <span class="code-imports--step_pencil">
-                    <input id="projectName" name="projectName" type="text" class="form-control code-imports--step_input col-sm-5" placeholder="Enter Application Name"
-                           #projectNameInput
-                           aria-label="Application Name Input" required
-                           [(ngModel)]="projectName"
-                           [value]="projectName | lowercase"
-                           (keyup)="validateProjectName()"
-                           (keyup.enter)="cancelImportsButton.click()">
-                  </span>
-                  <ng-template #namingTemplate>
-                    Names must:
-                    <ul>
-                      <li>Be Unique</li>
-                      <li>Contain 4-40 characters</li>
-                      <li>Contain only letters, numbers or hyphens</li>
-                      <li>Not start with a number</li>
-                      <li>Not start or end with hyphens</li>
-                    </ul>
-                  </ng-template>
-                  <span class="code-imports--step_tooltip-label" [popover]="namingTemplate" popoverTitle="Naming Requirements" placement="bottom" triggers="mouseenter:mouseleave">Naming Requirements<span class="pficon pficon-info"></span></span>
-                  <span class="help-block code-imports--step_help-block" *ngIf="isProjectNameValid === false">
-                    Invalid name. See a full list of naming requirements below the input field.
-                  </span>
-                  <span class="help-block code-imports--step_help-block" *ngIf="isProjectNameAvailable === false">
-                    Application name is already used in your current Space. Please enter a new one.
-                  </span>
-                </div>
-              </form>
+            <div class="col-sm-8 f8-add-app-overlay--card-col-middle">
+              <h5>Create a new codebase</h5>
+              <p class="font-size-small">
+                Choose from a variety of Red Hat certified templates to generate the foundation for
+                a new application in the Openshift ecosystem.
+              </p>
             </div>
-          </div>
-          <div class="row row-cards-pf">
-            <div class="col-sm-10 col-md-10 col-md-offset-2">
-              <h1 class="code-imports--step_title">
-                How do you want to start?</h1>
+            <div class="col-sm-3 f8-add-app-overlay--card-col-right">
+              <img class="f8-add-app-overlay--image" src="../../../assets/images/create-application.png" alt="Create Application">
             </div>
-          </div>
-          <div class="row row-cards-pf">
-            <div class="col-sm-10 col-md-4 col-md-offset-2">
-              <div class="container-fluid container-cards-pf">
-                <div class="card-pf card-pf-view card-pf-view-select card-pf-view-single-select code-imports--step_content">
-                  <div class="card-pf-body" (click)="updateLauncherFlowSelection('createapp')">
-                    <div class="row codebase-card-container">
-                      <div class="col-sm-1 codebase-card-container-radio">
-                        <div class="list-view-pf-checkbox codebase-card-container-radio-input">
-                          <input name="import" type="radio" [(ngModel)]="selectedFlow" value="createapp">
-                        </div>
-                      </div>
-                      <div class="col-sm-3">
-                        <p class="card-pf-info text-center">
-                          <img class="codebase-card-container-create-app-image" src="../../../assets/images/create-application.png" alt="Create Application">
-                        </p>
-                      </div>
-                      <div class="col-sm-8 codebase-card-container-desp">
-                        <h2 class="card-pf-title">
-                          Create a new codebase
-                        </h2>
-                        <div class="card-pf-items">
-                          <div class="card-pf-item">
-                            Choose from a variety of Red Hat certified templates to generate the foundation for a new application in the OpenShift ecosystem.
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-10 col-md-4">
-              <div class="container-fluid container-cards-pf">
-                <div class="card-pf card-pf-view card-pf-view-select card-pf-view-single-select code-imports--step_content">
-                  <div class="card-pf-body" (click)="updateLauncherFlowSelection('importapp')">
-                    <div class="row codebase-card-container">
-                      <div class="col-sm-1 codebase-card-container-radio">
-                        <div class="list-view-pf-checkbox codebase-card-container-radio-input">
-                          <input name="import" type="radio" [(ngModel)]="selectedFlow" value="importapp">
-                        </div>
-                      </div>
-                      <div class="col-sm-3">
-                        <p class="card-pf-info text-center">
-                          <img class="codebase-card-container-import-app-image" src="../../../assets/images/import-application.png" alt="Import Application">
-                        </p>
-                      </div>
-                      <div class="col-sm-8 codebase-card-container-desp">
-                        <h2 class="card-pf-title">
-                          Import an existing codebase
-                        </h2>
-                        <div class="card-pf-items">
-                          <div class="card-pf-item">
-                            Use code you already have as the foundation for your new application.
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </form>
-      </section>
-      <footer class="container-fluid">
-        <div class="row">
-          <div class="col-sm-12 code-imports--step_toolbar">
-            <button #cancelImportsButton id="cancelImportsButton" class="btn btn-primary" aria-label="Continue"
-              [disabled]="selectedFlow === ''
-                || projectName === ''
-                || isProjectNameValid === false
-                || isProjectNameAvailable === false
-                || isProjectNameValid === undefined
-                || isProjectNameAvailable === undefined
-                || navigationInProgress"
-              (click)="routeToLaunchApp()">Continue <i *ngIf="navigationInProgress" class="pficon pficon-in-progress fa-spin"></i></button>
           </div>
         </div>
-      </footer>
-    </form>
-    <div class="f8launcher-container_close">
-      <div class="sticky close animate-continue">
-        <span class="pficon pficon-close" aria-hidden="true" title="cancel" (click)="hideAddAppOverlay()"></span>
+      </form>
+    </section>
+    <section class="col-sm-6 f8-add-app-overlay--right-section">
+      <div class="col-sm-9 font-size-small">
+        <h5>What happens when I create an application?</h5>
+        <p>
+          When you create an application in Openshift.io, a new codebase
+          is created and stored in your git repository. Openshift.io also
+          generates a new pipeline and pipeline enviroments for the application
+          and starts an initial build.
+        </p>
+        <p>
+          <a>Learn more <i class="fa fa-external-link"></i></a>
+        </p>
+        <h5>What is a codebase?</h5>
+        <p>
+          A codebase is a generic representation of an application's code.
+          Openshift.io also stores application metadata for version control.
+          Since Openshift.io provides a hosted instance of Eclipse Che, you can
+          create a workspace for any application and use the browser-based IDE
+          and containerized development/testing enviroment to make updates to your codebase.
+        </p>
+        <p>
+          <a>Learn more <i class="fa fa-external-link"></i></a>
+        </p>
+        <h5>When I import a codebase?</h5>
+        <p>
+          If you have existing code in a GitHub repository, you can choose the import
+          option and use that code as a foundation for an application in Openshift.io.
+        </p>
+        <p>
+          <a>Learn more <i class="fa fa-external-link"></i></a>
+        </p>
       </div>
-    </div>
+    </section>
   </div>
+</div>
+<div class="modal-footer f8-add-app-overlay--modal-footer">
+  <button type="button" class="btn btn-default btn-lg" (click)="hideAddAppOverlay(); appForm.reset()">Cancel</button>
+  <button type="button" id="import-app-next" class="btn btn-primary btn-lg margin-left-20"
+    [disabled]="selectedFlow === '' || !isProjectNameValid || !isProjectNameAvailable"
+    (click)="routeToLaunchApp()">Next <i *ngIf="navigationInProgress" class="pficon pficon-in-progress fa-spin"></i></button>
 </div>

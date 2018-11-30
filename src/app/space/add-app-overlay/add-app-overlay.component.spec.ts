@@ -228,7 +228,7 @@ describe('AddAppOverlayComponent', () => {
       fixture = TestBed.createComponent(AddAppOverlayComponent);
       component = fixture.componentInstance;
       element = fixture.debugElement.nativeElement;
-      btnElem = element.querySelector('.code-imports--step_toolbar > button');
+      btnElem = element.querySelector('#import-app-next');
       fixture.detectChanges();
     });
 
