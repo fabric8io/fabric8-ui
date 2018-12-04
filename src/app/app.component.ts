@@ -34,7 +34,6 @@ export class AppComponent {
   public featureConfig: FeatureFlagConfig;
   public disconnectedStateConfig: EmptyStateConfig;
   private lastPageToTryGitHub: string;
-  private showAddAppOverlay: boolean = false;
   private showAddSpaceOverlay: boolean = false;
   private show: boolean;
   private addAppFlow: string;

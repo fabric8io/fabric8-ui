@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { Broadcaster } from 'ngx-base';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Context, Space } from 'ngx-fabric8-wit';
 import { DependencyCheckService } from 'ngx-launcher';
 import { User, UserService } from 'ngx-login-client';
@@ -29,6 +30,7 @@ export class AddAppOverlayComponent implements OnInit, OnDestroy {
     this.hideAddAppOverlay();
   }
   @ViewChild('projectNameInput') projectNameInput: ElementRef;
+  @ViewChild('modalAddAppOverlay') modalAddAppOverlay: ModalDirective;
   @Input() preselectedFlow: string;
 
   currentSpace: Space;
@@ -81,6 +83,14 @@ export class AddAppOverlayComponent implements OnInit, OnDestroy {
       this.selectedFlow = this.preselectedFlow;
     }
     setTimeout(() => this.projectNameInput.nativeElement.focus());
+
+    this.subscriptions.push(this.broadcaster.on('showAddAppOverlay').subscribe((show: boolean) => {
+      if (show) {
+        this.modalAddAppOverlay.show();
+      } else {
+        this.modalAddAppOverlay.hide();
+      }
+    }));
   }
 
   ngOnDestroy(): void {

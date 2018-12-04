@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { Fabric8WitModule } from 'ngx-fabric8-wit';
 import { DependencyCheckService } from 'ngx-launcher';
@@ -14,6 +15,7 @@ import { AddAppOverlayComponent } from './add-app-overlay.component';
     CommonModule,
     Fabric8WitModule,
     FormsModule,
+    ModalModule.forRoot(),
     PopoverModule.forRoot()
   ],
   declarations: [
