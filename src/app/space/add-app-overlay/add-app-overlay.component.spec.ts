@@ -228,7 +228,7 @@ describe('AddAppOverlayComponent', () => {
       fixture = TestBed.createComponent(AddAppOverlayComponent);
       component = fixture.componentInstance;
       element = fixture.debugElement.nativeElement;
-      btnElem = element.querySelector('#import-app-next');
+      btnElem = element.querySelector('#cancelImportsButton');
       fixture.detectChanges();
     });
 
