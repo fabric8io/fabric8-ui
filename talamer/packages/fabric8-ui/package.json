@@ -71,5 +71,8 @@
     "pluralize": "7.0.0",
     "raven-js": "3.27.0",
     "uuid": "3.3.2"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^4.6.0"
   }
 }

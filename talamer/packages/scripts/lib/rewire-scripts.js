@@ -1,3 +1,4 @@
+const webpackMerge = require('webpack-merge');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const fs = require('fs');
@@ -52,7 +53,7 @@ function rewirePaths() {
 function rewireWebpack(prod) {
   const paths = require('react-scripts/config/paths');
   const webpackConfig = `react-scripts/config/webpack.config.${prod ? 'prod' : 'dev'}.js`;
-  const config = require(webpackConfig);
+  let config = require(webpackConfig);
   const { oneOf } = config.module.rules[2];
 
   // rename static dir location according to env var STATIC_DIR
@@ -276,6 +277,14 @@ function rewireWebpack(prod) {
   // exported interfaces not found
   config.module.strictExportPresence = false;
 
+  const customWebpackPath = path.resolve(paths.appPath, 'webpack.config.js');
+  if (fs.existsSync(customWebpackPath)) {
+    const customConfig = require(customWebpackPath);
+    config = webpackMerge(
+      config,
+      typeof customConfig === 'function' ? customConfig() : customConfig,
+    );
+  }
   require.cache[require.resolve(webpackConfig)].exports = config;
 }
 
