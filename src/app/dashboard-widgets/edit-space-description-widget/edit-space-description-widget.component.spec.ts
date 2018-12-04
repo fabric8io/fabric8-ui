@@ -112,6 +112,13 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
       expect(link).toBeDefined();
     });
 
+    it('should have a link to add collaborators if the user is admin of the space', function() {
+      testContext.testedDirective.userIsSpaceAdmin = true;
+      testContext.fixture.detectChanges();
+      let link: DebugElement = testContext.fixture.debugElement.query(By.css('a'));
+      expect(link).toBeDefined();
+    });
+
     it('should not have a link to add collaborators if the user doesn\'t own the space', function() {
       testContext.testedDirective.userOwnsSpace = false;
       testContext.fixture.detectChanges();

@@ -2,7 +2,8 @@
     (onAddArea)="addChildArea()"
     (onFilterChange)="filterChange($event)"
     (onSortChange)="sortChange($event)"
-    [resultsCount]="resultsCount">
+    [resultsCount]="resultsCount"
+    [userOwnsSpace]="userOwnsSpace">
 </areas-toolbar>
 <div class="container-fluid">
   <div class="row">
@@ -21,9 +22,11 @@
           </div>
         </ng-template>
         <ng-template #actionTemplate let-node="node" let-index="index">
-          <pfng-action class="list-pf-actions"
-                       [config]="actionConfig"
-                       (onActionSelect)="handleAction($event, node)">
+          <pfng-action
+            *ngIf="userOwnsSpace"
+            class="list-pf-actions"
+            [config]="actionConfig"
+            (onActionSelect)="handleAction($event, node)">
           </pfng-action>
         </ng-template>
       </pfng-tree-list>

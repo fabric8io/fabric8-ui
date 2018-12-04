@@ -7,9 +7,6 @@ import { SpaceSettingsComponent } from './space-settings.component';
 const routes: Routes = [
   {
     path: '',
-    resolve: {
-      contextGuard: ContextCurrentUserGuard
-    },
     component: SpaceSettingsComponent,
     children: [
       { path: '', component: AreasComponent },

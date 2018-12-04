@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Event, NavigationEnd, Params, Router } from '@angular/router';
 import { Broadcaster } from 'ngx-base';
 import { Context, Contexts } from 'ngx-fabric8-wit';
-import { User, UserService } from 'ngx-login-client';
+import { PermissionService, User, UserService } from 'ngx-login-client';
 import { combineLatest as observableCombineLatest, Observable,  of as observableOf } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MenuItem } from '../../models/menu-item';
@@ -41,7 +41,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     ],
     [
       'settings', function(headerComponent) {
-        return headerComponent.checkContextUserEqualsLoggedInUser();
+        return headerComponent.loggedInUserNotSpaceAdmin();
       }
     ]
   ]);
@@ -60,7 +60,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private userService: UserService,
     public loginService: LoginService,
     private broadcaster: Broadcaster,
-    private contexts: Contexts
+    private contexts: Contexts,
+    private permissionService: PermissionService
   ) {
     router.events.subscribe((val: Event): void => {
       if (val instanceof NavigationEnd) {
@@ -228,6 +229,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.userService.loggedInUser.pipe(map((val: User) => val.id)),
       (a, b) => (a !== b)
     );
+  }
+
+  private loggedInUserNotSpaceAdmin(): Observable<boolean> {
+    return this.permissionService
+      .hasScope(this.context.space.id, 'manage')
+      .pipe(map(val => !val));
   }
 
 }

@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@ang
 import { cloneDeep } from 'lodash';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Area, AreaService, Context } from 'ngx-fabric8-wit';
+import { UserService } from 'ngx-login-client';
 import { Action, ActionConfig } from 'patternfly-ng/action';
 import { EmptyStateConfig } from 'patternfly-ng/empty-state';
 import { Filter, FilterEvent } from 'patternfly-ng/filter';
@@ -47,13 +48,22 @@ export class AreasComponent implements OnInit, OnDestroy {
   emptyStateConfig: EmptyStateConfig;
   isAscendingSort: boolean = true;
   selectedAreaId: string;
-  subscriptions: Subscription[] = [];
+  subscriptions: Subscription = new Subscription();
   resultsCount: number = 0;
   treeListConfig: TreeListConfig;
+  userOwnsSpace: boolean;
 
-  constructor(private contexts: ContextService,
-              private areaService: AreaService) {
-    this.contexts.current.subscribe(val => this.context = val);
+  constructor(
+    private contexts: ContextService,
+    private areaService: AreaService,
+    private userService: UserService
+  ) {
+    this.subscriptions.add(
+      this.contexts.current.subscribe((context: Context) => {
+        this.context = context;
+        this.userOwnsSpace = context.space.relationships['owned-by'].data.id === this.userService.currentLoggedInUser.id;
+      })
+    );
   }
 
   ngOnInit() {
@@ -90,7 +100,7 @@ export class AreasComponent implements OnInit, OnDestroy {
       }
     } as TreeListConfig;
 
-    this.subscriptions.push(this.areaService.getAllBySpaceId(this.context.space.id).subscribe(areas => {
+    this.subscriptions.add(this.areaService.getAllBySpaceId(this.context.space.id).subscribe(areas => {
       this.selectedAreaId = this.context.space.id;
       areas.forEach((area) => {
         if (area.attributes.parent_path == '/') {
@@ -104,9 +114,7 @@ export class AreasComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach(sub => {
-      sub.unsubscribe();
-    });
+    this.subscriptions.unsubscribe();
   }
 
   openModal(): void {

@@ -3,7 +3,7 @@
     <div>
       <span class="f8-space-masthead-name">{{space?.attributes.name}}</span> <span class="f8-space-masthead-owner">{{spaceOwner | async}}</span>
     </div>
-    <ng-container *ngIf="userOwnsSpace; else userDoesNotOwnSpaceHeaderInfo">
+    <ng-container *ngIf="userOwnsSpace || userIsSpaceAdmin; else userDoesNotOwnSpaceHeaderInfo">
       <span class="pointer"
             [popover]="popoverContent"
             [popoverTitle]="collaboratorCount + ' Collaborator' + (collaboratorCount === 1 ? '' : 's')"
@@ -13,7 +13,7 @@
       </span>
       <span class="f8-space-masthead-vertical-divider-collab"></span>
       <a class="add-collaborators-link" (click)="launchAddCollaborators()">
-        <span class="pficon pficon-add-circle-o fa-lg"></span> Add Collaborator
+        <span class="pficon pficon-add-circle-o fa-lg"></span> Add Collaborators
       </a>
     </ng-container>
     <ng-template #userDoesNotOwnSpaceHeaderInfo>

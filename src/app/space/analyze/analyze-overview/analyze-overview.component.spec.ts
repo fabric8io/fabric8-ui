@@ -3,8 +3,8 @@ import { By } from '@angular/platform-browser';
 import { Broadcaster } from 'ngx-base';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { Context, Contexts, Space } from 'ngx-fabric8-wit';
-import { AuthenticationService, User, UserService } from 'ngx-login-client';
-import { Subject } from 'rxjs';
+import { AuthenticationService, PermissionService, User, UserService } from 'ngx-login-client';
+import { of, Subject } from 'rxjs';
 import { createMock } from 'testing/mock';
 import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
 import { initContext, TestContext } from 'testing/test-context';
@@ -28,6 +28,7 @@ describe('AnalyzeOverviewComponent', () => {
       { provide: Broadcaster, useFactory: (): jasmine.SpyObj<Broadcaster> => createMock(Broadcaster) },
       { provide: AuthenticationService, useValue: ({ isLoggedIn: () => true }) },
       { provide: Contexts, useValue: ({ current: ctxSubj }) },
+      { provide: PermissionService, useValue: { hasScope: () => of(false) }},
       { provide: UserService, useValue: ({ loggedInUser: fakeUserObs }) }
     ],
     schemas: [
@@ -75,6 +76,11 @@ describe('AnalyzeOverviewComponent', () => {
     testContext.detectChanges();
 
     expect(testContext.testedDirective.checkSpaceOwner()).toBe(false);
+  });
+
+  it('should recognize that the user is not admin of the space', function() {
+    testContext.detectChanges();
+    expect(testContext.testedDirective.userIsSpaceAdmin).toBe(false);
   });
 
   it('should recognize that the user owns the space', function() {

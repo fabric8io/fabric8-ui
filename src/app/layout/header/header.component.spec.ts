@@ -11,7 +11,7 @@ import {
 } from 'ngx-base';
 import { Contexts } from 'ngx-fabric8-wit';
 import {
-  UserService
+  PermissionService, UserService
 } from 'ngx-login-client';
 import { never as observableNever, Observable,
   of as observableOf
@@ -68,6 +68,7 @@ describe('HeaderComponent', () => {
     declarations: [ MockRoutedComponent ],
     providers: [
       { provide: UserService, useValue: { loggedInUser: observableNever() } },
+      { provide: PermissionService, useValue:  jasmine.createSpyObj('PermissionService', ['hasScope']) },
       { provide: LoginService, useValue: jasmine.createSpyObj('LoginService', ['login']) },
       { provide: Broadcaster, useValue: mockBroadcaster },
       {
