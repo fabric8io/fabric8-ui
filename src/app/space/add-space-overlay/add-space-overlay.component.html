@@ -81,7 +81,7 @@
     (click)="hideAddSpaceOverlay(); spaceForm.reset()">
     Cancel
   </button>
-  <button type="button" class="btn btn-default btn-lg margin-left-20"
+  <button type="button" id="createSpaceAndExitButton" class="btn btn-default btn-lg margin-left-20"
     [disabled]="!spaceForm.form.valid || !canSubmit"
     (click)="createSpaceAndExit(); spaceForm.reset()">
     Create Space and Exit

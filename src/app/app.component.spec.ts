@@ -19,8 +19,7 @@ import {
   Broadcaster,
   Logger
 } from 'ngx-base';
-import { BsModalService } from 'ngx-bootstrap/modal';
-import { ModalModule } from 'ngx-bootstrap/modal';
+import { BsModalService, ModalModule } from 'ngx-bootstrap/modal';
 import {
   Context,
   Spaces

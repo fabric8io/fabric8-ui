@@ -2,8 +2,7 @@ import { Component, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/c
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Event, NavigationEnd, NavigationError, Router } from '@angular/router';
 import { Broadcaster, Logger } from 'ngx-base';
-import { BsModalService } from 'ngx-bootstrap/modal';
-import { ModalDirective } from 'ngx-bootstrap/modal';
+import { BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { Spaces } from 'ngx-fabric8-wit';
 import { FeatureFlagConfig } from 'ngx-feature-flag';
 import { AuthenticationService } from 'ngx-login-client';
