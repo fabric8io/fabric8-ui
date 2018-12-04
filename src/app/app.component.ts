@@ -2,7 +2,7 @@ import { Component, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/c
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Event, NavigationEnd, NavigationError, Router } from '@angular/router';
 import { Broadcaster, Logger } from 'ngx-base';
-import { BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
+import { BsModalService } from 'ngx-bootstrap/modal';
 import { Spaces } from 'ngx-fabric8-wit';
 import { FeatureFlagConfig } from 'ngx-feature-flag';
 import { AuthenticationService } from 'ngx-login-client';
@@ -34,13 +34,10 @@ export class AppComponent {
   public featureConfig: FeatureFlagConfig;
   public disconnectedStateConfig: EmptyStateConfig;
   private lastPageToTryGitHub: string;
-  private showAddSpaceOverlay: boolean = false;
   private show: boolean;
-  private addAppFlow: string;
   protected subscriptions: Subscription[] = [];
 
   @ViewChild('connectToGithubModal') connectToGithubModal: TemplateRef<any>;
-  @ViewChild('modalAddSpaceOverlay') modalAddSpaceOverlay: ModalDirective;
 
   constructor(
     private about: AboutService,
@@ -130,20 +127,6 @@ export class AppComponent {
     this.subscriptions.push(this.broadcaster.on('showDisconnectedFromGitHub').subscribe((event) => {
       this.lastPageToTryGitHub = event['location'];
       this.showGitHubConnectModal();
-    }));
-
-    this.subscriptions.push(this.broadcaster.on('showAddSpaceOverlay').subscribe((arg: any) => {
-      if (typeof arg === 'boolean') {
-        if (arg) {
-          this.addAppFlow = null;
-          this.modalAddSpaceOverlay.show();
-        } else {
-          this.modalAddSpaceOverlay.hide();
-        }
-      } else if (typeof arg === 'object') {
-        this.showAddSpaceOverlay = arg.show;
-        this.addAppFlow = arg.flow;
-      }
     }));
 
     this.disconnectedStateConfig = {

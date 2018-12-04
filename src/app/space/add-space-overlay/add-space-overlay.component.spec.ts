@@ -4,19 +4,35 @@ import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Broadcaster, Logger, Notifications } from 'ngx-base';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { Space, SpaceService } from 'ngx-fabric8-wit';
 import { Profile, User, UserService } from 'ngx-login-client';
-import { of as observableOf } from 'rxjs';
+import { Observable, of as observableOf, Subject } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { ContextService } from '../../shared/context.service';
 import { SpaceNamespaceService } from '../../shared/runtime-console/space-namespace.service';
 import { AddSpaceOverlayComponent } from './add-space-overlay.component';
 
+export class BroadcasterTestProvider {
+  private _eventBus: Subject<any>;
+  constructor() {
+    this._eventBus = new Subject<any>();
+  }
+  broadcast(key: any, data?: any) {
+    this._eventBus.next({key, data});
+  }
+  on<T>(key: any): Observable<T> {
+    return this._eventBus.asObservable()
+      .pipe(filter(event => event.key === key),
+            map(event => event.data as T)
+      );
+  }
+}
 
 describe('AddSpaceOverlayComponent', () => {
 
   let fixture: ComponentFixture<AddSpaceOverlayComponent>;
   let component: DebugNode['componentInstance'];
-  let mockBroadcaster: any = jasmine.createSpyObj('Broadcaster', ['broadcast']);
   let mockRouter: any = jasmine.createSpyObj('Router', ['navigate']);
   let mockSpaceService: any = jasmine.createSpyObj('SpaceService', ['create']);
   let mockNotifications: any = jasmine.createSpyObj('Notifications', ['message']);
@@ -81,10 +97,13 @@ describe('AddSpaceOverlayComponent', () => {
     mockUserService.currentLoggedInUser = mockUser;
 
     TestBed.configureTestingModule({
-      imports: [FormsModule],
+      imports: [
+        FormsModule,
+        ModalModule.forRoot()
+      ],
       declarations: [AddSpaceOverlayComponent],
       providers: [
-        { provide: Broadcaster, useValue: mockBroadcaster },
+        { provide: Broadcaster, useValue: new BroadcasterTestProvider() },
         { provide: Router, useValue: mockRouter },
         { provide: SpaceService, useValue: mockSpaceService },
         { provide: Notifications, useValue: mockNotifications },

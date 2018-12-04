@@ -19,7 +19,7 @@ import {
   Broadcaster,
   Logger
 } from 'ngx-base';
-import { BsModalService, ModalModule } from 'ngx-bootstrap/modal';
+import { BsModalService } from 'ngx-bootstrap/modal';
 import {
   Context,
   Spaces
@@ -66,7 +66,6 @@ class MockContextResolver implements Resolve<Context> {
 describe('AppComponent', () => {
   initContext(AppComponent, HostComponent, {
     imports: [
-      ModalModule.forRoot(),
       RouterTestingModule.withRoutes([
         { path: '_home', component: MockChildComponent },
         { path: '_error', component: MockChildComponent },
@@ -78,8 +77,7 @@ describe('AppComponent', () => {
           }
         },
         { path: '**', redirectTo: '/_error' }
-      ]),
-      ModalModule.forRoot()
+      ])
     ],
     declarations: [ MockChildComponent ],
     providers: [
