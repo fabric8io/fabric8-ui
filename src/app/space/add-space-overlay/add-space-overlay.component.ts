@@ -6,6 +6,7 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-base';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -31,6 +32,7 @@ export class AddSpaceOverlayComponent implements OnInit {
   @ViewChild('description') description: ElementRef;
   @ViewChild('addSpaceOverlayNameInput') spaceNameInput: ElementRef;
   @ViewChild('modalAddSpaceOverlay') modalAddSpaceOverlay: ModalDirective;
+  @ViewChild('spaceForm') spaceForm: NgForm;
 
   currentSpace: Space;
   space: Space;
@@ -113,6 +115,8 @@ export class AddSpaceOverlayComponent implements OnInit {
             this.showAddAppOverlay();
           }
           this.hideAddSpaceOverlay();
+          this.canSubmit = true;
+          this.spaceForm.reset();
         },
         err => {
           this.notifications.message({
@@ -120,10 +124,6 @@ export class AddSpaceOverlayComponent implements OnInit {
             type: NotificationType.DANGER
         } as Notification);
     }));
-  }
-
-  createSpaceAndExit() {
-    this.createSpace(false);
   }
 
   hideAddSpaceOverlay(): void {

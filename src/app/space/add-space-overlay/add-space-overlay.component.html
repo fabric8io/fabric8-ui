@@ -85,7 +85,7 @@
         </button>
         <button type="button" id="createSpaceAndExitButton" class="btn btn-default btn-lg margin-left-20"
           [disabled]="!spaceForm.form.valid || !canSubmit"
-          (click)="createSpaceAndExit()">
+          (click)="createSpace(false)">
           Create Space and Exit
         </button>
         <button type="button" id="createSpaceButton" class="btn btn-primary btn-lg margin-left-20"
