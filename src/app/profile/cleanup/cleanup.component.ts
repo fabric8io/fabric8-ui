@@ -155,7 +155,7 @@ export class CleanupComponent implements OnInit, OnDestroy {
     this.notificationClass = 'alert-success';
     this.notificationIcon = 'pficon-ok';
     this.notificationTitle = 'Success!';
-    this.notificationText = 'Your OpenShift.io environment has been erased!';
+    this.notificationText = 'Your CodeReady Toolchain environment has been erased!';
     this.cleanupStatus = 'completed';
   }
 

@@ -103,7 +103,7 @@ export class FeatureOptInComponent implements OnInit {
         name: 'released',
         selected: this.featureLevel === 'released',
         title: 'Production-Only Features',
-        description: 'Use the generally available version of OpenShift.io.',
+        description: 'Use the generally available version of CodeReady Toolchain.',
         detailDescription: 'These features have been released and are part of the product release.',
         features: [],
         displayed: true
