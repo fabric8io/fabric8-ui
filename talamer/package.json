@@ -3,8 +3,7 @@
   "version": "0.0.1",
   "description": "OpenShift.io platform UI",
   "scripts": {
-    "bootstrap": "lerna bootstrap",
-    "bootstrap:hoist": "lerna bootstrap --hoist",
+    "bootstrap": "lerna bootstrap:hoist",
     "lerna": "lerna",
     "lint": "npm-run-all lint:js lint:css",
     "lint:css": "stylelint '**/*.{css,scss,less}' --max-warnings 0",
@@ -14,13 +13,7 @@
     "format:css": "npm run lint:css -- --fix",
     "format:html": "prettier '**/*.html' --write",
     "format:js": "npm run lint:js -- --fix",
-    "format:md": "prettier '**/*.md' --write",
-    "test": "osio-scripts test --watchAll=false",
-    "test:ci": "CI=true osio-scripts test",
-    "test:watch": "osio-scripts test",
-    "test:coverage": "osio-scripts test:coverage",
-    "test:debug": "osio-scripts test:debug --watchAll=false",
-    "test:update": "osio-scripts test:update"
+    "format:md": "prettier '**/*.md' --write"
   },
   "keywords": [
     "osio",
