@@ -10,7 +10,7 @@ const {execSync} = require('child_process');
 const E2E_PROJECT_NAME = 'fabric8-test';
 const E2E_REPO = 'https://github.com/fabric8io/fabric8-test.git';
 
-const E2E_PROJECT = path.resolve(__dirname, '../', E2E_PROJECT_NAME);
+const E2E_PROJECT = path.resolve(__dirname, '../../../../', E2E_PROJECT_NAME);
 const TEST_DIR = path.resolve(E2E_PROJECT, 'ee_tests');
 
 const CONFIG_DIR = path.resolve(TEST_DIR, 'config');

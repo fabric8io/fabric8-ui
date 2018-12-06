@@ -1,21 +1,27 @@
 {
-  "name": "@osio/fabric8-ui",
+  "name": "fabric8-ui",
   "version": "0.0.0-development",
-  "description": "the angular 2 console for fabric8 online",
+  "description": "The CodeReady Toolchain front end.",
   "keywords": [
     "angular2",
-    "webpack",
     "typescript"
   ],
   "license": "Apache-2.0",
   "scripts": {
-    "start": "osio-scripts start",
+    "e2e": "gulp e2e",
+    "e2e:clean": "gulp e2eClean",
+    "e2e:last": "gulp e2eStart",
+    "e2e:reconfig": "gulp e2eReconfig",
     "analyze": "osio-scripts analyze",
-    "build": "STATIC_DIR=_static osio-scripts build",
+    "build": "CI=false STATIC_DIR=_static osio-scripts build",
     "postinstall": "node ./scripts/postinstall.js",
     "prod": "osio-scripts prod",
+    "semantic-release-origin-master": "semantic-release --branch origin/master",
+    "start": "osio-scripts start",
+    "start:prod": "npm run prod",
     "test": "osio-scripts test --watchAll=false --transformIgnorePatterns \"node_modules/(?!@ngrx|ngx|fabric8|patternfly-ng|ng2|@osio)\"",
-    "test:debug": "osio-scripts test:debug --watchAll=false --transformIgnorePatterns \"node_modules/(?!@ngrx|ngx|fabric8|patternfly-ng|ng2|@osio)\""
+    "test:debug": "osio-scripts test:debug --watchAll=false --transformIgnorePatterns \"node_modules/(?!@ngrx|ngx|fabric8|patternfly-ng|ng2|@osio)\"",
+    "test:e2e": "npm run e2e"
   },
   "dependencies": {
     "@osio/scripts": "^0.0.1",
@@ -29,7 +35,6 @@
     "@thisissoon/angular-inviewport": "4.0.0",
     "@types/c3": "0.6.2",
     "@types/jasmine": "3.3.0",
-    "@types/jest": "^23.3.2",
     "@types/js-yaml": "3.11.2",
     "@types/lodash": "4.14.116",
     "@types/node": "10.12.9",
@@ -47,8 +52,6 @@
     "angular2-websocket": "0.9.7",
     "fabric8-planner": "0.58.2",
     "fabric8-stack-analysis-ui": "2.1.2",
-    "jasmine-core": "3.2.1",
-    "jest": "^23.6.0",
     "jw-bootstrap-switch-ng2": "2.0.2",
     "jwt-decode": "2.2.0",
     "lodash": "4.17.11",
@@ -73,6 +76,12 @@
     "uuid": "3.3.2"
   },
   "devDependencies": {
-    "copy-webpack-plugin": "^4.6.0"
+    "copy-webpack-plugin": "^4.6.0",
+    "gulp": "^4.0.0",
+    "gulp-clean": "^0.4.0",
+    "gulp-rename": "^1.4.0",
+    "gulp-replace": "^1.0.0",
+    "readline-sync": "^1.4.0",
+    "semantic-release": "^15.12.0"
   }
 }
