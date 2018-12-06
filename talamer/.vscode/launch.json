@@ -1,0 +1,40 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Attach Debugger",
+      "cwd": "${workspaceRoot}"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Jest Tests",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/osio-scripts",
+		  "args": [
+        "test",
+        "--watchAll=false",
+        "--runInBand"
+		  ],
+      "console": "integratedTerminal",
+      "protocol": "inspector"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Jest Current File",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/osio-scripts",
+		  "args": [
+			  "test",
+        "--runInBand",
+        "--watchAll=false",
+       "${relativeFile}"
+		  ],
+      "console": "integratedTerminal",
+      "protocol": "inspector"
+    }
+  ]
+}
