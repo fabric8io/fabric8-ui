@@ -19,8 +19,8 @@
     "semantic-release-origin-master": "semantic-release --branch origin/master",
     "start": "osio-scripts start",
     "start:prod": "npm run prod",
-    "test": "osio-scripts test --watchAll=false --transformIgnorePatterns \"node_modules/(?!@ngrx|ngx|fabric8|patternfly-ng|ng2|@osio)\"",
-    "test:debug": "osio-scripts test:debug --watchAll=false --transformIgnorePatterns \"node_modules/(?!@ngrx|ngx|fabric8|patternfly-ng|ng2|@osio)\"",
+    "test": "osio-scripts test --transformIgnorePatterns='node_modules/(?!@ngrx|ngx|fabric8|patternfly-ng|ng2|@osio)' --watchAll=false",
+    "test:debug": "osio-scripts test:debug --transformIgnorePatterns='node_modules/(?!@ngrx|ngx|fabric8|patternfly-ng|ng2|@osio)' --watchAll=false ",
     "test:e2e": "npm run e2e"
   },
   "dependencies": {
