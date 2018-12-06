@@ -8,7 +8,7 @@ export interface RequestCacheItem {
   lastRead: number;
 }
 
-const CACHE_TTL = 300; // maximum cache age (ms)
+const CACHE_TTL = 10000; // maximum cache age (ms)
 
 @Injectable()
 export class RequestCache {
@@ -47,7 +47,7 @@ export class RequestCache {
 function createCacheKey(req: HttpRequest<any>): string {
   let key = req.urlWithParams;
   if (req.headers) {
-    key += `:${JSON.stringify(req.headers)}`;
+    key += `:${JSON.stringify(req.headers.get('headers'))}`;
   }
   return key;
 }
