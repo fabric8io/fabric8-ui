@@ -12,7 +12,7 @@ export class AppLauncherTargetEnvironmentService implements TargetEnvironmentSer
   getTargetEnvironments(): Observable<TargetEnvironment[]> {
     return observableOf([{
       description: 'Here is a brief description of what OpenShift Online is. ' +
-        'There is a distinction between what OpenShift Online does compared to OpenShift.io.',
+        'There is a distinction between what OpenShift Online does compared to CodeReady Toolchain.',
       benefits: [
         'In your GitHub namespace, create repository containg your project\'s code.',
         'Configure OpenShift Online to build and deploy your code on each push to your repository\'s master branch.',

@@ -23,20 +23,20 @@
               </button>
               <ul class='dropdown-menu-right dropdown-menu' aria-labelledby='dropdownKebabRight9' role="menu" *dropdownMenu>
                 <li>
-                  <a (click)="startBuild(pipeline)" title="Start this Pipeline">Start Pipeline</a>
+                  <a class="pointer" (click)="startBuild(pipeline)" title="Start this Pipeline">Start Pipeline</a>
                 </li>
 
                 <div *ngIf="pipeline.jenkinsJobUrl">
                   <li class="divider"></li>
                   <li>
-                    <a href="{{pipeline.jenkinsJobUrl}}" title="open the Jenkins Job for this build" target="jenkins">
+                    <a class="pointer" href="{{pipeline.jenkinsJobUrl}}" title="open the Jenkins Job for this build" target="jenkins">
                       Open Jenkins Job
                     </a>
                   </li>
                 </div>
                 <li class="divider"></li>
                 <li>
-                  <a (click)="openDeleteDialog(deleteBuildConfigModal, pipeline)" title="Delete this Pipeline">Delete</a>
+                  <a class="pointer" (click)="openDeleteDialog(deleteBuildConfigModal, pipeline)" title="Delete this Pipeline">Delete</a>
                 </li>
               </ul>
             </div>

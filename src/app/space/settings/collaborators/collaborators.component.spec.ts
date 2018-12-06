@@ -12,11 +12,10 @@ import {
   Context,
   Fabric8WitModule
 } from 'ngx-fabric8-wit';
-import { User } from 'ngx-login-client';
+import { PermissionService, User } from 'ngx-login-client';
 import {
-  Observable,
-  of as observableOf,
-  throwError as observableThrowError
+  of,
+  throwError
 } from 'rxjs';
 import { createMock } from 'testing/mock';
 import {
@@ -42,7 +41,7 @@ describe('CollaboratorsComponent', () => {
     providers: [
       {
         provide: ContextService, useValue: ({
-          current: observableOf({
+          current: of({
             space: {
               id: 'fake-space-id',
               attributes: {
@@ -57,6 +56,22 @@ describe('CollaboratorsComponent', () => {
         useFactory: (): jasmine.SpyObj<CollaboratorService> => {
           const collaboratorService: jasmine.SpyObj<CollaboratorService> = createMock(CollaboratorService);
           return collaboratorService;
+        }
+      },
+      {
+        provide: PermissionService,
+        useFactory: (): jasmine.SpyObj<PermissionService> => {
+          const permissionService: jasmine.SpyObj<PermissionService> = createMock(PermissionService);
+          const fakeUsers = [{
+            assignee_id: 'user-1',
+            assignee_type: 'something',
+            inherited: false,
+            inherited_from: 'something',
+            role_name: 'role-1'
+          }];
+          permissionService.getUsersByRole.and.returnValue(of(fakeUsers));
+          permissionService.assignRole.and.returnValue(of(null));
+          return permissionService;
         }
       },
       { provide: ErrorHandler, useValue: createMock(ErrorHandler) },
@@ -76,10 +91,36 @@ describe('CollaboratorsComponent', () => {
     });
   });
 
+  it('should get all admin users when context change', function(done: DoneFn): void {
+    TestBed.get(ContextService).current.subscribe((context: Context): void => {
+      expect(testContext.testedDirective.context).toEqual(context);
+      expect(testContext.testedDirective.adminCollaborators).toEqual(['user-1']);
+      done();
+    });
+  });
+
+  it('should handle assigning admin role to a user', function(): void {
+    testContext.testedDirective.adminCollaborators = [];
+    testContext.testedDirective.assignUserRole('some-user-1', 'admin');
+    expect(testContext.testedDirective.adminCollaborators).toEqual(['some-user-1']);
+  });
+
+  it('should handle assigning contributor role to a user', function(): void {
+    testContext.testedDirective.adminCollaborators = [];
+    testContext.testedDirective.assignUserRole('some-user-1', 'contributor');
+    expect(testContext.testedDirective.adminCollaborators).toEqual([]);
+  });
+
+  it('should handle assigning contributor role to admin user', function(): void {
+    testContext.testedDirective.adminCollaborators = ['some-user-1'];
+    testContext.testedDirective.assignUserRole('some-user-1', 'contributor');
+    expect(testContext.testedDirective.adminCollaborators).toEqual([]);
+  });
+
   describe('#initCollaborators', () => {
     it('should retrieve, sort, and set initial list of collaborators', function(): void {
       const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(CollaboratorService);
-      collaboratorService.getInitialBySpaceId.and.returnValue(observableOf([
+      collaboratorService.getInitialBySpaceId.and.returnValue(of([
         {
           attributes: {
             username: 'userA'
@@ -124,7 +165,7 @@ describe('CollaboratorsComponent', () => {
 
     it('should handle errors', function() {
       const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(CollaboratorService);
-      collaboratorService.getInitialBySpaceId.and.returnValue(observableThrowError('some_error'));
+      collaboratorService.getInitialBySpaceId.and.returnValue(throwError('some_error'));
 
       const errorHandler: jasmine.SpyObj<ErrorHandler> = TestBed.get(ErrorHandler);
       errorHandler.handleError.and.stub();
@@ -144,7 +185,7 @@ describe('CollaboratorsComponent', () => {
   describe('#fetchMoreCollaborators', () => {
     it('should add and sort additional collaborators', function() {
       const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(CollaboratorService);
-      collaboratorService.getNextCollaborators.and.returnValue(observableOf([
+      collaboratorService.getNextCollaborators.and.returnValue(of([
         {
           attributes: {
             username: 'userC'
@@ -202,7 +243,7 @@ describe('CollaboratorsComponent', () => {
 
     it('should handle errors', function() {
       const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(CollaboratorService);
-      collaboratorService.getNextCollaborators.and.returnValue(observableThrowError('some_error'));
+      collaboratorService.getNextCollaborators.and.returnValue(throwError('some_error'));
 
       const errorHandler: jasmine.SpyObj<ErrorHandler> = TestBed.get(ErrorHandler);
       errorHandler.handleError.and.stub();
@@ -273,7 +314,7 @@ describe('CollaboratorsComponent', () => {
   describe('removeUser', () => {
     it('should send remove request to service', function() {
       const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(CollaboratorService);
-      collaboratorService.removeCollaborator.and.returnValue(observableOf('unused'));
+      collaboratorService.removeCollaborator.and.returnValue(of('unused'));
 
       spyOn(testContext.testedDirective.modalDelete, 'show');
       spyOn(testContext.testedDirective.modalDelete, 'hide');
@@ -295,7 +336,7 @@ describe('CollaboratorsComponent', () => {
 
     it('should handle errors', function() {
       const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(CollaboratorService);
-      collaboratorService.removeCollaborator.and.returnValue(observableThrowError('some_error'));
+      collaboratorService.removeCollaborator.and.returnValue(throwError('some_error'));
 
       const errorHandler: jasmine.SpyObj<ErrorHandler> = TestBed.get(ErrorHandler);
       errorHandler.handleError.and.stub();

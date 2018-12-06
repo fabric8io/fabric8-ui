@@ -27,6 +27,7 @@
               <div class="list-pf-main-content">
                 <div class="list-pf-title">NAME (ID)</div>
                 <div class="list-pf-description">EMAIL</div>
+                <div class="list-pf-description">ROLE</div>
               </div>
             </div>
           </ng-template>
@@ -49,6 +50,9 @@
                 <div class="list-pf-description">
                   {{item.attributes.email}}
                 </div>
+                <div class="list-pf-description">
+                  {{ adminCollaborators.includes(item.id) ? 'Admin' : 'Contributor' }}
+                </div>
               </div>
             </div>
           </ng-template>
@@ -61,10 +65,23 @@
                 <li role="menuitem">
                   <a [routerLink]="['/', item.attributes.username]" class="secondary-action">View user</a>
                 </li>
-                <li *ngIf="item.id !== context.space.relationships['owned-by'].data.id; else cannotRemove" role="menuitem">
+                <li *ngIf="!adminCollaborators.includes(item.id) else removeAdmin" role="menuitem">
+                  <a (click)="assignUserRole(item.id, 'admin')" class="secondary-action menu-item">Make admin</a>
+                </li>
+                <ng-template #removeAdmin>
+                  <li *ngIf="!isSpaceOwner(item.id); else cannotRemoveAdmin" role="menuitem">
+                    <a (click)="assignUserRole(item.id, 'contributor')" class="secondary-action menu-item">Remove as admin</a>
+                  </li>
+                  <ng-template #cannotRemoveAdmin>
+                    <li class="disabled" title="Cannot remove owner of space as admin">
+                      <a class="secondary-action menu-item">Remove as admin</a>
+                    </li>
+                  </ng-template>
+                </ng-template>
+                <li *ngIf="!isSpaceOwner(item.id); else cannotRemoveUser" role="menuitem">
                   <a class="secondary-action menu-item" (click)="confirmUserRemove(item)">Remove from space</a>
                 </li>
-                <ng-template #cannotRemove>
+                <ng-template #cannotRemoveUser>
                   <li class="disabled" title="Cannot remove owner of space">
                     <a class="secondary-action">Remove from space</a>
                   </li>

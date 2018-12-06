@@ -6,8 +6,10 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-base';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Context, SpaceService } from 'ngx-fabric8-wit';
 import { Space, SpaceAttributes } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
@@ -29,11 +31,14 @@ export class AddSpaceOverlayComponent implements OnInit {
 
   @ViewChild('description') description: ElementRef;
   @ViewChild('addSpaceOverlayNameInput') spaceNameInput: ElementRef;
+  @ViewChild('modalAddSpaceOverlay') modalAddSpaceOverlay: ModalDirective;
+  @ViewChild('spaceForm') spaceForm: NgForm;
 
   currentSpace: Space;
   space: Space;
   subscriptions: Subscription[] = [];
   canSubmit: Boolean = true;
+  private addAppFlow: string;
 
   constructor(
     private router: Router,
@@ -54,6 +59,17 @@ export class AddSpaceOverlayComponent implements OnInit {
       }
     }));
     setTimeout(() => this.spaceNameInput.nativeElement.focus());
+
+    this.subscriptions.push(this.broadcaster.on('showAddSpaceOverlay').subscribe((arg: any) => {
+      if (typeof arg === 'boolean') {
+        if (arg) {
+          this.addAppFlow = null;
+          this.modalAddSpaceOverlay.show();
+        } else {
+          this.modalAddSpaceOverlay.hide();
+        }
+      }
+    }));
   }
 
   ngOnDestroy(): void {
@@ -66,7 +82,7 @@ export class AddSpaceOverlayComponent implements OnInit {
    * Creates a persistent collaboration space
    * by invoking the spaceService
    */
-  createSpace() {
+  createSpace(showAddAppOverlay: boolean = true) {
     if (!this.userService.currentLoggedInUser && !this.userService.currentLoggedInUser.id) {
       this.notifications.message({
         message: `Failed to create "${this.space.name}". Invalid user: "${this.userService.currentLoggedInUser}"`,
@@ -95,8 +111,12 @@ export class AddSpaceOverlayComponent implements OnInit {
       .subscribe(createdSpace => {
           this.router.navigate([createdSpace.relationalData.creator.attributes.username,
             createdSpace.attributes.name]);
-          this.showAddAppOverlay();
+          if (showAddAppOverlay) {
+            this.showAddAppOverlay();
+          }
           this.hideAddSpaceOverlay();
+          this.canSubmit = true;
+          this.spaceForm.reset();
         },
         err => {
           this.notifications.message({

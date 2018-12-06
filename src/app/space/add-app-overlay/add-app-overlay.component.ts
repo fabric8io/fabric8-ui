@@ -10,10 +10,11 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { Broadcaster } from 'ngx-base';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Context, Space } from 'ngx-fabric8-wit';
 import { DependencyCheckService } from 'ngx-launcher';
 import { User, UserService } from 'ngx-login-client';
-import { empty as observableEmpty,  Observable, Subscription } from 'rxjs';
+import { empty as observableEmpty, Subscription } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { ContextService } from '../../shared/context.service';
 import { Application, DeploymentApiService } from '../create/deployments/services/deployment-api.service';
@@ -29,17 +30,18 @@ export class AddAppOverlayComponent implements OnInit, OnDestroy {
     this.hideAddAppOverlay();
   }
   @ViewChild('projectNameInput') projectNameInput: ElementRef;
+  @ViewChild('modalAddAppOverlay') modalAddAppOverlay: ModalDirective;
   @Input() preselectedFlow: string;
 
   currentSpace: Space;
-  isProjectNameValid: boolean;
+  isProjectNameValid: boolean = false;
   loggedInUser: User;
   projectName: string = '';
   selectedFlow: string = '';
   spaces: Space[] = [];
   subscriptions: Subscription[] = [];
   applications: string[] = [];
-  isProjectNameAvailable: boolean;
+  isProjectNameAvailable: boolean = false;
   navigationInProgress: boolean = false;
 
   constructor(private contextService: ContextService,
@@ -81,6 +83,14 @@ export class AddAppOverlayComponent implements OnInit, OnDestroy {
       this.selectedFlow = this.preselectedFlow;
     }
     setTimeout(() => this.projectNameInput.nativeElement.focus());
+
+    this.subscriptions.push(this.broadcaster.on('showAddAppOverlay').subscribe((show: boolean) => {
+      if (show) {
+        this.modalAddAppOverlay.show();
+      } else {
+        this.modalAddAppOverlay.hide();
+      }
+    }));
   }
 
   ngOnDestroy(): void {
@@ -97,6 +107,9 @@ export class AddAppOverlayComponent implements OnInit, OnDestroy {
     this.broadcaster.broadcast('analyticsTracker', {
       event: 'add app closed'
     });
+    this.projectName = '';
+    this.selectedFlow = '';
+    this.validateProjectName();
     setTimeout(() => this.projectNameInput.nativeElement.blur());
   }
 
@@ -117,7 +130,7 @@ export class AddAppOverlayComponent implements OnInit, OnDestroy {
       flow: this.selectedFlow
     });
     this.router.navigate(['/',
-      this.loggedInUser.attributes.username, this.currentSpace.attributes.name,
+      this.userService.currentLoggedInUser.attributes.username, this.currentSpace.attributes.name,
       'applauncher', this.selectedFlow, this.projectName]).then(() => {
         this.hideAddAppOverlay();
         this.navigationInProgress = false;

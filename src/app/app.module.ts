@@ -22,6 +22,7 @@ import {
 } from 'ngx-fabric8-wit';
 import {
   AuthenticationService,
+  PermissionService,
   UserService
 } from 'ngx-login-client';
 import { RestangularModule } from 'ngx-restangular';
@@ -224,6 +225,7 @@ export type StoreType = {
       useExisting: NotificationsService
     },
     OAuthConfigStoreGuard,
+    PermissionService,
     PipelinesService,
     ProfileResolver,
     ProfileService,

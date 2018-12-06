@@ -29,7 +29,7 @@ export class BrandingService {
       this._logo = openshiftLogo;
       this._backgroundClass = 'home-header-background-image';
       this._description = 'A free, end-to-end, cloud-native development experience.';
-      this._name = 'OpenShift.io';
+      this._name = 'CodeReady Toolchain';
       this._moreInfoLink = 'https://openshift.io';
     }
   }

@@ -13,7 +13,7 @@ export class RedirectStatusComponent implements OnInit {
       '_verifyEmail', {
         success: {
           statusMessage: 'Your e-mail has been confirmed.',
-          secondaryStatusMessage: 'Thank you for validating your e-mail address. You can now continue to use Openshift.io',
+          secondaryStatusMessage: 'Thank you for validating your e-mail address. You can now continue to use CodeReady Toolchain.',
           callToActionUrl: '_home',
           callToActionLabel: 'home dashboard'
         },

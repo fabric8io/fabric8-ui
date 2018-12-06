@@ -6,8 +6,8 @@
         <strong>{{notificationTitle}}</strong> {{notificationText}}
       </div>
       <h3 *ngIf="cleanupStatus === 'notstarted'">
-        <strong>You are about to erase all of your OpenShift.io spaces</strong>, reverting your OpenShift.io environment to its default state.
-        This action will not affect your GitHub account or repositories associated with OpenShift.io.
+        <strong>You are about to erase all of your CodeReady Toolchain spaces</strong>, reverting your CodeReady Toolchain environment to its default state.
+        This action will not affect your GitHub account or repositories associated with CodeReady Toolchain.
       </h3>
       <h3 *ngIf="cleanupStatus === 'notstarted'">Your account will be reset and the following spaces will be removed.</h3>
       <h3 *ngIf="cleanupStatus !== 'notstarted'">Results</h3>
@@ -68,15 +68,15 @@
       </div>
       <div>
         <p class="cleanup-action-confirm" *ngIf="cleanupStatus !== 'completedwitherrors' && cleanupStatus !== 'completed'">
-          By clicking on 'Erase my OpenShift.io environment', you are telling us that you no longer wish to use your current environment, and that you wish to start all over again.  There is no going back - we cannot save what is lost.
+          By clicking on 'Erase my CodeReady Toolchain environment', you are telling us that you no longer wish to use your current environment, and that you wish to start all over again.  There is no going back - we cannot save what is lost.
         </p>
         <p class="cleanup-action-confirm" *ngIf="cleanupStatus === 'completedwitherrors'">
-          There was an error erasing some of your spaces from OpenShift.io.  You can either erase these manually, or try again using the button below.
+          There was an error erasing some of your spaces from CodeReady Toolchain.  You can either erase these manually, or try again using the button below.
         </p>
         <p class="cleanup-action-confirm" *ngIf="cleanupStatus === 'completed'">
-          You have successfully erased your OpenShift.io environment.  You can now return to your user dashboard.
+          You have successfully erased your CodeReady Toolchain environment.  You can now return to your user dashboard.
         </p>
-        <button class="btn btn-danger btn-lg" (click)="confirmErase()" *ngIf="cleanupStatus !== 'completed'">Erase My OpenShift.io Environment</button>
+        <button class="btn btn-danger btn-lg" (click)="confirmErase()" *ngIf="cleanupStatus !== 'completed'">Erase My CodeReady Toolchain Environment</button>
         <div *ngIf="cleanupStatus === 'completedwitherrors' || cleanupStatus === 'completed'" class="cleanup-home-action">
           <button class="btn btn-primary btn-lg" (click)="goHome()">Take me to my Dashboard</button>
         </div>
@@ -88,12 +88,12 @@
 <modal #confirmCleanup title="Are you sure?">
   <modal-content>
     <section>
-      <p class="clean-modal-warning">Erasing your OpenShift.io environment is an action that CANNOT be undone.</p>
+      <p class="clean-modal-warning">Erasing your CodeReady Toolchain environment is an action that CANNOT be undone.</p>
       <p>This will permanently erase all spaces, codebase links, applications, environments and pipelines.</p>
-      <p>Please verify this action by typing in your OpenShift.io username.</p>
+      <p>Please verify this action by typing in your CodeReady Toolchain username.</p>
       <form class="form-horizontal">
         <div class="form-group">
-          <label class="col-sm-4 control-label">OpenShift.io Username</label>
+          <label class="col-sm-4 control-label">CodeReady Toolchain Username</label>
           <div class="col-sm-8">
             <input
               #username

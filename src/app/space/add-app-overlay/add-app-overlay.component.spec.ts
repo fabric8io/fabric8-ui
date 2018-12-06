@@ -3,6 +3,7 @@ import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Broadcaster, Logger, Notifications } from 'ngx-base';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { PopoverConfig, PopoverModule } from 'ngx-bootstrap/popover';
 import { Context, ProcessTemplate, Space, SpaceService } from 'ngx-fabric8-wit';
 import { DependencyCheckService } from 'ngx-launcher';
@@ -176,6 +177,7 @@ describe('AddAppOverlayComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         FormsModule,
+        ModalModule.forRoot(),
         PopoverModule.forRoot()
       ],
       declarations: [
@@ -228,7 +230,7 @@ describe('AddAppOverlayComponent', () => {
       fixture = TestBed.createComponent(AddAppOverlayComponent);
       component = fixture.componentInstance;
       element = fixture.debugElement.nativeElement;
-      btnElem = element.querySelector('.code-imports--step_toolbar > button');
+      btnElem = element.querySelector('#cancelImportsButton');
       fixture.detectChanges();
     });
 
