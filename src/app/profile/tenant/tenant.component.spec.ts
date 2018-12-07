@@ -75,8 +75,8 @@ describe('TenantComponent', () => {
     });
 
     it('should be true if only template repo and template repo dir fields are modified', () => {
-      this.templatesRepoDirBlob = 'path/to/dir'
-      this.templatesRepoDirBlob = 'https://github.com/fabric8-services/fabric8-tenant'
+      this.templatesRepoDirBlob = 'path/to/dir';
+      this.templatesRepoDirBlob = 'https://github.com/fabric8-services/fabric8-tenant';
       let result: boolean = component.isUpdateProfileDisabled;
       expect(result).toBeFalsy();
     });

@@ -47,7 +47,7 @@ export class RequestCache {
 function createCacheKey(req: HttpRequest<any>): string {
   let key = req.urlWithParams;
   if (req.headers) {
-    key += `:${JSON.stringify(req.headers.get('headers'))}`;
+    key += `:${JSON.stringify(req.headers)}`;
   }
   return key;
 }

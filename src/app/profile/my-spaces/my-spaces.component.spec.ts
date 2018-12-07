@@ -20,8 +20,8 @@ import { initContext, TestContext } from 'testing/test-context';
 import { ExtProfile, GettingStartedService } from '../../getting-started/services/getting-started.service';
 import { spaceMock } from '../../shared/context.service.mock';
 import { UserSpacesService } from '../../shared/user-spaces.service';
-import { MySpacesComponent } from './my-spaces.component';
 import { SpacesType } from './my-spaces-toolbar/my-spaces-toolbar.component';
+import { MySpacesComponent } from './my-spaces.component';
 
 @Component({
   template: '<alm-my-spaces></alm-my-spaces>'

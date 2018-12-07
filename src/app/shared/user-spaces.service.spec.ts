@@ -12,15 +12,15 @@ import { createMock } from 'testing/mock';
 import { spaceMock } from './context.service.mock';
 
 import { Logger } from 'ngx-base';
-import { WIT_API_URL, SpaceService, Space } from 'ngx-fabric8-wit';
+import { Space, SpaceService, WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
 
-import {
-  UserSpacesResponse,
-  UserSpacesService,
-  SpaceInformation
-} from './user-spaces.service';
 import { of } from 'rxjs';
+import {
+  SpaceInformation,
+  UserSpacesResponse,
+  UserSpacesService
+} from './user-spaces.service';
 
 describe('UserSpacesService', () => {
 
