@@ -18,11 +18,11 @@ import {
 } from 'ngx-launcher';
 import { of } from 'rxjs';
 import { createMock } from 'testing/mock';
-import { AppLauncherMissionRuntimeService } from '../services/app-launcher-mission-runtime.service';
 import { CheService } from '../../create/codebases/services/che.service';
 import { WorkspacesService } from '../../create/codebases/services/workspaces.service';
 import { AppLauncherDependencyCheckService } from '../services/app-launcher-dependency-check.service';
 import { AppLauncherGitproviderService } from '../services/app-launcher-gitprovider.service';
+import { AppLauncherMissionRuntimeService } from '../services/app-launcher-mission-runtime.service';
 import { AppLauncherPipelineService } from '../services/app-launcher-pipeline.service';
 import { CreateAppComponent } from './create-app.component';
 

@@ -1,7 +1,7 @@
-require("@osio/scripts/config/jest/jasmine.shim");
+require('@osio/scripts/config/jest/jasmine.shim');
 
 // a very crude hack to allow c3 tests to function
-jest.mock("c3", function createProxy() {
+jest.mock('c3', function createProxy() {
   return new Proxy(
     {},
     {
@@ -11,4 +11,4 @@ jest.mock("c3", function createProxy() {
   );
 });
 
-require("@osio/scripts/config/jest/setup.angular");
+require('@osio/scripts/config/jest/setup.angular');

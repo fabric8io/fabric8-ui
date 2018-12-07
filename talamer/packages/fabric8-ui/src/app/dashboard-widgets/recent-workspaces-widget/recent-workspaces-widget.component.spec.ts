@@ -7,13 +7,13 @@ import { Notifications } from 'ngx-base';
 import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
 import { Spaces, SpaceService } from 'ngx-fabric8-wit';
 import { Observable, of as observableOf,  throwError as observableThrowError } from 'rxjs';
-import { LoadingWidgetModule } from '../loading-widget/loading-widget.module';
 import { ContextService } from '../../shared/context.service';
 import { spaceMock } from '../../shared/context.service.mock';
 import { WindowService } from '../../shared/window.service';
 import { CodebasesService } from '../../space/create/codebases/services/codebases.service';
 import { Workspace, WorkspaceLinks } from '../../space/create/codebases/services/workspace';
 import { WorkspacesService } from '../../space/create/codebases/services/workspaces.service';
+import { LoadingWidgetModule } from '../loading-widget/loading-widget.module';
 import { ExtCodebase, RecentWorkspacesWidgetComponent } from './recent-workspaces-widget.component';
 
 describe('RecentWorkspacesWidgetComponent', () => {

@@ -18,9 +18,9 @@ import {
   initContext,
   TestContext
 } from 'testing/test-context';
-import { LoadingWidgetModule } from '../loading-widget/loading-widget.module';
 import { Codebase } from '../../space/create/codebases/services/codebase';
 import { CodebasesService } from '../../space/create/codebases/services/codebases.service';
+import { LoadingWidgetModule } from '../loading-widget/loading-widget.module';
 import { AddCodebaseWidgetComponent } from './add-codebase-widget.component';
 
 @Component({

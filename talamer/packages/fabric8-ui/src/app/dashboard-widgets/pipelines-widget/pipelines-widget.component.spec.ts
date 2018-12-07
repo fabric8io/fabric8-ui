@@ -12,8 +12,8 @@ import {
   TestContext
 } from 'testing/test-context';
 import { BuildConfig } from '../../../a-runtime-console/index';
-import { LoadingWidgetModule } from '../loading-widget/loading-widget.module';
 import { PipelinesService } from '../../space/create/pipelines/services/pipelines.service';
+import { LoadingWidgetModule } from '../loading-widget/loading-widget.module';
 import { PipelinesWidgetComponent } from './pipelines-widget.component';
 
 @Component({

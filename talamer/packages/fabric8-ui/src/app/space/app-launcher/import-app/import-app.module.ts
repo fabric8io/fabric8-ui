@@ -14,6 +14,8 @@ import {
   TargetEnvironmentService,
   TokenProvider
 } from 'ngx-launcher';
+import { CheService } from '../../create/codebases/services/che.service';
+import { WorkspacesService } from '../../create/codebases/services/workspaces.service';
 import { AppLauncherDependencyCheckService } from '../services/app-launcher-dependency-check.service';
 import { AppLauncherGitproviderService } from '../services/app-launcher-gitprovider.service';
 import { AppLauncherMissionRuntimeService } from '../services/app-launcher-mission-runtime.service';
@@ -21,8 +23,6 @@ import { AppLauncherPipelineService } from '../services/app-launcher-pipeline.se
 import { AppLauncherProjectProgressService } from '../services/app-launcher-project-progress.service';
 import { AppLauncherProjectSummaryService } from '../services/app-launcher-project-summary.service';
 import { AppLauncherTargetEnvironmentService } from '../services/app-launcher-target-environment.service';
-import { CheService } from '../../create/codebases/services/che.service';
-import { WorkspacesService } from '../../create/codebases/services/workspaces.service';
 import { ImportAppRoutingModule } from './import-app-routing.module';
 import { ImportAppComponent } from './import-app.component';
 

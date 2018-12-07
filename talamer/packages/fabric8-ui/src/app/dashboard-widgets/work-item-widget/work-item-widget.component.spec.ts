@@ -10,9 +10,9 @@ import { Feature, FeatureTogglesService } from 'ngx-feature-flag';
 import { Observable,  of as observableOf, Subject } from 'rxjs';
 import { createMock } from 'testing/mock';
 import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
-import { LoadingWidgetModule } from '../loading-widget/loading-widget.module';
 import { SpacesService } from '../../shared/spaces.service';
 import { WorkItemsData } from '../../shared/workitem-utils';
+import { LoadingWidgetModule } from '../loading-widget/loading-widget.module';
 import { WorkItemBarchartModule } from './work-item-barchart/work-item-barchart.module';
 import { WorkItemWidgetComponent } from './work-item-widget.component';
 

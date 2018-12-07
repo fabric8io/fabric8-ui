@@ -4,8 +4,8 @@ import { uniqueId } from 'lodash';
 import { Contexts } from 'ngx-fabric8-wit';
 import { ConnectableObservable, Observable, Subscription } from 'rxjs';
 import { map, publishReplay, switchMap, tap } from 'rxjs/operators';
-import { WorkItemsData } from '../../shared/workitem-utils';
 import { SpacesService } from '../../shared/spaces.service';
+import { WorkItemsData } from '../../shared/workitem-utils';
 import { WorkItemBarchartConfig } from './work-item-barchart/work-item-barchart-config';
 import { WorkItemBarchartData } from './work-item-barchart/work-item-barchart-data';
 

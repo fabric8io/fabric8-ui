@@ -14,8 +14,8 @@ import 'reflect-metadata';
  * App Module
  * our top level module that holds all of our components
  */
-import { AppModule } from './app/index';
 import { decorateModuleRef } from './app/environment';
+import { AppModule } from './app/index';
 
 /**
  * Import application wide styles
