@@ -8,12 +8,13 @@
   ],
   "license": "Apache-2.0",
   "scripts": {
+    "analyze": "osio-scripts analyze",
+    "build": "CI=false STATIC_DIR=_static osio-scripts build",
     "e2e": "gulp e2e",
     "e2e:clean": "gulp e2eClean",
     "e2e:last": "gulp e2eStart",
     "e2e:reconfig": "gulp e2eReconfig",
-    "analyze": "osio-scripts analyze",
-    "build": "CI=false STATIC_DIR=_static osio-scripts build",
+    "lint": "find src -name '*.ts' | xargs tslint -p . -c tslint.json --force",
     "postinstall": "node ./scripts/postinstall.js",
     "prod": "osio-scripts prod",
     "semantic-release-origin-master": "semantic-release --branch origin/master",
@@ -76,12 +77,15 @@
     "uuid": "3.3.2"
   },
   "devDependencies": {
+    "codelyzer": "4.5.0",
     "copy-webpack-plugin": "^4.6.0",
     "gulp": "^4.0.0",
     "gulp-clean": "^0.4.0",
     "gulp-rename": "^1.4.0",
     "gulp-replace": "^1.0.0",
     "readline-sync": "^1.4.0",
-    "semantic-release": "^15.12.0"
+    "rxjs-tslint": "0.1.5",
+    "semantic-release": "^15.12.0",
+    "tslint": "^5.11.0"
   }
 }
