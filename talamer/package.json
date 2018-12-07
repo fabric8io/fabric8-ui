@@ -1,7 +1,7 @@
 {
-  "name": "osio-platform-ui",
+  "name": "talamer-ui",
   "version": "0.0.1",
-  "description": "OpenShift.io platform UI",
+  "description": "CodeReady Toolchain",
   "scripts": {
     "bootstrap": "lerna bootstrap --hoist",
     "clean": "lerna clean && rimraf node_modules",
@@ -18,10 +18,12 @@
     "reinstall": "npm run clean && npm install"
   },
   "keywords": [
-    "osio",
-    "openshift.io",
-    "openshiftio"
+    "codeready",
+    "angular",
+    "typescript",
+    "talamer"
   ],
+  "homepage": "https://github.com/fabric8-ui/fabric8-ui",
   "license": "Apache-2.0",
   "private": true,
   "workspaces": [
