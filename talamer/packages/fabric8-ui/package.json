@@ -20,6 +20,7 @@
     "semantic-release-origin-master": "semantic-release --branch origin/master",
     "start": "osio-scripts start",
     "start:prod": "npm run prod",
+    "stylelint": "stylelint '**/*.less'; exit 0",
     "test": "osio-scripts test --transformIgnorePatterns='node_modules/(?!@ngrx|ngx|fabric8|patternfly-ng|ng2|@osio)' --watchAll=false",
     "test:debug": "osio-scripts test:debug --transformIgnorePatterns='node_modules/(?!@ngrx|ngx|fabric8|patternfly-ng|ng2|@osio)' --watchAll=false ",
     "test:e2e": "npm run e2e"
@@ -86,6 +87,7 @@
     "readline-sync": "^1.4.0",
     "rxjs-tslint": "0.1.5",
     "semantic-release": "^15.12.0",
+    "stylelint": "9.5.0",
     "tslint": "^5.11.0"
   }
 }
