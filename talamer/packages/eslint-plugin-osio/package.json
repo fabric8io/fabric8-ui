@@ -11,8 +11,8 @@
   ],
   "license": "Apache-2.0",
   "peerDependencies": {
-    "eslint": "^5.7.0",
-    "prettier": "^1.15.0",
+    "eslint": "5.9.0",
+    "prettier": "1.15.3",
     "typescript": "*"
   },
   "dependencies": {
@@ -31,10 +31,5 @@
     "eslint-plugin-typescript": "0.12.0",
     "merge": "1.2.1",
     "typescript-eslint-parser": "20.0.0"
-  },
-  "devDependencies": {
-    "eslint": "^5.7.0",
-    "prettier": "^1.15.1",
-    "typescript": "^3.1.3"
   }
 }

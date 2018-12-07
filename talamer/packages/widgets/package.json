@@ -10,7 +10,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@osio/scripts": "^0.0.1",
+    "@osio/scripts": "0.0.1",
     "path": "^0.12.7",
     "react-docgen-typescript": "^1.10.0",
     "react-styleguidist": "^7.3.10"

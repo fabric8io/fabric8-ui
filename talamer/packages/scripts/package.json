@@ -32,12 +32,12 @@
     "tslib": "1.9.3",
     "typescript-snapshots-plugin": "1.5.3",
     "webpack-bundle-analyzer": "3.0.2",
-    "webpack-merge": "^4.0.0"
+    "webpack-merge": "4.0.0"
   },
   "devDependencies": {
-    "@types/enzyme": "^3.1.15",
-    "@types/enzyme-adapter-react-16": "^1.0.3",
-    "@types/jest": "^23.3.9"
+    "@types/enzyme": "3.1.15",
+    "@types/enzyme-adapter-react-16": "1.0.3",
+    "@types/jest": "23.3.9"
   },
   "optionalDependencies": {
     "@angular/core": ">= 6",
