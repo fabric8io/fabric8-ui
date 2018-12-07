@@ -17,6 +17,7 @@ export class MenusService {
         [
           {
             name: '',
+            subFeature: 'SpaceSettings',
             path: 'settings',
             icon: 'pficon pficon-settings',
             menus: [
@@ -77,7 +78,7 @@ export class MenusService {
     ]);
   }
 
-  private isFeatureEnabled(feature: string, features: Feature[]): boolean {
+  public isFeatureEnabled(feature: string, features: Feature[]): boolean {
     for (let f of features) {
       if (f.id === feature) {
         return f.attributes.enabled;
@@ -86,8 +87,17 @@ export class MenusService {
     return true;
   }
 
+  public isFeatureUserEnabled(feature: string, features: Feature[]): boolean {
+    for (let f of features) {
+      if (f.id === feature) {
+        return f.attributes['user-enabled'];
+      }
+    }
+    return true;
+  }
+
   // if a user is non-internal, she should not see internal feature in menu (feature is unapplicable)
-  private isFeatureNonApplicable(feature: string, features: Feature[]): boolean {
+  public isFeatureNonApplicable(feature: string, features: Feature[]): boolean {
     for (let f of features) {
       if (f.id === feature && !f.attributes['enablement-level']) {
         return true;

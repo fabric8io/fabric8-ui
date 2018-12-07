@@ -9,9 +9,10 @@ import { MenuItem } from '../../models/menu-item';
 import { Navigation } from '../../models/navigation';
 import { LoginService } from '../../shared/login.service';
 import { MenuedContextType } from './menued-context-type';
+import { MenusService } from './menus.service';
 
 interface MenuHiddenCallback {
-  (headerComponent: HeaderComponent): Observable<boolean>;
+  (headerComponent: HeaderComponent, menuItem: MenuItem): Observable<boolean>;
 }
 
 @Component({
@@ -30,18 +31,23 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   menuCallbacks: Map<String, MenuHiddenCallback> = new Map<String, MenuHiddenCallback>([
     [
-      '_settings', function(headerComponent) {
+      '_settings', function(headerComponent, menuItem) {
         return headerComponent.checkContextUserEqualsLoggedInUser();
       }
     ],
     [
-      '_resources', function(headerComponent) {
+      '_resources', function(headerComponent, menuItem) {
         return headerComponent.checkContextUserEqualsLoggedInUser();
       }
     ],
     [
-      'settings', function(headerComponent) {
-        return headerComponent.loggedInUserNotSpaceAdmin();
+      'settings', function(headerComponent, menuItem) {
+        const subFeature = menuItem['subFeature'];
+        const allFeatures = headerComponent.context.user['features'];
+        if (subFeature && allFeatures && headerComponent.menusService.isFeatureUserEnabled(subFeature, allFeatures)) {
+          return headerComponent.loggedInUserNotSpaceAdmin();
+        }
+        return headerComponent.checkContextUserEqualsLoggedInUser();
       }
     ]
   ]);
@@ -61,7 +67,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     public loginService: LoginService,
     private broadcaster: Broadcaster,
     private contexts: Contexts,
-    private permissionService: PermissionService
+    private permissionService: PermissionService,
+    private menusService: MenusService
   ) {
     router.events.subscribe((val: Event): void => {
       if (val instanceof NavigationEnd) {
@@ -169,7 +176,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         // Clear the menu's active state
         n.active = false;
         if (this.menuCallbacks.has(n.path)) {
-          this.menuCallbacks.get(n.path)(this).subscribe(val => n.hide = val);
+          this.menuCallbacks.get(n.path)(this, n).subscribe(val => n.hide = val);
         }
         // lets go in reverse order to avoid matching
         // /namespace/space/create instead of /namespace/space/create/pipelines
@@ -185,7 +192,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
               n.active = true;
             }
             if (this.menuCallbacks.has(o.path)) {
-              this.menuCallbacks.get(o.path)(this).subscribe(val => o.hide = val);
+              this.menuCallbacks.get(o.path)(this, o).subscribe(val => o.hide = val);
             }
           }
           if (!foundPath) {
@@ -197,7 +204,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
                 n.active = true;
               }
               if (this.menuCallbacks.has(o.path)) {
-                this.menuCallbacks.get(o.path)(this).subscribe(val => o.hide = val);
+                this.menuCallbacks.get(o.path)(this, o).subscribe(val => o.hide = val);
               }
             }
           }
@@ -211,7 +218,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
                 n.active = true;
               }
               if (this.menuCallbacks.has(o.path)) {
-                this.menuCallbacks.get(o.path)(this).subscribe(val => o.hide = val);
+                this.menuCallbacks.get(o.path)(this, o).subscribe(val => o.hide = val);
               }
             }
           }

@@ -1,99 +1,185 @@
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-xs-8 col-sm-8 col-md-9">
-      <h3 class="collaborators-header">Collaborators of {{context.space.attributes.name}} Space:</h3>
-    </div>
-    <div class="col-xs-4 col-sm-4 col-md-3">
-      <div class="table-action-heading" (click)="launchAddCollaborators()">
-        <a><i class="pficon pficon-add-circle-o"></i> Add Collaborators</a>
+<f8-feature-toggle featureName="SpaceSettings.Collaborators" [userLevel]="user" [defaultLevel]="default"></f8-feature-toggle>
+<ng-template #user>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-8 col-sm-8 col-md-9">
+        <h3 class="collaborators-header">Collaborators of {{context.space.attributes.name}} Space:</h3>
+      </div>
+      <div class="col-xs-4 col-sm-4 col-md-3">
+        <div class="table-action-heading" (click)="launchAddCollaborators()">
+          <a><i class="pficon pficon-add-circle-o"></i> Add Collaborators</a>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-md-12">
-      <div class="collaborator-list-scroll" almInfiniteScroll (eachElementHeightInPx)='54' (initItems)='initCollaborators($event)' (fetchMore)='fetchMoreCollaborators($event)'>
-        <pfng-list
-          [config]="listConfig"
-          [itemHeadingTemplate]="itemHeadingTemplate"
-          [itemTemplate]="itemTemplate"
-          [actionTemplate]="actionTemplate"
-          [items]="collaborators" >
-          <ng-template #itemHeadingTemplate let-item="item">
-            <div class="list-pf-left">
-              <!-- Place holder to user avatar width below -->
-              <span class="icon-user"></span>
-            </div>
-            <div class="list-pf-content-wrapper">
-              <div class="list-pf-main-content">
-                <div class="list-pf-title">NAME (ID)</div>
-                <div class="list-pf-description">EMAIL</div>
-                <div class="list-pf-description">ROLE</div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="collaborator-list-scroll" almInfiniteScroll (eachElementHeightInPx)='54' (initItems)='initCollaborators($event)' (fetchMore)='fetchMoreCollaborators($event)'>
+          <pfng-list
+            [config]="listConfig"
+            [itemHeadingTemplate]="itemHeadingTemplate"
+            [itemTemplate]="itemTemplate"
+            [actionTemplate]="actionTemplate"
+            [items]="collaborators" >
+            <ng-template #itemHeadingTemplate let-item="item">
+              <div class="list-pf-left">
+                <!-- Place holder to user avatar width below -->
+                <span class="icon-user"></span>
               </div>
-            </div>
-          </ng-template>
-          <ng-template #itemTemplate let-item="item" let-index="index">
-            <div class="list-pf-left">
-              <span *ngIf="(item.attributes.imageURL !== undefined && item.attributes.imageURL.length !== 0); then showImageUrl else defaultImageUrl"></span>
-              <ng-template #showImageUrl>
-                <img [src]="item.attributes.imageURL" class="icon-user" height="40">
-              </ng-template>
-              <ng-template #defaultImageUrl>
-                <img src="../../../../assets/images/profile-user.png" class="icon-user" height="40">
-              </ng-template>
-            </div>
-            <div class="list-pf-content-wrapper">
-              <div class="list-pf-main-content">
-                <div class="list-pf-title">
-                  <span>{{item.attributes.fullName}}</span>
-                  <span class="collab-username">({{item.attributes.username}})</span>
-                </div>
-                <div class="list-pf-description">
-                  {{item.attributes.email}}
-                </div>
-                <div class="list-pf-description">
-                  {{ adminCollaborators.includes(item.id) ? 'Admin' : 'Contributor' }}
+              <div class="list-pf-content-wrapper">
+                <div class="list-pf-main-content">
+                  <div class="list-pf-title">NAME (ID)</div>
+                  <div class="list-pf-description">EMAIL</div>
+                  <div class="list-pf-description">ROLE</div>
                 </div>
               </div>
-            </div>
-          </ng-template>
-          <ng-template #actionTemplate let-item="item" let-index="index">
-            <span class="dropdown-kebab-pf dropdown" dropdown>
-              <button class="btn btn-link dropdown-toggle" type="button" dropdownToggle>
-                <span class="fa fa-ellipsis-v"></span>
-              </button>
-              <ul class="dropdown-menu-right dropdown-menu" aria-labelledby="dropdownKebab" *dropdownMenu>
-                <li role="menuitem">
-                  <a [routerLink]="['/', item.attributes.username]" class="secondary-action">View user</a>
-                </li>
-                <li *ngIf="!adminCollaborators.includes(item.id) else removeAdmin" role="menuitem">
-                  <a (click)="assignUserRole(item.id, 'admin')" class="secondary-action menu-item">Make admin</a>
-                </li>
-                <ng-template #removeAdmin>
-                  <li *ngIf="!isSpaceOwner(item.id); else cannotRemoveAdmin" role="menuitem">
-                    <a (click)="assignUserRole(item.id, 'contributor')" class="secondary-action menu-item">Remove as admin</a>
+            </ng-template>
+            <ng-template #itemTemplate let-item="item" let-index="index">
+              <div class="list-pf-left">
+                <span *ngIf="(item.attributes.imageURL !== undefined && item.attributes.imageURL.length !== 0); then showImageUrl else defaultImageUrl"></span>
+                <ng-template #showImageUrl>
+                  <img [src]="item.attributes.imageURL" class="icon-user" height="40">
+                </ng-template>
+                <ng-template #defaultImageUrl>
+                  <img src="../../../../assets/images/profile-user.png" class="icon-user" height="40">
+                </ng-template>
+              </div>
+              <div class="list-pf-content-wrapper">
+                <div class="list-pf-main-content">
+                  <div class="list-pf-title">
+                    <span>{{item.attributes.fullName}}</span>
+                    <span class="collab-username">({{item.attributes.username}})</span>
+                  </div>
+                  <div class="list-pf-description">
+                    {{item.attributes.email}}
+                  </div>
+                  <div class="list-pf-description">
+                    {{ adminCollaborators.includes(item.id) ? 'Admin' : 'Contributor' }}
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template #actionTemplate let-item="item" let-index="index">
+              <span class="dropdown-kebab-pf dropdown" dropdown>
+                <button class="btn btn-link dropdown-toggle" type="button" dropdownToggle>
+                  <span class="fa fa-ellipsis-v"></span>
+                </button>
+                <ul class="dropdown-menu-right dropdown-menu" aria-labelledby="dropdownKebab" *dropdownMenu>
+                  <li role="menuitem">
+                    <a [routerLink]="['/', item.attributes.username]" class="secondary-action">View user</a>
                   </li>
-                  <ng-template #cannotRemoveAdmin>
-                    <li class="disabled" title="Cannot remove owner of space as admin">
-                      <a class="secondary-action menu-item">Remove as admin</a>
+                  <li *ngIf="!adminCollaborators.includes(item.id) else removeAdmin" role="menuitem">
+                    <a (click)="assignUserRole(item.id, 'admin')" class="secondary-action menu-item">Make admin</a>
+                  </li>
+                  <ng-template #removeAdmin>
+                    <li *ngIf="!isSpaceOwner(item.id); else cannotRemoveAdmin" role="menuitem">
+                      <a (click)="assignUserRole(item.id, 'contributor')" class="secondary-action menu-item">Remove as admin</a>
+                    </li>
+                    <ng-template #cannotRemoveAdmin>
+                      <li class="disabled" title="Cannot remove owner of space as admin">
+                        <a class="secondary-action menu-item">Remove as admin</a>
+                      </li>
+                    </ng-template>
+                  </ng-template>
+                  <li *ngIf="!isSpaceOwner(item.id); else cannotRemoveUser" role="menuitem">
+                    <a class="secondary-action menu-item" (click)="confirmUserRemove(item)">Remove user</a>
+                  </li>
+                  <ng-template #cannotRemoveUser>
+                    <li class="disabled" title="Cannot remove owner of space">
+                      <a class="secondary-action">Remove user</a>
                     </li>
                   </ng-template>
-                </ng-template>
-                <li *ngIf="!isSpaceOwner(item.id); else cannotRemoveUser" role="menuitem">
-                  <a class="secondary-action menu-item" (click)="confirmUserRemove(item)">Remove from space</a>
-                </li>
-                <ng-template #cannotRemoveUser>
-                  <li class="disabled" title="Cannot remove owner of space">
-                    <a class="secondary-action">Remove from space</a>
-                  </li>
-                </ng-template>
-              </ul>
-            </span>
-          </ng-template>
-        </pfng-list>
+                </ul>
+              </span>
+            </ng-template>
+          </pfng-list>
+        </div>
       </div>
     </div>
   </div>
-</div>
+</ng-template>
+<ng-template #default>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-8 col-sm-8 col-md-9">
+        <h3 class="collaborators-header">Collaborators of {{context.space.attributes.name}} Space:</h3>
+      </div>
+      <div class="col-xs-4 col-sm-4 col-md-3">
+        <div class="table-action-heading" (click)="launchAddCollaborators()">
+          <a><i class="pficon pficon-add-circle-o"></i> Add Collaborators</a>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="collaborator-list-scroll" almInfiniteScroll (eachElementHeightInPx)='54' (initItems)='initCollaborators($event)' (fetchMore)='fetchMoreCollaborators($event)'>
+          <pfng-list
+            [config]="listConfig"
+            [itemHeadingTemplate]="itemHeadingTemplate"
+            [itemTemplate]="itemTemplate"
+            [actionTemplate]="actionTemplate"
+            [items]="collaborators" >
+            <ng-template #itemHeadingTemplate let-item="item">
+              <div class="list-pf-left">
+                <!-- Place holder to user avatar width below -->
+                <span class="icon-user"></span>
+              </div>
+              <div class="list-pf-content-wrapper">
+                <div class="list-pf-main-content">
+                  <div class="list-pf-title">NAME (ID)</div>
+                  <div class="list-pf-description">EMAIL</div>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template #itemTemplate let-item="item" let-index="index">
+              <div class="list-pf-left">
+                <span *ngIf="(item.attributes.imageURL !== undefined && item.attributes.imageURL.length !== 0); then showImageUrl else defaultImageUrl"></span>
+                <ng-template #showImageUrl>
+                  <img [src]="item.attributes.imageURL" class="icon-user" height="40">
+                </ng-template>
+                <ng-template #defaultImageUrl>
+                  <img src="../../../../assets/images/profile-user.png" class="icon-user" height="40">
+                </ng-template>
+              </div>
+              <div class="list-pf-content-wrapper">
+                <div class="list-pf-main-content">
+                  <div class="list-pf-title">
+                    <span>{{item.attributes.fullName}}</span>
+                    <span class="collab-username">({{item.attributes.username}})</span>
+                  </div>
+                  <div class="list-pf-description">
+                    {{item.attributes.email}}
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template #actionTemplate let-item="item" let-index="index">
+              <span class="dropdown-kebab-pf dropdown" dropdown>
+                <button class="btn btn-link dropdown-toggle" type="button" dropdownToggle>
+                  <span class="fa fa-ellipsis-v"></span>
+                </button>
+                <ul class="dropdown-menu-right dropdown-menu" aria-labelledby="dropdownKebab" *dropdownMenu>
+                  <li role="menuitem">
+                    <a [routerLink]="['/', item.attributes.username]" class="secondary-action">View user</a>
+                  </li>
+                  <li *ngIf="item.id !== context.space.relationships['owned-by'].data.id; else cannotRemove" role="menuitem">
+                    <a class="secondary-action menu-item" (click)="confirmUserRemove(item)">Remove user</a>
+                  </li>
+                  <ng-template #cannotRemove>
+                    <li class="disabled" title="Cannot remove owner of space">
+                      <a class="secondary-action">Remove user</a>
+                    </li>
+                  </ng-template>
+                </ul>
+              </span>
+            </ng-template>
+          </pfng-list>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
 
 <div class="modal fade" bsModal #modalAdd="bs-modal" tabindex="-1" role="dialog" aria-hidden="true" (onShown)="onShowHandler()">
   <div class="modal-dialog">

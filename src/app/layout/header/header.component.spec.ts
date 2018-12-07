@@ -23,6 +23,7 @@ import {
 } from 'testing/test-context';
 import { LoginService } from '../../shared/login.service';
 import { HeaderComponent } from './header.component';
+import { MenusService } from './menus.service';
 
 @Component({
   template: '<alm-app-header></alm-app-header>'
@@ -68,6 +69,7 @@ describe('HeaderComponent', () => {
     declarations: [ MockRoutedComponent ],
     providers: [
       { provide: UserService, useValue: { loggedInUser: observableNever() } },
+      { provide: MenusService, useValue: jasmine.createSpyObj('MenusService', ['isFeatureUserEnabled']) },
       { provide: PermissionService, useValue:  jasmine.createSpyObj('PermissionService', ['hasScope']) },
       { provide: LoginService, useValue: jasmine.createSpyObj('LoginService', ['login']) },
       { provide: Broadcaster, useValue: mockBroadcaster },
