@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
+import openshiftLogo from '../../assets/images/codeready_toolchain.png';
 import fabric8Logo from '../../assets/images/fabric8_logo.png';
-import openshiftLogo from '../../assets/images/OpenShift-io_logo.png';
 import { Fabric8UIConfig } from '../shared/config/fabric8-ui-config';
 
 @Injectable()
