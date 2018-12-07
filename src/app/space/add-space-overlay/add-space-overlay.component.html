@@ -3,7 +3,7 @@
     <div class="modal-content">
       <div class="modal-header">
         Create space
-        <button type="button" class="close pull-right" aria-label="Close" (click)="hideAddSpaceOverlay(); spaceForm.reset()">
+        <button id="cancelSpaceButtonX" type="button" class="close pull-right" aria-label="Close" (click)="hideAddSpaceOverlay(); spaceForm.reset()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -11,7 +11,7 @@
         <div class="row f8-add-space-overlay__container">
           <section class="col-sm-6 f8-add-space-overlay__left-section" [ngClass]="{'has-error': name.errors && name.dirty}">
             <form #spaceForm="ngForm">
-              <div class="alert alert-danger alert-dismissable"
+              <div id="add-space-overlay-name-errors" class="alert alert-danger alert-dismissable"
                 *ngIf="name.errors && name.dirty">
                 <span class="pficon pficon-error-circle-o"></span>
                 <span [hidden]="!name.errors.required">Space Name is required to create a Space.</span>
@@ -28,7 +28,7 @@
                 <input id="add-space-overlay-name" class="form-control" name="name"
                   type="text" placeholder="Enter a unique name for your space"
                   #addSpaceOverlayNameInput
-                  [(ngModel)]="space.name" #name="ngModel" required uniqueSpaceName validSpaceName
+                  [(ngModel)]="spaceName" #name="ngModel" required uniqueSpaceName validSpaceName
                   (keyup.enter)="createSpaceButton.click()" autocomplete="off"/>
                 <p class="font-size-small f8-add-space-overlay__tip help-block">
                   Names must contain 4-40 characters, contain only letters, numbers, underscores
@@ -38,7 +38,8 @@
                   Description
                 </label>
                 <input id="add-space-overlay-description" class="form-control"
-                  name="description" type="text" placeholder="Enter a Space Description" #description/>
+                  name="description" type="text" placeholder="Enter a Space Description" #description
+                  [(ngModel)]="spaceDescription"/>
               </div>
             </form>
           </section>
@@ -90,7 +91,7 @@
         </button>
         <button type="button" id="createSpaceButton" class="btn btn-primary btn-lg margin-left-20"
           [disabled]="!spaceForm.form.valid || !canSubmit"
-          (click)="createSpace()" #createSpaceButton>
+          (click)="createSpace(true)" #createSpaceButton>
           Create Space and Continue
         </button>
       </div>

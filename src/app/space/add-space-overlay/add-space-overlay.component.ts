@@ -15,7 +15,6 @@ import { Space, SpaceAttributes } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
 import { of as observableOf, Subscription } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
-import { ContextService } from '../../shared/context.service';
 import { SpaceNamespaceService } from '../../shared/runtime-console/space-namespace.service';
 
 @Component({
@@ -29,13 +28,12 @@ export class AddSpaceOverlayComponent implements OnInit {
     this.hideAddSpaceOverlay();
   }
 
-  @ViewChild('description') description: ElementRef;
   @ViewChild('addSpaceOverlayNameInput') spaceNameInput: ElementRef;
   @ViewChild('modalAddSpaceOverlay') modalAddSpaceOverlay: ModalDirective;
   @ViewChild('spaceForm') spaceForm: NgForm;
 
-  currentSpace: Space;
-  space: Space;
+  spaceName: string;
+  spaceDescription: string;
   subscriptions: Subscription[] = [];
   canSubmit: Boolean = true;
   private addAppFlow: string;
@@ -46,18 +44,10 @@ export class AddSpaceOverlayComponent implements OnInit {
     private notifications: Notifications,
     private userService: UserService,
     private spaceNamespaceService: SpaceNamespaceService,
-    private context: ContextService,
     private broadcaster: Broadcaster
-  ) {
-    this.space = this.createTransientSpace();
-  }
+  ) {}
 
   ngOnInit() {
-    this.subscriptions.push(this.context.current.subscribe((ctx: Context) => {
-      if (ctx.space) {
-        this.currentSpace = ctx.space;
-      }
-    }));
     setTimeout(() => this.spaceNameInput.nativeElement.focus());
 
     this.subscriptions.push(this.broadcaster.on('showAddSpaceOverlay').subscribe((arg: any) => {
@@ -83,24 +73,21 @@ export class AddSpaceOverlayComponent implements OnInit {
    * by invoking the spaceService
    */
   createSpace(showAddAppOverlay: boolean = true) {
-    if (!this.userService.currentLoggedInUser && !this.userService.currentLoggedInUser.id) {
+    if (!this.userService.currentLoggedInUser || !this.userService.currentLoggedInUser.id) {
       this.notifications.message({
-        message: `Failed to create "${this.space.name}". Invalid user: "${this.userService.currentLoggedInUser}"`,
+        message: `Failed to create "${this.spaceName}". Invalid user: "${this.userService.currentLoggedInUser}"`,
         type: NotificationType.DANGER
       } as Notification);
       return;
     }
 
-    if (!this.space) {
-      this.space = this.createTransientSpace();
-    }
-    this.space.attributes.name = this.space.name.replace(/ /g, '_');
-    this.space.attributes.description = this.description.nativeElement.value;
-
     this.canSubmit = false;
-    this.space.relationships['owned-by'].data.id = this.userService.currentLoggedInUser.id;
+    let space = this.createTransientSpace();
+    space.attributes.name = this.spaceName;
+    space.attributes.description = this.spaceDescription;
+    space.relationships['owned-by'].data.id = this.userService.currentLoggedInUser.id;
 
-    this.subscriptions.push(this.spaceService.create(this.space).pipe(
+    this.subscriptions.push(this.spaceService.create(space).pipe(
       switchMap(createdSpace => {
         return this.spaceNamespaceService
           .updateConfigMap(observableOf(createdSpace)).pipe(
@@ -119,8 +106,9 @@ export class AddSpaceOverlayComponent implements OnInit {
           this.spaceForm.reset();
         },
         err => {
+          this.canSubmit = true;
           this.notifications.message({
-            message: `Failed to create "${this.space.name}"`,
+            message: `Failed to create "${this.spaceName}"`,
             type: NotificationType.DANGER
         } as Notification);
     }));
