@@ -9,7 +9,7 @@ metadata:
     expose: "true"
   annotations:
     fabric8.io/app-menu: development
-    fabric8.io/iconUrl: "https://cdn.rawgit.com/fabric8io/fabric8-console/f619a352/img/fabric8_icon.svg"
+    fabric8.io/iconUrl: "https://cdn.jsdelivr.net/gh/fabric8io/fabric8-console@f619a352/img/fabric8_icon.svg"
 spec:
   ports:
   - name: "http"

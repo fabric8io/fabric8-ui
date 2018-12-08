@@ -1,7 +1,7 @@
 metadata:
   annotations:
     configmap.fabric8.io/update-on-change: "fabric8-runtime-console"
-    fabric8.io/iconUrl: "https://cdn.rawgit.com/fabric8io/fabric8-console/f619a352/img/fabric8_icon.svg"
+    fabric8.io/iconUrl: "https://cdn.jsdelivr.net/gh/fabric8io/fabric8-console@f619a352/img/fabric8_icon.svg"
 spec:
   replicas: 1
   template:
