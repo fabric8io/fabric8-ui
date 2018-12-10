@@ -3,7 +3,6 @@
   <head>
     <base href="/">
     <meta charset="UTF-8">
-    <link rel="shortcut icon" href="%PUBLIC_URL%/_assets/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>CodeReady Toolchain</title>
@@ -18,34 +17,38 @@
     <f8-app>
       <style>
       body {
-        background: url(%PUBLIC_URL%/_assets/images/LoadingBackground.svg) fixed;
+        background: url('%PUBLIC_URL%/_assets/images/LoadingBackground.svg') fixed;
         background-size: cover;
         background-position: left;
         width: 100%;
         height: auto;
       }
-        .preboot-header-bar-primary {
-          height: 48px;
-          width: 100%;
-          background-color: #bbb;
-          opacity: 1;
-        }
-        .preboot-header-bar-secondary {
-          height: 25px;
-          width: 100%;
-          background-color: #ddd;
-        }
-        .preboot-container {
-          height: 100vh;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-        .preboot-container > div {
-          width: 100%;
-          max-width: 600px;
-        }
+
+      .preboot-header-bar-primary {
+        height: 48px;
+        width: 100%;
+        background-color: #bbb;
+        opacity: 1;
+      }
+
+      .preboot-header-bar-secondary {
+        height: 25px;
+        width: 100%;
+        background-color: #ddd;
+      }
+
+      .preboot-container {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .preboot-container > div {
+        width: 100%;
+        max-width: 600px;
+      }
       </style>
       <header>
         <div class="preboot-header-bar-primary"></div>
@@ -70,7 +73,6 @@
     <!-- Webpack Dev Server reload -->
     <!--<script src="/webpack-dev-server.js"></script>-->
     <!--<% } %>-->
-
 
   </body>
 </html>
