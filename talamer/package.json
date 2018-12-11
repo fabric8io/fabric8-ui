@@ -11,7 +11,7 @@
     "format:js": "npm run lint:js -- --fix",
     "format:md": "prettier '**/*.md' --write",
     "lerna": "lerna",
-    "lint": "npm-run-all lint:js lint:css",
+    "lint": "npm-run-all lint:js lint:css lint:html",
     "lint:css": "stylelint '**/*.{css,scss,less}' --max-warnings 0",
     "lint:js": "eslint '**/*.{js,ts,tsx}' --max-warnings 0 --format codeframe",
     "lint:html": "htmlhint **/*.html",
