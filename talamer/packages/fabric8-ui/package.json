@@ -16,6 +16,7 @@
     "e2e:reconfig": "gulp e2eReconfig",
     "lint": "find src -name '*.ts' | xargs tslint -p . -c tslint.json --force",
     "postinstall": "node ./scripts/postinstall.js",
+    "preprod": "./scripts/configBuildEnv.sh",
     "prod": "osio-scripts prod",
     "semantic-release-origin-master": "semantic-release --branch origin/master",
     "start": "osio-scripts start",
