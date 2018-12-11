@@ -2,7 +2,7 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = function() {
-  return {
+  return process.env.NODE_ENV !== 'production' ? {
     plugins: [
       new CopyWebpackPlugin([
         {
@@ -16,5 +16,5 @@ module.exports = function() {
         }
       ]),
     ],
-  };
+  } : {};
 }
