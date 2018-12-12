@@ -1,7 +1,7 @@
 #!/bin/bash
 
 HOME_DIR="/home/fabric8/fabric8-ui"
-APP_DIR="${HOME_DIR}/talamer/packages/fabric8-ui"
+APP_DIR="${HOME_DIR}/packages/fabric8-ui"
 BUILDER_CONT="fabric8-ui-builder"
 DEPLOY_CONT="fabric8-ui-deploy"
 REGISTRY="quay.io"
@@ -57,10 +57,10 @@ if [ ! -d dist ]; then
   docker run --detach=true --name="${BUILDER_CONT}" -t -v $(pwd)/dist:/build:Z -e BUILD_NUMBER -e BUILD_URL -e BUILD_TIMESTAMP -e JENKINS_URL -e GIT_BRANCH -e "CI=true" -e GH_TOKEN -e NPM_TOKEN -e FABRIC8_BRANDING=openshiftio -e FABRIC8_REALM=fabric8 "${BUILDER_CONT}"
 
   # Install talamer monorepo packages
-  docker exec --workdir="${HOME_DIR}/talamer" "${BUILDER_CONT}" npm install
+  docker exec --workdir="${HOME_DIR}" "${BUILDER_CONT}" npm install
 
   # Bootstrap the project dependencies
-  docker exec --workdir="${HOME_DIR}/talamer" "${BUILDER_CONT}" npm run bootstrap
+  docker exec --workdir="${HOME_DIR}" "${BUILDER_CONT}" npm run bootstrap
 
   ## Exec unit tests
   docker exec "${BUILDER_CONT}" ./run_unit_tests.sh
