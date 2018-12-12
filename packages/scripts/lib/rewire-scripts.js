@@ -68,6 +68,16 @@ function rewireWebpack(prod) {
   };
   oneOf[0].options.name = `${staticDir}/media/[name].[hash:8].[ext]`;
 
+  const miniCssExtractPluginIndex = config.plugins.findIndex(
+    (plugin) => plugin instanceof MiniCssExtractPlugin,
+  );
+  if (miniCssExtractPluginIndex !== -1) {
+    config.plugins[miniCssExtractPluginIndex] = new MiniCssExtractPlugin({
+      filename: `${staticDir}/css/[name].[contenthash:8].css`,
+      chunkFilename: `${staticDir}/css/[name].[contenthash:8].chunk.css`,
+    });
+  }
+
   // Support eslint for ts and tsx files
   config.module.rules[1] = {
     test: /\.(js|jsx|mjs|ts|tsx)$/,
