@@ -1,10 +1,10 @@
 /**
  * @author: @AngularClass
  */
-const path = require('path');
+// const path = require('path');
 const webpack = require('webpack');
 const helpers = require('./helpers');
-const branding = require('./branding');
+// const branding = require('./branding');
 const webpackMerge = require('webpack-merge'); // used to merge webpack configs
 const commonConfig = require('./webpack.common.js'); // the settings that are common to prod and dev
 const stringify = require('json-stringify');
@@ -17,7 +17,7 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 // const DedupePlugin = require('webpack/lib/optimize/DedupePlugin');
 const DefinePlugin = require('webpack/lib/DefinePlugin');
-const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
+// const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 // const IgnorePlugin = require('webpack/lib/IgnorePlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin');
@@ -285,10 +285,10 @@ module.exports = function (env) {
       /*
        * Generate FavIcons from the master svg in all formats
        */
-      new FaviconsWebpackPlugin({
-        logo: branding.assets[METADATA.FABRIC8_BRANDING].favicon.path,
-        prefix: '_assets/icons-[hash]/'
-      }),
+      // new FaviconsWebpackPlugin({
+      //   logo: branding.assets[METADATA.FABRIC8_BRANDING].favicon.path,
+      //   prefix: '_assets/icons-[hash]/'
+      // }),
 
       /**
        * Plugin: NormalModuleReplacementPlugin
