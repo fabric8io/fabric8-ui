@@ -181,7 +181,7 @@ export class MySpacesComponent implements OnDestroy, OnInit {
   // Events
 
   handlePinChange($event: any): void {
-    let index: any = findIndex(this._spaces, (obj: Space): boolean => {
+    let index: any = findIndex(this.displayedSpaces, (obj: Space): boolean => {
       return obj.id === $event.id;
     });
     if (index > -1) {
@@ -347,13 +347,12 @@ export class MySpacesComponent implements OnDestroy, OnInit {
       profile.contextInformation.pins = {};
     }
     let pins: any[] = [];
-    this._spaces.forEach((space: any): void => {
+    this.displayedSpaces.forEach((space: any): void => {
       if (space.showPin === true) {
         pins.push(space.id);
       }
     });
     profile.contextInformation.pins[this.pageName] = pins;
-
     this.subscriptions.push(this.gettingStartedService.update(profile)
       .subscribe((user: User): void => {
         // Do nothing
