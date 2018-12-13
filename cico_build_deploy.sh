@@ -1,7 +1,7 @@
 #!/bin/bash
 
 HOME_DIR="/home/fabric8/fabric8-ui"
-APP_DIR="${HOME_DIR}/packages/fabric8-ui"
+APP_DIR="packages/fabric8-ui"
 BUILDER_CONT="fabric8-ui-builder"
 DEPLOY_CONT="fabric8-ui-deploy"
 REGISTRY="quay.io"
@@ -75,14 +75,14 @@ if [ ! -d dist ]; then
   docker exec "${BUILDER_CONT}" env
 
   ## Run the prod build
-  docker exec --workdir="${APP_DIR}" "${BUILDER_CONT}" npm run build
+  docker exec "${BUILDER_CONT}" npm run build --prefix ${APP_DIR}
 
   docker exec "${BUILDER_CONT}" git branch -va
   # Set the GIT_BRANCH to master since cico sets it to origin/master
   docker exec "${BUILDER_CONT}" env GIT_BRANCH=master
   docker exec "${BUILDER_CONT}" env
-  docker exec --workdir="${APP_DIR}" "${BUILDER_CONT}" npm run semantic-release-origin-master || :
-  docker exec -u root "${BUILDER_CONT}" cp -r ${APP_DIR}/build /
+  docker exec "${BUILDER_CONT}" npm run semantic-release-origin-master --prefix ${APP_DIR} || :
+  docker exec -u root "${BUILDER_CONT}" cp -r ${HOME_DIR}/${APP_DIR}/build /
 fi
 
 set +e

@@ -1,7 +1,6 @@
 #!/bin/bash
 
-HOME_DIR="/home/fabric8/fabric8-ui"
-APP_DIR="${HOME_DIR}/packages/fabric8-ui"
+APP_DIR="packages/fabric8-ui"
 
 # Exit on error
 set -e
@@ -73,5 +72,5 @@ echo 'CICO: unit tests OK'
 
 
 ## All ok, build prod version
-docker exec --workdir="${APP_DIR}" fabric8-ui-builder npm run build
+docker exec fabric8-ui-builder npm run build --prefix ${APP_DIR}
 echo "Build Complete: $(date)"
