@@ -8,6 +8,7 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Broadcaster } from 'ngx-base';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -32,6 +33,7 @@ export class AddAppOverlayComponent implements OnInit, OnDestroy {
   @ViewChild('projectNameInput') projectNameInput: ElementRef;
   @ViewChild('modalAddAppOverlay') modalAddAppOverlay: ModalDirective;
   @Input() preselectedFlow: string;
+  @ViewChild('appForm') appForm: NgForm;
 
   currentSpace: Space;
   isProjectNameValid: boolean = false;
@@ -86,6 +88,7 @@ export class AddAppOverlayComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(this.broadcaster.on('showAddAppOverlay').subscribe((show: boolean) => {
       if (show) {
+        this.appForm.reset();
         this.modalAddAppOverlay.show();
       } else {
         this.modalAddAppOverlay.hide();
