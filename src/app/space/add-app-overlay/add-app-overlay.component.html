@@ -3,7 +3,7 @@
     <div class="modal-content">
       <div class="modal-header">
         Create an Application
-        <button type="button" class="close pull-right" aria-label="Close" (click)="appForm.reset(); hideAddAppOverlay()">
+        <button type="button" class="close pull-right" aria-label="Close" (click)="hideAddAppOverlay()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -38,7 +38,7 @@
                 <div class="row card-pf card-pf-view card-pf-view-select card-pf-view-single-select f8-add-app-overlay__card"
                   [ngClass]="{'active': importApp.checked}" (click)="updateLauncherFlowSelection('importapp')">
                   <div class="col-sm-1 f8-add-app-overlay__card-col-left">
-                    <input name="import" type="radio" [(ngModel)]="selectedFlow" value="importapp" #importApp>
+                    <input name="import" type="radio" [(ngModel)]="selectedFlow" value="importapp" #importApp required>
                   </div>
                   <div class="col-sm-8 f8-add-app-overlay__card-col-middle">
                     <h5>Import an existing codebase</h5>
@@ -54,7 +54,7 @@
                 <div class="row card-pf card-pf-view card-pf-view-select card-pf-view-single-select f8-add-app-overlay__card margin-top-20"
                   [ngClass]="{'active': createApp.checked}" (click)="updateLauncherFlowSelection('createapp')">
                   <div class="col-sm-1 f8-add-app-overlay__card-col-left">
-                    <input name="import" type="radio" [(ngModel)]="selectedFlow" value="createapp" #createApp>
+                    <input name="import" type="radio" [(ngModel)]="selectedFlow" value="createapp" #createApp required>
                   </div>
                   <div class="col-sm-8 f8-add-app-overlay__card-col-middle">
                     <h5>Create a new codebase</h5>
@@ -112,9 +112,9 @@
         </div>
       </div>
       <div class="modal-footer f8-add-app-overlay__modal-footer">
-        <button type="button" class="btn btn-default btn-lg" (click)="hideAddAppOverlay(); appForm.reset()">Cancel</button>
+        <button type="button" class="btn btn-default btn-lg" (click)="hideAddAppOverlay()">Cancel</button>
         <button type="button" id="cancelImportsButton" class="btn btn-primary btn-lg margin-left-20"
-          [disabled]="selectedFlow === '' || !isProjectNameValid || !isProjectNameAvailable || navigationInProgress"
+          [disabled]="!appForm.valid || selectedFlow === '' || !isProjectNameValid || !isProjectNameAvailable || navigationInProgress"
           (click)="routeToLaunchApp()">Next <i *ngIf="navigationInProgress" class="pficon pficon-in-progress fa-spin"></i></button>
       </div>
     </div>
