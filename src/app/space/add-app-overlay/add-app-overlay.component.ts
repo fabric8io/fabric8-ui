@@ -27,9 +27,7 @@ import { Application, DeploymentApiService } from '../create/deployments/service
   templateUrl: './add-app-overlay.component.html'
 })
 export class AddAppOverlayComponent implements OnInit, OnDestroy {
-  @HostListener('document:keyup.escape', ['$event']) onKeydownHandler(evt: KeyboardEvent) {
-    this.hideAddAppOverlay();
-  }
+
   @ViewChild('projectNameInput') projectNameInput: ElementRef;
   @ViewChild('modalAddAppOverlay') modalAddAppOverlay: ModalDirective;
   @Input() preselectedFlow: string;
@@ -45,6 +43,7 @@ export class AddAppOverlayComponent implements OnInit, OnDestroy {
   applications: string[] = [];
   isProjectNameAvailable: boolean = false;
   navigationInProgress: boolean = false;
+  isModalShown: boolean = false;
 
   constructor(private contextService: ContextService,
               private dependencyCheckService: DependencyCheckService,
@@ -84,11 +83,9 @@ export class AddAppOverlayComponent implements OnInit, OnDestroy {
     if (this.preselectedFlow) {
       this.selectedFlow = this.preselectedFlow;
     }
-    setTimeout(() => this.projectNameInput.nativeElement.focus());
 
     this.subscriptions.push(this.broadcaster.on('showAddAppOverlay').subscribe((show: boolean) => {
       if (show) {
-        this.appForm.reset();
         this.modalAddAppOverlay.show();
       } else {
         this.modalAddAppOverlay.hide();
@@ -110,10 +107,6 @@ export class AddAppOverlayComponent implements OnInit, OnDestroy {
     this.broadcaster.broadcast('analyticsTracker', {
       event: 'add app closed'
     });
-    this.projectName = '';
-    this.selectedFlow = '';
-    this.validateProjectName();
-    setTimeout(() => this.projectNameInput.nativeElement.blur());
   }
 
   /**
@@ -144,10 +137,12 @@ export class AddAppOverlayComponent implements OnInit, OnDestroy {
    * Validate the application name
    */
   validateProjectName(): void {
-    this.projectName = this.projectName.toLowerCase();
-    this.isProjectNameValid =
-      this.isValidProjectName(this.projectName);
-    this.isProjectNameAvailable = this.applications.indexOf(this.projectName) === -1 ? true : false;
+    if (this.projectName) {
+      this.projectName = this.projectName.toLowerCase();
+      this.isProjectNameValid =
+        this.isValidProjectName(this.projectName);
+      this.isProjectNameAvailable = this.applications.indexOf(this.projectName) === -1 ? true : false;
+    }
   }
 
    /**
@@ -161,5 +156,14 @@ export class AddAppOverlayComponent implements OnInit, OnDestroy {
     // no continuous '-' is allowed
     const pattern = /^[a-z](?!.*--)[a-z0-9-]{2,38}[a-z0-9]$/;
     return pattern.test(projectName);
+  }
+
+  onShown(): void {
+    this.isModalShown = true;
+  }
+
+  onHidden(): void {
+    this.appForm.reset();
+    this.isModalShown = false;
   }
 }

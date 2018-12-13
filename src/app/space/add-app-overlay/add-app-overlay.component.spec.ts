@@ -230,6 +230,8 @@ describe('AddAppOverlayComponent', () => {
       fixture = TestBed.createComponent(AddAppOverlayComponent);
       component = fixture.componentInstance;
       element = fixture.debugElement.nativeElement;
+      component.isModalShown = true;
+      fixture.detectChanges();
       btnElem = element.querySelector('#cancelImportsButton');
       fixture.detectChanges();
     });

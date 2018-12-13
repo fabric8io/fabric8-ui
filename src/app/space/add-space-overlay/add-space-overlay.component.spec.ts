@@ -54,6 +54,7 @@ describe('AddSpaceOverlayComponent', () => {
 
     fixture = TestBed.createComponent(AddSpaceOverlayComponent);
     component = fixture.debugElement.componentInstance;
+    component.isModalShown = true;
     fixture.detectChanges();
   });
 
@@ -373,8 +374,6 @@ describe('AddSpaceOverlayComponent', () => {
 
     expect(component.canSubmit).toBeTruthy();
     expect(component.subscriptions.length).toBe(2);
-
-    expect(component.spaceForm.reset).toBeCalled();
   }
 
   function errorFlowExpectations() {
@@ -384,8 +383,6 @@ describe('AddSpaceOverlayComponent', () => {
     expect(mockBroadcaster.broadcast).not.toBeCalled();
 
     expect(component.canSubmit).toBeTruthy();
-
-    expect(component.spaceForm.reset).not.toBeCalled();
   }
 
   function cancelFlowExpectations() {
@@ -395,6 +392,5 @@ describe('AddSpaceOverlayComponent', () => {
     expect(mockSpaceNamespaceService.updateConfigMap).not.toBeCalled();
     expect(mockRouter.navigate).not.toBeCalled();
     expect(mockNotifications.message).not.toBeCalled();
-    expect(component.spaceForm.reset).toBeCalled();
   }
 });

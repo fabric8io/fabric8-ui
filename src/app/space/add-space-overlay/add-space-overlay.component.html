@@ -1,99 +1,106 @@
-<div class="modal fade" bsModal #modalAddSpaceOverlay="bs-modal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" bsModal #modalAddSpaceOverlay="bs-modal" tabindex="-1" role="dialog" aria-hidden="true"
+  [config]="{ keyboard: true }" (onHidden)="onHidden()" (onShown)="onShown()">
   <div class="modal-dialog f8-modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         Create space
-        <button id="cancelSpaceButtonX" type="button" class="close pull-right" aria-label="Close" (click)="hideAddSpaceOverlay(); spaceForm.reset()">
+        <button id="cancelSpaceButtonX" type="button" class="close pull-right" aria-label="Close" (click)="hideAddSpaceOverlay()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body container-fluid f8-add-space-overlay">
-        <div class="row f8-add-space-overlay__container">
-          <section class="col-sm-6 f8-add-space-overlay__left-section" [ngClass]="{'has-error': name.errors && name.dirty}">
-            <form #spaceForm="ngForm">
-              <div id="add-space-overlay-name-errors" class="alert alert-danger alert-dismissable"
-                *ngIf="name.errors && name.dirty">
-                <span class="pficon pficon-error-circle-o"></span>
-                <span [hidden]="!name.errors.required">Space Name is required to create a Space.</span>
-                <span [hidden]="!name.errors.minLength">{{name.errors.minLength?.message}}</span>
-                <span [hidden]="!name.errors.maxLength">{{name.errors.maxLength?.message}}</span>
-                <span [hidden]="!name.errors.unique">{{name.errors.unique?.message}}</span>
-                <span [hidden]="!name.errors.invalid">{{name.errors.invalid?.message}}</span>
-              </div>
-              <div class="col-sm-9">
-                <label class="f8-add-space-overlay-label" for="add-space-overlay-name">
-                  <span class="required">*</span>
-                  Name
-                </label>
-                <input id="add-space-overlay-name" class="form-control" name="name"
-                  type="text" placeholder="Enter a unique name for your space"
-                  #addSpaceOverlayNameInput
-                  [(ngModel)]="spaceName" #name="ngModel" required uniqueSpaceName validSpaceName
-                  (keyup.enter)="createSpaceButton.click()" autocomplete="off"/>
-                <p class="font-size-small f8-add-space-overlay__tip help-block">
-                  Names must contain 4-40 characters, contain only letters, numbers, underscores
-                  or hyphens, not start with a number, and not start or end with underscores or hyphens.
-                </p>
-                <label class="f8-add-space-overlay-label" for="add-space-overlay-description">
-                  Description
-                </label>
-                <input id="add-space-overlay-description" class="form-control"
-                  name="description" type="text" placeholder="Enter a Space Description" #description
-                  [(ngModel)]="spaceDescription"/>
-              </div>
-            </form>
-          </section>
-          <section class="col-sm-6 f8-add-space-overlay__right-section">
-            <div class="f8-add-space-overlay__info-icon">
-              <i class="pficon pficon-info"></i>
-            </div>
-            <p class="f8-add-space-overlay__info">
-              This space will be public, which means that anyone can access the code
-              and participate in creating the product.
-            </p>
-            <h5>What is a space?</h5>
-            <p>
-              A space in CodeReady Toolchain is where a team works. Every application, codebase,
-              iteration, work item and collaborator is attached to a space.
-            </p>
-            <p>
-              Use spaces to plan and track development, collaborate and develop,
-              test and deploy applications.
-            </p>
-            <p>
-              <a href="https://docs.openshift.io/user-guide.html#working_with_spaces" target="_blank">
-                Learn more <i class="fa fa-external-link"></i>
-              </a>
-            </p>
-            <br/>
-            <h5>What happens next?</h5>
-            <p>
-              After you create a space, you can create or import applications, start planning
-              work for your team and add collaborators.
-            </p>
-            <p>
-              <a href="https://docs.openshift.io/getting-started-guide.html" target="blank">
-                Learn more <i class="fa fa-external-link"></i>
-              </a>
-            </p>
-          </section>
-        </div>
+      <div class="modal-body text-center" *ngIf="!isModalShown">
+        <i class="pficon pficon-in-progress fa-spin"></i>
       </div>
-      <div class="modal-footer f8-add-space-overlay__modal-footer">
-        <button type="button" id="cancelSpaceButton" class="btn btn-default btn-lg"
-          (click)="hideAddSpaceOverlay(); spaceForm.reset()">
-          Cancel
-        </button>
-        <button type="button" id="createSpaceAndExitButton" class="btn btn-default btn-lg margin-left-20"
-          [disabled]="!spaceForm.form.valid || !canSubmit"
-          (click)="createSpace(false)">
-          Create Empty Space
-        </button>
-        <button type="button" id="createSpaceButton" class="btn btn-primary btn-lg margin-left-20"
-          [disabled]="!spaceForm.form.valid || !canSubmit"
-          (click)="createSpace(true)" #createSpaceButton>
-          Create Space and Continue
-        </button>
+      <div *ngIf="isModalShown">
+        <div class="modal-body container-fluid f8-add-space-overlay">
+          <div class="row f8-add-space-overlay__container">
+            <section class="col-sm-6 f8-add-space-overlay__left-section" [ngClass]="{'has-error': name.errors && name.dirty}">
+              <form #spaceForm="ngForm">
+                <div id="add-space-overlay-name-errors" class="alert alert-danger alert-dismissable"
+                  *ngIf="name.errors && name.dirty">
+                  <span class="pficon pficon-error-circle-o"></span>
+                  <span [hidden]="!name.errors.required">Space Name is required to create a Space.</span>
+                  <span [hidden]="!name.errors.minLength">{{name.errors.minLength?.message}}</span>
+                  <span [hidden]="!name.errors.maxLength">{{name.errors.maxLength?.message}}</span>
+                  <span [hidden]="!name.errors.unique">{{name.errors.unique?.message}}</span>
+                  <span [hidden]="!name.errors.invalid">{{name.errors.invalid?.message}}</span>
+                </div>
+                <div class="col-sm-9">
+                  <label class="f8-add-space-overlay-label" for="add-space-overlay-name">
+                    <span class="required">*</span>
+                    Name
+                  </label>
+                  <input id="add-space-overlay-name" class="form-control" name="name"
+                    type="text" placeholder="Enter a unique name for your space"
+                    #addSpaceOverlayNameInput
+                    [(ngModel)]="spaceName" #name="ngModel" required uniqueSpaceName validSpaceName
+                    (keyup.enter)="createSpaceButton.click()" autocomplete="off" afinput
+                    [autofocus]="true"/>
+                  <p class="font-size-small f8-add-space-overlay__tip help-block">
+                    Names must contain 4-40 characters, contain only letters, numbers, underscores
+                    or hyphens, not start with a number, and not start or end with underscores or hyphens.
+                  </p>
+                  <label class="f8-add-space-overlay-label" for="add-space-overlay-description">
+                    Description
+                  </label>
+                  <input id="add-space-overlay-description" class="form-control"
+                    name="description" type="text" placeholder="Enter a Space Description" #description
+                    [(ngModel)]="spaceDescription"/>
+                </div>
+              </form>
+            </section>
+            <section class="col-sm-6 f8-add-space-overlay__right-section">
+              <div class="f8-add-space-overlay__info-icon">
+                <i class="pficon pficon-info"></i>
+              </div>
+              <p class="f8-add-space-overlay__info">
+                This space will be public, which means that anyone can access the code
+                and participate in creating the product.
+              </p>
+              <h5>What is a space?</h5>
+              <p>
+                A space in CodeReady Toolchain is where a team works. Every application, codebase,
+                iteration, work item and collaborator is attached to a space.
+              </p>
+              <p>
+                Use spaces to plan and track development, collaborate and develop,
+                test and deploy applications.
+              </p>
+              <p>
+                <a href="https://docs.openshift.io/user-guide.html#working_with_spaces" target="_blank">
+                  Learn more <i class="fa fa-external-link"></i>
+                </a>
+              </p>
+              <br/>
+              <h5>What happens next?</h5>
+              <p>
+                After you create a space, you can create or import applications, start planning
+                work for your team and add collaborators.
+              </p>
+              <p>
+                <a href="https://docs.openshift.io/getting-started-guide.html" target="blank">
+                  Learn more <i class="fa fa-external-link"></i>
+                </a>
+              </p>
+            </section>
+          </div>
+        </div>
+        <div class="modal-footer f8-add-space-overlay__modal-footer">
+          <button type="button" id="cancelSpaceButton" class="btn btn-default btn-lg"
+            (click)="hideAddSpaceOverlay()">
+            Cancel
+          </button>
+          <button type="button" id="createSpaceAndExitButton" class="btn btn-default btn-lg margin-left-20"
+            [disabled]="!spaceForm.form.valid || !canSubmit"
+            (click)="createSpace(false)">
+            Create Empty Space
+          </button>
+          <button type="button" id="createSpaceButton" class="btn btn-primary btn-lg margin-left-20"
+            [disabled]="!spaceForm.form.valid || !canSubmit"
+            (click)="createSpace(true)" #createSpaceButton>
+            Create Space and Continue
+          </button>
+        </div>
       </div>
     </div>
   </div>

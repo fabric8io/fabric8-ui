@@ -24,9 +24,6 @@ import { SpaceNamespaceService } from '../../shared/runtime-console/space-namesp
   templateUrl: './add-space-overlay.component.html'
 })
 export class AddSpaceOverlayComponent implements OnInit {
-  @HostListener('document:keyup.escape', ['$event']) onKeydownHandler(evt: KeyboardEvent) {
-    this.hideAddSpaceOverlay();
-  }
 
   @ViewChild('addSpaceOverlayNameInput') spaceNameInput: ElementRef;
   @ViewChild('modalAddSpaceOverlay') modalAddSpaceOverlay: ModalDirective;
@@ -37,6 +34,7 @@ export class AddSpaceOverlayComponent implements OnInit {
   subscriptions: Subscription[] = [];
   canSubmit: Boolean = true;
   private addAppFlow: string;
+  isModalShown: boolean = false;
 
   constructor(
     private router: Router,
@@ -48,9 +46,7 @@ export class AddSpaceOverlayComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    setTimeout(() => this.spaceNameInput.nativeElement.focus());
-
-    this.subscriptions.push(this.broadcaster.on('showAddSpaceOverlay').subscribe((arg: any) => {
+    this.subscriptions.push(this.broadcaster.on('showAddSpaceOverlay').subscribe((arg: boolean) => {
       if (typeof arg === 'boolean') {
         if (arg) {
           this.addAppFlow = null;
@@ -103,7 +99,6 @@ export class AddSpaceOverlayComponent implements OnInit {
           }
           this.hideAddSpaceOverlay();
           this.canSubmit = true;
-          this.spaceForm.reset();
         },
         err => {
           this.canSubmit = true;
@@ -119,7 +114,6 @@ export class AddSpaceOverlayComponent implements OnInit {
     this.broadcaster.broadcast('analyticsTracker', {
       event: 'add space closed'
     });
-    this.spaceNameInput.nativeElement.blur();
   }
 
   showAddAppOverlay(): void {
@@ -130,6 +124,15 @@ export class AddSpaceOverlayComponent implements OnInit {
         source: 'space-overlay'
       }
     });
+  }
+
+  onShown(): void {
+    this.isModalShown = true;
+  }
+
+  onHidden(): void {
+    this.spaceForm.reset();
+    this.isModalShown = false;
   }
 
   private createTransientSpace(): Space {
