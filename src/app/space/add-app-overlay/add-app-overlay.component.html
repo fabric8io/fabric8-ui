@@ -3,7 +3,7 @@
     <div class="modal-content">
       <div class="modal-header">
         Create an Application
-        <button type="button" class="close pull-right" aria-label="Close" (click)="appForm.reset(); hideAddAppOverlay()">
+        <button type="button" class="close pull-right" aria-label="Close" (click)="hideAddAppOverlay()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -112,7 +112,7 @@
         </div>
       </div>
       <div class="modal-footer f8-add-app-overlay__modal-footer">
-        <button type="button" class="btn btn-default btn-lg" (click)="hideAddAppOverlay(); appForm.reset()">Cancel</button>
+        <button type="button" class="btn btn-default btn-lg" (click)="hideAddAppOverlay()">Cancel</button>
         <button type="button" id="cancelImportsButton" class="btn btn-primary btn-lg margin-left-20"
           [disabled]="!appForm.valid || selectedFlow === '' || !isProjectNameValid || !isProjectNameAvailable || navigationInProgress"
           (click)="routeToLaunchApp()">Next <i *ngIf="navigationInProgress" class="pficon pficon-in-progress fa-spin"></i></button>

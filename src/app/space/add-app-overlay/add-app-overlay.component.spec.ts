@@ -342,6 +342,10 @@ describe('AddAppOverlayComponent', () => {
       component.navigationInProgress = false;
       component.projectName = 'project-aug-16-2018-1';
       component.selectedFlow = 'createapp';
+      component.appForm.form.setValue({
+        projectName: 'project-aug-16-2018-1',
+        import: 'createapp'
+      });
       component.validateProjectName();
       component.isProjectNameAvailable = true;
       fixture.detectChanges();
