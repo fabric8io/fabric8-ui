@@ -57,10 +57,10 @@ if [ ! -d dist ]; then
   docker run --detach=true --name="${BUILDER_CONT}" -t -v $(pwd)/dist:/build:Z -e BUILD_NUMBER -e BUILD_URL -e BUILD_TIMESTAMP -e JENKINS_URL -e GIT_BRANCH -e "CI=true" -e GH_TOKEN -e NPM_TOKEN -e FABRIC8_BRANDING=openshiftio -e FABRIC8_REALM=fabric8 "${BUILDER_CONT}"
 
   # Install talamer monorepo packages
-  docker exec --workdir="${HOME_DIR}" "${BUILDER_CONT}" npm install
+  docker exec "${BUILDER_CONT}" npm install
 
   # Bootstrap the project dependencies
-  docker exec --workdir="${HOME_DIR}" "${BUILDER_CONT}" npm run bootstrap
+  docker exec "${BUILDER_CONT}" npm run bootstrap
 
   ## Exec unit tests
   docker exec "${BUILDER_CONT}" ./run_unit_tests.sh
