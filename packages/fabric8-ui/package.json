@@ -19,7 +19,7 @@
     "preprod": "./scripts/configBuildEnv.sh",
     "prod": "osio-scripts prod",
     "semantic-release-origin-master": "semantic-release --branch origin/master",
-    "start": "osio-scripts start",
+    "start": "STATIC_DIR=_static osio-scripts start",
     "start:prod": "npm run prod",
     "stylelint": "stylelint '**/*.less'; exit 0",
     "test": "osio-scripts test --transformIgnorePatterns='node_modules/(?!@ngrx|ngx|fabric8|patternfly-ng|ng2|@osio)' --watchAll=false",
