@@ -15,7 +15,9 @@
     "lint:css": "stylelint '**/*.{css,scss,less}' --max-warnings 0",
     "lint:js": "eslint '**/*.{js,ts,tsx}' --max-warnings 0 --format codeframe",
     "lint:html": "htmlhint **/*.html",
-    "reinstall": "npm run clean && npm install"
+    "reinstall": "npm run clean && npm install",
+    "start": "npm run tmp_e2e_workaround",
+    "tmp_e2e_workaround": "npm run bootstrap && npm start --prefix packages/fabric8-ui"
   },
   "engines": {
     "node": "= 8.3.0",
