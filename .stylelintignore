@@ -3,3 +3,5 @@ node_modules
 coverage
 build
 dist
+/packages/planner
+/packages/ngx-widgets

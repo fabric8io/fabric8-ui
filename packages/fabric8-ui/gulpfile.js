@@ -101,7 +101,7 @@ function promptInput(field) {
   });
 }
 
-function promptResetEnvironment(field) {
+function promptResetEnvironment() {
   return readlineSync.keyInYN(`Reset environment after tests (WARNING: this is desctructive to your account. If unsure choose NO): `);
 }
 

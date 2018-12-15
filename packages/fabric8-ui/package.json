@@ -17,7 +17,7 @@
     "e2e:clean": "gulp e2eClean",
     "e2e:last": "gulp e2eStart",
     "e2e:reconfig": "gulp e2eReconfig",
-    "lint": "find src -name '*.ts' | xargs tslint -p . -c tslint.json --force",
+    "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "postinstall": "node ./scripts/postinstall.js",
     "preprod": "./scripts/configBuildEnv.sh",
     "prod": "osio-scripts prod",
