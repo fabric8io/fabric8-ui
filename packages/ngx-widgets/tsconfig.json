@@ -1,45 +1,24 @@
 {
+  "extends": "../scripts/config/tsconfig/tsconfig.json",
   "angularCompilerOptions": {
-    "genDir": "compiled",
     "skipTemplateCodegen": true,
     "strictMetadataEmit": true
   },
-  "atom": { "rewriteTsconfig": false },
-  "buildOnSave": false,
-  "compileOnSave": false,
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "baseUrl": ".",
-    "declaration": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "inlineSources": true,
-    "lib": [ "dom", "es6" ],
-    "module": "es2015",
-    "moduleResolution": "node",
-    "noEmitHelpers": false, // Planner and demo won't run when true
-    "noImplicitAny": true,
-    "outDir": "dist",
-    "paths": {
-      "@angular/common": ["node_modules/@angular/common"],
-      "@angular/core": ["node_modules/@angular/core"],
-      "@angular/forms": ["node_modules/@angular/forms"],
-      "@angular/http": ["node_modules/@angular/http"],
-      "@angular/router": ["node_modules/@angular/router"],
-      "rxjs/*": ["node_modules/rxjs/*"]
-    },
-    "rootDir": "build",
-    "skipLibCheck": true,
-    "sourceMap": true,
+    "baseUrl": "./src",
+    "rootDir": ".",
+    "noImplicitReturns": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "strictNullChecks": false,
-    "stripInternal": true,
-    "target": "es5"
+
+    "types": [
+      "jest",
+      "jasmine",
+      "node"
+    ]
   },
-  "exclude": [
-    "node_modules",
-    "dist"
-  ],
-  "files": [
-    "build/src/app/index.ts"
+  "include": [
+    "src"
   ]
 }

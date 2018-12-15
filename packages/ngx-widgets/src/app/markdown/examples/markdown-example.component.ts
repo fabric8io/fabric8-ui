@@ -7,8 +7,7 @@ import {
   SafeStyle,
   SafeUrl
 } from '@angular/platform-browser';
-
-const markdownIt = require('markdown-it');
+import markdownIt from 'markdown-it';
 const markdown = new markdownIt();
 
 @Pipe({

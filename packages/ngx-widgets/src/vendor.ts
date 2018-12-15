@@ -18,5 +18,5 @@ import 'rxjs';
 // You can import js, ts, css, less, ...
 
 // import PatternFly CSS
-import '../node_modules/patternfly/dist/css/patternfly-additions.min.css';
-import '../node_modules/patternfly/dist/css/patternfly.min.css';
+import 'patternfly/dist/css/patternfly-additions.min.css';
+import 'patternfly/dist/css/patternfly.min.css';

@@ -1,12 +1,11 @@
 {
   "rulesDirectory": [
-    "node_modules/codelyzer",
-    "node_modules/rxjs-tslint",
-    "node_modules/tslint/lib/rules"
+    "codelyzer",
+    "rxjs-tslint",
+    "tslint/lib/rules"
   ],
   "linterOptions": {
     "exclude": [
-      "src/a-runtime-console/*",
       "node_modules/*"
     ]
   },
