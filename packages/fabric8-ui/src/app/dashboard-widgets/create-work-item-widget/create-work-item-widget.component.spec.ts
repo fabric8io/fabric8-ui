@@ -5,7 +5,7 @@ import { By } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { NgArrayPipesModule } from 'angular-pipes';
 import { FilterService, WorkItem, WorkItemService } from 'fabric8-planner';
-import { NgLetModule } from 'fabric8-planner/app/shared/ng-let';
+import { NgLetModule } from 'fabric8-planner/src/app/shared/ng-let';
 import { cloneDeep } from 'lodash';
 import { Broadcaster } from 'ngx-base';
 import { Context, Contexts, Space } from 'ngx-fabric8-wit';
