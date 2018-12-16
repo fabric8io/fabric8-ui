@@ -1,10 +1,9 @@
 {
   "name": "ngx-widgets",
-  "version": "0.0.0-development",
+  "version": "0.0.0",
   "description": "A collection of Angular components and other useful things to be shared.",
   "main": "src/app/index.ts",
   "module": "src/app/index.ts",
-  "typings": "src/app/index.d.ts",
   "scripts": {
     "lint:less": "stylelint 'src/**/*.less' --config .stylelintrc",
     "lint:less:fix": "npm run lint:less -- --fix",
