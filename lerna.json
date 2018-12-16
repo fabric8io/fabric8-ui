@@ -1,11 +1,5 @@
 {
   "lerna": "2.11.0",
-  "packages": [
-    "packages/eslint-plugin-osio",
-    "packages/fabric8-ui",
-    "packages/scripts",
-    "packages/stylelint-config-osio",
-    "packages/widgets"
-  ],
+  "packages": ["packages/*"],
   "version": "0.0.0"
 }
