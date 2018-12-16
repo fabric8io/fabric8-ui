@@ -94,11 +94,10 @@ describe('Unit Test :: WorkItemService', () => {
 
   it('logger :: Should call logger.log during class construction and on call notifyError', done => {
     const wiService = TestBed.get(WorkItemService);
-    expect(wiService.logger.log.calls.count()).toBe(1, 'During construction');
+    expect(wiService.logger.log.calls.count()).toBe(1);
     wiService.notifyError('Some error', { message: 'Some error' });
     expect(wiService.logger.log.calls.count()).toBe(
       2,
-      'During notifyError call'
     );
     done();
   });

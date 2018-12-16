@@ -43,7 +43,7 @@ describe('AssigneeComponent', () => {
     comp.assigneeInput = [];
     comp.overlapAvatar = false;
     let assigneesDE  = fixture.debugElement.query(By.css('small.dib')).nativeElement;
-    expect(assigneesDE.innerText).toBe('Unassigned');
+    expect(assigneesDE.textContent).toBe('Unassigned');
   }));
 
   it('should truncate if assignees greater than 3', async(() => {
@@ -58,6 +58,6 @@ describe('AssigneeComponent', () => {
 
     fixture.detectChanges();
     let assigneesDE  = fixture.debugElement.query(By.css('.f8-assignees')).nativeElement;
-    expect(assigneesDE.innerText).toContain('1+');
+    expect(assigneesDE.textContent).toContain('1+');
   }));
 });

@@ -223,6 +223,7 @@ describe('Unit Test :: normalizeArray', () => {
   it('Should throw error for non-array input', () => {
     expect(
       // ignore the type error because this is the test
+      // @ts-ignore
       function(){ normalizeArray<any>('string'); } // tslint:disable-line
     ).toThrow(new Error('The input needs to be an array'));
   });

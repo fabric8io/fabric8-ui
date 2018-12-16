@@ -13,7 +13,7 @@ describe('Unit Test :: Testing comment module', () => {
     comp.onShowPreview.subscribe(item => {
       expect(item.rawText)
         .toBe(
-          showPreviewInput.rawText, 'Emits the correct rawtext'
+          showPreviewInput.rawText
         );
     });
     comp.showPreview(showPreviewInput);
@@ -28,7 +28,7 @@ describe('Unit Test :: Testing comment module', () => {
     comp.onShowPreview.subscribe(item => {
       expect(item.rawText)
         .toBe(
-          showPreviewInput.rawText, 'Emits the correct rawtext'
+          showPreviewInput.rawText
         );
     });
     comp.showPreview(showPreviewInput);
@@ -46,11 +46,11 @@ describe('Unit Test :: Testing comment module', () => {
     comp.onCreateRequest.subscribe(item => {
       expect(item.body)
         .toBe(
-          createCommentInput.rawText, 'Emits the correct body'
+          createCommentInput.rawText
         );
       expect(item.parentId)
         .toBe(
-          'comment-1', 'Emits the correct parentId'
+          'comment-1'
         );
     });
     comp.createComment(createCommentInput);
@@ -70,11 +70,11 @@ describe('Unit Test :: Testing comment module', () => {
     comp.onUpdateRequest.subscribe(item => {
       expect(item.body)
         .toBe(
-          updateCommentInput.rawText, 'Emits the correct body'
+          updateCommentInput.rawText
         );
       expect(item.id)
         .toBe(
-          'comment-1', 'Emits the correct parentId'
+          'comment-1'
         );
     });
     comp.updateComment(updateCommentInput, comment);

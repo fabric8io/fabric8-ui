@@ -130,6 +130,29 @@ export const boardsEntitySelector = createSelector(
 );
 
 @Injectable()
+export class ColumnWorkItemQuery {
+  private columnWorkitems = createSelector(
+    boardSelector,
+    (state) => state ? state.columnWorkItem : {}
+  );
+
+  private columnWorkitemSource = this.store.pipe(select(this.columnWorkitems));
+
+  constructor(
+    private store: Store<AppState>,
+    private workItemQuery: WorkItemQuery
+  ) {}
+
+  getWorkItemsByColumnId(id: string): Observable<WorkItemUI[]> {
+    return this.columnWorkitemSource.pipe(
+      select(state => state[id]),
+      map(items => items || []),
+      switchMap(ids => this.workItemQuery.getWorkItemsByIds(ids))
+    );
+  }
+}
+
+@Injectable()
 export class BoardQuery {
   private boardSource = this.store.select(boardsEntitySelector);
 
@@ -175,29 +198,6 @@ export class BoardQuery {
             })
         };
       })
-    );
-  }
-}
-
-@Injectable()
-export class ColumnWorkItemQuery {
-  private columnWorkitems = createSelector(
-    boardSelector,
-    (state) => state ? state.columnWorkItem : {}
-  );
-
-  private columnWorkitemSource = this.store.pipe(select(this.columnWorkitems));
-
-  constructor(
-    private store: Store<AppState>,
-    private workItemQuery: WorkItemQuery
-  ) {}
-
-  getWorkItemsByColumnId(id: string): Observable<WorkItemUI[]> {
-    return this.columnWorkitemSource.pipe(
-      select(state => state[id]),
-      map(items => items || []),
-      switchMap(ids => this.workItemQuery.getWorkItemsByIds(ids))
     );
   }
 }
