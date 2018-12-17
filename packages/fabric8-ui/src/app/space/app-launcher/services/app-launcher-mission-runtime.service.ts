@@ -4,6 +4,7 @@ import { Catalog, HelperService, MissionRuntimeService } from 'ngx-launcher';
 import { AuthenticationService } from 'ngx-login-client';
 import { Observable, throwError as observableThrowError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { FeatureTogglesService } from 'ngx-feature-flag';
 
 @Injectable()
 export class AppLauncherMissionRuntimeService extends MissionRuntimeService {
@@ -11,10 +12,12 @@ export class AppLauncherMissionRuntimeService extends MissionRuntimeService {
   private END_POINT: string = '';
   private API_BASE: string = 'booster-catalog/';
   private ORIGIN: string = '';
+  private isNodeBoosterEnable: boolean | {};
 
   constructor(
     private http: HttpClient,
     private auth: AuthenticationService,
+    private featureToggleService: FeatureTogglesService,
     private helperService: HelperService,
   ) {
     super();
@@ -23,15 +26,28 @@ export class AppLauncherMissionRuntimeService extends MissionRuntimeService {
     if (this.auth.getToken() != null) {
       this.headers = this.headers.set('Authorization', `Bearer ${this.auth.getToken()}`);
     }
+    this.featureToggleService
+      .isFeatureUserEnabled('AppLauncher.NodeBooster')
+      .subscribe((feature: boolean) => {
+        this.isNodeBoosterEnable = feature;
+      });
   }
 
   getCatalog(): Observable<Catalog> {
     if (this.ORIGIN) {
       this.headers = this.headers.set('X-App', this.ORIGIN);
     }
-    return this.http
-      .get<Catalog>(this.END_POINT + this.API_BASE, { headers: this.headers })
-      .pipe(catchError(this.handleError));
+    return this.http.get<Catalog>(this.END_POINT + this.API_BASE, { headers: this.headers }).pipe(
+      map((catalog: Catalog) => {
+        if (!this.isNodeBoosterEnable) {
+          catalog.boosters = catalog.boosters.filter((b) => b.runtime !== 'nodejs');
+          catalog.runtimes = catalog.runtimes.filter((r) => r.id !== 'nodejs');
+          return catalog;
+        }
+        return catalog;
+      }),
+      catchError(this.handleError),
+    );
   }
 
   private handleError(error: HttpErrorResponse | any) {
