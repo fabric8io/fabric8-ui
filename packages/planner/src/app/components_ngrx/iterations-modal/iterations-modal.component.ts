@@ -85,7 +85,7 @@ export class FabPlannerIterationModalComponent implements OnInit, OnDestroy, OnC
   constructor(
     private broadcaster: Broadcaster,
     private store: Store<AppState>,
-    private iterationQuery: IterationQuery) {}
+    private iterationQuery: IterationQuery) { }
 
   ngOnInit() {
     this.resetValues();
@@ -99,22 +99,22 @@ export class FabPlannerIterationModalComponent implements OnInit, OnDestroy, OnC
           this.validationString = uiState.error;
         }
         if (this.submitLoading &&
-            !uiState.modalLoading &&
-            !this.validationError) {
+          !uiState.modalLoading &&
+          !this.validationError) {
           this.createUpdateIterationDialog.close();
         }
         this.submitLoading = uiState.modalLoading;
 
       },
-      (e) => {
-        console.log('Some error has occured', e);
-      }
-    );
+        (e) => {
+          console.log('Some error has occured', e);
+        }
+      );
   }
 
   resetValues() {
 
-    this.iteration  = {
+    this.iteration = {
       id: '',
       name: '',
       userActive: false,
@@ -134,10 +134,10 @@ export class FabPlannerIterationModalComponent implements OnInit, OnDestroy, OnC
     let endDatePickerComponentCopy = Object.assign({}, this.endDatePickerOptions);
     let startDatePickerComponentCopy = Object.assign({}, this.startDatePickerOptions);
     let aDayBefore = moment().subtract(1, 'days');
-    let aDayBeforeDate = { date: { year: aDayBefore.format('YYYY'), month: aDayBefore.format('M'), day: aDayBefore.format('D') }} as any;
+    let aDayBeforeDate = { date: { year: aDayBefore.format('YYYY'), month: aDayBefore.format('M'), day: aDayBefore.format('D') } } as any;
     endDatePickerComponentCopy['disableUntil'] = aDayBeforeDate.date;
     startDatePickerComponentCopy['componentDisabled'] = false;
-    startDatePickerComponentCopy['disableSince'] = {year: 0, month: 0, day: 0};
+    startDatePickerComponentCopy['disableSince'] = { year: 0, month: 0, day: 0 };
     this.startDatePickerOptions = startDatePickerComponentCopy;
     this.endDatePickerOptions = endDatePickerComponentCopy;
     this.validationError = false;
@@ -164,6 +164,10 @@ export class FabPlannerIterationModalComponent implements OnInit, OnDestroy, OnC
 
   ngOnDestroy() {
     // prevent memory leak when component is destroyed
+  }
+
+  get isNameFieldEmpty(): boolean {
+    return this.iteration.name.trim().length <= 0;
   }
 
   openCreateUpdateModal(
@@ -317,7 +321,7 @@ export class FabPlannerIterationModalComponent implements OnInit, OnDestroy, OnC
   }
 
   setParentIteration(value: any) {
-    this.selectedParentIteration =  this.iterations.find((iteration) => iteration.id === value.key);
+    this.selectedParentIteration = this.iterations.find((iteration) => iteration.id === value.key);
     this.selectedParentIterationName = value.value;
     this.iterationSearch.nativeElement.focus();
     // this.iteration.relationships.parent.data.id = this.selectedParentIteration.id;
@@ -381,7 +385,7 @@ export class FabPlannerIterationModalComponent implements OnInit, OnDestroy, OnC
     } else {
       let inp = this.iterationSearch.nativeElement.value.trim();
       this.filteredIterations = this.iterationsValue.filter((item) => {
-         return item.value.toLowerCase().indexOf(inp.toLowerCase()) > -1;
+        return item.value.toLowerCase().indexOf(inp.toLowerCase()) > -1;
       });
       if (this.filteredIterations.length == 0) {
         this.selectedParentIteration = null;
@@ -393,7 +397,7 @@ export class FabPlannerIterationModalComponent implements OnInit, OnDestroy, OnC
     this.iteration.name = this.iteration.name.trim();
     if (this.iteration.name !== '') {
       if (this.iteration.name.indexOf('/') === -1 &&
-          this.iteration.name.indexOf('\\') === -1) {
+        this.iteration.name.indexOf('\\') === -1) {
         this.validationError = false;
         if (this.modalType == 'create' || this.modalType == 'createChild') {
           this.store.dispatch(new IterationActions.Add({
@@ -416,10 +420,10 @@ export class FabPlannerIterationModalComponent implements OnInit, OnDestroy, OnC
         this.validationError = true;
         this.validationString = '/ or \\ are not allowed in iteration name.';
       }
-      } else {
-        this.validationError = true;
-        this.validationString = 'This field is required.';
-      }
+    } else {
+      this.validationError = true;
+      this.validationString = 'This field is required.';
+    }
   }
 
   removeError() {
