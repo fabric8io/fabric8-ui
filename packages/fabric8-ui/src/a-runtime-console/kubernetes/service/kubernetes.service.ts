@@ -4,12 +4,11 @@ import { RESTService } from '../../store/entity/rest.service';
 import { KubernetesResource } from '../model/kubernetesresource.model';
 import { WatcherFactory } from './watcher-factory.service';
 
-export abstract class KubernetesService<T extends KubernetesResource, L extends Array<T>> extends RESTService<T, L> {
-
-  constructor(
-    kubernetesRestangular: Restangular,
-    public watcherFactory: WatcherFactory
-  ) {
+export abstract class KubernetesService<
+  T extends KubernetesResource,
+  L extends Array<T>
+> extends RESTService<T, L> {
+  constructor(kubernetesRestangular: Restangular, public watcherFactory: WatcherFactory) {
     super(kubernetesRestangular);
   }
 
@@ -56,5 +55,5 @@ export abstract class KubernetesService<T extends KubernetesResource, L extends 
     return 'Service';
   }
 
-  abstract get serviceUrl(): string
+  abstract get serviceUrl(): string;
 }

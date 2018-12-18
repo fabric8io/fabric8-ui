@@ -7,14 +7,9 @@ import { LoadingWidgetModule } from '../loading-widget/loading-widget.module';
 import { RecentWorkspacesWidgetComponent } from './recent-workspaces-widget.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    LoadingWidgetModule,
-    TooltipModule.forRoot()
-  ],
+  imports: [CommonModule, FormsModule, LoadingWidgetModule, TooltipModule.forRoot()],
   declarations: [RecentWorkspacesWidgetComponent],
   exports: [RecentWorkspacesWidgetComponent],
-  providers: [TooltipConfig, WorkspacesService]
+  providers: [TooltipConfig, WorkspacesService],
 })
-export class RecentWorkspacesWidgetModule { }
+export class RecentWorkspacesWidgetModule {}

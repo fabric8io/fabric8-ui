@@ -2,26 +2,26 @@ import { ReplicationController, ReplicationControllers } from './replicationcont
 import { ScalableResource } from './scalableresource.model';
 
 export class ReplicaSet extends ScalableResource {
-
   defaultKind() {
     return 'ReplicaSet';
   }
 }
 
-export class ReplicaSets extends Array<ReplicaSet> {
-}
-
+export class ReplicaSets extends Array<ReplicaSet> {}
 
 /**
  * Combines ReplicaSets and ReplicationControllers into a list removing any duplicates
  */
-export function combineReplicaSets(replicasets: ReplicaSets, replicationControllers: ReplicationControllers): ReplicaSets {
+export function combineReplicaSets(
+  replicasets: ReplicaSets,
+  replicationControllers: ReplicationControllers,
+): ReplicaSets {
   let map = {};
   if (replicationControllers) {
-    replicationControllers.forEach(s => map[s.name] = s);
+    replicationControllers.forEach((s) => (map[s.name] = s));
   }
   if (replicasets) {
-    replicasets.forEach(s => map[s.name] = s);
+    replicasets.forEach((s) => (map[s.name] = s));
   }
   let answer = new ReplicaSets();
   for (var key in map) {
@@ -44,9 +44,14 @@ export function combineReplicaSets(replicasets: ReplicaSets, replicationControll
 /**
  * Combines ReplicaSets and ReplicationControllers into a list removing any duplicates
  */
-export function combineReplicaSet(replicaset: ReplicaSet, replicationController: ReplicationController): ReplicaSet {
+export function combineReplicaSet(
+  replicaset: ReplicaSet,
+  replicationController: ReplicationController,
+): ReplicaSet {
   if (replicaset && replicaset.resource) {
-    return replicationController && replicationController.resource ? replicationController : replicaset;
+    return replicationController && replicationController.resource
+      ? replicationController
+      : replicaset;
   } else {
     return replicationController;
   }

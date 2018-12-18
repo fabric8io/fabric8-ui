@@ -14,7 +14,7 @@ import { WorkspacesService } from '../services/workspaces.service';
   encapsulation: ViewEncapsulation.None,
   selector: 'codebases-item-actions',
   templateUrl: './codebases-item-actions.component.html',
-  styleUrls: ['./codebases-item-actions.component.less']
+  styleUrls: ['./codebases-item-actions.component.less'],
 })
 export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
   @Input() cheRunning: boolean;
@@ -27,15 +27,15 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
   dialog: Dialog;
 
   constructor(
-      private broadcaster: Broadcaster,
-      private notifications: Notifications,
-      private cheService: CheService,
-      private workspacesService: WorkspacesService,
-      private codebasesService: CodebasesService) {
-  }
+    private broadcaster: Broadcaster,
+    private notifications: Notifications,
+    private cheService: CheService,
+    private workspacesService: WorkspacesService,
+    private codebasesService: CodebasesService,
+  ) {}
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => {
+    this.subscriptions.forEach((sub) => {
       sub.unsubscribe();
     });
   }
@@ -51,48 +51,57 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
    */
   createWorkspace(): void {
     this.workspaceBusy = true;
-    this.subscriptions.push(this.cheService.getState().pipe(switchMap((che: Che, index: number) => {
-      if (!che.clusterFull) {
-        // create
-        return this.workspacesService
-          .createWorkspace(this.codebase.id).pipe(
-          map(workspaceLinks => {
-            this.workspaceBusy = false;
-            if (workspaceLinks != undefined) {
-              let name = this.getWorkspaceName(workspaceLinks.links.open);
-              this.notifications.message({
-                message: `Workspace created!`,
-                type: NotificationType.SUCCESS
-              } as Notification);
-              // Poll for new workspaces
-              this.broadcaster.broadcast('workspaceCreated', {
-                codebase: this.codebase,
-                workspaceName: name
-              });
+    this.subscriptions.push(
+      this.cheService
+        .getState()
+        .pipe(
+          switchMap((che: Che, index: number) => {
+            if (!che.clusterFull) {
+              // create
+              return this.workspacesService.createWorkspace(this.codebase.id).pipe(
+                map((workspaceLinks) => {
+                  this.workspaceBusy = false;
+                  if (workspaceLinks != undefined) {
+                    let name = this.getWorkspaceName(workspaceLinks.links.open);
+                    this.notifications.message({
+                      message: `Workspace created!`,
+                      type: NotificationType.SUCCESS,
+                    } as Notification);
+                    // Poll for new workspaces
+                    this.broadcaster.broadcast('workspaceCreated', {
+                      codebase: this.codebase,
+                      workspaceName: name,
+                    });
+                  } else {
+                    // display error message
+                    this.notifications.message({
+                      message: `Workspace error during creation.`,
+                      type: NotificationType.DANGER,
+                    } as Notification);
+                  }
+                }),
+              );
             } else {
               // display error message
+              this.workspaceBusy = false;
               this.notifications.message({
-                message: `Workspace error during creation.`,
-                type: NotificationType.DANGER
+                message: `OpenShift Online cluster is currently out of capacity, workspace cannot be started.`,
+                type: NotificationType.DANGER,
               } as Notification);
+              return EMPTY;
             }
-          }));
-      } else {
-        // display error message
-        this.workspaceBusy = false;
-        this.notifications.message({
-          message: `OpenShift Online cluster is currently out of capacity, workspace cannot be started.`,
-          type: NotificationType.DANGER
-        } as Notification);
-        return EMPTY;
-      }
-    })).subscribe(() => {},
-        err => {
-          this.notifications.message({
-            message: `Workspace error during creation.`,
-            type: NotificationType.DANGER
-          } as Notification);
-        }));
+          }),
+        )
+        .subscribe(
+          () => {},
+          (err) => {
+            this.notifications.message({
+              message: `Workspace error during creation.`,
+              type: NotificationType.DANGER,
+            } as Notification);
+          },
+        ),
+    );
   }
 
   /**
@@ -115,15 +124,23 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
    * Disassociate codebase from current space
    */
   deleteCodebase(): void {
-    this.subscriptions.push(this.codebasesService.deleteCodebase(this.codebase).subscribe((codebase: Codebase) => {
-      this.modal.hide();
-      this.broadcaster.broadcast('codebaseDeleted', {
-        codebase: codebase
-      });
-    }, (error: any) => {
-      this.modal.hide();
-      this.handleError('Failed to deleteCodebase codebase ' + this.codebase.name, NotificationType.DANGER);
-    }));
+    this.subscriptions.push(
+      this.codebasesService.deleteCodebase(this.codebase).subscribe(
+        (codebase: Codebase) => {
+          this.modal.hide();
+          this.broadcaster.broadcast('codebaseDeleted', {
+            codebase: codebase,
+          });
+        },
+        (error: any) => {
+          this.modal.hide();
+          this.handleError(
+            'Failed to deleteCodebase codebase ' + this.codebase.name,
+            NotificationType.DANGER,
+          );
+        },
+      ),
+    );
   }
 
   // Private
@@ -144,7 +161,7 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
   private handleError(error: string, type: NotificationType) {
     this.notifications.message({
       message: error,
-      type: type
+      type: type,
     } as Notification);
   }
 }

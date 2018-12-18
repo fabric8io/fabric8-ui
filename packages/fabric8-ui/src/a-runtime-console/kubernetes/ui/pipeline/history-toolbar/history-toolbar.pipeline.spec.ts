@@ -4,18 +4,15 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { PipelinesHistoryToolbarComponent } from './history-toolbar.pipeline.component';
 
-
 describe('PipelinesHistoryToolbarComponent', () => {
   let component: PipelinesHistoryToolbarComponent;
   let fixture: ComponentFixture<PipelinesHistoryToolbarComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule.withRoutes([])
-      ],
+      imports: [RouterTestingModule.withRoutes([])],
       declarations: [PipelinesHistoryToolbarComponent],
-      schemas: [ NO_ERRORS_SCHEMA ]
+      schemas: [NO_ERRORS_SCHEMA],
     });
   }));
 

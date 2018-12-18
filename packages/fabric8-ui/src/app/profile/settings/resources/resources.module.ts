@@ -5,10 +5,7 @@ import { ResourcesRoutingModule } from './resources-routing.module';
 import { ResourcesComponent } from './resources.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    ResourcesRoutingModule
-  ],
-  declarations: [ ResourcesComponent, ResourceStatusIcon ]
+  imports: [CommonModule, ResourcesRoutingModule],
+  declarations: [ResourcesComponent, ResourceStatusIcon],
 })
 export class ResourcesModule {}

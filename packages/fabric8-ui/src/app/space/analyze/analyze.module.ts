@@ -5,14 +5,10 @@ import { AnalyzeOverviewModule } from './analyze-overview/analyze-overview.modul
 import { AnalyzeRoutingModule } from './analyze-routing.module';
 import { AnalyzeComponent } from './analyze.component';
 
-
 @NgModule({
-  imports: [AnalyzeOverviewModule,
-            AnalyzeRoutingModule,
-            CommonModule,
-            FeatureFlagModule],
-  declarations: [AnalyzeComponent]
+  imports: [AnalyzeOverviewModule, AnalyzeRoutingModule, CommonModule, FeatureFlagModule],
+  declarations: [AnalyzeComponent],
 })
 export class AnalyzeModule {
-  constructor() { }
+  constructor() {}
 }

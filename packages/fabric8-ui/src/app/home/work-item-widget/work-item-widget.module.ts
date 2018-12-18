@@ -23,9 +23,9 @@ import { WorkItemWidgetComponent } from './work-item-widget.component';
     WorkItemWidgetRoutingModule,
     WorkItemDetailModule,
     Fabric8WitModule,
-    FeatureFlagModule
+    FeatureFlagModule,
   ],
   declarations: [WorkItemWidgetComponent],
-  exports: [WorkItemWidgetComponent]
+  exports: [WorkItemWidgetComponent],
 })
-export class WorkItemWidgetModule { }
+export class WorkItemWidgetModule {}

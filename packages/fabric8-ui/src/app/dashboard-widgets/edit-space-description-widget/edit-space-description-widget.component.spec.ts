@@ -5,7 +5,7 @@ import { Broadcaster } from 'ngx-base';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { CollaboratorService, Contexts, Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
-import { ConnectableObservable,  Observable, of as observableOf } from 'rxjs';
+import { ConnectableObservable, Observable, of as observableOf } from 'rxjs';
 import { createMock } from 'testing/mock';
 import { initContext, TestContext } from 'testing/test-context';
 import { SpaceNamespaceService } from '../../shared/runtime-console/space-namespace.service';
@@ -13,12 +13,11 @@ import { AddCollaboratorsDialogModule } from '../../space/settings/collaborators
 import { EditSpaceDescriptionWidgetComponent } from './edit-space-description-widget.component';
 
 @Component({
-  template: '<fabric8-edit-space-description-widget></fabric8-edit-space-description-widget>'
+  template: '<fabric8-edit-space-description-widget></fabric8-edit-space-description-widget>',
 })
 class HostComponent {}
 
 describe('EditSpaceDescriptionWidgetComponent', () => {
-
   const mockSpace: any = {
     name: 'mock-space',
     path: 'mock-path',
@@ -28,80 +27,104 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
       description: 'mock-description',
       'updated-at': 'mock-updated-at',
       'created-at': 'mock-created-at',
-      version: 0
+      version: 0,
     },
     relationships: {
       'owned-by': {
         data: {
-          id: 'mock-id-1'
-        }
-      }
-    }
+          id: 'mock-id-1',
+        },
+      },
+    },
   };
   const mockUsers: any = [
     { id: 'mock-id-d', attributes: { username: 'mock-username-d', fullName: 'Dave' } },
     { id: 'mock-id-a', attributes: { username: 'mock-username-a', fullName: 'Ava' } },
-    { id: 'mock-id-c', attributes: { username: 'mock-username-c', fullName: 'Charles' } }
+    { id: 'mock-id-c', attributes: { username: 'mock-username-c', fullName: 'Charles' } },
   ];
 
   const testContext = initContext(EditSpaceDescriptionWidgetComponent, HostComponent, {
-    imports: [
-      ModalModule.forRoot(),
-      AddCollaboratorsDialogModule
-    ],
+    imports: [ModalModule.forRoot(), AddCollaboratorsDialogModule],
     providers: [
-      { provide: Spaces, useFactory: () => {
+      {
+        provide: Spaces,
+        useFactory: () => {
           let mockSpaces: jasmine.SpyObj<Spaces> = createMock(Spaces);
           mockSpaces.current = observableOf(mockSpace) as Observable<Space> & jasmine.Spy;
           return mockSpaces;
-        }
+        },
       },
-      { provide: Contexts, useFactory: () => {
+      {
+        provide: Contexts,
+        useFactory: () => {
           let mockContexts: jasmine.SpyObj<Contexts> = createMock(Contexts);
           return mockContexts;
-        }
+        },
       },
-      { provide: UserService, useFactory: () => {
+      {
+        provide: UserService,
+        useFactory: () => {
           let mockUserService: jasmine.SpyObj<UserService> = createMock(UserService);
-          mockUserService.loggedInUser = observableOf(mockUsers[0]) as ConnectableObservable<User> & jasmine.Spy;
-          mockUserService.getUserByUserId.and.returnValue(observableOf(mockUsers[0]) as Observable<User>);
+          mockUserService.loggedInUser = observableOf(mockUsers[0]) as ConnectableObservable<User> &
+            jasmine.Spy;
+          mockUserService.getUserByUserId.and.returnValue(observableOf(mockUsers[0]) as Observable<
+            User
+          >);
           return mockUserService;
-        }
+        },
       },
-      { provide: Broadcaster, useFactory: () => {
+      {
+        provide: Broadcaster,
+        useFactory: () => {
           let mockBroadcaster: jasmine.SpyObj<Broadcaster> = createMock(Broadcaster);
           return mockBroadcaster;
-        }
+        },
       },
-      { provide: SpaceService, useFactory: () => {
+      {
+        provide: SpaceService,
+        useFactory: () => {
           let mockSpaceService: jasmine.SpyObj<SpaceService> = createMock(SpaceService);
           return mockSpaceService;
-        }
+        },
       },
-      { provide: SpaceNamespaceService, useFactory: () => {
-          let mockSpaceNamespaceService: jasmine.SpyObj<SpaceNamespaceService> = createMock(SpaceNamespaceService);
+      {
+        provide: SpaceNamespaceService,
+        useFactory: () => {
+          let mockSpaceNamespaceService: jasmine.SpyObj<SpaceNamespaceService> = createMock(
+            SpaceNamespaceService,
+          );
           return mockSpaceNamespaceService;
-        }
+        },
       },
-      { provide: CollaboratorService, useFactory: () => {
-          let mockCollaboratorService: jasmine.SpyObj<CollaboratorService> = createMock(CollaboratorService);
-          mockCollaboratorService.getInitialBySpaceId.and.returnValue(observableOf(mockUsers) as Observable<User[]>);
+      {
+        provide: CollaboratorService,
+        useFactory: () => {
+          let mockCollaboratorService: jasmine.SpyObj<CollaboratorService> = createMock(
+            CollaboratorService,
+          );
+          mockCollaboratorService.getInitialBySpaceId.and.returnValue(observableOf(
+            mockUsers,
+          ) as Observable<User[]>);
           mockCollaboratorService.getTotalCount.and.returnValue(observableOf(mockUsers.length));
           return mockCollaboratorService;
-        }
-      }
+        },
+      },
     ],
-    schemas: [NO_ERRORS_SCHEMA]
+    schemas: [NO_ERRORS_SCHEMA],
   });
 
   describe('Component', () => {
-    it('should display the space\'s creator in the masthead', function() {
-      let el: DebugElement = testContext.fixture.debugElement.query(By.css('.f8-space-masthead-owner'));
+    it("should display the space's creator in the masthead", function() {
+      let el: DebugElement = testContext.fixture.debugElement.query(
+        By.css('.f8-space-masthead-owner'),
+      );
       expect(el.nativeElement.textContent.trim()).toEqual(mockUsers[0].attributes.username);
     });
 
     it('should display the number of collaborators in the masthead', function() {
-      let el: DebugElement = testContext.fixture.debugElement.query(By.css('.f8-space-masthead-space-info'));
+      let el: DebugElement = testContext.fixture.debugElement.query(
+        By.css('.f8-space-masthead-space-info'),
+      );
       expect(el.nativeElement.textContent.trim()).toContain(mockUsers.length);
     });
 
@@ -119,7 +142,7 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
       expect(link).toBeDefined();
     });
 
-    it('should not have a link to add collaborators if the user doesn\'t own the space', function() {
+    it("should not have a link to add collaborators if the user doesn't own the space", function() {
       testContext.testedDirective.userOwnsSpace = false;
       testContext.fixture.detectChanges();
       let link: DebugElement = testContext.fixture.debugElement.query(By.css('a'));
@@ -131,12 +154,14 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
       expect(testContext.testedDirective.filteredCollaborators).toEqual(mockUsers);
 
       testContext.testedDirective.onCollaboratorSearchChange('Dave');
-      expect(testContext.testedDirective.filteredCollaborators).toEqual([ { id: 'mock-id-d', attributes: { username: 'mock-username-d', fullName: 'Dave' } } ]);
+      expect(testContext.testedDirective.filteredCollaborators).toEqual([
+        { id: 'mock-id-d', attributes: { username: 'mock-username-d', fullName: 'Dave' } },
+      ]);
 
       testContext.testedDirective.onCollaboratorSearchChange('av');
       expect(testContext.testedDirective.filteredCollaborators).toEqual([
         { id: 'mock-id-d', attributes: { username: 'mock-username-d', fullName: 'Dave' } },
-        { id: 'mock-id-a', attributes: { username: 'mock-username-a', fullName: 'Ava' } }
+        { id: 'mock-id-a', attributes: { username: 'mock-username-a', fullName: 'Ava' } },
       ]);
 
       testContext.testedDirective.onCollaboratorSearchChange('');
@@ -151,7 +176,9 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
       testContext.testedDirective.userOwnsSpace = true;
       testContext.testedDirective.startEditingDescription();
       testContext.fixture.detectChanges();
-      let button: DebugElement = testContext.fixture.debugElement.query(By.css('#workItemTitle_btn_save_description'));
+      let button: DebugElement = testContext.fixture.debugElement.query(
+        By.css('#workItemTitle_btn_save_description'),
+      );
       button.nativeElement.click();
       expect(testContext.testedDirective.saveDescription).toHaveBeenCalled();
     });
@@ -160,11 +187,13 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
   describe('#onUpdateDescription', () => {
     xit('should be called when the enter key is pressed', function() {
       const mockedSpaceService = TestBed.get(SpaceService);
-      mockedSpaceService.update.and.returnValue(observableOf({
-        attributes: {
-          description: 'some mock description'
-        }
-      }));
+      mockedSpaceService.update.and.returnValue(
+        observableOf({
+          attributes: {
+            description: 'some mock description',
+          },
+        }),
+      );
       spyOn(testContext.testedDirective, 'isEditable').and.returnValue(observableOf(true));
       spyOn(testContext.testedDirective, 'onUpdateDescription');
       testContext.testedDirective.userOwnsSpace = true;
@@ -185,16 +214,16 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
           id: 'mock-id-e',
           attributes: {
             username: 'mock-username-e',
-            fullName: 'Edith'
-          }
+            fullName: 'Edith',
+          },
         },
         {
           id: 'mock-id-b',
           attributes: {
             username: 'mock-username-b',
-            fullName: 'Brenda'
-          }
-        }
+            fullName: 'Brenda',
+          },
+        },
       ] as User[];
 
       testContext.testedDirective.addCollaboratorsToParent(newUsers);
@@ -202,5 +231,4 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
       expect(testContext.testedDirective.collaborators).toEqual(newUsers);
     });
   });
-
 });

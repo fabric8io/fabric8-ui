@@ -1,26 +1,19 @@
 import { TestBed } from '@angular/core/testing';
-import {
-  Config,
-  HelperService,
-  TokenProvider
-} from 'ngx-launcher';
-import {
-  Subject
-} from 'rxjs';
+import { Config, HelperService, TokenProvider } from 'ngx-launcher';
+import { Subject } from 'rxjs';
 import { FABRIC8_FORGE_API_URL } from '../../../shared/runtime-console/fabric8-ui-forge-api';
 import { NewForgeConfig } from '../shared/new-forge.config';
 import { AppLauncherProjectProgressService } from './app-launcher-project-progress.service';
 
-
 function initTestBed() {
   TestBed.configureTestingModule({
     providers: [
-        AppLauncherProjectProgressService,
-        HelperService,
-        TokenProvider,
-        { provide: Config, useClass: NewForgeConfig },
-        { provide: FABRIC8_FORGE_API_URL, useValue: 'url-here' }
-    ]
+      AppLauncherProjectProgressService,
+      HelperService,
+      TokenProvider,
+      { provide: Config, useClass: NewForgeConfig },
+      { provide: FABRIC8_FORGE_API_URL, useValue: 'url-here' },
+    ],
   });
 }
 
@@ -32,12 +25,12 @@ describe('Progress: AppLauncherProjectProgressService', () => {
     initTestBed();
     appLauncherProjectProgressService = TestBed.get(AppLauncherProjectProgressService);
     let fakeWebSocket = () => {
-        let socket = new WebSocket('wss://url');
-        let msgEvntInit: MessageEventInit = {'data': 'socket data message'};
-        let event = new MessageEvent('worker', msgEvntInit);
-        spyOn(socket, 'onmessage').and.returnValue(event);
-        return socket;
-      };
+      let socket = new WebSocket('wss://url');
+      let msgEvntInit: MessageEventInit = { data: 'socket data message' };
+      let event = new MessageEvent('worker', msgEvntInit);
+      spyOn(socket, 'onmessage').and.returnValue(event);
+      return socket;
+    };
     spyOn(appLauncherProjectProgressService, 'getProgress').and.returnValue(fakeWebSocket);
   });
 
@@ -47,5 +40,4 @@ describe('Progress: AppLauncherProjectProgressService', () => {
       expect(event.data).toEqual('socket data message');
     };
   });
-
 });

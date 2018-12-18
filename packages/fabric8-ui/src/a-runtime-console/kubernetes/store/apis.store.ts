@@ -11,13 +11,11 @@ var _latestAPIs: APIs = null;
 let _currentAPIs: BehaviorSubject<APIs> = new BehaviorSubject(_latestAPIs);
 let _loadingAPIs: BehaviorSubject<boolean> = new BehaviorSubject(true);
 
-
 // TODO lets default to OpenShift as a hack ;)
 let _defaultIsOpenShift = true;
 
 export class APIs {
-  constructor(public isOpenShift: boolean) {
-  }
+  constructor(public isOpenShift: boolean) {}
 }
 
 export function isOpenShift(): boolean {
@@ -37,7 +35,6 @@ export function isOpenShift(): boolean {
 
 @Injectable()
 export class APIsStore {
-
   constructor(@Inject(KUBERNETES_RESTANGULAR) private kubernetesRestangular: Restangular) {
     this.load();
   }
@@ -67,7 +64,7 @@ export class APIsStore {
   }
 
   load() {
-/*
+    /*
     // we only need to load once really on startup
     if (_startedLoadingAPIs) {
       return;

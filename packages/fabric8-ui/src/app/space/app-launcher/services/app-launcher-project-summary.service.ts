@@ -1,21 +1,16 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {
-  HelperService,
-  Projectile,
-  ProjectSummaryService
-} from 'ngx-launcher';
+import { HelperService, Projectile, ProjectSummaryService } from 'ngx-launcher';
 import { AuthenticationService } from 'ngx-login-client';
-import { Observable,  throwError as observableThrowError } from 'rxjs';
+import { Observable, throwError as observableThrowError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 @Injectable()
 export class AppLauncherProjectSummaryService implements ProjectSummaryService {
-
   // TODO: remove the hardcodes
   private headers: HttpHeaders = new HttpHeaders({
     'Content-Type': 'application/x-www-form-urlencoded',
-    'X-Git-Provider': 'GitHub'
+    'X-Git-Provider': 'GitHub',
   });
   private END_POINT: string = '';
   private API_BASE_CREATE: string = 'osio/launch';
@@ -25,7 +20,7 @@ export class AppLauncherProjectSummaryService implements ProjectSummaryService {
   constructor(
     private http: HttpClient,
     private helperService: HelperService,
-    private auth: AuthenticationService
+    private auth: AuthenticationService,
   ) {
     this.END_POINT = this.helperService.getBackendUrl();
     this.ORIGIN = this.helperService.getOrigin();
@@ -46,10 +41,12 @@ export class AppLauncherProjectSummaryService implements ProjectSummaryService {
    */
   setup(projectile: Projectile<any>, retry?: number): Observable<any> {
     this.headers = this.headers.set('X-Execution-Step-Index', String(retry || 0));
-    let summaryEndPoint = this.END_POINT + (projectile.getState('MissionRuntime') ? this.API_BASE_CREATE : this.API_BASE_IMPORT);
+    let summaryEndPoint =
+      this.END_POINT +
+      (projectile.getState('MissionRuntime') ? this.API_BASE_CREATE : this.API_BASE_IMPORT);
     return this.http
-      .post(summaryEndPoint, projectile.toHttpPayload(), { headers: this.headers }).pipe(
-      catchError(this.handleError));
+      .post(summaryEndPoint, projectile.toHttpPayload(), { headers: this.headers })
+      .pipe(catchError(this.handleError));
   }
 
   private handleError(error: HttpErrorResponse | any) {

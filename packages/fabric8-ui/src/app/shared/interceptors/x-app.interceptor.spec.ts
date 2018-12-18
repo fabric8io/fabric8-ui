@@ -1,8 +1,5 @@
 import { HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
-import {
-  HttpClientTestingModule,
-  HttpTestingController
-} from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { FABRIC8_FORGE_API_URL } from '../runtime-console/fabric8-ui-forge-api';
 import { XAppInterceptor } from './x-app.interceptor';
@@ -15,17 +12,15 @@ describe('XAppInterceptor', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule
-      ],
+      imports: [HttpClientTestingModule],
       providers: [
         { provide: FABRIC8_FORGE_API_URL, useValue: 'http://forge.example.com' },
         {
           provide: HTTP_INTERCEPTORS,
           useClass: XAppInterceptor,
-          multi: true
-        }
-      ]
+          multi: true,
+        },
+      ],
     });
     httpMock = TestBed.get(HttpTestingController);
     httpClient = TestBed.get(HttpClient);

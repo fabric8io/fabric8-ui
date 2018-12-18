@@ -8,25 +8,26 @@ import { UserSpacesService } from '../shared/user-spaces.service';
   selector: 'alm-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.less'],
-  providers: [UserSpacesService]
+  providers: [UserSpacesService],
 })
 export class HomeComponent implements OnInit {
-
   loggedInUser: User;
   spacesCount: number = -1;
 
   constructor(
     private readonly userService: UserService,
-    private readonly userSpacesService: UserSpacesService
-  ) { }
+    private readonly userSpacesService: UserSpacesService,
+  ) {}
 
   ngOnInit() {
     this.loggedInUser = this.userService.currentLoggedInUser;
-    this.userSpacesService.getInvolvedSpacesCount()
+    this.userSpacesService
+      .getInvolvedSpacesCount()
       .pipe(first())
-      .subscribe((spacesCount: number): void => {
-        this.spacesCount = spacesCount;
-      });
+      .subscribe(
+        (spacesCount: number): void => {
+          this.spacesCount = spacesCount;
+        },
+      );
   }
-
 }

@@ -6,13 +6,17 @@ import { RouteStore } from './route.store';
 import { ServiceStore } from './service.store';
 
 @Injectable()
-export class RouteServiceStore  {
+export class RouteServiceStore {
   public readonly list: Observable<Services>;
   public readonly loading: Observable<boolean>;
 
   constructor(public serviceStore: ServiceStore, public routeStore: RouteStore) {
-    this.loading = this.serviceStore.loading.pipe(combineLatest(this.routeStore.loading, (f, s) => f && s));
-    this.list = this.serviceStore.list.pipe(combineLatest(this.routeStore.list, enrichServiceWithRoute));
+    this.loading = this.serviceStore.loading.pipe(
+      combineLatest(this.routeStore.loading, (f, s) => f && s),
+    );
+    this.list = this.serviceStore.list.pipe(
+      combineLatest(this.routeStore.list, enrichServiceWithRoute),
+    );
   }
 
   loadAll() {

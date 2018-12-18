@@ -1,20 +1,6 @@
-import {
-  Component,
-  DoCheck,
-  Input,
-  OnInit,
-  ViewEncapsulation
-} from '@angular/core';
-import {
-  cloneDeep,
-  defaultsDeep,
-  isEqual,
-  merge,
-  uniqueId
-} from 'lodash';
-import {
-  ChartBase
-} from 'patternfly-ng/chart';
+import { Component, DoCheck, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { cloneDeep, defaultsDeep, isEqual, merge, uniqueId } from 'lodash';
+import { ChartBase } from 'patternfly-ng/chart';
 import { WorkItemBarchartConfig } from './work-item-barchart-config';
 import { WorkItemBarchartData } from './work-item-barchart-data';
 
@@ -22,7 +8,7 @@ import { WorkItemBarchartData } from './work-item-barchart-data';
   encapsulation: ViewEncapsulation.None,
   selector: 'fabric8-work-item-barchart',
   templateUrl: './work-item-barchart.component.html',
-  styleUrls: ['./work-item-barchart.component.less']
+  styleUrls: ['./work-item-barchart.component.less'],
 })
 export class WorkItemBarchartComponent extends ChartBase implements DoCheck, OnInit {
   @Input() chartData: WorkItemBarchartData;
@@ -72,12 +58,12 @@ export class WorkItemBarchartComponent extends ChartBase implements DoCheck, OnI
     this.defaultConfig = {
       axis: {
         x: { show: true },
-        y: { show: true }
+        y: { show: true },
       },
       grid: {
         x: { show: false },
-        y: { show: false }
-      }
+        y: { show: false },
+      },
     };
     this.defaultConfig.chartId = uniqueId(this.config.chartId);
     this.defaultConfig.grid.y.show = false;
@@ -86,7 +72,7 @@ export class WorkItemBarchartComponent extends ChartBase implements DoCheck, OnI
       type: 'bar',
       order: function(data1, data2) {
         return 1;
-      }
+      },
     };
     this.defaultConfig.tooltip = this.tooltip();
     this.defaultConfig.units = '';
@@ -98,14 +84,10 @@ export class WorkItemBarchartComponent extends ChartBase implements DoCheck, OnI
     if (this.chartData && this.chartData.dataAvailable !== false && this.chartData.yData) {
       data.colors = this.chartData.colors;
       if (this.chartData.yData !== undefined) {
-        data.columns = [
-          ...this.chartData.yData
-        ];
+        data.columns = [...this.chartData.yData];
       }
       if (this.chartData.yGroups !== undefined) {
-        data.groups = [
-          this.chartData.yGroups
-        ];
+        data.groups = [this.chartData.yGroups];
       }
     }
     return data;

@@ -10,10 +10,14 @@ describe('OwnerGuard', () => {
   describe('should not let in users not logged in', () => {
     const FAKE_URL = 'fakeUrl';
     let ownerGuard: OwnerGuard;
-    let mockAuthService = { isLoggedIn: () => { return false; } };
-    let mockContext = { };
-    let mockLoginService = { redirectToLogin: () => { } };
-    let mockRoute = { } as ActivatedRouteSnapshot;
+    let mockAuthService = {
+      isLoggedIn: () => {
+        return false;
+      },
+    };
+    let mockContext = {};
+    let mockLoginService = { redirectToLogin: () => {} };
+    let mockRoute = {} as ActivatedRouteSnapshot;
     let mockState = { url: FAKE_URL } as RouterStateSnapshot;
 
     beforeEach(() => {
@@ -25,8 +29,8 @@ describe('OwnerGuard', () => {
           OwnerGuard,
           { provide: AuthenticationService, useValue: mockAuthService },
           { provide: ContextService, useValue: mockContext },
-          { provide: LoginService, useValue: mockLoginService }
-        ]
+          { provide: LoginService, useValue: mockLoginService },
+        ],
       });
       ownerGuard = TestBed.get(OwnerGuard);
     });
@@ -46,9 +50,13 @@ describe('OwnerGuard', () => {
 
   describe('should handle logged in users', () => {
     let ownerGuard: OwnerGuard;
-    let mockAuthService = { isLoggedIn: () => { return true; } };
-    let mockLoginService = { redirectToLogin: () => { } };
-    let mockRoute = { } as ActivatedRouteSnapshot;
+    let mockAuthService = {
+      isLoggedIn: () => {
+        return true;
+      },
+    };
+    let mockLoginService = { redirectToLogin: () => {} };
+    let mockRoute = {} as ActivatedRouteSnapshot;
     const activatedRoute = {
       url: null,
       root: null,
@@ -64,10 +72,10 @@ describe('OwnerGuard', () => {
       parent: null,
       paramMap: null,
       queryParamMap: null,
-      firstChild: null
+      firstChild: null,
     } as ActivatedRouteSnapshot;
     let child = cloneDeep(activatedRoute);
-    child.params = {entity: 'me'};
+    child.params = { entity: 'me' };
     let mockState = {
       url: '',
       root: {
@@ -85,8 +93,8 @@ describe('OwnerGuard', () => {
         parent: null,
         paramMap: null,
         queryParamMap: null,
-        firstChild: child
-      }
+        firstChild: child,
+      },
     } as RouterStateSnapshot;
 
     describe('should handle logged in users who are not viewing their own context', () => {
@@ -100,8 +108,8 @@ describe('OwnerGuard', () => {
             OwnerGuard,
             { provide: AuthenticationService, useValue: mockAuthService },
             { provide: ContextService, useValue: mockContextService },
-            { provide: LoginService, useValue: mockLoginService }
-          ]
+            { provide: LoginService, useValue: mockLoginService },
+          ],
         });
         ownerGuard = TestBed.get(OwnerGuard);
       });
@@ -127,8 +135,8 @@ describe('OwnerGuard', () => {
             OwnerGuard,
             { provide: AuthenticationService, useValue: mockAuthService },
             { provide: ContextService, useValue: mockContextService },
-            { provide: LoginService, useValue: mockLoginService }
-          ]
+            { provide: LoginService, useValue: mockLoginService },
+          ],
         });
         ownerGuard = TestBed.get(OwnerGuard);
       });

@@ -13,32 +13,19 @@ import { StackDetailsModule } from 'fabric8-stack-analysis-ui';
 import { Logger, Notifications } from 'ngx-base';
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import {
-  AreaService,
-  CollaboratorService,
-  Contexts,
-  Spaces,
-  SpaceService
-} from 'ngx-fabric8-wit';
-import {
-  AuthenticationService,
-  PermissionService,
-  UserService
-} from 'ngx-login-client';
+import { AreaService, CollaboratorService, Contexts, Spaces, SpaceService } from 'ngx-fabric8-wit';
+import { AuthenticationService, PermissionService, UserService } from 'ngx-login-client';
 import { RestangularModule } from 'ngx-restangular';
 import { WidgetsModule } from 'ngx-widgets';
 import { ActionModule } from 'patternfly-ng/action';
 import { EmptyStateModule } from 'patternfly-ng/empty-state';
-import {
-  NotificationService,
-  ToastNotificationListModule
-} from 'patternfly-ng/notification';
+import { NotificationService, ToastNotificationListModule } from 'patternfly-ng/notification';
 import {
   // Base functionality for the runtime console
   KubernetesRestangularModule,
   KubernetesStoreModule,
   OnLogin,
-  SpaceNamespace
+  SpaceNamespace,
 } from '../a-runtime-console/index';
 import { BootstrapModule } from './bootstrap/bootstrap.module';
 import './rxjs-extensions';
@@ -47,66 +34,61 @@ import './rxjs-extensions';
  * Platform and Environment providers/directives/pipes
  */
 import { AppRoutingModule } from './app-routing.module';
-import { ENV_PROVIDERS }    from './environment';
+import { ENV_PROVIDERS } from './environment';
 
 // App is our top level component
-import { AppComponent }                from './app.component';
-import { APP_RESOLVER_PROVIDERS }      from './app.resolver';
+import { AppComponent } from './app.component';
+import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { AppState, InternalStateType } from './app.service';
 
 // Header
 import { FeatureFlagResolver } from 'ngx-feature-flag';
 import { HeaderComponent } from './layout/header/header.component';
-import { MenusService }    from './layout/header/menus.service';
+import { MenusService } from './layout/header/menus.service';
 
 // Shared Services
-import { AboutService }                  from './shared/about.service';
-import { ProviderService }               from './shared/account/provider.service';
-import { AnalyticService }               from './shared/analytics.service';
-import { ApiLocatorService }             from './shared/api-locator.service';
-import {
-  authApiUrlProvider,
-  witApiProxyProvider
-} from './shared/auth-api.provider';
-import { AuthGuard }                     from './shared/auth-guard.service';
-import { BrandingService }               from './shared/branding.service';
-import { AuthUserResolve }               from './shared/common.resolver';
-import { fabric8UIConfigProvider }       from './shared/config/fabric8-ui-config.service';
-import { ContextCurrentUserGuard }       from './shared/context-current-user-guard.service';
-import { ContextResolver }               from './shared/context-resolver.service';
-import { ContextService }                from './shared/context.service';
-import { forgeApiUrlProvider }           from './shared/forge-api.provider';
-import { jenkinsApiUrlProvider }         from './shared/jenkins-api.provider';
-import { LoginService }                  from './shared/login.service';
-import { NotificationsService }          from './shared/notifications.service';
-import { ProfileResolver }               from './shared/profile-resolver.service';
-import { realmProvider }                 from './shared/realm-token.provider';
-import { Fabric8RuntimeConsoleService }  from './shared/runtime-console/fabric8-runtime-console.service';
-import { Fabric8UIOnLogin }              from './shared/runtime-console/fabric8-ui-onlogin.service';
-import { Fabric8UISpaceNamespace }       from './shared/runtime-console/fabric8-ui-space-namespace.service';
+import { AboutService } from './shared/about.service';
+import { ProviderService } from './shared/account/provider.service';
+import { AnalyticService } from './shared/analytics.service';
+import { ApiLocatorService } from './shared/api-locator.service';
+import { authApiUrlProvider, witApiProxyProvider } from './shared/auth-api.provider';
+import { AuthGuard } from './shared/auth-guard.service';
+import { BrandingService } from './shared/branding.service';
+import { AuthUserResolve } from './shared/common.resolver';
+import { fabric8UIConfigProvider } from './shared/config/fabric8-ui-config.service';
+import { ContextCurrentUserGuard } from './shared/context-current-user-guard.service';
+import { ContextResolver } from './shared/context-resolver.service';
+import { ContextService } from './shared/context.service';
+import { forgeApiUrlProvider } from './shared/forge-api.provider';
+import { jenkinsApiUrlProvider } from './shared/jenkins-api.provider';
+import { LoginService } from './shared/login.service';
+import { NotificationsService } from './shared/notifications.service';
+import { ProfileResolver } from './shared/profile-resolver.service';
+import { realmProvider } from './shared/realm-token.provider';
+import { Fabric8RuntimeConsoleService } from './shared/runtime-console/fabric8-runtime-console.service';
+import { Fabric8UIOnLogin } from './shared/runtime-console/fabric8-ui-onlogin.service';
+import { Fabric8UISpaceNamespace } from './shared/runtime-console/fabric8-ui-space-namespace.service';
 import { Fabric8RuntimeConsoleResolver } from './shared/runtime-console/oauth-config-store-guard.resolver';
-import { OAuthConfigStoreGuard }         from './shared/runtime-console/oauth-config-store-guard.service';
-import { PipelinesService }              from './shared/runtime-console/pipelines.service';
-import { SpaceNamespaceService }         from './shared/runtime-console/space-namespace.service';
-import { SpacesService }                 from './shared/spaces.service';
-import { ssoApiUrlProvider }             from './shared/sso-api.provider';
-import { WindowService }                 from './shared/window.service';
-import { witApiUrlProvider }             from './shared/wit-api.provider';
+import { OAuthConfigStoreGuard } from './shared/runtime-console/oauth-config-store-guard.service';
+import { PipelinesService } from './shared/runtime-console/pipelines.service';
+import { SpaceNamespaceService } from './shared/runtime-console/space-namespace.service';
+import { SpacesService } from './shared/spaces.service';
+import { ssoApiUrlProvider } from './shared/sso-api.provider';
+import { WindowService } from './shared/window.service';
+import { witApiUrlProvider } from './shared/wit-api.provider';
 
 // Component Services
-import { ConfigStore }               from './base/config.store';
-import { ErrorService }              from './layout/error/error.service';
-import { ProfileService }            from './profile/profile.service';
+import { ConfigStore } from './base/config.store';
+import { ErrorService } from './layout/error/error.service';
+import { ProfileService } from './profile/profile.service';
 
 // App launcher
-import { AddAppOverlayModule }   from './space/add-app-overlay/add-app-overlay.module';
+import { AddAppOverlayModule } from './space/add-app-overlay/add-app-overlay.module';
 import { AddSpaceOverlayModule } from './space/add-space-overlay/add-space-overlay.module';
 
 // About Modal
 import { TooltipModule } from 'ngx-bootstrap';
-import {
-  FeatureTogglesService
-} from 'ngx-feature-flag';
+import { FeatureTogglesService } from 'ngx-feature-flag';
 import { FeatureFooterModule } from './feature-flag/notification-footer/feature-footer.module';
 import { FeatureAcknowledgementService } from './feature-flag/service/feature-acknowledgement.service';
 import { GettingStartedService } from './getting-started/services/getting-started.service';
@@ -117,15 +99,12 @@ import { RequestCache } from './shared/request-cache.service';
 import { togglesApiUrlProvider } from './shared/toggles.api.provider';
 
 // Application wide providers
-const APP_PROVIDERS = [
-  ...APP_RESOLVER_PROVIDERS,
-  AppState
-];
+const APP_PROVIDERS = [...APP_RESOLVER_PROVIDERS, AppState];
 
 export type StoreType = {
-  state: InternalStateType,
-  restoreInputValues: () => void,
-  disposeOldHosts: () => void
+  state: InternalStateType;
+  restoreInputValues: () => void;
+  disposeOldHosts: () => void;
 };
 
 /**
@@ -151,7 +130,7 @@ export type StoreType = {
     KubernetesStoreModule,
     LocalStorageModule.withConfig({
       prefix: 'fabric8',
-      storageType: 'localStorage'
+      storageType: 'localStorage',
     }),
 
     MomentModule,
@@ -167,13 +146,15 @@ export type StoreType = {
 
     ModalModule.forRoot(),
     TooltipModule.forRoot(),
-    FeatureFooterModule
+    FeatureFooterModule,
   ],
-  declarations: [ // declare which components, directives and pipes belong to the module
+  declarations: [
+    // declare which components, directives and pipes belong to the module
     AppComponent,
-    HeaderComponent
+    HeaderComponent,
   ],
-  providers: [ // expose our Services and Providers into Angular's dependency injection
+  providers: [
+    // expose our Services and Providers into Angular's dependency injection
     // Broadcaster must come first
     BsDropdownConfig,
     ENV_PROVIDERS,
@@ -194,11 +175,11 @@ export type StoreType = {
     ContextService,
     {
       provide: Contexts,
-      useExisting: ContextService
+      useExisting: ContextService,
     },
     {
       provide: ErrorHandler,
-      useClass: RavenExceptionHandler
+      useClass: RavenExceptionHandler,
     },
     ErrorService,
     FeatureFlagResolver,
@@ -209,7 +190,7 @@ export type StoreType = {
     fabric8UIConfigProvider,
     {
       provide: OnLogin,
-      useClass: Fabric8UIOnLogin
+      useClass: Fabric8UIOnLogin,
     },
     forgeApiUrlProvider,
     GettingStartedService,
@@ -222,7 +203,7 @@ export type StoreType = {
     NotificationsService,
     {
       provide: Notifications,
-      useExisting: NotificationsService
+      useExisting: NotificationsService,
     },
     OAuthConfigStoreGuard,
     PermissionService,
@@ -236,28 +217,30 @@ export type StoreType = {
     SpaceService,
     {
       provide: Spaces,
-      useExisting: SpacesService
+      useExisting: SpacesService,
     },
     SpaceNamespaceService,
     {
       provide: SpaceNamespace,
-      useClass: Fabric8UISpaceNamespace
+      useClass: Fabric8UISpaceNamespace,
     },
     ssoApiUrlProvider,
     togglesApiUrlProvider,
     UserService,
     WindowService,
     witApiUrlProvider,
-    witApiProxyProvider
+    witApiProxyProvider,
   ],
   schemas: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {
-  constructor(public appRef: ApplicationRef, public appState: AppState) { }
+  constructor(public appRef: ApplicationRef, public appState: AppState) {}
 
   hmrOnInit(store: StoreType) {
-    if (!store || !store.state) { return; }
+    if (!store || !store.state) {
+      return;
+    }
     // set state
     this.appState._state = store.state;
     // set input values
@@ -272,7 +255,7 @@ export class AppModule {
   }
 
   hmrOnDestroy(store: StoreType) {
-    const cmpLocation = this.appRef.components.map(cmp => cmp.location.nativeElement);
+    const cmpLocation = this.appRef.components.map((cmp) => cmp.location.nativeElement);
     // save state
     const state = this.appState._state;
     store.state = state;
@@ -289,5 +272,4 @@ export class AppModule {
     store.disposeOldHosts();
     delete store.disposeOldHosts;
   }
-
 }

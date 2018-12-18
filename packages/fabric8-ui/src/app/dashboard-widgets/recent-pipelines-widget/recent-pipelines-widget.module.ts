@@ -7,10 +7,16 @@ import { FeatureFlagModule } from 'ngx-feature-flag';
 import { LoadingWidgetModule } from '../loading-widget/loading-widget.module';
 import { RecentPipelinesWidgetComponent } from './recent-pipelines-widget.component';
 
-
 @NgModule({
-  imports: [CommonModule, FormsModule, LoadingWidgetModule, RouterModule, MomentModule, FeatureFlagModule ],
+  imports: [
+    CommonModule,
+    FormsModule,
+    LoadingWidgetModule,
+    RouterModule,
+    MomentModule,
+    FeatureFlagModule,
+  ],
   declarations: [RecentPipelinesWidgetComponent],
-  exports: [RecentPipelinesWidgetComponent]
+  exports: [RecentPipelinesWidgetComponent],
 })
-export class RecentPipelinesWidgetModule { }
+export class RecentPipelinesWidgetModule {}

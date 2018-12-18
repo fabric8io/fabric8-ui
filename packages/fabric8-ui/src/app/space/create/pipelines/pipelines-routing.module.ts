@@ -8,12 +8,12 @@ import { PipelinesComponent } from './pipelines.component';
 const routes: Routes = [
   {
     path: '',
-    component: PipelinesComponent
-  }
+    component: PipelinesComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class PipelinesRoutingModule { }
+export class PipelinesRoutingModule {}

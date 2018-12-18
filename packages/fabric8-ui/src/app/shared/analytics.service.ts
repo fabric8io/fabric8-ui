@@ -14,7 +14,6 @@ declare global {
 
 @Injectable()
 export class AnalyticService {
-
   constructor(
     public fabric8UIConfig: Fabric8UIConfig,
     public broadcaster: Broadcaster,
@@ -22,7 +21,7 @@ export class AnalyticService {
     private router: Router,
     private contexts: Contexts,
     private notificationsService: NotificationsService,
-    private spaces: Spaces
+    private spaces: Spaces,
   ) {
     this.init();
   }
@@ -40,7 +39,7 @@ export class AnalyticService {
 
   public initialize(apiWriteKey: string) {
     // THIS CODE IS DIRECTLY PASTED FROM SEGMENT
-    let analytics = window.analytics = window.analytics || [];
+    let analytics = (window.analytics = window.analytics || []);
     if (!analytics.initialize) {
       if (analytics.invoked) {
         window.console && console.error && console.error('Segment snippet included twice.');
@@ -62,7 +61,7 @@ export class AnalyticService {
           'page',
           'once',
           'off',
-          'on'
+          'on',
         ];
         analytics.factory = function(t) {
           return function() {
@@ -80,7 +79,11 @@ export class AnalyticService {
           var e = document.createElement('script');
           e.type = 'text/javascript';
           e.async = !0;
-          e.src = ('https:' === document.location.protocol ? 'https://' : 'http://') + 'cdn.segment.com/analytics.js/v1/' + t + '/analytics.min.js';
+          e.src =
+            ('https:' === document.location.protocol ? 'https://' : 'http://') +
+            'cdn.segment.com/analytics.js/v1/' +
+            t +
+            '/analytics.min.js';
           var n = document.getElementsByTagName('script');
           if (n && n instanceof Array && n[0] && n[0].parentNode) {
             n[0].parentNode.insertBefore(e, n[0]);
@@ -94,88 +97,84 @@ export class AnalyticService {
 
   public track() {
     // Navigation
-    this.broadcaster
-      .on('navigate')
-      .subscribe((navigation: { url: string }) => {
-        if (navigation) {
-          this.analytics.page(navigation.url);
-        }
-      });
+    this.broadcaster.on('navigate').subscribe((navigation: { url: string }) => {
+      if (navigation) {
+        this.analytics.page(navigation.url);
+      }
+    });
 
     // User login and logout
-    this.userService.loggedInUser
-      .subscribe(user => {
-        if (user && user.id) {
-          this.identifyUser(user);
-          this.analytics.track('logged in', {
-            url: this.router.url
-          });
-        } else {
-          this.analytics.track('logged out');
-        }
-      });
+    this.userService.loggedInUser.subscribe((user) => {
+      if (user && user.id) {
+        this.identifyUser(user);
+        this.analytics.track('logged in', {
+          url: this.router.url,
+        });
+      } else {
+        this.analytics.track('logged out');
+      }
+    });
 
-    this.broadcaster.on('login').subscribe(() =>
-      this.analytics.track('login')
-    );
+    this.broadcaster.on('login').subscribe(() => this.analytics.track('login'));
 
     // Context change
-    this.contexts.current.subscribe(context => {
+    this.contexts.current.subscribe((context) => {
       if (context && context.type) {
         this.analytics.track('change context', {
           path: context.path,
-          type: context.type.name
+          type: context.type.name,
         });
       }
     });
 
     // Space change
-    this.spaces.current.subscribe(space => {
-      if (space && space.relationalData && space.relationalData.creator && space.relationalData.creator.attributes) {
+    this.spaces.current.subscribe((space) => {
+      if (
+        space &&
+        space.relationalData &&
+        space.relationalData.creator &&
+        space.relationalData.creator.attributes
+      ) {
         this.analytics.track('change space', {
           name: space.name,
-          owner: space.relationalData.creator.attributes.username
+          owner: space.relationalData.creator.attributes.username,
         });
       }
     });
 
     // Notifications
-    this.notificationsService.stream
-      .subscribe(notification => {
-        if (notification) {
-          this.analytics.track('receive notification', {
-            message: notification.message,
-            type: notification.type ? notification.type.cssClass : 'unknown'
-          });
-        }
+    this.notificationsService.stream.subscribe((notification) => {
+      if (notification) {
+        this.analytics.track('receive notification', {
+          message: notification.message,
+          type: notification.type ? notification.type.cssClass : 'unknown',
+        });
       }
-      );
+    });
 
     // Planner
     // TODO enrich properties
     this.broadcaster
       .on('unique_filter')
-      .subscribe(val => this.analytics.track('reset filters', JSON.stringify(val)));
+      .subscribe((val) => this.analytics.track('reset filters', JSON.stringify(val)));
     this.broadcaster
       .on('item_filter')
-      .subscribe(val => this.analytics.track('add filter', JSON.stringify(val)));
+      .subscribe((val) => this.analytics.track('add filter', JSON.stringify(val)));
 
     // App Launcher
     this.activateLauncherEventListeners();
   }
 
   public activateLauncherEventListeners(): void {
-    this.broadcaster
-      .on('analyticsTracker')
-      .subscribe((data: any) => {
-        const eventKey = data['event'];
-        const eventData = data['data'];
-        if (eventKey && eventData) {
-          this.analytics.track(eventKey, eventData);
-        } else if (eventKey) {
-          this.analytics.track(eventKey);
-        }
-      });
+    this.broadcaster.on('analyticsTracker').subscribe((data: any) => {
+      const eventKey = data['event'];
+      const eventData = data['data'];
+      if (eventKey && eventData) {
+        this.analytics.track(eventKey, eventData);
+      } else if (eventKey) {
+        this.analytics.track(eventKey);
+      }
+    });
   }
 
   private identifyUser(user: any): any {
@@ -185,10 +184,8 @@ export class AnalyticService {
       username: user.attributes.username,
       website: user.attributes.url,
       name: user.attributes.fullName,
-      description: user.attributes.bio
+      description: user.attributes.bio,
     };
-    this.analytics.
-      identify(
-      user.id, traits);
+    this.analytics.identify(user.id, traits);
   }
 }

@@ -6,8 +6,10 @@ import { KubernetesService } from './kubernetes.service';
 import { INamespaceScope } from './namespace.scope';
 import { WatcherFactory } from './watcher-factory.service';
 
-
-export abstract class NamespacedResourceService<T extends KubernetesResource, L extends Array<T>> extends KubernetesService<T, L> {
+export abstract class NamespacedResourceService<
+  T extends KubernetesResource,
+  L extends Array<T>
+> extends KubernetesService<T, L> {
   private namespaceSubscription: Subscription;
   private _namespace: string;
   protected _serviceUrl: string;
@@ -17,20 +19,17 @@ export abstract class NamespacedResourceService<T extends KubernetesResource, L 
     private namespaceScope: INamespaceScope,
     private urlSuffix: string,
     watcherFactory: WatcherFactory,
-    private urlPrefix: string = '/api/v1/namespaces/'
+    private urlPrefix: string = '/api/v1/namespaces/',
   ) {
     super(kubernetesRestangular, watcherFactory);
     this.namespace = namespaceScope.currentNamespace();
 
     if (this.namespaceScope) {
-      this.namespaceSubscription = this.namespaceScope.namespace.subscribe(
-        namespace => {
-          this.namespace = namespace;
-        }
-      );
+      this.namespaceSubscription = this.namespaceScope.namespace.subscribe((namespace) => {
+        this.namespace = namespace;
+      });
     }
   }
-
 
   /**
    * Creates a watcher that can watch for events
@@ -39,11 +38,14 @@ export abstract class NamespacedResourceService<T extends KubernetesResource, L 
   watchNamepace(namespace: string, queryParams: any = null) {
     if (namespace) {
       let listFactory = () => this.list(namespace, queryParams);
-      return this.watcherFactory.newInstance(() => this.serviceUrlForNamespace(namespace), queryParams, listFactory);
+      return this.watcherFactory.newInstance(
+        () => this.serviceUrlForNamespace(namespace),
+        queryParams,
+        listFactory,
+      );
     }
     return this.watch(queryParams);
   }
-
 
   get namespace(): string {
     return this._namespace;
@@ -69,7 +71,6 @@ export abstract class NamespacedResourceService<T extends KubernetesResource, L 
     }
     return this.restangularService.all(url).getList(queryParams);
   }
-
 
   create(obj: T, namespace: string = null): Observable<T> {
     let url = this.urlForObject(obj, namespace);
@@ -126,12 +127,10 @@ export abstract class NamespacedResourceService<T extends KubernetesResource, L 
     return '';
   }
 
-
   // TODO
   ngOnDestroy() {
     this.namespaceSubscription.unsubscribe();
   }
 
-  protected onNamespaceChanged() {
-  }
+  protected onNamespaceChanged() {}
 }

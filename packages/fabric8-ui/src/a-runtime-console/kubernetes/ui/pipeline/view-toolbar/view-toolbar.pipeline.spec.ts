@@ -8,14 +8,10 @@ describe('PipelineViewToolbarComponent', () => {
   let fixture: ComponentFixture<PipelineViewToolbarComponent>;
 
   beforeEach(async(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            RouterTestingModule.withRoutes([])
-          ],
-          declarations: [PipelineViewToolbarComponent]
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [RouterTestingModule.withRoutes([])],
+      declarations: [PipelineViewToolbarComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -24,5 +20,7 @@ describe('PipelineViewToolbarComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => { expect(pipeline).toBeTruthy(); });
+  it('should create', () => {
+    expect(pipeline).toBeTruthy();
+  });
 });

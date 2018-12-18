@@ -1,9 +1,4 @@
-import {
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewEncapsulation
-} from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Broadcaster } from 'ngx-base';
 import { Notifications, NotificationType } from 'ngx-base';
@@ -14,12 +9,12 @@ import { CheService } from '../../create/codebases/services/che.service';
 import { WorkspacesService } from '../../create/codebases/services/workspaces.service';
 
 type QueryJson = {
-  q: string
+  q: string;
 };
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'f8-create-app',
-  templateUrl: './create-app.component.html'
+  templateUrl: './create-app.component.html',
 })
 export class CreateAppComponent implements OnDestroy, OnInit {
   subscriptions: Subscription[] = [];
@@ -32,16 +27,17 @@ export class CreateAppComponent implements OnDestroy, OnInit {
     private router: Router,
     private broadcaster: Broadcaster,
     private projectile: Projectile<DependencyCheck>,
-    private workSpacesService: WorkspacesService) {}
+    private workSpacesService: WorkspacesService,
+  ) {}
 
   ngOnInit() {
     this.broadcaster.broadcast('analyticsTracker', {
-      event: 'create app opened'
+      event: 'create app opened',
     });
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => {
+    this.subscriptions.forEach((sub) => {
       sub.unsubscribe();
     });
   }
@@ -50,9 +46,9 @@ export class CreateAppComponent implements OnDestroy, OnInit {
    * Helper to cancel and route back to space
    */
   cancel($event: any): void {
-    this.router.navigate(['../../../'], {relativeTo: this.route});
+    this.router.navigate(['../../../'], { relativeTo: this.route });
     this.broadcaster.broadcast('analyticsTracker', {
-      event: 'create app closed'
+      event: 'create app closed',
     });
   }
 
@@ -60,41 +56,48 @@ export class CreateAppComponent implements OnDestroy, OnInit {
    * Helper to complete and route back to space
    */
   complete(): void {
-    this.router.navigate(['../../../'], {relativeTo: this.route});
+    this.router.navigate(['../../../'], { relativeTo: this.route });
   }
 
   addQuery(): QueryJson {
     this.projectName = this.projectile.sharedState.state.projectName;
-    const query = '{\"application\":[\"' + this.projectName + '\"]}';
+    const query = '{"application":["' + this.projectName + '"]}';
     return {
-      q: query
+      q: query,
     };
   }
 
   createWorkSpace(): void {
     const codeBaseId = this.projectile.sharedState.state.codebaseId;
-    this.broadcaster.broadcast('analyticsTracker',
-    { event: 'Create app flow open in IDE button clicked' });
-    this.subscriptions.push(this.cheService.getState().pipe(switchMap(che => {
-      if (!che.clusterFull) {
-        return this.workSpacesService.createWorkspace(codeBaseId)
-          .pipe(map(workSpaceLinks => {
-            window.open(workSpaceLinks.links.open, '_blank');
-          }));
-      } else {
-        this.notifications.message({
-          message: `Che cluster is full`,
-          type: NotificationType.WARNING
-        });
-      }
-    })).subscribe());
+    this.broadcaster.broadcast('analyticsTracker', {
+      event: 'Create app flow open in IDE button clicked',
+    });
+    this.subscriptions.push(
+      this.cheService
+        .getState()
+        .pipe(
+          switchMap((che) => {
+            if (!che.clusterFull) {
+              return this.workSpacesService.createWorkspace(codeBaseId).pipe(
+                map((workSpaceLinks) => {
+                  window.open(workSpaceLinks.links.open, '_blank');
+                }),
+              );
+            } else {
+              this.notifications.message({
+                message: `Che cluster is full`,
+                type: NotificationType.WARNING,
+              });
+            }
+          }),
+        )
+        .subscribe(),
+    );
   }
 
   viewPipeline(): void {
-    this.broadcaster.broadcast('analyticsTracker',
-      {
-        event: 'Create app flow View pipeline button clicked'
-      }
-    );
+    this.broadcaster.broadcast('analyticsTracker', {
+      event: 'Create app flow View pipeline button clicked',
+    });
   }
 }

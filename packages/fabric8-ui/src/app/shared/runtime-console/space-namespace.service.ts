@@ -4,7 +4,7 @@ import * as yaml from 'js-yaml';
 import { Notifications, NotificationType } from 'ngx-base';
 import { Space, Spaces } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
-import { forkJoin,  Observable ,  throwError as observableThrowError } from 'rxjs';
+import { forkJoin, Observable, throwError as observableThrowError } from 'rxjs';
 import { catchError, first, map, switchMap, tap } from 'rxjs/operators';
 import { ConfigMap, ConfigMapService } from '../../../a-runtime-console/index';
 import { DevNamespaceScope } from '../../../a-runtime-console/kubernetes/service/devnamespace.scope';
@@ -22,7 +22,6 @@ interface ConfigMapWrapper {
 // TODO Rename this so it doesn't clash with fabric8-ui-space-namespace.service
 @Injectable()
 export class SpaceNamespaceService {
-
   constructor(
     private userService: UserService,
     private fabric8UIConfig: Fabric8UIConfig,
@@ -30,19 +29,20 @@ export class SpaceNamespaceService {
     private spaces: Spaces,
     private notifications: Notifications,
     private devNamespace: DevNamespaceScope,
-    private fabric8RuntimeConsoleService: Fabric8RuntimeConsoleService
-  ) { }
+    private fabric8RuntimeConsoleService: Fabric8RuntimeConsoleService,
+  ) {}
 
   getConfigMap(): Observable<ConfigMapWrapper> {
     return forkJoin(
       this.buildNamespace().pipe(first()),
       this.fabric8RuntimeConsoleService.loading(),
-      (namespace, loading) => namespace
+      (namespace, loading) => namespace,
     ).pipe(
-      switchMap(namespace => this.configMapService
-        .list(namespace)
-        .pipe(
-          map(configMaps => ({ namespace: namespace, configMaps: configMaps } as ConfigMapWrapper)),
+      switchMap((namespace) =>
+        this.configMapService.list(namespace).pipe(
+          map(
+            (configMaps) => ({ namespace: namespace, configMaps: configMaps } as ConfigMapWrapper),
+          ),
           catchError((err: HttpErrorResponse, caught) => {
             if (err.status === 403) {
               let errDetail;
@@ -53,14 +53,14 @@ export class SpaceNamespaceService {
               }
               this.notifications.message({
                 message: `Something went wrong configuring your pipelines and environments as the OpenShift Project '${namespace}' is not accessible to you or does not exist.`,
-                type: NotificationType.WARNING
+                type: NotificationType.WARNING,
               });
             }
             return observableThrowError(err);
-          })
-        )
+          }),
+        ),
       ),
-      map(val => {
+      map((val) => {
         for (let configMap of val.configMaps) {
           if (configMap.labels['kind'] === 'spaces' && configMap.labels['provider'] === 'fabric8') {
             val.configMap = configMap;
@@ -68,7 +68,7 @@ export class SpaceNamespaceService {
         }
         return val as ConfigMapWrapper;
       }),
-      tap(val => {
+      tap((val) => {
         let res: Map<string, any[]> = new Map();
         if (val.configMap) {
           for (let c in val.configMap) {
@@ -78,7 +78,7 @@ export class SpaceNamespaceService {
           }
         }
         val.data = res;
-      })
+      }),
     );
   }
 
@@ -89,21 +89,22 @@ export class SpaceNamespaceService {
       (val, space) => {
         val.space = space;
         return val;
-      }
+      },
     ).pipe(
-      tap(val => {
+      tap((val) => {
         if (val.space) {
           val.data[val.space.attributes.name] = val.data.get(val.space.attributes.name) || {};
           val.data[val.space.attributes.name]['name'] = val.space.attributes.name;
           if (val.space.attributes.description) {
             val.data[val.space.attributes.name]['description'] = val.space.attributes.description;
           }
-          val.data[val.space.attributes.name]['creator'] = val.space.relationalData.creator.attributes.username;
+          val.data[val.space.attributes.name]['creator'] =
+            val.space.relationalData.creator.attributes.username;
           val.data[val.space.attributes.name]['id'] = val.space.id;
           val.data[val.space.attributes.name]['version'] = 'v1';
         }
       }),
-      switchMap(val => {
+      switchMap((val) => {
         let cm = val.configMap;
         if (!cm) {
           cm = new ConfigMap();
@@ -128,12 +129,11 @@ export class SpaceNamespaceService {
         } else {
           return this.configMapService.create(cm, cm.namespace);
         }
-      })
+      }),
     );
   }
 
   buildNamespace(): Observable<string> {
     return this.devNamespace.namespace;
   }
-
 }

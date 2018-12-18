@@ -20,7 +20,6 @@ import { currentOAuthConfig } from '../store/oauth-config-store';
 
 export const KUBERNETES_RESTANGULAR = new InjectionToken<string>('KubernetesRestangular');
 
-
 function convertToKubernetesResource(resource) {
   // TODO would be nice to make this bit more modular so we could register other kinds of resource more easily
   let kind = resource.kind;
@@ -74,7 +73,12 @@ function convertToKubernetesResource(resource) {
   }
 }
 
-export function KubernetesRestangularFactory(restangular: Restangular, oauthService: OAuthService, onLogin: OnLogin, loginService: LoginService) {
+export function KubernetesRestangularFactory(
+  restangular: Restangular,
+  oauthService: OAuthService,
+  onLogin: OnLogin,
+  loginService: LoginService,
+) {
   const config = restangular.withConfig((RestangularConfigurer) => {
     // TODO setting the baseUrl to empty string doesn't seem to work so lets use the absolute URL of the app
     let baseUrl = '';
@@ -122,60 +126,61 @@ export function KubernetesRestangularFactory(restangular: Restangular, oauthServ
       return data;
     });
 
-
-    RestangularConfigurer.addFullRequestInterceptor((element, operation, path, url, headers, params) => {
-      let baseUrl = '';
-      let oauthConfig = currentOAuthConfig();
-      if (oauthConfig) {
-        baseUrl = oauthConfig.proxyApiServer ||  oauthConfig.apiServer ||  '';
-        if (baseUrl) {
-          let protocol = oauthConfig.apiServerProtocol || 'https';
-          baseUrl = protocol + '://' + baseUrl;
-        }
-      } else {
-        console.log('No oauth config!');
-      }
-      // TODO setting the baseUrl to empty string doesn't seem to work so lets use the absolute URL of the app
-      if (!baseUrl) {
-        let location = window.location;
-        if (location) {
-          let hostname = location.hostname;
-          let port = location.port;
-          if (hostname) {
+    RestangularConfigurer.addFullRequestInterceptor(
+      (element, operation, path, url, headers, params) => {
+        let baseUrl = '';
+        let oauthConfig = currentOAuthConfig();
+        if (oauthConfig) {
+          baseUrl = oauthConfig.proxyApiServer || oauthConfig.apiServer || '';
+          if (baseUrl) {
             let protocol = oauthConfig.apiServerProtocol || 'https';
-            baseUrl = protocol + '://' + hostname;
-            if (port) {
-              baseUrl += ':' + port;
+            baseUrl = protocol + '://' + baseUrl;
+          }
+        } else {
+          console.log('No oauth config!');
+        }
+        // TODO setting the baseUrl to empty string doesn't seem to work so lets use the absolute URL of the app
+        if (!baseUrl) {
+          let location = window.location;
+          if (location) {
+            let hostname = location.hostname;
+            let port = location.port;
+            if (hostname) {
+              let protocol = oauthConfig.apiServerProtocol || 'https';
+              baseUrl = protocol + '://' + hostname;
+              if (port) {
+                baseUrl += ':' + port;
+              }
             }
           }
         }
-      }
-      if (oauthConfig.apiServerBasePath) {
-        baseUrl += oauthConfig.apiServerBasePath;
-      }
-      //console.log("==========  using Restangular base URL " + baseUrl);
-      RestangularConfigurer.setBaseUrl(baseUrl);
+        if (oauthConfig.apiServerBasePath) {
+          baseUrl += oauthConfig.apiServerBasePath;
+        }
+        //console.log("==========  using Restangular base URL " + baseUrl);
+        RestangularConfigurer.setBaseUrl(baseUrl);
 
-      //console.log("===== setting kubernetes token: " + (token ? "token" : "no token") + " for " + url);
-      headers['Authorization'] = 'Bearer ' + onLogin.token;
-       return {
-         params: params,
-         headers: headers,
-         element: element
-       };
-     });
+        //console.log("===== setting kubernetes token: " + (token ? "token" : "no token") + " for " + url);
+        headers['Authorization'] = 'Bearer ' + onLogin.token;
+        return {
+          params: params,
+          headers: headers,
+          element: element,
+        };
+      },
+    );
   });
   return config;
 }
 
 @NgModule({
-  imports: [
-    OAuthModule.forRoot()
-  ],
+  imports: [OAuthModule.forRoot()],
   providers: [
-    {provide: KUBERNETES_RESTANGULAR, useFactory: KubernetesRestangularFactory, deps: [Restangular, OAuthService, OnLogin]}
-  ]
+    {
+      provide: KUBERNETES_RESTANGULAR,
+      useFactory: KubernetesRestangularFactory,
+      deps: [Restangular, OAuthService, OnLogin],
+    },
+  ],
 })
-export class KubernetesRestangularModule {
-}
-
+export class KubernetesRestangularModule {}

@@ -1,8 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 export class Entry {
-  constructor(public key: string, public value: string) {
-  }
+  constructor(public key: string, public value: string) {}
 }
 
 /**
@@ -16,7 +15,7 @@ export function createEntryArray(labels: Map<string, string>): Array<Entry> {
   return entries;
 }
 
-@Pipe({name: 'entries'})
+@Pipe({ name: 'entries' })
 export class EntriesPipe implements PipeTransform {
   transform(value: any): Object[] {
     let entries = [];

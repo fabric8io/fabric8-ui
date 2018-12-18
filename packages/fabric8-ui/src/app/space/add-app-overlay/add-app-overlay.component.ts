@@ -6,7 +6,7 @@ import {
   OnDestroy,
   OnInit,
   ViewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -18,16 +18,18 @@ import { User, UserService } from 'ngx-login-client';
 import { empty as observableEmpty, Subscription } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { ContextService } from '../../shared/context.service';
-import { Application, DeploymentApiService } from '../create/deployments/services/deployment-api.service';
+import {
+  Application,
+  DeploymentApiService,
+} from '../create/deployments/services/deployment-api.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'f8-add-app-overlay',
   styleUrls: ['./add-app-overlay.component.less'],
-  templateUrl: './add-app-overlay.component.html'
+  templateUrl: './add-app-overlay.component.html',
 })
 export class AddAppOverlayComponent implements OnInit, OnDestroy {
-
   @ViewChild('projectNameInput') projectNameInput: ElementRef;
   @ViewChild('modalAddAppOverlay') modalAddAppOverlay: ModalDirective;
   @Input() preselectedFlow: string;
@@ -45,36 +47,42 @@ export class AddAppOverlayComponent implements OnInit, OnDestroy {
   navigationInProgress: boolean = false;
   isModalShown: boolean = false;
 
-  constructor(private contextService: ContextService,
-              private dependencyCheckService: DependencyCheckService,
-              public broadcaster: Broadcaster,
-              private userService: UserService,
-              private router: Router,
-              private deploymentApiService: DeploymentApiService) {
+  constructor(
+    private contextService: ContextService,
+    private dependencyCheckService: DependencyCheckService,
+    public broadcaster: Broadcaster,
+    private userService: UserService,
+    private router: Router,
+    private deploymentApiService: DeploymentApiService,
+  ) {
     this.loggedInUser = this.userService.currentLoggedInUser;
-    this.subscriptions.push(this.dependencyCheckService.getDependencyCheck().subscribe((val) => {
-      this.projectName = val.projectName;
-    }));
+    this.subscriptions.push(
+      this.dependencyCheckService.getDependencyCheck().subscribe((val) => {
+        this.projectName = val.projectName;
+      }),
+    );
     if (this.contextService && this.contextService.current) {
       this.subscriptions.push(
-        this.contextService.current.pipe(
-          map((ctx: Context) => ctx.space),
-          switchMap(space => {
-            if (space) {
-              this.currentSpace = space;
-              return this.deploymentApiService.getApplications(space.id);
-            } else {
-              return observableEmpty();
-            }
-          }))
+        this.contextService.current
+          .pipe(
+            map((ctx: Context) => ctx.space),
+            switchMap((space) => {
+              if (space) {
+                this.currentSpace = space;
+                return this.deploymentApiService.getApplications(space.id);
+              } else {
+                return observableEmpty();
+              }
+            }),
+          )
           .subscribe((response: Application[]) => {
             if (response) {
-              const applications: string[] = response.map(app => {
+              const applications: string[] = response.map((app) => {
                 return app.attributes.name ? app.attributes.name.toLowerCase() : '';
               });
               this.applications = applications;
             }
-          })
+          }),
       );
     }
   }
@@ -84,17 +92,19 @@ export class AddAppOverlayComponent implements OnInit, OnDestroy {
       this.selectedFlow = this.preselectedFlow;
     }
 
-    this.subscriptions.push(this.broadcaster.on('showAddAppOverlay').subscribe((show: boolean) => {
-      if (show) {
-        this.modalAddAppOverlay.show();
-      } else {
-        this.modalAddAppOverlay.hide();
-      }
-    }));
+    this.subscriptions.push(
+      this.broadcaster.on('showAddAppOverlay').subscribe((show: boolean) => {
+        if (show) {
+          this.modalAddAppOverlay.show();
+        } else {
+          this.modalAddAppOverlay.hide();
+        }
+      }),
+    );
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => {
+    this.subscriptions.forEach((sub) => {
       sub.unsubscribe();
     });
   }
@@ -105,7 +115,7 @@ export class AddAppOverlayComponent implements OnInit, OnDestroy {
   hideAddAppOverlay(): void {
     this.broadcaster.broadcast('showAddAppOverlay', false);
     this.broadcaster.broadcast('analyticsTracker', {
-      event: 'add app closed'
+      event: 'add app closed',
     });
   }
 
@@ -123,11 +133,18 @@ export class AddAppOverlayComponent implements OnInit, OnDestroy {
     this.navigationInProgress = true;
     this.broadcaster.broadcast('clickContinueAppOverlay', {
       appName: this.projectName,
-      flow: this.selectedFlow
+      flow: this.selectedFlow,
     });
-    this.router.navigate(['/',
-      this.userService.currentLoggedInUser.attributes.username, this.currentSpace.attributes.name,
-      'applauncher', this.selectedFlow, this.projectName]).then(() => {
+    this.router
+      .navigate([
+        '/',
+        this.userService.currentLoggedInUser.attributes.username,
+        this.currentSpace.attributes.name,
+        'applauncher',
+        this.selectedFlow,
+        this.projectName,
+      ])
+      .then(() => {
         this.hideAddAppOverlay();
         this.navigationInProgress = false;
       });
@@ -139,13 +156,13 @@ export class AddAppOverlayComponent implements OnInit, OnDestroy {
   validateProjectName(): void {
     if (this.projectName) {
       this.projectName = this.projectName.toLowerCase();
-      this.isProjectNameValid =
-        this.isValidProjectName(this.projectName);
-      this.isProjectNameAvailable = this.applications.indexOf(this.projectName) === -1 ? true : false;
+      this.isProjectNameValid = this.isValidProjectName(this.projectName);
+      this.isProjectNameAvailable =
+        this.applications.indexOf(this.projectName) === -1 ? true : false;
     }
   }
 
-   /**
+  /**
    * Validate the project name and returns a boolean value
    *
    * @param  {string} projectName

@@ -4,7 +4,7 @@ import {
   CanActivate,
   CanActivateChild,
   Router,
-  RouterStateSnapshot
+  RouterStateSnapshot,
 } from '@angular/router';
 import { Logger } from 'ngx-base';
 import { AuthenticationService } from 'ngx-login-client';
@@ -12,19 +12,17 @@ import { Observable, of } from 'rxjs';
 import { LoginService } from './login.service';
 import { Fabric8RuntimeConsoleService } from './runtime-console/fabric8-runtime-console.service';
 
-
 // Basic guard that checks the user is logged in
 
 @Injectable()
 export class AuthGuard implements CanActivate, CanActivateChild {
-
   constructor(
     protected auth: AuthenticationService,
     protected router: Router,
     protected logger: Logger,
     protected login: LoginService,
-    private fabric8RuntimeConsoleService: Fabric8RuntimeConsoleService
-  ) { }
+    private fabric8RuntimeConsoleService: Fabric8RuntimeConsoleService,
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     if (!this.auth.isLoggedIn()) {

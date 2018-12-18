@@ -14,18 +14,10 @@ import { BuildConfigDeleteDialog } from './delete-dialog.buildconfig.component';
     ModalModule,
     MomentModule,
     Fabric8CommonModule,
-    KubernetesComponentsModule
+    KubernetesComponentsModule,
   ],
-  declarations: [
-    BuildConfigDeleteDialog
-  ],
-  entryComponents: [
-    BuildConfigDeleteDialog
-  ],
-  exports: [
-    ModalModule,
-    BuildConfigDeleteDialog
-  ]
+  declarations: [BuildConfigDeleteDialog],
+  entryComponents: [BuildConfigDeleteDialog],
+  exports: [ModalModule, BuildConfigDeleteDialog],
 })
-export class BuildConfigDialogsModule {
-}
+export class BuildConfigDialogsModule {}

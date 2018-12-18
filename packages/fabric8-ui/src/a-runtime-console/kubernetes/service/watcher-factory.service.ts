@@ -6,11 +6,7 @@ import { Watcher } from './watcher';
 
 @Injectable()
 export class WatcherFactory {
-
-  constructor(
-    private onLogin: OnLogin,
-    private pollerFactory: PollerFactory
-  ) {}
+  constructor(private onLogin: OnLogin, private pollerFactory: PollerFactory) {}
 
   newInstance<L>(pathFn: () => String, queryParams: any, listFactory: () => Observable<L>) {
     return new Watcher(pathFn, queryParams, this.onLogin, listFactory, this.pollerFactory);

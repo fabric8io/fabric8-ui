@@ -14,30 +14,30 @@ const routes: Routes = [
         path: 'pipelines',
         loadChildren: './pipelines/pipelines.module#PipelinesModule',
         resolve: {
-          featureFlagConfig: FeatureFlagResolver
+          featureFlagConfig: FeatureFlagResolver,
         },
         data: {
           title: 'Pipelines',
-          featureName: 'Pipelines'
-        }
+          featureName: 'Pipelines',
+        },
       },
       {
         path: 'deployments',
         loadChildren: './deployments/deployments.module#DeploymentsModule',
         resolve: {
-          featureFlagConfig: FeatureFlagResolver
+          featureFlagConfig: FeatureFlagResolver,
         },
         data: {
           title: 'Deployments',
-          featureName: 'Deployments'
-        }
-      }
-    ]
-  }
+          featureName: 'Deployments',
+        },
+      },
+    ],
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class CreateRoutingModule { }
+export class CreateRoutingModule {}

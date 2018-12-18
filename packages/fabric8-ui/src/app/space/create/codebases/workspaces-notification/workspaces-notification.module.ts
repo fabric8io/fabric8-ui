@@ -4,11 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { WorkspacesNotificationComponent } from './workspaces-notification.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule
-  ],
-  declarations: [ WorkspacesNotificationComponent ],
-  exports: [ WorkspacesNotificationComponent ]
+  imports: [CommonModule, FormsModule],
+  declarations: [WorkspacesNotificationComponent],
+  exports: [WorkspacesNotificationComponent],
 })
 export class WorkspacesNotificationModule {}

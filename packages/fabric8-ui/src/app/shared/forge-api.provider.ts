@@ -8,5 +8,5 @@ let forgeApiUrlFactory = (api: ApiLocatorService) => {
 export let forgeApiUrlProvider = {
   provide: FABRIC8_FORGE_API_URL,
   useFactory: forgeApiUrlFactory,
-  deps: [ApiLocatorService]
+  deps: [ApiLocatorService],
 };

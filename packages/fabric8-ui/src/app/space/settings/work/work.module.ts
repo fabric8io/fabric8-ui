@@ -4,7 +4,7 @@ import { WorkRoutingModule } from './work-routing.module';
 import { WorkComponent } from './work.component';
 
 @NgModule({
-  imports:      [ CommonModule, WorkRoutingModule ],
-  declarations: [ WorkComponent ]
+  imports: [CommonModule, WorkRoutingModule],
+  declarations: [WorkComponent],
 })
-export class WorkModule { }
+export class WorkModule {}

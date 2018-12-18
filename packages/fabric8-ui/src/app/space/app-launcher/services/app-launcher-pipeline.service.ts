@@ -1,17 +1,12 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {
-  HelperService,
-  Pipeline,
-  PipelineService
-} from 'ngx-launcher';
+import { HelperService, Pipeline, PipelineService } from 'ngx-launcher';
 import { AuthenticationService } from 'ngx-login-client';
-import { Observable,  throwError as observableThrowError } from 'rxjs';
+import { Observable, throwError as observableThrowError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 @Injectable()
 export class AppLauncherPipelineService implements PipelineService {
-
   // TODO: remove the hardcodes
   private headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
   private END_POINT: string = '';
@@ -21,7 +16,7 @@ export class AppLauncherPipelineService implements PipelineService {
   constructor(
     private http: HttpClient,
     private helperService: HelperService,
-    private auth: AuthenticationService
+    private auth: AuthenticationService,
   ) {
     if (this.helperService) {
       this.END_POINT = this.helperService.getBackendUrl();
@@ -38,8 +33,8 @@ export class AppLauncherPipelineService implements PipelineService {
   getPipelines(): Observable<Pipeline[]> {
     let runtimeEndPoint: string = this.END_POINT + this.API_BASE;
     return this.http
-      .get<Pipeline[]>(runtimeEndPoint, { headers: this.headers }).pipe(
-      catchError(this.handleError));
+      .get<Pipeline[]>(runtimeEndPoint, { headers: this.headers })
+      .pipe(catchError(this.handleError));
   }
 
   private handleError(error: HttpErrorResponse | any) {

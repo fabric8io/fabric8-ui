@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { Logger, Notifications, NotificationType } from 'ngx-base';
 import { Contexts, WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
-import { Observable,  of ,  throwError as observableThrowError } from 'rxjs';
+import { Observable, of, throwError as observableThrowError } from 'rxjs';
 import { GettingStartedService } from '../../getting-started/services/getting-started.service';
 import { ProviderService } from '../../shared/account/provider.service';
 import { GitHubService } from '../../space/create/codebases/services/github.service';
@@ -13,11 +13,14 @@ import { TenantService } from '../services/tenant.service';
 import { TenantComponent } from './tenant.component';
 
 describe('TenantComponent', () => {
-
   let fixture: ComponentFixture<TenantComponent>;
   let component: DebugNode['componentInstance'];
   let mockAuthenticationService: any = jasmine.createSpyObj('AuthenticationService', ['getToken']);
-  let mockGettingStartedService: any = jasmine.createSpyObj('GettingStartedService', ['createTransientProfile', 'update', 'ngOnDestroy']);
+  let mockGettingStartedService: any = jasmine.createSpyObj('GettingStartedService', [
+    'createTransientProfile',
+    'update',
+    'ngOnDestroy',
+  ]);
   let mockContexts: any = jasmine.createSpy('Contexts');
   let mockNotifications: any = jasmine.createSpyObj('Notifications', ['message']);
   let mockRouter: any = jasmine.createSpyObj('Router', ['navigate']);
@@ -29,11 +32,11 @@ describe('TenantComponent', () => {
 
   mockAuthenticationService.gitHubToken = of('gh-test-user');
   mockContexts.current = of({
-    'user': {
-      'attributes': {
-        'username': 'foobar'
-      }
-    }
+    user: {
+      attributes: {
+        username: 'foobar',
+      },
+    },
   });
   mockUserService.currentLoggedInUser = {};
 
@@ -48,8 +51,8 @@ describe('TenantComponent', () => {
         { provide: Router, useValue: mockRouter },
         { provide: UserService, useValue: mockUserService },
         { provide: Logger, useValue: mockLogger },
-        { provide: WIT_API_URL, useValue: 'http://example.com' }
-      ]
+        { provide: WIT_API_URL, useValue: 'http://example.com' },
+      ],
     });
     TestBed.overrideProvider(GettingStartedService, { useValue: mockGettingStartedService });
     TestBed.overrideProvider(GitHubService, { useValue: mockGitHubService });
@@ -90,7 +93,7 @@ describe('TenantComponent', () => {
   });
 
   describe('#routeToProfile', () => {
-    it('should route to the user\'s profile page', () => {
+    it("should route to the user's profile page", () => {
       component.routeToProfile();
       expect(component.router.navigate).toHaveBeenCalledWith(['/', 'foobar']);
     });
@@ -119,8 +122,8 @@ describe('TenantComponent', () => {
   describe('#updateProfile', () => {
     it('should update the tenant if successful', () => {
       let message = {
-        'message': 'Tenant Updated!',
-        type: NotificationType.SUCCESS
+        message: 'Tenant Updated!',
+        type: NotificationType.SUCCESS,
       };
       component.gettingStartedService.createTransientProfile.and.returnValue({});
       component.gettingStartedService.update.and.returnValue(of({}));
@@ -131,8 +134,8 @@ describe('TenantComponent', () => {
 
     it('should show an error if the tenant has failed to update', () => {
       let message = {
-        'message': 'Failed to update tenant',
-        type: NotificationType.DANGER
+        message: 'Failed to update tenant',
+        type: NotificationType.DANGER,
       };
       component.gettingStartedService.createTransientProfile.and.returnValue({});
       component.gettingStartedService.update.and.returnValue(of({}));
@@ -143,8 +146,8 @@ describe('TenantComponent', () => {
 
     it('should handle an error 409 status if the e-mail provided already exists', () => {
       let message = {
-        'message': 'Email already exists',
-        type: NotificationType.DANGER
+        message: 'Email already exists',
+        type: NotificationType.DANGER,
       };
       component.gettingStartedService.createTransientProfile.and.returnValue({});
       component.gettingStartedService.update.and.returnValue(observableThrowError({ status: 409 }));
@@ -154,8 +157,8 @@ describe('TenantComponent', () => {
 
     it('should show an error if the profile has failed to update', () => {
       let message = {
-        'message': 'Failed to update profile',
-        type: NotificationType.DANGER
+        message: 'Failed to update profile',
+        type: NotificationType.DANGER,
       };
       component.gettingStartedService.createTransientProfile.and.returnValue({});
       component.gettingStartedService.update.and.returnValue(observableThrowError('error'));
@@ -165,7 +168,6 @@ describe('TenantComponent', () => {
   });
 
   describe('#boosterGitRepoValidate', () => {
-
     let gitUrl: string = '';
 
     // Wrongfully fails
@@ -193,7 +195,6 @@ describe('TenantComponent', () => {
   });
 
   describe('#templatesRepoValidate', () => {
-
     let repoUrl = '';
 
     it('should verify not-a-git-repo to be an invalid template Git repo', () => {
@@ -224,5 +225,4 @@ describe('TenantComponent', () => {
       expect(component.templatesRepoInvalid).toBe(false);
     });
   });
-
 });

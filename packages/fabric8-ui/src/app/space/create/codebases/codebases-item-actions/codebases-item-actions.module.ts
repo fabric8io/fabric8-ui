@@ -18,9 +18,9 @@ import { CodebasesItemActionsComponent } from './codebases-item-actions.componen
     DialogModule,
     FormsModule,
     ModalModule.forRoot(),
-    TooltipModule.forRoot()
+    TooltipModule.forRoot(),
   ],
-  declarations: [ CodebasesItemActionsComponent ],
-  exports: [ CodebasesItemActionsComponent ]
+  declarations: [CodebasesItemActionsComponent],
+  exports: [CodebasesItemActionsComponent],
 })
 export class CodebasesItemActionsModule {}

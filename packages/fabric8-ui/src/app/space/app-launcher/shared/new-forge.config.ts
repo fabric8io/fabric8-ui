@@ -5,10 +5,9 @@ import { FABRIC8_FORGE_API_URL } from '../../../shared/runtime-console/fabric8-u
 
 @Injectable()
 export class NewForgeConfig extends Config {
-
   constructor(@Inject(FABRIC8_FORGE_API_URL) private apiUrl: string) {
     super();
-    let settings = {backend_url: 'TO_BE_DEFINED'};
+    let settings = { backend_url: 'TO_BE_DEFINED' };
 
     if (apiUrl) {
       settings['backend_url'] = Location.stripTrailingSlash(apiUrl) + '/api/';

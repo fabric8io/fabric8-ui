@@ -1,34 +1,29 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  Output
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FilterEvent } from 'patternfly-ng/filter';
 import { SortEvent } from 'patternfly-ng/sort';
-import {
-  initContext,
-  TestContext
-} from 'testing/test-context';
+import { initContext, TestContext } from 'testing/test-context';
 import { AreasToolbarComponent } from './areas-toolbar.component';
 
 @Component({
-  template: `<areas-toolbar
-  (onFilterChange)="filterChange($event)"
-  (onSortChange)="sortChange($event)"
-  [resultsCount]="resultsCount">
-  </areas-toolbar>`
+  template: `
+    <areas-toolbar
+      (onFilterChange)="filterChange($event)"
+      (onSortChange)="sortChange($event)"
+      [resultsCount]="resultsCount"
+    >
+    </areas-toolbar>
+  `,
 })
 class HostComponent {
   public resultsCount = 0;
-  public filterChange($event: FilterEvent) { }
-  public sortChange($event: SortEvent) { }
+  public filterChange($event: FilterEvent) {}
+  public sortChange($event: SortEvent) {}
 }
 
 @Component({
   selector: 'pfng-toolbar',
-  template: ''
+  template: '',
 })
 class FakePfngToolbarComponent {
   @Input() config: any;
@@ -39,10 +34,9 @@ class FakePfngToolbarComponent {
 
 describe('AreasToolbarComponent', () => {
   type Context = TestContext<AreasToolbarComponent, HostComponent>;
-  const testContext = initContext(AreasToolbarComponent, HostComponent,
-  {
+  const testContext = initContext(AreasToolbarComponent, HostComponent, {
     declarations: [FakePfngToolbarComponent],
-    imports: [RouterTestingModule]
+    imports: [RouterTestingModule],
   });
 
   it('should update filterConfig resultsCount', function() {

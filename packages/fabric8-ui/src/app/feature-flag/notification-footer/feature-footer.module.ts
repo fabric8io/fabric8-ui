@@ -4,16 +4,9 @@ import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
 import { FeatureFooterComponent } from './feature-footer.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    TooltipModule
-  ],
-  declarations: [
-    FeatureFooterComponent
-  ],
-  exports: [
-    FeatureFooterComponent
-  ],
-  providers: [TooltipConfig]
+  imports: [CommonModule, TooltipModule],
+  declarations: [FeatureFooterComponent],
+  exports: [FeatureFooterComponent],
+  providers: [TooltipConfig],
 })
-export class FeatureFooterModule { }
+export class FeatureFooterModule {}

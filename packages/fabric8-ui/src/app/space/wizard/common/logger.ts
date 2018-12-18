@@ -20,9 +20,7 @@ export interface ILoggerDelegate {
 
 @Injectable()
 export class LoggerFactory {
-
   private styles = {
-
     origin: `
       background:linear-gradient(#444, #333);
       color:lime;
@@ -41,7 +39,7 @@ export class LoggerFactory {
       color:white;
       padding:0 5px;
       margin:0 0;
-      `
+      `,
   };
 
   constructor() {
@@ -70,8 +68,8 @@ export class LoggerFactory {
       }
       let fmt = formatConsole === true ? '%c' : '';
       let msg = `${fmt}${origin}${fmt} ${instance} ${fmt}${entry.message || ''}`;
-      let functionArgs = args.filter(a => typeof(a) === 'function');
-      let otherArgs = args.filter(a => typeof(a) !== 'function');
+      let functionArgs = args.filter((a) => typeof a === 'function');
+      let otherArgs = args.filter((a) => typeof a !== 'function');
       let newArgs = [msg, ...otherArgs];
       if (fmt.length > 0) {
         newArgs = [msg, me.styles.origin, me.styles.instance, me.styles.message, ...otherArgs];
@@ -96,4 +94,3 @@ export class LoggerFactory {
     return loggerDelegate;
   }
 }
-

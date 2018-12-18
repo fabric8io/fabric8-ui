@@ -1,34 +1,29 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  Output
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FilterEvent } from 'patternfly-ng/filter';
 import { SortEvent } from 'patternfly-ng/sort';
-import {
-  initContext,
-  TestContext
-} from 'testing/test-context';
+import { initContext, TestContext } from 'testing/test-context';
 import { CodebasesToolbarComponent } from './codebases-toolbar.component';
 
 @Component({
-  template: `<codebases-toolbar
-  (onFilterChange)="filterChange($event)"
-  (onSortChange)="sortChange($event)"
-  [resultsCount]="resultsCount">
-  </codebases-toolbar>`
+  template: `
+    <codebases-toolbar
+      (onFilterChange)="filterChange($event)"
+      (onSortChange)="sortChange($event)"
+      [resultsCount]="resultsCount"
+    >
+    </codebases-toolbar>
+  `,
 })
 class HostComponent {
   public resultsCount = 0;
-  public filterChange($event: FilterEvent) { }
-  public sortChange($event: SortEvent) { }
+  public filterChange($event: FilterEvent) {}
+  public sortChange($event: SortEvent) {}
 }
 
 @Component({
   selector: 'pfng-toolbar',
-  template: ''
+  template: '',
 })
 class FakePfngToolbarComponent {
   @Input() config: any;
@@ -38,10 +33,9 @@ class FakePfngToolbarComponent {
 }
 
 describe('CodebasesToolbarComponent', () => {
-  const testContext = initContext(CodebasesToolbarComponent, HostComponent,
-  {
+  const testContext = initContext(CodebasesToolbarComponent, HostComponent, {
     declarations: [FakePfngToolbarComponent],
-    imports: [RouterTestingModule]
+    imports: [RouterTestingModule],
   });
 
   it('should update filterConfig resultsCount', function() {
@@ -65,15 +59,15 @@ describe('CodebasesToolbarComponent', () => {
     spyOn(testContext.hostComponent, 'sortChange');
     testContext.testedDirective.sortChange({
       field: {
-        sortType: 'alphanumeric'
+        sortType: 'alphanumeric',
       },
-      isAscending: false
+      isAscending: false,
     });
     expect(testContext.hostComponent.sortChange).toHaveBeenCalledWith({
       field: {
-        sortType: 'alphanumeric'
+        sortType: 'alphanumeric',
       },
-      isAscending: false
+      isAscending: false,
     });
   });
 });

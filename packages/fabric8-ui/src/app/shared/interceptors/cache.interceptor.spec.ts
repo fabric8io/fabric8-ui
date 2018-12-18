@@ -6,12 +6,9 @@ import {
   HttpHeaders,
   HttpParams,
   HttpRequest,
-  HttpResponse
+  HttpResponse,
 } from '@angular/common/http';
-import {
-  HttpClientTestingModule,
-  HttpTestingController
-} from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Observable, of } from 'rxjs';
 import { RequestCache } from '../request-cache.service';
@@ -33,10 +30,10 @@ describe(`CacheHttpInterceptor`, () => {
         {
           provide: HTTP_INTERCEPTORS,
           useClass: CacheInterceptor,
-          multi: true
+          multi: true,
         },
-        CacheInterceptor
-      ]
+        CacheInterceptor,
+      ],
     });
     httpMock = TestBed.get(HttpTestingController);
     httpClient = TestBed.get(HttpClient);
@@ -77,10 +74,10 @@ describe(`CacheHttpInterceptor`, () => {
 
   it('cache key should include params and headers', () => {
     const paramOptions = {
-      params: new HttpParams().set('foo', 'bar')
+      params: new HttpParams().set('foo', 'bar'),
     };
     const headerOptions = {
-      headers: new HttpHeaders({ foo: 'bar' })
+      headers: new HttpHeaders({ foo: 'bar' }),
     };
 
     httpClient.get(testUrl).subscribe();
@@ -108,9 +105,11 @@ describe(`CacheHttpInterceptor`, () => {
     const mockHandler: HttpHandler = {
       handle(): Observable<HttpEvent<string>> {
         return null;
-      }
+      },
     };
-    const handleSpy = spyOn(mockHandler, 'handle').and.returnValue(of({ body: testResponse } as HttpResponse<string>));
+    const handleSpy = spyOn(mockHandler, 'handle').and.returnValue(
+      of({ body: testResponse } as HttpResponse<string>),
+    );
 
     let received1: string = null;
     let received2: string = null;

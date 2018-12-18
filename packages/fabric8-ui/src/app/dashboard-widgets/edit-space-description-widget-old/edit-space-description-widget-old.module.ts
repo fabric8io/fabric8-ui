@@ -6,7 +6,6 @@ import { FeatureFlagModule } from 'ngx-feature-flag';
 import { AlmEditableModule, AlmIconModule } from 'ngx-widgets';
 import { EditSpaceDescriptionWidgetOldComponent } from './edit-space-description-widget-old.component';
 
-
 @NgModule({
   imports: [
     CommonModule,
@@ -14,9 +13,9 @@ import { EditSpaceDescriptionWidgetOldComponent } from './edit-space-description
     AlmIconModule,
     AlmEditableModule,
     Fabric8WitModule,
-    FeatureFlagModule
+    FeatureFlagModule,
   ],
   declarations: [EditSpaceDescriptionWidgetOldComponent],
-  exports: [EditSpaceDescriptionWidgetOldComponent]
+  exports: [EditSpaceDescriptionWidgetOldComponent],
 })
-export class EditSpaceDescriptionWidgetOldModule { }
+export class EditSpaceDescriptionWidgetOldModule {}

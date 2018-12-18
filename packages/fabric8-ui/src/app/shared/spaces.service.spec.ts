@@ -4,7 +4,13 @@ import { cloneDeep } from 'lodash';
 import { Broadcaster } from 'ngx-base';
 import { Context, Contexts, Space, SpaceService } from 'ngx-fabric8-wit';
 import { User } from 'ngx-login-client';
-import { ConnectableObservable, never as observableNever,  Observable, of ,  throwError as observableThrowError } from 'rxjs';
+import {
+  ConnectableObservable,
+  never as observableNever,
+  Observable,
+  of,
+  throwError as observableThrowError,
+} from 'rxjs';
 import { createMock } from 'testing/mock';
 import { ExtProfile, ProfileService } from '../profile/profile.service';
 import { RECENT_LENGTH } from './recent-utils';
@@ -23,30 +29,30 @@ describe('SpacesService', () => {
       id: 'mock-space-id-1',
       attributes: {
         name: 'mock-space-name-1',
-        description: 'mock-space-description-1'
-      }
+        description: 'mock-space-description-1',
+      },
     } as Space;
 
     mockContext = {
-      'user': {
-        'attributes': {
-          'username': 'mock-username'
+      user: {
+        attributes: {
+          username: 'mock-username',
         },
-        'id': 'mock-user'
+        id: 'mock-user',
       },
-      'space': mockSpace
+      space: mockSpace,
     } as Context;
 
     mockProfile = {
       store: {
-        recentSpaces: []
-      }
+        recentSpaces: [],
+      },
     } as ExtProfile;
 
     mockUser = {
       attributes: mockProfile,
       id: 'mock-id',
-      type: 'mock-type'
+      type: 'mock-type',
     } as User;
 
     TestBed.configureTestingModule({
@@ -56,19 +62,21 @@ describe('SpacesService', () => {
           provide: Broadcaster,
           useFactory: () => {
             const mockBroadcaster: jasmine.SpyObj<Broadcaster> = createMock(Broadcaster);
-            mockBroadcaster.on.and.callFake((key: string): Observable<Space> => {
-              if (key === 'spaceChanged') {
-                return observableNever();
-              }
-              if (key === 'spaceDeleted') {
-                return observableNever();
-              }
-              if (key === 'spaceUpdated') {
-                return observableNever();
-              }
-            });
+            mockBroadcaster.on.and.callFake(
+              (key: string): Observable<Space> => {
+                if (key === 'spaceChanged') {
+                  return observableNever();
+                }
+                if (key === 'spaceDeleted') {
+                  return observableNever();
+                }
+                if (key === 'spaceUpdated') {
+                  return observableNever();
+                }
+              },
+            );
             return mockBroadcaster;
-          }
+          },
         },
         {
           provide: ProfileService,
@@ -77,7 +85,7 @@ describe('SpacesService', () => {
             mockProfileService.current = of(mockProfile);
             mockProfileService.silentSave.and.returnValue(of(mockUser));
             return mockProfileService;
-          }
+          },
         },
         {
           provide: Contexts,
@@ -85,7 +93,7 @@ describe('SpacesService', () => {
             const mockContexts: jasmine.SpyObj<Contexts> = createMock(Contexts);
             mockContexts.current = of(mockContext) as ConnectableObservable<Context> & jasmine.Spy;
             return mockContexts;
-          }
+          },
         },
         {
           provide: SpaceService,
@@ -93,7 +101,7 @@ describe('SpacesService', () => {
             const mockSpaceService: jasmine.SpyObj<SpaceService> = createMock(SpaceService);
             mockSpaceService.getSpaceById.and.returnValue(of(mockSpace));
             return mockSpaceService;
-          }
+          },
         },
         {
           provide: ErrorHandler,
@@ -101,9 +109,9 @@ describe('SpacesService', () => {
             const mockErrorHandler: jasmine.SpyObj<ErrorHandler> = createMock(ErrorHandler);
             mockErrorHandler.handleError.and.stub();
             return mockErrorHandler;
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
   });
 
@@ -131,7 +139,7 @@ describe('SpacesService', () => {
   });
 
   describe('#loadRecent', () => {
-    it('should return an empty array if recentSpaces doesn\'t exist on profile.store', (done: DoneFn) => {
+    it("should return an empty array if recentSpaces doesn't exist on profile.store", (done: DoneFn) => {
       const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
       broadcaster.on.and.returnValue(observableNever());
       delete mockProfile.store.recentSpaces;
@@ -177,17 +185,19 @@ describe('SpacesService', () => {
       const profileService: any = TestBed.get(ProfileService);
       mockProfile.store.recentSpaces = [mockSpace];
       const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
-      broadcaster.on.and.callFake((key: string): Observable<Space> => {
-        if (key === 'spaceChanged') {
-          return of(mockSpace);
-        }
-        if (key === 'spaceDeleted') {
-          return observableNever();
-        }
-        if (key === 'spaceUpdated') {
-          return observableNever();
-        }
-      });
+      broadcaster.on.and.callFake(
+        (key: string): Observable<Space> => {
+          if (key === 'spaceChanged') {
+            return of(mockSpace);
+          }
+          if (key === 'spaceDeleted') {
+            return observableNever();
+          }
+          if (key === 'spaceUpdated') {
+            return observableNever();
+          }
+        },
+      );
       spyOn(console, 'log').and.callFake(() => {});
       const spacesService: SpacesService = TestBed.get(SpacesService);
       expect(profileService.silentSave).toHaveBeenCalledTimes(0);
@@ -199,21 +209,23 @@ describe('SpacesService', () => {
       const profileService: any = TestBed.get(ProfileService);
       mockProfile.store.recentSpaces = [mockSpace];
       const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
-      broadcaster.on.and.callFake((key: string): Observable<Space> => {
-        if (key === 'spaceChanged') {
-          return of(mockSpace2);
-        }
-        if (key === 'spaceDeleted') {
-          return observableNever();
-        }
-        if (key === 'spaceUpdated') {
-          return observableNever();
-        }
-      });
+      broadcaster.on.and.callFake(
+        (key: string): Observable<Space> => {
+          if (key === 'spaceChanged') {
+            return of(mockSpace2);
+          }
+          if (key === 'spaceDeleted') {
+            return observableNever();
+          }
+          if (key === 'spaceUpdated') {
+            return observableNever();
+          }
+        },
+      );
       let expectedPatch = {
         store: {
-          recentSpaces: [mockSpace2.id, mockSpace.id]
-        }
+          recentSpaces: [mockSpace2.id, mockSpace.id],
+        },
       };
       const errorHandler: jasmine.SpyObj<ErrorHandler> = TestBed.get(ErrorHandler);
       const spacesService: SpacesService = TestBed.get(SpacesService);
@@ -228,21 +240,23 @@ describe('SpacesService', () => {
       mockProfile.store.recentSpaces = [mockSpace];
       profileService.silentSave.and.returnValue(observableThrowError('error'));
       const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
-      broadcaster.on.and.callFake((key: string): Observable<Space> => {
-        if (key === 'spaceChanged') {
-          return of(mockSpace2);
-        }
-        if (key === 'spaceDeleted') {
-          return observableNever();
-        }
-        if (key === 'spaceUpdated') {
-          return observableNever();
-        }
-      });
+      broadcaster.on.and.callFake(
+        (key: string): Observable<Space> => {
+          if (key === 'spaceChanged') {
+            return of(mockSpace2);
+          }
+          if (key === 'spaceDeleted') {
+            return observableNever();
+          }
+          if (key === 'spaceUpdated') {
+            return observableNever();
+          }
+        },
+      );
       let expectedPatch = {
         store: {
-          recentSpaces: [mockSpace2.id, mockSpace.id]
-        }
+          recentSpaces: [mockSpace2.id, mockSpace.id],
+        },
       };
       const errorHandler: jasmine.SpyObj<ErrorHandler> = TestBed.get(ErrorHandler);
       const spacesService: SpacesService = TestBed.get(SpacesService);
@@ -260,8 +274,8 @@ describe('SpacesService', () => {
       id: 'mock-space-id-8',
       attributes: {
         name: 'mock-space-name-8',
-        description: 'mock-space-description-8'
-      }
+        description: 'mock-space-description-8',
+      },
     } as Space;
 
     beforeEach(() => {
@@ -272,8 +286,8 @@ describe('SpacesService', () => {
           id: `mock-space-id-${i}`,
           attributes: {
             name: `mock-space-name-${i}`,
-            description: `mock-space-description-${i}`
-          }
+            description: `mock-space-description-${i}`,
+          },
         } as Space;
         mockSpaces[i] = space;
         mockSpacesObs[i] = of(space);
@@ -292,20 +306,22 @@ describe('SpacesService', () => {
       mockProfile.store.recentSpaces = mockSpaces;
       profileService.current = of(mockProfile);
       const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
-      broadcaster.on.and.callFake((key: string): Observable<Space> => {
-        if (key === 'spaceChanged') {
-          return of(mockSpace);
-        }
-        if (key === 'spaceDeleted') {
-          return observableNever();
-        }
-        if (key === 'spaceUpdated') {
-          return observableNever();
-        }
-      });
+      broadcaster.on.and.callFake(
+        (key: string): Observable<Space> => {
+          if (key === 'spaceChanged') {
+            return of(mockSpace);
+          }
+          if (key === 'spaceDeleted') {
+            return observableNever();
+          }
+          if (key === 'spaceUpdated') {
+            return observableNever();
+          }
+        },
+      );
       const spacesService: SpacesService = TestBed.get(SpacesService);
       // mock-space-1 should have been moved to the front of _recent
-      spacesService.recent.subscribe(spaces => {
+      spacesService.recent.subscribe((spaces) => {
         expect(spaces[0].id).toEqual(mockSpace.id);
         done();
       });
@@ -323,20 +339,22 @@ describe('SpacesService', () => {
       mockProfile.store.recentSpaces = mockSpaces;
       profileService.current = of(mockProfile);
       const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
-      broadcaster.on.and.callFake((key: string): Observable<Space> => {
-        if (key === 'spaceChanged') {
-          return mockSpacesObs[0];
-        }
-        if (key === 'spaceDeleted') {
-          return observableNever();
-        }
-        if (key === 'spaceUpdated') {
-          return observableNever();
-        }
-      });
+      broadcaster.on.and.callFake(
+        (key: string): Observable<Space> => {
+          if (key === 'spaceChanged') {
+            return mockSpacesObs[0];
+          }
+          if (key === 'spaceDeleted') {
+            return observableNever();
+          }
+          if (key === 'spaceUpdated') {
+            return observableNever();
+          }
+        },
+      );
       const spacesService: SpacesService = TestBed.get(SpacesService);
       // mock-space-0 should stay at the front of _recent
-      spacesService.recent.subscribe(spaces => {
+      spacesService.recent.subscribe((spaces) => {
         expect(spaces[0].id).toEqual(mockSpaces[0].id);
         done();
       });
@@ -355,19 +373,21 @@ describe('SpacesService', () => {
       mockProfile.store.recentSpaces = mockSpaces;
       profileService.current = of(mockProfile);
       const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
-      broadcaster.on.and.callFake((key: string): Observable<Space> => {
-        if (key === 'spaceChanged') {
-          return of(mockSpace8);
-        }
-        if (key === 'spaceDeleted') {
-          return observableNever();
-        }
-        if (key === 'spaceUpdated') {
-          return observableNever();
-        }
-      });
+      broadcaster.on.and.callFake(
+        (key: string): Observable<Space> => {
+          if (key === 'spaceChanged') {
+            return of(mockSpace8);
+          }
+          if (key === 'spaceDeleted') {
+            return observableNever();
+          }
+          if (key === 'spaceUpdated') {
+            return observableNever();
+          }
+        },
+      );
       const spacesService: SpacesService = TestBed.get(SpacesService);
-      spacesService.recent.subscribe(spaces => {
+      spacesService.recent.subscribe((spaces) => {
         expect(spaces.length).toEqual(RECENT_LENGTH);
         done();
       });
@@ -378,17 +398,19 @@ describe('SpacesService', () => {
     it('should remove deleted space from _recent', (done: DoneFn) => {
       const profileService: jasmine.SpyObj<ProfileService> = TestBed.get(ProfileService);
       const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
-      broadcaster.on.and.callFake((key: string): Observable<Space> => {
-        if (key === 'spaceChanged') {
-          return observableNever();
-        }
-        if (key === 'spaceDeleted') {
-          return of(mockSpace);
-        }
-        if (key === 'spaceUpdated') {
-          return observableNever();
-        }
-      });
+      broadcaster.on.and.callFake(
+        (key: string): Observable<Space> => {
+          if (key === 'spaceChanged') {
+            return observableNever();
+          }
+          if (key === 'spaceDeleted') {
+            return of(mockSpace);
+          }
+          if (key === 'spaceUpdated') {
+            return observableNever();
+          }
+        },
+      );
       mockProfile.store.recentSpaces = [mockSpace];
       const spacesService: SpacesService = TestBed.get(SpacesService);
       let result: Observable<Space[]> = spacesService.recent;
@@ -408,20 +430,22 @@ describe('SpacesService', () => {
         id: 'mock-space-id-2',
         attributes: {
           name: 'mock-space-name-2',
-          description: 'mock-space-description-2'
-        }
+          description: 'mock-space-description-2',
+        },
       } as Space;
-      broadcaster.on.and.callFake((key: string): Observable<Space> => {
-        if (key === 'spaceChanged') {
-          return observableNever();
-        }
-        if (key === 'spaceDeleted') {
-          return of(mockSpace2);
-        }
-        if (key === 'spaceUpdated') {
-          return observableNever();
-        }
-      });
+      broadcaster.on.and.callFake(
+        (key: string): Observable<Space> => {
+          if (key === 'spaceChanged') {
+            return observableNever();
+          }
+          if (key === 'spaceDeleted') {
+            return of(mockSpace2);
+          }
+          if (key === 'spaceUpdated') {
+            return observableNever();
+          }
+        },
+      );
       mockProfile.store.recentSpaces = [mockSpace];
       const spacesService: SpacesService = TestBed.get(SpacesService);
       let result: Observable<Space[]> = spacesService.recent;
@@ -432,5 +456,4 @@ describe('SpacesService', () => {
       });
     });
   });
-
 });

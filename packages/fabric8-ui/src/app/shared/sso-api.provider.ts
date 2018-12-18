@@ -8,5 +8,5 @@ let ssoApiUrlFactory = (api: ApiLocatorService) => {
 export let ssoApiUrlProvider = {
   provide: SSO_API_URL,
   useFactory: ssoApiUrlFactory,
-  deps: [ApiLocatorService]
+  deps: [ApiLocatorService],
 };

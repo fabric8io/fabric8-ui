@@ -6,8 +6,8 @@ jest.mock('c3', function createProxy() {
     {},
     {
       get: () => () => createProxy(),
-      set: () => true
-    }
+      set: () => true,
+    },
   );
 });
 

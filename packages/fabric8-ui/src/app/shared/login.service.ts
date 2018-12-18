@@ -9,7 +9,6 @@ import { WindowService } from './window.service';
 
 @Injectable()
 export class LoginService {
-
   static readonly REDIRECT_URL_KEY = 'redirectUrl';
   static readonly DEFAULT_URL = '/_home';
   // URLs that the redirect should ignore
@@ -17,7 +16,7 @@ export class LoginService {
   static readonly LOGIN_URL = '/';
 
   private window: Window;
-  private authUrl: string;  // URL to web api
+  private authUrl: string; // URL to web api
 
   public openShiftToken: string;
 
@@ -29,7 +28,7 @@ export class LoginService {
     private broadcaster: Broadcaster,
     private authService: AuthenticationService,
     private notifications: Notifications,
-    private userService: UserService
+    private userService: UserService,
   ) {
     this.window = windowService.getNativeWindow();
     // Removed ?link=true in favor of getting started page
@@ -39,8 +38,11 @@ export class LoginService {
     });
     this.broadcaster.on('noFederatedToken').subscribe(() => {
       // Don't log out first time users from getting started as tokens may not exist
-      if (this.router.url !== '/' && this.router.url.indexOf('_gettingstarted') === -1
-          && this.router.url.indexOf('_update') === -1) {
+      if (
+        this.router.url !== '/' &&
+        this.router.url.indexOf('_gettingstarted') === -1 &&
+        this.router.url.indexOf('_update') === -1
+      ) {
         this.authService.logout();
       }
     });
@@ -70,7 +72,8 @@ export class LoginService {
 
   public logout() {
     this.authService.logout();
-    this.window.location.href = this.apiUrl + 'logout?redirect=' + encodeURIComponent(this.window.location.origin);
+    this.window.location.href =
+      this.apiUrl + 'logout?redirect=' + encodeURIComponent(this.window.location.origin);
   }
 
   public login() {
@@ -82,7 +85,10 @@ export class LoginService {
     });
 
     if (result['error']) {
-      this.notifications.message({ message: result['error'], type: NotificationType.DANGER } as Notification);
+      this.notifications.message({
+        message: result['error'],
+        type: NotificationType.DANGER,
+      } as Notification);
     }
 
     if (result['token_json']) {
@@ -91,11 +97,12 @@ export class LoginService {
       this.authService
         .getOpenShiftToken()
         .pipe(
-          catchError(err => {
+          catchError((err) => {
             console.log('Unable to get OpenShift token', err);
             return of(null);
-          })
-        ).subscribe(token => this.openShiftToken = token);
+          }),
+        )
+        .subscribe((token) => (this.openShiftToken = token));
       // Navigate back to the current URL to clear up the query string
       this.router.navigateByUrl(this.router.url);
     } else if (this.authService.isLoggedIn()) {
@@ -104,11 +111,12 @@ export class LoginService {
       this.authService
         .getOpenShiftToken()
         .pipe(
-          catchError(err => {
+          catchError((err) => {
             console.log('Unable to get OpenShift token', err);
             return of(null);
-          })
-        ).subscribe(token => this.openShiftToken = token);
+          }),
+        )
+        .subscribe((token) => (this.openShiftToken = token));
     }
   }
 
@@ -123,5 +131,4 @@ export class LoginService {
     this.localStorage.remove(LoginService.REDIRECT_URL_KEY);
     return res;
   }
-
 }

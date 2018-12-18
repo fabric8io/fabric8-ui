@@ -16,10 +16,20 @@ export class CompositeDeploymentStore {
   public resource: Observable<Deployment>;
   public loading: Observable<boolean>;
 
-  constructor(private deploymentsStore: DeploymentStore, private deploymentConfigsStore: DeploymentConfigStore, private apiStore: APIsStore) {
-    this.list = this.deploymentsStore.list.pipe(combineLatest(this.deploymentConfigsStore.list, combineDeployments));
-    this.resource = this.deploymentsStore.resource.pipe(combineLatest(this.deploymentConfigsStore.resource, combineDeployment));
-    this.loading = this.deploymentsStore.loading.pipe(combineLatest(this.deploymentConfigsStore.loading, (f, s) => f && s));
+  constructor(
+    private deploymentsStore: DeploymentStore,
+    private deploymentConfigsStore: DeploymentConfigStore,
+    private apiStore: APIsStore,
+  ) {
+    this.list = this.deploymentsStore.list.pipe(
+      combineLatest(this.deploymentConfigsStore.list, combineDeployments),
+    );
+    this.resource = this.deploymentsStore.resource.pipe(
+      combineLatest(this.deploymentConfigsStore.resource, combineDeployment),
+    );
+    this.loading = this.deploymentsStore.loading.pipe(
+      combineLatest(this.deploymentConfigsStore.loading, (f, s) => f && s),
+    );
   }
 
   loadAll(): Observable<Deployments> {
@@ -51,4 +61,3 @@ export class CompositeDeploymentStore {
     });
   }
 }
-

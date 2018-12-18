@@ -36,7 +36,7 @@ import { DeploymentApiService } from './services/deployment-api.service';
     DeploymentsRoutingModule,
     ModalModule.forRoot(),
     SparklineChartModule,
-    ToolbarModule
+    ToolbarModule,
   ],
   declarations: [
     DeleteDeploymentModal,
@@ -54,13 +54,10 @@ import { DeploymentApiService } from './services/deployment-api.service';
     DeploymentsToolbarComponent,
     LoadingUtilizationBarComponent,
     ResourceCardComponent,
-    UtilizationBarComponent
+    UtilizationBarComponent,
   ],
-  providers: [
-    BsDropdownConfig,
-    DeploymentApiService
-  ]
+  providers: [BsDropdownConfig, DeploymentApiService],
 })
 export class DeploymentsModule {
-  constructor() { }
+  constructor() {}
 }

@@ -1,9 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  Output
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FilterEvent } from 'patternfly-ng/filter';
 import { SortEvent } from 'patternfly-ng/sort';
 import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
@@ -15,19 +10,20 @@ import { MySpacesToolbarComponent } from './my-spaces-toolbar.component';
     <my-spaces-toolbar
       (onFilterChange)="filterChange($event)"
       (onSortChange)="sortChange($event)"
-      [resultsCount]="resultsCount">
+      [resultsCount]="resultsCount"
+    >
     </my-spaces-toolbar>
-  `
+  `,
 })
 class TestHostComponent {
   public resultsCount: number = 0;
-  public filterChange(event: FilterEvent): void { }
-  public sortChange(event: SortEvent): void { }
+  public filterChange(event: FilterEvent): void {}
+  public sortChange(event: SortEvent): void {}
 }
 
 @Component({
   selector: 'pfng-toolbar',
-  template: ''
+  template: '',
 })
 class FakePfngToolbarComponent {
   @Input() config: any;
@@ -39,10 +35,7 @@ class FakePfngToolbarComponent {
 
 describe('MySpacesToolbarComponent', () => {
   const testContext = initContext(MySpacesToolbarComponent, TestHostComponent, {
-    declarations: [
-      FakePfngToolbarComponent,
-      MockFeatureToggleComponent
-    ]
+    declarations: [FakePfngToolbarComponent, MockFeatureToggleComponent],
   });
 
   it('should update filterConfig resultsCount', function() {
@@ -66,15 +59,15 @@ describe('MySpacesToolbarComponent', () => {
     spyOn(testContext.hostComponent, 'sortChange');
     testContext.testedDirective.sortChange({
       field: {
-        sortType: 'alphanumeric'
+        sortType: 'alphanumeric',
       },
-      isAscending: false
+      isAscending: false,
     });
     expect(testContext.hostComponent.sortChange).toHaveBeenCalledWith({
       field: {
-        sortType: 'alphanumeric'
+        sortType: 'alphanumeric',
       },
-      isAscending: false
+      isAscending: false,
     });
   });
 });

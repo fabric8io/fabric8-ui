@@ -19,9 +19,9 @@ import { SpacesComponent } from './overview-spaces.component';
     LoadingWidgetModule,
     ModalModule.forRoot(),
     WidgetsModule,
-    NgArrayPipesModule
+    NgArrayPipesModule,
   ],
   declarations: [SpacesComponent],
-  exports: [SpacesComponent]
+  exports: [SpacesComponent],
 })
-export class SpacesModule { }
+export class SpacesModule {}

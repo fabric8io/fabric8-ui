@@ -12,8 +12,8 @@ import { TenantComponent } from './tenant.component';
     FormsModule,
     JwBootstrapSwitchNg2Module,
     RemainingCharsCountModule,
-    TenantRoutingModule
+    TenantRoutingModule,
   ],
-  declarations: [ TenantComponent ]
+  declarations: [TenantComponent],
 })
 export class TenantModule {}
