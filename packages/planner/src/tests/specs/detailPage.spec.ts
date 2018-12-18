@@ -2,7 +2,6 @@ import { browser } from 'protractor';
 import { PlannerPage } from '../page_objects/planner';
 import * as support from '../support';
 
-
 describe('Detail View test: ', () => {
   let planner: PlannerPage;
   let c = new support.Constants();
@@ -25,7 +24,7 @@ describe('Detail View test: ', () => {
   });
 
   it('should open detail view and apply label', async () => {
-    let workitemname = {'title': 'detail page test'},
+    let workitemname = { title: 'detail page test' },
       label = 'sample_label_1';
     await planner.createWorkItem(workitemname);
     await planner.workItemList.openDetailPage(workitemname.title);
@@ -36,11 +35,11 @@ describe('Detail View test: ', () => {
   });
 
   it('should update title and description', async () => {
-    let workitemname = {'title': 'detail page title test'},
-     updatedWorkItem = {
-      title: 'detail page title updated',
-      description: 'New WorkItem Description'
-    };
+    let workitemname = { title: 'detail page title test' },
+      updatedWorkItem = {
+        title: 'detail page title updated',
+        description: 'New WorkItem Description',
+      };
     await planner.createWorkItem(workitemname);
     await planner.workItemList.openDetailPage(workitemname.title);
     await planner.waitUntilUrlContains('detail');
@@ -85,13 +84,13 @@ describe('Detail View test: ', () => {
     await planner.workItemList.openDetailPage(workItemTitle2);
     await planner.waitUntilUrlContains('detail');
     await planner.detailPage.titleInput.untilTextIsPresentInValue(workItemTitle2);
-     /* Adding link b/w workItemTitle2 and Workitem_Title_3 */
+    /* Adding link b/w workItemTitle2 and Workitem_Title_3 */
     await planner.detailPage.addLink(linkType, c.Workitem_Title_3);
     expect(await planner.detailPage.getLinkedItems()).toContain(c.Workitem_Title_3);
   });
 
   it('should remove link from workitem', async () => {
-    let workItemName1 = {'title': 'Remove_link_from_workitem_test'},
+    let workItemName1 = { title: 'Remove_link_from_workitem_test' },
       linkType = 'blocks';
     await planner.createWorkItem(workItemName1);
     await planner.workItemList.openDetailPage(workItemName1.title);
@@ -105,7 +104,7 @@ describe('Detail View test: ', () => {
   });
 
   it('should change the state of workitem', async () => {
-    let workitemname = {'title': 'change state test'};
+    let workitemname = { title: 'change state test' };
     await planner.createWorkItem(workitemname);
     await planner.workItemList.openDetailPage(workitemname.title);
     await planner.waitUntilUrlContains('detail');
@@ -115,7 +114,7 @@ describe('Detail View test: ', () => {
   });
 
   it('Should change the type of work item', async () => {
-    let workitemname = {'title': 'change type test'};
+    let workitemname = { title: 'change type test' };
     await planner.createWorkItem(workitemname);
     await planner.workItemList.openDetailPage(workitemname.title);
     await planner.waitUntilUrlContains('detail');

@@ -1,7 +1,11 @@
 import {
-  Component, Input, OnChanges,
-  OnDestroy, OnInit,
-  ViewChild, ViewEncapsulation
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
@@ -13,7 +17,7 @@ import { AuthenticationService } from 'ngx-login-client';
 import { IterationQuery, IterationUI } from '../../models/iteration.model';
 import { IterationService } from '../../services/iteration.service';
 import { AND, EQUAL } from '../../services/query-keys';
-import { WorkItemService }   from '../../services/work-item.service';
+import { WorkItemService } from '../../services/work-item.service';
 import { FabPlannerIterationModalComponent } from '../iterations-modal/iterations-modal.component';
 import { FilterService } from './../../services/filter.service';
 
@@ -27,10 +31,9 @@ import { AppState } from './../../states/app.state';
   encapsulation: ViewEncapsulation.None,
   selector: 'fab-planner-iteration',
   templateUrl: './iterations-panel.component.html',
-  styleUrls: ['./iterations-panel.component.less']
+  styleUrls: ['./iterations-panel.component.less'],
 })
 export class IterationComponent implements OnInit, OnDestroy, OnChanges {
-
   @Input() takeFromInput: boolean = false;
   @Input() iterations: IterationUI[] = [];
   @Input() collection = [];
@@ -48,18 +51,15 @@ export class IterationComponent implements OnInit, OnDestroy, OnChanges {
   editEnabled: boolean = false;
   barchatValue: number = 70;
   eventListeners: any[] = [];
-  treeIterations: Observable<IterationUI[]> =
-    this.iterationQuery.getIterationForTree()
-    .pipe(
-      filter(i => !!i.length),
-      tap(i => {
-        if (!this.startedCheckingURL) {
-          this.checkURL();
-        }
-      })
-    );
-  activeIterations: Observable<IterationUI[]> =
-    this.iterationQuery.getActiveIterations();
+  treeIterations: Observable<IterationUI[]> = this.iterationQuery.getIterationForTree().pipe(
+    filter((i) => !!i.length),
+    tap((i) => {
+      if (!this.startedCheckingURL) {
+        this.checkURL();
+      }
+    }),
+  );
+  activeIterations: Observable<IterationUI[]> = this.iterationQuery.getActiveIterations();
   spaceId: string = '';
   startedCheckingURL: boolean = false;
 
@@ -75,8 +75,8 @@ export class IterationComponent implements OnInit, OnDestroy, OnChanges {
     private route: ActivatedRoute,
     private workItemService: WorkItemService,
     private store: Store<AppState>,
-    private iterationQuery: IterationQuery) {
-    }
+    private iterationQuery: IterationQuery,
+  ) {}
 
   ngOnInit(): void {
     this.listenToEvents();
@@ -85,9 +85,9 @@ export class IterationComponent implements OnInit, OnDestroy, OnChanges {
     this.spaceSubscription = this.store
       .pipe(
         select('planner'),
-        select('space')
+        select('space'),
       )
-      .subscribe(space => {
+      .subscribe((space) => {
         if (space) {
           console.log('[IterationComponent] New Space selected: ' + space.attributes.name);
           console.log('collection is ', this.collection);
@@ -100,13 +100,12 @@ export class IterationComponent implements OnInit, OnDestroy, OnChanges {
       });
   }
 
-  ngOnChanges() {
-  }
+  ngOnChanges() {}
 
   ngOnDestroy() {
     // prevent memory leak when component is destroyed
     this.spaceSubscription.unsubscribe();
-    this.eventListeners.forEach(subscriber => subscriber.unsubscribe());
+    this.eventListeners.forEach((subscriber) => subscriber.unsubscribe());
   }
 
   constructURL(iterationId: string) {
@@ -136,28 +135,28 @@ export class IterationComponent implements OnInit, OnDestroy, OnChanges {
   addRemoveQueryParams(iterationId: string) {
     if (this.context === 'board') {
       return {
-        q: this.constructURLforBoard(iterationId)
+        q: this.constructURLforBoard(iterationId),
       };
     }
     if (this.showCompleted && this.showTree) {
       return {
         q: this.constructURL(iterationId),
         showTree: this.showTree,
-        showCompleted: this.showCompleted
+        showCompleted: this.showCompleted,
       };
     } else if (this.showTree) {
       return {
         q: this.constructURL(iterationId),
-        showTree: this.showTree
+        showTree: this.showTree,
       };
     } else if (this.showCompleted) {
       return {
         q: this.constructURL(iterationId),
-        showCompleted: this.showCompleted
+        showCompleted: this.showCompleted,
       };
     } else {
       return {
-        q: this.constructURL(iterationId)
+        q: this.constructURL(iterationId),
       };
     }
   }
@@ -180,28 +179,26 @@ export class IterationComponent implements OnInit, OnDestroy, OnChanges {
 
   listenToEvents() {
     this.eventListeners.push(
-      this.broadcaster.on<string>('logout')
-        .subscribe(message => {
-          this.loggedIn = false;
-          this.authUser = null;
-      })
+      this.broadcaster.on<string>('logout').subscribe((message) => {
+        this.loggedIn = false;
+        this.authUser = null;
+      }),
     );
   }
 
   checkURL() {
     this.startedCheckingURL = true;
     this.eventListeners.push(
-      this.route.queryParams.subscribe(val => {
+      this.route.queryParams.subscribe((val) => {
         if (val.hasOwnProperty('q')) {
-          const selectedIterationID =
-            this.filterService.getConditionFromQuery(val.q, 'iteration');
+          const selectedIterationID = this.filterService.getConditionFromQuery(val.q, 'iteration');
           if (selectedIterationID !== undefined) {
             this.store.dispatch(new IterationActions.Select(selectedIterationID));
           } else {
             this.store.dispatch(new IterationActions.Select());
           }
         }
-      })
+      }),
     );
   }
 }

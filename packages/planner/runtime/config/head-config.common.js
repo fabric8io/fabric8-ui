@@ -28,7 +28,12 @@ module.exports = {
     { rel: 'apple-touch-icon', sizes: '180x180', href: '/assets/icon/fabric8_icon_180px.png' },
 
     /** <link> tags for android web app icons **/
-    { rel: 'icon', type: 'image/png', sizes: '192x192', href: '/assets/icon/fabric8_icon_192px.png' },
+    {
+      rel: 'icon',
+      type: 'image/png',
+      sizes: '192x192',
+      href: '/assets/icon/fabric8_icon_192px.png',
+    },
 
     /** <link> tags for favicons **/
     { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/assets/icon/fabric8_icon_32px.png' },
@@ -36,11 +41,15 @@ module.exports = {
     { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/assets/icon/fabric8_icon_16px.png' },
 
     /** <link> tags for a Web App Manifest **/
-    { rel: 'manifest', href: '/assets/manifest.json' }
+    { rel: 'manifest', href: '/assets/manifest.json' },
   ],
   meta: [
     { name: 'msapplication-TileColor', content: '#00bcd4' },
-    { name: 'msapplication-TileImage', content: '/assets/icon/fabric8_icon_144px.png', '=content': true },
-    { name: 'theme-color', content: '#ffffff' }
-  ]
+    {
+      name: 'msapplication-TileImage',
+      content: '/assets/icon/fabric8_icon_144px.png',
+      '=content': true,
+    },
+    { name: 'theme-color', content: '#ffffff' },
+  ],
 };

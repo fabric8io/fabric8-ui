@@ -3,7 +3,6 @@ import { ListItemComponent } from './list-item.component';
 
 @NgModule({
   declarations: [ListItemComponent],
-  exports: [ListItemComponent]
+  exports: [ListItemComponent],
 })
-
 export class ListItemModule {}

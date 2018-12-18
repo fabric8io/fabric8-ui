@@ -12,7 +12,7 @@ const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 /**
  * Webpack Constants
  */
-const ENV = process.env.ENV = process.env.NODE_ENV = 'test';
+const ENV = (process.env.ENV = process.env.NODE_ENV = 'test');
 const API_URL = process.env.API_URL || 'http://localhost:8080/api/';
 const FABRIC8_WIT_API_URL = process.env.FABRIC8_WIT_API_URL;
 const FABRIC8_REALM = process.env.FABRIC8_REALM || 'fabric8';
@@ -23,7 +23,6 @@ const FABRIC8_REALM = process.env.FABRIC8_REALM || 'fabric8';
  * See: http://webpack.github.io/docs/configuration.html#cli
  */
 module.exports = {
-
   /**
    * Source map for Karma from the help of karma-sourcemap-loader &  karma-webpack
    *
@@ -38,7 +37,6 @@ module.exports = {
    * See: http://webpack.github.io/docs/configuration.html#resolve
    */
   resolve: {
-
     /**
      * An array of extensions that should be used to resolve modules.
      *
@@ -49,7 +47,7 @@ module.exports = {
     /**
      * Make sure root is src
      */
-    modules: [helpers.root('src'), 'node_modules']
+    modules: [helpers.root('src'), 'node_modules'],
   },
 
   /**
@@ -67,7 +65,6 @@ module.exports = {
      * See: http://webpack.github.io/docs/configuration.html#module-loaders
      */
     rules: [
-
       /**
        * Typescript loader support for .ts and Angular 2 async routes via .async.ts
        *
@@ -75,41 +72,38 @@ module.exports = {
        */
       {
         test: /\.ts$/,
-        use: [
-          'awesome-typescript-loader',
-          'angular2-template-loader'
-        ],
-        exclude: [/\.e2e\.ts$/]
+        use: ['awesome-typescript-loader', 'angular2-template-loader'],
+        exclude: [/\.e2e\.ts$/],
       },
 
       {
         test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        use: ['file-loader']
+        use: ['file-loader'],
       },
 
       // Support for *.json files.
       {
         test: /\.json$/,
-        use: ['json-loader']
+        use: ['json-loader'],
       },
       /*
-        * to string and css loader support for *.css files
-        * Returns file content as string
-        *
-        */
+       * to string and css loader support for *.css files
+       * Returns file content as string
+       *
+       */
       {
         test: /\.css$/,
         loaders: [
-          { loader: "to-string-loader" },
+          { loader: 'to-string-loader' },
           {
-            loader: "style-loader"
+            loader: 'style-loader',
           },
           {
-            loader: "css-loader"
+            loader: 'css-loader',
           },
         ],
       },
-    ]
+    ],
   },
 
   /**
@@ -129,15 +123,15 @@ module.exports = {
      */
     // NOTE: when adding more properties make sure you include them in custom-typings.d.ts
     new DefinePlugin({
-      'ENV': JSON.stringify(ENV),
-      'HMR': false,
+      ENV: JSON.stringify(ENV),
+      HMR: false,
       'process.env': {
-        'ENV': JSON.stringify(ENV),
-        'API_URL': JSON.stringify(API_URL),
-        'NODE_ENV': JSON.stringify(ENV),
-        'HMR': false,
-        'FABRIC8_REALM': JSON.stringify(FABRIC8_REALM)
-      }
+        ENV: JSON.stringify(ENV),
+        API_URL: JSON.stringify(API_URL),
+        NODE_ENV: JSON.stringify(ENV),
+        HMR: false,
+        FABRIC8_REALM: JSON.stringify(FABRIC8_REALM),
+      },
     }),
 
     /**
@@ -150,7 +144,7 @@ module.exports = {
     new webpack.ContextReplacementPlugin(
       // The (\\|\/) piece accounts for path separators in *nix and Windows
       /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
-      helpers.root('src') // location of your src
+      helpers.root('src'), // location of your src
     ),
 
     /**
@@ -162,7 +156,7 @@ module.exports = {
       debug: false,
       options: {
         // legacy options go here
-      }
+      },
     }),
   ],
 
@@ -178,6 +172,6 @@ module.exports = {
     crypto: 'empty',
     module: false,
     clearImmediate: false,
-    setImmediate: false
-  }
+    setImmediate: false,
+  },
 };

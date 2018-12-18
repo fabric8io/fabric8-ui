@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class ModalService {
-
   private clientSource = new Subject<string>();
   private componentSource = new Subject<string[]>();
   private clientSource$ = this.clientSource.asObservable();
@@ -12,8 +11,13 @@ export class ModalService {
 
   constructor() {}
 
-  public openModal(title: string, message: string, buttonText: string, actionKey?: string): Observable<string> {
-    this.componentSource.next([ title, message, buttonText, actionKey ]);
+  public openModal(
+    title: string,
+    message: string,
+    buttonText: string,
+    actionKey?: string,
+  ): Observable<string> {
+    this.componentSource.next([title, message, buttonText, actionKey]);
     console.log('Opened modal dialog for key ' + actionKey);
     return this.clientSource$;
   }

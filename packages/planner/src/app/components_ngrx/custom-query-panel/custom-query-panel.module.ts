@@ -3,9 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import {
-  WidgetsModule
-} from 'ngx-widgets';
+import { WidgetsModule } from 'ngx-widgets';
 
 import { TruncateModule } from 'ng2-truncate';
 import { TooltipModule } from 'ngx-bootstrap';
@@ -25,12 +23,10 @@ import { CustomQueryComponent } from './custom-query-panel.component';
     TruncateModule,
     WidgetsModule,
     IterationModule,
-    RouterModule
+    RouterModule,
   ],
-  declarations: [
-    CustomQueryComponent
-  ],
+  declarations: [CustomQueryComponent],
   exports: [CustomQueryComponent],
-  providers: [BsDropdownConfig, CustomQueryService]
+  providers: [BsDropdownConfig, CustomQueryService],
 })
-export class CustomQueryModule { }
+export class CustomQueryModule {}

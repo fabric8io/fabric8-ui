@@ -15,9 +15,7 @@ export class MultipleSelectionList extends BaseElement {
   }
 
   item(text: string) {
-    let el = this.list.element(by.cssContainingText(
-      'li.checkbox label', text
-    ));
+    let el = this.list.element(by.cssContainingText('li.checkbox label', text));
     return new Checkbox(el);
   }
 

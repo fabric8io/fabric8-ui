@@ -19,20 +19,20 @@ describe('BoardReducer:', () => {
   it('GetSuccess action should return new state', () => {
     const boards: BoardState = {
       '000-000-003': {
-        'id': '000-000-002',
-        'name': 'Scenarios Board',
-          'description': 'This is the default board config for the legacy template (Experiences).',
-          'contextType': 'TypeLevelContext',
-          'context': '000-000-003',
-          'columns': [
-            {
-                'id': '000-000-005',
-                'title': 'workitemboardcolumn',
-                'columnOrder': 0,
-                'type': 'boardcolumns'
-            }
-        ]
-      }
+        id: '000-000-002',
+        name: 'Scenarios Board',
+        description: 'This is the default board config for the legacy template (Experiences).',
+        contextType: 'TypeLevelContext',
+        context: '000-000-003',
+        columns: [
+          {
+            id: '000-000-005',
+            title: 'workitemboardcolumn',
+            columnOrder: 0,
+            type: 'boardcolumns',
+          },
+        ],
+      },
     };
 
     const action = new BoardActions.GetSuccess(boards);
@@ -44,20 +44,20 @@ describe('BoardReducer:', () => {
   it('GetError Action should return previous state', () => {
     const previousState: BoardState = {
       '000-000-003': {
-        'id': '000-000-002',
-        'name': 'Scenarios Board',
-          'description': 'This is the default board config for the legacy template (Experiences).',
-          'contextType': 'TypeLevelContext',
-          'context': '000-000-003',
-          'columns': [
-            {
-                'id': '000-000-005',
-                'title': 'workitemboardcolumn',
-                'columnOrder': 0,
-                'type': 'boardcolumns'
-            }
-        ]
-      }
+        id: '000-000-002',
+        name: 'Scenarios Board',
+        description: 'This is the default board config for the legacy template (Experiences).',
+        contextType: 'TypeLevelContext',
+        context: '000-000-003',
+        columns: [
+          {
+            id: '000-000-005',
+            title: 'workitemboardcolumn',
+            columnOrder: 0,
+            type: 'boardcolumns',
+          },
+        ],
+      },
     };
     const action = new BoardActions.GetError();
     const state = BoardReducer(previousState, action);

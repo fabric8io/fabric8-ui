@@ -4,9 +4,8 @@ import { EventUI } from '../../models/event.model';
 @Component({
   selector: 'work-item-event',
   templateUrl: './work-item-event.component.html',
-  styleUrls: ['./work-item-event.component.less']
+  styleUrls: ['./work-item-event.component.less'],
 })
-
 export class WorkItemEventComponent implements OnInit {
   @Input('event') set Event(event: EventUI) {
     this.event = event;
@@ -48,8 +47,7 @@ export class WorkItemEventComponent implements OnInit {
   private toText: string | null = 'to';
   private textType: string;
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   getTitle() {
     if (this.event.name.indexOf('system') > -1) {
@@ -66,7 +64,6 @@ export class WorkItemEventComponent implements OnInit {
       this.intermediateText = 'changed the ' + this.title + ' from';
       this.textType = 'attribute';
     }
-
   }
 
   areasAndIteration() {
@@ -77,7 +74,10 @@ export class WorkItemEventComponent implements OnInit {
 
   users() {
     if (this.event.oldValueRelationships.length === 0) {
-      if (this.event.newValueRelationships.length === 1 && this.event.newValueRelationships[0].id === this.event.modifierId) {
+      if (
+        this.event.newValueRelationships.length === 1 &&
+        this.event.newValueRelationships[0].id === this.event.modifierId
+      ) {
         this.intermediateText = 'self assigned this workitem';
         this.toText = null;
         this.event.newValueRelationshipsObs = [];

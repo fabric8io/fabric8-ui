@@ -1,10 +1,4 @@
-import {
-  Component,
-  Input,
-  OnDestroy,
-  OnInit,
-  ViewEncapsulation
-} from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { cloneDeep } from 'lodash';
 import { Observable } from 'rxjs';
 
@@ -17,9 +11,8 @@ import { WorkItemUI } from './../../models/work-item';
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'work-item-comment-wrapper',
-  templateUrl: './work-item-comment-wrapper.component.html'
+  templateUrl: './work-item-comment-wrapper.component.html',
 })
-
 export class WorkItemCommentWrapperComponent implements OnInit, OnDestroy {
   @Input() loggedIn: boolean;
   @Input() loggedInUser: UserUI;
@@ -29,25 +22,19 @@ export class WorkItemCommentWrapperComponent implements OnInit, OnDestroy {
   }
 
   private workItem: WorkItemUI = null;
-  private comments: Observable<CommentUI[]> =
-    this.commentQuery.getCommentsWithChildren();
+  private comments: Observable<CommentUI[]> = this.commentQuery.getCommentsWithChildren();
   private eventListeners: any[] = [];
 
-  constructor(
-    private commentQuery: CommentQuery
-  ) {}
+  constructor(private commentQuery: CommentQuery) {}
 
   ngOnInit() {}
 
   ngOnDestroy() {
-    this.eventListeners.forEach(e => e.unsubscribe());
+    this.eventListeners.forEach((e) => e.unsubscribe());
   }
 
   createComment(newComment: CommentUI) {
-    this.commentQuery.createComment(
-       this.workItem.commentLink,
-       newComment
-    );
+    this.commentQuery.createComment(this.workItem.commentLink, newComment);
   }
 
   updateComment(comment: CommentUI) {

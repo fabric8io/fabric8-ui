@@ -8,5 +8,5 @@ let witApiUrlFactory = () => {
 // for now use wit proxy for toggles-services
 export let togglesApiUrlProvider = {
   provide: FABRIC8_FEATURE_TOGGLES_API_URL as InjectionToken<string>,
-  useFactory: witApiUrlFactory
+  useFactory: witApiUrlFactory,
 };

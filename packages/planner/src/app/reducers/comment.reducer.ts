@@ -6,7 +6,10 @@ import { Comment } from './../models/comment';
 
 export type Action = CommentActions.All;
 
-export const CommentReducer: ActionReducer<CommentState> = (state = initialState, action: Action) => {
+export const CommentReducer: ActionReducer<CommentState> = (
+  state = initialState,
+  action: Action,
+) => {
   switch (action.type) {
     case CommentActions.GET_SUCCESS: {
       return [...action.payload];
@@ -22,7 +25,7 @@ export const CommentReducer: ActionReducer<CommentState> = (state = initialState
     }
     case CommentActions.UPDATE_SUCCESS: {
       let updatedComment = action.payload;
-      let index = state.findIndex(c => c.id === updatedComment.id);
+      let index = state.findIndex((c) => c.id === updatedComment.id);
       if (index > -1) {
         state[index] = action.payload;
       }
@@ -33,7 +36,7 @@ export const CommentReducer: ActionReducer<CommentState> = (state = initialState
     }
     case CommentActions.DELETE_SUCCESS: {
       let deletedComment = action.payload;
-      let index = state.findIndex(c => c.id === deletedComment.id);
+      let index = state.findIndex((c) => c.id === deletedComment.id);
       if (index > -1) {
         state.splice(index, 1);
       }

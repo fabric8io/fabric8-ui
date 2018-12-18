@@ -1,18 +1,19 @@
-import { ChangeDetectionStrategy,
+import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Input,
   OnInit,
-  Output } from '@angular/core';
+  Output,
+} from '@angular/core';
 import { sortBy } from 'lodash';
 
 @Component({
   selector: 'table-config',
   templateUrl: './table-config.component.html',
   styleUrls: ['./table-config.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
 export class TableConfigComponent {
   @Input() columns;
   @Output() readonly onMovetoAvailable: EventEmitter<any[]> = new EventEmitter();
@@ -38,13 +39,17 @@ export class TableConfigComponent {
    * shows these column in table
    */
   moveToDisplay() {
-    this.columns.filter(col => col.selected).forEach(col => {
-      if (col.display === true) { return; }
-      col.selected = false;
-      col.display = true;
-      col.showInDisplay = true;
-      col.available = false;
-    });
+    this.columns
+      .filter((col) => col.selected)
+      .forEach((col) => {
+        if (col.display === true) {
+          return;
+        }
+        col.selected = false;
+        col.display = true;
+        col.showInDisplay = true;
+        col.available = false;
+      });
     this.updateColumnIndex();
     this.onMovetoDisplay.emit(this.columns);
   }
@@ -54,13 +59,17 @@ export class TableConfigComponent {
    * dont show these col in table
    */
   moveToAvailable() {
-    this.columns.filter(col => col.selected).forEach(col => {
-      if (col.available === true) { return; }
-      col.selected = false;
-      col.display = false;
-      col.showInDisplay = false;
-      col.available = true;
-    });
+    this.columns
+      .filter((col) => col.selected)
+      .forEach((col) => {
+        if (col.available === true) {
+          return;
+        }
+        col.selected = false;
+        col.display = false;
+        col.showInDisplay = false;
+        col.available = true;
+      });
     this.updateColumnIndex();
     this.onMovetoAvailable.emit(this.columns);
   }
@@ -72,7 +81,7 @@ export class TableConfigComponent {
    */
   updateColumnIndex() {
     let index = 0;
-    this.columns.forEach(col => {
+    this.columns.forEach((col) => {
       if (col.display === true) {
         col.index = index + 1;
         index += 1;

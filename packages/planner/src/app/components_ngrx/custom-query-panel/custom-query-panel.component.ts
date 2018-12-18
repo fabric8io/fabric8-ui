@@ -1,9 +1,4 @@
-import {
-  Component,
-  Input,
-  OnDestroy,
-  OnInit
-} from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
 import { Spaces } from 'ngx-fabric8-wit';
@@ -22,10 +17,9 @@ import { AppState } from './../../states/app.state';
 @Component({
   selector: 'custom-query',
   templateUrl: './custom-query-panel.component.html',
-  styleUrls: ['./custom-query-panel.component.less']
+  styleUrls: ['./custom-query-panel.component.less'],
 })
 export class CustomQueryComponent implements OnInit, OnDestroy {
-
   @Input() sidePanelOpen: boolean = true;
   @Input() context: 'list' | 'board'; // 'list' or 'board'
 
@@ -43,29 +37,27 @@ export class CustomQueryComponent implements OnInit, OnDestroy {
     private modalService: ModalService,
     private route: ActivatedRoute,
     private spaces: Spaces,
-    private store: Store<AppState>
+    private store: Store<AppState>,
   ) {}
 
   ngOnInit(): void {
-    const customQueriesData = this.store
-      .pipe(
-        select('planner'),
-        select('customQueries')
-      );
+    const customQueriesData = this.store.pipe(
+      select('planner'),
+      select('customQueries'),
+    );
 
     this.eventListeners.push(
-      customQueriesData
-      .subscribe((customQueries) => {
+      customQueriesData.subscribe((customQueries) => {
         this.customQueries = customQueries;
         if (!this.startedCheckingURL && !!this.customQueries.length) {
           this.checkURL();
         }
-      })
+      }),
     );
   }
 
   ngOnDestroy() {
-    this.eventListeners.forEach(e => e.unsubscribe());
+    this.eventListeners.forEach((e) => e.unsubscribe());
   }
 
   constructUrl(attributes) {
@@ -77,11 +69,11 @@ export class CustomQueryComponent implements OnInit, OnDestroy {
   checkURL() {
     this.startedCheckingURL = true;
     this.eventListeners.push(
-      this.route.queryParams.subscribe(val => {
+      this.route.queryParams.subscribe((val) => {
         if (val.hasOwnProperty('q')) {
           const urlQuery = val['q'];
           let foundMatch = false;
-          this.customQueries.forEach(q => {
+          this.customQueries.forEach((q) => {
             if (this.constructUrl(q.attributes.fields) === urlQuery) {
               foundMatch = true;
               this.store.dispatch(new CustomQueryActions.Select(q));
@@ -101,7 +93,7 @@ export class CustomQueryComponent implements OnInit, OnDestroy {
         } else {
           this.showCompleted = '';
         }
-      })
+      }),
     );
   }
 
@@ -110,21 +102,21 @@ export class CustomQueryComponent implements OnInit, OnDestroy {
       return {
         q: this.constructUrl(queryField),
         showTree: this.showTree,
-        showCompleted: this.showCompleted
+        showCompleted: this.showCompleted,
       };
     } else if (this.showTree) {
       return {
         q: this.constructUrl(queryField),
-        showTree: this.showTree
+        showTree: this.showTree,
       };
     } else if (this.showCompleted) {
       return {
         q: this.constructUrl(queryField),
-        showCompleted: this.showCompleted
+        showCompleted: this.showCompleted,
       };
     } else {
       return {
-        q: this.constructUrl(queryField)
+        q: this.constructUrl(queryField),
       };
     }
   }
@@ -139,11 +131,15 @@ export class CustomQueryComponent implements OnInit, OnDestroy {
 
   confirmCustomQueryDelete(event, customQuery) {
     // this.stopPropagation(event);
-    this.modalService.openModal('Delete Filter', 'Are you sure you want to delete this filter?', 'Delete', 'deleteFilter')
-      .pipe(
-        first()
+    this.modalService
+      .openModal(
+        'Delete Filter',
+        'Are you sure you want to delete this filter?',
+        'Delete',
+        'deleteFilter',
       )
-      .subscribe(actionKey => {
+      .pipe(first())
+      .subscribe((actionKey) => {
         if (actionKey === 'deleteFilter') {
           this.deleteCustomQuery(customQuery);
         }

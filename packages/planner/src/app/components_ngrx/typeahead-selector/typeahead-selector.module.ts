@@ -8,20 +8,8 @@ import { SelectDropdownModule } from '../../widgets/select-dropdown/select-dropd
 import { TypeaheadSelectorComponent } from './typeahead-selector.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    SelectDropdownModule,
-    TruncateModule,
-    WidgetsModule,
-    NgLetModule
-  ],
-  declarations: [
-    TypeaheadSelectorComponent
-  ],
-  exports: [
-    TypeaheadSelectorComponent
-  ]
+  imports: [CommonModule, SelectDropdownModule, TruncateModule, WidgetsModule, NgLetModule],
+  declarations: [TypeaheadSelectorComponent],
+  exports: [TypeaheadSelectorComponent],
 })
-export class TypeaheadSelectorModule {
-
-}
+export class TypeaheadSelectorModule {}

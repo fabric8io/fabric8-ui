@@ -43,8 +43,8 @@ describe('WorkItemReduer: ', () => {
         createId: 1,
         type: null,
         eventLink: '',
-        selected: false
-      }
+        selected: false,
+      },
     ];
 
     workItemState = {
@@ -81,10 +81,10 @@ describe('WorkItemReduer: ', () => {
           createId: 1,
           type: null,
           eventLink: '',
-          selected: false
-        }
+          selected: false,
+        },
       },
-      nextLink: ''
+      nextLink: '',
     };
   });
 
@@ -99,22 +99,21 @@ describe('WorkItemReduer: ', () => {
     const initialState = {
       ids: [],
       entities: {},
-      nextLink: ''
+      nextLink: '',
     };
 
     expect(WorkItemInitialState).toEqual(initialState);
   });
 
   it('GetSuccess action should return new state', () => {
-
-    const action = new WorkItemActions.GetSuccess({workItems: workItems, nextLink: ''});
+    const action = new WorkItemActions.GetSuccess({ workItems: workItems, nextLink: '' });
     const state = WorkItemReducer(WorkItemInitialState, action);
 
     expect(state).toEqual(workItemState);
   });
 
   it('GetError action should return previous state', () => {
-    const action = new WorkItemActions.GetSuccess({workItems: workItems, nextLink: ''});
+    const action = new WorkItemActions.GetSuccess({ workItems: workItems, nextLink: '' });
     const state = WorkItemReducer(WorkItemInitialState, action);
 
     const getErrorAction = new WorkItemActions.GetError();
@@ -131,7 +130,7 @@ describe('WorkItemReduer: ', () => {
   });
 
   it('AddError action should return the previous state', () => {
-    const action = new WorkItemActions.GetSuccess({workItems: workItems, nextLink: ''});
+    const action = new WorkItemActions.GetSuccess({ workItems: workItems, nextLink: '' });
     const state = WorkItemReducer(WorkItemInitialState, action);
 
     const addErrorAction = new WorkItemActions.AddError();
@@ -143,7 +142,7 @@ describe('WorkItemReduer: ', () => {
   it('UpdateSuccess action should return updated state', () => {
     let workItemsClone = cloneDeep(workItems);
     workItemsClone[0].title = 'Work Item Updated';
-    const action = new WorkItemActions.GetSuccess({workItems: workItems, nextLink: ''});
+    const action = new WorkItemActions.GetSuccess({ workItems: workItems, nextLink: '' });
     const state = WorkItemReducer(WorkItemInitialState, action);
 
     const updateSuccessAction = new WorkItemActions.UpdateSuccess(workItemsClone[0]);
@@ -153,7 +152,7 @@ describe('WorkItemReduer: ', () => {
   });
 
   it('UpdateError action should return previous state', () => {
-    const action = new WorkItemActions.GetSuccess({workItems: workItems, nextLink: ''});
+    const action = new WorkItemActions.GetSuccess({ workItems: workItems, nextLink: '' });
     const state = WorkItemReducer(WorkItemInitialState, action);
 
     const updateErrorAction = new WorkItemActions.UpdateError();
@@ -163,7 +162,6 @@ describe('WorkItemReduer: ', () => {
   });
 
   it('GetChildrenSuccess action should return new state', () => {
-
     const children: WorkItemUI[] = [
       {
         id: '2',
@@ -196,13 +194,16 @@ describe('WorkItemReduer: ', () => {
         createId: 1,
         type: null,
         selected: false,
-        eventLink: ''
-      }
+        eventLink: '',
+      },
     ];
-    const action = new WorkItemActions.GetSuccess({workItems: workItems, nextLink: ''});
+    const action = new WorkItemActions.GetSuccess({ workItems: workItems, nextLink: '' });
     const state = WorkItemReducer(WorkItemInitialState, action);
 
-    const getChildrenSuccessAction = new WorkItemActions.GetChildrenSuccess({parent: workItems[0], children: children});
+    const getChildrenSuccessAction = new WorkItemActions.GetChildrenSuccess({
+      parent: workItems[0],
+      children: children,
+    });
     const newState = WorkItemReducer(state, getChildrenSuccessAction);
 
     expect(newState.entities[1].childrenLoaded).toBe(true);
@@ -210,7 +211,7 @@ describe('WorkItemReduer: ', () => {
   });
 
   it('GetChildrenError action should return previous state', () => {
-    const action = new WorkItemActions.GetSuccess({workItems: workItems, nextLink: ''});
+    const action = new WorkItemActions.GetSuccess({ workItems: workItems, nextLink: '' });
     const state = WorkItemReducer(WorkItemInitialState, action);
 
     const GetChildrenErrorAction = new WorkItemActions.GetChildrenError(workItems[0]);
@@ -251,18 +252,18 @@ describe('WorkItemReduer: ', () => {
       createId: 1,
       type: null,
       eventLink: '',
-      selected: false
+      selected: false,
     };
 
     let workItems1 = cloneDeep(workItems);
     workItems1.push(workItem1);
-    const action = new WorkItemActions.GetSuccess({workItems: workItems1, nextLink: ''});
+    const action = new WorkItemActions.GetSuccess({ workItems: workItems1, nextLink: '' });
     const state = WorkItemReducer(WorkItemInitialState, action);
 
     const createLinkAction = new WorkItemActions.CreateLink({
       source: workItems1[0],
       target: workItems1[1],
-      sourceTreeStatus: 'disabled'
+      sourceTreeStatus: 'disabled',
     });
     const newState = WorkItemReducer(state, createLinkAction);
     expect(newState.entities['1'].treeStatus).toBe('collapsed');
@@ -302,17 +303,17 @@ describe('WorkItemReduer: ', () => {
       createId: 1,
       type: null,
       eventLink: '',
-      selected: false
+      selected: false,
     };
 
     let workItems1 = cloneDeep(workItems);
     workItems1.push(workItem1);
-    const action = new WorkItemActions.GetSuccess({workItems: workItems1, nextLink: ''});
+    const action = new WorkItemActions.GetSuccess({ workItems: workItems1, nextLink: '' });
     const state = WorkItemReducer(WorkItemInitialState, action);
     const createLinkAction = new WorkItemActions.CreateLink({
       source: workItems1[0],
       target: workItems1[1],
-      sourceTreeStatus: 'disabled'
+      sourceTreeStatus: 'disabled',
     });
     const newState = WorkItemReducer(state, createLinkAction);
     expect(newState.entities[1].parentID).toBe('');

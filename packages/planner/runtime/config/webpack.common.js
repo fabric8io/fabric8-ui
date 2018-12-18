@@ -29,7 +29,7 @@ var helpers = require('./helpers');
 
 const extractCSS = new ExtractTextPlugin({
   filename: '_assets/stylesheets/[name].[id]' + (helpers.isProd ? '.[contenthash]' : '') + '.css',
-  allChunks: true
+  allChunks: true,
 });
 
 /*
@@ -40,11 +40,10 @@ const AOT = helpers.hasNpmFlag('aot');
 const METADATA = {
   title: 'Fabric8 Planner',
   baseUrl: '/',
-  isDevServer: helpers.isWebpackDevServer()
+  isDevServer: helpers.isWebpackDevServer(),
 };
 
 module.exports = {
-
   resolve: {
     extensions: ['.ts', '.js', '.json'],
 
@@ -54,7 +53,7 @@ module.exports = {
 
   stats: {
     colors: true,
-    reasons: true
+    reasons: true,
   },
 
   module: {
@@ -69,29 +68,29 @@ module.exports = {
         test: /\.ts$/,
         use: [
           {
-            loader: 'awesome-typescript-loader'
+            loader: 'awesome-typescript-loader',
           },
           {
-            loader: 'angular2-router-loader'
+            loader: 'angular2-router-loader',
           },
           {
-            loader: 'angular2-template-loader'
-          }
+            loader: 'angular2-template-loader',
+          },
         ],
-        exclude: [/\.(spec|e2e)\.ts$/]
+        exclude: [/\.(spec|e2e)\.ts$/],
       },
 
       // Support for *.json files.
       {
         test: /\.json$/,
-        use: ['json-loader']
+        use: ['json-loader'],
       },
       {
         test: /\.css$/,
         loader: extractCSS.extract({
-          fallback: "style-loader",
-          use: "css-loader?sourceMap&context=/"
-        })
+          fallback: 'style-loader',
+          use: 'css-loader?sourceMap&context=/',
+        }),
       },
       {
         test: /^(?!.*component).*\.less$/,
@@ -103,42 +102,46 @@ module.exports = {
               options: {
                 minimize: helpers.isProd,
                 sourceMap: true,
-                context: '/'
-              }
-            }, {
+                context: '/',
+              },
+            },
+            {
               loader: 'less-loader',
               options: {
                 paths: [
-                  path.resolve(__dirname, "../node_modules/patternfly/src/less"),
-                  path.resolve(__dirname, "../node_modules/patternfly/node_modules")
-                  ],
-                sourceMap: true
-              }
-            }
+                  path.resolve(__dirname, '../node_modules/patternfly/src/less'),
+                  path.resolve(__dirname, '../node_modules/patternfly/node_modules'),
+                ],
+                sourceMap: true,
+              },
+            },
           ],
-        })
-      }, {
+        }),
+      },
+      {
         test: /\.component\.less$/,
         use: [
           {
-            loader: 'to-string-loader'
-          }, {
+            loader: 'to-string-loader',
+          },
+          {
             loader: 'css-loader',
             options: {
               minimize: helpers.isProd,
               sourceMap: true,
-              context: '/'
-            }
-          }, {
+              context: '/',
+            },
+          },
+          {
             loader: 'less-loader',
             options: {
               paths: [
-                path.resolve(__dirname, "../node_modules/patternfly/src/less"),
-                path.resolve(__dirname, "../node_modules/patternfly/node_modules")
-                ],
-              sourceMap: true
-            }
-          }
+                path.resolve(__dirname, '../node_modules/patternfly/src/less'),
+                path.resolve(__dirname, '../node_modules/patternfly/node_modules'),
+              ],
+              sourceMap: true,
+            },
+          },
         ],
       },
 
@@ -148,37 +151,38 @@ module.exports = {
         test: /\.woff2?$|\.ttf$|\.eot$|\.svg$/,
         loaders: [
           {
-            loader: "url-loader",
+            loader: 'url-loader',
             query: {
               limit: 3000,
-              name: 'assets/fonts/[name].' + (helpers.isProd ? '[hash]' : '') + '[ext]'
-            }
-          }
-        ]
-      }, {
+              name: 'assets/fonts/[name].' + (helpers.isProd ? '[hash]' : '') + '[ext]',
+            },
+          },
+        ],
+      },
+      {
         test: /\.jpg$|\.png$|\.gif$|\.jpeg$/,
         loaders: [
           {
-            loader: "url-loader",
+            loader: 'url-loader',
             query: {
               limit: 3000,
-              name: 'assets/fonts/[name].' + (helpers.isProd ? '[hash]' : '') + '[ext]'
-            }
-          }
-        ]
+              name: 'assets/fonts/[name].' + (helpers.isProd ? '[hash]' : '') + '[ext]',
+            },
+          },
+        ],
       },
       {
         test: /\.html$/,
-        use: ['raw-loader']
-      }
-    ]
+        use: ['raw-loader'],
+      },
+    ],
   },
 
   plugins: [
     new AssetsPlugin({
       path: helpers.root('dist'),
       filename: 'webpack-assets.json',
-      prettyPrint: true
+      prettyPrint: true,
     }),
 
     /*
@@ -199,7 +203,7 @@ module.exports = {
     new webpack.ContextReplacementPlugin(
       // The (\\|\/) piece accounts for path separators in *nix and Windows
       /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
-      helpers.root('src') // location of your src
+      helpers.root('src'), // location of your src
     ),
 
     new HtmlWebpackPlugin({
@@ -207,7 +211,7 @@ module.exports = {
       title: METADATA.title,
       chunksSortMode: 'dependency',
       metadata: METADATA,
-      inject: 'head'
+      inject: 'head',
     }),
 
     /**
@@ -221,8 +225,8 @@ module.exports = {
     new CopyWebpackPlugin([
       {
         from: 'src/assets',
-        to: 'assets'
-      }
+        to: 'assets',
+      },
     ]),
 
     /*
@@ -248,7 +252,7 @@ module.exports = {
      * Dependencies: HtmlWebpackPlugin
      */
     new HtmlElementsPlugin({
-      headTags: require('./head-config.common')
+      headTags: require('./head-config.common'),
     }),
 
     /*
@@ -259,7 +263,7 @@ module.exports = {
      * See: https://github.com/numical/script-ext-html-webpack-plugin
      */
     new ScriptExtHtmlWebpackPlugin({
-      defaultAttribute: 'defer'
+      defaultAttribute: 'defer',
     }),
 
     /**
@@ -334,29 +338,29 @@ module.exports = {
     new CleanWebpackPlugin(['bundles'], {
       root: helpers.root(),
       verbose: false,
-      dry: false
+      dry: false,
     }),
 
     // Fix Angular 2
     new NormalModuleReplacementPlugin(
       /facade(\\|\/)async/,
-      helpers.root('node_modules/@angular/core/src/facade/async.js')
+      helpers.root('node_modules/@angular/core/src/facade/async.js'),
     ),
     new NormalModuleReplacementPlugin(
       /facade(\\|\/)collection/,
-      helpers.root('node_modules/@angular/core/src/facade/collection.js')
+      helpers.root('node_modules/@angular/core/src/facade/collection.js'),
     ),
     new NormalModuleReplacementPlugin(
       /facade(\\|\/)errors/,
-      helpers.root('node_modules/@angular/core/src/facade/errors.js')
+      helpers.root('node_modules/@angular/core/src/facade/errors.js'),
     ),
     new NormalModuleReplacementPlugin(
       /facade(\\|\/)lang/,
-      helpers.root('node_modules/@angular/core/src/facade/lang.js')
+      helpers.root('node_modules/@angular/core/src/facade/lang.js'),
     ),
     new NormalModuleReplacementPlugin(
       /facade(\\|\/)math/,
-      helpers.root('node_modules/@angular/core/src/facade/math.js')
+      helpers.root('node_modules/@angular/core/src/facade/math.js'),
     ),
     extractCSS,
 
@@ -365,6 +369,5 @@ module.exports = {
     //   tsConfig: helpers.root('tsconfig.webpack.json'),
     //   resourceOverride: helpers.root('config/resource-override.js')
     // })
-
-  ]
+  ],
 };

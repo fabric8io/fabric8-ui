@@ -6,16 +6,15 @@ import {
   OnInit,
   Output,
   ViewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'f8-inlineinput',
   templateUrl: './inlineinput.component.html',
-  styleUrls: ['./inlineinput.component.less']
+  styleUrls: ['./inlineinput.component.less'],
 })
-
 export class InlineInputComponent implements OnInit {
   @ViewChild('input') inputField: ElementRef;
 
@@ -23,8 +22,7 @@ export class InlineInputComponent implements OnInit {
   @Input('disabled') disabled: boolean = false;
   @Input('value') set input(val) {
     // convert special charecters only the input value is a string
-    const v = typeof(val) === 'string' ?
-      this.convertSpecialChar(val) : val;
+    const v = typeof val === 'string' ? this.convertSpecialChar(val) : val;
     this.inputValue = v;
     this.previousValue = v;
   }
@@ -40,12 +38,13 @@ export class InlineInputComponent implements OnInit {
   private errorMessage: string = '';
   private isNotValid: boolean;
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   startEditing(onLineClick: boolean) {
     this.errorMessage = '';
-    if (this.disabled) { return; }
+    if (this.disabled) {
+      return;
+    }
     // If field was clicked and onLineClick edit is allowed
     // Or startEditing was called from the edit icon click
     if ((onLineClick && this.allowOnLineClickEdit) || !onLineClick) {
@@ -68,7 +67,7 @@ export class InlineInputComponent implements OnInit {
       this.saving = true;
       this.onSave.emit({
         value: this.formatValue(this.inputField.nativeElement.value),
-        callBack: (v: string = '', e: string = '') => this.handleSave(v, e)
+        callBack: (v: string = '', e: string = '') => this.handleSave(v, e),
       });
     } else {
       this.errorMessage = `Invalid value for the field type ${this.type}`;
@@ -112,14 +111,16 @@ export class InlineInputComponent implements OnInit {
   handleSave(value: string, error: string) {
     this.errorMessage = error;
     this.saving = false;
-    if (this.errorMessage) {} else {
+    if (this.errorMessage) {
+    } else {
       this.editing = false;
       this.inputValue = value;
     }
   }
 
   convertSpecialChar(str: string) {
-    return str.replace(/&amp;/g, '&')
+    return str
+      .replace(/&amp;/g, '&')
       .replace(/&gt;/g, '>')
       .replace(/&lt;/g, '<')
       .replace(/&#34;/g, '"')
@@ -137,9 +138,11 @@ export class InlineInputComponent implements OnInit {
     this.errorMessage = '';
     if (this.editing && keycode !== 13) {
       // Checking if there is already a '.' in float value
-      if (this.type === 'float' &&
+      if (
+        this.type === 'float' &&
         this.inputField.nativeElement.value.indexOf('.') > -1 &&
-        keycode === 190) {
+        keycode === 190
+      ) {
         event.preventDefault();
         return;
       }
@@ -187,7 +190,8 @@ export class InlineInputComponent implements OnInit {
     if (allowFloat) {
       allowedCodes = [...allowedCodes, 190];
     }
-    if (allowedCodes.indexOf(keycode) !== -1 ||
+    if (
+      allowedCodes.indexOf(keycode) !== -1 ||
       // Allow: Ctrl+A
       (keycode === 65 && (event.ctrlKey || event.metaKey)) ||
       // Allow: Ctrl+C
@@ -197,13 +201,14 @@ export class InlineInputComponent implements OnInit {
       // Allow: Ctrl+X
       (keycode === 88 && (event.ctrlKey || event.metaKey)) ||
       // Allow: home, end, left, right
-      (keycode >= 48 && keycode <= 57)) {
-        // let it happen, is valid: true
-        return true;
-      }
-      // Ensure that it is a number and stop the keypress
-      if ((event.shiftKey || (keycode < 48 || keycode > 57)) && (keycode < 96 || keycode > 105)) {
-          return false;
-      }
+      (keycode >= 48 && keycode <= 57)
+    ) {
+      // let it happen, is valid: true
+      return true;
     }
+    // Ensure that it is a number and stop the keypress
+    if ((event.shiftKey || (keycode < 48 || keycode > 57)) && (keycode < 96 || keycode > 105)) {
+      return false;
+    }
+  }
 }

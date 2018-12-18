@@ -5,11 +5,23 @@ import { BasePage } from './base.page';
 
 export abstract class AppPage extends BasePage {
   appTag = $('f8-app');
-  mainNavBar = new BaseElement($('header ul.navbar-primary.persistent-secondary'), 'Main Navigation Bar');
+  mainNavBar = new BaseElement(
+    $('header ul.navbar-primary.persistent-secondary'),
+    'Main Navigation Bar',
+  );
   planTab = new Clickable(this.mainNavBar.element(by.xpath("//span[text()='Plan']")), 'Plan Tab');
-  backLogTab = new Clickable(this.mainNavBar.element(by.xpath("//span[text()=' Backlog ']")), 'Backlog Tab');
-  boardTab = new Clickable(this.mainNavBar.element(by.xpath("//span[text()=' Board ']")), 'Board Tab');
-  QueryTab = new Clickable(element(by.cssContainingText('.nav.persistent-secondary li>a', 'Query')), 'Query Tab');
+  backLogTab = new Clickable(
+    this.mainNavBar.element(by.xpath("//span[text()=' Backlog ']")),
+    'Backlog Tab',
+  );
+  boardTab = new Clickable(
+    this.mainNavBar.element(by.xpath("//span[text()=' Board ']")),
+    'Board Tab',
+  );
+  QueryTab = new Clickable(
+    element(by.cssContainingText('.nav.persistent-secondary li>a', 'Query')),
+    'Query Tab',
+  );
 
   /**
    * Extend this class, to describe Application Page(after logging in)
@@ -46,7 +58,7 @@ export abstract class AppPage extends BasePage {
     await this.backLogTab.clickWhenReady();
   }
 
-   async clickBoardTab() {
+  async clickBoardTab() {
     await this.boardTab.clickWhenReady();
   }
 

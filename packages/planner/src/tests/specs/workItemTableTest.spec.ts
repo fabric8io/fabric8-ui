@@ -3,7 +3,6 @@ import { PlannerPage } from '../page_objects/planner';
 import * as support from '../support';
 import { SidePanel } from './../ui/planner/sidepanel';
 
-
 describe('Work Item datatable list: ', () => {
   let planner: PlannerPage;
   let c = new support.Constants();
@@ -55,7 +54,7 @@ describe('Work Item datatable list: ', () => {
   });
 
   it('hideTree and create a work item then work item should be displayed when show tree is selected', async () => {
-    let newWorkItem1 = {'title' : 'New WorkItem'};
+    let newWorkItem1 = { title: 'New WorkItem' };
     await planner.header.clickShowTree();
     await planner.workItemList.overlay.untilHidden();
     await planner.createWorkItem(newWorkItem1);
@@ -68,7 +67,7 @@ describe('Work Item datatable list: ', () => {
     await planner.header.clickShowCompleted();
     await planner.workItemList.overlay.untilHidden();
     let newWorkItem = {
-      title: 'Check for show complete work item'
+      title: 'Check for show complete work item',
     };
     await planner.createWorkItem(newWorkItem);
     expect(await planner.workItemList.hasWorkItem(newWorkItem.title)).toBeTruthy();
@@ -81,7 +80,7 @@ describe('Work Item datatable list: ', () => {
 
   it('work item should show updated title when switching from flat to tree view', async () => {
     let updatedWorkItem = {
-      title: 'test show updated work item'
+      title: 'test show updated work item',
     };
 
     let title = await planner.createUniqueWorkItem();
@@ -98,10 +97,10 @@ describe('Work Item datatable list: ', () => {
 
   it('list should not update when new label is added', async () => {
     let title = await planner.createUniqueWorkItem(),
-    newLabel1 = 'new label 1',
+      newLabel1 = 'new label 1',
       LabelTestTitle = {
-      'title': 'test list is not updated when new label is added'
-    };
+        title: 'test list is not updated when new label is added',
+      };
     expect(await planner.workItemList.hasWorkItem(title)).toBeTruthy();
     await planner.workItemList.workItem(title).clickInlineQuickAdd();
     await planner.createInlineWorkItem(LabelTestTitle);
@@ -116,8 +115,8 @@ describe('Work Item datatable list: ', () => {
     let title = await planner.createUniqueWorkItem(),
       newIteration1 = 'new Iteration 1',
       childWorkItem = {
-        'title': 'test list is not updated when new iteration is added',
-        'type': c.childType
+        title: 'test list is not updated when new iteration is added',
+        type: c.childType,
       };
     expect(await planner.workItemList.hasWorkItem(title)).toBeTruthy();
     await planner.workItemList.workItem(title).clickInlineQuickAdd();
@@ -132,7 +131,7 @@ describe('Work Item datatable list: ', () => {
   it('clicking on label should filter the workitem list by label', async () => {
     let label = 'sample_label_1',
       labelFilter = 'label: sample_label_1',
-      workItemTitle = {'title': 'test clicking on label should filter the workitem list by label'};
+      workItemTitle = { title: 'test clicking on label should filter the workitem list by label' };
 
     await planner.sidePanel.clickWorkItemGroup();
     await planner.createWorkItem(workItemTitle);
@@ -146,7 +145,7 @@ describe('Work Item datatable list: ', () => {
   });
 
   it('should update the workitem List on workitem edit', async () => {
-    let workitem = {'title': 'TITLE_TEXT'};
+    let workitem = { title: 'TITLE_TEXT' };
     await planner.header.selectFilter('State', c.stateNew);
     await planner.createWorkItem(workitem);
     await planner.workItemList.clickWorkItem(workitem.title);
@@ -156,7 +155,7 @@ describe('Work Item datatable list: ', () => {
   });
 
   it('should make the title bold based on filter when adding a new workitem', async () => {
-    let workitem = {'title': 'test title bold test'};
+    let workitem = { title: 'test title bold test' };
     await planner.header.selectFilter('State', c.stateNew);
     await planner.createWorkItem(workitem);
     expect(await planner.workItemList.hasWorkItem(workitem.title)).toBeTruthy();
@@ -166,7 +165,9 @@ describe('Work Item datatable list: ', () => {
   it('should filter the workitem list by Assignee', async () => {
     let labelFilter = 'assignee: Unassigned';
     await planner.workItemList.overlay.untilHidden();
-    let countUnassignedWorkItem = await planner.workItemList.getUnassignedWorkItemCount(' Unassigned ');
+    let countUnassignedWorkItem = await planner.workItemList.getUnassignedWorkItemCount(
+      ' Unassigned ',
+    );
     await planner.header.selectFilter('Assignee', 'Unassigned');
     await browser.sleep(1000);
     expect(await planner.header.getFilterConditions()).toContain(labelFilter);
@@ -175,7 +176,7 @@ describe('Work Item datatable list: ', () => {
 
   it('Should filter the work item by close state', async () => {
     let newWorkItem = {
-      title: 'Should filter the work item by close state - xxx'
+      title: 'Should filter the work item by close state - xxx',
     };
     await planner.createWorkItem(newWorkItem);
     expect(await planner.workItemList.hasWorkItem(newWorkItem.title)).toBeTruthy();

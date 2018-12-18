@@ -4,7 +4,7 @@ import { Component, HostBinding, Input, OnInit, ViewChildren } from '@angular/co
 @Component({
   selector: 'list-item',
   templateUrl: './list-item.component.html',
-  styleUrls: ['./list-item.component.less']
+  styleUrls: ['./list-item.component.less'],
 })
 export class ListItemComponent implements Highlightable {
   @Input() item;
@@ -22,5 +22,4 @@ export class ListItemComponent implements Highlightable {
   getLabel() {
     return this.item;
   }
-
 }

@@ -11,7 +11,7 @@ describe('HttpService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [HttpClientService]
+      providers: [HttpClientService],
     });
     injector = getTestBed();
     service = injector.get(HttpClientService);
@@ -24,16 +24,13 @@ describe('HttpService', () => {
 
   it('Should return correct response on get request Observable<Item[]>', () => {
     type Item = {
-      name: string; id: string
+      name: string;
+      id: string;
     };
 
-    const mockItems: Item[] = [
-      {name: 'Laptop', id: '1'},
-      {name: 'PC', id: '2'}
-    ];
+    const mockItems: Item[] = [{ name: 'Laptop', id: '1' }, { name: 'PC', id: '2' }];
 
-    service.get<Item[]>('/some/url')
-    .subscribe(items => {
+    service.get<Item[]>('/some/url').subscribe((items) => {
       expect(items.length).toBe(2);
       expect(items).toEqual(mockItems);
     });
@@ -45,16 +42,13 @@ describe('HttpService', () => {
 
   it('Should return correct response on patch request Observable<Item[]>', () => {
     type Item = {
-      name: string; id: string
+      name: string;
+      id: string;
     };
 
-    const mockItems: Item[] = [
-      {name: 'Laptop', id: '1'},
-      {name: 'PC', id: '2'}
-    ];
+    const mockItems: Item[] = [{ name: 'Laptop', id: '1' }, { name: 'PC', id: '2' }];
 
-    service.patch<Item[]>('/some/url', {})
-    .subscribe(items => {
+    service.patch<Item[]>('/some/url', {}).subscribe((items) => {
       expect(items.length).toBe(2);
       expect(items).toEqual(mockItems);
     });
@@ -66,16 +60,13 @@ describe('HttpService', () => {
 
   it('Should return correct response on post request Observable<Item[]>', () => {
     type Item = {
-      name: string; id: string
+      name: string;
+      id: string;
     };
 
-    const mockItems: Item[] = [
-      {name: 'Laptop', id: '1'},
-      {name: 'PC', id: '2'}
-    ];
+    const mockItems: Item[] = [{ name: 'Laptop', id: '1' }, { name: 'PC', id: '2' }];
 
-    service.post<Item[]>('/some/url', {})
-    .subscribe(items => {
+    service.post<Item[]>('/some/url', {}).subscribe((items) => {
       expect(items.length).toBe(2);
       expect(items).toEqual(mockItems);
     });
@@ -86,14 +77,12 @@ describe('HttpService', () => {
   });
 
   it('Should return correct response on delete request', () => {
-    service.delete('/some/url')
-    .subscribe(items => {
+    service.delete('/some/url').subscribe((items) => {
       expect(items).toBeNull();
     });
 
     const req = httpMock.expectOne('/some/url');
     expect(req.request.method).toBe('DELETE');
-    req.event(new HttpResponse<string>({body: null}));
+    req.event(new HttpResponse<string>({ body: null }));
   });
-
 });

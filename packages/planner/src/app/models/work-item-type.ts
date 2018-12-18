@@ -16,37 +16,37 @@ import {
   modelService,
   modelUI,
   normalizeArray,
-  switchModel
+  switchModel,
 } from './common.model';
 import { plannerSelector } from './space';
 import { WorkItemService } from './work-item';
 
 export class WorkItemType extends modelService {
-    attributes?: {
-      name: string;
-      version: number;
-      description: string;
-      icon: string;
-      fields: any;
+  attributes?: {
+    name: string;
+    version: number;
+    description: string;
+    icon: string;
+    fields: any;
+  };
+  relationships?: {
+    guidedChildTypes?: {
+      data?: WorkItemType[];
     };
-    relationships?: {
-      guidedChildTypes?: {
-        data?: WorkItemType[]
-      },
-      space?: Space
-    };
+    space?: Space;
+  };
 }
 
 export class WorkItemTypeField {
-    description?: string;
-    label: string;
-    required: boolean;
-    type: {
-      componentType?: string,
-      baseType?: string,
-      kind: string,
-      values?: string[]
-    };
+  description?: string;
+  label: string;
+  required: boolean;
+  type: {
+    componentType?: string;
+    baseType?: string;
+    kind: string;
+    values?: string[];
+  };
 }
 
 export interface WorkItemTypeService extends WorkItemType {}
@@ -65,85 +65,96 @@ export interface WorkItemTypeUI extends modelUI {
 }
 
 export class WorkItemTypeMapper implements Mapper<WorkItemTypeService, WorkItemTypeUI> {
+  serviceToUiMapTree: MapTree = [
+    {
+      fromPath: ['id'],
+      toPath: ['id'],
+    },
+    {
+      fromPath: ['attributes', 'name'],
+      toPath: ['name'],
+    },
+    {
+      fromPath: ['attributes', 'icon'],
+      toPath: ['icon'],
+    },
+    {
+      fromPath: ['attributes', 'version'],
+      toPath: ['version'],
+    },
+    {
+      fromPath: ['relationships', 'guidedChildTypes', 'data'],
+      toPath: ['childTypes'],
+      toFunction: (item: WorkItemTypeService) => {
+        return !!item ? item : [];
+      },
+    },
+    {
+      fromPath: ['attributes', 'fields'],
+      toPath: ['fields'],
+    },
+    {
+      fromPath: ['attributes', 'fields'],
+      toPath: ['dynamicfields'],
+      toFunction: filterDynamicFields,
+    },
+    {
+      toPath: ['type'],
+      toValue: 'workitemtypes',
+    },
+    {
+      fromPath: ['attributes', 'description'],
+      toPath: ['description'],
+      toFunction: (value) => value || 'no info-tip',
+    },
+  ];
 
-    serviceToUiMapTree: MapTree = [{
-        fromPath: ['id'],
-        toPath: ['id']
-      }, {
-        fromPath: ['attributes', 'name'],
-        toPath: ['name']
-      }, {
-        fromPath: ['attributes', 'icon'],
-        toPath: ['icon']
-      }, {
-        fromPath: ['attributes', 'version'],
-        toPath: ['version']
-      }, {
-        fromPath: ['relationships', 'guidedChildTypes', 'data'],
-        toPath: ['childTypes'],
-        toFunction: (item: WorkItemTypeService) => {
-          return !!item ? item : [];
-        }
-      }, {
-        fromPath: ['attributes', 'fields'],
-        toPath: ['fields']
-      }, {
-        fromPath: ['attributes', 'fields'],
-        toPath: ['dynamicfields'],
-        toFunction: filterDynamicFields
-      }, {
-        toPath: ['type'],
-        toValue: 'workitemtypes'
-      }, {
-        fromPath: ['attributes', 'description'],
-        toPath: ['description'],
-        toFunction: (value) => value || 'no info-tip'
-    }];
+  uiToServiceMapTree: MapTree = [
+    {
+      toPath: ['id'],
+      fromPath: ['id'],
+    },
+    {
+      toPath: ['attributes', 'name'],
+      fromPath: ['name'],
+    },
+    {
+      toPath: ['attributes', 'icon'],
+      fromPath: ['icon'],
+    },
+    {
+      toPath: ['attributes', 'version'],
+      fromPath: ['version'],
+    },
+    {
+      toPath: ['type'],
+      toValue: 'workitemtypes',
+    },
+    {
+      fromPath: ['childTypes'],
+      toPath: ['relationships', 'guidedChildTypes', 'data'],
+      toFunction: (item: WorkItemTypeUI) => {
+        return !!item ? item : [];
+      },
+    },
+    {
+      toPath: ['attributes', 'fields'],
+      fromPath: ['fields'],
+    },
+  ];
 
-    uiToServiceMapTree: MapTree = [{
-        toPath: ['id'],
-        fromPath: ['id']
-      }, {
-        toPath: ['attributes', 'name'],
-        fromPath: ['name']
-      }, {
-        toPath: ['attributes', 'icon'],
-        fromPath: ['icon']
-      }, {
-        toPath: ['attributes', 'version'],
-        fromPath: ['version']
-      }, {
-        toPath: ['type'],
-        toValue: 'workitemtypes'
-      }, {
-        fromPath: ['childTypes'],
-        toPath: ['relationships', 'guidedChildTypes', 'data'],
-        toFunction: (item: WorkItemTypeUI) => {
-          return !!item ? item : [];
-        }
-      }, {
-        toPath: ['attributes', 'fields'],
-        fromPath: ['fields']
-      }
-    ];
+  toUIModel(arg: WorkItemTypeService): WorkItemTypeUI {
+    return switchModel<WorkItemTypeService, WorkItemTypeUI>(arg, this.serviceToUiMapTree);
+  }
 
-    toUIModel(arg: WorkItemTypeService): WorkItemTypeUI {
-      return switchModel<WorkItemTypeService, WorkItemTypeUI>(
-        arg, this.serviceToUiMapTree
-      );
-    }
-
-    toServiceModel(arg: WorkItemTypeUI): WorkItemTypeService {
-      return switchModel<WorkItemTypeUI, WorkItemTypeService>(
-        arg, this.uiToServiceMapTree
-      );
-    }
+  toServiceModel(arg: WorkItemTypeUI): WorkItemTypeService {
+    return switchModel<WorkItemTypeUI, WorkItemTypeService>(arg, this.uiToServiceMapTree);
+  }
 }
-
 
 export class WorkItemTypeResolver {
   private allTypes: WorkItemTypeUI[];
-  private normalizedTypes: {[id: string]: WorkItemTypeUI};
+  private normalizedTypes: { [id: string]: WorkItemTypeUI };
 
   constructor(allTypes: WorkItemTypeUI[] = []) {
     this.allTypes = allTypes;
@@ -151,8 +162,8 @@ export class WorkItemTypeResolver {
   }
 
   resolveChildren() {
-    this.allTypes.forEach(type => {
-      type.childTypes = type.childTypes.map(ct => this.normalizedTypes[ct.id]);
+    this.allTypes.forEach((type) => {
+      type.childTypes = type.childTypes.map((ct) => this.normalizedTypes[ct.id]);
     });
   }
 
@@ -161,10 +172,8 @@ export class WorkItemTypeResolver {
   }
 }
 
-
 function filterDynamicFields(fields: any[]) {
   if (fields !== null) {
-
     const fieldKeys = Object.keys(fields);
     // These fields won't show up in the details page
     const staticFields = [
@@ -182,23 +191,20 @@ function filterDynamicFields(fields: any[]) {
       'system.state',
       'system.title',
       'system.updated_at',
-      'system.metastate'
+      'system.metastate',
     ];
     // These fields types won't show up in the details page
-    const restrictedFieldTypes = [
-      'float', 'string', 'integer', 'enum', 'markup'
-    ];
-    return fieldKeys.filter(
-      f => {
-        return staticFields.findIndex(sf => sf === f) === -1 &&
-          restrictedFieldTypes.indexOf(fields[f].type.kind) > -1;
-      }
-    );
+    const restrictedFieldTypes = ['float', 'string', 'integer', 'enum', 'markup'];
+    return fieldKeys.filter((f) => {
+      return (
+        staticFields.findIndex((sf) => sf === f) === -1 &&
+        restrictedFieldTypes.indexOf(fields[f].type.kind) > -1
+      );
+    });
   } else {
     return [];
   }
 }
-
 
 // This interface is used to determine state for entity adapter
 export interface WorkItemTypeStateModel extends EntityState<WorkItemTypeUI> {}
@@ -210,36 +216,34 @@ const { selectIds, selectEntities, selectAll, selectTotal } = workItemTypeAdapte
 
 export const workItemTypeSelector = createSelector(
   plannerSelector,
-  state => state ? state.workItemTypes : {ids: [], entities: {}}
+  (state) => (state ? state.workItemTypes : { ids: [], entities: {} }),
 );
 
 // Do not export it
 const getWorkItemTypeEntitiesSelector = createSelector(
   workItemTypeSelector,
-  selectEntities
+  selectEntities,
 );
 
 @Injectable()
 export class WorkItemTypeQuery {
-
-  constructor(private store: Store<AppState>) {
-  }
+  constructor(private store: Store<AppState>) {}
 
   getAllWorkItemTypesSelector = createSelector(
     workItemTypeSelector,
-    selectAll
+    selectAll,
   );
 
   getWorkItemTypesWithChildrenSelector = createSelector(
     this.getAllWorkItemTypesSelector,
     getWorkItemTypeEntitiesSelector,
     (types, typeEntities) => {
-      return types.map(type => {
-        const childTypes = type.childTypes.map(t => typeEntities[t.id]);
+      return types.map((type) => {
+        const childTypes = type.childTypes.map((t) => typeEntities[t.id]);
         type.childTypes = childTypes;
         return type;
       });
-    }
+    },
   );
   workItemTypeSource = this.store.pipe(select(this.getAllWorkItemTypesSelector));
 
@@ -248,28 +252,29 @@ export class WorkItemTypeQuery {
    * without their child types
    */
   getWorkItemTypes(): Observable<WorkItemTypeUI[]> {
-    return this.workItemTypeSource.pipe(filter(w => !!w.length));
+    return this.workItemTypeSource.pipe(filter((w) => !!w.length));
   }
 
   getWorkItemTypesWithChildren(): Observable<WorkItemTypeUI[]> {
     return this.store.pipe(
       select(this.getWorkItemTypesWithChildrenSelector),
-      filter(t => !!t.length));
+      filter((t) => !!t.length),
+    );
   }
 
   getWorkItemTypeWithChildrenById(id: string): Observable<WorkItemTypeUI> {
     return this.store.pipe(
       select(this.getWorkItemTypesWithChildrenSelector),
-      map(types => {
-        return types.filter(type => type.id === id)[0];
-      })
+      map((types) => {
+        return types.filter((type) => type.id === id)[0];
+      }),
     );
   }
 
   getWorkItemTypeById(id: string): Observable<WorkItemTypeUI> {
     return this.store.pipe(
       select(getWorkItemTypeEntitiesSelector),
-      map(wt => wt[id])
+      map((wt) => wt[id]),
     );
   }
 }

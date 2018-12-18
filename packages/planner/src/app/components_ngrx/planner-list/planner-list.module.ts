@@ -1,13 +1,9 @@
-import { CommonModule }     from '@angular/common';
-import { NgModule }         from '@angular/core';
-import {
-  RequestOptions,
-  XHRBackend
-} from '@angular/http';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { RequestOptions, XHRBackend } from '@angular/http';
 import { NgxDatatableModule } from 'rh-ngx-datatable';
 import { WorkItemCellModule } from './../work-item-cell/work-item-cell.module';
 import { WorkItemPreviewPanelModule } from './../work-item-preview-panel/work-item-preview-panel.module';
-
 
 import { PlannerListComponent } from './planner-list.component';
 
@@ -23,9 +19,7 @@ import { LabelService } from './../../services/label.service';
 import { WorkItemService } from './../../services/work-item.service';
 import { GlobalSettings } from './../../shared/globals';
 import { PlannerHttpClientModule } from './../../shared/http-module/http.module';
-import {
-  PlannerLayoutModule
-} from './../../widgets/planner-layout/planner-layout.module';
+import { PlannerLayoutModule } from './../../widgets/planner-layout/planner-layout.module';
 import { PlannerListRoutingModule } from './../planner-list/planner-list-routing.module';
 import { SidepanelModule } from './../side-panel/side-panel.module';
 import { ToolbarPanelModule } from './../toolbar-panel/toolbar-panel.module';
@@ -56,31 +50,31 @@ import { FilterColumnModule } from '../../pipes/column-filter.module';
 import { TableConfigModule } from './../table-config/table-config.module';
 
 let providers = [
-    WorkItemService,
-    CustomQueryService,
-    IterationService,
-    TooltipConfig,
-    GlobalSettings,
-    LabelService,
-    AreaService,
-    CollaboratorService,
-    FilterService,
-    BsDropdownConfig,
-    CookieService,
-    UrlService,
-    InfotipService,
-    CommentQuery,
-    UserQuery,
-    LabelQuery,
-    IterationQuery,
-    WorkItemQuery,
-    AreaQuery,
-    SpaceQuery,
-    GroupTypeQuery,
-    WorkItemTypeQuery,
-    SpaceQuery,
-    ErrorHandler
-  ];
+  WorkItemService,
+  CustomQueryService,
+  IterationService,
+  TooltipConfig,
+  GlobalSettings,
+  LabelService,
+  AreaService,
+  CollaboratorService,
+  FilterService,
+  BsDropdownConfig,
+  CookieService,
+  UrlService,
+  InfotipService,
+  CommentQuery,
+  UserQuery,
+  LabelQuery,
+  IterationQuery,
+  WorkItemQuery,
+  AreaQuery,
+  SpaceQuery,
+  GroupTypeQuery,
+  WorkItemTypeQuery,
+  SpaceQuery,
+  ErrorHandler,
+];
 
 @NgModule({
   imports: [
@@ -103,13 +97,11 @@ let providers = [
     WidgetsModule,
     TableConfigModule,
     TruncateModule,
-    WorkItemCellModule
+    WorkItemCellModule,
   ],
-  declarations: [
-    PlannerListComponent
-  ],
+  declarations: [PlannerListComponent],
   providers: providers,
-  exports: [ PlannerListComponent ]
+  exports: [PlannerListComponent],
 })
 export class PlannerListModule {
   constructor() {}

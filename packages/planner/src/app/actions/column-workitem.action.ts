@@ -7,23 +7,23 @@ export const UPDATE_ERROR = '[column workitem] UpdateError';
 
 export class Update implements Action {
   payload: {
-    workItem: WorkItemUI,
+    workItem: WorkItemUI;
     reorder: {
-        workitem: WorkItemUI,
-        destinationWorkitemID: string,
-        direction: string
-      },
-    prevColumnId: string
+      workitem: WorkItemUI;
+      destinationWorkitemID: string;
+      direction: string;
+    };
+    prevColumnId: string;
   };
 
   constructor(payload: {
-    workItem: WorkItemUI,
+    workItem: WorkItemUI;
     reorder: {
-        workitem: WorkItemUI,
-        destinationWorkitemID: string,
-        direction: string
-      },
-    prevColumnId: string
+      workitem: WorkItemUI;
+      destinationWorkitemID: string;
+      direction: string;
+    };
+    prevColumnId: string;
   }) {
     this.payload = payload;
   }
@@ -32,16 +32,12 @@ export class Update implements Action {
 
 export class UpdateSuccess implements Action {
   payload: {
-    workItemId: string,
-    prevColumnId: string,
-    newColumnIds: string[]
+    workItemId: string;
+    prevColumnId: string;
+    newColumnIds: string[];
   };
 
-  constructor(payload: {
-    workItemId: string,
-    prevColumnId: string,
-    newColumnIds: string[]
-  }) {
+  constructor(payload: { workItemId: string; prevColumnId: string; newColumnIds: string[] }) {
     this.payload = payload;
   }
   readonly type = UPDATE_SUCCESS;
@@ -49,20 +45,14 @@ export class UpdateSuccess implements Action {
 
 export class UpdateError implements Action {
   payload: {
-    prevColumnId: string,
-    newColumnIds: string[]
+    prevColumnId: string;
+    newColumnIds: string[];
   };
 
-  constructor(payload: {
-    prevColumnId: string,
-    newColumnIds: string[]
-  }) {
+  constructor(payload: { prevColumnId: string; newColumnIds: string[] }) {
     this.payload = payload;
   }
   readonly type = UPDATE_ERROR;
 }
 
-export type All
-  = Update
-  | UpdateSuccess
-  | UpdateError;
+export type All = Update | UpdateSuccess | UpdateError;

@@ -8,28 +8,29 @@ import { WorkItem } from './../models/work-item';
 
 export type Action = DetailWorkItemActions.All | WorkItemActions.All;
 
-export const DetailWorkItemReducer: ActionReducer<DetailWorkItemState> =
-  (state = initialState, action: Action) => {
-    switch (action.type) {
-
-      case DetailWorkItemActions.GET_WORKITEM_SUCCESS: {
-        return {...action.payload};
-      }
-
-      case WorkItemActions.UPDATE_SUCCESS: {
-        return {...action.payload};
-      }
-
-      case WorkItemActions.UPDATE_ERROR: {
-        return {...state};
-      }
-
-      case DetailWorkItemActions.GET_WORKITEM_ERROR: {
-        return state;
-      }
-
-      default: {
-        return state;
-      }
+export const DetailWorkItemReducer: ActionReducer<DetailWorkItemState> = (
+  state = initialState,
+  action: Action,
+) => {
+  switch (action.type) {
+    case DetailWorkItemActions.GET_WORKITEM_SUCCESS: {
+      return { ...action.payload };
     }
-  };
+
+    case WorkItemActions.UPDATE_SUCCESS: {
+      return { ...action.payload };
+    }
+
+    case WorkItemActions.UPDATE_ERROR: {
+      return { ...state };
+    }
+
+    case DetailWorkItemActions.GET_WORKITEM_ERROR: {
+      return state;
+    }
+
+    default: {
+      return state;
+    }
+  }
+};

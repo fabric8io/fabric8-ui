@@ -1,8 +1,15 @@
 import {
   AfterViewChecked,
-  Component, ElementRef, EventEmitter,
-  HostListener, Input, OnDestroy,
-  OnInit, Output, Renderer2, ViewChild
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  Renderer2,
+  ViewChild,
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -32,7 +39,7 @@ import { AppState } from './../../states/app.state';
   selector: 'work-item-detail',
   templateUrl: './work-item-detail.component.html',
   styleUrls: ['./work-item-detail.component.less'],
-  providers: [AuthenticationService]
+  providers: [AuthenticationService],
 })
 export class WorkItemDetailComponent implements OnInit, OnDestroy, AfterViewChecked {
   @ViewChild('detailHeader') detailHeader: ElementRef;
@@ -40,7 +47,7 @@ export class WorkItemDetailComponent implements OnInit, OnDestroy, AfterViewChec
   @ViewChild('inlineInput') inlineInput: InlineInputComponent;
   @ViewChild('descMarkdown') descMarkdown: MarkdownComponent;
 
-  private spaceSource = this.spaceQuery.getCurrentSpace.pipe(filter(s => !!s));
+  private spaceSource = this.spaceQuery.getCurrentSpace.pipe(filter((s) => !!s));
 
   public labelSource = this.labelQuery.getLables();
   public areaSource: Observable<CommonSelectorUI[]>;
@@ -58,7 +65,7 @@ export class WorkItemDetailComponent implements OnInit, OnDestroy, AfterViewChec
   private combinedSources = combineLatest(
     this.labelSource,
     this.collaboratorSource,
-    this.workItemTypeQuery.getWorkItemTypes()
+    this.workItemTypeQuery.getWorkItemTypes(),
   );
 
   @Input() context: string;
@@ -101,7 +108,7 @@ export class WorkItemDetailComponent implements OnInit, OnDestroy, AfterViewChec
   private listenToEsc: boolean = false;
   private dynamicFormGroup: FormGroup;
   private dynamicFormDataArray: any;
-  private dynamicKeyValueFields: {key: string; value: string | number | null; field: any}[];
+  private dynamicKeyValueFields: { key: string; value: string | number | null; field: any }[];
 
   constructor(
     private store: Store<AppState>,
@@ -116,10 +123,8 @@ export class WorkItemDetailComponent implements OnInit, OnDestroy, AfterViewChec
     private labelQuery: LabelQuery,
     private workItemQuery: WorkItemQuery,
     private workItemTypeQuery: WorkItemTypeQuery,
-    private spaceQuery: SpaceQuery
-  ) {
-
-  }
+    private spaceQuery: SpaceQuery,
+  ) {}
 
   ngOnInit() {
     const currentRoute = this.router.url;
@@ -132,7 +137,7 @@ export class WorkItemDetailComponent implements OnInit, OnDestroy, AfterViewChec
   }
 
   ngOnDestroy() {
-    this.eventListeners.forEach(e => e.unsubscribe());
+    this.eventListeners.forEach((e) => e.unsubscribe());
     if (this.workItemSubscriber !== null) {
       this.workItemSubscriber.unsubscribe();
       this.workItemSubscriber = null;
@@ -145,7 +150,7 @@ export class WorkItemDetailComponent implements OnInit, OnDestroy, AfterViewChec
   ngAfterViewChecked() {
     if (this.detailContext === 'detail') {
       if (this.detailHeader) {
-        let HdrDivHeight: any =  this.detailHeader.nativeElement.offsetHeight;
+        let HdrDivHeight: any = this.detailHeader.nativeElement.offsetHeight;
         let targetHeight: any = window.innerHeight - HdrDivHeight - 90;
         this.renderer.setStyle(this.detailContent.nativeElement, 'height', targetHeight + 'px');
       }
@@ -165,26 +170,32 @@ export class WorkItemDetailComponent implements OnInit, OnDestroy, AfterViewChec
     this.workItemStateSource = this.workItemQuery.getStatesForWorkItem(wiNumber);
     this.selectedWorkItemStates = this.getSelectedItems(this.workItemStateSource);
 
-    this.workItemSubscriber =
-      this.spaceSource
+    this.workItemSubscriber = this.spaceSource
       .pipe(
-        switchMap(s => {
+        switchMap((s) => {
           return this.combinedSources;
         }),
         switchMap(([labels, collabs, type]) => {
-          this.collaborators = collabs.filter(c => !c.currentUser);
-          this.loggedInUser = collabs.find(c => c.currentUser);
-          this.labels = labels.sort((l1, l2) => (l1.name.toLowerCase() > l2.name.toLowerCase() ? 1 : 0));
-          this.store.dispatch(new DetailWorkItemActions.GetWorkItem({
-            number: wiNumber
-          }));
+          this.collaborators = collabs.filter((c) => !c.currentUser);
+          this.loggedInUser = collabs.find((c) => c.currentUser);
+          this.labels = labels.sort((l1, l2) =>
+            l1.name.toLowerCase() > l2.name.toLowerCase() ? 1 : 0,
+          );
+          this.store.dispatch(
+            new DetailWorkItemActions.GetWorkItem({
+              number: wiNumber,
+            }),
+          );
           return this.workItemQuery.getWorkItem(wiNumber);
         }),
-        filter(w => w !== null)
+        filter((w) => w !== null),
       )
-      .subscribe(workItem => {
-        if ((this.detailContext === 'preview')
-        && this.descMarkdown && this.workItem.id !== workItem.id) {
+      .subscribe((workItem) => {
+        if (
+          this.detailContext === 'preview' &&
+          this.descMarkdown &&
+          this.workItem.id !== workItem.id
+        ) {
           this.descMarkdown.deactivateEditor();
         }
 
@@ -198,15 +209,17 @@ export class WorkItemDetailComponent implements OnInit, OnDestroy, AfterViewChec
 
         // init dynamic form
         if (this.workItem.type) {
-          this.eventListeners.push(this.workItem.typeObs.subscribe((type) => {
-            this.dynamicKeyValueFields = type.dynamicfields.map(item => {
-              return {
-                key: item,
-                value: this.workItem.dynamicfields[item],
-                field: type.fields[item]
-              };
-            });
-          }));
+          this.eventListeners.push(
+            this.workItem.typeObs.subscribe((type) => {
+              this.dynamicKeyValueFields = type.dynamicfields.map((item) => {
+                return {
+                  key: item,
+                  value: this.workItem.dynamicfields[item],
+                  field: type.fields[item],
+                };
+              });
+            }),
+          );
         }
 
         // set title on update
@@ -219,19 +232,18 @@ export class WorkItemDetailComponent implements OnInit, OnDestroy, AfterViewChec
         if (this.descCallback !== null) {
           this.descCallback(
             this.workItem.description,
-            this.sanitizer.bypassSecurityTrustHtml(this.workItem.descriptionRendered)
+            this.sanitizer.bypassSecurityTrustHtml(this.workItem.descriptionRendered),
           );
           this.descCallback = null;
         }
       });
   }
 
-  getSelectedItems(itemSource: Observable<CommonSelectorUI[]>)
-    : Observable<CommonSelectorUI[]> {
+  getSelectedItems(itemSource: Observable<CommonSelectorUI[]>): Observable<CommonSelectorUI[]> {
     return itemSource.pipe(
-      map(items => {
-        return items.filter(i => i.selected);
-      })
+      map((items) => {
+        return items.filter((i) => i.selected);
+      }),
     );
   }
 
@@ -294,7 +306,7 @@ export class WorkItemDetailComponent implements OnInit, OnDestroy, AfterViewChec
     workItem['version'] = this.workItem.version;
     workItem['link'] = this.workItem.link;
     workItem['id'] = this.workItem.id;
-    workItem['assignees'] = users.map(u => u.id);
+    workItem['assignees'] = users.map((u) => u.id);
     this.store.dispatch(new WorkItemActions.Update(workItem));
   }
 
@@ -317,7 +329,7 @@ export class WorkItemDetailComponent implements OnInit, OnDestroy, AfterViewChec
     workItem['link'] = this.workItem.link;
     workItem['id'] = this.workItem.id;
 
-    workItem['iterationId'] =  iterationID;
+    workItem['iterationId'] = iterationID;
     this.store.dispatch(new WorkItemActions.Update(workItem));
   }
 
@@ -328,7 +340,7 @@ export class WorkItemDetailComponent implements OnInit, OnDestroy, AfterViewChec
     workItem['link'] = this.workItem.link;
     workItem['id'] = this.workItem.id;
 
-    workItem['labels'] = labels.map(l => l.id);
+    workItem['labels'] = labels.map((l) => l.id);
     this.store.dispatch(new WorkItemActions.Update(workItem));
   }
 
@@ -339,20 +351,16 @@ export class WorkItemDetailComponent implements OnInit, OnDestroy, AfterViewChec
     workItem['link'] = this.workItem.link;
     workItem['id'] = this.workItem.id;
 
-    workItem['labels'] = this.workItem.labels.filter(l => l != label.id);
+    workItem['labels'] = this.workItem.labels.filter((l) => l != label.id);
     this.store.dispatch(new WorkItemActions.Update(workItem));
   }
 
   showPreview(event: any): void {
     const rawText = event.rawText;
     const callBack = event.callBack;
-    this.workItemService.renderMarkDown(rawText)
-      .subscribe(renderedHtml => {
-        callBack(
-          rawText,
-          this.sanitizer.bypassSecurityTrustHtml(renderedHtml)
-        );
-      });
+    this.workItemService.renderMarkDown(rawText).subscribe((renderedHtml) => {
+      callBack(rawText, this.sanitizer.bypassSecurityTrustHtml(renderedHtml));
+    });
   }
 
   descUpdate(event: any): void {
@@ -364,7 +372,7 @@ export class WorkItemDetailComponent implements OnInit, OnDestroy, AfterViewChec
     workItem['id'] = this.workItem.id;
     workItem['description'] = {
       content: rawText,
-      markup: 'Markdown'
+      markup: 'Markdown',
     };
     this.store.dispatch(new WorkItemActions.Update(workItem));
   }
@@ -399,8 +407,8 @@ export class WorkItemDetailComponent implements OnInit, OnDestroy, AfterViewChec
   onKeyEvent(event: any) {
     // for ESC key handling
     if (event.keyCode == 27 && this.listenToEsc) {
-     this.closeDetail();
-     this.listenToEsc = false;
+      this.closeDetail();
+      this.listenToEsc = false;
     }
   }
 }

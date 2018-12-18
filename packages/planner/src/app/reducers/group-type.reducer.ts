@@ -6,8 +6,10 @@ import { GroupTypeState, initialState } from '../states/grouptype.state';
 
 export type Action = GroupTypeActions.All;
 
-export const GroupTypeReducer: ActionReducer<GroupTypeState> =
-  (state = initialState, action: Action) => {
+export const GroupTypeReducer: ActionReducer<GroupTypeState> = (
+  state = initialState,
+  action: Action,
+) => {
   switch (action.type) {
     case GroupTypeActions.GET_SUCCESS: {
       return action.payload;
@@ -18,9 +20,7 @@ export const GroupTypeReducer: ActionReducer<GroupTypeState> =
     }
 
     case GroupTypeActions.SELECT: {
-      const index = state.findIndex(
-        item => item.id === action.payload.id
-      );
+      const index = state.findIndex((item) => item.id === action.payload.id);
       if (index > -1) {
         for (let i = 0; i < state.length; i++) {
           state[i].selected = i === index;

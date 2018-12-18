@@ -40,6 +40,7 @@
     "no-var": "off",
     "no-undef": "off",
     "no-unneeded-ternary": "off",
+    "no-useless-concat": "off",
     "object-shorthand": "off",
     "one-var": "off",
     "operator-assignment": "off",
@@ -75,8 +76,6 @@
     "jest/prefer-to-have-length": "off",
     "jest/valid-expect": "off",
     "jest/valid-expect-in-promise": "off",
-
-    "prettier/prettier": "off",
 
     "promise/catch-or-return": "off",
 

@@ -8,17 +8,17 @@ export interface AppState {
   boardView?: BoardViewState;
 
   iterationPanel: {
-    iterationUI: states.IterationUIState
+    iterationUI: states.IterationUIState;
   };
 
   detailPage: DetailPageState;
 
   toolbar: {
-    filters: states.FilterState
+    filters: states.FilterState;
   };
 
   workItemLink: {
-    workItems: states.WorkItemState
+    workItems: states.WorkItemState;
   };
 }
 
@@ -45,7 +45,7 @@ export interface PlannerState {
   infotips: states.InfotipState;
 }
 
-export interface  DetailPageState {
+export interface DetailPageState {
   comments: states.CommentState;
   workItem: states.DetailWorkItemState;
   linkType: states.LinkTypeState;

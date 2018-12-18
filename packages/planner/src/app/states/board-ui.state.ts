@@ -1,7 +1,7 @@
 export type BoardUIState = {
-  lockBoard: boolean
+  lockBoard: boolean;
 };
 
 export const initialState: BoardUIState = {
-  lockBoard: false
+  lockBoard: false,
 } as BoardUIState;
