@@ -5,5 +5,3 @@ build
 dist
 *.d.ts
 /config/
-/packages/planner
-/packages/ngx-widgets

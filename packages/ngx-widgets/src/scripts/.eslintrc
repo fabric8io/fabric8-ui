@@ -1,0 +1,9 @@
+{
+  "rules": {
+    "lines-around-directive": "off",
+    "strict": "off",
+
+    "import/no-extraneous-dependencies": "off",
+    "import/no-unresolved": "off"
+  }
+}
