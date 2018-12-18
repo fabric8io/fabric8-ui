@@ -5,16 +5,11 @@ import { ActionsConfig } from './actions-config';
 import { View } from './view';
 import { ViewsConfig } from './views-config';
 
-export {
-  Action,
-  ActionsConfig,
-  View,
-  ViewsConfig
-};
+export { Action, ActionsConfig, View, ViewsConfig };
 
 @NgModule({
-  imports: [ ],
-  declarations: [ ],
-  exports: [ ]
+  imports: [],
+  declarations: [],
+  exports: [],
 })
-export class ConfigModule { }
+export class ConfigModule {}

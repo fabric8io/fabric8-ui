@@ -7,23 +7,21 @@ import {
   Input,
   OnChanges,
   OnInit,
-  Output
+  Output,
 } from '@angular/core';
 
 @Directive({
-    selector: '[almEditable]',
-    exportAs: 'almEditable'
+  selector: '[almEditable]',
+  exportAs: 'almEditable',
 })
 export class AlmEditableDirective implements OnInit, OnChanges {
-
   @Output('onUpdate') onUpdate = new EventEmitter();
   @Input() editable = true;
 
   private content: any = '';
   private element: HTMLElement = this.elementRef.nativeElement;
 
-  constructor(private elementRef: ElementRef) {
-  }
+  constructor(private elementRef: ElementRef) {}
 
   ngOnInit() {
     this.element.style.whiteSpace = 'pre-wrap';
@@ -46,7 +44,6 @@ export class AlmEditableDirective implements OnInit, OnChanges {
       this.content = newContent;
       this.onUpdate.emit(this.content);
     }
-
   }
 
   makeEditable() {
@@ -73,7 +70,7 @@ export class AlmEditableDirective implements OnInit, OnChanges {
         let sel = window.getSelection();
         range.setStart(
           this.element.childNodes[this.element.childNodes.length - 1],
-          this.element.childNodes[this.element.childNodes.length - 1].childNodes.length
+          this.element.childNodes[this.element.childNodes.length - 1].childNodes.length,
         );
         range.collapse(true);
         sel.removeAllRanges();

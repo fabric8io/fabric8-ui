@@ -6,15 +6,14 @@ import {
   Input,
   OnChanges,
   OnInit,
-  Output
+  Output,
 } from '@angular/core';
 
 @Directive({
-    selector: '[almInfiniteScroll]',
-    exportAs: 'almInfiniteScroll'
+  selector: '[almInfiniteScroll]',
+  exportAs: 'almInfiniteScroll',
 })
 export class InfiniteScrollDirective implements OnInit {
-
   @Output('initItems') initItems = new EventEmitter();
   @Output('fetchMore') fetchMore = new EventEmitter();
   @Input() eachElementHeightInPx: number = 20;
@@ -23,8 +22,7 @@ export class InfiniteScrollDirective implements OnInit {
   lastCheckedHeight = 0;
   previousScrollHeight = 0;
 
-  constructor(private elementRef: ElementRef) {
-  }
+  constructor(private elementRef: ElementRef) {}
 
   private element: HTMLElement = this.elementRef.nativeElement;
 
@@ -38,7 +36,7 @@ export class InfiniteScrollDirective implements OnInit {
 
   initContentItems() {
     this.initItems.emit({
-      pageSize: this.pageSize
+      pageSize: this.pageSize,
     });
   }
 
@@ -46,13 +44,15 @@ export class InfiniteScrollDirective implements OnInit {
   onScrollContainer(event: any) {
     if (this.element.scrollHeight > this.lastCheckedHeight) {
       this.previousScrollHeight = this.element.scrollHeight;
-      let remainingHeight = this.element.scrollHeight - (this.element.offsetHeight + this.element.scrollTop);
+      let remainingHeight =
+        this.element.scrollHeight - (this.element.offsetHeight + this.element.scrollTop);
       let remainingElement = Math.ceil(remainingHeight / this.eachElementHeightInPx);
       if (remainingElement < this.fetchThreshold) {
         this.lastCheckedHeight = this.element.scrollHeight;
         this.fetchMore.emit();
       }
-    } else if (this.element.scrollHeight < this.previousScrollHeight) { // To check if the list is reloaded
+    } else if (this.element.scrollHeight < this.previousScrollHeight) {
+      // To check if the list is reloaded
       this.previousScrollHeight = this.element.scrollHeight;
       this.lastCheckedHeight = 0;
       this.element.scrollTop = 0; // Scroll the list to top

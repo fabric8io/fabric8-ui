@@ -7,10 +7,9 @@ import { Component, ViewEncapsulation } from '@angular/core';
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'demo-app',
-  templateUrl: './app.component.html'
+  templateUrl: './app.component.html',
 })
 export class AppComponent {
-
   constructor() {}
 
   ngOnInit() {}
