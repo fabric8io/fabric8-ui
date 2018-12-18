@@ -2,8 +2,8 @@ import { AlmMomentTime } from './alm-moment-time.pipe';
 
 describe('Moment time pipe', () => {
   // This pipe is a pure, stateless function so no need for BeforeEach
-  let pipe = new AlmMomentTime();
-  let baseTime = new Date(2017, 0, 1);
+  const pipe = new AlmMomentTime();
+  const baseTime = new Date(2017, 0, 1);
 
   beforeAll(() => {
     jasmine.clock().mockDate(baseTime);
@@ -18,14 +18,14 @@ describe('Moment time pipe', () => {
   });
 
   it('should transform more than one month old timestamp to exact date', () => {
-    let transformedString = pipe.transform('2016-05-12T13:51:08.554');
+    const transformedString = pipe.transform('2016-05-12T13:51:08.554');
     expect(transformedString).toContain('<span title="May 12, 2016 1:51 PM">');
     expect(transformedString).toContain('12 May 2016');
     expect(transformedString).toContain('</span>');
   });
 
   it('should transform less than one month old timestamp to human-readable string', () => {
-    let transformedString = pipe.transform('2016-12-31T13:51:08.554');
+    const transformedString = pipe.transform('2016-12-31T13:51:08.554');
     expect(transformedString).toContain('<span title="December 31, 2016 1:51 PM">');
     expect(transformedString).toContain('10 hours ago');
     expect(transformedString).toContain('</span>');

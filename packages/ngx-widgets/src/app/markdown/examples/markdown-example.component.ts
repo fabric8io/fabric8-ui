@@ -7,8 +7,9 @@ import {
   SafeStyle,
   SafeUrl,
 } from '@angular/platform-browser';
-import markdownIt from 'markdown-it';
-const markdown = new markdownIt();
+import MarkdownIt from 'markdown-it';
+
+const markdown = new MarkdownIt();
 
 @Pipe({
   name: 'safe',
@@ -52,8 +53,11 @@ export class MarkdownExampleComponent {
     '<li><input class="markdown-checkbox" type="checkbox" checked="" data-checkbox-index="1"></input> Item 1</li>' +
     // tslint:disable-next-line:max-line-length
     '<li><input class="markdown-checkbox" type="checkbox" data-checkbox-index="2"></input> Item 2</li></ul>';
-  private renderedTextNoEdit: string = '<p>Edit is not allowed here</p>';
-  private rawText: string = '# hello, markdown!\n* [ ] Item 1\n* [x] Item 2\n* [ ] Item 3';
+
+  private renderedTextNoEdit = '<p>Edit is not allowed here</p>';
+
+  private rawText = '# hello, markdown!\n* [ ] Item 1\n* [x] Item 2\n* [ ] Item 3';
+
   private allowEdit = false;
 
   constructor(private sanitizer: DomSanitizer) {}
@@ -61,7 +65,7 @@ export class MarkdownExampleComponent {
   onSaveOrPreview(value: any) {
     const rawText = value.rawText;
     const callBack = value.callBack;
-    console.log('MarkdownExampleComponent: Received markdown markup update in client: ' + rawText);
+    console.log(`MarkdownExampleComponent: Received markdown markup update in client: ${rawText}`);
     setTimeout(() => {
       let text: string = markdown.render(rawText);
       const regex = /\[[ xX]\]|\[\]/gm;
@@ -75,22 +79,16 @@ export class MarkdownExampleComponent {
         }
         if (m.length > 0) {
           // JavaScript does not have a replace by index method.
-          let matchLen = m[0].length;
-          let matchEndIndex = regex.lastIndex;
-          let matchStartIndex = matchEndIndex - matchLen;
+          const matchLen = m[0].length;
+          const matchEndIndex = regex.lastIndex;
+          const matchStartIndex = matchEndIndex - matchLen;
           let replaceStr;
           if (m[0] === '[]' || m[0] === '[ ]') {
             // tslint:disable-next-line:max-line-length
-            replaceStr =
-              '<input class="markdown-checkbox" type="checkbox" data-checkbox-index="' +
-              matchIndex +
-              '"></input>';
+            replaceStr = `<input class="markdown-checkbox" type="checkbox" data-checkbox-index="${matchIndex}"></input>`;
           } else {
             // tslint:disable-next-line:max-line-length
-            replaceStr =
-              '<input class="markdown-checkbox" type="checkbox" checked="" data-checkbox-index="' +
-              matchIndex +
-              '"></input>';
+            replaceStr = `<input class="markdown-checkbox" type="checkbox" checked="" data-checkbox-index="${matchIndex}"></input>`;
           }
           // tslint:disable-next-line:max-line-length
           text =
@@ -102,8 +100,7 @@ export class MarkdownExampleComponent {
       }
       // tslint:disable-next-line:max-line-length
       console.log(
-        'MarkdownExampleComponent: Rendering on service side completed, sending to component: ' +
-          text,
+        `MarkdownExampleComponent: Rendering on service side completed, sending to component: ${text}`,
       );
       callBack(rawText, this.sanitizer.bypassSecurityTrustHtml(text));
     }, 2000);

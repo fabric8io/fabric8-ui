@@ -9,7 +9,9 @@ import { Router } from '@angular/router';
 })
 export class SlideOutExampleComponent implements OnInit {
   itemName: string;
+
   itemIcon: string;
+
   panelState: string;
 
   constructor(private router: Router) {}

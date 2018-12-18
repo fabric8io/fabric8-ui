@@ -5,8 +5,7 @@ export class AlmTrim implements PipeTransform {
   transform(val: string): any {
     if (!val) {
       return '';
-    } else {
-      return val.trim();
     }
+    return val.trim();
   }
 }
