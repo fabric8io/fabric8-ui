@@ -17,7 +17,7 @@ export class HttpClientService {
     if (Object.keys(options).length && Object.keys(options)[0] === 'no-header') {
       return headers;
     }
-    (<any> Object).entries(options).forEach(([key, value]) => {
+    Object.entries<any>(options).forEach(([key, value]) => {
       headers = headers.append(key, value);
     });
     // this header is added to identify that it's a planner request to
