@@ -4,27 +4,29 @@ import { RedirectData, RedirectStatusData } from '../../models/redirect-data';
 
 @Component({
   selector: 'f8-redirect-status',
-  templateUrl: 'redirect-status.component.html'
+  templateUrl: 'redirect-status.component.html',
 })
 export class RedirectStatusComponent implements OnInit {
-
   private redirects: Map<string, RedirectData> = new Map([
     [
-      '_verifyEmail', {
+      '_verifyEmail',
+      {
         success: {
           statusMessage: 'Your e-mail has been confirmed.',
-          secondaryStatusMessage: 'Thank you for validating your e-mail address. You can now continue to use CodeReady Toolchain.',
+          secondaryStatusMessage:
+            'Thank you for validating your e-mail address. You can now continue to use CodeReady Toolchain.',
           callToActionUrl: '_home',
-          callToActionLabel: 'home dashboard'
+          callToActionLabel: 'home dashboard',
         },
         fail: {
           statusMessage: '',
-          secondaryStatusMessage: 'It appears there is a problem with validating your e-mail. You can reset your e-mail on your Profile Page',
+          secondaryStatusMessage:
+            'It appears there is a problem with validating your e-mail. You can reset your e-mail on your Profile Page',
           callToActionUrl: '_profile',
-          callToActionLabel: 'profile'
-        }
-      }
-    ]
+          callToActionLabel: 'profile',
+        },
+      },
+    ],
   ]);
 
   redirectStatus: string;

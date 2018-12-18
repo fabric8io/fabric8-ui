@@ -4,11 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { WorkItemBarchartComponent } from './work-item-barchart.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule
-  ],
+  imports: [CommonModule, FormsModule],
   declarations: [WorkItemBarchartComponent],
-  exports: [WorkItemBarchartComponent]
+  exports: [WorkItemBarchartComponent],
 })
-export class WorkItemBarchartModule { }
+export class WorkItemBarchartModule {}

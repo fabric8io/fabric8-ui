@@ -12,15 +12,10 @@ import { CodebasesToolbarComponent } from './codebases-toolbar.component';
     CommonModule,
     RouterModule,
     ToolbarModule,
-    TooltipModule.forRoot()
+    TooltipModule.forRoot(),
   ],
-  declarations: [
-    CodebasesToolbarComponent
-  ],
-  providers: [
-    BsDropdownConfig,
-    TooltipConfig
-  ],
-  exports: [CodebasesToolbarComponent]
+  declarations: [CodebasesToolbarComponent],
+  providers: [BsDropdownConfig, TooltipConfig],
+  exports: [CodebasesToolbarComponent],
 })
-export class CodebasesToolbarModule { }
+export class CodebasesToolbarModule {}

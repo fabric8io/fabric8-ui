@@ -8,5 +8,5 @@ let witApiUrlFactory = (api: ApiLocatorService) => {
 export let witApiUrlProvider = {
   provide: WIT_API_URL,
   useFactory: witApiUrlFactory,
-  deps: [ApiLocatorService]
+  deps: [ApiLocatorService],
 };

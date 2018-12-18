@@ -14,10 +14,10 @@ import { ApplicationsListItemComponent } from './applications-list-item.componen
     CommonModule,
     FormsModule,
     PipelineModule,
-    RouterModule
+    RouterModule,
   ],
   declarations: [ApplicationsListItemComponent],
   exports: [ApplicationsListItemComponent],
-  providers: [BsDropdownConfig]
+  providers: [BsDropdownConfig],
 })
-export class ApplicationsListItemModule { }
+export class ApplicationsListItemModule {}

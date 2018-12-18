@@ -8,7 +8,7 @@ import { PopoverConfig, PopoverModule } from 'ngx-bootstrap/popover';
 import { Context, ProcessTemplate, Space, SpaceService } from 'ngx-fabric8-wit';
 import { DependencyCheckService } from 'ngx-launcher';
 import { Profile, User, UserService } from 'ngx-login-client';
-import { Observable,  of as observableOf ,  Subject } from 'rxjs';
+import { Observable, of as observableOf, Subject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { ContextService } from '../../shared/context.service';
 import { SpaceNamespaceService } from '../../shared/runtime-console/space-namespace.service';
@@ -23,13 +23,13 @@ export class BroadcasterTestProvider {
     this._eventBus = new Subject<any>();
   }
   broadcast(key: any, data?: any) {
-    this._eventBus.next({key, data});
+    this._eventBus.next({ key, data });
   }
   on<T>(key: any): Observable<T> {
-    return this._eventBus.asObservable()
-      .pipe(filter(event => event.key === key),
-            map(event => event.data as T)
-      );
+    return this._eventBus.asObservable().pipe(
+      filter((event) => event.key === key),
+      map((event) => event.data as T),
+    );
   }
 }
 
@@ -41,7 +41,7 @@ describe('AddAppOverlayComponent', () => {
   let mockSpaceTemplateService: any = {
     getSpaceTemplates: () => {
       return observableOf(mockSpaceTemplates);
-    }
+    },
   };
   let mockSpaceService: any = jasmine.createSpyObj('SpaceService', ['create']);
   let mockNotifications: any = jasmine.createSpyObj('Notifications', ['message']);
@@ -57,24 +57,30 @@ describe('AddAppOverlayComponent', () => {
         groupId: 'io.openshift.booster',
         projectName: 'app-test-1',
         projectVersion: '1.0.0-SNAPSHOT',
-        spacePath: '/myspace'
+        spacePath: '/myspace',
       });
     },
     validateProjectName(projectName: string): boolean {
       // allows only '-', ' ' and 4-40 characters (must start and end with alphanumeric)
       const pattern = /^[a-z](?!.*--)[a-z0-9-]{2,38}[a-z0-9]$/;
       return pattern.test(projectName);
-    }
+    },
   };
-  let mockDeploymentApiService: any = jasmine.createSpyObj('DeploymentApiService', ['getApplications']);
+  let mockDeploymentApiService: any = jasmine.createSpyObj('DeploymentApiService', [
+    'getApplications',
+  ]);
   mockDeploymentApiService.getApplications.and.returnValue(
-    observableOf([{
-      attributes: { name: 'app-apr-10-2018-4-25' }
-    }, {
-      attributes: { name: 'app-may-11-2018' }
-    }, {
-      attributes: { name: 'app-may-14-1-04' }
-    }])
+    observableOf([
+      {
+        attributes: { name: 'app-apr-10-2018-4-25' },
+      },
+      {
+        attributes: { name: 'app-may-11-2018' },
+      },
+      {
+        attributes: { name: 'app-may-14-1-04' },
+      },
+    ]),
   );
 
   let mockApplications: string[] = ['app-apr-10-2018-4-25', 'app-may-11-2018', 'app-may-14-1-04'];
@@ -84,21 +90,19 @@ describe('AddAppOverlayComponent', () => {
   let mockProfile: Profile = {
     fullName: 'mock-fullName',
     imageURL: 'mock-imageURL',
-    username: 'mock-username'
+    username: 'mock-username',
   };
 
   let mockUser: User = {
     id: 'mock-id',
     attributes: mockProfile,
-    type: 'mock-type'
+    type: 'mock-type',
   };
 
   let mockSpace: Space = {
     name: 'mock-space',
     path: 'mock-path',
-    teams: [
-      { name: 'mock-name', members: [mockUser] }
-    ],
+    teams: [{ name: 'mock-name', members: [mockUser] }],
     defaultTeam: { name: 'mock-name', members: [mockUser] },
     id: 'mock-id',
     attributes: {
@@ -106,11 +110,11 @@ describe('AddAppOverlayComponent', () => {
       description: 'mock-description',
       'updated-at': 'mock-updated-at',
       'created-at': 'mock-created-at',
-      version: 0
+      version: 0,
     },
     type: 'mock-type',
     links: {
-      self: 'mock-self'
+      self: 'mock-self',
     },
     relationships: {
       areas: { links: { related: 'mock-related' } },
@@ -119,43 +123,49 @@ describe('AddAppOverlayComponent', () => {
       'owned-by': {
         data: {
           id: mockUser.id,
-          type: mockUser.type
-        }
-      }
+          type: mockUser.type,
+        },
+      },
     },
     relationalData: {
-      creator: mockUser
-    }
+      creator: mockUser,
+    },
   };
 
-  let mockSpaceTemplates: ProcessTemplate[] = [{
-    attributes: {
-      'can-construct': false,
-      description: 'Description-1',
-      name: 'Template - 01'
+  let mockSpaceTemplates: ProcessTemplate[] = [
+    {
+      attributes: {
+        'can-construct': false,
+        description: 'Description-1',
+        name: 'Template - 01',
+      },
+      id: 'template-01',
+      type: 'spacetemplates',
     },
-    id: 'template-01',
-    type: 'spacetemplates'
-  }, {
-    attributes: {
-      'can-construct': true,
-      description: 'Description-2',
-      name: 'Template - 02'
+    {
+      attributes: {
+        'can-construct': true,
+        description: 'Description-2',
+        name: 'Template - 02',
+      },
+      id: 'template-02',
+      type: 'spacetemplates',
     },
-    id: 'template-02',
-    type: 'spacetemplates'
-  }, {
-    attributes: {
-      'can-construct': true,
-      description: 'Description-3',
-      name: 'Template - 03'
+    {
+      attributes: {
+        'can-construct': true,
+        description: 'Description-3',
+        name: 'Template - 03',
+      },
+      id: 'template-03',
+      type: 'spacetemplates',
     },
-    id: 'template-03',
-    type: 'spacetemplates'
-  }] as ProcessTemplate[];
+  ] as ProcessTemplate[];
 
   class mockContextService {
-    get current(): Observable<Context> { return observableOf(mockContext); }
+    get current(): Observable<Context> {
+      return observableOf(mockContext);
+    }
   }
 
   beforeEach(() => {
@@ -166,23 +176,17 @@ describe('AddAppOverlayComponent', () => {
         id: 'c814a58b-6220-4670-80cf-a2196899a59d',
         attributes: {
           'created-at': '2018-04-24T11:15:59.164872Z',
-          'description': '',
-          'name': 'my-space-apr24-4-43',
+          description: '',
+          name: 'my-space-apr24-4-43',
           'updated-at': '2018-04-24T11:15:59.164872Z',
-          'version': 0
-        }
-      }
+          version: 0,
+        },
+      },
     };
 
     TestBed.configureTestingModule({
-      imports: [
-        FormsModule,
-        ModalModule.forRoot(),
-        PopoverModule.forRoot()
-      ],
-      declarations: [
-        AddAppOverlayComponent
-      ],
+      imports: [FormsModule, ModalModule.forRoot(), PopoverModule.forRoot()],
+      declarations: [AddAppOverlayComponent],
       providers: [
         { provide: DeploymentApiService, useValue: mockDeploymentApiService },
         { provide: DependencyCheckService, useValue: mockDependencyCheckService },
@@ -197,8 +201,8 @@ describe('AddAppOverlayComponent', () => {
         { provide: SpacesService, useValue: mockSpacesService },
         { provide: ContextService, useClass: mockContextService },
         { provide: Logger, useValue: mockLogger },
-        { provide: ErrorHandler, useValue: mockErrorHandler }
-      ]
+        { provide: ErrorHandler, useValue: mockErrorHandler },
+      ],
     });
   });
 
@@ -294,7 +298,9 @@ describe('AddAppOverlayComponent', () => {
     });
 
     it('validate Project Name to be falsy as length is not satisfied', () => {
-      let valProjectName = component.isValidProjectName('12345678901234567890123456789012345678901');
+      let valProjectName = component.isValidProjectName(
+        '12345678901234567890123456789012345678901',
+      );
       expect(valProjectName).toBeFalsy();
     });
 
@@ -320,8 +326,7 @@ describe('AddAppOverlayComponent', () => {
 
     it('should broadcast a event on overlay hide', () => {
       component.hideAddAppOverlay();
-      component.broadcaster.on('analyticsTracker')
-      .subscribe(data => {
+      component.broadcaster.on('analyticsTracker').subscribe((data) => {
         expect(data['event']).toBe('add app closed');
       });
     });
@@ -346,7 +351,7 @@ describe('AddAppOverlayComponent', () => {
       component.selectedFlow = 'createapp';
       component.appForm.form.setValue({
         projectName: 'project-aug-16-2018-1',
-        import: 'createapp'
+        import: 'createapp',
       });
       component.validateProjectName();
       component.isProjectNameAvailable = true;
@@ -371,5 +376,4 @@ describe('AddAppOverlayComponent', () => {
       }));
     });
   });
-
 });

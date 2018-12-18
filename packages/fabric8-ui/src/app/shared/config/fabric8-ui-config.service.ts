@@ -15,5 +15,5 @@ function fabric8UIConfigFactory(): Fabric8UIConfig {
 export let fabric8UIConfigProvider = {
   provide: Fabric8UIConfig,
   useFactory: fabric8UIConfigFactory,
-  deps: []
+  deps: [],
 };

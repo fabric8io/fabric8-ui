@@ -1,12 +1,7 @@
-import {
-  Directive,
-  ElementRef,
-  Input,
-  NgModule
-} from '@angular/core';
+import { Directive, ElementRef, Input, NgModule } from '@angular/core';
 
 @Directive({
-  selector: '[afinput]'
+  selector: '[afinput]',
 })
 export class AutofocusDirective {
   private focus = true;
@@ -25,9 +20,8 @@ export class AutofocusDirective {
   }
 }
 
-
 @NgModule({
-  declarations: [ AutofocusDirective ],
-  exports: [ AutofocusDirective ]
+  declarations: [AutofocusDirective],
+  exports: [AutofocusDirective],
 })
 export class AutofocusModule {}

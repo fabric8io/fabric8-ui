@@ -5,12 +5,8 @@ import { ApplicationsListItemModule } from '../applications-list-item/applicatio
 import { ApplicatonsListComponent } from './applicatons-list.component';
 
 @NgModule({
-  imports: [
-    ApplicationsListItemModule,
-    CommonModule,
-    FormsModule
-  ],
+  imports: [ApplicationsListItemModule, CommonModule, FormsModule],
   declarations: [ApplicatonsListComponent],
-  exports: [ApplicatonsListComponent]
+  exports: [ApplicatonsListComponent],
 })
-export class ApplicationsListModule { }
+export class ApplicationsListModule {}

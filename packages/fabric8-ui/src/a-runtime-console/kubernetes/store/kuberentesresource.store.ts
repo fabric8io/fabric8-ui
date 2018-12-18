@@ -13,10 +13,19 @@ function nameOfResource(resource: any): string {
   return metadata.name || '';
 }
 
-export abstract class KubernetesResourceStore<T extends KubernetesResource, L extends Array<T>, R extends KubernetesService<T, L>> extends AbstractStore<T, L, R> {
+export abstract class KubernetesResourceStore<
+  T extends KubernetesResource,
+  L extends Array<T>,
+  R extends KubernetesService<T, L>
+> extends AbstractStore<T, L, R> {
   protected watcher: Watcher<L>;
 
-  constructor(service: R, private initialList: L, initialCurrent: T, protected type: { new(): T; }) {
+  constructor(
+    service: R,
+    private initialList: L,
+    initialCurrent: T,
+    protected type: { new (): T },
+  ) {
     super(service, initialList, initialCurrent);
   }
 
@@ -33,7 +42,6 @@ export abstract class KubernetesResourceStore<T extends KubernetesResource, L ex
       return null;
     }
   }
-
 
   update(obj: T): Observable<T> {
     return this.service.update(obj);
@@ -71,37 +79,43 @@ export abstract class KubernetesResourceStore<T extends KubernetesResource, L ex
 
     // lets not use Observable.combineLatest() so that we have more control over error handling
     // as we wanna just ignore websocket errors really
-    listObserver.subscribe(list => {
+    listObserver.subscribe(
+      (list) => {
         latestList = list;
         const result = this.combineListAndWatchEvent(latestList, latestMsg);
         if (result) {
           subject.next(result);
         }
-    },
-    (error) => {
-      console.log('Error retrieving list ' + plural(this.kind) + ': ' + error);
-      this._loading.next(false);
-    });
+      },
+      (error) => {
+        console.log('Error retrieving list ' + plural(this.kind) + ': ' + error);
+        this._loading.next(false);
+      },
+    );
 
-    dataStream.subscribe(msg => {
+    dataStream.subscribe(
+      (msg) => {
         latestMsg = msg;
         const result = this.combineListAndWatchEvent(latestList, latestMsg);
         if (result) {
           subject.next(result);
         }
-      this._loading.next(false);
-    },
-    (error) => {
-      console.log('Error watching websockets on ' + plural(this.kind) + ': ' + error);
-    });
+        this._loading.next(false);
+      },
+      (error) => {
+        console.log('Error watching websockets on ' + plural(this.kind) + ': ' + error);
+      },
+    );
 
-    subject.subscribe(list => {
-      this._list.next(list);
-      this._loading.next(false);
-    },
-    (error) => {
-      console.log('Error on joined stream ' + plural(this.kind) + ': ' + error);
-    });
+    subject.subscribe(
+      (list) => {
+        this._list.next(list);
+        this._loading.next(false);
+      },
+      (error) => {
+        console.log('Error on joined stream ' + plural(this.kind) + ': ' + error);
+      },
+    );
   }
 
   protected recreateWatcher() {
@@ -111,7 +125,6 @@ export abstract class KubernetesResourceStore<T extends KubernetesResource, L ex
       this.watcher = this.service.watch();
     }
   }
-
 
   /**
    * Lets combine the web socket events with the latest list
@@ -130,11 +143,18 @@ export abstract class KubernetesResourceStore<T extends KubernetesResource, L ex
         case Operation.DELETED:
           return this.deleteItemFromArray(array, resource);
         default:
-          console.log('Unknown resource option ' + operation + ' for ' + resource + ' on ' + this.service.serviceUrl);
+          console.log(
+            'Unknown resource option ' +
+              operation +
+              ' for ' +
+              resource +
+              ' on ' +
+              this.service.serviceUrl,
+          );
       }
     }
 
-/*
+    /*
     if (msg instanceof MessageEvent) {
       let me = msg as MessageEvent;
       let data = me.data;
@@ -187,7 +207,6 @@ export abstract class KubernetesResourceStore<T extends KubernetesResource, L ex
     }
     return null;
   }
-
 
   protected deleteItemFromArray(array: L, resource: any): L {
     let n = nameOfResource(resource);

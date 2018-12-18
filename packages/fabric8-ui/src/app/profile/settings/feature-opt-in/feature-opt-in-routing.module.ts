@@ -4,12 +4,12 @@ import { FeatureOptInComponent } from './feature-opt-in.component';
 const routes: Routes = [
   {
     path: '',
-    component: FeatureOptInComponent
-  }
+    component: FeatureOptInComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class FeatureOptInRoutingModule { }
+export class FeatureOptInRoutingModule {}

@@ -17,10 +17,10 @@ import { MySpacesItemActionsComponent } from './my-spaces-item-actions.component
     DialogModule,
     FormsModule,
     ModalModule,
-    TooltipModule.forRoot()
+    TooltipModule.forRoot(),
   ],
-  declarations: [ MySpacesItemActionsComponent ],
-  exports: [ MySpacesItemActionsComponent ],
-  providers: [ BsDropdownConfig, TooltipConfig ]
+  declarations: [MySpacesItemActionsComponent],
+  exports: [MySpacesItemActionsComponent],
+  providers: [BsDropdownConfig, TooltipConfig],
 })
 export class MySpacesItemActionsModule {}

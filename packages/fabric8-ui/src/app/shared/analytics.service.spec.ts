@@ -27,7 +27,9 @@ describe('Analytic Service:', () => {
     mockUserService = jasmine.createSpyObj('UserService', ['getUserByUserId']);
     mockUserService.getUserByUserId.and.returnValue(of(loggedInUser));
     mockUserService.loggedInUser = of(loggedInUser);
-    mockNotificationsService = jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
+    mockNotificationsService = jasmine.createSpyObj<NotificationsService>('NotificationsService', [
+      'message',
+    ]);
     mockBroadcaster = createMock(Broadcaster);
     mockBroadcaster.on.and.returnValue(() => {
       return new Subject<BroadcastEvent>();
@@ -36,22 +38,26 @@ describe('Analytic Service:', () => {
     TestBed.configureTestingModule({
       providers: [
         {
-          provide: Router, useValue: mockRouter
+          provide: Router,
+          useValue: mockRouter,
         },
         {
-          provide: Broadcaster, useFactory: () => mockBroadcaster
+          provide: Broadcaster,
+          useFactory: () => mockBroadcaster,
         },
         {
-          provide: UserService, useValue: mockUserService
+          provide: UserService,
+          useValue: mockUserService,
         },
         {
-          provide: NotificationsService, useValue: mockNotificationsService
+          provide: NotificationsService,
+          useValue: mockNotificationsService,
         },
         AnalyticService,
         Contexts,
         Spaces,
-        Fabric8UIConfig
-      ]
+        Fabric8UIConfig,
+      ],
     });
     analyticService = TestBed.get(AnalyticService);
   });
@@ -99,7 +105,5 @@ describe('Analytic Service:', () => {
     it('analytics object should have identify method', () => {
       expect(analytics.methods).toContain('identify');
     });
-
   });
-
 });

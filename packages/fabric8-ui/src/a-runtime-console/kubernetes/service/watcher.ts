@@ -6,7 +6,6 @@ import { currentOAuthConfig } from '../store/oauth-config-store';
 import { Poller } from './poller';
 import { PollerFactory } from './poller-factory.service';
 
-
 export class Watcher<L> {
   protected ws: $WebSocket;
   protected serviceUrl: String;
@@ -16,7 +15,13 @@ export class Watcher<L> {
   protected connectTime = new Date().getTime();
   protected poller: Poller<L>;
 
-  constructor(protected pathFn: () => String, protected queryParams: any = null, protected onLogin: OnLogin, protected listFactory: () => Observable<L>, protected pollerFactory: PollerFactory) {
+  constructor(
+    protected pathFn: () => String,
+    protected queryParams: any = null,
+    protected onLogin: OnLogin,
+    protected listFactory: () => Observable<L>,
+    protected pollerFactory: PollerFactory,
+  ) {
     this.lazyCreateWebSocket();
 
     // send a single initial event to make it easier to combine
@@ -166,11 +171,11 @@ export class Watcher<L> {
               this.retries = 0;
               this.connectTime = new Date().getTime();
               this.recreate();
-            }
+            },
           );
         }
       } else {
-        console.log('Cannot figure out the base URL so we can\'t watch this resource!');
+        console.log("Cannot figure out the base URL so we can't watch this resource!");
       }
     }
   }
@@ -181,7 +186,13 @@ export class Watcher<L> {
       this.retries = this.retries + 1;
       this.recreate();
     } else {
-      console.log('WebSocket for ' + this.pathFn() + ' error, retry #' + this.retries + ' so switching to polling mode');
+      console.log(
+        'WebSocket for ' +
+          this.pathFn() +
+          ' error, retry #' +
+          this.retries +
+          ' so switching to polling mode',
+      );
       this.closeWebSocket();
       this.lazyCreatePoller();
     }
@@ -192,7 +203,6 @@ export class Watcher<L> {
       this.poller = this.pollerFactory.newInstance(this.listFactory, this._dataStream);
     }
   }
-
 
   // TODO
   ngOnDestroy(): void {

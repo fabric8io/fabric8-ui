@@ -5,21 +5,18 @@ import { initContext, TestContext } from 'testing/test-context';
 import { LoadingWidgetComponent } from './loading-widget.component';
 
 @Component({
-  template: '<fabric8-loading-widget [message]="\'test1\'" [title]="\'test2\'"></fabric8-loading-widget>'
+  template:
+    '<fabric8-loading-widget [message]="\'test1\'" [title]="\'test2\'"></fabric8-loading-widget>',
 })
-class HostComponent {
-}
+class HostComponent {}
 
 describe('LoadingWidgetComponent', () => {
   type TestingContext = TestContext<LoadingWidgetComponent, HostComponent>;
 
-  beforeEach(() => {
-  });
+  beforeEach(() => {});
 
   const testContext = initContext(LoadingWidgetComponent, HostComponent, {
-    imports: [
-      CommonModule
-    ]
+    imports: [CommonModule],
   });
 
   describe('Loading widget', () => {

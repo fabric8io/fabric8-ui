@@ -1,8 +1,5 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import {
-  async,
-  TestBed
-} from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { Broadcaster } from 'ngx-base';
 import { Che } from '../services/che';
@@ -21,11 +18,12 @@ describe('Codebases Item Heading Component', () => {
       declarations: [CodebasesItemHeadingComponent],
       providers: [
         {
-          provide: Broadcaster, useValue: broadcasterMock
-        }
+          provide: Broadcaster,
+          useValue: broadcasterMock,
+        },
       ],
       // Tells the compiler not to error on unknown elements and attributes
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     });
     fixture = TestBed.createComponent(CodebasesItemHeadingComponent);
     fixture.detectChanges();

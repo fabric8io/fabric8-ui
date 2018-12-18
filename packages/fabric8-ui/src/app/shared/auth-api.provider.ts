@@ -8,7 +8,7 @@ let authApiUrlFactory = (api: ApiLocatorService) => {
 export let authApiUrlProvider = {
   provide: AUTH_API_URL,
   useFactory: authApiUrlFactory,
-  deps: [ApiLocatorService]
+  deps: [ApiLocatorService],
 };
 
 let witApiProxyFactory = (api: ApiLocatorService) => {
@@ -18,5 +18,5 @@ let witApiProxyFactory = (api: ApiLocatorService) => {
 export let witApiProxyProvider = {
   provide: WIT_API_PROXY,
   useFactory: witApiProxyFactory,
-  deps: [ApiLocatorService]
+  deps: [ApiLocatorService],
 };

@@ -1,45 +1,32 @@
-import {
-  Component,
-  Input
-} from '@angular/core';
-import {
-  TestBed,
-  TestModuleMetadata
-} from '@angular/core/testing';
+import { Component, Input } from '@angular/core';
+import { TestBed, TestModuleMetadata } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import {
-  never,
-  Observable,
-  of
-} from 'rxjs';
+import { never, Observable, of } from 'rxjs';
 
 import { createMock } from 'testing/mock';
 import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
 import { initContext, TestContext } from 'testing/test-context';
 
-import {
-  User,
-  UserService
-} from 'ngx-login-client';
+import { User, UserService } from 'ngx-login-client';
 import { LoadingWidgetComponent } from '../dashboard-widgets/loading-widget/loading-widget.component';
 import { LoadingWidgetModule } from '../dashboard-widgets/loading-widget/loading-widget.module';
 import { UserSpacesService } from '../shared/user-spaces.service';
 import { HomeComponent } from './home.component';
 
 @Component({
-  template: '<alm-home></alm-home>'
+  template: '<alm-home></alm-home>',
 })
-class HostComponent { }
+class HostComponent {}
 
 @Component({
   selector: 'fabric8-home-empty-state',
-  template: ''
+  template: '',
 })
-class MockEmptyState { }
+class MockEmptyState {}
 
 @Component({
   selector: 'fabric8-recent-spaces-widget',
-  template: ''
+  template: '',
 })
 class MockRecentSpaces {
   @Input() cardSizeClass: string;
@@ -48,35 +35,37 @@ class MockRecentSpaces {
 
 @Component({
   selector: 'fabric8-recent-workspaces-widget',
-  template: ''
+  template: '',
 })
-class MockRecentWorkspaces { }
+class MockRecentWorkspaces {}
 
 @Component({
   selector: 'alm-work-item-widget',
-  template: ''
+  template: '',
 })
-class MockWorkItems { }
+class MockWorkItems {}
 
 @Component({
   selector: 'fabric8-recent-pipelines-widget',
-  template: ''
+  template: '',
 })
-class MockRecentPipelines { }
+class MockRecentPipelines {}
 
 const mockUser: User = {
   attributes: {
-    username: 'foo-user'
-  }
+    username: 'foo-user',
+  },
 } as User;
 
 function getModuleMetadata(countObservable: Observable<number>): TestModuleMetadata {
   const mockUserSpacesService: jasmine.SpyObj<UserSpacesService> = createMock(UserSpacesService);
   mockUserSpacesService.getInvolvedSpacesCount.and.returnValue(countObservable);
 
-  beforeEach((): void => {
-    TestBed.overrideProvider(UserSpacesService, { useValue: mockUserSpacesService });
-  });
+  beforeEach(
+    (): void => {
+      TestBed.overrideProvider(UserSpacesService, { useValue: mockUserSpacesService });
+    },
+  );
 
   return {
     declarations: [
@@ -85,28 +74,29 @@ function getModuleMetadata(countObservable: Observable<number>): TestModuleMetad
       MockRecentSpaces,
       MockRecentWorkspaces,
       MockWorkItems,
-      MockRecentPipelines
+      MockRecentPipelines,
     ],
-    imports: [
-      LoadingWidgetModule
-    ],
+    imports: [LoadingWidgetModule],
     providers: [
       {
         provide: UserService,
-        useFactory: (): UserService => ({ currentLoggedInUser: mockUser } as UserService)
+        useFactory: (): UserService => ({ currentLoggedInUser: mockUser } as UserService),
       },
       {
         provide: UserSpacesService,
-        useFactory: (): UserSpacesService => mockUserSpacesService
-      }
-    ]
+        useFactory: (): UserSpacesService => mockUserSpacesService,
+      },
+    ],
   };
 }
 
 describe('HomeComponent', (): void => {
-
   describe('no Spaces', (): void => {
-    const testContext: TestContext<HomeComponent, HostComponent> = initContext(HomeComponent, HostComponent, getModuleMetadata(of(0)));
+    const testContext: TestContext<HomeComponent, HostComponent> = initContext(
+      HomeComponent,
+      HostComponent,
+      getModuleMetadata(of(0)),
+    );
 
     it('should count 0 spaces', (): void => {
       expect(testContext.testedDirective.spacesCount).toEqual(0);
@@ -124,7 +114,11 @@ describe('HomeComponent', (): void => {
   });
 
   describe('while loading', (): void => {
-    const testContext: TestContext<HomeComponent, HostComponent> = initContext(HomeComponent, HostComponent, getModuleMetadata(never()));
+    const testContext: TestContext<HomeComponent, HostComponent> = initContext(
+      HomeComponent,
+      HostComponent,
+      getModuleMetadata(never()),
+    );
 
     it('should correctly assign logged in user', (): void => {
       expect(testContext.testedDirective.loggedInUser).toBe(mockUser);
@@ -150,7 +144,11 @@ describe('HomeComponent', (): void => {
   });
 
   describe('with Spaces', (): void => {
-    const testContext: TestContext<HomeComponent, HostComponent> = initContext(HomeComponent, HostComponent, getModuleMetadata(of(2)));
+    const testContext: TestContext<HomeComponent, HostComponent> = initContext(
+      HomeComponent,
+      HostComponent,
+      getModuleMetadata(of(2)),
+    );
 
     it('should count 2 spaces', (): void => {
       expect(testContext.testedDirective.spacesCount).toEqual(2);
@@ -166,5 +164,4 @@ describe('HomeComponent', (): void => {
       expect(testContext.tested.queryAll(By.directive(MockRecentPipelines)).length).toEqual(0);
     });
   });
-
 });

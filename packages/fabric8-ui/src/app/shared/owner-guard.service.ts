@@ -3,7 +3,7 @@ import {
   ActivatedRouteSnapshot,
   CanActivate,
   CanActivateChild,
-  RouterStateSnapshot
+  RouterStateSnapshot,
 } from '@angular/router';
 import { AuthenticationService } from 'ngx-login-client';
 import { ContextService } from './context.service';
@@ -15,16 +15,16 @@ import { LoginService } from './login.service';
  */
 @Injectable()
 export class OwnerGuard implements CanActivate, CanActivateChild {
-
   constructor(
     private authService: AuthenticationService,
     private contextService: ContextService,
-    private loginService: LoginService
-  ) { }
+    private loginService: LoginService,
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     if (this.authService.isLoggedIn()) {
-      let isViewingOwnContext = state.root.firstChild.params['entity'] === this.contextService.currentUser;
+      let isViewingOwnContext =
+        state.root.firstChild.params['entity'] === this.contextService.currentUser;
       return isViewingOwnContext;
     } else {
       this.loginService.redirectToLogin(state.url);

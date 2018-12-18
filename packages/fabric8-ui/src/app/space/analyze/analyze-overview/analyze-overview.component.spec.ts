@@ -11,9 +11,9 @@ import { initContext, TestContext } from 'testing/test-context';
 import { AnalyzeOverviewComponent } from './analyze-overview.component';
 
 @Component({
-  template: '<alm-analyzeOverview></alm-analyzeOverview>'
+  template: '<alm-analyzeOverview></alm-analyzeOverview>',
 })
-class HostComponent { }
+class HostComponent {}
 
 describe('AnalyzeOverviewComponent', () => {
   type TestingContext = TestContext<AnalyzeOverviewComponent, HostComponent>;
@@ -22,25 +22,29 @@ describe('AnalyzeOverviewComponent', () => {
   let fakeUserObs: Subject<User> = new Subject<User>();
 
   const testContext: TestingContext = initContext(AnalyzeOverviewComponent, HostComponent, {
-    declarations: [ MockFeatureToggleComponent ],
+    declarations: [MockFeatureToggleComponent],
     providers: [
-      { provide: BsModalService, useFactory: (): jasmine.SpyObj<BsModalService> => createMock(BsModalService) },
-      { provide: Broadcaster, useFactory: (): jasmine.SpyObj<Broadcaster> => createMock(Broadcaster) },
-      { provide: AuthenticationService, useValue: ({ isLoggedIn: () => true }) },
-      { provide: Contexts, useValue: ({ current: ctxSubj }) },
-      { provide: PermissionService, useValue: { hasScope: () => of(false) }},
-      { provide: UserService, useValue: ({ loggedInUser: fakeUserObs }) }
+      {
+        provide: BsModalService,
+        useFactory: (): jasmine.SpyObj<BsModalService> => createMock(BsModalService),
+      },
+      {
+        provide: Broadcaster,
+        useFactory: (): jasmine.SpyObj<Broadcaster> => createMock(Broadcaster),
+      },
+      { provide: AuthenticationService, useValue: { isLoggedIn: () => true } },
+      { provide: Contexts, useValue: { current: ctxSubj } },
+      { provide: PermissionService, useValue: { hasScope: () => of(false) } },
+      { provide: UserService, useValue: { loggedInUser: fakeUserObs } },
     ],
-    schemas: [
-      NO_ERRORS_SCHEMA
-    ]
+    schemas: [NO_ERRORS_SCHEMA],
   });
 
   it('should call to check the user space', function() {
     spyOn(testContext.testedDirective, 'checkSpaceOwner');
 
     fakeUserObs.next({
-      id: 'loggedInUser'
+      id: 'loggedInUser',
     } as User);
 
     ctxSubj.next({
@@ -48,11 +52,11 @@ describe('AnalyzeOverviewComponent', () => {
         relationships: {
           'owned-by': {
             data: {
-              id: 'loggedInUser'
-            }
-          }
-        }
-      } as Space
+              id: 'loggedInUser',
+            },
+          },
+        },
+      } as Space,
     } as Context);
 
     testContext.detectChanges();
@@ -85,7 +89,7 @@ describe('AnalyzeOverviewComponent', () => {
 
   it('should recognize that the user owns the space', function() {
     fakeUserObs.next({
-      id: 'loggedInUser'
+      id: 'loggedInUser',
     } as User);
 
     ctxSubj.next({
@@ -93,11 +97,11 @@ describe('AnalyzeOverviewComponent', () => {
         relationships: {
           'owned-by': {
             data: {
-              id: 'loggedInUser'
-            }
-          }
-        }
-      } as Space
+              id: 'loggedInUser',
+            },
+          },
+        },
+      } as Space,
     } as Context);
 
     testContext.detectChanges();
@@ -107,7 +111,7 @@ describe('AnalyzeOverviewComponent', () => {
 
   it('should recognize that the user does not own the space', function() {
     fakeUserObs.next({
-      id: 'loggedInUser'
+      id: 'loggedInUser',
     } as User);
 
     ctxSubj.next({
@@ -115,11 +119,11 @@ describe('AnalyzeOverviewComponent', () => {
         relationships: {
           'owned-by': {
             data: {
-              id: 'someOtherUser'
-            }
-          }
-        }
-      } as Space
+              id: 'someOtherUser',
+            },
+          },
+        },
+      } as Space,
     } as Context);
 
     testContext.detectChanges();
@@ -129,7 +133,7 @@ describe('AnalyzeOverviewComponent', () => {
 
   it('should show the Create an Application button if the user owns the space', function() {
     fakeUserObs.next({
-      id: 'loggedInUser'
+      id: 'loggedInUser',
     } as User);
 
     ctxSubj.next({
@@ -137,21 +141,25 @@ describe('AnalyzeOverviewComponent', () => {
         relationships: {
           'owned-by': {
             data: {
-              id: 'loggedInUser'
-            }
-          }
-        }
-      } as Space
+              id: 'loggedInUser',
+            },
+          },
+        },
+      } as Space,
     } as Context);
 
     testContext.detectChanges();
 
-    expect(testContext.fixture.debugElement.query(By.css('#user-level-analyze-overview-dashboard-create-space-button'))).not.toBeNull();
+    expect(
+      testContext.fixture.debugElement.query(
+        By.css('#user-level-analyze-overview-dashboard-create-space-button'),
+      ),
+    ).not.toBeNull();
   });
 
   it('should hide the Create an Application button if the user does not own the space', function() {
     fakeUserObs.next({
-      id: 'loggedInUser'
+      id: 'loggedInUser',
     } as User);
 
     ctxSubj.next({
@@ -159,15 +167,19 @@ describe('AnalyzeOverviewComponent', () => {
         relationships: {
           'owned-by': {
             data: {
-              id: 'someOtherUser'
-            }
-          }
-        }
-      } as Space
+              id: 'someOtherUser',
+            },
+          },
+        },
+      } as Space,
     } as Context);
 
     testContext.detectChanges();
 
-    expect(testContext.fixture.debugElement.query(By.css('#user-level-analyze-overview-dashboard-create-space-button'))).toBeNull();
+    expect(
+      testContext.fixture.debugElement.query(
+        By.css('#user-level-analyze-overview-dashboard-create-space-button'),
+      ),
+    ).toBeNull();
   });
 });

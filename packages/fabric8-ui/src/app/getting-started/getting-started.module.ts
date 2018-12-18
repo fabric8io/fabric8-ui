@@ -5,8 +5,8 @@ import { GettingStartedRoutingModule } from './getting-started-routing.module';
 import { GettingStartedComponent } from './getting-started.component';
 
 @NgModule({
-  imports: [ CommonModule, FormsModule, GettingStartedRoutingModule ],
-  declarations: [ GettingStartedComponent ]
+  imports: [CommonModule, FormsModule, GettingStartedRoutingModule],
+  declarations: [GettingStartedComponent],
 })
 export class GettingStartedModule {
   constructor() {}

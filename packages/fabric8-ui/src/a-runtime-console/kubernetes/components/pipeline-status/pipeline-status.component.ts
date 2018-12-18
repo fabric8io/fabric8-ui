@@ -4,10 +4,8 @@ import { PipelineStage } from '../../model/pipelinestage.model';
 @Component({
   selector: 'pipeline-status',
   templateUrl: './pipeline-status.component.html',
-  styleUrls: ['./pipeline-status.component.less']
+  styleUrls: ['./pipeline-status.component.less'],
 })
 export class PipelineStatusComponent {
-
   @Input() stage: PipelineStage;
-
 }

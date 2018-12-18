@@ -13,7 +13,7 @@ describe('My Spaces Item Heading Component', () => {
       declarations: [MySpacesItemHeadingComponent],
       providers: [],
       // Tells the compiler not to error on unknown elements and attributes
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     });
     fixture = TestBed.createComponent(MySpacesItemHeadingComponent);
   });

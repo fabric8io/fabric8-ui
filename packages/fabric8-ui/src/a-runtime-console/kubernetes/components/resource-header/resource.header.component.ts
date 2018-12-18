@@ -6,48 +6,47 @@ import { MenuItem } from '../../../models/menu-item';
 export const resourceMenus = [
   {
     name: 'ConfigMap',
-    path: 'configmaps'
+    path: 'configmaps',
   },
   {
     name: 'Deployments',
-    path: 'deployments'
+    path: 'deployments',
   },
   {
     name: 'Events',
-    path: 'events'
+    path: 'events',
   },
   {
     name: 'Pods',
-    path: 'pods'
+    path: 'pods',
   },
   {
     name: 'ReplicaSets',
-    path: 'replicasets'
+    path: 'replicasets',
   },
   {
     name: 'Services',
-    path: 'services'
-  }
+    path: 'services',
+  },
 ];
 
 @Component({
   host: {
-    'class': 'kube-resource-header'
+    class: 'kube-resource-header',
   },
   selector: 'kube-resource-header',
   templateUrl: './resource.header.component.html',
-  styleUrls: ['./resource.header.component.less']
+  styleUrls: ['./resource.header.component.less'],
 })
 export class ResourceHeaderComponent implements OnInit {
   menus: MenuItem[];
   current: MenuItem;
 
-
   constructor(public router: Router, parentLinkFactory: ParentLinkFactory) {
     this.menus = resourceMenus;
 
     var urlPrefix = parentLinkFactory.parentLink;
-    this.menus.forEach(menu => {
+    this.menus.forEach((menu) => {
       if (!menu.fullPath) {
         var path = menu.path;
         menu.fullPath = urlPrefix + path;
@@ -55,7 +54,7 @@ export class ResourceHeaderComponent implements OnInit {
     });
     this.current = this.menus[0];
 
-    router.events.subscribe(event => {
+    router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.onNavigate(event);
       }
@@ -78,7 +77,7 @@ export class ResourceHeaderComponent implements OnInit {
       if (paths && paths.length) {
         var path = paths[paths.length - 1];
         this.current = null;
-        menus.forEach(menu => {
+        menus.forEach((menu) => {
           if (path === menu.path) {
             this.current = menu;
           }

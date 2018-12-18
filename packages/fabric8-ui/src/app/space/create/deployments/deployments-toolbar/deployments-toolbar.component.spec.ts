@@ -1,7 +1,4 @@
-import {
-  Component,
-  NO_ERRORS_SCHEMA
-} from '@angular/core';
+import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { initContext } from 'testing/test-context';
 
 import { DeploymentsToolbarComponent } from './deployments-toolbar.component';
@@ -11,20 +8,20 @@ import { DeploymentsToolbarComponent } from './deployments-toolbar.component';
     <deployments-toolbar
       (onFilterChange)="filterChange($event)"
       (onSortChange)="sortChange($event)"
-      [resultsCount]="resultsCount">
+      [resultsCount]="resultsCount"
+    >
     </deployments-toolbar>
-  `
+  `,
 })
 class TestHostComponent {
   resultsCount: number = 0;
-  filterChange(): void { }
-  sortChange(): void { }
+  filterChange(): void {}
+  sortChange(): void {}
 }
 
 describe('DeploymentsToolbarComponent', (): void => {
-
   const testContext = initContext(DeploymentsToolbarComponent, TestHostComponent, {
-    schemas: [NO_ERRORS_SCHEMA]
+    schemas: [NO_ERRORS_SCHEMA],
   });
 
   it('should update filterConfig resultsCount', (): void => {
@@ -48,15 +45,15 @@ describe('DeploymentsToolbarComponent', (): void => {
     spyOn(testContext.hostComponent, 'sortChange');
     testContext.testedDirective.sortChange({
       field: {
-        sortType: 'alphanumeric'
+        sortType: 'alphanumeric',
       },
-      isAscending: false
+      isAscending: false,
     });
     expect(testContext.hostComponent.sortChange).toHaveBeenCalledWith({
       field: {
-        sortType: 'alphanumeric'
+        sortType: 'alphanumeric',
       },
-      isAscending: false
+      isAscending: false,
     });
   });
 });

@@ -6,12 +6,10 @@ import { Fabric8UIConfig } from './config/fabric8-ui-config';
 
 @Component({
   selector: 'app-apilocatorservicecomp',
-  template: ''
+  template: '',
 })
 export class TestAPILocatorServiceComponent {
-  constructor(
-    public apilocator: ApiLocatorService) {
-  }
+  constructor(public apilocator: ApiLocatorService) {}
 }
 
 class ApiLocatorServiceTest extends BaseApiLocatorService {
@@ -20,9 +18,7 @@ class ApiLocatorServiceTest extends BaseApiLocatorService {
   }
 }
 
-
 describe('API Locator Service', function() {
-
   var base = function() {
     return window.location.hostname + ':' + window.location.port;
   };
@@ -31,17 +27,29 @@ describe('API Locator Service', function() {
   };
 
   it('Add prefix to configured service URL', function() {
-    var loc = new ApiLocatorServiceTest(new Fabric8UIConfig(), new Map([['random_test', 'api']]), new Map());
+    var loc = new ApiLocatorServiceTest(
+      new Fabric8UIConfig(),
+      new Map([['random_test', 'api']]),
+      new Map(),
+    );
     expect(loc.get('random_test')).toMatch(url('api.' + base()));
   });
 
   it('Add suffix to configured service URL', function() {
-    var loc = new ApiLocatorServiceTest(new Fabric8UIConfig(), new Map(), new Map([['random_test', 'api']]));
+    var loc = new ApiLocatorServiceTest(
+      new Fabric8UIConfig(),
+      new Map(),
+      new Map([['random_test', 'api']]),
+    );
     expect(loc.get('random_test')).toMatch(url(base() + '/api'));
   });
 
   it('Add prefix and suffix to configured service URL', function() {
-    var loc = new ApiLocatorServiceTest(new Fabric8UIConfig(), new Map([['random_test', 'api']]), new Map([['random_test', 'api']]));
+    var loc = new ApiLocatorServiceTest(
+      new Fabric8UIConfig(),
+      new Map([['random_test', 'api']]),
+      new Map([['random_test', 'api']]),
+    );
     expect(loc.get('random_test')).toMatch(url('api.' + base() + '/api'));
   });
 
@@ -53,7 +61,7 @@ describe('API Locator Service', function() {
   it('Ensure APILocatorService is injectable', function() {
     TestBed.configureTestingModule({
       declarations: [TestAPILocatorServiceComponent],
-      providers: [ApiLocatorService, Fabric8UIConfig, ProviderService]
+      providers: [ApiLocatorService, Fabric8UIConfig, ProviderService],
     });
     var fixture = TestBed.createComponent(TestAPILocatorServiceComponent);
     var comp = fixture.componentInstance;

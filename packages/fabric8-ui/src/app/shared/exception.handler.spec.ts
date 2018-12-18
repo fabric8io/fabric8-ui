@@ -22,16 +22,19 @@ describe('Raven exception handler', () => {
     // init TestBed
     TestBed.configureTestingModule({
       providers: [
-        { provide: UserService, useValue: {
-          currentLoggedInUser: {
-            id: testId,
-            attributes: {
-              email: testEmail
-            }
-          }
-        } },
-        RavenExceptionHandler
-      ]
+        {
+          provide: UserService,
+          useValue: {
+            currentLoggedInUser: {
+              id: testId,
+              attributes: {
+                email: testEmail,
+              },
+            },
+          },
+        },
+        RavenExceptionHandler,
+      ],
     });
 
     handler = TestBed.get(RavenExceptionHandler);
@@ -65,7 +68,6 @@ describe('Raven exception handler', () => {
   });
 
   describe('raven error handling', () => {
-
     beforeEach(() => {
       // default environment to Environment.production
       getEnvironmentSpy.and.returnValue(Environment.production);
@@ -76,7 +78,7 @@ describe('Raven exception handler', () => {
       handler.handleError('');
       expect(setUserContextSpy).toHaveBeenCalledWith({
         id: testId,
-        email: testEmail
+        email: testEmail,
       });
     });
 
@@ -92,7 +94,7 @@ describe('Raven exception handler', () => {
       delete err.stack;
       handler.handleError(err);
       expect(captureExceptionSpy).toHaveBeenCalledWith(err, {
-        fingerprint: [errMessage]
+        fingerprint: [errMessage],
       });
     });
 
@@ -103,7 +105,7 @@ describe('Raven exception handler', () => {
       err.stack = stack.join('\n');
       handler.handleError(err);
       expect(captureExceptionSpy).toHaveBeenCalledWith(err, {
-        fingerprint: [errMessage].concat(stack.slice(0, 2))
+        fingerprint: [errMessage].concat(stack.slice(0, 2)),
       });
     });
   });

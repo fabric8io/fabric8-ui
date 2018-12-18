@@ -4,10 +4,8 @@ import { NgModule } from '@angular/core';
 import { EmptyStateComponent } from './empty-state.component';
 
 @NgModule({
-  imports: [
-    CommonModule
-  ],
-  exports: [ EmptyStateComponent ],
-  declarations: [ EmptyStateComponent ]
+  imports: [CommonModule],
+  exports: [EmptyStateComponent],
+  declarations: [EmptyStateComponent],
 })
-export class EmptyStateModule { }
+export class EmptyStateModule {}

@@ -28,7 +28,7 @@ import { NotificationsService } from './shared/notifications.service';
   encapsulation: ViewEncapsulation.None,
   selector: 'f8-app',
   styleUrls: ['./app.component.less'],
-  templateUrl: './app.component.html'
+  templateUrl: './app.component.html',
 })
 export class AppComponent {
   public featureConfig: FeatureFlagConfig;
@@ -57,95 +57,121 @@ export class AppComponent {
     private providerService: ProviderService,
     private errorService: ErrorService,
     private logger: Logger,
-    private toggleAckService: FeatureAcknowledgementService
-  ) {
-
-  }
+    private toggleAckService: FeatureAcknowledgementService,
+  ) {}
 
   ngOnInit() {
     console.log('Welcome to Fabric8!');
-    console.log('This is', this.about.buildVersion,
-      '(Build', '#' + this.about.buildNumber, 'and was built on', this.about.buildTimestamp, ')');
-    this.subscriptions.push(this.activatedRoute.params.subscribe(() => {
-      this.loginService.login();
-    }));
+    console.log(
+      'This is',
+      this.about.buildVersion,
+      '(Build',
+      '#' + this.about.buildNumber,
+      'and was built on',
+      this.about.buildTimestamp,
+      ')',
+    );
+    this.subscriptions.push(
+      this.activatedRoute.params.subscribe(() => {
+        this.loginService.login();
+      }),
+    );
     // initial value
     if (this.toggleAckService.showIconChanged) {
-      this.subscriptions.push(this.toggleAckService.getToggle().subscribe(val => {
-        this.show = val;
-      }));
+      this.subscriptions.push(
+        this.toggleAckService.getToggle().subscribe((val) => {
+          this.show = val;
+        }),
+      );
       // subscribe for changes
-      this.subscriptions.push(this.toggleAckService.showIconChanged.subscribe(val => {
-        this.show = val.value;
-      }));
+      this.subscriptions.push(
+        this.toggleAckService.showIconChanged.subscribe((val) => {
+          this.show = val.value;
+        }),
+      );
     }
-    this.subscriptions.push(observableMerge(
-      this.router.events.pipe(
-        filter((event: Event): boolean => event instanceof NavigationEnd),
-        filter((event: NavigationEnd): boolean => event.url !== '/_error'),
-        filter((event: NavigationEnd): boolean => event.urlAfterRedirects === '/_error'),
-        map((event: NavigationEnd): string => event.url)),
-      this.router.events.pipe(
-        filter((event: Event): boolean => event instanceof NavigationError),
-        map((event: NavigationError): string => event.url))
-    ).subscribe((url: string): void => this.handleNavigationError(url)));
+    this.subscriptions.push(
+      observableMerge(
+        this.router.events.pipe(
+          filter((event: Event): boolean => event instanceof NavigationEnd),
+          filter((event: NavigationEnd): boolean => event.url !== '/_error'),
+          filter((event: NavigationEnd): boolean => event.urlAfterRedirects === '/_error'),
+          map((event: NavigationEnd): string => event.url),
+        ),
+        this.router.events.pipe(
+          filter((event: Event): boolean => event instanceof NavigationError),
+          map((event: NavigationError): string => event.url),
+        ),
+      ).subscribe((url: string): void => this.handleNavigationError(url)),
+    );
 
     this.router.errorHandler = this.logger.error;
 
-    this.subscriptions.push(this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd),
-      map(() => this.activatedRoute),
-      map(route => {
-        // reset all experimental feature flag properties
-        this.featureConfig = null;
-        while (route.firstChild) {
-          route = route.firstChild;
-        }
-        return route;
-      }),
-      filter(route => route.outlet === 'primary'),
-      mergeMap(route => route.data))
-      .subscribe((event) => {
-        let routeTree = this.activatedRoute.snapshot;
-        let featureFlagsInTree;
+    this.subscriptions.push(
+      this.router.events
+        .pipe(
+          filter((event) => event instanceof NavigationEnd),
+          map(() => this.activatedRoute),
+          map((route) => {
+            // reset all experimental feature flag properties
+            this.featureConfig = null;
+            while (route.firstChild) {
+              route = route.firstChild;
+            }
+            return route;
+          }),
+          filter((route) => route.outlet === 'primary'),
+          mergeMap((route) => route.data),
+        )
+        .subscribe((event) => {
+          let routeTree = this.activatedRoute.snapshot;
+          let featureFlagsInTree;
 
-        while (routeTree.firstChild) {
-          if (routeTree.data && routeTree.data['featureFlagConfig']) {
-            featureFlagsInTree = routeTree.data['featureFlagConfig'];
+          while (routeTree.firstChild) {
+            if (routeTree.data && routeTree.data['featureFlagConfig']) {
+              featureFlagsInTree = routeTree.data['featureFlagConfig'];
+            }
+            routeTree = routeTree.firstChild;
           }
-          routeTree = routeTree.firstChild;
-        }
 
-        if (event['featureFlagConfig'] || featureFlagsInTree) {
-          let featureFlagConfig = event['featureFlagConfig'] as FeatureFlagConfig || featureFlagsInTree;
-          this.featureConfig = featureFlagConfig;
-        }
-        let title = event['title'] ? `${event['title']} - ${this.brandingService.name}` : this.brandingService.name;
-        this.titleService.setTitle(title);
-      }));
+          if (event['featureFlagConfig'] || featureFlagsInTree) {
+            let featureFlagConfig =
+              (event['featureFlagConfig'] as FeatureFlagConfig) || featureFlagsInTree;
+            this.featureConfig = featureFlagConfig;
+          }
+          let title = event['title']
+            ? `${event['title']} - ${this.brandingService.name}`
+            : this.brandingService.name;
+          this.titleService.setTitle(title);
+        }),
+    );
 
-    this.subscriptions.push(this.broadcaster.on('showDisconnectedFromGitHub').subscribe((event) => {
-      this.lastPageToTryGitHub = event['location'];
-      this.showGitHubConnectModal();
-    }));
+    this.subscriptions.push(
+      this.broadcaster.on('showDisconnectedFromGitHub').subscribe((event) => {
+        this.lastPageToTryGitHub = event['location'];
+        this.showGitHubConnectModal();
+      }),
+    );
 
     this.disconnectedStateConfig = {
       actions: {
-        primaryActions: [{
-          id: 'connectAction',
-          title: 'Connect to GitHub',
-          tooltip: 'Connect to GitHub'
-        }],
-        moreActions: []
+        primaryActions: [
+          {
+            id: 'connectAction',
+            title: 'Connect to GitHub',
+            tooltip: 'Connect to GitHub',
+          },
+        ],
+        moreActions: [],
       } as ActionConfig,
       iconStyleClass: 'pficon-info',
       title: 'GitHub Disconnected',
-      info: 'You must be connected to GitHub in order to add to or create a Space'
+      info: 'You must be connected to GitHub in order to add to or create a Space',
     } as EmptyStateConfig;
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => {
+    this.subscriptions.forEach((sub) => {
       sub.unsubscribe();
     });
   }
@@ -155,7 +181,7 @@ export class AppComponent {
   }
 
   showGitHubConnectModal(): void {
-    this.modalService.show(this.connectToGithubModal, {class: 'modal-lg'});
+    this.modalService.show(this.connectToGithubModal, { class: 'modal-lg' });
   }
 
   connectToGithub(): void {

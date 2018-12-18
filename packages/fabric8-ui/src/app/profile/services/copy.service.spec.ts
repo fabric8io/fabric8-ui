@@ -3,17 +3,13 @@ import { Logger } from 'ngx-base';
 import { CopyService } from './copy.service';
 
 describe('CopyService', () => {
-
   let service: CopyService;
   let mockLogger: any = jasmine.createSpyObj('Logger', ['error']);
   let mockElement: any = document.createElement('textarea');
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        CopyService,
-        { provide: Logger, useValue: mockLogger }
-      ]
+      providers: [CopyService, { provide: Logger, useValue: mockLogger }],
     });
     service = TestBed.get(CopyService);
     spyOn(service.dom, 'createElement').and.returnValue(mockElement);
@@ -43,5 +39,4 @@ describe('CopyService', () => {
       expect(result).toBeFalsy();
     });
   });
-
 });

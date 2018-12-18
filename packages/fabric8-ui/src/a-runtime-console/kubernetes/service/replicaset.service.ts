@@ -12,8 +12,14 @@ export class ReplicaSetService extends NamespacedResourceService<ReplicaSet, Rep
   constructor(
     @Inject(KUBERNETES_RESTANGULAR) kubernetesRestangular: Restangular,
     namespaceScope: NamespaceScope,
-    watcherFactory: WatcherFactory
+    watcherFactory: WatcherFactory,
   ) {
-    super(kubernetesRestangular, namespaceScope, '/replicasets', watcherFactory, apisExtensionsNamespacesUrl);
+    super(
+      kubernetesRestangular,
+      namespaceScope,
+      '/replicasets',
+      watcherFactory,
+      apisExtensionsNamespacesUrl,
+    );
   }
 }

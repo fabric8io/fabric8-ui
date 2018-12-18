@@ -2,7 +2,7 @@ export enum MemoryUnit {
   B = 'bytes',
   KB = 'KB',
   MB = 'MB',
-  GB = 'GB'
+  GB = 'GB',
 }
 
 export function ordinal(unit: MemoryUnit): number {

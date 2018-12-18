@@ -13,20 +13,12 @@ describe('PipelineViewPage', () => {
   beforeEach(async(() => {
     let mockBuildConfigStore: any = jasmine.createSpy('BuildConfigService');
     mockBuildConfigStore.load = () => {};
-    TestBed
-      .configureTestingModule({
-        imports: [
-          RouterTestingModule.withRoutes([]),
-          MomentModule
-        ],
-        declarations: [
-          PipelineViewPage
-        ],
-        providers: [
-          { provide: BuildConfigStore, useValue: mockBuildConfigStore }
-        ],
-        schemas: [ NO_ERRORS_SCHEMA ]
-      });
+    TestBed.configureTestingModule({
+      imports: [RouterTestingModule.withRoutes([]), MomentModule],
+      declarations: [PipelineViewPage],
+      providers: [{ provide: BuildConfigStore, useValue: mockBuildConfigStore }],
+      schemas: [NO_ERRORS_SCHEMA],
+    });
   }));
 
   beforeEach(() => {
@@ -35,5 +27,7 @@ describe('PipelineViewPage', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => { expect(pipeline).toBeTruthy(); });
+  it('should create', () => {
+    expect(pipeline).toBeTruthy();
+  });
 });

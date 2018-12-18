@@ -12,9 +12,7 @@ export class BrandingService {
   private _name: string;
   private _moreInfoLink: string;
 
-  constructor(
-    private fabric8UIConfig: Fabric8UIConfig
-  ) {
+  constructor(private fabric8UIConfig: Fabric8UIConfig) {
     this.isFabric8 = this.fabric8UIConfig.branding && this.fabric8UIConfig.branding === 'fabric8';
 
     if (this.isFabric8) {
@@ -53,5 +51,4 @@ export class BrandingService {
   get moreInfoLink(): string {
     return this._moreInfoLink;
   }
-
 }

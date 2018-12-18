@@ -5,16 +5,10 @@ import { CreateRoutingModule } from './create-routing.module';
 import { CreateComponent } from './create.component';
 
 @NgModule({
-  imports: [
-    CodebasesModule,
-    CommonModule,
-    CreateRoutingModule
-  ],
+  imports: [CodebasesModule, CommonModule, CreateRoutingModule],
   declarations: [CreateComponent],
-  providers: [
-
-  ]
+  providers: [],
 })
 export class CreateModule {
-  constructor() { }
+  constructor() {}
 }

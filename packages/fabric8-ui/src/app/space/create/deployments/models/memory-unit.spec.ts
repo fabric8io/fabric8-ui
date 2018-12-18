@@ -1,8 +1,4 @@
-import {
-  fromOrdinal,
-  MemoryUnit,
-  ordinal
-} from './memory-unit';
+import { fromOrdinal, MemoryUnit, ordinal } from './memory-unit';
 
 describe('MemoryUnit', (): void => {
   describe('ordinal', (): void => {
@@ -41,11 +37,13 @@ describe('MemoryUnit', (): void => {
     });
 
     describe('undefined cases', (): void => {
-      [-1, Object.keys(MemoryUnit).length, 1.5, NaN, Infinity].forEach((n: number): void => {
-        it(`should be undefined for ${n}`, (): void => {
-          expect(fromOrdinal(n)).toBeUndefined();
-        });
-      });
+      [-1, Object.keys(MemoryUnit).length, 1.5, NaN, Infinity].forEach(
+        (n: number): void => {
+          it(`should be undefined for ${n}`, (): void => {
+            expect(fromOrdinal(n)).toBeUndefined();
+          });
+        },
+      );
     });
   });
 });

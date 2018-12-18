@@ -12,15 +12,10 @@ import { AreasToolbarComponent } from './areas-toolbar.component';
     CommonModule,
     RouterModule,
     ToolbarModule,
-    TooltipModule.forRoot()
+    TooltipModule.forRoot(),
   ],
-  declarations: [
-    AreasToolbarComponent
-  ],
-  providers: [
-    BsDropdownConfig,
-    TooltipConfig
-  ],
-  exports: [AreasToolbarComponent]
+  declarations: [AreasToolbarComponent],
+  providers: [BsDropdownConfig, TooltipConfig],
+  exports: [AreasToolbarComponent],
 })
-export class AreasToolbarModule { }
+export class AreasToolbarModule {}

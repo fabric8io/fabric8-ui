@@ -1,11 +1,21 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Notification, Notifications, NotificationType } from 'ngx-base';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
 import { Subscription } from 'rxjs';
-import { ExtProfile, GettingStartedService } from '../../getting-started/services/getting-started.service';
+import {
+  ExtProfile,
+  GettingStartedService,
+} from '../../getting-started/services/getting-started.service';
 import { ProviderService } from '../../shared/account/provider.service';
 import { GitHubService } from '../../space/create/codebases/services/github.service';
 import { CopyService } from '../services/copy.service';
@@ -16,7 +26,7 @@ import { TenantService } from '../services/tenant.service';
   selector: 'alm-update',
   templateUrl: 'tenant.component.html',
   styleUrls: ['./tenant.component.less'],
-  providers: [CopyService, GettingStartedService, GitHubService, ProviderService, TenantService]
+  providers: [CopyService, GettingStartedService, GitHubService, ProviderService, TenantService],
 })
 export class TenantComponent implements AfterViewInit, OnInit {
   @ViewChild('_templatesRepoBlob') templatesRepoBlobElement: HTMLElement;
@@ -65,18 +75,23 @@ export class TenantComponent implements AfterViewInit, OnInit {
     private notifications: Notifications,
     private router: Router,
     private tenantService: TenantService,
-    private userService: UserService) {
-    this.subscriptions.push(contexts.current.subscribe(val => this.context = val));
+    private userService: UserService,
+  ) {
+    this.subscriptions.push(contexts.current.subscribe((val) => (this.context = val)));
 
     if (userService.currentLoggedInUser.attributes) {
       this.loggedInUser = userService.currentLoggedInUser;
       this.setUserProperties(this.loggedInUser);
-      this.subscriptions.push(auth.gitHubToken.subscribe(token => {
-        this.gitHubLinked = (token !== undefined && token.length !== 0);
-      }));
-      this.subscriptions.push(auth.isOpenShiftConnected(this.loggedInUser.attributes.cluster).subscribe((isConnected) => {
-        this.openShiftLinked = isConnected;
-      }));
+      this.subscriptions.push(
+        auth.gitHubToken.subscribe((token) => {
+          this.gitHubLinked = token !== undefined && token.length !== 0;
+        }),
+      );
+      this.subscriptions.push(
+        auth.isOpenShiftConnected(this.loggedInUser.attributes.cluster).subscribe((isConnected) => {
+          this.openShiftLinked = isConnected;
+        }),
+      );
     }
   }
 
@@ -94,19 +109,23 @@ export class TenantComponent implements AfterViewInit, OnInit {
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => {
+    this.subscriptions.forEach((sub) => {
       sub.unsubscribe();
     });
   }
-
 
   get isUpdateProfileDisabled(): boolean {
     if (this.modifiedFromRequestParam) {
       return false;
     }
-    return ((!this.profileForm.dirty && !(!this.loadedFormEmpty && this.formValuesEmpty())) ||
-      (this.templatesRepoBlobInvalid || this.templatesRepoInvalid || this.templatesRepoDirInvalid ||
-        this.boosterGitRefInvalid || this.boosterGitRepoInvalid));
+    return (
+      (!this.profileForm.dirty && !(!this.loadedFormEmpty && this.formValuesEmpty())) ||
+      (this.templatesRepoBlobInvalid ||
+        this.templatesRepoInvalid ||
+        this.templatesRepoDirInvalid ||
+        this.boosterGitRefInvalid ||
+        this.boosterGitRepoInvalid)
+    );
   }
 
   /**
@@ -167,28 +186,35 @@ export class TenantComponent implements AfterViewInit, OnInit {
     tenantConfig['templatesRepoDir'] = this.templatesRepoDir;
     tenantConfig['updateTenant'] = this.updateTenant;
 
+    this.subscriptions.push(
+      this.gettingStartedService.update(profile).subscribe(
+        (user) => {
+          this.setUserProperties(user);
 
-    this.subscriptions.push(this.gettingStartedService.update(profile).subscribe(user => {
-      this.setUserProperties(user);
-
-      this.subscriptions.push(this.tenantService.updateTenant()
-        .subscribe(res => {
-          this.notifications.message({
-            message: `Tenant Updated!`,
-            type: NotificationType.SUCCESS
-          } as Notification);
-          this.routeToProfile();
-        }, error => {
-          this.handleError('Failed to update tenant', NotificationType.DANGER);
-        }));
-
-    }, error => {
-      if (error.status === 409) {
-        this.handleError('Email already exists', NotificationType.DANGER);
-      } else {
-        this.handleError('Failed to update profile', NotificationType.DANGER);
-      }
-    }));
+          this.subscriptions.push(
+            this.tenantService.updateTenant().subscribe(
+              (res) => {
+                this.notifications.message({
+                  message: `Tenant Updated!`,
+                  type: NotificationType.SUCCESS,
+                } as Notification);
+                this.routeToProfile();
+              },
+              (error) => {
+                this.handleError('Failed to update tenant', NotificationType.DANGER);
+              },
+            ),
+          );
+        },
+        (error) => {
+          if (error.status === 409) {
+            this.handleError('Email already exists', NotificationType.DANGER);
+          } else {
+            this.handleError('Failed to update profile', NotificationType.DANGER);
+          }
+        },
+      ),
+    );
   }
 
   boosterGitRepoValidate(): void {
@@ -224,7 +250,6 @@ export class TenantComponent implements AfterViewInit, OnInit {
     }
   }
 
-
   /**
    * Helper to retrieve request parameters
    *
@@ -232,7 +257,9 @@ export class TenantComponent implements AfterViewInit, OnInit {
    * @returns {any} The request parameter value or null
    */
   private getRequestParam(name: string): string {
-    let param = (new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)')).exec(window.location.search);
+    let param = new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)').exec(
+      window.location.search,
+    );
     if (param != undefined) {
       return decodeURIComponent(param[1]);
     }
@@ -249,7 +276,6 @@ export class TenantComponent implements AfterViewInit, OnInit {
     delete profile.username;
     return profile;
   }
-
 
   /**
    * Set user properties
@@ -284,7 +310,6 @@ export class TenantComponent implements AfterViewInit, OnInit {
 
     this.loadedFormEmpty = this.formValuesEmpty();
 
-
     this.defaultValuesFromRequestParams();
   }
 
@@ -307,13 +332,18 @@ export class TenantComponent implements AfterViewInit, OnInit {
   private handleError(error: string, type: NotificationType) {
     this.notifications.message({
       message: error,
-      type: type
+      type: type,
     } as Notification);
   }
 
   private formValuesEmpty() {
-    return !(this.boosterGitRef || this.boosterGitRepo ||
-      this.templatesRepoBlob || this.templatesRepo || this.templatesRepoDir || !this.updateTenant);
+    return !(
+      this.boosterGitRef ||
+      this.boosterGitRepo ||
+      this.templatesRepoBlob ||
+      this.templatesRepo ||
+      this.templatesRepoDir ||
+      !this.updateTenant
+    );
   }
-
 }

@@ -1,21 +1,16 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ConnectableObservable, Observable, Subscription } from 'rxjs';
 import { publish } from 'rxjs/operators';
-import {
-  Build,
-  BuildConfig,
-  BuildConfigs
-} from '../../../a-runtime-console/index';
+import { Build, BuildConfig, BuildConfigs } from '../../../a-runtime-console/index';
 import { PipelinesService } from '../../shared/runtime-console/pipelines.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'fabric8-analytical-report-widget',
   templateUrl: './analytical-report-widget.component.html',
-  styleUrls: ['./analytical-report-widget.component.less']
+  styleUrls: ['./analytical-report-widget.component.less'],
 })
 export class AnalyticalReportWidgetComponent implements OnInit {
-
   buildConfigs: Observable<BuildConfigs>;
   buildConfigsCount: number;
 
@@ -31,20 +26,17 @@ export class AnalyticalReportWidgetComponent implements OnInit {
     recommendationsLimit: 7,
     showLoader: false,
     recommendations: [],
-    finishedTime: ''
+    finishedTime: '',
   };
 
   _contextSubscription: Subscription;
 
-  constructor(
-    private pipelinesService: PipelinesService
-  ) {
+  constructor(private pipelinesService: PipelinesService) {
     this.buildConfigsCount = 0;
   }
 
   ngOnInit() {
-    let bcs = this.pipelinesService.current.pipe(
-      publish()) as ConnectableObservable<BuildConfig[]>;
+    let bcs = this.pipelinesService.current.pipe(publish()) as ConnectableObservable<BuildConfig[]>;
     this.buildConfigs = bcs;
 
     this.buildConfigs.subscribe((data) => {
@@ -66,7 +58,7 @@ export class AnalyticalReportWidgetComponent implements OnInit {
   }
 
   filterPipelines(buildConfs: Array<any>): Array<any> {
-    return buildConfs.filter(item => {
+    return buildConfs.filter((item) => {
       let returnStatement: boolean = false;
       if (item && item.interestingBuilds && item.interestingBuilds.length > 0) {
         for (let build of item.interestingBuilds) {
@@ -81,7 +73,7 @@ export class AnalyticalReportWidgetComponent implements OnInit {
   }
 
   selectedPipeline(): void {
-    let pipeline: BuildConfig = this.pipelines.find(val => val.id === this.currentPipeline);
+    let pipeline: BuildConfig = this.pipelines.find((val) => val.id === this.currentPipeline);
     this.currentPipelineBuilds = pipeline.interestingBuilds;
     this.currentBuild = null;
     for (let build of this.currentPipelineBuilds) {
@@ -112,5 +104,4 @@ export class AnalyticalReportWidgetComponent implements OnInit {
       this.hideLoader();
     }
   }
-
 }

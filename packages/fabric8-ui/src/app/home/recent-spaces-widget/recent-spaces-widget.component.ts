@@ -1,32 +1,15 @@
-import {
-  Component,
-  ErrorHandler,
-  Input,
-  OnInit
-} from '@angular/core';
-import {
-  Broadcaster,
-  Logger
-} from 'ngx-base';
-import {
-  Space,
-  Spaces,
-  SpaceService
-} from 'ngx-fabric8-wit';
+import { Component, ErrorHandler, Input, OnInit } from '@angular/core';
+import { Broadcaster, Logger } from 'ngx-base';
+import { Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
-import {
-  Observable,
-  ReplaySubject,
-  Subject
-} from 'rxjs';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { first, map } from 'rxjs/operators';
 
 @Component({
   selector: 'fabric8-recent-spaces-widget',
-  templateUrl: './recent-spaces-widget.component.html'
+  templateUrl: './recent-spaces-widget.component.html',
 })
 export class RecentSpacesWidget implements OnInit {
-
   @Input() cardSizeClass: string;
   @Input() cardBodySizeClass: string;
 
@@ -40,7 +23,7 @@ export class RecentSpacesWidget implements OnInit {
     private userService: UserService,
     private errorHandler: ErrorHandler,
     private broadcaster: Broadcaster,
-    private logger: Logger
+    private logger: Logger,
   ) {
     this.recentSpaces = spaces.recent;
   }
@@ -48,9 +31,11 @@ export class RecentSpacesWidget implements OnInit {
   ngOnInit(): void {
     this.loading = true;
     this.spaceService
-      .getSpacesByUser(this.userService.currentLoggedInUser.attributes.username).pipe(
-      first(),
-      map((spaces: Space[]): boolean => spaces.length > 0))
+      .getSpacesByUser(this.userService.currentLoggedInUser.attributes.username)
+      .pipe(
+        first(),
+        map((spaces: Space[]): boolean => spaces.length > 0),
+      )
       .subscribe(
         (userHasSpaces: boolean): void => {
           this.userHasSpaces.next(userHasSpaces);
@@ -61,12 +46,11 @@ export class RecentSpacesWidget implements OnInit {
           this.logger.error(error);
           this.errorHandler.handleError(error);
           this.loading = false;
-        }
+        },
       );
   }
 
   showAddSpaceOverlay(): void {
     this.broadcaster.broadcast('showAddSpaceOverlay', true);
   }
-
 }

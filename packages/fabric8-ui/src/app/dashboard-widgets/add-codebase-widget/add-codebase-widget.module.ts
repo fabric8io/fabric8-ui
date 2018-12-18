@@ -14,9 +14,9 @@ import { CodebaseItemModule } from './codebase-item/codebase-item.module';
     AddCodebaseWidgetRoutingModule,
     FeatureFlagModule,
     LoadingWidgetModule,
-    CodebaseItemModule
+    CodebaseItemModule,
   ],
   declarations: [AddCodebaseWidgetComponent],
-  exports: [AddCodebaseWidgetComponent]
+  exports: [AddCodebaseWidgetComponent],
 })
-export class AddCodebaseWidgetModule { }
+export class AddCodebaseWidgetModule {}

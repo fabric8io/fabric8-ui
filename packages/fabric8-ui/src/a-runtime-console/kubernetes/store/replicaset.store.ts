@@ -5,7 +5,11 @@ import { ReplicaSetService } from '../service/replicaset.service';
 import { NamespacedResourceStore } from './namespacedresource.store';
 
 @Injectable()
-export class ReplicaSetStore extends NamespacedResourceStore<ReplicaSet, ReplicaSets, ReplicaSetService> {
+export class ReplicaSetStore extends NamespacedResourceStore<
+  ReplicaSet,
+  ReplicaSets,
+  ReplicaSetService
+> {
   constructor(replicaSetReplicaSet: ReplicaSetService, namespaceScope: NamespaceScope) {
     super(replicaSetReplicaSet, [], {} as ReplicaSet, namespaceScope, ReplicaSet);
   }

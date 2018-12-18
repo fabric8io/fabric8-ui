@@ -1,12 +1,6 @@
 import { ErrorHandler, Injectable } from '@angular/core';
 import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-base';
-import {
-  Context,
-  Contexts,
-  ContextTypes,
-  Space,
-  SpaceService
-} from 'ngx-fabric8-wit';
+import { Context, Contexts, ContextTypes, Space, SpaceService } from 'ngx-fabric8-wit';
 import { Feature, FeatureTogglesService } from 'ngx-feature-flag';
 import { User, UserService } from 'ngx-login-client';
 import {
@@ -19,7 +13,7 @@ import {
   ReplaySubject,
   Subject,
   Subscription,
-  throwError as observableThrowError
+  throwError as observableThrowError,
 } from 'rxjs';
 import {
   catchError,
@@ -30,7 +24,7 @@ import {
   multicast,
   switchMap,
   tap,
-  withLatestFrom
+  withLatestFrom,
 } from 'rxjs/operators';
 import { MenusService } from '../layout/header/menus.service';
 import { Navigation } from '../models/navigation';
@@ -50,7 +44,6 @@ interface RawContext {
  */
 @Injectable()
 export class ContextService extends RecentUtils<Context> implements Contexts {
-
   readonly RESERVED_WORDS: string[] = [];
   private _current: Subject<Context> = new ReplaySubject<Context>(1);
   private _default: ConnectableObservable<Context>;
@@ -66,7 +59,7 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
     private userService: UserService,
     private notifications: Notifications,
     private spaceService: SpaceService,
-    private toggleService: FeatureTogglesService
+    private toggleService: FeatureTogglesService,
   ) {
     super(errorHandler, profileService);
     this.initDefault();
@@ -74,86 +67,95 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach((subscription: Subscription): void => {
-      subscription.unsubscribe();
-    });
+    this.subscriptions.forEach(
+      (subscription: Subscription): void => {
+        subscription.unsubscribe();
+      },
+    );
   }
 
   private initDefault(): void {
-   // Initialize the default context when the logged in user changes
-   this._default = this.userService.loggedInUser
-    .pipe(
-    // First use map to convert the broadcast event to just a username
-      map((val: User): string => {
-        if (!(val && val.id)) {
-          // this is a logout event
-          return null;
-        } else if (val.attributes.username) {
-          this._currentUser = val.attributes.username;
-          return val.attributes.username;
-        } else {
-          this.notifications.message({
-            message: 'Something went badly wrong. Please try again later or ask for help.',
-            type: NotificationType.DANGER
-          } as Notification);
-          throw 'Unknown user';
-        }
-      }),
+    // Initialize the default context when the logged in user changes
+    this._default = this.userService.loggedInUser.pipe(
+      // First use map to convert the broadcast event to just a username
+      map(
+        (val: User): string => {
+          if (!(val && val.id)) {
+            // this is a logout event
+            return null;
+          } else if (val.attributes.username) {
+            this._currentUser = val.attributes.username;
+            return val.attributes.username;
+          } else {
+            this.notifications.message({
+              message: 'Something went badly wrong. Please try again later or ask for help.',
+              type: NotificationType.DANGER,
+            } as Notification);
+            throw 'Unknown user';
+          }
+        },
+      ),
       filter((val: string): boolean => val !== null),
       distinctUntilChanged(),
       // Then, perform another map to create a context from the user
       switchMap((val: string): Observable<User> => this.userService.getUserByUsername(val)),
-      map((val: User): Context => {
-        if (val && val.id) {
-          return {
-            user: val,
-            space: null,
-            type: ContextTypes.BUILTIN.get('user'),
-            name: val.attributes.username,
-            path: '/' + val.attributes.username
-          } as Context;
-        } else {
-          return {} as Context;
-        }
-      }),
-      multicast(() => new ReplaySubject(1))
+      map(
+        (val: User): Context => {
+          if (val && val.id) {
+            return {
+              user: val,
+              space: null,
+              type: ContextTypes.BUILTIN.get('user'),
+              name: val.attributes.username,
+              path: '/' + val.attributes.username,
+            } as Context;
+          } else {
+            return {} as Context;
+          }
+        },
+      ),
+      multicast(() => new ReplaySubject(1)),
     ) as ConnectableObservable<Context>;
     this._default.connect();
   }
 
   private initRecent(): void {
     this.subscriptions.push(
-      this.loadRecentContexts().subscribe((contexts: Context[]): void =>
-        this._recent.next(contexts)
-      )
+      this.loadRecentContexts().subscribe(
+        (contexts: Context[]): void => this._recent.next(contexts),
+      ),
     );
 
     this.subscriptions.push(
-      this.broadcaster.on<Context>('contextChanged')
+      this.broadcaster
+        .on<Context>('contextChanged')
         .pipe(
           withLatestFrom(this.recent),
-          map(([changedContext, recentContexts]: [Context, Context[]]): RecentData<Context> =>
-            this.onBroadcastChanged(changedContext, recentContexts)
+          map(
+            ([changedContext, recentContexts]: [Context, Context[]]): RecentData<Context> =>
+              this.onBroadcastChanged(changedContext, recentContexts),
           ),
-          filter((recentData: RecentData<Context>): boolean => recentData.isSaveRequired)
+          filter((recentData: RecentData<Context>): boolean => recentData.isSaveRequired),
         )
-        .subscribe((recentData: RecentData<Context>): void =>
-          this.saveRecentContexts(recentData.recent)
-        )
+        .subscribe(
+          (recentData: RecentData<Context>): void => this.saveRecentContexts(recentData.recent),
+        ),
     );
 
     this.subscriptions.push(
-      this.broadcaster.on<Space>('spaceDeleted')
+      this.broadcaster
+        .on<Space>('spaceDeleted')
         .pipe(
           withLatestFrom(this._recent),
-          map(([deletedSpace, recentContexts]: [Space, Context[]]): RecentData<Context> =>
-            this.onBroadcastDeleted(deletedSpace, recentContexts, this.compareContextToSpace)
+          map(
+            ([deletedSpace, recentContexts]: [Space, Context[]]): RecentData<Context> =>
+              this.onBroadcastDeleted(deletedSpace, recentContexts, this.compareContextToSpace),
           ),
-          filter((recentData: RecentData<Context>): boolean => recentData.isSaveRequired)
+          filter((recentData: RecentData<Context>): boolean => recentData.isSaveRequired),
         )
-        .subscribe((recentData: RecentData<Context>): void =>
-          this.saveRecentContexts(recentData.recent)
-        )
+        .subscribe(
+          (recentData: RecentData<Context>): void => this.saveRecentContexts(recentData.recent),
+        ),
     );
   }
 
@@ -186,73 +188,98 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
   changeContext(navigation: Observable<Navigation>): Observable<Context> {
     let res = navigation.pipe(
       // Fetch the objects from the REST API
-      switchMap((val: Navigation): Observable<RawContext | Context> => {
-        if (val.space) {
-          // If it's a space that's been requested then load the space creator as the owner
-          return this
-            .loadSpace(val.user, val.space)
-            .pipe(
-              map((space: Space): RawContext => {
-                return { user: space.relationalData.creator, space: space } as RawContext;
-              }),
-              catchError((err: string): Observable<RawContext> => {
-                console.log(`Space with name ${val.space} and owner ${val.user}
+      switchMap(
+        (val: Navigation): Observable<RawContext | Context> => {
+          if (val.space) {
+            // If it's a space that's been requested then load the space creator as the owner
+            return this.loadSpace(val.user, val.space).pipe(
+              map(
+                (space: Space): RawContext => {
+                  return { user: space.relationalData.creator, space: space } as RawContext;
+                },
+              ),
+              catchError(
+                (err: string): Observable<RawContext> => {
+                  console.log(`Space with name ${val.space} and owner ${val.user}
                   from path ${val.url} was not found because of ${err}`);
-                return observableThrowError(`Space with name ${val.space} and owner ${val.user}
+                  return observableThrowError(`Space with name ${val.space} and owner ${val.user}
                   from path ${val.url} was not found because of ${err}`);
-              })
+                },
+              ),
             );
-        } else {
-          // Otherwise, load the user and use that as the owner
-          return this
-            .loadUser(val.user)
-            .pipe(
-              map((user: User): RawContext => {
-                return { user: user, space: null } as RawContext;
-              }),
-              catchError((err: string): Observable<RawContext> => {
-                console.log(`Owner ${val.user} from path ${val.url} was not found because of ${err}`);
-                return observableThrowError(`Owner ${val.user} from path ${val.url} was not found because of ${err}`);
-              })
+          } else {
+            // Otherwise, load the user and use that as the owner
+            return this.loadUser(val.user).pipe(
+              map(
+                (user: User): RawContext => {
+                  return { user: user, space: null } as RawContext;
+                },
+              ),
+              catchError(
+                (err: string): Observable<RawContext> => {
+                  console.log(
+                    `Owner ${val.user} from path ${val.url} was not found because of ${err}`,
+                  );
+                  return observableThrowError(
+                    `Owner ${val.user} from path ${val.url} was not found because of ${err}`,
+                  );
+                },
+              ),
             );
-        }
-      }),
+          }
+        },
+      ),
       // Get the list of features enabled for this given user to know whether we should display feature menu.
-      switchMap((val: RawContext): Observable<RawContext> => {
-        return this.toggleService.getAllFeaturesEnabledByLevel()
-          .pipe(
-            map((features: Feature[]): RawContext => {
-              val.user.features = features;
-              return val;
-            }),
-            catchError((): Observable<RawContext> => {
-              return of(val);
-            })
+      switchMap(
+        (val: RawContext): Observable<RawContext> => {
+          return this.toggleService.getAllFeaturesEnabledByLevel().pipe(
+            map(
+              (features: Feature[]): RawContext => {
+                val.user.features = features;
+                return val;
+              },
+            ),
+            catchError(
+              (): Observable<RawContext> => {
+                return of(val);
+              },
+            ),
           );
-      }),
+        },
+      ),
       // Use a map to convert from a navigation url to a context
       map((val: RawContext) => this.buildContext(val)),
       distinctUntilKeyChanged('path'),
       // Broadcast the spaceChanged event
       // Ensure the menus are built
-      tap((val: Context): void => {
-        if (val) { this.menus.attach(val); }
-      }),
-      tap((val: Context): void => {
-        if (val) {
-          this._currentContextUser = val.user.attributes.username;
-          this.broadcaster.broadcast('contextChanged', val);
-        }
-      }),
-      tap((val: Context): void => {
-        if (val && val.space) {
-          this.broadcaster.broadcast('spaceChanged', val.space);
-        }
-      }),
-      tap((val: Context): void => {
-        this._current.next(val);
-      }),
-      multicast(() => new Subject())
+      tap(
+        (val: Context): void => {
+          if (val) {
+            this.menus.attach(val);
+          }
+        },
+      ),
+      tap(
+        (val: Context): void => {
+          if (val) {
+            this._currentContextUser = val.user.attributes.username;
+            this.broadcaster.broadcast('contextChanged', val);
+          }
+        },
+      ),
+      tap(
+        (val: Context): void => {
+          if (val && val.space) {
+            this.broadcaster.broadcast('spaceChanged', val.space);
+          }
+        },
+      ),
+      tap(
+        (val: Context): void => {
+          this._current.next(val);
+        },
+      ),
+      multicast(() => new Subject()),
     ) as ConnectableObservable<Context>;
     res.connect();
     return res;
@@ -267,22 +294,22 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
     let c: Context;
     if (val.space) {
       c = {
-        'user': val.space.relationalData.creator,
-        'space': val.space,
-        'type': null,
-        'name': null,
-        'path': null
+        user: val.space.relationalData.creator,
+        space: val.space,
+        type: null,
+        name: null,
+        path: null,
       } as Context;
       c.type = ContextTypes.BUILTIN.get('space');
       c.path = '/' + c.user.attributes.username + '/' + c.space.attributes.name;
       c.name = c.space.attributes.name;
     } else if (val.user) {
       c = {
-        'user': val.user,
-        'space': null,
-        'type': null,
-        'name': null,
-        'path': null
+        user: val.user,
+        space: null,
+        type: null,
+        name: null,
+        path: null,
       } as Context;
       c.type = ContextTypes.BUILTIN.get('user');
       // TODO replace path with username once parameterized routes are working
@@ -297,26 +324,35 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
 
   private loadUser(userName: string): Observable<User> {
     if (this.checkForReservedWords(userName)) {
-      return observableThrowError(new Error(`User name ${userName} contains reserved characters.`), asapScheduler);
+      return observableThrowError(
+        new Error(`User name ${userName} contains reserved characters.`),
+        asapScheduler,
+      );
     }
-    return this.userService
-      .getUserByUsername(userName)
-      .pipe(
-        map((val: User): User => {
+    return this.userService.getUserByUsername(userName).pipe(
+      map(
+        (val: User): User => {
           if (val && val.id) {
             return val;
           } else {
             throw new Error(`No user found for ${userName}`);
           }
-        })
-      );
+        },
+      ),
+    );
   }
 
   private loadSpace(userName: string, spaceName: string): Observable<Space> {
     if (this.checkForReservedWords(userName)) {
-      return observableThrowError(new Error(`User name ${userName} contains reserved characters.`), asapScheduler);
+      return observableThrowError(
+        new Error(`User name ${userName} contains reserved characters.`),
+        asapScheduler,
+      );
     } else if (this.checkForReservedWords(spaceName)) {
-      return observableThrowError(new Error(`Space name ${spaceName} contains reserved characters.`), asapScheduler);
+      return observableThrowError(
+        new Error(`Space name ${spaceName} contains reserved characters.`),
+        asapScheduler,
+      );
     }
 
     if (userName && spaceName) {
@@ -342,58 +378,72 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
   }
 
   private loadRecentContexts(): Observable<Context[]> {
-    return this.profileService.current.pipe(switchMap((profile: ExtProfile): Observable<Context[]> => {
-      if (profile.store.recentContexts && profile.store.recentContexts.length > 0) {
-        return forkJoin((profile.store.recentContexts as RawContext[])
-          .map((raw: RawContext): Observable<Context> => {
-            if (raw.space) {
-              // if getSpaceById() throws an error, forkJoin will not complete and loadRecent will not return
-              return this.spaceService.getSpaceById(raw.space)
-                .pipe(
-                  catchError((): Observable<Space> => of(null)),
-                  map((val: Space): Context => {
-                    if (val) {
-                      return this.buildContext({ space: val } as RawContext);
-                    }
-                    return null;
-                  })
-                );
-            } else {
-              return this.userService.getUserByUserId(raw.user)
-                .pipe(
-                  catchError((err: string): Observable<Context> => {
-                    console.log('Unable to restore recent context', err);
-                    return EMPTY;
-                  }),
-                  map((val: Context | User): Context => {
-                    return this.buildContext({ user: val } as RawContext);
-                  })
-                );
-            }
-          }))
-          .pipe(
-            map((contexts: Context[]): Context[] => {
-              // remove null context values resulting from getSpaceById throwing an error
-              return contexts.filter((context: Context): boolean => context !== null);
-            })
-          );
-      } else {
-        return of([]);
-      }
-    }));
+    return this.profileService.current.pipe(
+      switchMap(
+        (profile: ExtProfile): Observable<Context[]> => {
+          if (profile.store.recentContexts && profile.store.recentContexts.length > 0) {
+            return forkJoin(
+              (profile.store.recentContexts as RawContext[]).map(
+                (raw: RawContext): Observable<Context> => {
+                  if (raw.space) {
+                    // if getSpaceById() throws an error, forkJoin will not complete and loadRecent will not return
+                    return this.spaceService.getSpaceById(raw.space).pipe(
+                      catchError((): Observable<Space> => of(null)),
+                      map(
+                        (val: Space): Context => {
+                          if (val) {
+                            return this.buildContext({ space: val } as RawContext);
+                          }
+                          return null;
+                        },
+                      ),
+                    );
+                  } else {
+                    return this.userService.getUserByUserId(raw.user).pipe(
+                      catchError(
+                        (err: string): Observable<Context> => {
+                          console.log('Unable to restore recent context', err);
+                          return EMPTY;
+                        },
+                      ),
+                      map(
+                        (val: Context | User): Context => {
+                          return this.buildContext({ user: val } as RawContext);
+                        },
+                      ),
+                    );
+                  }
+                },
+              ),
+            ).pipe(
+              map(
+                (contexts: Context[]): Context[] => {
+                  // remove null context values resulting from getSpaceById throwing an error
+                  return contexts.filter((context: Context): boolean => context !== null);
+                },
+              ),
+            );
+          } else {
+            return of([]);
+          }
+        },
+      ),
+    );
   }
 
   private saveRecentContexts(recent: Context[]): void {
     this._recent.next(recent);
     let patch = {
       store: {
-        recentContexts: recent.map(ctx => ({
-          user: ctx.user.id,
-          space: (ctx.space ? ctx.space.id : null)
-        } as RawContext))
-      }
+        recentContexts: recent.map(
+          (ctx) =>
+            ({
+              user: ctx.user.id,
+              space: ctx.space ? ctx.space.id : null,
+            } as RawContext),
+        ),
+      },
     } as ExtProfile;
     this.saveProfile(patch);
   }
-
 }

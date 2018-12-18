@@ -5,10 +5,7 @@ import { RedirectStatusComponent } from './redirect-status.component';
 import { StatusComponent } from './status/status.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RedirectStatusRoutingModule
-  ],
-  declarations: [ StatusComponent, RedirectStatusComponent ]
+  imports: [CommonModule, RedirectStatusRoutingModule],
+  declarations: [StatusComponent, RedirectStatusComponent],
 })
 export class RedirectStatusModule {}

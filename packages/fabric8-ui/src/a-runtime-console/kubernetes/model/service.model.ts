@@ -31,17 +31,15 @@ export class Service extends KubernetesSpecResource {
   }
 }
 
-export class Services extends Array<Service> {
-}
-
+export class Services extends Array<Service> {}
 
 export function enrichServiceWithRoute(services: Services, routes: Routes): Services {
   let map = {};
   if (routes) {
-    routes.forEach(s => map[s.name] = s);
+    routes.forEach((s) => (map[s.name] = s));
   }
   if (services) {
-    services.forEach(s => {
+    services.forEach((s) => {
       let route = map[s.name];
       if (route) {
         s.route = route;

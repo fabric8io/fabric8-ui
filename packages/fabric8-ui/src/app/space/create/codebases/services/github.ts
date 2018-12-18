@@ -36,10 +36,10 @@ export class GitHubUser {
   'collaborators': number;
   'two_factor_authentication': boolean;
   'plan': {
-    'name': string;
-    'space': number;
-    'private_repos': number;
-    'collaborators': number;
+    name: string;
+    space: number;
+    private_repos: number;
+    collaborators: number;
   };
 }
 
@@ -162,16 +162,16 @@ export class GitHubRepoLicense {
   'content': string;
   'encoding': string;
   '_links': {
-    'self': string;
-    'git': string;
-    'html': string;
+    self: string;
+    git: string;
+    html: string;
   };
   'license': {
-    'key': string;
-    'name': string;
-    'spdx_id': string;
-    'url': string;
-    'featured': boolean;
+    key: string;
+    name: string;
+    spdx_id: string;
+    url: string;
+    featured: boolean;
   };
 }
 
@@ -181,9 +181,9 @@ export class GitHubRepoLastCommit {
   'ref': string;
   'url': string;
   'object': {
-    'sha': string;
-    'type': string;
-    'url': string;
+    sha: string;
+    type: string;
+    url: string;
   };
 }
 
@@ -192,49 +192,53 @@ export class GitHubRepoLastCommit {
 export class GitHubRepoCommit {
   'sha': string;
   'commit': {
-    'author': {
-      'name': string;
-      'email': string;
-      'date': string;
+    author: {
+      name: string;
+      email: string;
+      date: string;
     };
-    'committer': {
-      'name': string;
-      'email': string;
-      'date': string;
+    committer: {
+      name: string;
+      email: string;
+      date: string;
     };
-    'message': string;
-    'tree': {
-      'sha': string;
-      'url': string;
+    message: string;
+    tree: {
+      sha: string;
+      url: string;
     };
-    'url': string;
-    'comment_count': number;
+    url: string;
+    comment_count: number;
   };
   'url': string;
   'html_url': string;
   'comments_url': string;
   'author': GitHubOwner;
   'committer': GitHubOwner;
-  'parents': [{
-      'sha': string;
-      'url': string;
-      'html_url': string;
-  }];
+  'parents': [
+    {
+      sha: string;
+      url: string;
+      html_url: string;
+    }
+  ];
   'stats': {
-    'total': number;
-    'additions': number;
-    'deletions': number;
+    total: number;
+    additions: number;
+    deletions: number;
   };
-  'files': [{
-    'sha': string;
-    'filename': string;
-    'status': string;
-    'additions': number;
-    'deletions': number;
-    'changes': number;
-    'blob_url': string;
-    'raw_url': string;
-    'contents_url': string;
-    'patch': string;
-  }];
+  'files': [
+    {
+      sha: string;
+      filename: string;
+      status: string;
+      additions: number;
+      deletions: number;
+      changes: number;
+      blob_url: string;
+      raw_url: string;
+      contents_url: string;
+      patch: string;
+    }
+  ];
 }

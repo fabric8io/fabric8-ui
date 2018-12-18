@@ -13,19 +13,14 @@ import { TruncateCharactersPipe } from './truncate-characters.pipe';
 import { TruncateWordsPipe } from './truncate-words.pipe';
 
 @NgModule({
-  imports: [
-    BsDropdownModule.forRoot(),
-    CommonModule,
-    RouterModule,
-    OAuthModule.forRoot()
-  ],
+  imports: [BsDropdownModule.forRoot(), CommonModule, RouterModule, OAuthModule.forRoot()],
   declarations: [
     EntriesPipe,
     TruncateCharactersPipe,
     TruncateWordsPipe,
     LoadingComponent,
     ResourceHeaderComponent,
-    SafeUrlPipe
+    SafeUrlPipe,
   ],
   exports: [
     EntriesPipe,
@@ -33,12 +28,8 @@ import { TruncateWordsPipe } from './truncate-words.pipe';
     TruncateWordsPipe,
     LoadingComponent,
     ResourceHeaderComponent,
-    SafeUrlPipe
+    SafeUrlPipe,
   ],
-  providers: [
-    BsDropdownConfig,
-    ParentLinkFactory,
-    OnLogin
-  ]
+  providers: [BsDropdownConfig, ParentLinkFactory, OnLogin],
 })
-export class Fabric8CommonModule { }
+export class Fabric8CommonModule {}

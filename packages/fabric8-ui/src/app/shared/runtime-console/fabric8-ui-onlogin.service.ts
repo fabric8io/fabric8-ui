@@ -4,12 +4,7 @@ import { LoginService } from '../login.service';
 
 @Injectable()
 export class Fabric8UIOnLogin implements OnLogin {
-
-  constructor(
-    private loginService: LoginService
-  ) {
-
-  }
+  constructor(private loginService: LoginService) {}
 
   // TODO - remove this in favor of handling all tokens through ngx-login-client
   get token(): string {

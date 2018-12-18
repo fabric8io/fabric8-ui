@@ -6,7 +6,7 @@ import { SpaceSettingsRoutingModule } from './space-settings-routing.module';
 import { SpaceSettingsComponent } from './space-settings.component';
 
 @NgModule({
-  imports:      [ CommonModule, SpaceSettingsRoutingModule, SettingsOverviewModule, AreasModule ],
-  declarations: [ SpaceSettingsComponent ]
+  imports: [CommonModule, SpaceSettingsRoutingModule, SettingsOverviewModule, AreasModule],
+  declarations: [SpaceSettingsComponent],
 })
-export class SpaceSettingsModule { }
+export class SpaceSettingsModule {}

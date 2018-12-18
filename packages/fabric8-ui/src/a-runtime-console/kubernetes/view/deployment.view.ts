@@ -2,7 +2,6 @@ import { Deployment, Deployments } from '../model/deployment.model';
 import { DeploymentConfig, DeploymentConfigs } from '../model/deploymentconfig.model';
 import { Service, Services } from '../model/service.model';
 
-
 export class DeploymentView {
   public readonly deployment: Deployment;
   public readonly service: Service;
@@ -88,16 +87,18 @@ export class DeploymentView {
   }
 }
 
-export class DeploymentViews extends Array<DeploymentView> {
-}
+export class DeploymentViews extends Array<DeploymentView> {}
 
 /**
  * Combines Deployments and DeploymentConfigs into a list removing any duplicates
  */
-export function combineDeployments(deployments: Deployments, deploymentConfigs: DeploymentConfigs): Deployments {
+export function combineDeployments(
+  deployments: Deployments,
+  deploymentConfigs: DeploymentConfigs,
+): Deployments {
   let map = {};
   if (deployments) {
-    deployments.forEach(s => map[s.name] = s);
+    deployments.forEach((s) => (map[s.name] = s));
   }
 
   var answer = new Deployments();
@@ -116,7 +117,10 @@ export function combineDeployments(deployments: Deployments, deploymentConfigs: 
 /**
  * Combines Deployments and DeploymentConfigs into a list removing any duplicates
  */
-export function combineDeployment(deployment: Deployment, deploymentConfig: DeploymentConfig): Deployment {
+export function combineDeployment(
+  deployment: Deployment,
+  deploymentConfig: DeploymentConfig,
+): Deployment {
   if (deployment && deployment.resource) {
     return deploymentConfig && deploymentConfig.resource ? deploymentConfig : deployment;
   } else {
@@ -124,8 +128,11 @@ export function combineDeployment(deployment: Deployment, deploymentConfig: Depl
   }
 }
 
-export function createDeploymentViews(deployments: Deployments, services: Services): DeploymentViews {
+export function createDeploymentViews(
+  deployments: Deployments,
+  services: Services,
+): DeploymentViews {
   let map = {};
-  services.forEach(s => map[s.name] = s);
-  return deployments.map(d => new DeploymentView(d, map[d.name]));
+  services.forEach((s) => (map[s.name] = s));
+  return deployments.map((d) => new DeploymentView(d, map[d.name]));
 }

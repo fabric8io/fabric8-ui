@@ -33,16 +33,18 @@ describe('createMock', (): void => {
   });
 
   describe('falsy inputs', (): void => {
-    [undefined, null].forEach((value: Type<TestClass>): void => {
-      it(`should fail gracefully on ${value}`, (): void => {
-        try {
-          createMock(value);
-        } catch (e) {
-          expect(e).toEqual(new Error(`Cannot mock falsy value "${value}"`));
-          return;
-        }
-        fail();
-      });
-    });
+    [undefined, null].forEach(
+      (value: Type<TestClass>): void => {
+        it(`should fail gracefully on ${value}`, (): void => {
+          try {
+            createMock(value);
+          } catch (e) {
+            expect(e).toEqual(new Error(`Cannot mock falsy value "${value}"`));
+            return;
+          }
+          fail();
+        });
+      },
+    );
   });
 });

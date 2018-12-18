@@ -19,9 +19,9 @@ import { CreateWorkItemWidgetComponent } from './create-work-item-widget.compone
     PlannerListModule,
     NgArrayPipesModule,
     WorkItemDetailModule,
-    NgLetModule
+    NgLetModule,
   ],
   declarations: [CreateWorkItemWidgetComponent],
-  exports: [CreateWorkItemWidgetComponent]
+  exports: [CreateWorkItemWidgetComponent],
 })
-export class CreateWorkItemWidgetModule { }
+export class CreateWorkItemWidgetModule {}
