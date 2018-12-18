@@ -1,30 +1,13 @@
-<div class="inlineinput-container"
-[class.read-only]="disabled"
-(clickOut)="input.value == inputValue || input.value == '' ? closeClick() : ''">
-  <textarea
-    #input
-    autosize
-    (click)="startEditing(true)"
-    [init_height]="23"
-    [attr.disabled]="(!allowOnLineClickEdit || disabled) && !editing ? '' : null"
-    [attr.placeholder]="placeholder"
-    [class.active]="editing"
-    [ngModel]="inputValue"
-    class="input-field inlineinput-textarea"
-    (keydown.enter)="submitOnEnter($event)"
-    (keydown)="onkeyDown($event)">
+<div class="inlineinput-container" [class.read-only]="disabled" (clickOut)="input.value == inputValue || input.value == '' ? closeClick() : saveClick()">
+  <textarea #input autosize (click)="startEditing(true)" [init_height]="23" [attr.disabled]="(!allowOnLineClickEdit || disabled) && !editing ? '' : null"
+    [attr.placeholder]="placeholder" [class.active]="editing" [ngModel]="inputValue" class="input-field inlineinput-textarea"
+    (keydown.enter)="submitOnEnter($event)" (keydown)="onkeyDown($event)">
   </textarea>
-  <div
-    *ngIf="editing"
-    (click)="saveClick()"
-    class="btn btn-primary action-btn btn-save inlineinput-btn-save"
+  <div *ngIf="editing" (click)="saveClick()" class="btn btn-primary action-btn btn-save inlineinput-btn-save"
     [class.disabled]="saving">
     <i class="fa fa-check"></i>
   </div>
-  <div
-    class="btn btn-default action-btn inlineinput-btn-cancel"
-    *ngIf="editing"
-    (click)="closeClick()">
+  <div class="btn btn-default action-btn inlineinput-btn-cancel" *ngIf="editing" (click)="closeClick()">
     <i class="fa fa-close"></i>
   </div>
 
@@ -46,9 +29,7 @@
 
     TODO: Evaluate the solution and come up with a better one if there is any
   -->
-  <div (click)="startEditing(false)"
-      class="editor-icon-container"
-      [class.hide]="editing">
+  <div (click)="startEditing(false)" class="editor-icon-container" [class.hide]="editing">
     <i class="pficon-edit edit-icon"></i>
   </div>
   <div *ngIf="editing">
