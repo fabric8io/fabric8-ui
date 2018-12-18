@@ -9,9 +9,8 @@ import { WorkItemUI } from './../../models/work-item';
 @Component({
   selector: 'work-item-event-wrapper',
   templateUrl: './work-item-event-wrapper.component.html',
-  styleUrls: ['./work-item-event-wrapper.component.less']
+  styleUrls: ['./work-item-event-wrapper.component.less'],
 })
-
 export class WorkItemEventWrapperComponent implements OnInit {
   @Input('workItem') set WorkItem(workitem: WorkItemUI) {
     this.workitem = workitem;
@@ -22,15 +21,12 @@ export class WorkItemEventWrapperComponent implements OnInit {
   private workitem: WorkItemUI = null;
   private events = this.eventsQuery.getEventsWithModifier();
 
-  constructor(
-    private store: Store<AppState>,
-    private eventsQuery: EventQuery
-  ) { }
+  constructor(private store: Store<AppState>, private eventsQuery: EventQuery) {}
 
   ngOnInit() {
     this.emptyStateConfig = {
       info: 'There are no Audits for your selected work item',
-      title: 'No Audits Available'
+      title: 'No Audits Available',
     } as EmptyStateConfig;
   }
 }

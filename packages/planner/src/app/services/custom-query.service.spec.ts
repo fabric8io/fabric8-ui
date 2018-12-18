@@ -11,37 +11,34 @@ describe('Custom Query :: Unit Tests', () => {
   let spy, resp;
   beforeEach(() => {
     spy = jasmine.createSpyObj('HttpService', ['get', 'post', 'delete']);
-    TestBed.configureTestingModule(
-      {
-        providers: [
-          CustomQueryService,
-          { provide: HttpClientService, useValue: spy}
-        ]
-      }
-    );
+    TestBed.configureTestingModule({
+      providers: [CustomQueryService, { provide: HttpClientService, useValue: spy }],
+    });
     customqueryService = TestBed.get(CustomQueryService);
     httpService = TestBed.get(HttpClientService);
   });
 
   it('should get all the custom queries', () => {
-    httpService.get.and.returnValue(of({
-      data: [] as CustomQueryModel[]
-    }));
+    httpService.get.and.returnValue(
+      of({
+        data: [] as CustomQueryModel[],
+      }),
+    );
 
-    customqueryService.getCustomQueries('')
-      .subscribe((d) => {
-        expect(d).toEqual([] as CustomQueryModel[]);
-      });
+    customqueryService.getCustomQueries('').subscribe((d) => {
+      expect(d).toEqual([] as CustomQueryModel[]);
+    });
   });
 
   it('should create a custom query', () => {
-    httpService.post.and.returnValue(of({
-      data: {} as CustomQueryModel
-    }));
-    customqueryService.create({} as CustomQueryModel, '')
-      .subscribe(d => {
-        expect(d).toEqual({} as CustomQueryModel);
-      });
+    httpService.post.and.returnValue(
+      of({
+        data: {} as CustomQueryModel,
+      }),
+    );
+    customqueryService.create({} as CustomQueryModel, '').subscribe((d) => {
+      expect(d).toEqual({} as CustomQueryModel);
+    });
   });
 
   it('should delete a custom query', () => {
@@ -50,5 +47,4 @@ describe('Custom Query :: Unit Tests', () => {
       expect(httpService.delete).toHaveBeenCalled();
     });
   });
-
 });

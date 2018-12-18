@@ -17,7 +17,7 @@ function getRepoName(remoteName) {
   remoteName = remoteName || 'origin';
 
   var stdout = execSync('git remote show ' + remoteName),
-      match = REPO_NAME_RE.exec(stdout);
+    match = REPO_NAME_RE.exec(stdout);
 
   if (!match) {
     throw new Error('Could not find a repository on remote ' + remoteName);
@@ -27,7 +27,6 @@ function getRepoName(remoteName) {
 }
 
 function stripTrailing(str, char) {
-
   if (str[0] === char) {
     str = str.substr(1);
   }

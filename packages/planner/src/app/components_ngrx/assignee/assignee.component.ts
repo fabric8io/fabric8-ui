@@ -4,9 +4,8 @@ import { User } from 'ngx-login-client';
 @Component({
   selector: 'f8-assignee',
   templateUrl: './assignee.component.html',
-  styleUrls: ['./assignee.component.less']
+  styleUrls: ['./assignee.component.less'],
 })
-
 export class AssigneesComponent {
   private assignees: User[] = [];
 

@@ -1,6 +1,4 @@
-import {
-  GroupTypeUI
-} from './../models/group-types.model';
+import { GroupTypeUI } from './../models/group-types.model';
 
 export type GroupTypeState = GroupTypeUI[];
 

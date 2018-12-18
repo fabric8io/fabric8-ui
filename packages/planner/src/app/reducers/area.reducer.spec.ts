@@ -18,8 +18,8 @@ describe('AreaReducer:', () => {
 
   it('GetSuccess action should return new state', () => {
     const areas: AreaState = {
-      '1': {id: '1', name: 'Area 1', parentPath: '/1223', parentPathResolved: '/space'},
-      '2': {id: '2', name: 'Area 2', parentPath: '/1224', parentPathResolved: '/space1'}
+      '1': { id: '1', name: 'Area 1', parentPath: '/1223', parentPathResolved: '/space' },
+      '2': { id: '2', name: 'Area 2', parentPath: '/1224', parentPathResolved: '/space1' },
     };
 
     const action = new AreaActions.GetSuccess(areas);
@@ -30,8 +30,8 @@ describe('AreaReducer:', () => {
 
   it('GetError Action should return previous state', () => {
     const previousState: AreaState = {
-      '1': {id: '1', name: 'Area 1', parentPath: '/1223', parentPathResolved: '/space'},
-      '2': {id: '2', name: 'Area 2', parentPath: '/1224', parentPathResolved: '/space1'}
+      '1': { id: '1', name: 'Area 1', parentPath: '/1223', parentPathResolved: '/space' },
+      '2': { id: '2', name: 'Area 2', parentPath: '/1224', parentPathResolved: '/space1' },
     };
     const action = new AreaActions.GetError();
     const state = AreaReducer(previousState, action);

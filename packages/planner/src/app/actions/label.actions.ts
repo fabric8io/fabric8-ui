@@ -1,12 +1,12 @@
 import { Action } from '@ngrx/store';
 import { LabelModel, LabelUI } from './../models/label.model';
 
-export const ADD            = '[label] Add';
-export const GET            = '[label] Get';
-export const GET_SUCCESS    = '[label] GetSuccess';
-export const GET_ERROR      = '[label] GetError';
-export const ADD_SUCCESS    = '[label] AddSuccess';
-export const ADD_ERROR      = '[label] AddError';
+export const ADD = '[label] Add';
+export const GET = '[label] Get';
+export const GET_SUCCESS = '[label] GetSuccess';
+export const GET_ERROR = '[label] GetError';
+export const ADD_SUCCESS = '[label] AddSuccess';
+export const ADD_ERROR = '[label] AddError';
 
 export class Add implements Action {
   payload: any;
@@ -44,10 +44,4 @@ export class AddError implements Action {
   readonly type = ADD_ERROR;
 }
 
-export type All
-  = Add
-  | Get
-  | GetSuccess
-  | GetError
-  | AddSuccess
-  | AddError;
+export type All = Add | Get | GetSuccess | GetError | AddSuccess | AddError;

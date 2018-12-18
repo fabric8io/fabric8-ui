@@ -11,25 +11,18 @@ describe('Unit test :: Collaborator Service', () => {
   let spy;
   beforeEach(() => {
     spy = jasmine.createSpyObj('HttpClientService', ['get']);
-    TestBed.configureTestingModule(
-      {
-        providers: [
-          CollaboratorService,
-          {provide: HttpClientService, useValue: spy}
-        ]
-      }
-    );
+    TestBed.configureTestingModule({
+      providers: [CollaboratorService, { provide: HttpClientService, useValue: spy }],
+    });
   });
 
   it('should call get from HTTP service', async () => {
     const collabService = TestBed.get(CollaboratorService);
     const returnValue = {
-      data: [] as User[]
+      data: [] as User[],
     };
 
-    collabService.httpClienService.get.and.returnValue(
-      of(returnValue).pipe(delay(200))
-    );
+    collabService.httpClienService.get.and.returnValue(of(returnValue).pipe(delay(200)));
     collabService.getCollaborators('').subscribe((d) => {
       expect(d).toEqual(returnValue.data);
     });

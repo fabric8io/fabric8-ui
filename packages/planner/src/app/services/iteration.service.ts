@@ -3,13 +3,13 @@ import { Observable } from 'rxjs';
 
 import { map, tap } from 'rxjs/operators';
 import {
-  IterationService as IterationServiceModel, IterationUI
+  IterationService as IterationServiceModel,
+  IterationUI,
 } from './../models/iteration.model';
 import { HttpClientService } from './../shared/http-module/http.service';
 
 @Injectable()
 export class IterationService {
-
   constructor(private http: HttpClientService) {}
 
   /**
@@ -18,12 +18,10 @@ export class IterationService {
    * @return Promise of IterationModel[] - Array of iterations.
    */
   getIterations(iterationUrl): Observable<IterationServiceModel[]> {
-    return this.http
-      .get<{data: IterationServiceModel[]}>(iterationUrl)
-      .pipe(
-        map(r => r.data),
-        map(d => this.resolveChildren(d))
-      );
+    return this.http.get<{ data: IterationServiceModel[] }>(iterationUrl).pipe(
+      map((r) => r.data),
+      map((d) => this.resolveChildren(d)),
+    );
   }
 
   /**
@@ -32,10 +30,14 @@ export class IterationService {
    * @param iteration - data to create a new iteration
    * @return new item
    */
-  createIteration(url: string, iteration: IterationServiceModel): Observable<IterationServiceModel> {
+  createIteration(
+    url: string,
+    iteration: IterationServiceModel,
+  ): Observable<IterationServiceModel> {
     console.log('Create on iteration service.');
-    return this.http.post<{data: IterationServiceModel}>(url, { data: iteration })
-      .pipe(map(r => r.data));
+    return this.http
+      .post<{ data: IterationServiceModel }>(url, { data: iteration })
+      .pipe(map((r) => r.data));
   }
 
   /**
@@ -46,8 +48,8 @@ export class IterationService {
   updateIteration(iteration: IterationServiceModel): Observable<IterationServiceModel> {
     console.log('Update on iteration service.');
     return this.http
-      .patch<{data: IterationServiceModel}>(iteration.links.self, { data: iteration })
-      .pipe(map(r => r.data));
+      .patch<{ data: IterationServiceModel }>(iteration.links.self, { data: iteration })
+      .pipe(map((r) => r.data));
   }
 
   isRootIteration(parentPath: string): boolean {
@@ -59,8 +61,13 @@ export class IterationService {
    * @param parent
    * @param iterations
    */
-  private checkForChildIterations(parent: IterationServiceModel, iterations: IterationServiceModel[]): IterationServiceModel[] {
-    return iterations.filter(i => i.relationships.parent ? parent.id === i.relationships.parent.data.id : false);
+  private checkForChildIterations(
+    parent: IterationServiceModel,
+    iterations: IterationServiceModel[],
+  ): IterationServiceModel[] {
+    return iterations.filter((i) =>
+      i.relationships.parent ? parent.id === i.relationships.parent.data.id : false,
+    );
   }
 
   /**
@@ -68,7 +75,7 @@ export class IterationService {
    * @param data
    */
   private resolveChildren(iterations: IterationServiceModel[]): IterationServiceModel[] {
-    return iterations.map(iteration => {
+    return iterations.map((iteration) => {
       const childIterations = this.checkForChildIterations(iteration, iterations);
       if (childIterations.length > 0) {
         iteration.hasChildren = true;
@@ -79,8 +86,8 @@ export class IterationService {
   }
 
   getTopLevelIterations(iterations: IterationUI[]): IterationUI[] {
-    let topLevelIterations = iterations.filter(iteration =>
-      ((iteration.parentPath.split('/')).length - 1) === 1
+    let topLevelIterations = iterations.filter(
+      (iteration) => iteration.parentPath.split('/').length - 1 === 1,
     );
     return topLevelIterations;
   }

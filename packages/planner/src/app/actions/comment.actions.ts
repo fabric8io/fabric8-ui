@@ -16,10 +16,10 @@ export const DELETE_ERROR = '[comment] DeleteError';
 
 export class Add implements Action {
   payload: {
-    url: string,
-    comment: Comment
+    url: string;
+    comment: Comment;
   };
-  constructor(payload: {url: string, comment: Comment}) {
+  constructor(payload: { url: string; comment: Comment }) {
     this.payload = payload;
   }
   readonly type = ADD;
@@ -97,8 +97,8 @@ export class DeleteError implements Action {
   readonly type = DELETE_ERROR;
 }
 
-export type All
-  = Add
+export type All =
+  | Add
   | Get
   | Update
   | Delete

@@ -7,5 +7,5 @@ let realmFactory = () => {
 
 export let realmProvider = {
   provide: REALM,
-  useFactory: realmFactory
+  useFactory: realmFactory,
 };

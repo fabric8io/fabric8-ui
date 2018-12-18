@@ -6,7 +6,6 @@ import { InfotipComponent } from './infotip.component';
 @NgModule({
   imports: [CommonModule, PopoverModule.forRoot()],
   declarations: [InfotipComponent],
-  exports: [InfotipComponent]
+  exports: [InfotipComponent],
 })
-
 export class InfotipModule {}

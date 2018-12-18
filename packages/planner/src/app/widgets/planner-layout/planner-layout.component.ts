@@ -1,51 +1,44 @@
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger
-} from '@angular/animations';
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  TemplateRef
-} from '@angular/core';
-
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { Component, EventEmitter, Input, OnInit, Output, TemplateRef } from '@angular/core';
 
 @Component({
   selector: 'alm-planner-layout',
   templateUrl: './planner-layout.component.html',
   styleUrls: ['./planner-layout.component.less'],
-  animations:
-  [
+  animations: [
     trigger('slideInOut', [
-      state('in', style({
-        width: '50px'
-
-      })),
-      state('out', style({
-        width: '320px'
-      })),
-      transition('in <=> out', animate('400ms ease-in-out'))
+      state(
+        'in',
+        style({
+          width: '50px',
+        }),
+      ),
+      state(
+        'out',
+        style({
+          width: '320px',
+        }),
+      ),
+      transition('in <=> out', animate('400ms ease-in-out')),
     ]),
     trigger('slideInOutContent', [
-      state('out', style({
-        marginLeft: '50px'
-
-      })),
-      state('in', style({
-        marginLeft: '320px'
-      })),
-      transition('in <=> out', animate('400ms ease-in-out'))
-    ])
-  ]
+      state(
+        'out',
+        style({
+          marginLeft: '50px',
+        }),
+      ),
+      state(
+        'in',
+        style({
+          marginLeft: '320px',
+        }),
+      ),
+      transition('in <=> out', animate('400ms ease-in-out')),
+    ]),
+  ],
 })
-
 export class PlannerLayoutComponent implements OnInit {
-
   @Input() itemName: string;
   @Input() itemIcon: string;
   @Input() sidePanelContent: TemplateRef<any>;
@@ -56,10 +49,9 @@ export class PlannerLayoutComponent implements OnInit {
   contentHide: Boolean = false;
   sidePanelState: string = 'out';
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   getCurrentState() {
     return this.sidePanelState;

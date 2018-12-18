@@ -5,10 +5,7 @@ import { flatMap, retryWhen } from 'rxjs/operators';
 
 @Injectable()
 export class HttpClientService {
-
-  constructor(
-    private http: HttpClient
-  ) {}
+  constructor(private http: HttpClient) {}
 
   private setHeaders(options) {
     let headers = new HttpHeaders();
@@ -30,16 +27,18 @@ export class HttpClientService {
     console.log('retryWhen callback');
     let count = 0;
     return attempts.pipe(
-      flatMap(error => {
-        if (error.status == 0) { // Server offline :: keep trying
+      flatMap((error) => {
+        if (error.status == 0) {
+          // Server offline :: keep trying
           console.log('########### Now offline #############', error);
           return timer(++count * 1000); // TODO ng6: use timer from rxjs 6
-        } else if (error.status == 500 || error.status == 401) { // Server error :: Try 3 times then throw error
+        } else if (error.status == 500 || error.status == 401) {
+          // Server error :: Try 3 times then throw error
           return ++count >= 3 ? throwError(error) : timer(1000);
         } else {
           return throwError(error);
         }
-      })
+      }),
     );
   }
 
@@ -47,20 +46,18 @@ export class HttpClientService {
     console.log('GET request initiated');
     console.log('URL - ', url);
     console.log('Options - ', options);
-    return this.http.get<any | T>(url, { headers: this.setHeaders(options) })
-      .pipe(
-        retryWhen(attempts => this.requestRetryLogic(attempts))
-      );
+    return this.http
+      .get<any | T>(url, { headers: this.setHeaders(options) })
+      .pipe(retryWhen((attempts) => this.requestRetryLogic(attempts)));
   }
 
   public post<T>(url: string, body: any, options: any = {}): Observable<T> {
     console.log('GET request initiated');
     console.log('URL - ', url);
     console.log('Options - ', options);
-    return this.http.post<any | T>(url, body, { headers: this.setHeaders(options) })
-      .pipe(
-        retryWhen(attempts => this.requestRetryLogic(attempts))
-      );
+    return this.http
+      .post<any | T>(url, body, { headers: this.setHeaders(options) })
+      .pipe(retryWhen((attempts) => this.requestRetryLogic(attempts)));
   }
 
   public patch<T>(url: string, body: any, options = {}): Observable<T> {
@@ -68,21 +65,18 @@ export class HttpClientService {
     console.log('URL - ', url);
     console.log('Body - ', body);
     console.log('Options - ', options);
-    return this.http.patch<T>(url, body, { headers: this.setHeaders(options) })
-      .pipe(
-        retryWhen(attempts => this.requestRetryLogic(attempts))
-      );
+    return this.http
+      .patch<T>(url, body, { headers: this.setHeaders(options) })
+      .pipe(retryWhen((attempts) => this.requestRetryLogic(attempts)));
   }
 
   public delete(url: string): Observable<any> {
     console.log('DELETE request initiated');
     console.log('URL - ', url);
-    return this.http.delete(url, {responseType: 'text', headers: this.setHeaders({})})
-      .pipe(
-        retryWhen(attempts => this.requestRetryLogic(attempts))
-      );
+    return this.http
+      .delete(url, { responseType: 'text', headers: this.setHeaders({}) })
+      .pipe(retryWhen((attempts) => this.requestRetryLogic(attempts)));
   }
-
 }
 
 /**
@@ -113,4 +107,3 @@ export class HttpBackendClient extends HttpClient {
     super(handler);
   }
 }
-

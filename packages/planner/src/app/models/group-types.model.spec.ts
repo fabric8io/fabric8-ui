@@ -1,8 +1,4 @@
-import {
-  GroupTypeMapper,
-  GroupTypeService,
-  GroupTypeUI
-} from './group-types.model';
+import { GroupTypeMapper, GroupTypeService, GroupTypeUI } from './group-types.model';
 
 describe('Unit Test :: Group type model', () => {
   it('should execute the canary test', () => {
@@ -19,21 +15,23 @@ describe('Unit Test :: Group type model', () => {
         name: 'Portfolio',
         sublevel: 3,
         group: 'portfolio',
-        ['show-in-sidebar']: true
+        ['show-in-sidebar']: true,
       },
       id: 'gt_01',
       links: {
-        related: 'some_link'
+        related: 'some_link',
       },
       relationships: {
         typeList: {
-          data: [{
-            id: 'b9a71831-c803-4f66-8774-4193fffd1311',
-            workitemtype: 'type-1'
-          }]
-        }
+          data: [
+            {
+              id: 'b9a71831-c803-4f66-8774-4193fffd1311',
+              workitemtype: 'type-1',
+            },
+          ],
+        },
       },
-      type: 'grouptype'
+      type: 'grouptype',
     } as GroupTypeService;
     const output: GroupTypeUI = gtm.toUIModel(input);
     const expectedOutput: GroupTypeUI = {
@@ -47,10 +45,12 @@ describe('Unit Test :: Group type model', () => {
       selected: false,
       showInSideBar: true,
       description: 'no info-tip',
-      typeList: [{
-        id: 'b9a71831-c803-4f66-8774-4193fffd1311',
-        workitemtype: 'type-1'
-      }]
+      typeList: [
+        {
+          id: 'b9a71831-c803-4f66-8774-4193fffd1311',
+          workitemtype: 'type-1',
+        },
+      ],
     };
     return expect(expectedOutput).toEqual(output);
   });

@@ -3,12 +3,11 @@ import { CardConfig } from 'patternfly-ng/card';
 import { WorkItemUI } from './../../models/work-item';
 
 @Component({
-    selector: 'f8-planner-card',
-    templateUrl: './planner-card.component.html',
-    styleUrls: ['./planner-card.component.less']
+  selector: 'f8-planner-card',
+  templateUrl: './planner-card.component.html',
+  styleUrls: ['./planner-card.component.less'],
 })
 export class PlannerCardComponent {
-
   @Input() workItem: WorkItemUI;
   @Output() readonly onCardClick = new EventEmitter();
   @Output() readonly onTitleClick = new EventEmitter();
@@ -16,7 +15,7 @@ export class PlannerCardComponent {
   private config: CardConfig = {
     noPadding: true,
     topBorder: false,
-    titleBorder: false
+    titleBorder: false,
   };
 
   cardClick(workItem: WorkItemUI, event) {

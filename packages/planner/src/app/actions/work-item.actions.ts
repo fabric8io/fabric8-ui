@@ -28,15 +28,18 @@ export const DELETE_SUCCESS = '[workItem] DeleteSuccess';
 export const DELETE_ERROR = '[workItem] DeleteError';
 
 export class Add implements Action {
-  payload: {workItem: WorkItemService, createId: number, parentId: string, openDetailPage: boolean};
-  constructor(
-    payload: {
-      workItem: WorkItemService,
-      createId: number,
-      parentId: string,
-      openDetailPage: boolean
-    }
-  ) {
+  payload: {
+    workItem: WorkItemService;
+    createId: number;
+    parentId: string;
+    openDetailPage: boolean;
+  };
+  constructor(payload: {
+    workItem: WorkItemService;
+    createId: number;
+    parentId: string;
+    openDetailPage: boolean;
+  }) {
     this.payload = payload;
   }
   readonly type = ADD;
@@ -44,9 +47,9 @@ export class Add implements Action {
 
 export class Get implements Action {
   payload: {
-    pageSize: number,
-    filters: any[],
-    isShowTree: boolean
+    pageSize: number;
+    filters: any[];
+    isShowTree: boolean;
   };
   constructor(payload: any) {
     this.payload = payload;
@@ -75,8 +78,8 @@ export class AddError implements Action {
 }
 
 export class GetSuccess implements Action {
-  payload: {workItems: WorkItemUI[], nextLink: string};
-  constructor(payload: {workItems: WorkItemUI[], nextLink: string}) {
+  payload: { workItems: WorkItemUI[]; nextLink: string };
+  constructor(payload: { workItems: WorkItemUI[]; nextLink: string }) {
     this.payload = payload;
   }
   readonly type = GET_SUCCESS;
@@ -95,7 +98,7 @@ export class GetChildren implements Action {
 }
 
 export class GetChildrenSuccess implements Action {
-  payload: {parent: WorkItemUI, children: WorkItemUI[]};
+  payload: { parent: WorkItemUI; children: WorkItemUI[] };
   constructor(payload: any) {
     this.payload = payload;
   }
@@ -125,15 +128,13 @@ export class UpdateError implements Action {
 export class Reorder implements Action {
   readonly type = REORDER;
   payload: {
-    workitem: WorkItemUI,
-    destinationWorkitemID: string,
-    direction: string
+    workitem: WorkItemUI;
+    destinationWorkitemID: string;
+    direction: string;
   };
-  constructor(payload: {
-    workitem: WorkItemUI,
-    destinationWorkitemID: string,
-    direction: string
-  }) { this.payload = payload; }
+  constructor(payload: { workitem: WorkItemUI; destinationWorkitemID: string; direction: string }) {
+    this.payload = payload;
+  }
 }
 
 export class UpdateWorkitemIteration implements Action {
@@ -141,22 +142,18 @@ export class UpdateWorkitemIteration implements Action {
   payload: {
     iteration: IterationUI;
   };
-  constructor(payload: {
-    iteration: IterationUI
-  }) { this.payload = payload; }
+  constructor(payload: { iteration: IterationUI }) {
+    this.payload = payload;
+  }
 }
 
 export class CreateLink implements Action {
   payload: {
-    source: WorkItemUI,
-    target: WorkItemUI,
-    sourceTreeStatus: string
+    source: WorkItemUI;
+    target: WorkItemUI;
+    sourceTreeStatus: string;
   };
-  constructor(payload: {
-    source: WorkItemUI,
-    target: WorkItemUI,
-    sourceTreeStatus: string
-  }) {
+  constructor(payload: { source: WorkItemUI; target: WorkItemUI; sourceTreeStatus: string }) {
     this.payload = payload;
   }
   readonly type = CREATE_LINK;
@@ -164,15 +161,11 @@ export class CreateLink implements Action {
 
 export class DeleteLink implements Action {
   payload: {
-    source: WorkItemUI,
-    target: WorkItemUI,
-    sourceTreeStatus: string
+    source: WorkItemUI;
+    target: WorkItemUI;
+    sourceTreeStatus: string;
   };
-  constructor(payload: {
-    source: WorkItemUI,
-    target: WorkItemUI,
-    sourceTreeStatus: string
-  }) {
+  constructor(payload: { source: WorkItemUI; target: WorkItemUI; sourceTreeStatus: string }) {
     this.payload = payload;
   }
   readonly type = DELETE_LINK;
@@ -186,17 +179,15 @@ export class GetMoreWorkItems implements Action {
   payload: {
     isShowTree: boolean;
   };
-  constructor(payload: {
-    isShowTree: boolean;
-  }) {
+  constructor(payload: { isShowTree: boolean }) {
     this.payload = payload;
   }
   readonly type = GET_MORE_WORKITEMS;
 }
 
 export class GetMoreWorkItemsSuccess implements Action {
-  payload: {workItems: WorkItemUI[], nextLink: string};
-  constructor(payload: {workItems: WorkItemUI[], nextLink: string}) {
+  payload: { workItems: WorkItemUI[]; nextLink: string };
+  constructor(payload: { workItems: WorkItemUI[]; nextLink: string }) {
     this.payload = payload;
   }
   readonly type = GET_MORE_WORKITEMS_SUCCESS;
@@ -222,8 +213,8 @@ export class DeleteError implements Action {
   readonly type = DELETE_ERROR;
 }
 
-export type All
-  = Add
+export type All =
+  | Add
   | Get
   | Update
   | AddSuccess
@@ -245,4 +236,3 @@ export type All
   | Delete
   | DeleteSuccess
   | DeleteError;
-

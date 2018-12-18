@@ -1,7 +1,6 @@
 import { Observable } from 'rxjs/Observable';
 
 export class GlobalSettings {
-
   private mode: boolean = true;
 
   constructor() {
@@ -11,5 +10,4 @@ export class GlobalSettings {
   public isTestmode() {
     return this.mode;
   }
-
 }

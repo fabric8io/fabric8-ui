@@ -8,14 +8,14 @@ describe('Unit Test :: ColumnWorkItem Actions', () => {
       reorder: {
         workitem: {} as WorkItemUI,
         destinationWorkitemID: '',
-        direction: 'above'
+        direction: 'above',
       },
-      prevColumnId: ''
+      prevColumnId: '',
     };
     const action = new ColumnWorkItemActions.Update(payload);
-    expect({...action}).toEqual({
+    expect({ ...action }).toEqual({
       type: ColumnWorkItemActions.UPDATE,
-      payload: payload
+      payload: payload,
     });
   });
 
@@ -23,24 +23,24 @@ describe('Unit Test :: ColumnWorkItem Actions', () => {
     const payload = {
       workItemId: '',
       prevColumnId: '',
-      newColumnIds: ['', '']
+      newColumnIds: ['', ''],
     };
     const action = new ColumnWorkItemActions.UpdateSuccess(payload);
-    expect({...action}).toEqual({
+    expect({ ...action }).toEqual({
       type: ColumnWorkItemActions.UPDATE_SUCCESS,
-      payload: payload
+      payload: payload,
     });
   });
 
   it('UpdateColumnWorkitemError :: should create UpdateError action', () => {
     const payload = {
       prevColumnId: '',
-      newColumnIds: ['', '']
+      newColumnIds: ['', ''],
     };
     const action = new ColumnWorkItemActions.UpdateError(payload);
-    expect({...action}).toEqual({
+    expect({ ...action }).toEqual({
       type: ColumnWorkItemActions.UPDATE_ERROR,
-      payload: payload
+      payload: payload,
     });
   });
 });

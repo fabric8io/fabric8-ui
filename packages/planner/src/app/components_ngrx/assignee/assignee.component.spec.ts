@@ -8,24 +8,20 @@ import { WidgetsModule } from 'ngx-widgets';
 import { UserAvatarModule } from './../../widgets/user-avatar/user-avatar.module';
 import { AssigneesComponent } from './assignee.component';
 
-
 describe('AssigneeComponent', () => {
-  let fixture: ComponentFixture<AssigneesComponent>,
-    comp: AssigneesComponent;
+  let fixture: ComponentFixture<AssigneesComponent>, comp: AssigneesComponent;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-        imports: [
-          CommonModule,
-          RouterModule,
-          TooltipModule.forRoot(),
-          UserAvatarModule,
-          WidgetsModule
+      imports: [
+        CommonModule,
+        RouterModule,
+        TooltipModule.forRoot(),
+        UserAvatarModule,
+        WidgetsModule,
       ],
-      declarations: [
-        AssigneesComponent
-      ],
-      providers: [ TooltipConfig, BsDropdownConfig ]
+      declarations: [AssigneesComponent],
+      providers: [TooltipConfig, BsDropdownConfig],
     }).compileComponents();
   }));
 
@@ -42,7 +38,7 @@ describe('AssigneeComponent', () => {
     fixture.detectChanges();
     comp.assigneeInput = [];
     comp.overlapAvatar = false;
-    let assigneesDE  = fixture.debugElement.query(By.css('small.dib')).nativeElement;
+    let assigneesDE = fixture.debugElement.query(By.css('small.dib')).nativeElement;
     expect(assigneesDE.textContent).toBe('Unassigned');
   }));
 
@@ -50,14 +46,14 @@ describe('AssigneeComponent', () => {
     comp.showFullName = false;
     comp.truncateAfter = 3;
     comp.assigneeInput = [
-      {'name': 'Name 1', avatar: 'https://avatars3.githubusercontent.com/u/34271052?v=4&s=25'},
-      {'name': 'Name 2', avatar: 'https://avatars3.githubusercontent.com/u/34271051?v=4&s=25'},
-      {'name': 'Name 3', avatar: 'https://avatars3.githubusercontent.com/u/34271053?v=4&s=25'},
-      {'name': 'Name 4', avatar: 'https://avatars3.githubusercontent.com/u/34271054?v=4&s=25'}
-   ];
+      { name: 'Name 1', avatar: 'https://avatars3.githubusercontent.com/u/34271052?v=4&s=25' },
+      { name: 'Name 2', avatar: 'https://avatars3.githubusercontent.com/u/34271051?v=4&s=25' },
+      { name: 'Name 3', avatar: 'https://avatars3.githubusercontent.com/u/34271053?v=4&s=25' },
+      { name: 'Name 4', avatar: 'https://avatars3.githubusercontent.com/u/34271054?v=4&s=25' },
+    ];
 
     fixture.detectChanges();
-    let assigneesDE  = fixture.debugElement.query(By.css('.f8-assignees')).nativeElement;
+    let assigneesDE = fixture.debugElement.query(By.css('.f8-assignees')).nativeElement;
     expect(assigneesDE.textContent).toContain('1+');
   }));
 });

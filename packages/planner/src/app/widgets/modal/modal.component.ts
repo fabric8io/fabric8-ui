@@ -7,10 +7,9 @@ import { ModalService } from '../../services/modal.service';
 @Component({
   selector: 'osio-modal',
   templateUrl: './modal.component.html',
-  styleUrls: ['./modal.component.less']
+  styleUrls: ['./modal.component.less'],
 })
 export class ModalComponent implements OnDestroy {
-
   @ViewChild('OSIOModal') private modal: Modal;
   private title: string;
   private buttonText: string;
@@ -23,12 +22,12 @@ export class ModalComponent implements OnDestroy {
       this.modalService.getComponentObservable().subscribe((params: string[]) => {
         this.actionKey = params[3];
         this.open(params[0], params[1], params[2]);
-      })
+      }),
     );
   }
 
   ngOnDestroy() {
-    this.eventListeners.forEach(e => e.unsubscribe());
+    this.eventListeners.forEach((e) => e.unsubscribe());
   }
 
   public open(title: string, message: string, buttonText: string) {

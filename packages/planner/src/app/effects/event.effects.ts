@@ -11,28 +11,24 @@ export type Action = EventActions.All;
 
 @Injectable()
 export class EventEffects {
-  private eventMapper: EventMapper =
-    new EventMapper();
+  private eventMapper: EventMapper = new EventMapper();
   constructor(
     private actions$: Actions,
     private workItemService: WorkItemService,
-    private errHandler: ErrorHandler
-  ) {
-  }
+    private errHandler: ErrorHandler,
+  ) {}
 
   resolveEvents(events) {
     return events.map((event: EventService) => {
       let eventUI = this.eventMapper.toUIModel(event);
       if (eventUI.newValueRelationships && eventUI.oldValueRelationships) {
         let added = eventUI.newValueRelationships.filter(
-          newItem => eventUI.oldValueRelationships.findIndex(
-            oldItem => oldItem.id === newItem.id
-          ) === -1
+          (newItem) =>
+            eventUI.oldValueRelationships.findIndex((oldItem) => oldItem.id === newItem.id) === -1,
         );
         let removed = eventUI.oldValueRelationships.filter(
-          oldItem => eventUI.newValueRelationships.findIndex(
-            newItem => newItem.id === oldItem.id
-          ) === -1
+          (oldItem) =>
+            eventUI.newValueRelationships.findIndex((newItem) => newItem.id === oldItem.id) === -1,
         );
         eventUI.newValueRelationships = added;
         eventUI.oldValueRelationships = removed;
@@ -42,27 +38,29 @@ export class EventEffects {
           eventUI.type = eventUI.oldValueRelationships[0].type;
         }
       }
-      return {...eventUI};
+      return { ...eventUI };
     });
   }
 
-  @Effect() getWorkItemEvents$: Observable<Action> = this.actions$
-    .pipe(
-      ofType<EventActions.Get>(EventActions.GET),
-      switchMap((p) => {
-        return this.workItemService.getEvents(p.payload)
-          .pipe(
-            map((resp) => {
-              let events =  resp.filter(event => event !== null).reverse();
-              return this.resolveEvents(events);
-            }),
-            map((events: EventUI[]) => {
-              return new EventActions.GetSuccess(events);
-            }),
-            catchError(err => this.errHandler.handleError<Action>(
-              err,  `Problem loading Events.`, new EventActions.GetError()
-            ))
-          );
-      })
-    );
+  @Effect() getWorkItemEvents$: Observable<Action> = this.actions$.pipe(
+    ofType<EventActions.Get>(EventActions.GET),
+    switchMap((p) => {
+      return this.workItemService.getEvents(p.payload).pipe(
+        map((resp) => {
+          let events = resp.filter((event) => event !== null).reverse();
+          return this.resolveEvents(events);
+        }),
+        map((events: EventUI[]) => {
+          return new EventActions.GetSuccess(events);
+        }),
+        catchError((err) =>
+          this.errHandler.handleError<Action>(
+            err,
+            `Problem loading Events.`,
+            new EventActions.GetError(),
+          ),
+        ),
+      );
+    }),
+  );
 }

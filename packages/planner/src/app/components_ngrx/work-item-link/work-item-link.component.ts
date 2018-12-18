@@ -1,10 +1,4 @@
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger
-} from '@angular/animations';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -14,7 +8,7 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
@@ -40,18 +34,23 @@ import { TypeaheadDropdownItem } from './../typeahead-selector/typeahead-selecto
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('linkState', [
-      state('inactive', style({
-        backgroundColor: '#fff'
-      })),
-      state('active',   style({
-        backgroundColor: '#39a5dc'
-      })),
+      state(
+        'inactive',
+        style({
+          backgroundColor: '#fff',
+        }),
+      ),
+      state(
+        'active',
+        style({
+          backgroundColor: '#39a5dc',
+        }),
+      ),
       transition('inactive => active', animate('0.2s 100ms')),
-      transition('active => inactive', animate('0.2s 100ms'))
-    ])
-  ]
+      transition('active => inactive', animate('0.2s 100ms')),
+    ]),
+  ],
 })
-
 export class WorkItemLinkComponent implements OnInit, OnDestroy {
   @Input() context: string = 'list';
   @Input() loggedIn: Boolean;
@@ -64,9 +63,7 @@ export class WorkItemLinkComponent implements OnInit, OnDestroy {
   @Input('workItem') set workItemSetter(workItem: WorkItemUI) {
     if (this.workItem === null || this.workItem.id !== workItem.id) {
       this.workItem = workItem;
-      this.store.dispatch(
-        new WorkItemLinkActions.Get(this.workItem.link + '/relationships/links')
-      );
+      this.store.dispatch(new WorkItemLinkActions.Get(this.workItem.link + '/relationships/links'));
       // Reset links value for the new work item first
       this.store.dispatch(new WorkItemLinkActions.ResetLinks());
       this.searchNotAllowedIds = [];
@@ -82,29 +79,24 @@ export class WorkItemLinkComponent implements OnInit, OnDestroy {
   selectedLinkType: LinkTypeUI = null;
 
   // These are being used in the template
-  linkTypesSource: Observable<LinkTypeUI[]> =
-   this.linkTypeQuery.getLinkTypesForDropdown
-   .pipe(tap(types => this.selectedLinkType = types[0])); // Setting up the default link type
-  workItemLinksSource: Observable<WorkItemLinkUI[]> =
-    this.workItemLinkQuery.getWorkItemLinks
-    .pipe(
-      tap(links => {
+  linkTypesSource: Observable<LinkTypeUI[]> = this.linkTypeQuery.getLinkTypesForDropdown.pipe(
+    tap((types) => (this.selectedLinkType = types[0])),
+  ); // Setting up the default link type
+  workItemLinksSource: Observable<WorkItemLinkUI[]> = this.workItemLinkQuery.getWorkItemLinks.pipe(
+    tap((links) => {
       // Reset the create environment
       this.selectedWorkItem = null;
       this.lockCreation = false;
 
       // to remove the highlight from newly added item
-      if (links && links.findIndex(l => l.newlyAdded) > -1) {
+      if (links && links.findIndex((l) => l.newlyAdded) > -1) {
         setTimeout(() => {
-          this.store.dispatch(
-            new WorkItemLinkActions.TrivializeAll()
-          );
+          this.store.dispatch(new WorkItemLinkActions.TrivializeAll());
         }, 3000);
       }
-    })
+    }),
   );
-  workItemLinksCountSource: Observable<number> =
-    this.workItemLinkQuery.getWorkItemLinksCount;
+  workItemLinksCountSource: Observable<number> = this.workItemLinkQuery.getWorkItemLinksCount;
   showLinkComponent: Boolean = false;
   lockCreation: boolean = false;
 
@@ -116,7 +108,7 @@ export class WorkItemLinkComponent implements OnInit, OnDestroy {
     private workItemService: WorkItemService,
     private linkTypeQuery: WorkItemLinkTypeQuery,
     private workItemLinkQuery: WorkItemLinkQuery,
-    private spaceQuery: SpaceQuery
+    private spaceQuery: SpaceQuery,
   ) {}
 
   ngOnDestroy() {
@@ -142,79 +134,79 @@ export class WorkItemLinkComponent implements OnInit, OnDestroy {
   }
 
   createLink(event: Event) {
-    if (
-      this.selectedLinkType &&
-      this.selectedWorkItem &&
-      !this.lockCreation) {
+    if (this.selectedLinkType && this.selectedWorkItem && !this.lockCreation) {
       this.lockCreation = true;
       let linkPayload = this.createLinkObject(
         this.workItem.id,
         this.selectedWorkItem.key,
         this.selectedLinkType.id,
-        this.selectedLinkType.linkType
+        this.selectedLinkType.linkType,
       );
       this.store.dispatch(new WorkItemLinkActions.Add(linkPayload));
     }
   }
 
   deleteLink(event, wiLink, workItem) {
-    this.store.dispatch(new WorkItemLinkActions.Delete({
-      wiLink: wiLink,
-      workItemId: workItem.id
-    }));
+    this.store.dispatch(
+      new WorkItemLinkActions.Delete({
+        wiLink: wiLink,
+        workItemId: workItem.id,
+      }),
+    );
   }
 
   onLinkClicked(wiNumber) {
     this.onLinkClick.emit({
-      number: wiNumber
+      number: wiNumber,
     });
   }
 
   searchWorkItem(term: string): Observable<TypeaheadDropdownItem[]> {
     return this.spaceQuery.getCurrentSpace.pipe(
-      switchMap(space => {
-        return this.workItemService.searchLinkWorkItem(term, space.id)
-        .pipe(map(items => {
-          return items
-          .filter(item => this.searchNotAllowedIds.indexOf(item.id) == -1)
-          .map(item => {
-            return {
-              key: item.id,
-              value: `${item.attributes['system.number']} - ${item.attributes['system.title']}`,
-              selected: false
-            };
-          });
-        }));
-      })
+      switchMap((space) => {
+        return this.workItemService.searchLinkWorkItem(term, space.id).pipe(
+          map((items) => {
+            return items
+              .filter((item) => this.searchNotAllowedIds.indexOf(item.id) == -1)
+              .map((item) => {
+                return {
+                  key: item.id,
+                  value: `${item.attributes['system.number']} - ${item.attributes['system.title']}`,
+                  selected: false,
+                };
+              });
+          }),
+        );
+      }),
     );
   }
 
   createLinkObject(sourceId: string, targetId: string, linkId: string, linkType: string) {
     return {
-      'attributes': {
-        'version': 0
+      attributes: {
+        version: 0,
       },
-      'relationships': {
-        'link_type': {
-          'data': {
-            'id': linkId,
-            'type': 'workitemlinktypes'
-          }
+      relationships: {
+        link_type: {
+          data: {
+            id: linkId,
+            type: 'workitemlinktypes',
+          },
         },
-        'source': {
-          'data': {
-            'id': linkType === 'forward' ? sourceId : targetId,
-            'type': 'workitems'
-          }
+        source: {
+          data: {
+            id: linkType === 'forward' ? sourceId : targetId,
+            type: 'workitems',
+          },
         },
-        'target': {
-          'data': {
-            'id': linkType === 'reverse' ? sourceId : targetId,
-            'type': 'workitems'
-          }
-        }
+        target: {
+          data: {
+            id: linkType === 'reverse' ? sourceId : targetId,
+            type: 'workitems',
+          },
+        },
       },
-      'type': 'workitemlinks'
+      type: 'workitemlinks',
     };
   }
 }

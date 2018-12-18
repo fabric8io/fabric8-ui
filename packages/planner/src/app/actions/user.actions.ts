@@ -1,4 +1,3 @@
-
 import { Action } from '@ngrx/store';
 import { UserUI } from './../models/user';
 import { UserState } from './../states/user.state';
@@ -38,5 +37,4 @@ export class GetError implements Action {
   readonly type = GET_ERROR;
 }
 
-export type All
-  = Set | Get | GetError;
+export type All = Set | Get | GetError;

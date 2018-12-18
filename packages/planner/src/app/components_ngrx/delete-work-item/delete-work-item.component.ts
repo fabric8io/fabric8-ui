@@ -11,21 +11,18 @@ import { AppState } from '../../states/app.state';
 @Component({
   selector: 'f8-delete-workitem',
   templateUrl: './delete-work-item.component.html',
-  styleUrls: ['./delete-work-item.component.less']
+  styleUrls: ['./delete-work-item.component.less'],
 })
-
 export class DeleteWorkItemComponent {
-
   @Input('workItem') set workItemInput(val: WorkItemUI) {
     if (val) {
       this.workItem = val;
-      this.allowDelete =
-        this.permissionQuery.isAllowedToDelete(val);
+      this.allowDelete = this.permissionQuery.isAllowedToDelete(val);
     }
   }
   @Input() detailContext: string = '';
 
-  @Output() readonly onDelete: EventEmitter<any> = new EventEmitter;
+  @Output() readonly onDelete: EventEmitter<any> = new EventEmitter();
 
   allowDelete: Observable<boolean>;
   workItem: WorkItemUI;
@@ -33,7 +30,7 @@ export class DeleteWorkItemComponent {
   constructor(
     private modalService: ModalService,
     private store: Store<AppState>,
-    private permissionQuery: PermissionQuery
+    private permissionQuery: PermissionQuery,
   ) {}
 
   deleteWorkItem(event: MouseEvent): void {
@@ -41,15 +38,14 @@ export class DeleteWorkItemComponent {
     if (this.workItem.hasChildren) {
       note = 'This work item has children. ' + note;
     }
-    this.modalService.openModal('Delete Work Item', note, 'Delete', 'deleteWorkItem')
-      .pipe(
-        first()
-      ).subscribe((actionKey: string) => {
-          if (actionKey === 'deleteWorkItem') {
-            this.onDelete.emit();
-            this.store.dispatch(new Delete(this.workItem));
-          }
+    this.modalService
+      .openModal('Delete Work Item', note, 'Delete', 'deleteWorkItem')
+      .pipe(first())
+      .subscribe((actionKey: string) => {
+        if (actionKey === 'deleteWorkItem') {
+          this.onDelete.emit();
+          this.store.dispatch(new Delete(this.workItem));
+        }
       });
   }
 }
-

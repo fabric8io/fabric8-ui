@@ -12,9 +12,7 @@ import { DragulaModule } from 'ng2-dragula';
 import { TruncateModule } from 'ng2-truncate';
 import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ModalModule } from 'ngx-modal';
-import {
-  WidgetsModule
-} from 'ngx-widgets';
+import { WidgetsModule } from 'ngx-widgets';
 import { IterationService } from '../../services/iteration.service';
 import { IterationListEntryComponent } from '../iteration-list-entry/iteration-list-entry.component';
 import { IterationTreeComponent } from '../iteration-tree/iteration-tree.component';
@@ -43,21 +41,25 @@ import { initialUIState } from './../../states/iteration.state';
     WidgetsModule,
     RouterModule,
     InfotipModule,
-    StoreModule.forFeature('iterationPanel', {
-      iterationUI: iterationUiReducer
-    }, {
-      initialState: {
-        iterationUI: initialUIState
-      }
-    })
+    StoreModule.forFeature(
+      'iterationPanel',
+      {
+        iterationUI: iterationUiReducer,
+      },
+      {
+        initialState: {
+          iterationUI: initialUIState,
+        },
+      },
+    ),
   ],
   declarations: [
     FabPlannerIterationModalComponent,
     IterationComponent,
     IterationListEntryComponent,
-    IterationTreeComponent
+    IterationTreeComponent,
   ],
   exports: [IterationComponent],
-  providers: [BsDropdownConfig, IterationService, TooltipConfig, IterationQuery]
+  providers: [BsDropdownConfig, IterationService, TooltipConfig, IterationQuery],
 })
-export class IterationModule { }
+export class IterationModule {}

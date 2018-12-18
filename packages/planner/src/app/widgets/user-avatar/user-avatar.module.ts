@@ -6,12 +6,9 @@ import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
 import { UserAvatarComponent } from './user-avatar.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    TooltipModule
-  ],
-  declarations: [ UserAvatarComponent],
-  providers: [ TooltipConfig ],
-  exports: [UserAvatarComponent]
+  imports: [CommonModule, TooltipModule],
+  declarations: [UserAvatarComponent],
+  providers: [TooltipConfig],
+  exports: [UserAvatarComponent],
 })
-export class UserAvatarModule { }
+export class UserAvatarModule {}

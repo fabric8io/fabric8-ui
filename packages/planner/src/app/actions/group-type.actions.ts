@@ -1,9 +1,5 @@
 import { Action } from '@ngrx/store';
-import {
-  GroupTypeMapper,
-  GroupTypeService,
-  GroupTypeUI
-} from './../models/group-types.model';
+import { GroupTypeMapper, GroupTypeService, GroupTypeUI } from './../models/group-types.model';
 
 export const GET = '[group-type] Get';
 export const GET_SUCCESS = '[group-type] GetSuccess';
@@ -34,8 +30,4 @@ export class SelectType implements Action {
   }
 }
 
-export type All
-  = Get
-  | GetSuccess
-  | GetError
-  | SelectType;
+export type All = Get | GetSuccess | GetError | SelectType;

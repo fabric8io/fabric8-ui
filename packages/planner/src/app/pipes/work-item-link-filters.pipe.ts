@@ -6,7 +6,7 @@ import { WorkItem } from '../models/work-item';
 export class WorkItemLinkFilterByTypeName implements PipeTransform {
   transform(selectedLinkType: string, arr: any[]): any[] {
     if (selectedLinkType !== null && selectedLinkType !== 'all') {
-      let outputArr: any[] = arr.filter(item => item.linkName === selectedLinkType);
+      let outputArr: any[] = arr.filter((item) => item.linkName === selectedLinkType);
       return outputArr;
     }
     return arr;
@@ -25,7 +25,7 @@ export class GroupWorkItemLinks implements PipeTransform {
      *
      */
     let linkTypes = arr.reduce((ltypes, curr_val) => {
-      if (ltypes.findIndex(ltype => curr_val.linkType.id === ltype.id) === -1) {
+      if (ltypes.findIndex((ltype) => curr_val.linkType.id === ltype.id) === -1) {
         return [...ltypes, curr_val.linkType];
       } else {
         return [...ltypes];
@@ -33,20 +33,19 @@ export class GroupWorkItemLinks implements PipeTransform {
     }, []);
 
     let op = [];
-    linkTypes.forEach(linkType => {
-      const linksOfLinkType = arr.filter(link =>
-        link.linkType.id === linkType.id);
+    linkTypes.forEach((linkType) => {
+      const linksOfLinkType = arr.filter((link) => link.linkType.id === linkType.id);
       let forward = [];
       let reverse = [];
       let forwardLinks = [];
       let reverseLinks = [];
-      linksOfLinkType.forEach(link => {
+      linksOfLinkType.forEach((link) => {
         if (link.source.id === workItemId) {
-          forward.push({...link.target, ...{newlyAdded: link.newlyAdded}});
+          forward.push({ ...link.target, ...{ newlyAdded: link.newlyAdded } });
           forwardLinks.push(link);
         }
         if (link.target.id === workItemId) {
-          reverse.push({...link.source, ...{newlyAdded: link.newlyAdded}});
+          reverse.push({ ...link.source, ...{ newlyAdded: link.newlyAdded } });
           reverseLinks.push(link);
         }
       });
@@ -55,7 +54,7 @@ export class GroupWorkItemLinks implements PipeTransform {
           linkType: linkType,
           linkDirection: 'forwardName',
           workItems: forward,
-          links: forwardLinks
+          links: forwardLinks,
         });
       }
       if (reverse.length) {
@@ -63,7 +62,7 @@ export class GroupWorkItemLinks implements PipeTransform {
           linkType: linkType,
           linkDirection: 'reverseName',
           workItems: reverse,
-          links: reverseLinks
+          links: reverseLinks,
         });
       }
     });
@@ -76,7 +75,7 @@ export class GroupWorkItemLinks implements PipeTransform {
 export class WorkItemLinkTypeFilterByTypeName implements PipeTransform {
   transform(selectedLinkType: string, arr: any[]): any[] {
     if (selectedLinkType !== 'all') {
-      let outputArr: any[] = arr.filter(item => item.name === selectedLinkType);
+      let outputArr: any[] = arr.filter((item) => item.name === selectedLinkType);
       return outputArr;
     }
     return arr;

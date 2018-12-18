@@ -7,5 +7,5 @@ let witApiUrlFactory = () => {
 
 export let witApiUrlProvider = {
   provide: WIT_API_URL,
-  useFactory: witApiUrlFactory
+  useFactory: witApiUrlFactory,
 };

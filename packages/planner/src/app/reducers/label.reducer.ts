@@ -1,7 +1,7 @@
 import { createEntityAdapter } from '@ngrx/entity';
 import { State } from '@ngrx/store';
 import { ActionReducer } from '@ngrx/store';
-import * as LabelActions  from './../actions/label.actions';
+import * as LabelActions from './../actions/label.actions';
 import { LabelUI } from './../models/label.model';
 import { initialState, LabelState } from './../states/label.state';
 
