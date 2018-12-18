@@ -1,17 +1,11 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { DropdownOption } from './dropdown-option';
 
 @Component({
   selector: 'alm-dropdown',
   styleUrls: ['./dropdown.component.less'],
-  templateUrl: './dropdown.component.html'
+  templateUrl: './dropdown.component.html',
 })
 export class DropdownComponent implements OnInit {
   @Input() options: DropdownOption[];
@@ -22,11 +16,9 @@ export class DropdownComponent implements OnInit {
 
   show: boolean = false;
 
-  constructor() {
-  }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   toggle(): void {
     this.show = !this.show;
@@ -43,7 +35,7 @@ export class DropdownComponent implements OnInit {
   onChange(option: DropdownOption): void {
     this.onUpdate.emit({
       currentOption: this.selected,
-      newOption: option
+      newOption: option,
     });
     this.toggle();
   }

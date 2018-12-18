@@ -7,7 +7,6 @@ import { ContainerTogglerComponent } from './container-toggler.component';
   imports: [CommonModule],
   declarations: [ContainerTogglerComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  exports: [ContainerTogglerComponent]
+  exports: [ContainerTogglerComponent],
 })
-
-export class ContainerTogglerModule { }
+export class ContainerTogglerModule {}

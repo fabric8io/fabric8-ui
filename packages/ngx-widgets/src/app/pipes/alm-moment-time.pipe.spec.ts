@@ -30,5 +30,4 @@ describe('Moment time pipe', () => {
     expect(transformedString).toContain('10 hours ago');
     expect(transformedString).toContain('</span>');
   });
-
 });

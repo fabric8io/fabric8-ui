@@ -65,8 +65,6 @@
     "jest/valid-expect": "off",
     "jest/valid-expect-in-promise": "off",
 
-    "prettier/prettier": "off",
-
     "promise/catch-or-return": "off",
 
     "typescript/class-name-casing": "off",

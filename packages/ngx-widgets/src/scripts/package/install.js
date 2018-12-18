@@ -39,7 +39,7 @@ function copyFolderRecursive(source, target) {
   // Copy
   if (fs.lstatSync(source).isDirectory()) {
     files = fs.readdirSync(source);
-    files.forEach(function (file) {
+    files.forEach(function(file) {
       var curSource = path.join(source, file);
       if (fs.lstatSync(curSource).isDirectory()) {
         copyFolderRecursive(curSource, targetFolder);
@@ -54,11 +54,13 @@ function copyFolderRecursive(source, target) {
 
 function deleteFolderRecursive(source) {
   if (fs.existsSync(source)) {
-    fs.readdirSync(source).forEach(function(file,index){
-      var curPath = source + "/" + file;
-      if(fs.lstatSync(curPath).isDirectory()) { // recurse
+    fs.readdirSync(source).forEach(function(file, index) {
+      var curPath = source + '/' + file;
+      if (fs.lstatSync(curPath).isDirectory()) {
+        // recurse
         deleteFolderRecursive(curPath);
-      } else { // delete file
+      } else {
+        // delete file
         fs.unlinkSync(curPath);
       }
     });

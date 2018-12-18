@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import {
-  HttpClient
-} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -27,7 +25,6 @@ export interface Gh_issue {
  */
 @Injectable()
 export class GitHubLinkService {
-
   private linkCache: Gh_issue[] = [];
 
   constructor(private http: HttpClient) {}
@@ -44,16 +41,22 @@ export class GitHubLinkService {
     if (cachedData) {
       return of(cachedData);
     } else {
-      let query: Observable<Gh_issue> = this.http.get<Gh_issue>(
-        'https://api.github.com/repos/' +
-        linkData.org + '/' +
-        linkData.repo +
-        '/issues/' + linkData.issue)
-        .pipe(catchError((error: any) => {
-          linkData.state = 'error';
-          return of(linkData);
-        }));
-      query.subscribe(data => {
+      let query: Observable<Gh_issue> = this.http
+        .get<Gh_issue>(
+          'https://api.github.com/repos/' +
+            linkData.org +
+            '/' +
+            linkData.repo +
+            '/issues/' +
+            linkData.issue,
+        )
+        .pipe(
+          catchError((error: any) => {
+            linkData.state = 'error';
+            return of(linkData);
+          }),
+        );
+      query.subscribe((data) => {
         this.linkCache.push(data);
       });
       return query;
@@ -63,12 +66,17 @@ export class GitHubLinkService {
   private findInCache(linkData: Gh_issue): any {
     for (let i = 0; i < this.linkCache.length; i++) {
       let link = this.linkCache[i];
-      if (link.url === 'https://api.github.com/repos/' +
-            linkData.org + '/' +
-            linkData.repo + '/issues/' +
-            linkData.issue) {
-          linkData.state = link.state;
-          return linkData;
+      if (
+        link.url ===
+        'https://api.github.com/repos/' +
+          linkData.org +
+          '/' +
+          linkData.repo +
+          '/issues/' +
+          linkData.issue
+      ) {
+        linkData.state = link.state;
+        return linkData;
       }
     }
     return null;
