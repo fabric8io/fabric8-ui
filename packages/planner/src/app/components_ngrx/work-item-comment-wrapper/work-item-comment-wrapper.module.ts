@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { NgModule }     from '@angular/core';
+import { NgModule } from '@angular/core';
 
 //ngrx stuff
 import { EffectsModule } from '@ngrx/effects';
@@ -11,13 +11,8 @@ import { WorkItemCommentModule } from './../work-item-comment/work-item-comment.
 import { WorkItemCommentWrapperComponent } from './work-item-comment-wrapper.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    WorkItemCommentModule
-  ],
-  declarations: [
-    WorkItemCommentWrapperComponent
-  ],
-  exports: [WorkItemCommentWrapperComponent]
+  imports: [CommonModule, WorkItemCommentModule],
+  declarations: [WorkItemCommentWrapperComponent],
+  exports: [WorkItemCommentWrapperComponent],
 })
-export class WorkItemCommentWrapperModule { }
+export class WorkItemCommentWrapperModule {}

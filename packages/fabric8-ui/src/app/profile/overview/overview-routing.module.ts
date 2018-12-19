@@ -1,4 +1,4 @@
-import { NgModule }  from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { OverviewComponent } from './overview.component';
 import { SpacesComponent } from './spaces/overview-spaces.component';
@@ -11,31 +11,31 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: '_profile'
+        redirectTo: '_profile',
       },
       {
         path: '_profile',
         children: [
           {
             path: '',
-            redirectTo: 'workitems'
+            redirectTo: 'workitems',
           },
           {
             path: 'workitems',
-            component: WorkItemsComponent
+            component: WorkItemsComponent,
           },
           {
             path: 'spaces',
-            component: SpacesComponent
-          }
-        ]
-      }
-    ]
-  }
+            component: SpacesComponent,
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 @NgModule({
-  imports: [ RouterModule.forChild(routes) ],
-  exports: [ RouterModule ]
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
 })
 export class OverviewRoutingModule {}

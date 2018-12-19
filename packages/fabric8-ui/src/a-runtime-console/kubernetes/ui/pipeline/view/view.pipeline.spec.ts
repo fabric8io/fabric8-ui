@@ -11,14 +11,9 @@ describe('PipelineViewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [
-        MomentModule,
-        Fabric8CommonModule
-      ],
-      declarations: [
-        PipelineViewComponent
-      ],
-      schemas: [ NO_ERRORS_SCHEMA ]
+      imports: [MomentModule, Fabric8CommonModule],
+      declarations: [PipelineViewComponent],
+      schemas: [NO_ERRORS_SCHEMA],
     });
   }));
 

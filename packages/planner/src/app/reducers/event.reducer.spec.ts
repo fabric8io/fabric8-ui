@@ -19,16 +19,18 @@ describe('EventReducer :: Unit Test', () => {
   });
 
   it('GetSuccess action should return new state', () => {
-    const event: EventUI[] = [{
-      name: 'system.title',
-      newValue: 'a',
-      oldValue: 'b',
-      timestamp: '2018-05-27T08:54:44.63509Z',
-      modifierId: '20694424-0841-4d6c-bfb5-bbbb0391b8db',
-      newValueRelationships: null,
-      oldValueRelationships: null,
-      type: null
-    }];
+    const event: EventUI[] = [
+      {
+        name: 'system.title',
+        newValue: 'a',
+        oldValue: 'b',
+        timestamp: '2018-05-27T08:54:44.63509Z',
+        modifierId: '20694424-0841-4d6c-bfb5-bbbb0391b8db',
+        newValueRelationships: null,
+        oldValueRelationships: null,
+        type: null,
+      },
+    ];
 
     const action = new EventActions.GetSuccess(event);
     const state = EventReducer(EventInitialState, action);
@@ -37,16 +39,18 @@ describe('EventReducer :: Unit Test', () => {
   });
 
   it('GetError Action should return previous state', () => {
-    const previousState: EventUI[] = [{
-      name: 'system.title',
-      newValue: 'a',
-      oldValue: 'b',
-      timestamp: '2018-05-27T08:54:44.63509Z',
-      modifierId: '20694424-0841-4d6c-bfb5-bbbb0391b8db',
-      newValueRelationships: null,
-      oldValueRelationships: null,
-      type: null
-    }];
+    const previousState: EventUI[] = [
+      {
+        name: 'system.title',
+        newValue: 'a',
+        oldValue: 'b',
+        timestamp: '2018-05-27T08:54:44.63509Z',
+        modifierId: '20694424-0841-4d6c-bfb5-bbbb0391b8db',
+        newValueRelationships: null,
+        oldValueRelationships: null,
+        type: null,
+      },
+    ];
     const action = new EventActions.GetError();
     const state = EventReducer(previousState, action);
 

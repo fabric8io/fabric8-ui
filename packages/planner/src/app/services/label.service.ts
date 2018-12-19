@@ -9,7 +9,6 @@ import { HttpClientService } from './../shared/http-module/http.service';
 
 @Injectable()
 export class LabelService {
-
   constructor(private http: HttpClientService) {}
 
   /**
@@ -18,12 +17,10 @@ export class LabelService {
    * Url - http://localhost:8080/api/spaces/829d2039-3929-4e8e-865b-fd463b8b34f1/labels/
    */
   getLabels(labelUrl): Observable<LabelModel[]> {
-    return this.http.get<{data: LabelModel[]}>(labelUrl)
-      .pipe(map(r => r.data));
+    return this.http.get<{ data: LabelModel[] }>(labelUrl).pipe(map((r) => r.data));
   }
 
   createLabel(label: LabelModel, url: string): Observable<LabelModel> {
-    return this.http.post<{data: LabelModel}>(url, {data: label})
-      .pipe(map(r => r.data));
+    return this.http.post<{ data: LabelModel }>(url, { data: label }).pipe(map((r) => r.data));
   }
 }

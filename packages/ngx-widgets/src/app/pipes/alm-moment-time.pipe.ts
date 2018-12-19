@@ -4,7 +4,7 @@ import * as moment from 'moment';
 /*
  * Usage:
  *   <span [innerHTML]="timestamp | almMomentTime"></span>
-*/
+ */
 
 @Pipe({ name: 'almMomentTime' })
 export class AlmMomentTime implements PipeTransform {
@@ -24,6 +24,5 @@ export class AlmMomentTime implements PipeTransform {
     return `<span title="${moment(val).format('LLL')}">
               ${moment(val, [moment.ISO_8601]).fromNow()}
             </span>`;
-
   }
 }

@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, Inject, Input, OnDestroy, ViewChild } from '@angular/core';
 import { AuthenticationService } from 'ngx-login-client';
-import { Observable,  Subscription, timer as observableTimer } from 'rxjs';
+import { Observable, Subscription, timer as observableTimer } from 'rxjs';
 import { JenkinsService } from '../../../../../app/shared/jenkins.service';
 import { FABRIC8_FORGE_API_URL } from '../../../../../app/shared/runtime-console/fabric8-ui-forge-api';
 import { Build, PendingInputAction } from '../../../model/build.model';
@@ -11,7 +11,7 @@ import { pathJoin } from '../../../model/utils';
 @Component({
   selector: 'input-action-dialog',
   templateUrl: './input-action-dialog.component.html',
-  styleUrls: ['./input-action-dialog.component.less']
+  styleUrls: ['./input-action-dialog.component.less'],
 })
 export class InputActionDialog implements OnDestroy {
   build: Build = new Build();
@@ -24,12 +24,12 @@ export class InputActionDialog implements OnDestroy {
   private _jenkinsTimerSubscription: Subscription;
   private jenkinsStatus: any;
 
-  constructor(private http: HttpClient,
-              private authService: AuthenticationService,
-              private jenkinsService: JenkinsService,
-              @Inject(FABRIC8_FORGE_API_URL) private forgeApiUrl: string
-  ) {
-  }
+  constructor(
+    private http: HttpClient,
+    private authService: AuthenticationService,
+    private jenkinsService: JenkinsService,
+    @Inject(FABRIC8_FORGE_API_URL) private forgeApiUrl: string,
+  ) {}
 
   ngOnDestroy() {
     this.unsubscribeJenkinsSubscription();
@@ -73,8 +73,9 @@ export class InputActionDialog implements OnDestroy {
       } else {
         url = pathJoin(forgeUrl, '/api/openshift/services/jenkins/', jenkinsNamespace, url);
         const headers = new HttpHeaders({
-          'Authorization': 'Bearer ' + this.authService.getToken(),
-          'X-App': 'OSIO'});
+          Authorization: 'Bearer ' + this.authService.getToken(),
+          'X-App': 'OSIO',
+        });
         let body = null;
         this.http.post(url, body, { headers }).subscribe(() => {});
       }
@@ -89,22 +90,20 @@ export class InputActionDialog implements OnDestroy {
   checkJenkinsStatus() {
     this.jenkinsStatus = false;
     this.unsubscribeJenkinsSubscription();
-    this._jenkinsTimerSubscription = observableTimer(0, 20000).subscribe(t => {
+    this._jenkinsTimerSubscription = observableTimer(0, 20000).subscribe((t) => {
       // stop polling after 6 minutes
       if (t <= 17) {
-      this._jenkinsSubscription = this.jenkinsService.getJenkinsStatus()
-      .subscribe(status => {
+        this._jenkinsSubscription = this.jenkinsService.getJenkinsStatus().subscribe((status) => {
           if (status && status.data && status.data.state === 'running') {
             this.jenkinsStatus = true;
             this.unsubscribeJenkinsSubscription();
           } else {
             this.jenkinsStatus = false;
           }
-      });
-    } else {
-      this.unsubscribeJenkinsSubscription();
-    }
-
+        });
+      } else {
+        this.unsubscribeJenkinsSubscription();
+      }
     });
   }
 

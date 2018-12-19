@@ -3,9 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import {
-  WidgetsModule
-} from 'ngx-widgets';
+import { WidgetsModule } from 'ngx-widgets';
 
 import { TruncateModule } from 'ng2-truncate';
 import { TooltipModule } from 'ngx-bootstrap';
@@ -27,16 +25,10 @@ import { GroupTypesComponent } from './group-types-panel.component';
     TruncateModule,
     WidgetsModule,
     IterationModule,
-    RouterModule
+    RouterModule,
   ],
-  declarations: [
-    GroupTypesComponent
-  ],
+  declarations: [GroupTypesComponent],
   exports: [GroupTypesComponent],
-  providers: [
-    GroupTypesService,
-    SpaceQuery,
-    GroupTypeQuery
-  ]
+  providers: [GroupTypesService, SpaceQuery, GroupTypeQuery],
 })
-export class GroupTypesModule { }
+export class GroupTypesModule {}

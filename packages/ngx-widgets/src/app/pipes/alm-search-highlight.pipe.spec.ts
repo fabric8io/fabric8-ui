@@ -11,5 +11,4 @@ describe('Search highlight pipe', () => {
   it('should transforms "Barack Obama" to "<b>B</b>arack O<b>b</b>ama"', () => {
     expect(pipe.transform('Barack Obama', 'b')).toBe('<b>B</b>arack O<b>b</b>ama');
   });
-
 });

@@ -4,7 +4,7 @@ import * as support from '../support';
 
 export enum PageOpenMode {
   AlreadyOpened,
-  RefreshBrowser
+  RefreshBrowser,
 }
 
 export abstract class BasePage {
@@ -26,12 +26,9 @@ export abstract class BasePage {
     this.debug(`url: '${url}'`);
   }
 
-  async ready() {
-  }
+  async ready() {}
 
-
-  async open(mode: PageOpenMode =  PageOpenMode.AlreadyOpened): Promise<BasePage> {
-
+  async open(mode: PageOpenMode = PageOpenMode.AlreadyOpened): Promise<BasePage> {
     if (mode === PageOpenMode.RefreshBrowser) {
       await this.openInBrowser();
     }

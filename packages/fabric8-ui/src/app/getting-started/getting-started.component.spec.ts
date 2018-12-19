@@ -7,26 +7,26 @@ import { ProviderService } from '../shared/account/provider.service';
 import { GettingStartedComponent } from './getting-started.component';
 
 describe('GettingStartedComponent', () => {
-
   let fixture: ComponentFixture<GettingStartedComponent>;
   let component: DebugNode['componentInstance'];
 
   let mockRouter: any = jasmine.createSpy('Router');
   let mockProvider: any = jasmine.createSpyObj('ProviderService', ['linkOpenShift']);
   let mockUserService: any = jasmine.createSpy('UserService');
-  let mockAuthenticationService: any = jasmine.createSpyObj('AuthenticationService', ['isOpenShiftConnected']);
+  let mockAuthenticationService: any = jasmine.createSpyObj('AuthenticationService', [
+    'isOpenShiftConnected',
+  ]);
 
   const mockUser: any = {
     attributes: {
-      username: 'userName'
-    }
+      username: 'userName',
+    },
   };
 
   let mockActivatedRoute = {
     snapshot: {
-      queryParams: {
-      }
-    }
+      queryParams: {},
+    },
   };
 
   beforeEach(() => {
@@ -38,9 +38,9 @@ describe('GettingStartedComponent', () => {
         { provide: AuthenticationService, useValue: mockAuthenticationService },
         { provide: ProviderService, useValue: mockProvider },
         { provide: ActivatedRoute, useValue: mockActivatedRoute },
-        { provide: UserService, useValue: mockUserService }
+        { provide: UserService, useValue: mockUserService },
       ],
-      schemas: []
+      schemas: [],
     });
     fixture = TestBed.createComponent(GettingStartedComponent);
     component = fixture.debugElement.componentInstance;
@@ -55,7 +55,6 @@ describe('GettingStartedComponent', () => {
   });
 
   it('should not link openshift when it is connected', () => {
-
     mockUserService.loggedInUser = observableOf(mockUser);
     mockAuthenticationService.isOpenShiftConnected.and.returnValue(observableOf(true));
     spyOn(component, 'routeToHomeIfCompleted');
@@ -71,9 +70,9 @@ describe('GettingStartedComponent', () => {
     component.route = {
       snapshot: {
         queryParams: {
-          wait: 'true'
-        }
-      }
+          wait: 'true',
+        },
+      },
     };
     fixture.detectChanges();
     expect(component.errorConnecting).toBe(true);

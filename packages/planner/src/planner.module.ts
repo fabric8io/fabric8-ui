@@ -15,47 +15,53 @@ import * as states from './app/states/index.state';
 
 @NgModule({
   imports: [
-    RouterModule.forChild([{
-      path: '**',
-      redirectTo: '/_error'
-    }])
+    RouterModule.forChild([
+      {
+        path: '**',
+        redirectTo: '/_error',
+      },
+    ]),
   ],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class PlannerRoutingModule {}
 
 @NgModule({
   imports: [
     // The order is important
-    StoreModule.forFeature('planner', {
-      space: reducers.SpaceReducer,
-      labels: reducers.LabelReducer,
-      iterations: reducers.iterationReducer,
-      areas: reducers.AreaReducer,
-      collaborators: reducers.CollaboratorReducer,
-      users: reducers.UserReducer,
-      customQueries: reducers.CustomQueryReducer,
-      groupTypes: reducers.GroupTypeReducer,
-      workItemTypes: reducers.WorkItemTypeReducer,
-      workItems: reducers.WorkItemReducer,
-      workItemStates: reducers.WorkItemStateReducer,
-      infotips: reducers.InfotipReducer
-    }, {
-      initialState: {
-        space: states.initialSpaceState,
-        labels: states.initialLabelState,
-        iterations: states.initialIterationState,
-        areas: states.initialAreaState,
-        collaborators: states.initialCollaboratorState,
-        users: states.inititalUserState,
-        customQueries: states.initialCustomQueryState,
-        groupTypes: states.initialGroupTypeState,
-        workItemTypes: states.initialWorkItemTypeState,
-        workItems: states.initialWorkItemState,
-        workItemStates: states.initialWIState,
-        infotips: states.initialInfotipState
-      }
-    }),
+    StoreModule.forFeature(
+      'planner',
+      {
+        space: reducers.SpaceReducer,
+        labels: reducers.LabelReducer,
+        iterations: reducers.iterationReducer,
+        areas: reducers.AreaReducer,
+        collaborators: reducers.CollaboratorReducer,
+        users: reducers.UserReducer,
+        customQueries: reducers.CustomQueryReducer,
+        groupTypes: reducers.GroupTypeReducer,
+        workItemTypes: reducers.WorkItemTypeReducer,
+        workItems: reducers.WorkItemReducer,
+        workItemStates: reducers.WorkItemStateReducer,
+        infotips: reducers.InfotipReducer,
+      },
+      {
+        initialState: {
+          space: states.initialSpaceState,
+          labels: states.initialLabelState,
+          iterations: states.initialIterationState,
+          areas: states.initialAreaState,
+          collaborators: states.initialCollaboratorState,
+          users: states.inititalUserState,
+          customQueries: states.initialCustomQueryState,
+          groupTypes: states.initialGroupTypeState,
+          workItemTypes: states.initialWorkItemTypeState,
+          workItems: states.initialWorkItemState,
+          workItemStates: states.initialWIState,
+          infotips: states.initialInfotipState,
+        },
+      },
+    ),
     EffectsModule.forFeature([
       effects.SpaceEffects,
       effects.LabelEffects,
@@ -67,13 +73,13 @@ export class PlannerRoutingModule {}
       effects.GroupTypeEffects,
       effects.WorkItemTypeEffects,
       effects.WorkItemEffects,
-      effects.InfotipEffects
+      effects.InfotipEffects,
     ]),
     PlannerBoardModule,
     PlannerQueryModule,
     WorkItemDetailExternalModule,
     PlannerListModule,
-    PlannerRoutingModule
-  ]
+    PlannerRoutingModule,
+  ],
 })
 export class PlannerModule {}

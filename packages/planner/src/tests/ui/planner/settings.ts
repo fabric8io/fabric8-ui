@@ -2,13 +2,22 @@ import { ElementFinder } from 'protractor';
 import * as ui from '../../ui';
 
 export class Settings extends ui.BaseElement {
-  settingsDropdownDiv = new ui.BaseElement(this.$('.f8-table-config__settings-dropdown'), 'settings div');
+  settingsDropdownDiv = new ui.BaseElement(
+    this.$('.f8-table-config__settings-dropdown'),
+    'settings div',
+  );
   settingsDropDown = new ui.Dropdown(
     this.$('.f8-table-config__settings .dropdown-toggle'),
-    this.$('.f8-table-config__settings-dropdown')
+    this.$('.f8-table-config__settings-dropdown'),
   );
-  moveToDisplayedAttributeButton = new ui.Clickable(this.settingsDropdownDiv.$("span[tooltip='Move to Displayed Attributes']"), 'move to displayed attribute');
-  moveToAvailableAttributeButton = new ui.Clickable(this.settingsDropdownDiv.$("span[tooltip='Move to Available Attributes']"), 'move to available attribute');
+  moveToDisplayedAttributeButton = new ui.Clickable(
+    this.settingsDropdownDiv.$("span[tooltip='Move to Displayed Attributes']"),
+    'move to displayed attribute',
+  );
+  moveToAvailableAttributeButton = new ui.Clickable(
+    this.settingsDropdownDiv.$("span[tooltip='Move to Available Attributes']"),
+    'move to available attribute',
+  );
   close = new ui.Clickable(this.settingsDropdownDiv.$('.fa-close.btn'), ' close button');
 
   constructor(el: ElementFinder, name = 'Settings') {

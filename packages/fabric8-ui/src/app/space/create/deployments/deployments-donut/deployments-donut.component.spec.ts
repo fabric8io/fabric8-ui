@@ -1,16 +1,7 @@
-import {
-  Component,
-  DebugElement,
-  Input
-} from '@angular/core';
+import { Component, DebugElement, Input } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import {
-  BehaviorSubject,
-  of,
-  Subject,
-  throwError
-} from 'rxjs';
+import { BehaviorSubject, of, Subject, throwError } from 'rxjs';
 
 import { createMock } from 'testing/mock';
 import { initContext } from 'testing/test-context';
@@ -21,13 +12,13 @@ import { DeploymentsService } from '../services/deployments.service';
 import { DeploymentsDonutComponent } from './deployments-donut.component';
 
 @Component({
-  template: '<deployments-donut></deployments-donut>'
+  template: '<deployments-donut></deployments-donut>',
 })
-class HostComponent { }
+class HostComponent {}
 
 @Component({
   selector: 'deployments-donut-chart',
-  template: ''
+  template: '',
 })
 class FakeDeploymentsDonutChartComponent {
   @Input() desiredReplicas: number;
@@ -38,37 +29,48 @@ class FakeDeploymentsDonutChartComponent {
 }
 
 describe('DeploymentsDonutComponent', (): void => {
-
-  const testContext = initContext(DeploymentsDonutComponent, HostComponent,
+  const testContext = initContext(
+    DeploymentsDonutComponent,
+    HostComponent,
     {
       declarations: [FakeDeploymentsDonutChartComponent],
       providers: [
         {
-          provide: DeploymentsService, useFactory: (): jasmine.SpyObj<DeploymentsService> => {
+          provide: DeploymentsService,
+          useFactory: (): jasmine.SpyObj<DeploymentsService> => {
             const svc: jasmine.SpyObj<DeploymentsService> = createMock(DeploymentsService);
-            svc.scalePods.and.returnValue(
-              of('scalePods')
-            );
+            svc.scalePods.and.returnValue(of('scalePods'));
             svc.getPods.and.returnValue(
-              new BehaviorSubject<Pods>({ pods: [[PodPhase.RUNNING, 1], [PodPhase.TERMINATING, 1]], total: 2 })
+              new BehaviorSubject<Pods>({
+                pods: [[PodPhase.RUNNING, 1], [PodPhase.TERMINATING, 1]],
+                total: 2,
+              }),
             );
             svc.canScale.and.returnValue(new Subject<boolean>());
             svc.getMaximumPods.and.returnValue(of(2));
             return svc;
-          }
+          },
         },
-        { provide: NotificationsService, useValue: jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']) }
-      ]
+        {
+          provide: NotificationsService,
+          useValue: jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']),
+        },
+      ],
     },
     (component: DeploymentsDonutComponent): void => {
       component.mini = false;
       component.spaceId = 'space';
       component.applicationId = 'application';
       component.environment = 'environmentName';
-    });
+    },
+  );
 
   it('should get the pods with the correct arguments', (): void => {
-    expect(TestBed.get(DeploymentsService).getPods).toHaveBeenCalledWith('space', 'environmentName', 'application');
+    expect(TestBed.get(DeploymentsService).getPods).toHaveBeenCalledWith(
+      'space',
+      'environmentName',
+      'application',
+    );
   });
 
   it('should use pods data for initial desired replicas', (): void => {
@@ -85,7 +87,9 @@ describe('DeploymentsDonutComponent', (): void => {
   });
 
   it('should detect when detected scale attempt reaches maximum supported pods', (): void => {
-    TestBed.get(DeploymentsService).getPods().next({ pods: [], total: 0 });
+    TestBed.get(DeploymentsService)
+      .getPods()
+      .next({ pods: [], total: 0 });
 
     expect(testContext.testedDirective.desiredReplicas).toBe(0);
     expect(testContext.testedDirective.requestedScaleIsMaximum).toBeFalsy();
@@ -134,13 +138,15 @@ describe('DeploymentsDonutComponent', (): void => {
   });
 
   it('should acquire pods data', (done: DoneFn): void => {
-    testContext.testedDirective.pods.subscribe((pods: Pods): void => {
-      expect(pods).toEqual({
-        pods: [[PodPhase.RUNNING, 1], [PodPhase.TERMINATING, 1]],
-        total: 2
-      });
-      done();
-    });
+    testContext.testedDirective.pods.subscribe(
+      (pods: Pods): void => {
+        expect(pods).toEqual({
+          pods: [[PodPhase.RUNNING, 1], [PodPhase.TERMINATING, 1]],
+          total: 2,
+        });
+        done();
+      },
+    );
   });
 
   it('should call scalePods when scaling up', (): void => {
@@ -149,7 +155,12 @@ describe('DeploymentsDonutComponent', (): void => {
 
     el.click();
     testContext.testedDirective.debounceScale.flush();
-    expect(TestBed.get(DeploymentsService).scalePods).toHaveBeenCalledWith('space', 'environmentName', 'application', 3);
+    expect(TestBed.get(DeploymentsService).scalePods).toHaveBeenCalledWith(
+      'space',
+      'environmentName',
+      'application',
+      3,
+    );
   });
 
   it('should call scalePods when scaling down', (): void => {
@@ -158,7 +169,12 @@ describe('DeploymentsDonutComponent', (): void => {
 
     el.click();
     testContext.testedDirective.debounceScale.flush();
-    expect(TestBed.get(DeploymentsService).scalePods).toHaveBeenCalledWith('space', 'environmentName', 'application', 1);
+    expect(TestBed.get(DeploymentsService).scalePods).toHaveBeenCalledWith(
+      'space',
+      'environmentName',
+      'application',
+      1,
+    );
   });
 
   it('should not call scalePods when scaling below 0', (): void => {
@@ -184,7 +200,12 @@ describe('DeploymentsDonutComponent', (): void => {
     testContext.detectChanges();
     testContext.testedDirective.debounceScale.flush();
 
-    expect(TestBed.get(DeploymentsService).scalePods).toHaveBeenCalledWith('space', 'environmentName', 'application', 3);
+    expect(TestBed.get(DeploymentsService).scalePods).toHaveBeenCalledWith(
+      'space',
+      'environmentName',
+      'application',
+      3,
+    );
     expect(TestBed.get(NotificationsService).message).not.toHaveBeenCalled();
   });
 
@@ -194,10 +215,14 @@ describe('DeploymentsDonutComponent', (): void => {
     });
 
     it('should mirror inverted DeploymentsService#canScale()', (): void => {
-      TestBed.get(DeploymentsService).canScale().next(true);
+      TestBed.get(DeploymentsService)
+        .canScale()
+        .next(true);
       expect(testContext.testedDirective.atQuota).toBeFalsy();
 
-      TestBed.get(DeploymentsService).canScale().next(false);
+      TestBed.get(DeploymentsService)
+        .canScale()
+        .next(false);
       expect(testContext.testedDirective.atQuota).toBeTruthy();
     });
   });

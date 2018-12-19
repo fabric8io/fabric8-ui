@@ -1,12 +1,8 @@
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ErrorHandler, Injectable } from '@angular/core';
-import {
-  Logger,
-  Notification,
-  NotificationType
-} from 'ngx-base';
+import { Logger, Notification, NotificationType } from 'ngx-base';
 import { User, UserService } from 'ngx-login-client';
-import { BehaviorSubject,  empty as observableEmpty, Observable } from 'rxjs';
+import { BehaviorSubject, empty as observableEmpty, Observable } from 'rxjs';
 import { catchError, first } from 'rxjs/operators';
 import { NotificationsService } from '../../../app/shared/notifications.service';
 
@@ -80,13 +76,12 @@ export function currentOAuthConfig() {
 
 @Injectable()
 export class OAuthConfigStore {
-
   constructor(
     private readonly http: HttpClient,
     private readonly userService: UserService,
     private readonly logger: Logger,
     private readonly errorHandler: ErrorHandler,
-    private readonly notifications: NotificationsService
+    private readonly notifications: NotificationsService,
   ) {
     this.load();
   }
@@ -109,63 +104,68 @@ export class OAuthConfigStore {
   get config(): OAuthConfig {
     let answer = _latestOAuthConfig;
     if (!answer) {
-      console.log('WARNING: invoked the isOpenShift() method before the OAuthConfigStore has loaded!');
+      console.log(
+        'WARNING: invoked the isOpenShift() method before the OAuthConfigStore has loaded!',
+      );
     }
     return answer;
   }
 
   private load() {
     let configUri = '/_config/oauth.json';
-    this.http.get(configUri).pipe(
-      catchError((error: HttpErrorResponse) => {
-        this.errorHandler.handleError(error);
-        this.logger.error(error);
-        this.notifications.message({
-          type: NotificationType.DANGER,
-          header: 'Error: Configuration setup',
-          message: 'Could not find OAuth configuration at ' + configUri
-        } as Notification);
-        _currentOAuthConfig.next(_latestOAuthConfig);
-        _loadingOAuthConfig.next(false);
-        return observableEmpty();
-      }))
-      .subscribe(
-        (res: HttpResponse<any>) => {
-          let data = res;
-          for (let key in data) {
-            let value = data[key];
-            if (value === 'undefined') {
-              data[key] = '';
-            }
-          }
-          _latestOAuthConfig = new OAuthConfig(data);
-          /**
-           * openshiftConsoleUrl is set late and another emission occurs
-           * so users who do not need it are not blocked from continuing.
-           * Users who do need it should subscribe and wait for the
-           * emission that contains the property.
-           */
-          this.userService.loggedInUser.pipe(
-            first((user: User) => user.attributes != null && user.attributes.cluster != null))
-            .subscribe(
-              (user: User) => {
-                let cluster = user.attributes.cluster;
-                _latestOAuthConfig.openshiftConsoleUrl = cluster.replace('api', 'console') + 'console';
-                _currentOAuthConfig.next(_latestOAuthConfig);
-              },
-              (error) => {
-                this.errorHandler.handleError(error);
-                this.logger.error(error);
-                this.notifications.message({
-                  type: NotificationType.DANGER,
-                  header: 'Error: Configuration setup',
-                  message: 'Could not acquire user credentials for oauthconfig setup'
-                } as Notification);
-                _currentOAuthConfig.next(_latestOAuthConfig);
-              }
-            );
+    this.http
+      .get(configUri)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          this.errorHandler.handleError(error);
+          this.logger.error(error);
+          this.notifications.message({
+            type: NotificationType.DANGER,
+            header: 'Error: Configuration setup',
+            message: 'Could not find OAuth configuration at ' + configUri,
+          } as Notification);
           _currentOAuthConfig.next(_latestOAuthConfig);
           _loadingOAuthConfig.next(false);
-        });
+          return observableEmpty();
+        }),
+      )
+      .subscribe((res: HttpResponse<any>) => {
+        let data = res;
+        for (let key in data) {
+          let value = data[key];
+          if (value === 'undefined') {
+            data[key] = '';
+          }
+        }
+        _latestOAuthConfig = new OAuthConfig(data);
+        /**
+         * openshiftConsoleUrl is set late and another emission occurs
+         * so users who do not need it are not blocked from continuing.
+         * Users who do need it should subscribe and wait for the
+         * emission that contains the property.
+         */
+        this.userService.loggedInUser
+          .pipe(first((user: User) => user.attributes != null && user.attributes.cluster != null))
+          .subscribe(
+            (user: User) => {
+              let cluster = user.attributes.cluster;
+              _latestOAuthConfig.openshiftConsoleUrl =
+                cluster.replace('api', 'console') + 'console';
+              _currentOAuthConfig.next(_latestOAuthConfig);
+            },
+            (error) => {
+              this.errorHandler.handleError(error);
+              this.logger.error(error);
+              this.notifications.message({
+                type: NotificationType.DANGER,
+                header: 'Error: Configuration setup',
+                message: 'Could not acquire user credentials for oauthconfig setup',
+              } as Notification);
+              _currentOAuthConfig.next(_latestOAuthConfig);
+            },
+          );
+        _currentOAuthConfig.next(_latestOAuthConfig);
+        _loadingOAuthConfig.next(false);
+      });
   }
 }

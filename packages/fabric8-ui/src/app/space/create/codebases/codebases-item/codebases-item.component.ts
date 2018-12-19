@@ -9,7 +9,7 @@ import { CodebasesService } from '../services/codebases.service';
   encapsulation: ViewEncapsulation.None,
   selector: 'codebases-item',
   templateUrl: './codebases-item.component.html',
-  styleUrls: ['./codebases-item.component.less']
+  styleUrls: ['./codebases-item.component.less'],
 })
 export class CodebasesItemComponent implements OnDestroy, OnInit {
   @Input() cheState: Che;
@@ -19,18 +19,13 @@ export class CodebasesItemComponent implements OnDestroy, OnInit {
 
   subscriptions: Subscription[] = [];
 
-  constructor(
-    private notifications: Notifications,
-    private codebasesService: CodebasesService) {
-  }
+  constructor(private notifications: Notifications, private codebasesService: CodebasesService) {}
 
-  ngOnDestroy(): void {
-  }
+  ngOnDestroy(): void {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
-  onChangeSubscribe(event: {previousValue: boolean, currentValue: boolean}, codebase): void {
+  onChangeSubscribe(event: { previousValue: boolean; currentValue: boolean }, codebase): void {
     codebase.attributes['cve-scan'] = event.currentValue;
     this.updateCodebase(codebase);
   }
@@ -40,18 +35,28 @@ export class CodebasesItemComponent implements OnDestroy, OnInit {
    * @param codebase
    */
   updateCodebase(codebase): void {
-    this.subscriptions.push(this.codebasesService.updateCodebases(codebase).subscribe(() => {
-      let statusMsg: string = '';
-      if (codebase.attributes['cve-scan']) {
-        statusMsg = `The codebase has been successfully subscribed for receiving security alerts.`;
-      } else {
-        statusMsg = `The codebase has been successfully unsubscribed from receiving security alerts.`;
-      }
-      this.ShowSubscriptionStatus(statusMsg , NotificationType.SUCCESS);
-    }, (error: any) => {
-      codebase.attributes['cve-scan'] = !codebase.attributes['cve-scan'];
-      this.ShowSubscriptionStatus(`Status: ${error.status}, Unable to update security alert subscription for codebase ${codebase.name} .` , NotificationType.DANGER);
-    }));
+    this.subscriptions.push(
+      this.codebasesService.updateCodebases(codebase).subscribe(
+        () => {
+          let statusMsg: string = '';
+          if (codebase.attributes['cve-scan']) {
+            statusMsg = `The codebase has been successfully subscribed for receiving security alerts.`;
+          } else {
+            statusMsg = `The codebase has been successfully unsubscribed from receiving security alerts.`;
+          }
+          this.ShowSubscriptionStatus(statusMsg, NotificationType.SUCCESS);
+        },
+        (error: any) => {
+          codebase.attributes['cve-scan'] = !codebase.attributes['cve-scan'];
+          this.ShowSubscriptionStatus(
+            `Status: ${error.status}, Unable to update security alert subscription for codebase ${
+              codebase.name
+            } .`,
+            NotificationType.DANGER,
+          );
+        },
+      ),
+    );
   }
 
   /**
@@ -63,7 +68,7 @@ export class CodebasesItemComponent implements OnDestroy, OnInit {
   private ShowSubscriptionStatus(msg: string, type: NotificationType) {
     this.notifications.message({
       message: msg,
-      type: type
+      type: type,
     } as Notification);
   }
 }

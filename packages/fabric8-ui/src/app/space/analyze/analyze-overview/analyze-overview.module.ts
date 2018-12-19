@@ -33,11 +33,11 @@ import { AnalyzeOverviewComponent } from './analyze-overview.component';
     PipelinesWidgetModule,
     AddCollaboratorsDialogModule,
     ModalModule.forRoot(),
-    WorkItemWidgetModule
+    WorkItemWidgetModule,
   ],
   declarations: [AnalyzeOverviewComponent],
-  entryComponents: [EnvironmentWidgetComponent]
+  entryComponents: [EnvironmentWidgetComponent],
 })
 export class AnalyzeOverviewModule {
-  constructor() { }
+  constructor() {}
 }

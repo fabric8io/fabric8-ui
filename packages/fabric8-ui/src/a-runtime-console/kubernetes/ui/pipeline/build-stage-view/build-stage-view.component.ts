@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, ViewChild } from '@angular/core';
-import { Observable,  Subscription, timer as observableTimer } from 'rxjs';
+import { Observable, Subscription, timer as observableTimer } from 'rxjs';
 import { Build, isValidInputAction, PendingInputAction } from '../../../model/build.model';
 import { PipelineStage } from '../../../model/pipelinestage.model';
 import { InputActionDialog } from '../input-action-dialog/input-action-dialog.component';
@@ -7,10 +7,9 @@ import { InputActionDialog } from '../input-action-dialog/input-action-dialog.co
 @Component({
   selector: 'build-stage-view',
   templateUrl: './build-stage-view.component.html',
-  styleUrls: ['./build-stage-view.component.less']
+  styleUrls: ['./build-stage-view.component.less'],
 })
 export class BuildStageViewComponent implements OnDestroy {
-
   @Input() build: Build;
 
   @ViewChild(InputActionDialog) inputActionDialog: InputActionDialog;
@@ -18,33 +17,31 @@ export class BuildStageViewComponent implements OnDestroy {
   displayStages: PipelineStage[] = [];
   private _timerSubscription: Subscription;
 
-
   constructor() {
     // Every 200ms check for an update
-    this._timerSubscription = observableTimer(0, 200)
-      .subscribe(count => {
-        for (let i = 0; i < this.build.pipelineStages.length; i++) {
-          // First, update the displayed stage if needed
-          if (!this.build.pipelineStages[i]) {
-            // If the stage is null, do nothing
-          } else if (this.displayStages.length <= i || !this.displayStages[i]) {
-            // If the stage is not yet present, or null, copy in the current value
-            this.displayStages[i] = this.build.pipelineStages[i];
-          } else if (this.displayStages[i].status !== this.build.pipelineStages[i].status) {
-            // If the status changes, then update the view
-            this.displayStages[i] = this.build.pipelineStages[i];
-            // Set the duration as the status changed
-          }
-          // Otherwise the status has not changed, so don't update the view
-
-          // COUNTER
-
-          if (this.build.pipelineStages[i].status === 'IN_PROGRESS') {
-            // Increment the counter when the build is running
-            this.displayStages[i].durationMillis += 200;
-          }
+    this._timerSubscription = observableTimer(0, 200).subscribe((count) => {
+      for (let i = 0; i < this.build.pipelineStages.length; i++) {
+        // First, update the displayed stage if needed
+        if (!this.build.pipelineStages[i]) {
+          // If the stage is null, do nothing
+        } else if (this.displayStages.length <= i || !this.displayStages[i]) {
+          // If the stage is not yet present, or null, copy in the current value
+          this.displayStages[i] = this.build.pipelineStages[i];
+        } else if (this.displayStages[i].status !== this.build.pipelineStages[i].status) {
+          // If the status changes, then update the view
+          this.displayStages[i] = this.build.pipelineStages[i];
+          // Set the duration as the status changed
         }
-      });
+        // Otherwise the status has not changed, so don't update the view
+
+        // COUNTER
+
+        if (this.build.pipelineStages[i].status === 'IN_PROGRESS') {
+          // Increment the counter when the build is running
+          this.displayStages[i].durationMillis += 200;
+        }
+      }
+    });
   }
 
   ngOnDestroy() {

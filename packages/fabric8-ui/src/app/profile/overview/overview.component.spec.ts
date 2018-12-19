@@ -14,28 +14,27 @@ import { OverviewComponent } from './overview.component';
 
 @Component({
   selector: 'alm-work-items',
-  template: ''
+  template: '',
 })
-class MockWorkItemsComponent { }
+class MockWorkItemsComponent {}
 
 @Component({
   selector: 'alm-spaces',
-  template: ''
+  template: '',
 })
-class MockSpacesComponent { }
+class MockSpacesComponent {}
 
 @Component({
-  template: ''
+  template: '',
 })
-class MockComponent { }
+class MockComponent {}
 
 @Component({
-  template: '<alm-overview></alm-overview>'
+  template: '<alm-overview></alm-overview>',
 })
-class HostComponent { }
+class HostComponent {}
 
 describe('OverviewComponent', (): void => {
-
   const testContext = initContext(OverviewComponent, HostComponent, {
     imports: [
       RouterTestingModule.withRoutes([
@@ -46,19 +45,19 @@ describe('OverviewComponent', (): void => {
             {
               path: '',
               redirectTo: '_workitems',
-              pathMatch: 'full'
+              pathMatch: 'full',
             },
             {
               path: '_workitems',
               component: MockWorkItemsComponent,
-              pathMatch: 'full'
+              pathMatch: 'full',
             },
             {
               path: '_spaces',
               component: MockSpacesComponent,
-              pathMatch: 'full'
-            }
-          ]
+              pathMatch: 'full',
+            },
+          ],
         },
         {
           path: ':username',
@@ -66,65 +65,79 @@ describe('OverviewComponent', (): void => {
           children: [
             {
               path: '_update',
-              component: MockComponent
-            }
-          ]
-        }
-      ])
+              component: MockComponent,
+            },
+          ],
+        },
+      ]),
     ],
-    declarations: [
-      OverviewComponent,
-      MockWorkItemsComponent,
-      MockSpacesComponent,
-      MockComponent
-    ],
+    declarations: [OverviewComponent, MockWorkItemsComponent, MockSpacesComponent, MockComponent],
     providers: [
-      { provide: UserService, useFactory: (): jasmine.SpyObj<UserService> => createMock(UserService) },
       {
-        provide: Notifications, useFactory: (): jasmine.SpyObj<Notifications> => {
+        provide: UserService,
+        useFactory: (): jasmine.SpyObj<UserService> => createMock(UserService),
+      },
+      {
+        provide: Notifications,
+        useFactory: (): jasmine.SpyObj<Notifications> => {
           const mock: jasmine.SpyObj<Notifications> = createMock(Notifications);
           mock.message.and.stub();
           return mock;
-        }
+        },
       },
       {
-        provide: ContextService, useFactory: (): jasmine.SpyObj<ContextService> => {
+        provide: ContextService,
+        useFactory: (): jasmine.SpyObj<ContextService> => {
           const mock: jasmine.SpyObj<ContextService> = createMock(ContextService);
           mock.viewingOwnContext.and.returnValue(true);
-          (mock as any).current = new BehaviorSubject<Context>({ user: { attributes: { username: 'mock-username' } } } as Context);
+          (mock as any).current = new BehaviorSubject<Context>({
+            user: { attributes: { username: 'mock-username' } },
+          } as Context);
           return mock;
-        }
-      }
+        },
+      },
     ],
-    schemas: [NO_ERRORS_SCHEMA]
+    schemas: [NO_ERRORS_SCHEMA],
   });
 
   it('should set the user value to be userService.currentLoggedInUser.attributes', (): void => {
-    expect(testContext.testedDirective.user.attributes).toEqual({ username: 'mock-username' } as Profile);
+    expect(testContext.testedDirective.user.attributes).toEqual({
+      username: 'mock-username',
+    } as Profile);
   });
 
   describe(`when viewing another user's account`, (): void => {
     it('should update user', (): void => {
       expect(testContext.testedDirective.viewingOwnAccount).toBeTruthy();
-      expect(testContext.testedDirective.user.attributes).toEqual({ username: 'mock-username' } as Profile);
+      expect(testContext.testedDirective.user.attributes).toEqual({
+        username: 'mock-username',
+      } as Profile);
 
       TestBed.get(ContextService).viewingOwnContext.and.returnValue(false);
-      TestBed.get(ContextService).current.next({ user: { attributes: { username: 'some-other-user' } } });
+      TestBed.get(ContextService).current.next({
+        user: { attributes: { username: 'some-other-user' } },
+      });
 
       expect(testContext.testedDirective.viewingOwnAccount).toBeFalsy();
-      expect(testContext.testedDirective.user.attributes).toEqual({ username: 'some-other-user' } as Profile);
+      expect(testContext.testedDirective.user.attributes).toEqual({
+        username: 'some-other-user',
+      } as Profile);
     });
   });
 
   describe('when logged user attributes are unavailable', (): void => {
-    beforeEach((): void => {
-      TestBed.get(ContextService).viewingOwnContext.and.returnValue(true);
-      TestBed.get(ContextService).current.next({ user: {} });
-    });
+    beforeEach(
+      (): void => {
+        TestBed.get(ContextService).viewingOwnContext.and.returnValue(true);
+        TestBed.get(ContextService).current.next({ user: {} });
+      },
+    );
 
     it('should not update user', (): void => {
       expect(testContext.testedDirective.viewingOwnAccount).toBeTruthy();
-      expect(testContext.testedDirective.user.attributes).toEqual({ username: 'mock-username' } as Profile);
+      expect(testContext.testedDirective.user.attributes).toEqual({
+        username: 'mock-username',
+      } as Profile);
     });
   });
 
@@ -136,5 +149,4 @@ describe('OverviewComponent', (): void => {
       expect(locationSpy.path()).toEqual('/mock-username/_update');
     }));
   });
-
 });

@@ -1,25 +1,12 @@
-import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpHeaders,
-  HttpResponse
-} from '@angular/common/http';
-import {
-  ErrorHandler,
-  Inject,
-  Injectable
-} from '@angular/core';
-import {
-  Logger,
-  Notification,
-  NotificationType
-} from 'ngx-base';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { ErrorHandler, Inject, Injectable } from '@angular/core';
+import { Logger, Notification, NotificationType } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
 import {
   combineLatest as observableCombineLatest,
   empty as observableEmpty,
-  Observable
+  Observable,
 } from 'rxjs';
 import { catchError, distinctUntilChanged, map, shareReplay } from 'rxjs/operators';
 import { BuildConfig } from '../../../../../a-runtime-console/index';
@@ -46,7 +33,6 @@ export interface UserServiceNamespace {
 
 @Injectable()
 export class PipelinesService {
-
   private readonly headers: HttpHeaders;
   private readonly apiUrl: string;
   private loggedIn: boolean = false;
@@ -59,7 +45,7 @@ export class PipelinesService {
     private readonly logger: Logger,
     private readonly errorHandler: ErrorHandler,
     private readonly notifications: NotificationsService,
-    @Inject(WIT_API_URL) witUrl: string
+    @Inject(WIT_API_URL) witUrl: string,
   ) {
     let headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
     const token: string = this.auth.getToken();
@@ -75,7 +61,7 @@ export class PipelinesService {
     return observableCombineLatest(
       this.runtimePipelinesService.current.pipe(distinctUntilChanged()),
       this.getOpenshiftConsoleUrl(),
-      this.setupBuildConfigLinks
+      this.setupBuildConfigLinks,
     );
   }
 
@@ -83,24 +69,43 @@ export class PipelinesService {
     return observableCombineLatest(
       this.runtimePipelinesService.recentPipelines.pipe(distinctUntilChanged()),
       this.getOpenshiftConsoleUrl(),
-      this.setupBuildConfigLinks
+      this.setupBuildConfigLinks,
     );
   }
 
   getOpenshiftConsoleUrl(): Observable<string> {
     if (!this.openshiftConsoleUrl) {
-      this.openshiftConsoleUrl = this.http.get<UserServiceResponse>(this.apiUrl, { headers: this.headers }).pipe(
-        catchError((err: HttpErrorResponse): Observable<UserServiceResponse> => this.handleHttpError(err)),
-        map((resp: UserServiceResponse): UserServiceNamespace[] => resp.data.attributes.namespaces),
-        map((namespaces: UserServiceNamespace[]): string => {
-          for (let namespace of namespaces) {
-            if (namespace.name && namespace.type && namespace.type === 'user' && namespace['cluster-console-url']) {
-              return namespace['cluster-console-url'] + 'project/' + namespace.name + '/browse/pipelines';
-            }
-          }
-          return '';
-        }),
-        shareReplay());
+      this.openshiftConsoleUrl = this.http
+        .get<UserServiceResponse>(this.apiUrl, { headers: this.headers })
+        .pipe(
+          catchError(
+            (err: HttpErrorResponse): Observable<UserServiceResponse> => this.handleHttpError(err),
+          ),
+          map(
+            (resp: UserServiceResponse): UserServiceNamespace[] => resp.data.attributes.namespaces,
+          ),
+          map(
+            (namespaces: UserServiceNamespace[]): string => {
+              for (let namespace of namespaces) {
+                if (
+                  namespace.name &&
+                  namespace.type &&
+                  namespace.type === 'user' &&
+                  namespace['cluster-console-url']
+                ) {
+                  return (
+                    namespace['cluster-console-url'] +
+                    'project/' +
+                    namespace.name +
+                    '/browse/pipelines'
+                  );
+                }
+              }
+              return '';
+            },
+          ),
+          shareReplay(),
+        );
     }
 
     return this.openshiftConsoleUrl;
@@ -131,7 +136,7 @@ export class PipelinesService {
     this.notifications.message({
       type: NotificationType.DANGER,
       header: `Request failed: ${response.status} (${response.statusText})`,
-      message: response.message
+      message: response.message,
     } as Notification);
     return observableEmpty();
   }

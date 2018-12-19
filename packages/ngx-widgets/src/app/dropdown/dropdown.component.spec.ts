@@ -1,19 +1,11 @@
-import {
-  async,
-  ComponentFixture,
-  fakeAsync,
-  inject,
-  TestBed,
-  tick
-} from '@angular/core/testing';
+import { async, ComponentFixture, fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
 
 import { DebugElement } from '@angular/core';
-import { FormsModule }  from '@angular/forms';
-import { By }           from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
+import { By } from '@angular/platform-browser';
 
 import { DropdownOption } from './dropdown-option';
 import { DropdownComponent } from './dropdown.component';
-
 
 describe('Dropdown component - ', () => {
   let comp: DropdownComponent;
@@ -28,34 +20,34 @@ describe('Dropdown component - ', () => {
         id: 1,
         option: 'option1',
         option_class: 'option1',
-        active_class: 'option1_active'
+        active_class: 'option1_active',
       },
       {
         id: 2,
         option: 'option2',
         option_class: 'option2',
-        active_class: 'option2_active'
+        active_class: 'option2_active',
       },
       {
         id: 3,
         option: 'option3',
         option_class: 'option3',
-        active_class: 'option3_active'
-      }
+        active_class: 'option3_active',
+      },
     ] as DropdownOption[];
 
     slectedOption = {
       id: 1,
       option: 'option1',
       option_class: 'option1',
-      active_class: 'option1_active'
+      active_class: 'option1_active',
     } as DropdownOption;
   });
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [FormsModule],
-      declarations: [DropdownComponent]
+      declarations: [DropdownComponent],
     })
       .compileComponents()
       .then(() => {

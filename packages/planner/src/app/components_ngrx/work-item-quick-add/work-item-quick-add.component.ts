@@ -11,7 +11,7 @@ import {
   QueryList,
   Renderer2,
   ViewChild,
-  ViewChildren
+  ViewChildren,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Logger } from 'ngx-base';
@@ -33,12 +33,13 @@ import { AppState } from './../../states/app.state';
 @Component({
   selector: 'alm-work-item-quick-add',
   templateUrl: './work-item-quick-add.component.html',
-  styleUrls: ['./work-item-quick-add.component.less']
+  styleUrls: ['./work-item-quick-add.component.less'],
 })
-export class WorkItemQuickAddComponent implements OnInit, OnDestroy, AfterViewInit, AfterViewChecked {
+export class WorkItemQuickAddComponent
+  implements OnInit, OnDestroy, AfterViewInit, AfterViewChecked {
   @ViewChild('quickAddTitle') qaTitle: any;
   @ViewChild('quickAddDesc') qaDesc: any;
-  @ViewChildren('quickAddTitle', {read: ElementRef}) qaTitleRef: QueryList<ElementRef>;
+  @ViewChildren('quickAddTitle', { read: ElementRef }) qaTitleRef: QueryList<ElementRef>;
   @ViewChild('quickAddElement') quickAddElement: ElementRef;
   @ViewChild('inlinequickAddElement') inlinequickAddElement: ElementRef;
 
@@ -54,8 +55,7 @@ export class WorkItemQuickAddComponent implements OnInit, OnDestroy, AfterViewIn
   workItem: WorkItemService;
   validTitle: boolean = false;
   linkObject: object;
-  addDisabled: Observable<boolean> =
-    this.permissionQuery.isAllowedToAdd();
+  addDisabled: Observable<boolean> = this.permissionQuery.isAllowedToAdd();
   workItemTitle = new FormControl('');
 
   // Board view specific
@@ -64,21 +64,21 @@ export class WorkItemQuickAddComponent implements OnInit, OnDestroy, AfterViewIn
   descHeight: any = '27px';
   descResize: any = 'none';
   showQuickAdd: boolean;
-  createId: number= 0;
+  createId: number = 0;
   eventListeners: any[] = [];
   blockAdd: boolean = false;
-  infotipSource = this.store
-    .pipe(
-      select('planner'),
-      select('infotips')
-    );
+  infotipSource = this.store.pipe(
+    select('planner'),
+    select('infotips'),
+  );
 
   constructor(
     private logger: Logger,
     private renderer: Renderer2,
     private store: Store<AppState>,
     private workItemQuery: WorkItemQuery,
-    private permissionQuery: PermissionQuery) {}
+    private permissionQuery: PermissionQuery,
+  ) {}
 
   ngOnInit(): void {
     this.createWorkItemObj();
@@ -88,18 +88,19 @@ export class WorkItemQuickAddComponent implements OnInit, OnDestroy, AfterViewIn
 
     // listen for item added
     this.eventListeners.push(
-      this.workItemQuery.getWorkItems()
-        .pipe(filter(items => !!items.length))
-        .subscribe(items => {
+      this.workItemQuery
+        .getWorkItems()
+        .pipe(filter((items) => !!items.length))
+        .subscribe((items) => {
           // const addedItem = items.find(item => item.createId === this.createId);
           this.resetQuickAdd();
-        })
+        }),
     );
   }
 
   ngOnDestroy() {
     // prevent memory leak when component is destroyed
-    this.eventListeners.forEach(e => {
+    this.eventListeners.forEach((e) => {
       e.unsubscribe();
     });
   }
@@ -117,7 +118,7 @@ export class WorkItemQuickAddComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   ngAfterViewInit() {
-    this.qaTitleRef.changes.subscribe(item => {
+    this.qaTitleRef.changes.subscribe((item) => {
       if (item.length) {
         this.qaTitle.nativeElement.focus();
       }
@@ -126,9 +127,10 @@ export class WorkItemQuickAddComponent implements OnInit, OnDestroy, AfterViewIn
 
   ngAfterViewChecked() {
     if (this.quickAddElement) {
-      let quickaddWdth: number =  0;
+      let quickaddWdth: number = 0;
       if (document.getElementsByClassName('f8-wi-list__quick-add').length > 0) {
-        quickaddWdth = (document.getElementsByClassName('f8-wi-list__quick-add')[0] as HTMLElement).offsetWidth;
+        quickaddWdth = (document.getElementsByClassName('f8-wi-list__quick-add')[0] as HTMLElement)
+          .offsetWidth;
       }
       let targetWidth: number = quickaddWdth + 20;
       if (this.quickAddElement.nativeElement.classList.contains('f8-quick-add-inline')) {
@@ -152,39 +154,42 @@ export class WorkItemQuickAddComponent implements OnInit, OnDestroy, AfterViewIn
     }
     // Do we have a real title?
     // If yes, trim; if not, reassign it as a (blank) string.
-    this.workItem.attributes['system.title'] =
-      (!!this.workItem.attributes['system.title']) ?
-        this.workItem.attributes['system.title'].trim() : '';
+    this.workItem.attributes['system.title'] = !!this.workItem.attributes['system.title']
+      ? this.workItem.attributes['system.title'].trim()
+      : '';
 
     // Same treatment as title, but this is more important.
     // As we're validating title in the next step
     // But passing on description as is (causing data type issues)
-    this.workItem.attributes['system.description'] =
-      (!!this.workItem.attributes['system.description']) ?
-        this.workItem.attributes['system.description'].trim() : '';
+    this.workItem.attributes['system.description'] = !!this.workItem.attributes[
+      'system.description'
+    ]
+      ? this.workItem.attributes['system.description'].trim()
+      : '';
 
     // Set the default work item type
     this.workItem.relationships.baseType = {
       data: {
         id: this.selectedType ? this.selectedType.id : 'testtypeid',
-        type: 'workitemtypes'
-      }
+        type: 'workitemtypes',
+      },
     };
 
     // Setting state value from selected work item type
     // This line can be removed when space template backend is in
     // The backend will take care of setting the default state to
     // a newly create work item
-    this.workItem.attributes['system.state'] =
-      this.selectedType.fields['system.state'].type.values[0];
+    this.workItem.attributes['system.state'] = this.selectedType.fields[
+      'system.state'
+    ].type.values[0];
 
     // Set the default iteration for new work item
     if (this.selectedIteration) {
       this.workItem.relationships.iteration = {
         data: {
           id: this.selectedIteration.id,
-          type: 'iterations'
-        }
+          type: 'iterations',
+        },
       };
     }
     this.createId = new Date().getTime();
@@ -192,12 +197,14 @@ export class WorkItemQuickAddComponent implements OnInit, OnDestroy, AfterViewIn
     if (this.workItem.attributes['system.title']) {
       this.blockAdd = true;
       this.onStartCreateWI.emit(this.parentWorkItemId);
-      this.store.dispatch(new WorkItemActions.Add({
-        createId: this.createId,
-        workItem: this.workItem,
-        parentId: this.parentWorkItemId,
-        openDetailPage: openStatus
-      }));
+      this.store.dispatch(
+        new WorkItemActions.Add({
+          createId: this.createId,
+          workItem: this.workItem,
+          parentId: this.parentWorkItemId,
+          openDetailPage: openStatus,
+        }),
+      );
       if (this.wilistview === 'wi-query-view') {
         this.workItemTitle.setValue('');
         this.resetQuickAdd();
@@ -209,7 +216,10 @@ export class WorkItemQuickAddComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   checkTitle(): void {
-    if (this.workItem.attributes['system.title'] && this.workItem.attributes['system.title'].trim()) {
+    if (
+      this.workItem.attributes['system.title'] &&
+      this.workItem.attributes['system.title'].trim()
+    ) {
       this.validTitle = true;
     } else {
       this.validTitle = false;
@@ -227,7 +237,6 @@ export class WorkItemQuickAddComponent implements OnInit, OnDestroy, AfterViewIn
     }
   }
 
-
   preventDef(event: any) {
     event.preventDefault();
   }
@@ -242,10 +251,9 @@ export class WorkItemQuickAddComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   getInfotipText(id: string) {
-    return this.infotipSource
-      .pipe(
-        select(s => s[id]),
-        select(i => i ? i['en'] : id)
-      );
+    return this.infotipSource.pipe(
+      select((s) => s[id]),
+      select((i) => (i ? i['en'] : id)),
+    );
   }
 }

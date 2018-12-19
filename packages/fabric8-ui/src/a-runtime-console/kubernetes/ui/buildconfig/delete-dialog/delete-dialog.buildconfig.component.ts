@@ -6,14 +6,16 @@ import { BuildConfigStore } from '../../../store/buildconfig.store';
 @Component({
   selector: 'delete-buildconfig-dialog',
   templateUrl: './delete-dialog.buildconfig.component.html',
-  styleUrls: ['./delete-dialog.buildconfig.component.less']
+  styleUrls: ['./delete-dialog.buildconfig.component.less'],
 })
 export class BuildConfigDeleteDialog {
   buildconfig: BuildConfig = new BuildConfig();
   modal: any;
 
-  constructor(private buildconfigService: BuildConfigService, private buildconfigStore: BuildConfigStore) {
-  }
+  constructor(
+    private buildconfigService: BuildConfigService,
+    private buildconfigStore: BuildConfigStore,
+  ) {}
 
   ok() {
     this.modal.close();
@@ -29,7 +31,7 @@ export class BuildConfigDeleteDialog {
         },
         () => {
           this.buildconfigStore.loadAll();
-        }
+        },
       );
     } else {
       this.buildconfigStore.loadAll();

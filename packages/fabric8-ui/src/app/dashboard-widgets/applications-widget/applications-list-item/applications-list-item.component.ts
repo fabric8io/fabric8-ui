@@ -1,17 +1,13 @@
-import {
-  Component,
-  DoCheck,
-  Input,
-  OnInit,
-  ViewChild,
-  ViewEncapsulation
-} from '@angular/core';
+import { Component, DoCheck, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { isEmpty } from 'lodash';
 import { Contexts } from 'ngx-fabric8-wit';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { BuildConfig } from '../../../../a-runtime-console/index';
-import { Build, isValidInputAction } from '../../../../a-runtime-console/kubernetes/model/build.model';
+import {
+  Build,
+  isValidInputAction,
+} from '../../../../a-runtime-console/kubernetes/model/build.model';
 import { PipelineStage } from '../../../../a-runtime-console/kubernetes/model/pipelinestage.model';
 import { InputActionDialog } from '../../../../a-runtime-console/kubernetes/ui/pipeline/input-action-dialog/input-action-dialog.component';
 import { ApplicationsStackReportComponent } from '../applications-stack-report/applications-stack-report.component';
@@ -24,7 +20,7 @@ export class BuildInput {
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'fabric8-applications-list-item',
-  templateUrl: './applications-list-item.component.html'
+  templateUrl: './applications-list-item.component.html',
 })
 export class ApplicationsListItemComponent implements DoCheck, OnInit {
   @Input() buildConfig: BuildConfig;
@@ -41,11 +37,10 @@ export class ApplicationsListItemComponent implements DoCheck, OnInit {
   private _promoteBuildInput: BuildInput;
 
   constructor(private context: Contexts) {
-    this.contextPath = this.context.current.pipe(map(context => context.path));
+    this.contextPath = this.context.current.pipe(map((context) => context.path));
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   ngDoCheck(): void {
     this.initApplicationUrl();
@@ -158,7 +153,7 @@ export class ApplicationsListItemComponent implements DoCheck, OnInit {
           if (stage.jenkinsInputURL !== undefined) {
             this._promoteBuildInput = {
               build: build,
-              stage: stage
+              stage: stage,
             };
             return;
           }

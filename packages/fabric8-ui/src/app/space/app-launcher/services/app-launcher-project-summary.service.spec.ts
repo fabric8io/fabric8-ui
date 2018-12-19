@@ -1,9 +1,13 @@
-import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+  TestRequest,
+} from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { Context } from 'ngx-fabric8-wit';
 import { AuthHelperService, Config, HelperService, Projectile } from 'ngx-launcher';
 import { AUTH_API_URL, AuthenticationService } from 'ngx-login-client';
-import { Observable,  of as observableOf } from 'rxjs';
+import { Observable, of as observableOf } from 'rxjs';
 import { createMock } from 'testing/mock';
 import { ContextService } from '../../../shared/context.service';
 import { context1, context2 } from '../../../shared/context.service.mock';
@@ -17,11 +21,15 @@ describe('Service: AppLauncherProjectSummaryService', () => {
   const projectile = new Projectile<any>();
 
   class mockContextService {
-    get current(): Observable<Context> { return observableOf(context1); }
+    get current(): Observable<Context> {
+      return observableOf(context1);
+    }
   }
 
   beforeEach(() => {
-    const mockAuthenticationService: jasmine.SpyObj<AuthenticationService> = createMock(AuthenticationService);
+    const mockAuthenticationService: jasmine.SpyObj<AuthenticationService> = createMock(
+      AuthenticationService,
+    );
     mockAuthenticationService.getToken.and.returnValue('mock-token');
     const mockHelperService: jasmine.SpyObj<HelperService> = createMock(HelperService);
     mockHelperService.getBackendUrl.and.returnValue('http://example.com/');
@@ -37,8 +45,8 @@ describe('Service: AppLauncherProjectSummaryService', () => {
         { provide: ContextService, useClass: mockContextService },
         { provide: Config, useClass: NewForgeConfig },
         { provide: FABRIC8_FORGE_API_URL, useValue: 'http://example.com' },
-        { provide: AUTH_API_URL, useValue: 'http://auth.example.com' }
-      ]
+        { provide: AUTH_API_URL, useValue: 'http://auth.example.com' },
+      ],
     });
     service = TestBed.get(AppLauncherProjectSummaryService);
     controller = TestBed.get(HttpTestingController);
@@ -55,10 +63,8 @@ describe('Service: AppLauncherProjectSummaryService', () => {
     expect(req.request.method).toBe('POST');
     expect(req.request.headers.get('Authorization')).toEqual('Bearer mock-token');
     req.flush({
-      'uuid': 'e6daff35-5d93-4c38-965a-6a975cf80be1',
-      'uuid_link': '/status/e6daff35-5d93-4c38-965a-6a975cf80be1'
+      uuid: 'e6daff35-5d93-4c38-965a-6a975cf80be1',
+      uuid_link: '/status/e6daff35-5d93-4c38-965a-6a975cf80be1',
     });
   });
-
 });
-

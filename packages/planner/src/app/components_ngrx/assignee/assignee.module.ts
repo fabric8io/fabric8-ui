@@ -14,12 +14,10 @@ import { AssigneesComponent } from './assignee.component';
     TooltipModule,
     BsDropdownModule,
     UserAvatarModule,
-    WidgetsModule
+    WidgetsModule,
   ],
-  declarations: [
-    AssigneesComponent
-  ],
-  providers: [ TooltipConfig, BsDropdownConfig ],
-  exports: [AssigneesComponent]
+  declarations: [AssigneesComponent],
+  providers: [TooltipConfig, BsDropdownConfig],
+  exports: [AssigneesComponent],
 })
-export class AssigneesModule { }
+export class AssigneesModule {}

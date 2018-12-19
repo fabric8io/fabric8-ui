@@ -25,12 +25,10 @@ import { SlideOutExampleModule } from './slide-out-panel/examples/slide-out-exam
     GitHubLinkAreaExampleModule,
     HomeModule,
     MarkdownExampleModule,
-    SlideOutExampleModule
+    SlideOutExampleModule,
   ],
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   providers: [],
-  bootstrap: [ AppComponent ]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

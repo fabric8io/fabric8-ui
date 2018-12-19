@@ -1,4 +1,3 @@
-
 import { CommonModule } from '@angular/common';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
@@ -17,7 +16,6 @@ let fixture: ComponentFixture<LabelSelectorComponent>;
 let store: Store<AppState>;
 
 describe('LabelSelectorComponent', () => {
-
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -26,19 +24,18 @@ describe('LabelSelectorComponent', () => {
         HttpModule,
         HttpClientTestingModule,
         SelectDropdownModule,
-        StoreModule.forRoot({})
+        StoreModule.forRoot({}),
       ],
-      declarations: [
-        LabelSelectorComponent
-      ],
-      providers: [ LabelService, HttpClientService, Store]
-    }).compileComponents()
+      declarations: [LabelSelectorComponent],
+      providers: [LabelService, HttpClientService, Store],
+    })
+      .compileComponents()
       .then(() => {
-          let store = TestBed.get(Store);
-          spyOn(store, 'dispatch').and.callThrough();
-          fixture = TestBed.createComponent(LabelSelectorComponent);
-          componentInstance = fixture.componentInstance;
-          fixture.detectChanges();
+        let store = TestBed.get(Store);
+        spyOn(store, 'dispatch').and.callThrough();
+        fixture = TestBed.createComponent(LabelSelectorComponent);
+        componentInstance = fixture.componentInstance;
+        fixture.detectChanges();
       });
   }));
 
@@ -67,5 +64,4 @@ describe('LabelSelectorComponent', () => {
     expect(fixture.componentInstance['createDisabled']).toBeTruthy();
     expect(labelnameInput.nativeElement.value.length).toBe(0);
   }));
-
 });

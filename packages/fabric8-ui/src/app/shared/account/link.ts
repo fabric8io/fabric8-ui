@@ -1,3 +1,3 @@
 export class Link {
-    redirect_location: string;
+  redirect_location: string;
 }

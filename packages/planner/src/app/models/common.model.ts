@@ -47,24 +47,22 @@ export function switchModel<I, O>(input: I, mapTree: MapTree): O {
 
     // Either their should be a servicePath
     // Or their should be a default value for UI model
-    if ((!mapTree[i].hasOwnProperty('fromPath') || !mapTree[i].fromPath.length) &&
-          !mapTree[i].hasOwnProperty('toValue')) {
-      throw(
-        'No from path or default value for \'to\' model is provided at index - `${i}` !'
-      );
+    if (
+      (!mapTree[i].hasOwnProperty('fromPath') || !mapTree[i].fromPath.length) &&
+      !mapTree[i].hasOwnProperty('toValue')
+    ) {
+      throw 'No from path or default value for \'to\' model is provided at index - `${i}` !';
     }
 
     if (!mapTree[i].hasOwnProperty('toPath') || !mapTree[i].toPath.length) {
-      throw(
-        'No to path provided at index - `${i}` !'
-      );
+      throw 'No to path provided at index - `${i}` !';
     }
     const toPath = mapTree[i].toPath;
     if (mapTree[i].hasOwnProperty('toValue')) {
       updateObj(output, toPath, mapTree[i].toValue);
     } else {
       let fromCurrentVal: any = input;
-      if (fromCurrentVal !== null && typeof(fromCurrentVal) !== 'undefined') {
+      if (fromCurrentVal !== null && typeof fromCurrentVal !== 'undefined') {
         // Get the value to be mapped from service model
         for (let j = 0; j < fromPath.length; j++) {
           if (fromCurrentVal.hasOwnProperty(fromPath[j])) {
@@ -79,12 +77,9 @@ export function switchModel<I, O>(input: I, mapTree: MapTree): O {
       }
       if (
         mapTree[i].hasOwnProperty('toFunction') &&
-        typeof(mapTree[i]['toFunction']) === 'function'
+        typeof mapTree[i]['toFunction'] === 'function'
       ) {
-        updateObj(
-          output, toPath,
-          mapTree[i].toFunction(fromCurrentVal)
-        );
+        updateObj(output, toPath, mapTree[i].toFunction(fromCurrentVal));
       } else {
         updateObj(output, toPath, fromCurrentVal);
       }
@@ -93,10 +88,9 @@ export function switchModel<I, O>(input: I, mapTree: MapTree): O {
   return output;
 }
 
-
 function updateObj(obj: Object, keyPath: string[], value: any) {
   const lastKeyIndex = keyPath.length - 1;
-  for (var i = 0; i < lastKeyIndex; ++ i) {
+  for (var i = 0; i < lastKeyIndex; ++i) {
     const key = keyPath[i];
     if (!(key in obj)) {
       obj[key] = {};
@@ -105,7 +99,6 @@ function updateObj(obj: Object, keyPath: string[], value: any) {
   }
   obj[keyPath[lastKeyIndex]] = value;
 }
-
 
 /**
  *
@@ -118,20 +111,14 @@ function updateObj(obj: Object, keyPath: string[], value: any) {
 export function cleanObject(obj: any, keysToRemove: string[] = []): any {
   const allKeys = Object.keys(obj);
   for (let i = 0; i < allKeys.length; i++) {
-    if (obj[allKeys[i]] === null ||
-      keysToRemove.findIndex(k => k === allKeys[i]) > -1) {
+    if (obj[allKeys[i]] === null || keysToRemove.findIndex((k) => k === allKeys[i]) > -1) {
       delete obj[allKeys[i]];
-    } else if (
-      typeof(obj[allKeys[i]]) === 'object' &&
-      !Array.isArray(obj[allKeys[i]])
-    ) {
+    } else if (typeof obj[allKeys[i]] === 'object' && !Array.isArray(obj[allKeys[i]])) {
       obj[allKeys[i]] = cleanObject(obj[allKeys[i]], keysToRemove);
-      if (!Object.keys(obj[allKeys[i]]).length ||
-          (
-            Object.keys(obj[allKeys[i]])[0] === 'type' &&
-            Object.keys(obj[allKeys[i]]).length === 1
-          )
-        ) {
+      if (
+        !Object.keys(obj[allKeys[i]]).length ||
+        (Object.keys(obj[allKeys[i]])[0] === 'type' && Object.keys(obj[allKeys[i]]).length === 1)
+      ) {
         delete obj[allKeys[i]];
       }
     }
@@ -139,15 +126,14 @@ export function cleanObject(obj: any, keysToRemove: string[] = []): any {
   return obj;
 }
 
-
 /**
  * This function normalize the array to
  * a key value paired dictionary
  * @param arr
  */
-export function normalizeArray<I>(arr: I[], id: string = ''): {[id: string]: I} {
+export function normalizeArray<I>(arr: I[], id: string = ''): { [id: string]: I } {
   if (!Array.isArray(arr)) {
-    throw(new Error('The input needs to be an array'));
+    throw new Error('The input needs to be an array');
   }
   let output = {};
   arr.forEach((item, index) => {

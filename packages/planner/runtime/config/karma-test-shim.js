@@ -26,5 +26,5 @@ var modules = requireAll(appContext);
 
 testing.TestBed.initTestEnvironment(
   browser.BrowserDynamicTestingModule,
-  browser.platformBrowserDynamicTesting()
+  browser.platformBrowserDynamicTesting(),
 );

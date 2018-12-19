@@ -7,7 +7,7 @@ import { MomentModule } from 'angular2-moment';
 import { StackDetailsModule } from 'fabric8-stack-analysis-ui';
 import { AUTH_API_URL, AuthenticationService } from 'ngx-login-client';
 import { ModalModule } from 'ngx-modal';
-import { Observable,  of as observableOf } from 'rxjs';
+import { Observable, of as observableOf } from 'rxjs';
 import { JenkinsService } from '../../../../../app/shared/jenkins.service';
 import { FABRIC8_FORGE_API_URL } from '../../../../../app/shared/runtime-console/fabric8-ui-forge-api';
 import { FABRIC8_JENKINS_API_URL } from '../../../../../app/shared/runtime-console/fabric8-ui-jenkins-api';
@@ -23,118 +23,131 @@ describe('BuildStageViewComponent', () => {
   let fakeAuthService: any;
   let element: HTMLElement;
   let buildData: any = {
-      'statusPhase': 'Complete',
-      'logURL': 'https://jenkins.openshift.io/job/invinciblejai/job/app-test-apr-18-10-43/job/master/1/console',
-      'name': 'app-test-apr-18-10-43-1',
-      'namespace': 'jakumar',
-      'icon': '',
-      'iconStyle': 'pficon-ok',
-      'id': 'app-test-apr-18-10-43-1',
-      'buildConfigName': 'app-test-apr-18-10-43',
-      'buildNumber': 1,
-      'buildNumberInt': 1,
-      'annotations': {
-        'fabric8.io/bayesian.analysisUrl': 'https://recommender.api.openshift.io/api/v1/stack-analyses/2347877889989'
+    statusPhase: 'Complete',
+    logURL:
+      'https://jenkins.openshift.io/job/invinciblejai/job/app-test-apr-18-10-43/job/master/1/console',
+    name: 'app-test-apr-18-10-43-1',
+    namespace: 'jakumar',
+    icon: '',
+    iconStyle: 'pficon-ok',
+    id: 'app-test-apr-18-10-43-1',
+    buildConfigName: 'app-test-apr-18-10-43',
+    buildNumber: 1,
+    buildNumberInt: 1,
+    annotations: {
+      'fabric8.io/bayesian.analysisUrl':
+        'https://recommender.api.openshift.io/api/v1/stack-analyses/2347877889989',
+    },
+    pipelineStages: [
+      {
+        durationMillis: 172579,
+        id: '20',
+        name: 'Build Release',
+        pauseDurationMillis: 0,
+        status: 'SUCCESS',
       },
-      'pipelineStages': [{
-        'durationMillis': 172579,
-        'id': '20',
-        'name': 'Build Release',
-        'pauseDurationMillis': 0,
-        'status': 'SUCCESS'
-    },
-    {
-        'durationMillis': 172579,
-        'environmentName': 'Stage',
-        'id': '60',
-        'name': 'Rollout to Stage',
-        'pauseDurationMillis': 0,
-        'serviceUrl': 'http://app-test-apr-12-11-jakumar-stage.8a09.starter-us-east-2.openshiftapps.com',
-        'serviceUrlMap': {
-            'app-test-apr-12-11': 'http://app-test-apr-12-11-jakumar-stage.8a09.starter-us-east-2.openshiftapps.com'
+      {
+        durationMillis: 172579,
+        environmentName: 'Stage',
+        id: '60',
+        name: 'Rollout to Stage',
+        pauseDurationMillis: 0,
+        serviceUrl:
+          'http://app-test-apr-12-11-jakumar-stage.8a09.starter-us-east-2.openshiftapps.com',
+        serviceUrlMap: {
+          'app-test-apr-12-11':
+            'http://app-test-apr-12-11-jakumar-stage.8a09.starter-us-east-2.openshiftapps.com',
         },
-        'status': 'SUCCESS'
-    },
-    {
-        'durationMillis': 172579,
-        'id': '20',
-        'name': 'Approve',
-        'pauseDurationMillis': 0,
-        'status': 'FAILED'
-    }
-    ]
+        status: 'SUCCESS',
+      },
+      {
+        durationMillis: 172579,
+        id: '20',
+        name: 'Approve',
+        pauseDurationMillis: 0,
+        status: 'FAILED',
+      },
+    ],
   };
 
   let buildDataStage: any = {
-    'statusPhase': 'Complete',
-    'logURL': 'https://jenkins.openshift.io/job/invinciblejai/job/app-test-apr-18-10-43/job/master/1/console',
-    'name': 'app-test-apr-18-10-43-1',
-    'namespace': 'jakumar',
-    'icon': '',
-    'iconStyle': 'pficon-ok',
-    'id': 'app-test-apr-18-10-43-1',
-    'buildConfigName': 'app-test-apr-18-10-43',
-    'buildNumber': 1,
-    'buildNumberInt': 1,
-    'annotations': {
-      'fabric8.io/bayesian.analysisUrl': 'https://recommender.api.openshift.io/api/v1/stack-analyses/2347877889989'
+    statusPhase: 'Complete',
+    logURL:
+      'https://jenkins.openshift.io/job/invinciblejai/job/app-test-apr-18-10-43/job/master/1/console',
+    name: 'app-test-apr-18-10-43-1',
+    namespace: 'jakumar',
+    icon: '',
+    iconStyle: 'pficon-ok',
+    id: 'app-test-apr-18-10-43-1',
+    buildConfigName: 'app-test-apr-18-10-43',
+    buildNumber: 1,
+    buildNumberInt: 1,
+    annotations: {
+      'fabric8.io/bayesian.analysisUrl':
+        'https://recommender.api.openshift.io/api/v1/stack-analyses/2347877889989',
     },
-    'pipelineStages': [{
-      'durationMillis': 172579,
-      'id': '20',
-      'name': 'Build Image',
-      'pauseDurationMillis': 0,
-      'status': 'SUCCESS'
-    },
-    {
-      'durationMillis': 172579,
-      'environmentName': 'Stage',
-      'id': '60',
-      'name': 'Rollout to Stage',
-      'pauseDurationMillis': 0,
-      'serviceUrl': 'http://app-test-apr-12-11-jakumar-stage.8a09.starter-us-east-2.openshiftapps.com',
-      'serviceUrlMap': {
-          'app-test-apr-12-11': 'http://app-test-apr-12-11-jakumar-stage.8a09.starter-us-east-2.openshiftapps.com'
+    pipelineStages: [
+      {
+        durationMillis: 172579,
+        id: '20',
+        name: 'Build Image',
+        pauseDurationMillis: 0,
+        status: 'SUCCESS',
       },
-      'status': 'FAILED'
-    }
-    ]
+      {
+        durationMillis: 172579,
+        environmentName: 'Stage',
+        id: '60',
+        name: 'Rollout to Stage',
+        pauseDurationMillis: 0,
+        serviceUrl:
+          'http://app-test-apr-12-11-jakumar-stage.8a09.starter-us-east-2.openshiftapps.com',
+        serviceUrlMap: {
+          'app-test-apr-12-11':
+            'http://app-test-apr-12-11-jakumar-stage.8a09.starter-us-east-2.openshiftapps.com',
+        },
+        status: 'FAILED',
+      },
+    ],
   };
 
   let buildDataTrigger: any = {
-    'statusPhase': 'Running',
-    'name': 'app-test-apr-18-10-43-1',
-    'namespace': 'jakumar',
-    'icon': '',
-    'iconStyle': 'pficon-running',
-    'id': 'app-test-apr-18-10-43-1',
-    'buildConfigName': 'app-test-apr-18-10-43',
-    'buildNumber': 1,
-    'buildNumberInt': 1,
-    'pipelineStages': []
-};
+    statusPhase: 'Running',
+    name: 'app-test-apr-18-10-43-1',
+    namespace: 'jakumar',
+    icon: '',
+    iconStyle: 'pficon-running',
+    id: 'app-test-apr-18-10-43-1',
+    buildConfigName: 'app-test-apr-18-10-43',
+    buildNumber: 1,
+    buildNumberInt: 1,
+    pipelineStages: [],
+  };
 
   let buildDataRun: any = {
-    'statusPhase': 'Running',
-    'name': 'app-test-apr-18-10-43-1',
-    'namespace': 'jakumar',
-    'logURL': 'https://jenkins.openshift.io/job/invinciblejai/job/app-test-apr-18-10-43/job/master/1/console',
-    'icon': '',
-    'iconStyle': 'pficon-running',
-    'id': 'app-test-apr-18-10-43-1',
-    'buildConfigName': 'app-test-apr-18-10-43',
-    'buildNumber': 1,
-    'buildNumberInt': 1,
-    'pipelineStages': []
-};
+    statusPhase: 'Running',
+    name: 'app-test-apr-18-10-43-1',
+    namespace: 'jakumar',
+    logURL:
+      'https://jenkins.openshift.io/job/invinciblejai/job/app-test-apr-18-10-43/job/master/1/console',
+    icon: '',
+    iconStyle: 'pficon-running',
+    id: 'app-test-apr-18-10-43-1',
+    buildConfigName: 'app-test-apr-18-10-43',
+    buildNumber: 1,
+    buildNumberInt: 1,
+    pipelineStages: [],
+  };
 
   let mockJenkinsService = {
     getJenkinsStatus(): Observable<any> {
-      let jenkinsStatus = observableOf([{
-        'data': {'state': 'idled'}
-      } as any]);
+      let jenkinsStatus = observableOf([
+        {
+          data: { state: 'idled' },
+        } as any,
+      ]);
       return jenkinsStatus;
-    }
+    },
   };
 
   beforeEach(async(() => {
@@ -144,7 +157,7 @@ describe('BuildStageViewComponent', () => {
       },
       isLoggedIn: function() {
         return true;
-      }
+      },
     };
 
     TestBed.configureTestingModule({
@@ -154,36 +167,38 @@ describe('BuildStageViewComponent', () => {
         ModalModule,
         MomentModule,
         RouterTestingModule.withRoutes([]),
-        StackDetailsModule
+        StackDetailsModule,
       ],
       declarations: [
         BuildStatusIconComponent,
         BuildStageViewComponent,
         InputActionDialog,
         PipelineStatusComponent,
-        StageTimePipe
+        StageTimePipe,
       ],
       providers: [
         {
           provide: AUTH_API_URL,
-          useValue: 'https://auth.fabric8.io/api/'
+          useValue: 'https://auth.fabric8.io/api/',
         },
         {
-            provide: AuthenticationService,
-            useValue: fakeAuthService
+          provide: AuthenticationService,
+          useValue: fakeAuthService,
         },
         {
-          provide: FABRIC8_FORGE_API_URL, useValue: 'http://fabric8.forge.api.url/'
+          provide: FABRIC8_FORGE_API_URL,
+          useValue: 'http://fabric8.forge.api.url/',
         },
         {
-          provide: FABRIC8_JENKINS_API_URL, useValue: 'http://fabric8.jenkins.api.url/'
+          provide: FABRIC8_JENKINS_API_URL,
+          useValue: 'http://fabric8.jenkins.api.url/',
         },
         {
-          provide: JenkinsService, useValue: mockJenkinsService
-        }
-       ]
-    })
-      .compileComponents();
+          provide: JenkinsService,
+          useValue: mockJenkinsService,
+        },
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -201,8 +216,7 @@ describe('BuildStageViewComponent', () => {
     component.build = buildDataTrigger;
     fixture.detectChanges();
     element = fixture.nativeElement;
-    let buildStatusMessageNoLog = element.
-      querySelector('#pipeine-stage-name-no-log');
+    let buildStatusMessageNoLog = element.querySelector('#pipeine-stage-name-no-log');
     expect(buildStatusMessageNoLog.innerHTML).toContain('Setting up your build server.');
   });
 
@@ -210,8 +224,7 @@ describe('BuildStageViewComponent', () => {
     component.build = buildDataRun;
     fixture.detectChanges();
     element = fixture.nativeElement;
-    let buildStatusMessageNoLog = element.
-      querySelector('#pipeine-stage-name-no-log');
+    let buildStatusMessageNoLog = element.querySelector('#pipeine-stage-name-no-log');
     expect(buildStatusMessageNoLog).toBeNull();
   });
 
@@ -219,8 +232,7 @@ describe('BuildStageViewComponent', () => {
     component.build = buildDataRun;
     fixture.detectChanges();
     element = fixture.nativeElement;
-    let buildStatusMessageNoStage = element.
-      querySelector('#pipeine-stage-name-no-stages');
+    let buildStatusMessageNoStage = element.querySelector('#pipeine-stage-name-no-stages');
     expect(buildStatusMessageNoStage.innerHTML).toContain('Build has started.');
   });
 
@@ -228,8 +240,7 @@ describe('BuildStageViewComponent', () => {
     component.build = buildData;
     fixture.detectChanges();
     element = fixture.nativeElement;
-    let buildStatusMessageNoStage = element.
-      querySelector('#pipeine-stage-name-no-stages');
+    let buildStatusMessageNoStage = element.querySelector('#pipeine-stage-name-no-stages');
     expect(buildStatusMessageNoStage).toBeNull();
   });
 
@@ -237,8 +248,7 @@ describe('BuildStageViewComponent', () => {
     component.build = buildData;
     fixture.detectChanges();
     element = fixture.nativeElement;
-    let buildStackReportShow = element.
-      querySelector('#stack-report-btn-cntr');
+    let buildStackReportShow = element.querySelector('#stack-report-btn-cntr');
     expect(buildStackReportShow).toBeDefined();
   });
 
@@ -246,8 +256,7 @@ describe('BuildStageViewComponent', () => {
     component.build = buildDataStage;
     fixture.detectChanges();
     element = fixture.nativeElement;
-    let buildStackReportShow = element.
-      querySelector('#stack-report-btn-cntr');
+    let buildStackReportShow = element.querySelector('#stack-report-btn-cntr');
     expect(buildStackReportShow).toBeDefined();
   });
 
@@ -255,9 +264,7 @@ describe('BuildStageViewComponent', () => {
     component.build = buildDataTrigger;
     fixture.detectChanges();
     element = fixture.nativeElement;
-    let buildStackReportShow = element.
-      querySelector('#stack-report-btn-cntr');
+    let buildStackReportShow = element.querySelector('#stack-report-btn-cntr');
     expect(buildStackReportShow).toBeNull();
   });
-
 });

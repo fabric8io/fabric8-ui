@@ -4,11 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { LoadingWidgetComponent } from './loading-widget.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule
-  ],
+  imports: [CommonModule, FormsModule],
   declarations: [LoadingWidgetComponent],
-  exports: [LoadingWidgetComponent]
+  exports: [LoadingWidgetComponent],
 })
-export class LoadingWidgetModule { }
+export class LoadingWidgetModule {}

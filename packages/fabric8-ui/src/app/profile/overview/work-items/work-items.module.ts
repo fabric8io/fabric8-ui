@@ -17,9 +17,9 @@ import { WorkItemsComponent } from './work-items.component';
     PlannerListModule,
     NgArrayPipesModule,
     WorkItemDetailModule,
-    Fabric8WitModule
+    Fabric8WitModule,
   ],
   declarations: [WorkItemsComponent],
-  exports: [WorkItemsComponent]
+  exports: [WorkItemsComponent],
 })
-export class WorkItemsModule { }
+export class WorkItemsModule {}

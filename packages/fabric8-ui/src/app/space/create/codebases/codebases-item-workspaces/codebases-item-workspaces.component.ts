@@ -5,7 +5,7 @@ import {
   EMPTY,
   Observable,
   Subscription,
-  timer as observableTimer
+  timer as observableTimer,
 } from 'rxjs';
 import { map, publish, switchMap, take } from 'rxjs/operators';
 import { WindowService } from '../../../../shared/window.service';
@@ -24,7 +24,7 @@ export class WorkspaceCreatedEvent {
   encapsulation: ViewEncapsulation.None,
   selector: 'codebases-item-workspaces',
   templateUrl: './codebases-item-workspaces.component.html',
-  styleUrls: ['./codebases-item-workspaces.component.less']
+  styleUrls: ['./codebases-item-workspaces.component.less'],
 })
 export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
   @Input() codebase: Codebase;
@@ -40,15 +40,15 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
   workspacePollTimer: Observable<any>;
 
   constructor(
-      private broadcaster: Broadcaster,
-      private notifications: Notifications,
-      private windowService: WindowService,
-      private cheService: CheService,
-      private workspacesService: WorkspacesService) {
-  }
+    private broadcaster: Broadcaster,
+    private notifications: Notifications,
+    private windowService: WindowService,
+    private cheService: CheService,
+    private workspacesService: WorkspacesService,
+  ) {}
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => {
+    this.subscriptions.forEach((sub) => {
       sub.unsubscribe();
     });
   }
@@ -62,12 +62,11 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
     }
     this.workspaces = [];
     this.updateWorkspaces();
-    this.broadcaster.on('workspaceCreated')
-      .subscribe((val) => {
-        if ((val as WorkspaceCreatedEvent).codebase.id === this.codebase.id) {
-          this.updateWorkspacesPoll((val as WorkspaceCreatedEvent).workspaceName);
-        }
-      });
+    this.broadcaster.on('workspaceCreated').subscribe((val) => {
+      if ((val as WorkspaceCreatedEvent).codebase.id === this.codebase.id) {
+        this.updateWorkspacesPoll((val as WorkspaceCreatedEvent).workspaceName);
+      }
+    });
   }
 
   // Actions
@@ -77,46 +76,55 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
    */
   createWorkspace(): void {
     this.workspaceBusy = true;
-    this.subscriptions.push(this.cheService.getState().pipe(switchMap((che: Che, index: number) => {
-      if (!che.clusterFull) {
-        // create
-        return this.workspacesService
-          .createWorkspace(this.codebase.id).pipe(
-          map(workspaceLinks => {
-            this.workspaceBusy = false;
-            if (workspaceLinks != undefined) {
-              let name = this.getWorkspaceName(workspaceLinks.links.open);
-              this.notifications.message({
-                message: `Workspace created!`,
-                type: NotificationType.SUCCESS
-              } as Notification);
-              // Poll for new workspaces
-              this.updateWorkspacesPoll(name);
+    this.subscriptions.push(
+      this.cheService
+        .getState()
+        .pipe(
+          switchMap((che: Che, index: number) => {
+            if (!che.clusterFull) {
+              // create
+              return this.workspacesService.createWorkspace(this.codebase.id).pipe(
+                map((workspaceLinks) => {
+                  this.workspaceBusy = false;
+                  if (workspaceLinks != undefined) {
+                    let name = this.getWorkspaceName(workspaceLinks.links.open);
+                    this.notifications.message({
+                      message: `Workspace created!`,
+                      type: NotificationType.SUCCESS,
+                    } as Notification);
+                    // Poll for new workspaces
+                    this.updateWorkspacesPoll(name);
+                  } else {
+                    // display error message
+                    this.notifications.message({
+                      message: `Workspace error during creation.`,
+                      type: NotificationType.DANGER,
+                    } as Notification);
+                  }
+                }),
+              );
             } else {
+              this.workspaceBusy = false;
+              this.workspacesAvailable = false;
               // display error message
               this.notifications.message({
-                message: `Workspace error during creation.`,
-                type: NotificationType.DANGER
+                message: `OpenShift Online cluster is currently out of capacity, workspace cannot be started.`,
+                type: NotificationType.DANGER,
               } as Notification);
+              return EMPTY;
             }
-          }));
-      } else {
-        this.workspaceBusy = false;
-        this.workspacesAvailable = false;
-        // display error message
-        this.notifications.message({
-          message: `OpenShift Online cluster is currently out of capacity, workspace cannot be started.`,
-          type: NotificationType.DANGER
-        } as Notification);
-        return EMPTY;
-      }
-    })).subscribe(() => {},
-      err => {
-        this.notifications.message({
-          message: `Workspace error during creation.`,
-          type: NotificationType.DANGER
-        } as Notification);
-      }));
+          }),
+        )
+        .subscribe(
+          () => {},
+          (err) => {
+            this.notifications.message({
+              message: `Workspace error during creation.`,
+              type: NotificationType.DANGER,
+            } as Notification);
+          },
+        ),
+    );
   }
 
   /**
@@ -132,38 +140,51 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
   openWorkspace(): void {
     let workspaceWindow = this.windowService.open('about:blank', '_blank');
     this.workspaceBusy = true;
-    this.subscriptions.push(this.cheService.getState().pipe(switchMap((che: Che, index: number) => {
-      if (!che.clusterFull) {
-        // create
-        return this.workspacesService.openWorkspace(this.workspaceUrl).pipe(map(workspaceLinks => {
-          this.workspaceBusy = false;
-          if (workspaceLinks != undefined) {
-            workspaceWindow.location.href = workspaceLinks.links.open;
-          }
-        }));
-      } else {
-        workspaceWindow.close();
-        this.workspaceBusy = false;
-        // display error message
-        this.notifications.message({
-          message: `OpenShift Online cluster is currently out of capacity, workspace cannot be started.`,
-          type: NotificationType.DANGER
-        } as Notification);
-        return EMPTY;
-      }
-    })).subscribe(() => {},
-      err => {
-        this.workspaceBusy = false;
-        this.handleError('Failed to open workspace', NotificationType.DANGER);
-      }));
+    this.subscriptions.push(
+      this.cheService
+        .getState()
+        .pipe(
+          switchMap((che: Che, index: number) => {
+            if (!che.clusterFull) {
+              // create
+              return this.workspacesService.openWorkspace(this.workspaceUrl).pipe(
+                map((workspaceLinks) => {
+                  this.workspaceBusy = false;
+                  if (workspaceLinks != undefined) {
+                    workspaceWindow.location.href = workspaceLinks.links.open;
+                  }
+                }),
+              );
+            } else {
+              workspaceWindow.close();
+              this.workspaceBusy = false;
+              // display error message
+              this.notifications.message({
+                message: `OpenShift Online cluster is currently out of capacity, workspace cannot be started.`,
+                type: NotificationType.DANGER,
+              } as Notification);
+              return EMPTY;
+            }
+          }),
+        )
+        .subscribe(
+          () => {},
+          (err) => {
+            this.workspaceBusy = false;
+            this.handleError('Failed to open workspace', NotificationType.DANGER);
+          },
+        ),
+    );
   }
 
   /**
    * When combobox element is selected, sets the selected workspace
    */
   setWorkspaceSelected(): void {
-    this.workspaceSelected = (this.workspaceUrl !== undefined && this.workspaceUrl.length !== 0
-      && this.workspaceUrl !== 'default');
+    this.workspaceSelected =
+      this.workspaceUrl !== undefined &&
+      this.workspaceUrl.length !== 0 &&
+      this.workspaceUrl !== 'default';
   }
 
   // Private
@@ -185,7 +206,7 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
    * Helper to set flag indicating workspaces are available
    */
   private setWorkspacesAvailable(): void {
-    this.workspacesAvailable = (this.workspaces !== undefined && this.workspaces.length !== 0);
+    this.workspacesAvailable = this.workspaces !== undefined && this.workspaces.length !== 0;
   }
 
   /**
@@ -206,16 +227,20 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
    * Helper to update workspaces
    */
   private updateWorkspaces(): void {
-    this.subscriptions.push(this.workspacesService.getWorkspaces(this.codebase.id)
-      .subscribe(workspaces => {
-        if (workspaces != undefined && workspaces.length > 0) {
-          this.workspaces = workspaces;
-          this.setWorkspacesAvailable();
-          this.setWorkspaceUrl(this.codebase.attributes.last_used_workspace);
-        }
-      }, error => {
-        console.log('Failed to retrieve workspaces for codebase ID: ' + this.codebase.id);
-      }));
+    this.subscriptions.push(
+      this.workspacesService.getWorkspaces(this.codebase.id).subscribe(
+        (workspaces) => {
+          if (workspaces != undefined && workspaces.length > 0) {
+            this.workspaces = workspaces;
+            this.setWorkspacesAvailable();
+            this.setWorkspaceUrl(this.codebase.attributes.last_used_workspace);
+          }
+        },
+        (error) => {
+          console.log('Failed to retrieve workspaces for codebase ID: ' + this.codebase.id);
+        },
+      ),
+    );
   }
 
   /**
@@ -234,23 +259,27 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
     this.workspacePollTimer = observableTimer(2000, 20000).pipe(take(30));
     this.workspacePollSubscription = (this.workspacePollTimer.pipe(
       switchMap(() => this.workspacesService.getWorkspaces(this.codebase.id)),
-      map(workspaces => {
-        if (workspaces != undefined && workspaces.length > 0
-            && workspaces.length !== this.workspaces.length) {
+      map((workspaces) => {
+        if (
+          workspaces != undefined &&
+          workspaces.length > 0 &&
+          workspaces.length !== this.workspaces.length
+        ) {
           this.workspacePollSubscription.unsubscribe();
           this.workspaces = workspaces;
           this.setWorkspacesAvailable();
           this.setWorkspaceUrl(name);
         }
       }),
-      publish()) as ConnectableObservable<number>).connect();
+      publish(),
+    ) as ConnectableObservable<number>).connect();
     this.subscriptions.push(this.workspacePollSubscription);
   }
 
   private handleError(error: string, type: NotificationType) {
     this.notifications.message({
       message: error,
-      type: type
+      type: type,
     } as Notification);
   }
 }

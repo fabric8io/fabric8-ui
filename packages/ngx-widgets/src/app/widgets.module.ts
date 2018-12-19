@@ -20,18 +20,8 @@ import { ArrayCount } from './pipes/arrayCount.pipe';
 import { MarkdownModule } from './markdown/markdown.module';
 
 @NgModule({
-  imports: [
-    FormsModule,
-    AlmSearchHighlightModule
-  ],
-  declarations: [
-    AlmArrayFilter,
-    AlmAvatarSize,
-    AlmLinkTarget,
-    AlmMomentTime,
-    AlmTrim,
-    ArrayCount
-  ],
+  imports: [FormsModule, AlmSearchHighlightModule],
+  declarations: [AlmArrayFilter, AlmAvatarSize, AlmLinkTarget, AlmMomentTime, AlmTrim, ArrayCount],
   exports: [
     AlmArrayFilter,
     AlmAvatarSize,
@@ -46,8 +36,8 @@ import { MarkdownModule } from './markdown/markdown.module';
     DialogModule,
     DropdownModule,
     InfiniteScrollModule,
-    MarkdownModule
-  ]
+    MarkdownModule,
+  ],
 })
 export class WidgetsModule {
   // static forRoot(providedLoader: any = {

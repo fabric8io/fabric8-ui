@@ -8,7 +8,7 @@ describe('PipelinesListToolbarComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [PipelinesListToolbarComponent]
+      declarations: [PipelinesListToolbarComponent],
     });
   }));
 

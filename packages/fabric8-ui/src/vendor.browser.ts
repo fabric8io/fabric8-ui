@@ -32,9 +32,6 @@ import 'patternfly-sandbox-ng/dist/css/patternfly-sandbox-ng.min.css';
 
 if ('production' === ENV) {
   // Production
-
-
 } else {
   // Development
-
 }

@@ -8,36 +8,53 @@ import { Space, Spaces } from 'ngx-fabric8-wit';
 import { createMock } from 'testing/mock';
 import { initContext, TestContext } from 'testing/test-context';
 
-import { ApplicationAttributesOverview, ApplicationOverviewService } from './application-overview.service';
+import {
+  ApplicationAttributesOverview,
+  ApplicationOverviewService,
+} from './application-overview.service';
 import { EnvironmentWidgetComponent } from './environment-widget.component';
 
 @Component({
-  template: '<fabric8-environment-widget></fabric8-environment-widget>'
+  template: '<fabric8-environment-widget></fabric8-environment-widget>',
 })
-class HostComponent { }
+class HostComponent {}
 
 describe('EnvironmentWidgetComponent', (): void => {
-
-  const mockApplicationOverviewService: jasmine.SpyObj<ApplicationOverviewService> = createMock(ApplicationOverviewService);
-  const mockAppEnvsSubj: Subject<ApplicationAttributesOverview[]> = new Subject<ApplicationAttributesOverview[]>();
+  const mockApplicationOverviewService: jasmine.SpyObj<ApplicationOverviewService> = createMock(
+    ApplicationOverviewService,
+  );
+  const mockAppEnvsSubj: Subject<ApplicationAttributesOverview[]> = new Subject<
+    ApplicationAttributesOverview[]
+  >();
   mockApplicationOverviewService.getAppsAndEnvironments.and.returnValue(mockAppEnvsSubj);
   mockApplicationOverviewService.ngOnDestroy.and.stub();
-  beforeEach((): void => {
-    TestBed.overrideProvider(ApplicationOverviewService, { useValue: mockApplicationOverviewService });
-    mockApplicationOverviewService.getAppsAndEnvironments.calls.reset();
-  });
+  beforeEach(
+    (): void => {
+      TestBed.overrideProvider(ApplicationOverviewService, {
+        useValue: mockApplicationOverviewService,
+      });
+      mockApplicationOverviewService.getAppsAndEnvironments.calls.reset();
+    },
+  );
 
-  const testContext: TestContext<EnvironmentWidgetComponent, HostComponent> = initContext(EnvironmentWidgetComponent, HostComponent, {
-    providers: [
-      {
-        provide: Spaces,
-        useFactory: (): Spaces => ({
-          current: new BehaviorSubject<Space>({ id: 'foo-space-id' } as Space) as Observable<Space>
-        } as Spaces)
-      }
-    ],
-    schemas: [NO_ERRORS_SCHEMA]
-  });
+  const testContext: TestContext<EnvironmentWidgetComponent, HostComponent> = initContext(
+    EnvironmentWidgetComponent,
+    HostComponent,
+    {
+      providers: [
+        {
+          provide: Spaces,
+          useFactory: (): Spaces =>
+            ({
+              current: new BehaviorSubject<Space>({ id: 'foo-space-id' } as Space) as Observable<
+                Space
+              >,
+            } as Spaces),
+        },
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    },
+  );
 
   it('should initialize', (): void => {
     expect(testContext.testedDirective).toBeTruthy();
@@ -76,55 +93,51 @@ describe('EnvironmentWidgetComponent', (): void => {
             {
               name: 'stage',
               version: '1.0.1',
-              url: null
+              url: null,
             },
             {
               name: 'run',
               version: '1.0.0',
-              url: 'http://example.com/application-1/run'
-            }
-          ]
-        }
+              url: 'http://example.com/application-1/run',
+            },
+          ],
+        },
       ];
 
       testContext.testedDirective.appInfos
-        .pipe(
-          first()
-        )
-        .subscribe(
-          (appInfos: ApplicationAttributesOverview[]): void => {
-            expect(mockApplicationOverviewService.getAppsAndEnvironments).toHaveBeenCalledWith('foo-space-id');
-            expect(appInfos).toEqual(mockData);
-            done();
-          },
-          done.fail
-        );
+        .pipe(first())
+        .subscribe((appInfos: ApplicationAttributesOverview[]): void => {
+          expect(mockApplicationOverviewService.getAppsAndEnvironments).toHaveBeenCalledWith(
+            'foo-space-id',
+          );
+          expect(appInfos).toEqual(mockData);
+          done();
+        }, done.fail);
 
       mockAppEnvsSubj.next(mockData);
     });
 
     it('should request new data when Space changes', (done: DoneFn): void => {
-      testContext.testedDirective.appInfos
-        .pipe(
-          take(2)
-        )
-        .subscribe(
-          (): void => {},
-          done.fail,
-          (): void => {
-            expect(mockApplicationOverviewService.getAppsAndEnvironments.calls.count()).toEqual(2);
+      testContext.testedDirective.appInfos.pipe(take(2)).subscribe(
+        (): void => {},
+        done.fail,
+        (): void => {
+          expect(mockApplicationOverviewService.getAppsAndEnvironments.calls.count()).toEqual(2);
 
-            expect(mockApplicationOverviewService.getAppsAndEnvironments.calls.argsFor(0)).toEqual(['foo-space-id']);
-            expect(mockApplicationOverviewService.getAppsAndEnvironments.calls.argsFor(1)).toEqual(['foo-space-id-2']);
+          expect(mockApplicationOverviewService.getAppsAndEnvironments.calls.argsFor(0)).toEqual([
+            'foo-space-id',
+          ]);
+          expect(mockApplicationOverviewService.getAppsAndEnvironments.calls.argsFor(1)).toEqual([
+            'foo-space-id-2',
+          ]);
 
-            done();
-          }
-        );
+          done();
+        },
+      );
 
       mockAppEnvsSubj.next([]);
       TestBed.get(Spaces).current.next({ id: 'foo-space-id-2' });
       mockAppEnvsSubj.next([]);
     });
   });
-
 });

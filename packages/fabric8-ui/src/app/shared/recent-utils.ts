@@ -5,19 +5,15 @@ import { ExtProfile, ProfileService } from '../profile/profile.service';
 
 export const RECENT_LENGTH: number = 8;
 
-export interface RecentData <T> {
+export interface RecentData<T> {
   recent: T[];
   isSaveRequired: boolean;
 }
 
 export abstract class RecentUtils<T> {
-
   protected _recent: Subject<T[]>;
 
-  constructor(
-    protected errorHandler: ErrorHandler,
-    protected profileService: ProfileService
-  ) {
+  constructor(protected errorHandler: ErrorHandler, protected profileService: ProfileService) {
     this._recent = new ReplaySubject<T[]>(1);
   }
 
@@ -27,14 +23,21 @@ export abstract class RecentUtils<T> {
 
   abstract compareElements<K = T>(t1: T, t2: K): boolean;
 
-  onBroadcastChanged(changed: T, recent: T[], compareFn: ((a: T, b: T) => boolean) = this.compareElements): RecentData<T> {
+  onBroadcastChanged(
+    changed: T,
+    recent: T[],
+    compareFn: ((a: T, b: T) => boolean) = this.compareElements,
+  ): RecentData<T> {
     let index: number = recent.findIndex((t: T) => compareFn(t, changed));
-    if (index === 0) { // continue only if changed is new, or requires a move within recent
+    if (index === 0) {
+      // continue only if changed is new, or requires a move within recent
       return { recent: recent, isSaveRequired: false };
-    } else if (index > 0) { // if changed exists in recent, move it to the front
+    } else if (index > 0) {
+      // if changed exists in recent, move it to the front
       recent.splice(index, 1);
       recent.unshift(changed);
-    } else { // if changed is new to recent
+    } else {
+      // if changed is new to recent
       recent.unshift(changed);
       // trim recent if required to ensure it is length =< 8
       if (recent.length > RECENT_LENGTH) {
@@ -44,7 +47,11 @@ export abstract class RecentUtils<T> {
     return { recent: recent, isSaveRequired: true };
   }
 
-  onBroadcastDeleted<K>(deleted: K, recent: T[], compareFn: ((a: T, b: K) => boolean) = this.compareElements): RecentData<T> {
+  onBroadcastDeleted<K>(
+    deleted: K,
+    recent: T[],
+    compareFn: ((a: T, b: K) => boolean) = this.compareElements,
+  ): RecentData<T> {
     let index: number = recent.findIndex((t: T) => compareFn(t, deleted));
     if (index === -1) {
       return { recent: recent, isSaveRequired: false };
@@ -58,7 +65,7 @@ export abstract class RecentUtils<T> {
       (): void => {},
       (err: string): void => {
         this.errorHandler.handleError(err);
-      });
+      },
+    );
   }
-
 }

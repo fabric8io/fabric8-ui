@@ -6,14 +6,9 @@ import { WorkspacesNotificationModule } from '../workspaces-notification/workspa
 import { CodebasesItemHeadingComponent } from './codebases-item-heading.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    TooltipModule.forRoot(),
-    WorkspacesNotificationModule
-  ],
-  declarations: [ CodebasesItemHeadingComponent ],
-  exports: [ CodebasesItemHeadingComponent ],
-  providers: [TooltipConfig]
+  imports: [CommonModule, FormsModule, TooltipModule.forRoot(), WorkspacesNotificationModule],
+  declarations: [CodebasesItemHeadingComponent],
+  exports: [CodebasesItemHeadingComponent],
+  providers: [TooltipConfig],
 })
 export class CodebasesItemHeadingModule {}

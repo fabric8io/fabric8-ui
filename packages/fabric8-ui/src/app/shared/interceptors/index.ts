@@ -10,5 +10,5 @@ export const HttpInterceptorProviders = [
   { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true },
   { provide: HTTP_INTERCEPTORS, useClass: RequestIdInterceptor, multi: true },
-  { provide: HTTP_INTERCEPTORS, useClass: XAppInterceptor, multi: true }
+  { provide: HTTP_INTERCEPTORS, useClass: XAppInterceptor, multi: true },
 ];

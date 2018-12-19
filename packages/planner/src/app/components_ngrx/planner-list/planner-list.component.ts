@@ -7,13 +7,11 @@ import {
   OnInit,
   Renderer2,
   ViewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
 import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { cloneDeep, sortBy } from 'lodash';
-import {
-  AuthenticationService
-} from 'ngx-login-client';
+import { AuthenticationService } from 'ngx-login-client';
 import { EmptyStateConfig } from 'patternfly-ng/empty-state';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, switchMap, take, tap } from 'rxjs/operators';
@@ -42,14 +40,12 @@ import { WorkItemQuery, WorkItemUI } from './../../models/work-item';
 import { AppState } from './../../states/app.state';
 import { WorkItemPreviewPanelComponent } from './../work-item-preview-panel/work-item-preview-panel.component';
 
-
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-work-item-list',
   templateUrl: './planner-list.component.html',
-  styleUrls: ['./planner-list.component.less']
+  styleUrls: ['./planner-list.component.less'],
 })
-
 export class PlannerListComponent implements OnInit, OnDestroy, AfterViewChecked {
   public uiLockedAll: boolean = false;
   public sidePanelOpen: boolean = true;
@@ -63,25 +59,18 @@ export class PlannerListComponent implements OnInit, OnDestroy, AfterViewChecked
   public emptyStateConfig: any = {};
   public uiLockedList: boolean = false;
   public uiLockedSidebar: boolean = false;
-  public selectedIterationSource: Observable<IterationUI> =
-    this.iterationQuery.getSelectedIteration().pipe(
-      filter(i => i !== null)
-    );
+  public selectedIterationSource: Observable<
+    IterationUI
+  > = this.iterationQuery.getSelectedIteration().pipe(filter((i) => i !== null));
 
   private workItemTypeSource = this.workItemTypeQuery.getWorkItemTypesWithChildren();
-  private spaceSource = this.spaceQuery.getCurrentSpace.pipe(filter(s => !!s));
-  private areaSource = this.areaQuery.getAreas().pipe(
-    filter(a => !!a.length)
-  );
+  private spaceSource = this.spaceQuery.getCurrentSpace.pipe(filter((s) => !!s));
+  private areaSource = this.areaQuery.getAreas().pipe(filter((a) => !!a.length));
   private labelSource = this.labelQuery.getLables();
-  private iterationSource = this.iterationQuery.getIterations().pipe(
-    filter(i => !!i.length)
-  );
+  private iterationSource = this.iterationQuery.getIterations().pipe(filter((i) => !!i.length));
   private collaboratorSource = this.userQuery.getCollaborators();
   private workItemSource = this.workItemQuery.getWorkItems();
-  private routeSource = this.route.queryParams.pipe(
-    filter(p => p.hasOwnProperty('q'))
-  );
+  private routeSource = this.route.queryParams.pipe(filter((p) => p.hasOwnProperty('q')));
   private eventListeners: any[] = [];
   private detailExpandedRows: any = [];
   private showTree: boolean = false;
@@ -113,7 +102,7 @@ export class PlannerListComponent implements OnInit, OnDestroy, AfterViewChecked
     private areaQuery: AreaQuery,
     private groupTypeQuery: GroupTypeQuery,
     private workItemTypeQuery: WorkItemTypeQuery,
-    private spaceQuery: SpaceQuery
+    private spaceQuery: SpaceQuery,
   ) {}
 
   ngOnInit() {
@@ -121,86 +110,90 @@ export class PlannerListComponent implements OnInit, OnDestroy, AfterViewChecked
     let newFilterObj = {};
     this.emptyStateConfig = {
       info: 'There are no Work Items for your selected criteria',
-      title: 'No Work Items Available'
+      title: 'No Work Items Available',
     } as EmptyStateConfig;
 
     this.eventListeners.push(
       this.spaceSource
-      .pipe(
-        tap(() => {
-          this.store.dispatch(new CollaboratorActions.Get());
-          this.store.dispatch(new AreaActions.Get());
-          this.uiLockedSidebar = true;
-          this.uiLockedList = true;
-        }),
-        switchMap(s => {
-          return combineLatest(
-            this.workItemTypeSource,
-            this.areaSource,
-            this.iterationSource.pipe(take(1)),
-            this.labelSource.pipe(take(1)),
-            this.collaboratorSource.pipe(take(1)),
-            this.routeSource
-          );
-        })
-      )
-      .subscribe(([
-        workItemTypeSource,
-        areaSource,
-        iterationSource,
-        labelSource,
-        collaboratorSource,
-        queryParams
-      ]) => {
-        this.uiLockedSidebar = false;
-        this.uiLockedList = true;
-        let exp = this.filterService.queryToJson(queryParams.q);
-        let fields = this.filterService.queryToFlat(queryParams.q);
-        let stateFilter = fields.findIndex(f => f.field === 'state');
-        if (!queryParams.hasOwnProperty('showCompleted') && !queryParams.showCompleted && stateFilter === -1) {
-          this.showCompleted = false;
-          // not closed state
-          // TODO remove hard coded states and
-          // use meta-states when available
-          let stateQuery = {};
-          ['closed', 'Done', 'Removed', 'Closed'].forEach(state => {
-            stateQuery = this.filterService.queryJoiner(
-              stateQuery,
-              AND,
-              this.filterService.queryBuilder(
-                'state', NOT_EQUAL, state
-              )
+        .pipe(
+          tap(() => {
+            this.store.dispatch(new CollaboratorActions.Get());
+            this.store.dispatch(new AreaActions.Get());
+            this.uiLockedSidebar = true;
+            this.uiLockedList = true;
+          }),
+          switchMap((s) => {
+            return combineLatest(
+              this.workItemTypeSource,
+              this.areaSource,
+              this.iterationSource.pipe(take(1)),
+              this.labelSource.pipe(take(1)),
+              this.collaboratorSource.pipe(take(1)),
+              this.routeSource,
             );
-          });
-          exp = this.filterService.queryJoiner(
-            exp,
-            AND,
-            stateQuery
-          );
-        } else {
-          this.showCompleted = true;
-        }
+          }),
+        )
+        .subscribe(
+          ([
+            workItemTypeSource,
+            areaSource,
+            iterationSource,
+            labelSource,
+            collaboratorSource,
+            queryParams,
+          ]) => {
+            this.uiLockedSidebar = false;
+            this.uiLockedList = true;
+            let exp = this.filterService.queryToJson(queryParams.q);
+            let fields = this.filterService.queryToFlat(queryParams.q);
+            let stateFilter = fields.findIndex((f) => f.field === 'state');
+            if (
+              !queryParams.hasOwnProperty('showCompleted') &&
+              !queryParams.showCompleted &&
+              stateFilter === -1
+            ) {
+              this.showCompleted = false;
+              // not closed state
+              // TODO remove hard coded states and
+              // use meta-states when available
+              let stateQuery = {};
+              ['closed', 'Done', 'Removed', 'Closed'].forEach((state) => {
+                stateQuery = this.filterService.queryJoiner(
+                  stateQuery,
+                  AND,
+                  this.filterService.queryBuilder('state', NOT_EQUAL, state),
+                );
+              });
+              exp = this.filterService.queryJoiner(exp, AND, stateQuery);
+            } else {
+              this.showCompleted = true;
+            }
 
-        // Check for tree view
-        if (queryParams.hasOwnProperty('showTree') && queryParams.showTree) {
-          this.showTree = true;
-          exp['$OPTS'] = {'tree-view': true};
-        } else {
-          this.showTree = false;
-          exp['$OPTS'] = {'tree-view': false};
-        }
-        this.store.dispatch(new WorkItemActions.Get({
-          pageSize: 200,
-          filters: exp,
-          isShowTree: this.showTree
-        }));
-      })
+            // Check for tree view
+            if (queryParams.hasOwnProperty('showTree') && queryParams.showTree) {
+              this.showTree = true;
+              exp['$OPTS'] = { 'tree-view': true };
+            } else {
+              this.showTree = false;
+              exp['$OPTS'] = { 'tree-view': false };
+            }
+            this.store.dispatch(
+              new WorkItemActions.Get({
+                pageSize: 200,
+                filters: exp,
+                isShowTree: this.showTree,
+              }),
+            );
+          },
+        ),
     );
 
     const queryParams = this.route.snapshot.queryParams;
-    if (Object.keys(queryParams).length === 0 ||
-      (Object.keys(queryParams).length === 1 &&  // for in memory
-        Object.keys(queryParams).indexOf('token_json') > -1)) {
+    if (
+      Object.keys(queryParams).length === 0 ||
+      (Object.keys(queryParams).length === 1 && // for in memory
+        Object.keys(queryParams).indexOf('token_json') > -1)
+    ) {
       this.setDefaultUrl();
     }
     this.loggedIn = this.auth.isLoggedIn();
@@ -211,14 +204,15 @@ export class PlannerListComponent implements OnInit, OnDestroy, AfterViewChecked
     // Listen for the url change
     this.eventListeners.push(
       this.router.events
-        .pipe(filter(event => event instanceof NavigationStart))
-        .subscribe(
-        (event: any) => {
-          if (event.url.indexOf('?q') === -1 &&
+        .pipe(filter((event) => event instanceof NavigationStart))
+        .subscribe((event: any) => {
+          if (
+            event.url.indexOf('?q') === -1 &&
             event.url.indexOf('/plan/detail/') === -1 &&
             event.url.indexOf('/plan/board') === -1 &&
             event.url.indexOf('/plan/query') === -1 &&
-            event.url.indexOf('/plan') > -1) {
+            event.url.indexOf('/plan') > -1
+          ) {
             this.setDefaultUrl();
           }
           if (event.url.indexOf('/plan/detail/') > -1) {
@@ -230,13 +224,12 @@ export class PlannerListComponent implements OnInit, OnDestroy, AfterViewChecked
             }
             this.urlService.recordLastListOrBoard(url);
           }
-        }
-        )
+        }),
     );
   }
 
-   //ngx-datatable methods
-   handleReorder(event) {
+  //ngx-datatable methods
+  handleReorder(event) {
     if (event.newValue !== 0) {
       this.columns[event.prevValue - 1].index = event.newValue;
       this.columns[event.newValue - 1].index = event.prevValue;
@@ -273,72 +266,70 @@ export class PlannerListComponent implements OnInit, OnDestroy, AfterViewChecked
   togglePanel() {
     this.plannerLayout.toggleSidePanel();
     setTimeout(() => {
-    this.workItems = [...this.workItems];
+      this.workItems = [...this.workItems];
     }, 500);
   }
 
   setDefaultUrl() {
     //redirect to default type group
     //get space id
-    this.spaceSource
-      .pipe(take(1))
-      .subscribe(space => {
-        if (space) {
-          const spaceId = space.id;
-          //get groupsgroups
-          this.groupTypeQuery.getFirstGroupType
-            .pipe(take(1))
-              .subscribe(groupType => {
-              const defaultGroupName = groupType.name;
-              //Query for work item type group
-              const type_query = this.filterService.queryBuilder('typegroup.name', EQUAL, defaultGroupName);
-              //Join type and space query
-              const first_join = this.filterService.queryJoiner({}, AND, type_query);
-              //const view_query = this.filterService.queryBuilder('tree-view', EQUAL, 'true');
-              //const third_join = this.filterService.queryJoiner(second_join);
-              //second_join gives json object
-              let query = this.filterService.jsonToQuery(first_join);
-              console.log('query is ', query);
-              // { queryParams : {q: query}
-              this.router.navigate([], {
-                relativeTo: this.route,
-                queryParams: { q: query, showTree: true }
-              });
-            });
-        }
-      });
+    this.spaceSource.pipe(take(1)).subscribe((space) => {
+      if (space) {
+        const spaceId = space.id;
+        //get groupsgroups
+        this.groupTypeQuery.getFirstGroupType.pipe(take(1)).subscribe((groupType) => {
+          const defaultGroupName = groupType.name;
+          //Query for work item type group
+          const type_query = this.filterService.queryBuilder(
+            'typegroup.name',
+            EQUAL,
+            defaultGroupName,
+          );
+          //Join type and space query
+          const first_join = this.filterService.queryJoiner({}, AND, type_query);
+          //const view_query = this.filterService.queryBuilder('tree-view', EQUAL, 'true');
+          //const third_join = this.filterService.queryJoiner(second_join);
+          //second_join gives json object
+          let query = this.filterService.jsonToQuery(first_join);
+          console.log('query is ', query);
+          // { queryParams : {q: query}
+          this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: { q: query, showTree: true },
+          });
+        });
+      }
+    });
   }
 
   setWorkItemTypes() {
     this.eventListeners.push(
-      combineLatest(
-        this.workItemTypeSource,
-        this.groupTypeQuery.getGroupTypes
-      ).subscribe(([workItemTypes, groupTypes]) => {
-        const selectedGroupType = groupTypes.find(gt => gt.selected);
-        if (selectedGroupType) {
-          this.quickAddWorkItemTypes = selectedGroupType.typeList.map(type => {
-            return workItemTypes.find(wit => wit.id === type.id);
-          });
-        } else {
-          this.quickAddWorkItemTypes = workItemTypes;
-        }
-      })
+      combineLatest(this.workItemTypeSource, this.groupTypeQuery.getGroupTypes).subscribe(
+        ([workItemTypes, groupTypes]) => {
+          const selectedGroupType = groupTypes.find((gt) => gt.selected);
+          if (selectedGroupType) {
+            this.quickAddWorkItemTypes = selectedGroupType.typeList.map((type) => {
+              return workItemTypes.find((wit) => wit.id === type.id);
+            });
+          } else {
+            this.quickAddWorkItemTypes = workItemTypes;
+          }
+        },
+      ),
     );
   }
 
   /**
    * This function listens for any change in
    * work item state and adopt it
-  */
+   */
   setWorkItems() {
     this.eventListeners.push(
-      this.workItemSource
-        .subscribe(workItems => {
-          this.uiLockedList = false;
-          this.showTreeUI = this.showTree;
-          this.workItems = [...workItems];
-        })
+      this.workItemSource.subscribe((workItems) => {
+        this.uiLockedList = false;
+        this.showTreeUI = this.showTree;
+        this.workItems = [...workItems];
+      }),
     );
   }
 
@@ -400,25 +391,23 @@ export class PlannerListComponent implements OnInit, OnDestroy, AfterViewChecked
       // Clean object is used to remove
       // Observables from the object so that
       // it works with Redux dev-tools
-      new WorkItemActions.GetChildren(
-        {
-          id: workItem.id,
-          childrenLink: workItem.childrenLink
-        } as WorkItemUI
-      )
+      new WorkItemActions.GetChildren({
+        id: workItem.id,
+        childrenLink: workItem.childrenLink,
+      } as WorkItemUI),
     );
   }
 
   toggleExpandRow(row, quickAddEnabled = true) {
     if (quickAddEnabled && this.loggedIn) {
-      const index = this.detailExpandedRows.findIndex(r => r.id === row.id);
+      const index = this.detailExpandedRows.findIndex((r) => r.id === row.id);
       if (index > -1) {
         // For collapsing
         this.table.rowDetail.toggleExpandRow(this.detailExpandedRows[index]);
         this.detailExpandedRows.splice(index, 1);
       } else {
         // For expanding
-        this.detailExpandedRows.forEach(r => {
+        this.detailExpandedRows.forEach((r) => {
           this.table.rowDetail.toggleExpandRow(r);
         });
         this.detailExpandedRows = [];
@@ -435,27 +424,19 @@ export class PlannerListComponent implements OnInit, OnDestroy, AfterViewChecked
   onClickLabel(event) {
     const labelId = event.id;
     let queryParams = cloneDeep(this.route.snapshot.queryParams);
-    const newQuery = this.filterService.queryBuilder(
-      'label',
-      EQUAL,
-      labelId
-    );
+    const newQuery = this.filterService.queryBuilder('label', EQUAL, labelId);
     let existingQuery = {};
     if (queryParams.hasOwnProperty('q')) {
       existingQuery = this.filterService.queryToJson(queryParams['q']);
     }
     const finalQuery = this.filterService.jsonToQuery(
-      this.filterService.queryJoiner(
-        existingQuery,
-        AND,
-        newQuery
-      )
+      this.filterService.queryJoiner(existingQuery, AND, newQuery),
     );
     queryParams['q'] = finalQuery;
     // Navigated to filtered view
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: queryParams
+      queryParams: queryParams,
     });
   }
 
@@ -468,27 +449,29 @@ export class PlannerListComponent implements OnInit, OnDestroy, AfterViewChecked
       return;
     }
     this.uiLockedList = true;
-    const payload =  {
+    const payload = {
       workitem: event.source,
       destinationWorkitemID: event.target.id,
-      direction: 'above'
+      direction: 'above',
     };
     this.store.dispatch(new WorkItemActions.Reorder(payload));
   }
 
   ngOnDestroy() {
-    this.eventListeners.forEach(e => e.unsubscribe());
+    this.eventListeners.forEach((e) => e.unsubscribe());
   }
 
   ngAfterViewChecked() {
     if (document.getElementsByClassName('navbar-pf').length > 0) {
-      this.hdrHeight = (document.getElementsByClassName('navbar-pf')[0] as HTMLElement).offsetHeight;
+      this.hdrHeight = (document.getElementsByClassName(
+        'navbar-pf',
+      )[0] as HTMLElement).offsetHeight;
     }
     if (this.toolbar) {
-      this.toolbarHt =  this.toolbar.nativeElement.offsetHeight;
+      this.toolbarHt = this.toolbar.nativeElement.offsetHeight;
     }
     if (this.quickaddWrapper) {
-      this.quickaddHt =  this.quickaddWrapper.nativeElement.offsetHeight;
+      this.quickaddHt = this.quickaddWrapper.nativeElement.offsetHeight;
     }
     let targetHeight = window.innerHeight - (this.hdrHeight + this.toolbarHt + this.quickaddHt);
     if (this.listContainer) {

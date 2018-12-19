@@ -20,15 +20,11 @@ import { CreateAreaDialogModule } from './create-area-dialog/create-area-dialog.
     CreateAreaDialogModule,
     Fabric8WitModule,
     TreeListModule,
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
   ],
-  declarations: [
-    AreasComponent
-  ],
-  providers: [
-    BsDropdownConfig
-  ]
+  declarations: [AreasComponent],
+  providers: [BsDropdownConfig],
 })
 export class AreasModule {
-  constructor() { }
+  constructor() {}
 }

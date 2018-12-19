@@ -14,9 +14,9 @@ import { ApplicationsWidgetComponent } from './applications-widget.component';
     FeatureFlagModule,
     FormsModule,
     LoadingWidgetModule,
-    RouterModule
+    RouterModule,
   ],
   declarations: [ApplicationsWidgetComponent],
-  exports: [ApplicationsWidgetComponent]
+  exports: [ApplicationsWidgetComponent],
 })
-export class ApplicationsWidgetModule { }
+export class ApplicationsWidgetModule {}

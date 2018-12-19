@@ -4,12 +4,11 @@ import { KubernetesResource } from './kubernetesresource.model';
 export class ConfigMap extends KubernetesResource {
   data: Map<string, string>;
 
-
   updateResource(resource) {
     resource.data = this.data;
     super.updateResource(resource);
 
-/*
+    /*
     if (!this.labels[FunktionKindAnnotation]) {
       var funktionKind = this.defaultFunctionKind();
       if (funktionKind) {
@@ -19,7 +18,7 @@ export class ConfigMap extends KubernetesResource {
 */
   }
 
-/*
+  /*
   defaultFunctionKind() {
     return "";
   }
@@ -35,6 +34,4 @@ export class ConfigMap extends KubernetesResource {
   }
 }
 
-export class ConfigMaps extends Array<ConfigMap> {
-}
-
+export class ConfigMaps extends Array<ConfigMap> {}

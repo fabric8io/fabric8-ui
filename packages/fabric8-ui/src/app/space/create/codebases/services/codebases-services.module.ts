@@ -6,12 +6,7 @@ import { GitHubService } from './github.service';
 import { WorkspacesService } from './workspaces.service';
 
 @NgModule({
-  imports: [ HttpClientModule ],
-  providers: [
-    CheService,
-    CodebasesService,
-    GitHubService,
-    WorkspacesService
-  ]
+  imports: [HttpClientModule],
+  providers: [CheService, CodebasesService, GitHubService, WorkspacesService],
 })
 export class CodebasesServicesModule {}

@@ -12,10 +12,9 @@ import { SpaceNamespaceService } from '../../shared/runtime-console/space-namesp
   encapsulation: ViewEncapsulation.None,
   selector: 'fabric8-edit-space-description-widget',
   templateUrl: './edit-space-description-widget.component.html',
-  styleUrls: ['./edit-space-description-widget.component.less']
+  styleUrls: ['./edit-space-description-widget.component.less'],
 })
 export class EditSpaceDescriptionWidgetComponent implements OnInit, OnDestroy {
-
   @Input() userOwnsSpace: boolean;
   @Input() userIsSpaceAdmin: boolean;
   space: Space;
@@ -40,13 +39,15 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit, OnDestroy {
     private broadcaster: Broadcaster,
     private spaceService: SpaceService,
     private spaceNamespaceService: SpaceNamespaceService,
-    private collaboratorService: CollaboratorService
-  ) { }
+    private collaboratorService: CollaboratorService,
+  ) {}
 
   ngOnInit(): void {
-    this.subscriptions.push(this.userService.loggedInUser.subscribe((val: User) => this.loggedInUser = val));
-    this.subscriptions.push(this.spaces.current
-      .subscribe(space => {
+    this.subscriptions.push(
+      this.userService.loggedInUser.subscribe((val: User) => (this.loggedInUser = val)),
+    );
+    this.subscriptions.push(
+      this.spaces.current.subscribe((space) => {
         this.collaborators = [];
         this.filteredCollaborators = [];
         this.collaboratorCount = 0;
@@ -55,49 +56,55 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit, OnDestroy {
           this.refreshCollaboratorCount();
           this.spaceOwner = this.userService
             .getUserByUserId(space.relationships['owned-by'].data.id)
-            .pipe(
-              map((u: User) => u.attributes.username)
-            );
+            .pipe(map((u: User) => u.attributes.username));
         }
-      }));
-    this.subscriptions.push(this._descriptionUpdater.pipe(
-      debounceTime(1000),
-      map(description => {
-        let patch = {
-          attributes: {
-            description: description,
-            name: this.space ? this.space.attributes.name : '',
-            version: this.space ? this.space.attributes.version : ''
-          },
-          type: 'spaces',
-          id: this.space ? this.space.id : ''
-        } as Space;
-        return patch;
       }),
-      switchMap(patch => this.spaceService
-        .update(patch).pipe(
-        tap(val => {
-          this.isEditing = false;
-          if (this.space && val) {
-            this.space.attributes.description = val.attributes.description;
-          }
-        }),
-        tap(updated => this.broadcaster.broadcast('spaceUpdated', updated)),
-        switchMap(updated => this.spaceNamespaceService.updateConfigMap(observableOf(updated))))
-      ))
-      .subscribe()
+    );
+    this.subscriptions.push(
+      this._descriptionUpdater
+        .pipe(
+          debounceTime(1000),
+          map((description) => {
+            let patch = {
+              attributes: {
+                description: description,
+                name: this.space ? this.space.attributes.name : '',
+                version: this.space ? this.space.attributes.version : '',
+              },
+              type: 'spaces',
+              id: this.space ? this.space.id : '',
+            } as Space;
+            return patch;
+          }),
+          switchMap((patch) =>
+            this.spaceService.update(patch).pipe(
+              tap((val) => {
+                this.isEditing = false;
+                if (this.space && val) {
+                  this.space.attributes.description = val.attributes.description;
+                }
+              }),
+              tap((updated) => this.broadcaster.broadcast('spaceUpdated', updated)),
+              switchMap((updated) =>
+                this.spaceNamespaceService.updateConfigMap(observableOf(updated)),
+              ),
+            ),
+          ),
+        )
+        .subscribe(),
     );
   }
 
   refreshCollaboratorCount(): void {
     this.subscriptions.push(
-      this.collaboratorService.getInitialBySpaceId(this.space.id)
-        .pipe(
-          concatMap(() => this.collaboratorService.getTotalCount())
-        )
-        .subscribe((count: number): void => {
-          this.collaboratorCount = count;
-        })
+      this.collaboratorService
+        .getInitialBySpaceId(this.space.id)
+        .pipe(concatMap(() => this.collaboratorService.getTotalCount()))
+        .subscribe(
+          (count: number): void => {
+            this.collaboratorCount = count;
+          },
+        ),
     );
   }
 
@@ -122,7 +129,7 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit, OnDestroy {
   }
 
   isEditable(): Observable<boolean> {
-    return this.contexts.current.pipe(map(val => val.user.id === this.loggedInUser.id));
+    return this.contexts.current.pipe(map((val) => val.user.id === this.loggedInUser.id));
   }
 
   launchAddCollaborators(): void {
@@ -139,16 +146,17 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit, OnDestroy {
       this.filteredCollaborators = this.collaborators;
       return;
     }
-    this.filteredCollaborators = this.collaborators
-      .filter(
-        (user: User): boolean =>
-          user.attributes.fullName.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())
-          || user.attributes.username.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())
-        );
+    this.filteredCollaborators = this.collaborators.filter(
+      (user: User): boolean =>
+        user.attributes.fullName.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()) ||
+        user.attributes.username.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()),
+    );
   }
 
   popoverInit(pageSize: number): void {
-    this.fetchCollaboratorsFrom(this.collaboratorService.getInitialBySpaceId(this.space.id, pageSize));
+    this.fetchCollaboratorsFrom(
+      this.collaboratorService.getInitialBySpaceId(this.space.id, pageSize),
+    );
   }
 
   fetchMoreCollaborators(): void {
@@ -159,7 +167,7 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit, OnDestroy {
     obs
       .pipe(
         first(),
-        catchError((): Observable<User[]> => empty())
+        catchError((): Observable<User[]> => empty()),
       )
       .subscribe((users: User[]): void => this.addCollaboratorsToParent(users));
   }
@@ -167,5 +175,4 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptions.forEach((subscription: Subscription): void => subscription.unsubscribe());
   }
-
 }

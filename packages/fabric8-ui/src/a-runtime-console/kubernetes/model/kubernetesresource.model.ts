@@ -15,7 +15,6 @@ import { BaseEntity } from '../../store/entity/entity.model';
 import { currentOAuthConfig } from '../store/oauth-config-store';
 import { openShiftBrowseResourceUrl } from './helpers';
 
-
 export class KubernetesResource implements BaseEntity {
   id: string;
   name: string;
@@ -73,7 +72,10 @@ export class KubernetesResource implements BaseEntity {
     let templateMetadata = template.metadata || {};
     let templateAnnotations = templateMetadata.annotations || new Map<string, string>();
 
-    this.icon = this.annotations['fabric8.io/iconUrl'] || templateAnnotations['fabric8.io/iconUrl'] || this.defaultIconUrl();
+    this.icon =
+      this.annotations['fabric8.io/iconUrl'] ||
+      templateAnnotations['fabric8.io/iconUrl'] ||
+      this.defaultIconUrl();
 
     // lets fix up old image URIs
     if (this.isFabric8Icon(this.icon, 'camel')) {
@@ -111,7 +113,9 @@ export class KubernetesResource implements BaseEntity {
 
   isFabric8Icon(url, name) {
     if (url && (url.startsWith('img/icons/') || url.startsWith('/img/icons/'))) {
-      return url.endsWith(name + '.svg') || url.endsWith(name + '.png') || url.endsWith(name + '.jpg');
+      return (
+        url.endsWith(name + '.svg') || url.endsWith(name + '.png') || url.endsWith(name + '.jpg')
+      );
     }
     return false;
   }

@@ -11,7 +11,6 @@ describe('PipelinesListPage', () => {
   let component: PipelinesListPage;
   let fixture: ComponentFixture<PipelinesListPage>;
 
-
   beforeEach(async(() => {
     let mockBuildConfigStore: any = jasmine.createSpy('BuildConfigService');
     mockBuildConfigStore.loading = observableOf(false);
@@ -22,15 +21,13 @@ describe('PipelinesListPage', () => {
     let mockAPIsStore: any = jasmine.createSpyObj('APIsStore', ['load']);
     mockAPIsStore.loading = observableEmpty();
     TestBed.configureTestingModule({
-      declarations: [
-        PipelinesListPage
-      ],
+      declarations: [PipelinesListPage],
       providers: [
         { provide: BuildConfigStore, useValue: mockBuildConfigStore },
         { provide: BuildStore, useValue: mockBuildStore },
-        { provide: APIsStore, useValue: mockAPIsStore }
+        { provide: APIsStore, useValue: mockAPIsStore },
       ],
-      schemas: [ NO_ERRORS_SCHEMA ]
+      schemas: [NO_ERRORS_SCHEMA],
     });
   }));
 

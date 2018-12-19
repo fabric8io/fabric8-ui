@@ -1,8 +1,4 @@
-import {
-  async,
-  ComponentFixture,
-  TestBed
-} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { FormsModule } from '@angular/forms';
@@ -19,7 +15,7 @@ describe('Slide out component - ', () => {
     TestBed.configureTestingModule({
       imports: [BrowserAnimationsModule, FormsModule],
       declarations: [SlideOutPanelComponent],
-      providers: []
+      providers: [],
     })
       .compileComponents()
       .then(() => {
@@ -56,7 +52,7 @@ describe('Slide out component - ', () => {
     expect(comp.panelState).toBe('out');
   });
 
-  it ('should notify when the panel is closed', function(done) {
+  it('should notify when the panel is closed', function(done) {
     comp.panelStateChange.subscribe((data: string) => {
       expect(data).toBe('out');
       done();

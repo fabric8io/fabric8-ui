@@ -1,12 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import {
-  BsDropdownConfig,
-  BsDropdownModule,
-  TooltipConfig,
-  TooltipModule
-} from 'ngx-bootstrap';
+import { BsDropdownConfig, BsDropdownModule, TooltipConfig, TooltipModule } from 'ngx-bootstrap';
 import { EmptyStateModule } from 'patternfly-ng/empty-state';
 import { NgxDatatableModule } from 'rh-ngx-datatable';
 import { SpaceQuery } from '../../models/space';
@@ -49,7 +44,7 @@ import { WorkItemQuickAddModule } from '../work-item-quick-add/work-item-quick-a
     InfiniteScrollModule,
     NgLetModule,
     PlannerModalModule,
-    ListItemModule
+    ListItemModule,
   ],
   declarations: [PlannerQueryComponent],
   exports: [PlannerQueryComponent],
@@ -63,7 +58,7 @@ import { WorkItemQuickAddModule } from '../work-item-quick-add/work-item-quick-a
     UrlService,
     WorkItemTypeQuery,
     ErrorHandler,
-    QuerySuggestionService
-  ]
+    QuerySuggestionService,
+  ],
 })
 export class PlannerQueryModule {}

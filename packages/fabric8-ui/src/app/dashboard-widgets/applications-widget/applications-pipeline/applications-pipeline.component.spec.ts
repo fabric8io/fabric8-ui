@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Context, Contexts } from 'ngx-fabric8-wit';
-import { BehaviorSubject,  never as observableNever, Observable } from 'rxjs';
+import { BehaviorSubject, never as observableNever, Observable } from 'rxjs';
 import { initContext, TestContext } from 'testing/test-context';
 import { ApplicationsPipelineComponent } from './applications-pipeline.component';
 
 @Component({
-  template: '<fabric8-applications-pipeline></fabric8-applications-pipeline>'
+  template: '<fabric8-applications-pipeline></fabric8-applications-pipeline>',
 })
-class HostComponent { }
+class HostComponent {}
 
 describe('ApplicationsPipelineComponent', () => {
   type TestingContext = TestContext<ApplicationsPipelineComponent, HostComponent>;
@@ -18,7 +18,7 @@ describe('ApplicationsPipelineComponent', () => {
   let pipelineStage = {
     jenkinsInputURL: 'https://example.com/app1.git',
     name: 'Build Release',
-    status: 'SUCCESS'
+    status: 'SUCCESS',
   };
 
   beforeEach(() => {
@@ -28,25 +28,26 @@ describe('ApplicationsPipelineComponent', () => {
         path: '/user/space',
         space: {
           attributes: {
-            name: 'space'
-          }
-        }
+            name: 'space',
+          },
+        },
       } as Context),
       recent: observableNever(),
-      default: observableNever()
+      default: observableNever(),
     };
   });
 
-  const testContext = initContext(ApplicationsPipelineComponent, HostComponent, {
-    imports: [
-      CommonModule
-    ],
-    providers: [
-      { provide: Contexts, useFactory: () => contexts }
-    ]
-  }, (component: ApplicationsPipelineComponent): void => {
-    component.stage = pipelineStage as any;
-  });
+  const testContext = initContext(
+    ApplicationsPipelineComponent,
+    HostComponent,
+    {
+      imports: [CommonModule],
+      providers: [{ provide: Contexts, useFactory: () => contexts }],
+    },
+    (component: ApplicationsPipelineComponent): void => {
+      component.stage = pipelineStage as any;
+    },
+  );
 
   describe('Applications pipeline with stage', () => {
     it('Pipeline stage should be set', function() {

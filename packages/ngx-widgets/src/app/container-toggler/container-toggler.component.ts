@@ -1,9 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Output,
-  ViewEncapsulation
-} from '@angular/core';
+import { Component, EventEmitter, Output, ViewEncapsulation } from '@angular/core';
 
 /**
  * Container-toggler
@@ -15,16 +10,13 @@ import {
 @Component({
   selector: 'f8-container-toggler',
   encapsulation: ViewEncapsulation.None,
-  templateUrl: './container-toggler.html'
+  templateUrl: './container-toggler.html',
 })
-
 export class ContainerTogglerComponent {
   @Output() nextBtn = new EventEmitter();
   @Output() prevBtn = new EventEmitter();
 
-  constructor() {
-
-  }
+  constructor() {}
 
   prev(): void {
     this.prevBtn.emit('P');

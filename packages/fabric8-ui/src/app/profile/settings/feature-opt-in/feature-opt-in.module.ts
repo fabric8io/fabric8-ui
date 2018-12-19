@@ -14,9 +14,9 @@ import { FeatureOptInComponent } from './feature-opt-in.component';
     FormsModule,
     FeatureOptInRoutingModule,
     ListModule,
-    JwBootstrapSwitchNg2Module
+    JwBootstrapSwitchNg2Module,
   ],
   declarations: [FeatureOptInComponent],
-  exports: [FeatureOptInComponent]
+  exports: [FeatureOptInComponent],
 })
-export class FeatureOptInModule { }
+export class FeatureOptInModule {}

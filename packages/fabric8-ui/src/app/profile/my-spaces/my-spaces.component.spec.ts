@@ -9,30 +9,30 @@ import { Context, Contexts, Space, SpaceService } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
 import { Filter, SortEvent, SortField } from 'patternfly-ng';
 import { Action } from 'patternfly-ng/action';
-import {
-  ConnectableObservable,
-  Observable,
-  of,
-  throwError as observableThrowError
-} from 'rxjs';
+import { ConnectableObservable, Observable, of, throwError as observableThrowError } from 'rxjs';
 import { createMock } from 'testing/mock';
 import { initContext, TestContext } from 'testing/test-context';
-import { ExtProfile, GettingStartedService } from '../../getting-started/services/getting-started.service';
+import {
+  ExtProfile,
+  GettingStartedService,
+} from '../../getting-started/services/getting-started.service';
 import { spaceMock } from '../../shared/context.service.mock';
 import { UserSpacesService } from '../../shared/user-spaces.service';
 import { SpacesType } from './my-spaces-toolbar/my-spaces-toolbar.component';
 import { MySpacesComponent } from './my-spaces.component';
 
 @Component({
-  template: '<alm-my-spaces></alm-my-spaces>'
+  template: '<alm-my-spaces></alm-my-spaces>',
 })
-class HostComponent { }
+class HostComponent {}
 
 describe('MySpacesComponent', (): void => {
-
   type TestingContext = TestContext<MySpacesComponent, HostComponent>;
   const mockModalRef: jasmine.SpyObj<BsModalRef> = jasmine.createSpyObj('BsModalRef', ['hide']);
-  const mockTemplateRef: jasmine.SpyObj<TemplateRef<any>> = jasmine.createSpyObj('TemplateRef', ['elementRef', 'createEmbeddedView']);
+  const mockTemplateRef: jasmine.SpyObj<TemplateRef<any>> = jasmine.createSpyObj('TemplateRef', [
+    'elementRef',
+    'createEmbeddedView',
+  ]);
   let mockExtProfile: ExtProfile;
   let mockUser: User;
   let mockContext: Context;
@@ -42,60 +42,62 @@ describe('MySpacesComponent', (): void => {
 
   let mockFilter1: Filter = {
     field: { id: 'name' },
-    value: 'space'
+    value: 'space',
   };
 
   let mockFilter2: Filter = {
     field: { id: 'name' },
-    value: '2'
+    value: '2',
   };
 
   let mockFilter3: Filter = {
     field: { id: 'not-name' },
-    value: 'zzz'
-};
+    value: 'zzz',
+  };
 
-  beforeEach((): void => {
-    mockExtProfile = {
-      bio: 'mock-bio',
-      company: 'mock-company',
-      email: 'mock-email',
-      emailPrivate: false,
-      fullName: 'mock-fullName',
-      imageURL: 'mock-imageUrl',
-      url: 'mock-url',
-      username: 'mock-username',
-      contextInformation: {
-        pins: {
-          'myspaces': []
-        }
-      },
-      registrationCompleted: true,
-      featureLevel: 'mock-featureLevel'
-    } as ExtProfile;
+  beforeEach(
+    (): void => {
+      mockExtProfile = {
+        bio: 'mock-bio',
+        company: 'mock-company',
+        email: 'mock-email',
+        emailPrivate: false,
+        fullName: 'mock-fullName',
+        imageURL: 'mock-imageUrl',
+        url: 'mock-url',
+        username: 'mock-username',
+        contextInformation: {
+          pins: {
+            myspaces: [],
+          },
+        },
+        registrationCompleted: true,
+        featureLevel: 'mock-featureLevel',
+      } as ExtProfile;
 
-    mockUser = {
-      attributes: mockExtProfile,
-      id: 'mock-id',
-      type: 'mock-type'
-    } as User;
+      mockUser = {
+        attributes: mockExtProfile,
+        id: 'mock-id',
+        type: 'mock-type',
+      } as User;
 
-    mockContext = {
-      user: mockUser,
-      type: jasmine.createSpy('ContextType'),
-      path: 'mock-path',
-      name: 'mock-name'
-    } as Context;
-    spaceMock1 = cloneDeep(spaceMock); // owned space
-    spaceMock2 = cloneDeep(spaceMock); // owned space
-    spaceMock3 = cloneDeep(spaceMock); // collaborating space
-    (spaceMock1 as any).showPin = true;
-    spaceMock2.id = '2';
-    (spaceMock2 as any).showPin = false;
-    spaceMock2.attributes.name = 'spaceMock2-name';
-    spaceMock3.id = '3';
-    spaceMock3.attributes.name = 'spaceMock3-name';
-  });
+      mockContext = {
+        user: mockUser,
+        type: jasmine.createSpy('ContextType'),
+        path: 'mock-path',
+        name: 'mock-name',
+      } as Context;
+      spaceMock1 = cloneDeep(spaceMock); // owned space
+      spaceMock2 = cloneDeep(spaceMock); // owned space
+      spaceMock3 = cloneDeep(spaceMock); // collaborating space
+      (spaceMock1 as any).showPin = true;
+      spaceMock2.id = '2';
+      (spaceMock2 as any).showPin = false;
+      spaceMock2.attributes.name = 'spaceMock2-name';
+      spaceMock3.id = '3';
+      spaceMock3.attributes.name = 'spaceMock3-name';
+    },
+  );
 
   const testContext: TestingContext = initContext(MySpacesComponent, HostComponent, {
     imports: [FormsModule, HttpClientTestingModule],
@@ -107,16 +109,18 @@ describe('MySpacesComponent', (): void => {
           const mockContexts: jasmine.SpyObj<Contexts> = createMock(Contexts);
           mockContexts.current = of(mockContext) as Observable<Context> & jasmine.Spy;
           return mockContexts;
-        }
+        },
       },
       {
         provide: GettingStartedService,
         useFactory: (): jasmine.SpyObj<GettingStartedService> => {
-          const mockGettingStartedService: jasmine.SpyObj<GettingStartedService> = createMock(GettingStartedService);
+          const mockGettingStartedService: jasmine.SpyObj<GettingStartedService> = createMock(
+            GettingStartedService,
+          );
           mockGettingStartedService.createTransientProfile.and.returnValue(mockExtProfile);
           mockGettingStartedService.update.and.returnValue(of({}));
           return mockGettingStartedService;
-        }
+        },
       },
       {
         provide: Logger,
@@ -124,7 +128,7 @@ describe('MySpacesComponent', (): void => {
           const mockLogger: jasmine.SpyObj<Logger> = createMock(Logger);
           mockLogger.error.and.stub();
           return mockLogger;
-        }
+        },
       },
       {
         provide: Broadcaster,
@@ -133,7 +137,7 @@ describe('MySpacesComponent', (): void => {
           mockBroadcaster.on.and.stub();
           mockBroadcaster.broadcast.and.callThrough();
           return mockBroadcaster;
-        }
+        },
       },
       {
         provide: BsModalService,
@@ -141,7 +145,7 @@ describe('MySpacesComponent', (): void => {
           const mockBsModalService: jasmine.SpyObj<BsModalService> = createMock(BsModalService);
           mockBsModalService.show.and.returnValue(mockModalRef);
           return mockBsModalService;
-        }
+        },
       },
       {
         provide: SpaceService,
@@ -151,7 +155,7 @@ describe('MySpacesComponent', (): void => {
           mockSpaceService.getSpaceById.and.returnValue(of([spaceMock3]));
           mockSpaceService.deleteSpace.and.stub();
           return mockSpaceService;
-        }
+        },
       },
       {
         provide: UserService,
@@ -159,7 +163,7 @@ describe('MySpacesComponent', (): void => {
           const mockUserService: jasmine.SpyObj<UserService> = createMock(UserService);
           mockUserService.loggedInUser = of(mockUser) as ConnectableObservable<User> & jasmine.Spy;
           return mockUserService;
-        }
+        },
       },
       {
         provide: ErrorHandler,
@@ -167,19 +171,21 @@ describe('MySpacesComponent', (): void => {
           const mockErrorHandler: jasmine.SpyObj<ErrorHandler> = createMock(ErrorHandler);
           mockErrorHandler.handleError.and.callThrough();
           return mockErrorHandler;
-        }
+        },
       },
       {
         provide: UserSpacesService,
         useFactory: (): jasmine.SpyObj<UserSpacesService> => {
-          const mockUserSpacesService: jasmine.SpyObj<UserSpacesService> = createMock(UserSpacesService);
+          const mockUserSpacesService: jasmine.SpyObj<UserSpacesService> = createMock(
+            UserSpacesService,
+          );
           mockUserSpacesService.getSharedSpaces.and.returnValue(of([spaceMock3]));
           mockUserSpacesService.getInvolvedSpacesCount.and.returnValue(of([3]));
           return mockUserSpacesService;
-        }
-      }
+        },
+      },
     ],
-    schemas: [NO_ERRORS_SCHEMA]
+    schemas: [NO_ERRORS_SCHEMA],
   });
 
   describe('#spaces', (): void => {
@@ -200,7 +206,7 @@ describe('MySpacesComponent', (): void => {
    * Events
    */
   describe('#handlePinChange', (): void => {
-    it('should delegate to savePins and updateSpaces if the selected space exists in the user\'s spaces', (): void => {
+    it("should delegate to savePins and updateSpaces if the selected space exists in the user's spaces", (): void => {
       const component: MySpacesComponent = testContext.testedDirective;
       spyOn(component, 'savePins').and.callThrough();
       spyOn(component, 'updateSpaces');
@@ -209,7 +215,7 @@ describe('MySpacesComponent', (): void => {
       expect(component.updateSpaces).toHaveBeenCalled();
     });
 
-    it('should not adjust the pins if the space does not exist in the user\'s spaces', () => {
+    it("should not adjust the pins if the space does not exist in the user's spaces", () => {
       const component: MySpacesComponent = testContext.testedDirective;
       spyOn(component, 'savePins');
       component.handlePinChange(spaceMock3);
@@ -229,7 +235,7 @@ describe('MySpacesComponent', (): void => {
     it('should broadcast event when create space is clicked', (): void => {
       const component: MySpacesComponent = testContext.testedDirective;
       const mockBroadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
-      component.handleAction({ id: 'createSpace'} as Action);
+      component.handleAction({ id: 'createSpace' } as Action);
       expect(mockBroadcaster.broadcast).toHaveBeenCalledWith('showAddSpaceOverlay', true);
     });
   });
@@ -268,7 +274,7 @@ describe('MySpacesComponent', (): void => {
       expect(result).toBe(false);
     });
 
-    it('should simply return true if the filter id isn\'t name, because this is not supported functionality', (): void => {
+    it("should simply return true if the filter id isn't name, because this is not supported functionality", (): void => {
       const component: MySpacesComponent = testContext.testedDirective;
       const result: boolean = component.matchesFilter(spaceMock1, mockFilter3);
       expect(result).toBe(true);
@@ -335,7 +341,7 @@ describe('MySpacesComponent', (): void => {
   });
 
   describe('#initSpaces', (): void => {
-    it('should retrieve the user\'s space information and show all spaces', (): void => {
+    it("should retrieve the user's space information and show all spaces", (): void => {
       const component: MySpacesComponent = testContext.testedDirective;
       component.initSpaces();
       expect(component.spaces).toEqual([spaceMock1, spaceMock2]);
@@ -402,9 +408,9 @@ describe('MySpacesComponent', (): void => {
       const mockSortEvent: SortEvent = {
         field: {
           id: 'name',
-          sortType: 'mock-sortType'
+          sortType: 'mock-sortType',
         } as SortField,
-        isAscending: true
+        isAscending: true,
       };
       component.sortChange(mockSortEvent);
       const result: number = component.compare(spaceMock1, spaceMock1);
@@ -416,9 +422,9 @@ describe('MySpacesComponent', (): void => {
       const mockSortEvent: SortEvent = {
         field: {
           id: 'name',
-          sortType: 'mock-sortType'
+          sortType: 'mock-sortType',
         } as SortField,
-        isAscending: false
+        isAscending: false,
       };
       component.sortChange(mockSortEvent);
       const result: number = component.compare(spaceMock1, spaceMock1);
@@ -436,9 +442,9 @@ describe('MySpacesComponent', (): void => {
       const mockSortEvent: SortEvent = {
         field: {
           id: 'name',
-          sortType: 'mock-sortType'
+          sortType: 'mock-sortType',
         } as SortField,
-        isAscending: false
+        isAscending: false,
       };
       component.sortChange(mockSortEvent);
       const result: number = component.compare(spaceMock1, spaceMock2);
@@ -449,7 +455,7 @@ describe('MySpacesComponent', (): void => {
       const component: MySpacesComponent = testContext.testedDirective;
       let mockSortEvent: SortEvent = {
         field: {} as SortField,
-        isAscending: false
+        isAscending: false,
       };
       component.sortChange(mockSortEvent);
       const result: number = component.compare(spaceMock1, spaceMock2);
@@ -470,9 +476,9 @@ describe('MySpacesComponent', (): void => {
       const mockSortEvent: SortEvent = {
         field: {
           id: 'name',
-          sortType: 'mock-sortType'
+          sortType: 'mock-sortType',
         } as SortField,
-        isAscending: false
+        isAscending: false,
       };
       component.sortChange(mockSortEvent);
       component.sort();
@@ -481,12 +487,12 @@ describe('MySpacesComponent', (): void => {
   });
 
   describe('#sortChange', (): void => {
-    it ('should update the spaces', (): void => {
+    it('should update the spaces', (): void => {
       const component: MySpacesComponent = testContext.testedDirective;
       spyOn(component, 'updateSpaces');
       const mockSortEvent: SortEvent = {
         field: {} as SortField,
-        isAscending: false
+        isAscending: false,
       };
       component.sortChange(mockSortEvent);
       expect(component.updateSpaces).toHaveBeenCalled();
@@ -519,7 +525,6 @@ describe('MySpacesComponent', (): void => {
     });
   });
 
-
   describe('#savePins', (): void => {
     it('should initialize the contextInformation and pins if undefined', (): void => {
       const component: MySpacesComponent = testContext.testedDirective;
@@ -531,14 +536,18 @@ describe('MySpacesComponent', (): void => {
 
     it('should update the profile via GettingStartedService update()', (): void => {
       const component: MySpacesComponent = testContext.testedDirective;
-      const mockGettingStartedService: jasmine.SpyObj<GettingStartedService> = TestBed.get(GettingStartedService);
+      const mockGettingStartedService: jasmine.SpyObj<GettingStartedService> = TestBed.get(
+        GettingStartedService,
+      );
       component.savePins();
       expect(mockGettingStartedService.update).toHaveBeenCalled();
     });
 
     it('should log an error if there was a problem with subscribing to the update', (): void => {
       const component: MySpacesComponent = testContext.testedDirective;
-      const mockGettingStartedService: jasmine.SpyObj<GettingStartedService> = TestBed.get(GettingStartedService);
+      const mockGettingStartedService: jasmine.SpyObj<GettingStartedService> = TestBed.get(
+        GettingStartedService,
+      );
       const mockLogger: jasmine.SpyObj<Logger> = TestBed.get(Logger);
       mockGettingStartedService.update.and.returnValue(observableThrowError('error'));
       component.savePins();

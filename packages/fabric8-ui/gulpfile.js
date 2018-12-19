@@ -1,11 +1,11 @@
 const fs = require('fs');
 const path = require('path');
-const {dest, src, series} = require('gulp');
+const { dest, src, series } = require('gulp');
 const replace = require('gulp-replace');
 const rename = require('gulp-rename');
 const clean = require('gulp-clean');
 const readlineSync = require('readline-sync');
-const {execSync} = require('child_process');
+const { execSync } = require('child_process');
 
 const E2E_PROJECT_NAME = 'fabric8-test';
 const E2E_REPO = 'https://github.com/fabric8io/fabric8-test.git';
@@ -35,7 +35,7 @@ const featureLevels = ['beta', 'released'];
 function e2eClean() {
   if (fs.existsSync(E2E_PROJECT)) {
     console.log(`Deleting project ${E2E_PROJECT}`);
-    return src(E2E_PROJECT, {read: false}).pipe(clean({force: true}));
+    return src(E2E_PROJECT, { read: false }).pipe(clean({ force: true }));
   }
   return Promise.resolve();
 }
@@ -44,16 +44,16 @@ function e2eClean() {
 async function e2eFetch() {
   if (fs.existsSync(E2E_PROJECT)) {
     const packageLock = path.resolve(TEST_DIR, 'package-lock.json');
-    execSync('git checkout master', {stdio: 'inherit', cwd: E2E_PROJECT});
-    execSync(`git checkout HEAD -- ${packageLock}`, {stdio: 'inherit', cwd: E2E_PROJECT});
-    execSync(`git pull origin master`, {stdio: 'inherit', cwd: E2E_PROJECT});
+    execSync('git checkout master', { stdio: 'inherit', cwd: E2E_PROJECT });
+    execSync(`git checkout HEAD -- ${packageLock}`, { stdio: 'inherit', cwd: E2E_PROJECT });
+    execSync(`git pull origin master`, { stdio: 'inherit', cwd: E2E_PROJECT });
   } else {
-    execSync(`git clone ${E2E_REPO}`, {stdio: 'inherit', cwd: path.resolve(E2E_PROJECT, '../')});
+    execSync(`git clone ${E2E_REPO}`, { stdio: 'inherit', cwd: path.resolve(E2E_PROJECT, '../') });
   }
 }
 
 async function e2eInstall() {
-  execSync('npm install', {stdio: 'inherit', cwd: TEST_DIR});
+  execSync('npm install', { stdio: 'inherit', cwd: TEST_DIR });
 }
 
 function e2eEnsureConfigFile() {
@@ -66,10 +66,9 @@ function e2eEnsureConfigFile() {
   return Promise.resolve();
 }
 
-
 function promptTestSuite() {
   return testSuites[
-    readlineSync.keyInSelect(testSuites, 'Select a test suite: ', {cancel: false})
+    readlineSync.keyInSelect(testSuites, 'Select a test suite: ', { cancel: false })
   ];
 }
 
@@ -84,7 +83,7 @@ function promptOsioUrl(currentValue) {
   const urls = Object.keys(testUrls).map(
     (name) => `${name}${testUrls[name] ? ` (${testUrls[name]})` : ''}`,
   );
-  const choice = readlineSync.keyInSelect(urls, 'Select a test URL: ', {cancel});
+  const choice = readlineSync.keyInSelect(urls, 'Select a test URL: ', { cancel });
 
   // if custom, ask for input
   if (choice === 0) {
@@ -102,12 +101,16 @@ function promptInput(field) {
 }
 
 function promptResetEnvironment() {
-  return readlineSync.keyInYN(`Reset environment after tests (WARNING: this is desctructive to your account. If unsure choose NO): `);
+  return readlineSync.keyInYN(
+    `Reset environment after tests (WARNING: this is desctructive to your account. If unsure choose NO): `,
+  );
 }
 
 function promptFeatureLevel() {
   return featureLevels[
-    readlineSync.keyInSelect(featureLevels, 'Select your OSIO account feature level: ', {cancel: false})
+    readlineSync.keyInSelect(featureLevels, 'Select your OSIO account feature level: ', {
+      cancel: false,
+    })
   ];
 }
 
@@ -142,12 +145,12 @@ function e2eEditConfig() {
 }
 
 function e2eClearConfig() {
-  return src(CONFIG, {read: false, allowEmpty: true}).pipe(clean({force: true}))
+  return src(CONFIG, { read: false, allowEmpty: true }).pipe(clean({ force: true }));
 }
 
 async function e2eStart() {
   try {
-    execSync('npm start', {stdio: 'inherit', cwd: TEST_DIR});
+    execSync('npm start', { stdio: 'inherit', cwd: TEST_DIR });
   } catch (err) {
     // suppress as the test would have already logged to console
   }

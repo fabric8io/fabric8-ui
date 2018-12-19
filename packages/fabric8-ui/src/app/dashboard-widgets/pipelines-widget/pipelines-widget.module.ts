@@ -8,15 +8,9 @@ import { LoadingWidgetModule } from '../loading-widget/loading-widget.module';
 import { PipelinesWidgetComponent } from './pipelines-widget.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    LoadingWidgetModule,
-    RouterModule,
-    MomentModule
-  ],
+  imports: [CommonModule, FormsModule, LoadingWidgetModule, RouterModule, MomentModule],
   declarations: [PipelinesWidgetComponent],
   exports: [PipelinesWidgetComponent],
-  providers: [PipelinesService]
+  providers: [PipelinesService],
 })
-export class PipelinesWidgetModule { }
+export class PipelinesWidgetModule {}

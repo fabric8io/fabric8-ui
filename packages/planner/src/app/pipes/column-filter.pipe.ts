@@ -7,6 +7,6 @@ import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({ name: 'filterColumn', pure: true })
 export class FilterColumn implements PipeTransform {
   transform(columns: any[], param: string): any[] {
-    return columns.filter(col => col[param]);
+    return columns.filter((col) => col[param]);
   }
 }

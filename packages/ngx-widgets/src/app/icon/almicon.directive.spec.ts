@@ -9,10 +9,7 @@ describe('AlmIcon directive - ', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        AlmIconTest,
-        AlmIconDirective
-      ]
+      declarations: [AlmIconTest, AlmIconDirective],
     });
   });
 
@@ -23,38 +20,34 @@ describe('AlmIcon directive - ', () => {
   it('Should apply appropriate class and color', () => {
     TestBed.overrideComponent(AlmIconTest, {
       set: {
-        template: '<span almIcon iconType="new"></span>'
-      }
+        template: '<span almIcon iconType="new"></span>',
+      },
     })
-    .compileComponents()
-    .then(() => {
-      fixture = TestBed.createComponent(AlmIconTest);
-      comp = fixture.componentInstance;
-      fixture.detectChanges();
-      let compiled = fixture.debugElement.nativeElement
-        .querySelector('span');
-      expect(compiled.className).toBe('fa fa-star');
-      expect(compiled.style.color).toBe('rgb(88, 47, 192)');
-    });
+      .compileComponents()
+      .then(() => {
+        fixture = TestBed.createComponent(AlmIconTest);
+        comp = fixture.componentInstance;
+        fixture.detectChanges();
+        let compiled = fixture.debugElement.nativeElement.querySelector('span');
+        expect(compiled.className).toBe('fa fa-star');
+        expect(compiled.style.color).toBe('rgb(88, 47, 192)');
+      });
   });
 
   it('Should apply default class and color', () => {
     TestBed.overrideComponent(AlmIconTest, {
       set: {
-        template: '<span almIcon iconType="anything"></span>'
-      }
+        template: '<span almIcon iconType="anything"></span>',
+      },
     })
-    .compileComponents()
-    .then(() => {
-      fixture = TestBed.createComponent(AlmIconTest);
-      comp = fixture.componentInstance;
-      fixture.detectChanges();
-      let compiled = fixture.debugElement.nativeElement
-        .querySelector('span');
-      expect(compiled.className).toBe('fa fa-crosshairs');
-      expect(compiled.style.color).toBe('rgb(0, 0, 0)');
-    });
+      .compileComponents()
+      .then(() => {
+        fixture = TestBed.createComponent(AlmIconTest);
+        comp = fixture.componentInstance;
+        fixture.detectChanges();
+        let compiled = fixture.debugElement.nativeElement.querySelector('span');
+        expect(compiled.className).toBe('fa fa-crosshairs');
+        expect(compiled.style.color).toBe('rgb(0, 0, 0)');
+      });
   });
-
 });
-

@@ -1,11 +1,7 @@
-import {
-  browser, ElementArrayFinder,
-  ElementFinder, ExpectedConditions as EC
-} from 'protractor';
+import { browser, ElementArrayFinder, ElementFinder, ExpectedConditions as EC } from 'protractor';
 
 import * as mixins from '../mixins';
 import { DEFAULT_WAIT } from '../support';
-
 
 // todo move to a different module
 
@@ -13,8 +9,8 @@ type NumberComparerFn = (x: number) => boolean;
 type NumberComparer = number | NumberComparerFn;
 
 function makeNumberComparer(compare: NumberComparer): NumberComparerFn {
-  if (typeof(compare) == 'number') {
-    return (n: number) =>  n >= compare;
+  if (typeof compare == 'number') {
+    return (n: number) => n >= compare;
   }
   return compare;
 }
@@ -27,7 +23,7 @@ function makeNumberComparer(compare: NumberComparer): NumberComparerFn {
  */
 function untilCount(elements: ElementArrayFinder, expectation: NumberComparer) {
   let compare: NumberComparerFn = makeNumberComparer(expectation);
-  return  () => elements.count().then(compare);
+  return () => elements.count().then(compare);
 }
 
 export interface BaseElementInterface {
@@ -37,9 +33,7 @@ export interface BaseElementInterface {
   clickWhenReady(wait?: number): Promise<any>;
 }
 
-
 export class BaseElement extends ElementFinder implements BaseElementInterface {
-
   // add logging mixin
   name: string = '';
   log!: (action: string, ...msg: string[]) => void;
@@ -150,16 +144,13 @@ export class BaseElement extends ElementFinder implements BaseElementInterface {
 }
 
 export class BaseElementArray extends ElementArrayFinder {
-
   // Loggin Mixin
   log!: (action: string, ...msg: string[]) => void;
   debug!: (context: string, ...msg: string[]) => void;
 
   constructor(wrapped: ElementArrayFinder, name: string = 'unnamed') {
     // see: clone https://github.com/angular/protractor/blob/5.2.0/lib/element.ts#L106
-    super(
-      wrapped.browser_, wrapped.getWebElements,
-      wrapped.locator_, wrapped.actionResults_);
+    super(wrapped.browser_, wrapped.getWebElements, wrapped.locator_, wrapped.actionResults_);
     this.name = name;
   }
 
@@ -190,7 +181,6 @@ export class BaseElementArray extends ElementArrayFinder {
       }
     });
   }
-
 }
 
 export class Clickable extends BaseElement {

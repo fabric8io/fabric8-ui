@@ -7,24 +7,23 @@ import { AuthenticationService } from 'ngx-login-client';
 
 @Injectable()
 export class LoginService {
-
   static readonly REDIRECT_URL_KEY = 'redirectUrl';
   static readonly DEFAULT_URL = '/home';
   static readonly LOGIN_URL = '/';
   // URLs that the redirect should ignore
-  static readonly BANNED_REDIRECT_URLS = [ '/', '/public'];
+  static readonly BANNED_REDIRECT_URLS = ['/', '/public'];
 
   // switch to allow swapping between fabric8 auth and openshift authentication
   public useCustomAuth = false;
 
-  private authUrl: string;  // URL to web api
+  private authUrl: string; // URL to web api
 
   constructor(
     private router: Router,
     private localStorage: LocalStorageService,
     @Inject(WIT_API_URL) apiUrl: string,
     private broadcaster: Broadcaster,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
   ) {
     this.authUrl = apiUrl + 'login/authorize';
     this.broadcaster.on('authenticationError').subscribe(() => {
@@ -85,5 +84,4 @@ export class LoginService {
     this.localStorage.remove(LoginService.REDIRECT_URL_KEY);
     return res;
   }
-
 }

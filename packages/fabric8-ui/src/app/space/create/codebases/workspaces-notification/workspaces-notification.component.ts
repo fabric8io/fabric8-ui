@@ -1,15 +1,10 @@
-import {
-  Component,
-  DoCheck,
-  Input,
-  OnInit
-} from '@angular/core';
+import { Component, DoCheck, Input, OnInit } from '@angular/core';
 import { NotificationType } from 'patternfly-ng/notification';
 
 @Component({
   selector: 'f8-workspaces-notification',
   styleUrls: ['./workspaces-notification.component.less'],
-  templateUrl: './workspaces-notification.component.html'
+  templateUrl: './workspaces-notification.component.html',
 })
 export class WorkspacesNotificationComponent implements DoCheck, OnInit {
   /**
@@ -34,11 +29,9 @@ export class WorkspacesNotificationComponent implements DoCheck, OnInit {
 
   private _hide: boolean = false;
 
-  constructor() {
-  }
+  constructor() {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   ngDoCheck() {
     if (this.dismiss === true) {

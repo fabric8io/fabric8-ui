@@ -10,9 +10,9 @@ import { Subscription } from 'rxjs';
   selector: 'alm-overview-spaces',
   templateUrl: './overview-spaces.component.html',
   styleUrls: ['./overview-spaces.component.less'],
-  providers: [SpaceService]
+  providers: [SpaceService],
 })
-export class SpacesComponent implements OnDestroy, OnInit  {
+export class SpacesComponent implements OnDestroy, OnInit {
   context: Context;
   loggedInUser: User;
   subscriptions: Subscription[] = [];
@@ -22,22 +22,24 @@ export class SpacesComponent implements OnDestroy, OnInit  {
   private pageSize: number = 20;
 
   constructor(
-      private contexts: Contexts,
-      private logger: Logger,
-      private spaceService: SpaceService,
-      private broadcaster: Broadcaster,
-      private errorHandler: ErrorHandler
-  ) { }
+    private contexts: Contexts,
+    private logger: Logger,
+    private spaceService: SpaceService,
+    private broadcaster: Broadcaster,
+    private errorHandler: ErrorHandler,
+  ) {}
 
   ngOnInit(): void {
-    this.subscriptions.push(this.contexts.current.subscribe((ctx: Context) => {
-      this.context = ctx;
-      this.initSpaces();
-    }));
+    this.subscriptions.push(
+      this.contexts.current.subscribe((ctx: Context) => {
+        this.context = ctx;
+        this.initSpaces();
+      }),
+    );
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => {
+    this.subscriptions.forEach((sub) => {
       sub.unsubscribe();
     });
   }
@@ -45,18 +47,21 @@ export class SpacesComponent implements OnDestroy, OnInit  {
   initSpaces(): void {
     this.loading = true;
     if (this.context && this.context.user) {
-      this.subscriptions.push(this.spaceService
-        .getSpacesByUser(this.context.user.attributes.username, this.pageSize)
-        .subscribe(
-          (spaces: Space[]): void => {
-            this.spaces = spaces;
-            this.loading = false;
-          },
-          (error: any): void => {
-            this.logger.error(error);
-            this.errorHandler.handleError(error);
-            this.loading = false;
-          }));
+      this.subscriptions.push(
+        this.spaceService
+          .getSpacesByUser(this.context.user.attributes.username, this.pageSize)
+          .subscribe(
+            (spaces: Space[]): void => {
+              this.spaces = spaces;
+              this.loading = false;
+            },
+            (error: any): void => {
+              this.logger.error(error);
+              this.errorHandler.handleError(error);
+              this.loading = false;
+            },
+          ),
+      );
     } else {
       this.logger.error('Failed to retrieve list of spaces owned by user');
       this.loading = false;
@@ -65,14 +70,16 @@ export class SpacesComponent implements OnDestroy, OnInit  {
 
   fetchMoreSpaces(): void {
     if (this.context && this.context.user) {
-      this.subscriptions.push(this.spaceService.getMoreSpacesByUser()
-        .subscribe(
+      this.subscriptions.push(
+        this.spaceService.getMoreSpacesByUser().subscribe(
           (spaces: Space[]): void => {
             this.spaces = this.spaces.concat(spaces);
           },
           (err: any): void => {
             this.logger.error(err);
-          }));
+          },
+        ),
+      );
     } else {
       this.logger.error('Failed to retrieve list of spaces owned by user');
     }
@@ -81,5 +88,4 @@ export class SpacesComponent implements OnDestroy, OnInit  {
   showAddSpaceOverlay(): void {
     this.broadcaster.broadcast('showAddSpaceOverlay', true);
   }
-
 }

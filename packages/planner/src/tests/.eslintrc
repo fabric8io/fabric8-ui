@@ -1,0 +1,5 @@
+{
+  "rules": {
+    "no-buffer-constructor": "off"
+  }
+}

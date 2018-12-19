@@ -9,4 +9,3 @@ export interface IModalHost {
   open(options?: any);
   close();
 }
-

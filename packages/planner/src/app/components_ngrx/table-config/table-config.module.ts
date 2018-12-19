@@ -13,11 +13,10 @@ import { TableConfigComponent } from './table-config.component';
     ClickOutModule,
     FilterColumnModule,
     BsDropdownModule,
-    TooltipModule
+    TooltipModule,
   ],
   declarations: [TableConfigComponent],
   exports: [TableConfigComponent],
-  providers: [BsDropdownConfig, TooltipConfig]
+  providers: [BsDropdownConfig, TooltipConfig],
 })
-
 export class TableConfigModule {}

@@ -17,19 +17,17 @@ describe('InfotipEffects', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-
-      ],
+      imports: [],
       providers: [
         InfotipEffects,
         provideMockActions(() => actions),
         {
           provide: InfotipService,
-          useValue: jasmine.createSpyObj('infotipService', ['getInfotips'])
+          useValue: jasmine.createSpyObj('infotipService', ['getInfotips']),
         },
         ErrorHandler,
-        Notifications
-      ]
+        Notifications,
+      ],
     });
 
     effects = TestBed.get(InfotipEffects);
@@ -40,9 +38,10 @@ describe('InfotipEffects', () => {
   it('should fetch infotips', () => {
     let payload: InfotipState = {
       '6cff4ab8-c380-4aa9-9980-17b6f223d181': {
-        'term': 'alternate dependency',
-        'en': 'Dependencies recommended by OpenShift.io to replace restrictive licenses or usage outliers.'
-      }
+        term: 'alternate dependency',
+        en:
+          'Dependencies recommended by OpenShift.io to replace restrictive licenses or usage outliers.',
+      },
     };
     const action = new Actions.Get();
     const success = new Actions.GetSuccess(payload);

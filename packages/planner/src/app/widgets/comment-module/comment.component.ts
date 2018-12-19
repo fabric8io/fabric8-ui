@@ -1,7 +1,4 @@
-import {
-  Component, EventEmitter,
-  Input, Output
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { CommentUI } from './../../models/comment';
 import { WorkItemService } from './../../services/work-item.service';
@@ -9,7 +6,7 @@ import { WorkItemService } from './../../services/work-item.service';
 @Component({
   selector: 'fabric8-comment',
   templateUrl: './comment.component.html',
-  styleUrls: ['./comment.component.less']
+  styleUrls: ['./comment.component.less'],
 })
 export class CommentComponent {
   /**
@@ -21,27 +18,26 @@ export class CommentComponent {
    * Event to show preview in markdown
    */
   @Output('onShowPreview') readonly onShowPreview: EventEmitter<{
-    rawText: string, callBack: (x: string, y: string) => void
+    rawText: string;
+    callBack: (x: string, y: string) => void;
   }> = new EventEmitter();
 
   /**
    * This output is emitted when new comment is added
    */
-  @Output('onCreateRequest') readonly onCreateRequest: EventEmitter<CommentUI> =
-   new EventEmitter();
+  @Output('onCreateRequest') readonly onCreateRequest: EventEmitter<CommentUI> = new EventEmitter();
 
   /**
    * This is an output event for any update request
    * to the comment or it's children
    */
-  @Output('onUpdateRequest') readonly onUpdateRequest: EventEmitter<CommentUI> =
-   new EventEmitter();
+  @Output('onUpdateRequest') readonly onUpdateRequest: EventEmitter<CommentUI> = new EventEmitter();
 
   private replyActive: boolean = false;
 
   constructor() {}
 
-  showPreview(event: {rawText: string, callBack: (x: string, y: string) => void}): void {
+  showPreview(event: { rawText: string; callBack: (x: string, y: string) => void }): void {
     this.onShowPreview.emit(event);
   }
 
@@ -51,7 +47,7 @@ export class CommentComponent {
     callBack('', '');
     let newComment: CommentUI = {
       body: rawText,
-      parentId: this.comment.id
+      parentId: this.comment.id,
     } as CommentUI;
     this.onCreateRequest.emit(newComment);
   }
@@ -61,7 +57,7 @@ export class CommentComponent {
     let updatedComment: CommentUI = {
       body: rawText,
       id: comment.id,
-      selfLink: comment.selfLink
+      selfLink: comment.selfLink,
     } as CommentUI;
     this.onUpdateRequest.emit(updatedComment);
   }

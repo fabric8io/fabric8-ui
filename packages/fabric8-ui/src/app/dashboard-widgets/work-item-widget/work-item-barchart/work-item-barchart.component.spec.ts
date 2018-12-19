@@ -1,8 +1,4 @@
-import {
-  async,
-  ComponentFixture,
-  TestBed
-} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -18,21 +14,17 @@ describe('WorkItemBarchartComponent', () => {
   let chartData: WorkItemBarchartData;
 
   beforeEach(() => {
-    chartConfig  = {
+    chartConfig = {
       chartId: 'testChart',
       size: {
         height: 275,
-        width: 130
-      }
+        width: 130,
+      },
     };
     chartData = {
       colors: {},
-      yData: [
-        ['Open', 1],
-        ['In Progress', 1],
-        ['Resolved', 2]
-      ],
-      yGroups: ['Open', 'In Progress', 'Resolved']
+      yData: [['Open', 1], ['In Progress', 1], ['Resolved', 2]],
+      yGroups: ['Open', 'In Progress', 'Resolved'],
     };
   });
 
@@ -40,7 +32,7 @@ describe('WorkItemBarchartComponent', () => {
     TestBed.configureTestingModule({
       imports: [BrowserAnimationsModule, FormsModule],
       declarations: [WorkItemBarchartComponent],
-      providers: []
+      providers: [],
     })
       .compileComponents()
       .then(() => {
@@ -130,7 +122,7 @@ describe('WorkItemBarchartComponent', () => {
     let tooltip = {
       contents: (d: any) => {
         tooltipCalled = true;
-      }
+      },
     };
 
     chartConfig.tooltip = tooltip;

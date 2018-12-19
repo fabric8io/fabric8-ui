@@ -1,10 +1,4 @@
-import {
-  Component,
-  DoCheck,
-  Input,
-  OnInit,
-  ViewEncapsulation
-} from '@angular/core';
+import { Component, DoCheck, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { isEmpty } from 'lodash';
 import { Build } from '../../../../a-runtime-console/kubernetes/model/build.model';
 import { PipelineStage } from '../../../../a-runtime-console/kubernetes/model/pipelinestage.model';
@@ -17,7 +11,7 @@ export class ExtPipelineStage extends PipelineStage {
   encapsulation: ViewEncapsulation.None,
   selector: 'fabric8-applications-list-item-details',
   templateUrl: './applications-list-item-details.component.html',
-  styleUrls: ['./applications-list-item-details.component.less']
+  styleUrls: ['./applications-list-item-details.component.less'],
 })
 export class ApplicationsListItemDetailsComponent implements DoCheck, OnInit {
   @Input() build: Build;
@@ -25,8 +19,7 @@ export class ApplicationsListItemDetailsComponent implements DoCheck, OnInit {
   private _pipelineStages: ExtPipelineStage[];
   private prevStatusPhase: string;
 
-  constructor() {
-  }
+  constructor() {}
 
   ngOnInit(): void {
     this.initStages();
@@ -52,11 +45,15 @@ export class ApplicationsListItemDetailsComponent implements DoCheck, OnInit {
       return;
     }
     if (this.build.pipelineStages.length - 2 > 0) {
-      let prevStage = this.build.pipelineStages[this.build.pipelineStages.length - 2] as ExtPipelineStage;
+      let prevStage = this.build.pipelineStages[
+        this.build.pipelineStages.length - 2
+      ] as ExtPipelineStage;
       this._pipelineStages.push(prevStage);
     }
     if (this.build.pipelineStages.length - 1 >= 0) {
-      let curStage = this.build.pipelineStages[this.build.pipelineStages.length - 1] as ExtPipelineStage;
+      let curStage = this.build.pipelineStages[
+        this.build.pipelineStages.length - 1
+      ] as ExtPipelineStage;
       curStage.currentStage = true;
       this._pipelineStages.push(curStage);
     }

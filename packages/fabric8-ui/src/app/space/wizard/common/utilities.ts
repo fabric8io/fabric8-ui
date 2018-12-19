@@ -3,11 +3,11 @@ export function formatJson(obj: any, indent: number = 0): string {
   let s: string = '   ';
   let ar = {
     start: ' [ ',
-    end: ' ] '
+    end: ' ] ',
   };
   let ob = {
     start: ' { ',
-    end: ' } '
+    end: ' } ',
   };
 
   s = s.repeat(indent);
@@ -16,19 +16,27 @@ export function formatJson(obj: any, indent: number = 0): string {
     let count = 0;
     for (let item of obj) {
       count++;
-      t = `${t}${s}\n${s}${ob.start}${formatJson(item, indent + 1)}\n${s}${ob.end}${count < obj.length ? ',' : ''}`;
+      t = `${t}${s}\n${s}${ob.start}${formatJson(item, indent + 1)}\n${s}${ob.end}${
+        count < obj.length ? ',' : ''
+      }`;
     }
   } else {
     for (let p of Object.getOwnPropertyNames(obj)) {
       let tmp = obj[p];
       if (Array.isArray(tmp)) {
-        t = `${t}\n${s}<span class="property-name" >${p}</span>${ar.start}${formatJson(tmp, indent + 1)}${ar.end}`;
-      } else if (typeof (tmp) !== 'function') {
-        if (typeof (tmp) === 'object') {
+        t = `${t}\n${s}<span class="property-name" >${p}</span>${ar.start}${formatJson(
+          tmp,
+          indent + 1,
+        )}${ar.end}`;
+      } else if (typeof tmp !== 'function') {
+        if (typeof tmp === 'object') {
           t = `${t}\n${s}<span class="property-name" >${p}</span>${formatJson(tmp, indent + 1)}`;
         } else {
           let propertyValue = `<span class="property-value" >${tmp}</span>`;
-          if (propertyValue.toLowerCase().includes('exception') && !propertyValue.toLowerCase().includes('property-value-error')) {
+          if (
+            propertyValue.toLowerCase().includes('exception') &&
+            !propertyValue.toLowerCase().includes('property-value-error')
+          ) {
             propertyValue = `<span class="property-value property-value-error" >${obj[p]}</span>`;
           }
           t = `${t}\n${s}<span class="property-name" >${p}</span>${propertyValue}`;
@@ -43,7 +51,6 @@ export function clone<T>(value: any): T {
   return JSON.parse(JSON.stringify(value || {})) as T;
 }
 
-
 export function getPropertyValue<T>(obj1: T, dataToRetrieve: string) {
   return dataToRetrieve
     .split('.') // split string based on `.`
@@ -54,7 +61,9 @@ export function getPropertyValue<T>(obj1: T, dataToRetrieve: string) {
 
 export function mergeArraysDistinctByKey<T>(destination: T[], origin: T[], key: string) {
   for (let itemToAddOrReplace of origin) {
-    let requestFieldIndex = destination.findIndex((f) => getPropertyValue(f, key) === getPropertyValue(itemToAddOrReplace, key));
+    let requestFieldIndex = destination.findIndex(
+      (f) => getPropertyValue(f, key) === getPropertyValue(itemToAddOrReplace, key),
+    );
     if (requestFieldIndex != -1) {
       // if already there replace it
       destination[requestFieldIndex] = itemToAddOrReplace;
