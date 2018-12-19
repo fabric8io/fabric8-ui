@@ -6,10 +6,8 @@ import { NgModule } from '@angular/core';
 import { CollapseModule } from 'ngx-bootstrap';
 import { TooltipModule } from 'ngx-bootstrap';
 import { ModalModule } from 'ngx-modal';
-import { CustomQueryModule } from
-  './../custom-query-panel/custom-query-panel.module';
-import { GroupTypesModule } from
-  './../group-types-panel/group-types-panel.module';
+import { CustomQueryModule } from './../custom-query-panel/custom-query-panel.module';
+import { GroupTypesModule } from './../group-types-panel/group-types-panel.module';
 import { SidepanelComponent } from './side-panel.component';
 
 // ngrx stuff
@@ -19,7 +17,7 @@ import { IterationEffects } from './../../effects/iteration.effects';
 import { iterationReducer } from './../../reducers/iteration-reducer';
 import {
   initialState as initialIterationState,
-  IterationState
+  IterationState,
 } from './../../states/iteration.state';
 
 @NgModule({
@@ -30,11 +28,9 @@ import {
     GroupTypesModule,
     ModalModule,
     RouterModule,
-    TooltipModule
+    TooltipModule,
   ],
-  declarations: [
-    SidepanelComponent
-  ],
-  exports: [SidepanelComponent]
+  declarations: [SidepanelComponent],
+  exports: [SidepanelComponent],
 })
-export class SidepanelModule { }
+export class SidepanelModule {}

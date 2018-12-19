@@ -8,7 +8,11 @@ import { WatcherFactory } from './watcher-factory.service';
 
 @Injectable()
 export class EventService extends NamespacedResourceService<Event, Events> {
-  constructor(@Inject(KUBERNETES_RESTANGULAR) kubernetesRestangular: Restangular, namespaceScope: NamespaceScope, watcherFactory: WatcherFactory) {
+  constructor(
+    @Inject(KUBERNETES_RESTANGULAR) kubernetesRestangular: Restangular,
+    namespaceScope: NamespaceScope,
+    watcherFactory: WatcherFactory,
+  ) {
     super(kubernetesRestangular, namespaceScope, '/events', watcherFactory);
   }
 }

@@ -2,15 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { LocalStorageService } from 'angular-2-local-storage';
-import {
-  Broadcaster,
-  Notifications
-} from 'ngx-base';
-import {
-  AUTH_API_URL,
-  AuthenticationService,
-  UserService
-} from 'ngx-login-client';
+import { Broadcaster, Notifications } from 'ngx-base';
+import { AUTH_API_URL, AuthenticationService, UserService } from 'ngx-login-client';
 import { never as observableNever, of } from 'rxjs';
 import { createMock } from 'testing/mock';
 import { LoginService } from './login.service';
@@ -19,9 +12,7 @@ import { WindowService } from './window.service';
 describe('LoginService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule.withRoutes([])
-      ],
+      imports: [RouterTestingModule.withRoutes([])],
       providers: [
         LoginService,
         {
@@ -30,7 +21,7 @@ describe('LoginService', () => {
             const windowService: jasmine.SpyObj<WindowService> = createMock(WindowService);
             windowService.getNativeWindow.and.returnValue({});
             return windowService;
-          }
+          },
         },
         { provide: LocalStorageService, useValue: createMock(LocalStorageService) },
         { provide: AUTH_API_URL, useValue: 'http://example.com' },
@@ -40,12 +31,12 @@ describe('LoginService', () => {
             const broadcaster: jasmine.SpyObj<Broadcaster> = createMock(Broadcaster);
             broadcaster.on.and.returnValue(observableNever());
             return broadcaster;
-          }
+          },
         },
         { provide: AuthenticationService, useValue: createMock(AuthenticationService) },
         { provide: Notifications, useValue: createMock(Notifications) },
-        { provide: UserService, useValue: createMock(UserService) }
-      ]
+        { provide: UserService, useValue: createMock(UserService) },
+      ],
     });
   });
 
@@ -55,11 +46,13 @@ describe('LoginService', () => {
         const windowService: jasmine.SpyObj<WindowService> = TestBed.get(WindowService);
         windowService.getNativeWindow.and.returnValue({
           location: {
-            search: '?error=some_error&token_json=some_token'
-          }
+            search: '?error=some_error&token_json=some_token',
+          },
         });
 
-        const authService: jasmine.SpyObj<AuthenticationService> = TestBed.get(AuthenticationService);
+        const authService: jasmine.SpyObj<AuthenticationService> = TestBed.get(
+          AuthenticationService,
+        );
         authService.logIn.and.stub();
         authService.getOpenShiftToken.and.returnValue(of('some_token'));
 
@@ -86,11 +79,13 @@ describe('LoginService', () => {
         const windowService: jasmine.SpyObj<WindowService> = TestBed.get(WindowService);
         windowService.getNativeWindow.and.returnValue({
           location: {
-            search: '?error=some_error'
-          }
+            search: '?error=some_error',
+          },
         });
 
-        const authService: jasmine.SpyObj<AuthenticationService> = TestBed.get(AuthenticationService);
+        const authService: jasmine.SpyObj<AuthenticationService> = TestBed.get(
+          AuthenticationService,
+        );
         authService.isLoggedIn.and.returnValue(true);
         authService.onLogIn.and.stub();
         authService.getOpenShiftToken.and.returnValue(of('mock-openshift-token'));

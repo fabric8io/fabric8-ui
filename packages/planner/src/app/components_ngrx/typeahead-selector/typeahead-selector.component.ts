@@ -1,14 +1,16 @@
 import {
-  ChangeDetectionStrategy, Component,
-  EventEmitter, Input, OnInit,
-  Output, ViewChild
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
 } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { combineLatest, of as ObservableOf } from 'rxjs';
 import { catchError, filter, map, switchMap, tap } from 'rxjs/operators';
-import {
-  SelectDropdownComponent
-} from './../../widgets/select-dropdown/select-dropdown.component';
+import { SelectDropdownComponent } from './../../widgets/select-dropdown/select-dropdown.component';
 
 export type TypeaheadDropdownItem = {
   key: string;
@@ -16,14 +18,13 @@ export type TypeaheadDropdownItem = {
   selected: boolean;
 };
 
-export type TypeaheadDatasourceFunction =
-  (string) => Observable<TypeaheadDropdownItem[]>;
+export type TypeaheadDatasourceFunction = (string) => Observable<TypeaheadDropdownItem[]>;
 
 @Component({
   selector: 'f8-typeahead-selector',
   templateUrl: './typeahead-selector.component.html',
   styleUrls: ['./typeahead-selector.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TypeaheadSelectorComponent implements OnInit {
   @ViewChild('dropdown') dropdownRef: SelectDropdownComponent;
@@ -62,10 +63,12 @@ export class TypeaheadSelectorComponent implements OnInit {
   @Output() readonly onCloseSelector: EventEmitter<any[]> = new EventEmitter();
 
   private searchTermObs: BehaviorSubject<string> = new BehaviorSubject<string>('');
-  private selectedItemsBs: BehaviorSubject<TypeaheadDropdownItem[]> =
-    new BehaviorSubject<TypeaheadDropdownItem[]>([]);
-  private selectedItemsObs = this.selectedItemsBs.asObservable()
-    .pipe(filter(i => Array.isArray(i)));
+  private selectedItemsBs: BehaviorSubject<TypeaheadDropdownItem[]> = new BehaviorSubject<
+    TypeaheadDropdownItem[]
+  >([]);
+  private selectedItemsObs = this.selectedItemsBs
+    .asObservable()
+    .pipe(filter((i) => Array.isArray(i)));
 
   // this is only used for storing the data temporarily
   // not for visualization
@@ -79,56 +82,52 @@ export class TypeaheadSelectorComponent implements OnInit {
   searching: boolean = false;
   isOpen: boolean = false;
 
-  menuItems: Observable<TypeaheadDropdownItem[]> =
-    this.searchTermObs.asObservable()
-    .pipe(
-      tap(term => this.searchValue = term),
-      switchMap((term) => {
-        if (typeof(this.dataSource) === 'function'
-          && term !== '') {
-          return combineLatest(
-              this.dataSource(term),
-              this.selectedItemsObs
-            )
-            .pipe(
-              map(([items, selectedItems]) => this.updateSelection(items, selectedItems)),
-              tap(v => this.searching = false),
-              catchError(err => {
-                this.searching = false;
-                return ObservableOf([]);
-              })
-            );
-        } else {
-          return ObservableOf([]);
-        }
-      })
-    );
+  menuItems: Observable<TypeaheadDropdownItem[]> = this.searchTermObs.asObservable().pipe(
+    tap((term) => (this.searchValue = term)),
+    switchMap((term) => {
+      if (typeof this.dataSource === 'function' && term !== '') {
+        return combineLatest(this.dataSource(term), this.selectedItemsObs).pipe(
+          map(([items, selectedItems]) => this.updateSelection(items, selectedItems)),
+          tap((v) => (this.searching = false)),
+          catchError((err) => {
+            this.searching = false;
+            return ObservableOf([]);
+          }),
+        );
+      } else {
+        return ObservableOf([]);
+      }
+    }),
+  );
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   updateSelection(
-    items: TypeaheadDropdownItem[], selectedItems: TypeaheadDropdownItem[]
+    items: TypeaheadDropdownItem[],
+    selectedItems: TypeaheadDropdownItem[],
   ): TypeaheadDropdownItem[] {
-    const selectedItemsIds = selectedItems.map(i => i.key);
-    items.forEach(item => {
+    const selectedItemsIds = selectedItems.map((i) => i.key);
+    items.forEach((item) => {
       item.selected = selectedItemsIds.indexOf(item.key) > -1;
     });
     return items;
   }
 
   onSelect(event: TypeaheadDropdownItem) {
-    if (event.key === null) { return; }
+    if (event.key === null) {
+      return;
+    }
     if (!this.allowMultiSelect) {
       // empty the array and put the item clicked
       this._selectedItems = [event];
     } else {
       // find the index of the clicked item in the selected list
-      const index = this._selectedItems.findIndex(i => i.key === event.key);
+      const index = this._selectedItems.findIndex((i) => i.key === event.key);
       // if the item clickd is already there then remove it
       if (index > -1) {
         this._selectedItems.splice(index, 1);
-      } else { // enter the item in the array
+      } else {
+        // enter the item in the array
         this._selectedItems.push(event);
       }
     }

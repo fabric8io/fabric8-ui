@@ -10,12 +10,9 @@ import { PipelinesService } from '../../space/create/pipelines/services/pipeline
   selector: 'fabric8-recent-pipelines-widget',
   templateUrl: './recent-pipelines-widget.component.html',
   styleUrls: ['./recent-pipelines-widget.component.less'],
-  providers: [
-    PipelinesService
-  ]
+  providers: [PipelinesService],
 })
 export class RecentPipelinesWidgetComponent implements OnInit, OnDestroy {
-
   contextPath: string;
   buildConfigs: BuildConfigs;
   buildConfigsCount: number;
@@ -23,24 +20,24 @@ export class RecentPipelinesWidgetComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
-  constructor(
-    private pipelinesService: PipelinesService,
-    private contextService: ContextService
-  ) { }
+  constructor(private pipelinesService: PipelinesService, private contextService: ContextService) {}
 
   ngOnInit() {
     // these values changing asynchronously triggers changes in the DOM;
     // force Angular Change Detection via setTimeout encapsulation
-    this.subscriptions.push(this.pipelinesService.getRecentPipelines().pipe(share()).subscribe(
-      (configs: BuildConfigs) => {
-        this.loading = true;
-        setTimeout(() => {
-          this.buildConfigsCount = configs.length;
-          this.buildConfigs = configs;
-          this.loading = false;
-        });
-      }
-    ));
+    this.subscriptions.push(
+      this.pipelinesService
+        .getRecentPipelines()
+        .pipe(share())
+        .subscribe((configs: BuildConfigs) => {
+          this.loading = true;
+          setTimeout(() => {
+            this.buildConfigsCount = configs.length;
+            this.buildConfigs = configs;
+            this.loading = false;
+          });
+        }),
+    );
     this.contextPath = this.contextService.currentUser;
   }
 

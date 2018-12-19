@@ -5,27 +5,34 @@ import {
   SafeResourceUrl,
   SafeScript,
   SafeStyle,
-  SafeUrl
+  SafeUrl,
 } from '@angular/platform-browser';
 import markdownIt from 'markdown-it';
 const markdown = new markdownIt();
 
 @Pipe({
-  name: 'safe'
+  name: 'safe',
 })
 export class SafePipe implements PipeTransform {
+  constructor(protected sanitizer: DomSanitizer) {}
 
- constructor(protected sanitizer: DomSanitizer) {}
-
- public transform(value: any, type: string):
-  SafeHtml | SafeStyle | SafeScript | SafeUrl | SafeResourceUrl {
+  public transform(
+    value: any,
+    type: string,
+  ): SafeHtml | SafeStyle | SafeScript | SafeUrl | SafeResourceUrl {
     switch (type) {
-      case 'html': return this.sanitizer.bypassSecurityTrustHtml(value);
-      case 'style': return this.sanitizer.bypassSecurityTrustStyle(value);
-      case 'script': return this.sanitizer.bypassSecurityTrustScript(value);
-      case 'url': return this.sanitizer.bypassSecurityTrustUrl(value);
-      case 'resourceUrl': return this.sanitizer.bypassSecurityTrustResourceUrl(value);
-      default: throw new Error(`Invalid safe type specified: ${type}`);
+      case 'html':
+        return this.sanitizer.bypassSecurityTrustHtml(value);
+      case 'style':
+        return this.sanitizer.bypassSecurityTrustStyle(value);
+      case 'script':
+        return this.sanitizer.bypassSecurityTrustScript(value);
+      case 'url':
+        return this.sanitizer.bypassSecurityTrustUrl(value);
+      case 'resourceUrl':
+        return this.sanitizer.bypassSecurityTrustResourceUrl(value);
+      default:
+        throw new Error(`Invalid safe type specified: ${type}`);
     }
   }
 }
@@ -34,11 +41,11 @@ export class SafePipe implements PipeTransform {
   encapsulation: ViewEncapsulation.None,
   selector: 'markdown-example',
   styleUrls: ['./markdown-example.component.less'],
-  templateUrl: './markdown-example.component.html'
+  templateUrl: './markdown-example.component.html',
 })
 export class MarkdownExampleComponent {
-
-    private renderedText: string = '<h1>hello, markdown!\</h1><ul>' +
+  private renderedText: string =
+    '<h1>hello, markdown!</h1><ul>' +
     // tslint:disable-next-line:max-line-length
     '<li><input class="markdown-checkbox" type="checkbox" data-checkbox-index="0"></input> Item 0</li>' +
     // tslint:disable-next-line:max-line-length
@@ -74,18 +81,30 @@ export class MarkdownExampleComponent {
           let replaceStr;
           if (m[0] === '[]' || m[0] === '[ ]') {
             // tslint:disable-next-line:max-line-length
-            replaceStr = '<input class="markdown-checkbox" type="checkbox" data-checkbox-index="' + matchIndex + '"></input>';
+            replaceStr =
+              '<input class="markdown-checkbox" type="checkbox" data-checkbox-index="' +
+              matchIndex +
+              '"></input>';
           } else {
             // tslint:disable-next-line:max-line-length
-            replaceStr = '<input class="markdown-checkbox" type="checkbox" checked="" data-checkbox-index="' + matchIndex + '"></input>';
+            replaceStr =
+              '<input class="markdown-checkbox" type="checkbox" checked="" data-checkbox-index="' +
+              matchIndex +
+              '"></input>';
           }
           // tslint:disable-next-line:max-line-length
-          text = text.substring(0, matchStartIndex) + replaceStr + text.substring(matchEndIndex, text.length);
+          text =
+            text.substring(0, matchStartIndex) +
+            replaceStr +
+            text.substring(matchEndIndex, text.length);
         }
         matchIndex++;
       }
       // tslint:disable-next-line:max-line-length
-      console.log('MarkdownExampleComponent: Rendering on service side completed, sending to component: ' + text);
+      console.log(
+        'MarkdownExampleComponent: Rendering on service side completed, sending to component: ' +
+          text,
+      );
       callBack(rawText, this.sanitizer.bypassSecurityTrustHtml(text));
     }, 2000);
   }
@@ -101,5 +120,4 @@ export class MarkdownExampleComponent {
   closeClicked() {
     console.log('Close clicked event works');
   }
-
 }

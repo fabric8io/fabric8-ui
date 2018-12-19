@@ -2,7 +2,6 @@ import { ElementFinder, ExpectedConditions as until } from 'protractor';
 import * as ui from '../ui';
 import { BaseElement } from './base.element';
 
-
 export class ModalDialog extends BaseElement {
   content = new BaseElement(this.$('.modal-content'));
   // optional

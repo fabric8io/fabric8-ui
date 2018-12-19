@@ -10,15 +10,15 @@ import { CommentComponent } from './comment.component';
 import { UserAvatarModule } from './../../widgets/user-avatar/user-avatar.module';
 
 @NgModule({
-  declarations: [ CommentComponent],
+  declarations: [CommentComponent],
   imports: [
     CommonModule,
     SafePipeModule,
     MarkdownModule,
     TooltipModule,
     WidgetsModule,
-    UserAvatarModule
+    UserAvatarModule,
   ],
-  exports: [CommentComponent]
+  exports: [CommentComponent],
 })
-export class CommentModule { }
+export class CommentModule {}

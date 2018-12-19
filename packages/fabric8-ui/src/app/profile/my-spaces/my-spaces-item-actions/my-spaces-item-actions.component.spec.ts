@@ -5,10 +5,7 @@ import { By } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LocalStorageService } from 'angular-2-local-storage';
 import { Broadcaster, Notifications } from 'ngx-base';
-import {
-  Contexts,
-  SpaceService
-} from 'ngx-fabric8-wit';
+import { Contexts, SpaceService } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
 import { of as observableOf } from 'rxjs';
 import { MenusService } from '../../../layout/header/menus.service';
@@ -52,38 +49,48 @@ describe('My Spaces Item Actions Component', () => {
       providers: [
         ContextService,
         {
-          provide: Contexts, useClass: ContextsMock
+          provide: Contexts,
+          useClass: ContextsMock,
         },
         {
-          provide: Router, useValue: mockRouter
+          provide: Router,
+          useValue: mockRouter,
         },
         {
-          provide: Broadcaster, useValue: mockBroadcaster
+          provide: Broadcaster,
+          useValue: mockBroadcaster,
         },
         {
-          provide: MenusService, useValue: mockMenu
+          provide: MenusService,
+          useValue: mockMenu,
         },
         {
-          provide: SpaceService, useValue: mockSpaceService
+          provide: SpaceService,
+          useValue: mockSpaceService,
         },
         {
-          provide: UserService, useValue: mockUserService
+          provide: UserService,
+          useValue: mockUserService,
         },
         {
-          provide: Notifications, useValue: mockNotifications
+          provide: Notifications,
+          useValue: mockNotifications,
         },
         {
-          provide: ActivatedRoute, useValue: mockRoute
+          provide: ActivatedRoute,
+          useValue: mockRoute,
         },
         {
-          provide: ProfileService, useValue: mockProfileService
+          provide: ProfileService,
+          useValue: mockProfileService,
         },
         {
-          provide: LocalStorageService, useValue: mockLocalStorage
-        }
+          provide: LocalStorageService,
+          useValue: mockLocalStorage,
+        },
       ],
       // Tells the compiler not to error on unknown elements and attributes
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     });
 
     space = {
@@ -92,7 +99,7 @@ describe('My Spaces Item Actions Component', () => {
         description: 'This is my space',
         name: 'test1',
         'updated-at': '2017-12-07T21:25:59.811024Z',
-        version: 1
+        version: 1,
       },
       id: '3eeaa158-a68c-4ff3-9b0d-23ee3368d8b3',
       relationalData: {
@@ -112,11 +119,11 @@ describe('My Spaces Item Actions Component', () => {
             'updated-at': '2017-12-07T21:25:59.811024Z',
             url: '',
             userID: 'c21f2ece-21f0-4e7f-b9ab-b49b8dd0d752',
-            username: 'name@redhat.com'
+            username: 'name@redhat.com',
           },
-          id: 'c21f2ece-21f0-4e7f-b9ab-b49b8dd0d752'
-        }
-      }
+          id: 'c21f2ece-21f0-4e7f-b9ab-b49b8dd0d752',
+        },
+      },
     };
     fixture = TestBed.createComponent(MySpacesItemActionsComponent);
   });

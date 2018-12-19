@@ -5,8 +5,8 @@ import { ModalModule } from 'ngx-bootstrap';
 import { CreateAreaDialogComponent } from './create-area-dialog.component';
 
 @NgModule({
-  imports:      [ CommonModule, ModalModule, FormsModule ],
-  declarations: [ CreateAreaDialogComponent ],
-  exports:      [ CreateAreaDialogComponent, ModalModule ]
+  imports: [CommonModule, ModalModule, FormsModule],
+  declarations: [CreateAreaDialogComponent],
+  exports: [CreateAreaDialogComponent, ModalModule],
 })
-export class CreateAreaDialogModule { }
+export class CreateAreaDialogModule {}

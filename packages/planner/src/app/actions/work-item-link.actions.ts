@@ -32,15 +32,10 @@ export class Get implements Action {
 
 export class Delete implements Action {
   payload: {
-    wiLink: WorkItemLinkUI,
-    workItemId: string
+    wiLink: WorkItemLinkUI;
+    workItemId: string;
   };
-  constructor(
-    payload: {
-      wiLink: WorkItemLinkUI,
-      workItemId: string
-    }
-  ) {
+  constructor(payload: { wiLink: WorkItemLinkUI; workItemId: string }) {
     this.payload = payload;
   }
   readonly type = DELETE;
@@ -90,8 +85,8 @@ export class TrivializeAll implements Action {
   readonly type = TRIVIALIZE_ALL;
 }
 
-export type All
-  = Add
+export type All =
+  | Add
   | AddSuccess
   | AddError
   | Get

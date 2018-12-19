@@ -6,20 +6,8 @@ import { UserAvatarModule } from './../../widgets/user-avatar/user-avatar.module
 import { AssigneeSelectorComponent } from './assignee-selector.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    SelectDropdownModule,
-    WidgetsModule,
-    UserAvatarModule
-  ],
-  declarations: [
-    AssigneeSelectorComponent
-  ],
-  exports: [
-    AssigneeSelectorComponent
-  ]
+  imports: [CommonModule, SelectDropdownModule, WidgetsModule, UserAvatarModule],
+  declarations: [AssigneeSelectorComponent],
+  exports: [AssigneeSelectorComponent],
 })
-
-export class AssigneeSelectorModule {
-
-}
+export class AssigneeSelectorModule {}

@@ -4,7 +4,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class StageTimePipe implements PipeTransform {
   transform(value: string): any {
     if (typeof value === 'number') {
-      let seconds: number = Math.floor(value as number / 1000);
+      let seconds: number = Math.floor((value as number) / 1000);
       let minutes = 0;
       if (seconds < 0) {
         seconds = 0;

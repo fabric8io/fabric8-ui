@@ -8,5 +8,5 @@ export enum PodPhase {
   PENDING = 'Pending',
   SUCCEEDED = 'Succeeded',
   TERMINATING = 'Terminating',
-  UNKNOWN = 'Unknown'
+  UNKNOWN = 'Unknown',
 }

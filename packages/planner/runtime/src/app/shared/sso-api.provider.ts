@@ -7,5 +7,5 @@ let ssoApiUrlFactory = () => {
 
 export let ssoApiUrlProvider = {
   provide: SSO_API_URL,
-  useFactory: ssoApiUrlFactory
+  useFactory: ssoApiUrlFactory,
 };

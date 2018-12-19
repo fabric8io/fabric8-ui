@@ -12,9 +12,9 @@ import { MySpacesSearchSpacesDialog } from './my-spaces-search-spaces-dialog.com
     FormsModule,
     InfiniteScrollModule,
     ModalModule,
-    MySpacesSearchSpacesDialogSpaceItemModule
+    MySpacesSearchSpacesDialogSpaceItemModule,
   ],
-  declarations: [ MySpacesSearchSpacesDialog ],
-  exports: [ MySpacesSearchSpacesDialog ]
+  declarations: [MySpacesSearchSpacesDialog],
+  exports: [MySpacesSearchSpacesDialog],
 })
-export class MySpacesSearchSpacesDialogModule { }
+export class MySpacesSearchSpacesDialogModule {}

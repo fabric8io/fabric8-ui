@@ -13,17 +13,10 @@ describe('PipelinesListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule.withRoutes([]),
-        MomentModule
-      ],
-      declarations: [
-        PipelinesListComponent
-      ],
-      providers: [
-        { provide: BuildConfigService, useVale: mockBuildConfigService }
-      ],
-      schemas: [ NO_ERRORS_SCHEMA ]
+      imports: [RouterTestingModule.withRoutes([]), MomentModule],
+      declarations: [PipelinesListComponent],
+      providers: [{ provide: BuildConfigService, useVale: mockBuildConfigService }],
+      schemas: [NO_ERRORS_SCHEMA],
     });
   }));
 

@@ -4,25 +4,25 @@ import { KubernetesResource } from './kubernetesresource.model';
 import { pathJoin } from './utils';
 
 export var resourceKindToCollectionName = {
-  'Deployment': 'deployments',
-  'DeploymentConfig': 'deploymentconfigs',
-  'Build': 'builds',
-  'BuildConfig': 'buildsconfigs',
-  'ConfigMap': 'configmaps',
-  'Event': 'events',
-  'Namespace': 'spaces',
-  'Pod': 'pods',
-  'Project': 'projects',
-  'ReplicationController': 'replicationcontrollers',
-  'ReplicaSet': 'replicasets',
-  'Route': 'routes',
-  'Service': 'services'
+  Deployment: 'deployments',
+  DeploymentConfig: 'deploymentconfigs',
+  Build: 'builds',
+  BuildConfig: 'buildsconfigs',
+  ConfigMap: 'configmaps',
+  Event: 'events',
+  Namespace: 'spaces',
+  Pod: 'pods',
+  Project: 'projects',
+  ReplicationController: 'replicationcontrollers',
+  ReplicaSet: 'replicasets',
+  Route: 'routes',
+  Service: 'services',
 };
 
 export var resourceKindToOpenShiftConsoleCollectionName = {
-  'BuildConfig': 'pipelines',
-  'DeploymentConfig': 'dc',
-  'ReplicationController': 'rc'
+  BuildConfig: 'pipelines',
+  DeploymentConfig: 'dc',
+  ReplicationController: 'rc',
 };
 
 /**
@@ -35,11 +35,15 @@ export function isNamespacedKind(kind: string) {
   return false;
 }
 
-
 /**
  * Given the resource generate a link to browse the resource on the OpenShift web console
  */
-export function openShiftBrowseResourceUrl(resource: KubernetesResource, oauthConfig: OAuthConfig, openShiftConsoleUrl: string = null, kinds: string = null): string {
+export function openShiftBrowseResourceUrl(
+  resource: KubernetesResource,
+  oauthConfig: OAuthConfig,
+  openShiftConsoleUrl: string = null,
+  kinds: string = null,
+): string {
   if (resource) {
     if (!openShiftConsoleUrl) {
       openShiftConsoleUrl = oauthConfig.openshiftConsoleUrl;
@@ -53,7 +57,8 @@ export function openShiftBrowseResourceUrl(resource: KubernetesResource, oauthCo
         }
       }
       if (kind) {
-        kinds = resourceKindToOpenShiftConsoleCollectionName[kind] || resourceKindToCollectionName[kind];
+        kinds =
+          resourceKindToOpenShiftConsoleCollectionName[kind] || resourceKindToCollectionName[kind];
         if (!kinds) {
           console.log('Could not find collection name for kind: ' + kind);
           kinds = kind.toLowerCase();
@@ -67,7 +72,14 @@ export function openShiftBrowseResourceUrl(resource: KubernetesResource, oauthCo
     const namespace = resource.namespace;
     if (kinds === 'builds' && name && namespace) {
       const pipelineName = resource['buildConfigName'] || name;
-      return pathJoin(openShiftConsoleUrl, '/project/', namespace, '/browse/pipelines', pipelineName, name);
+      return pathJoin(
+        openShiftConsoleUrl,
+        '/project/',
+        namespace,
+        '/browse/pipelines',
+        pipelineName,
+        name,
+      );
     } else if (kinds === 'spaces' || kinds === 'projects') {
       if (name) {
         return pathJoin(openShiftConsoleUrl, '/project/', name, '/overview');
@@ -114,4 +126,3 @@ export function findParameter(route: ActivatedRoute, name: string): string {
   }
   return null;
 }
-

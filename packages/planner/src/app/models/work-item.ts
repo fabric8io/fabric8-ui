@@ -6,17 +6,17 @@ import { createEntityAdapter, EntityState } from '@ngrx/entity';
 // Exported variable 'workItemSelector' has or is using name 'MemoizedSelector'
 // from external module "@ngrx/store/src/selector" but cannot be named.
 import {
-  createFeatureSelector, createSelector,
-  MemoizedSelector, select, Store
+  createFeatureSelector,
+  createSelector,
+  MemoizedSelector,
+  select,
+  Store,
 } from '@ngrx/store';
 import { cloneDeep, orderBy } from 'lodash';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
 import { AppState, DetailPageState, PlannerState } from './../states/app.state';
-import {
-  AreaModel,
-  AreaQuery, AreaUI
-} from './area.model';
+import { AreaModel, AreaQuery, AreaUI } from './area.model';
 import { Comment, CommentUI } from './comment';
 import {
   cleanObject,
@@ -24,17 +24,10 @@ import {
   Mapper,
   MapTree,
   modelService,
-  switchModel
+  switchModel,
 } from './common.model';
-import {
-  IterationModel,
-  IterationQuery, IterationUI
-} from './iteration.model';
-import {
-   LabelMapper,
-   LabelModel,
-   LabelQuery, LabelUI
-} from './label.model';
+import { IterationModel, IterationQuery, IterationUI } from './iteration.model';
+import { LabelMapper, LabelModel, LabelQuery, LabelUI } from './label.model';
 import { Link } from './link';
 import { plannerSelector } from './space';
 import { UserQuery, UserService, UserUI } from './user';
@@ -43,7 +36,7 @@ import {
   WorkItemTypeMapper,
   WorkItemTypeQuery,
   workItemTypeSelector,
-  WorkItemTypeUI
+  WorkItemTypeUI,
 } from './work-item-type';
 
 export class WorkItem extends modelService {
@@ -59,16 +52,16 @@ export class WorkItem extends modelService {
 
 export class WorkItemRelations {
   area?: {
-    data?: AreaModel
+    data?: AreaModel;
   };
   assignees?: {
-    data?: UserService[]
+    data?: UserService[];
   };
   labels?: {
     data?: LabelModel[];
     links?: {
       related?: string;
-    }
+    };
   };
   baseType?: {
     data: WorkItemType;
@@ -87,7 +80,7 @@ export class WorkItemRelations {
   events?: {
     links?: {
       related?: string;
-    }
+    };
   };
   comments?: {
     data?: Comment[];
@@ -97,7 +90,7 @@ export class WorkItemRelations {
     };
     meta?: {
       totalCount?: number;
-    }
+    };
   };
   creator?: {
     data: UserService;
@@ -109,13 +102,13 @@ export class WorkItemRelations {
     links: {
       meta: {
         edit: string;
-      }
-    }
+      };
+    };
   };
   workItemLinks?: {
     links?: {
       related?: string;
-    }
+    };
   };
 }
 
@@ -149,7 +142,7 @@ export interface WorkItemUI {
   state: string;
   descriptionMarkup: string;
   descriptionRendered: string;
-  description: string | {content: string, markup: 'Markdown', rendered?: string};
+  description: string | { content: string; markup: 'Markdown'; rendered?: string };
   version: number;
   order: number;
   dynamicfields?: any;
@@ -191,100 +184,125 @@ export interface WorkItemStateModel extends EntityState<WorkItemUI> {
 }
 
 const workItemAdapter = createEntityAdapter<WorkItemUI>();
-const {
-  selectIds,
-  selectEntities,
-  selectAll,
-  selectTotal
-} = workItemAdapter.getSelectors();
+const { selectIds, selectEntities, selectAll, selectTotal } = workItemAdapter.getSelectors();
 
 export class WorkItemMapper implements Mapper<WorkItemService, WorkItemUI> {
   wiTypeMapper = new WorkItemTypeMapper();
   labelMapper = new LabelMapper();
-  serviceToUiMapTree: MapTree = [{
+  serviceToUiMapTree: MapTree = [
+    {
       fromPath: ['id'],
-      toPath: ['id']
-    }, {
+      toPath: ['id'],
+    },
+    {
       fromPath: ['attributes', 'system.title'],
-      toPath: ['title']
-    }, {
+      toPath: ['title'],
+    },
+    {
       fromPath: ['attributes', 'system.number'],
-      toPath: ['number']
-    }, {
+      toPath: ['number'],
+    },
+    {
       fromPath: ['attributes', 'system.order'],
-      toPath: ['order']
-    }, {
+      toPath: ['order'],
+    },
+    {
       fromPath: ['attributes', 'system.created_at'],
-      toPath: ['createdAt']
-    }, {
+      toPath: ['createdAt'],
+    },
+    {
       fromPath: ['attributes', 'system.updated_at'],
-      toPath: ['updatedAt']
-    }, {
+      toPath: ['updatedAt'],
+    },
+    {
       fromPath: ['attributes', 'system.state'],
-      toPath: ['state']
-    }, {
+      toPath: ['state'],
+    },
+    {
       fromPath: ['attributes', 'system.description.markup'],
-      toPath: ['descriptionMarkup']
-    }, {
+      toPath: ['descriptionMarkup'],
+    },
+    {
       fromPath: ['attributes', 'system.description.rendered'],
-      toPath: ['descriptionRendered']
-    }, {
+      toPath: ['descriptionRendered'],
+    },
+    {
       fromPath: ['attributes', 'system.description'],
-      toPath: ['description']
-    }, {
+      toPath: ['description'],
+    },
+    {
       fromPath: ['attributes', 'version'],
-      toPath: ['version']
-    }, {
+      toPath: ['version'],
+    },
+    {
       fromPath: ['links', 'self'],
-      toPath: ['link']
-    }, {
+      toPath: ['link'],
+    },
+    {
       fromPath: ['relationships', 'workItemLinks', 'links', 'related'],
-      toPath: ['WILinkUrl']
-    }, {
+      toPath: ['WILinkUrl'],
+    },
+    {
       fromPath: ['relationships', 'area', 'data', 'id'],
-      toPath: ['areaId']
-    }, {
+      toPath: ['areaId'],
+    },
+    {
       fromPath: ['relationships', 'creator', 'data', 'id'],
-      toPath: ['creator']
-    }, {
+      toPath: ['creator'],
+    },
+    {
       fromPath: ['relationships', 'iteration', 'data', 'id'],
-      toPath: ['iterationId']
-    }, {
+      toPath: ['iterationId'],
+    },
+    {
       fromPath: ['relationships', 'baseType', 'data', 'id'],
-      toPath: ['type']
-    }, {
+      toPath: ['type'],
+    },
+    {
       fromPath: ['relationships', 'comments', 'links', 'related'],
-      toPath: ['commentLink']
-    }, {
+      toPath: ['commentLink'],
+    },
+    {
       fromPath: ['relationships', 'events', 'links', 'related'],
-      toPath: ['eventLink']
-    }, {
+      toPath: ['eventLink'],
+    },
+    {
       fromPath: ['relationships', 'assignees', 'data'],
       toPath: ['assignees'],
       toFunction: function(assignees: UserService[]) {
-        if (!assignees) { return []; }
-        return assignees.map(assignee => assignee.id);
-      }
-    }, {
+        if (!assignees) {
+          return [];
+        }
+        return assignees.map((assignee) => assignee.id);
+      },
+    },
+    {
       fromPath: ['relationships', 'labels', 'data'],
       toPath: ['labels'],
       toFunction: function(labels: LabelModel[]) {
-        if (!labels) { return []; }
-        return labels.map(label => label.id);
-      }
-    }, {
+        if (!labels) {
+          return [];
+        }
+        return labels.map((label) => label.id);
+      },
+    },
+    {
       toPath: ['children'],
-      toValue: []
-    }, {
+      toValue: [],
+    },
+    {
       fromPath: ['relationships', 'children', 'meta', 'hasChildren'],
-      toPath: ['hasChildren']
-    }, {
+      toPath: ['hasChildren'],
+    },
+    {
       fromPath: ['relationships', 'parent', 'data', 'id'],
-      toPath: ['parentID']
-    }, {
+      toPath: ['parentID'],
+    },
+    {
       fromPath: ['relationships', 'children', 'links', 'related'],
-      toPath: ['childrenLink']
-    }, {
+      toPath: ['childrenLink'],
+    },
+    {
       fromPath: ['relationships', 'children', 'meta', 'hasChildren'],
       toPath: ['treeStatus'],
       toFunction: (hasChildren) => {
@@ -293,151 +311,192 @@ export class WorkItemMapper implements Mapper<WorkItemService, WorkItemUI> {
         } else {
           return 'collapsed';
         }
-      }
-    }, {
+      },
+    },
+    {
       toPath: ['childrenLoaded'],
-      toValue: false
-    }, {
+      toValue: false,
+    },
+    {
       toPath: ['bold'],
-      toValue: false
-    }, {
+      toValue: false,
+    },
+    {
       toPath: ['editable'],
-      toValue: false
-    }, {
+      toValue: false,
+    },
+    {
       fromPath: ['relationships', 'boardcolumns', 'data'],
       toPath: ['columnIds'],
       toFunction: (data) => {
-        return Array.isArray(data) ? data.map(col => col.id) : null;
-      }
-    }
-
+        return Array.isArray(data) ? data.map((col) => col.id) : null;
+      },
+    },
   ];
 
-  uiToServiceMapTree: MapTree = [{
+  uiToServiceMapTree: MapTree = [
+    {
       toPath: ['id'],
-      fromPath: ['id']
-    }, {
+      fromPath: ['id'],
+    },
+    {
       fromPath: ['title'],
-      toPath: ['attributes', 'system.title']
-    }, {
+      toPath: ['attributes', 'system.title'],
+    },
+    {
       fromPath: ['number'],
-      toPath: ['attributes', 'system.number']
-    }, {
+      toPath: ['attributes', 'system.number'],
+    },
+    {
       fromPath: ['order'],
-      toPath: ['attributes', 'system.order']
-    }, {
+      toPath: ['attributes', 'system.order'],
+    },
+    {
       fromPath: ['createdAt'],
-      toPath: ['attributes', 'system.created_at']
-    }, {
+      toPath: ['attributes', 'system.created_at'],
+    },
+    {
       fromPath: ['updatedAt'],
-      toPath: ['attributes', 'system.updated_at']
-    }, {
+      toPath: ['attributes', 'system.updated_at'],
+    },
+    {
       fromPath: ['state'],
-      toPath: ['attributes', 'system.state']
-    }, {
+      toPath: ['attributes', 'system.state'],
+    },
+    {
       fromPath: ['descriptionRendered'],
-      toPath: ['attributes', 'system.description.rendered']
-    }, {
+      toPath: ['attributes', 'system.description.rendered'],
+    },
+    {
       fromPath: ['description'],
-      toPath: ['attributes', 'system.description']
-    }, {
+      toPath: ['attributes', 'system.description'],
+    },
+    {
       fromPath: ['description'],
       toPath: ['attributes', 'system.description.markup'],
       toFunction: (val) => {
-        if (val) { return 'Markdown'; }
+        if (val) {
+          return 'Markdown';
+        }
         return null;
-      }
-    }, {
+      },
+    },
+    {
       fromPath: ['version'],
-      toPath: ['attributes', 'version']
-    }, {
+      toPath: ['attributes', 'version'],
+    },
+    {
       fromPath: ['link'],
-      toPath: ['links', 'self']
-    }, {
+      toPath: ['links', 'self'],
+    },
+    {
       fromPath: ['WILinkUrl'],
-      toPath: ['relationships', 'workItemLinks', 'links', 'related']
-    }, {
+      toPath: ['relationships', 'workItemLinks', 'links', 'related'],
+    },
+    {
       fromPath: ['areaId'],
-      toPath: ['relationships', 'area', 'data', 'id']
-    }, {
+      toPath: ['relationships', 'area', 'data', 'id'],
+    },
+    {
       toPath: ['relationships', 'area', 'data', 'type'],
-      toValue: 'areas'
-    }, {
+      toValue: 'areas',
+    },
+    {
       fromPath: ['creator'],
-      toPath: ['relationships', 'creator', 'data', 'id']
-    }, {
+      toPath: ['relationships', 'creator', 'data', 'id'],
+    },
+    {
       toPath: ['relationships', 'creator', 'data', 'type'],
-      toValue: 'identities'
-    }, {
+      toValue: 'identities',
+    },
+    {
       fromPath: ['iterationId'],
       toPath: ['relationships', 'iteration', 'data'],
       toFunction: (id: string) => {
         return {
           id: id,
-          type: 'iterations'
+          type: 'iterations',
         };
-      }
-    }, {
+      },
+    },
+    {
       fromPath: ['type'],
-      toPath: ['relationships', 'baseType', 'data', 'id']
-    }, {
+      toPath: ['relationships', 'baseType', 'data', 'id'],
+    },
+    {
       toPath: ['relationships', 'baseType', 'data', 'type'],
-      toValue: 'workitemtypes'
-    }, {
+      toValue: 'workitemtypes',
+    },
+    {
       fromPath: ['commentLink'],
-      toPath: ['relationships', 'comments', 'links', 'related']
-    }, {
+      toPath: ['relationships', 'comments', 'links', 'related'],
+    },
+    {
       fromPath: ['eventLink'],
-      toPath: ['relationships', 'events', 'links', 'related']
-    }, {
+      toPath: ['relationships', 'events', 'links', 'related'],
+    },
+    {
       fromPath: ['assignees'],
       toPath: ['relationships', 'assignees', 'data'],
       toFunction: function(assignees: string[]) {
-        if (!assignees) { return null; }
-        return assignees.map(assigneeId => {
+        if (!assignees) {
+          return null;
+        }
+        return assignees.map((assigneeId) => {
           return {
             id: assigneeId,
-            type: 'identities'
+            type: 'identities',
           };
         });
-      }
-    }, {
+      },
+    },
+    {
       fromPath: ['labels'],
       toPath: ['relationships', 'labels', 'data'],
       toFunction: function(labels: LabelUI[]) {
-        if (!labels) { return null; }
-        return labels.map(
-          label => cleanObject(
-            this.labelMapper.toServiceModel({id: label}),
-            ['attributes', 'links', 'relationships']
-          )
+        if (!labels) {
+          return null;
+        }
+        return labels.map((label) =>
+          cleanObject(this.labelMapper.toServiceModel({ id: label }), [
+            'attributes',
+            'links',
+            'relationships',
+          ]),
         );
-      }.bind(this)
-    }, {
+      }.bind(this),
+    },
+    {
       toPath: ['relationships', 'boardcolumns', 'data'],
       fromPath: ['columnIds'],
       toFunction: (data) => {
-        if (!data) {return null; }
+        if (!data) {
+          return null;
+        }
         return data.map((id) => {
           return {
-          id: id,
-          type: 'boardcolumns'
+            id: id,
+            type: 'boardcolumns',
           };
         });
-      }
-    }, {
+      },
+    },
+    {
       fromPath: ['hasChildren'],
-      toPath: ['relationships', 'children', 'meta', 'hasChildren']
-    }, {
+      toPath: ['relationships', 'children', 'meta', 'hasChildren'],
+    },
+    {
       fromPath: ['parentID'],
-      toPath: ['relationships', 'parent', 'data', 'id']
-    }, {
+      toPath: ['relationships', 'parent', 'data', 'id'],
+    },
+    {
       fromPath: ['childrenLink'],
-      toPath: ['relationships', 'children', 'links', 'related']
-    }, {
+      toPath: ['relationships', 'children', 'links', 'related'],
+    },
+    {
       toPath: ['type'],
-      toValue: 'workitems'
-    }
+      toValue: 'workitems',
+    },
   ];
 
   toDynamicUIModel(arg: WorkItemService, dynamicFields) {
@@ -445,12 +504,10 @@ export class WorkItemMapper implements Mapper<WorkItemService, WorkItemUI> {
     for (let i = 0; i < dynamicFields.length; i++) {
       serviceToDyanmicUiMapTree.push({
         toPath: ['dynamicfields', dynamicFields[i]],
-        fromPath: ['attributes', dynamicFields[i]]
+        fromPath: ['attributes', dynamicFields[i]],
       });
     }
-    return switchModel<WorkItemService, any>(
-      arg, serviceToDyanmicUiMapTree
-    );
+    return switchModel<WorkItemService, any>(arg, serviceToDyanmicUiMapTree);
   }
 
   toDyanmicServiceModel(arg: WorkItemUI, dynamicFields) {
@@ -458,45 +515,43 @@ export class WorkItemMapper implements Mapper<WorkItemService, WorkItemUI> {
     for (let i = 0; i < dynamicFields.length; i++) {
       dynamicUiToServiceMapTree.push({
         toPath: ['attributes', dynamicFields[i]],
-        fromPath: ['dynamicfields', dynamicFields[i]]
+        fromPath: ['dynamicfields', dynamicFields[i]],
       });
     }
-    const serviceModel = switchModel<WorkItemUI, any>(
-      arg, dynamicUiToServiceMapTree
-    );
+    const serviceModel = switchModel<WorkItemUI, any>(arg, dynamicUiToServiceMapTree);
     return cleanObject(serviceModel);
   }
 
   toUIModel(arg: WorkItemService): WorkItemUI {
-    return switchModel<WorkItemService, WorkItemUI>(
-      arg, this.serviceToUiMapTree
-    );
+    return switchModel<WorkItemService, WorkItemUI>(arg, this.serviceToUiMapTree);
   }
 
   toServiceModel(arg: WorkItemUI): WorkItemService {
-    let serviceModel =
-      switchModel<WorkItemUI, WorkItemService>(
-        arg, this.uiToServiceMapTree
-      );
+    let serviceModel = switchModel<WorkItemUI, WorkItemService>(arg, this.uiToServiceMapTree);
 
     // Removing relationship part of iteration
     if (serviceModel.relationships.iteration.data !== null) {
-      serviceModel.relationships.iteration.data =
-        cleanObject(serviceModel.relationships.iteration.data, ['relationships']);
+      serviceModel.relationships.iteration.data = cleanObject(
+        serviceModel.relationships.iteration.data,
+        ['relationships'],
+      );
     }
 
     // Removing attributes from assignees
     if (serviceModel.relationships.assignees.data !== null) {
-      serviceModel.relationships.assignees.data =
-        serviceModel.relationships.assignees.data.map(a => {
+      serviceModel.relationships.assignees.data = serviceModel.relationships.assignees.data.map(
+        (a) => {
           return cleanObject(a, ['attributes']);
-        });
+        },
+      );
     }
 
     // Removing relationship part of baseType
     if (serviceModel.relationships.baseType.data !== null) {
-      serviceModel.relationships.baseType.data =
-        cleanObject(serviceModel.relationships.baseType.data, ['relationships']);
+      serviceModel.relationships.baseType.data = cleanObject(
+        serviceModel.relationships.baseType.data,
+        ['relationships'],
+      );
     }
 
     return cleanObject(serviceModel);
@@ -513,24 +568,23 @@ export const workItemSelector = createSelector(
   // This is a HACK till fabric8-ui removes the unnecessary planner imports
   // it should just be
   // state => state.workItems
-  state => state ? state.workItems : {entities: {}, ids: []}
+  (state) => (state ? state.workItems : { entities: {}, ids: [] }),
 );
 // should never be exported
 const workItemEntities = createSelector(
   workItemSelector,
-  selectEntities
+  selectEntities,
 );
 export const getAllWorkItemSelector = createSelector(
   workItemSelector,
-  selectAll
+  selectAll,
 );
 
-export const workItemDetailSelector =
-  createFeatureSelector<DetailPageState>('detailPage');
+export const workItemDetailSelector = createFeatureSelector<DetailPageState>('detailPage');
 
 export const workItemInDetailSelector = createSelector(
   workItemDetailSelector,
-  state => state.workItem
+  (state) => state.workItem,
 );
 
 @Injectable()
@@ -541,12 +595,10 @@ export class WorkItemQuery {
     private iterationQuery: IterationQuery,
     private areaQuery: AreaQuery,
     private labelQuery: LabelQuery,
-    private workItemTypeQuery: WorkItemTypeQuery
+    private workItemTypeQuery: WorkItemTypeQuery,
   ) {}
 
-  private workItemSource = this.store.pipe(
-    select(getAllWorkItemSelector)
-  );
+  private workItemSource = this.store.pipe(select(getAllWorkItemSelector));
 
   resolveWorkItem(workItem: WorkItemUI): WorkItemUI {
     return {
@@ -556,24 +608,24 @@ export class WorkItemQuery {
       assigneesObs: this.userQuery.getUserObservablesByIds(workItem.assignees),
       iterationObs: this.iterationQuery.getIterationObservableById(workItem.iterationId),
       areaObs: this.areaQuery.getAreaObservableById(workItem.areaId),
-      labelsObs: this.labelQuery.getLabelObservablesByIds(workItem.labels)
+      labelsObs: this.labelQuery.getLabelObservablesByIds(workItem.labels),
     };
   }
 
   getWorkItems(): Observable<WorkItemUI[]> {
     return this.workItemSource.pipe(
-      map(workItems => {
+      map((workItems) => {
         return workItems.map(this.resolveWorkItem.bind(this));
-      })
+      }),
     );
   }
 
   getWorkItem(number: string | number): Observable<WorkItemUI> {
     return this.store.pipe(
       select(workItemInDetailSelector),
-      filter(item => item !== null),
+      filter((item) => item !== null),
       map(this.resolveWorkItem.bind(this)),
-      switchMap(this.setWorkItemsEditable.bind(this))
+      switchMap(this.setWorkItemsEditable.bind(this)),
     );
   }
 
@@ -583,24 +635,25 @@ export class WorkItemQuery {
    * @param WorkItemUI || @param WorkItemUI[]
    * @return Observable<WorkItemUI> || @return Observable<WorkItemUI[]>
    */
-  setWorkItemsEditable(workItems: WorkItemUI | WorkItemUI[]): Observable<WorkItemUI | WorkItemUI[]> {
+  setWorkItemsEditable(
+    workItems: WorkItemUI | WorkItemUI[],
+  ): Observable<WorkItemUI | WorkItemUI[]> {
     let items = Array.isArray(workItems) ? workItems : [workItems];
-    return combineLatest(
-      this.userQuery.getLoggedInUser,
-      this.userQuery.getCollaboratorIds
-    ).pipe(
-        map(([loggdInuser, collabIDs]): WorkItemUI[] => {
-        return items.map((item: WorkItemUI) => {
-          const allAllowedIds = loggdInuser ? [...collabIDs, item.creator] : [];
-          return {
-            ...item,
-            editable: allAllowedIds.indexOf(loggdInuser.id) > -1
-          };
-        });
-      }),
-      map(items => {
+    return combineLatest(this.userQuery.getLoggedInUser, this.userQuery.getCollaboratorIds).pipe(
+      map(
+        ([loggdInuser, collabIDs]): WorkItemUI[] => {
+          return items.map((item: WorkItemUI) => {
+            const allAllowedIds = loggdInuser ? [...collabIDs, item.creator] : [];
+            return {
+              ...item,
+              editable: allAllowedIds.indexOf(loggdInuser.id) > -1,
+            };
+          });
+        },
+      ),
+      map((items) => {
         return Array.isArray(workItems) ? items : items[0];
-      })
+      }),
     );
   }
 
@@ -612,24 +665,23 @@ export class WorkItemQuery {
    * @param number
    */
   getIterationsForWorkItem(number: string | number): Observable<CommonSelectorUI[]> {
-    return this.getWorkItem(number)
-      .pipe(
-        filter(w => !!w),
-        switchMap(workitem => {
-          return this.iterationQuery.getIterations().pipe(
-            map(iterations => {
-              return orderBy(iterations, 'name', 'asc').map(i => {
-                return {
-                  key: i.id,
-                  value: (i.resolvedParentPath != '/' ? i.resolvedParentPath : '') + '/' + i.name,
-                  selected: i.id === workitem.iterationId,
-                  cssLabelClass: undefined
-                };
-              });
-            })
-          );
-        })
-      );
+    return this.getWorkItem(number).pipe(
+      filter((w) => !!w),
+      switchMap((workitem) => {
+        return this.iterationQuery.getIterations().pipe(
+          map((iterations) => {
+            return orderBy(iterations, 'name', 'asc').map((i) => {
+              return {
+                key: i.id,
+                value: (i.resolvedParentPath != '/' ? i.resolvedParentPath : '') + '/' + i.name,
+                selected: i.id === workitem.iterationId,
+                cssLabelClass: undefined,
+              };
+            });
+          }),
+        );
+      }),
+    );
   }
 
   /**
@@ -640,24 +692,24 @@ export class WorkItemQuery {
    * @param number
    */
   getAreasForWorkItem(number: string | number): Observable<CommonSelectorUI[]> {
-    return this.getWorkItem(number)
-      .pipe(
-        filter(w => !!w),
-        switchMap(workItem => {
-          return this.areaQuery.getAreas().pipe(
-            map(areas => {
-              return areas.map(area => {
-                return {
-                  key: area.id,
-                  value: (area.parentPathResolved != '/' ? area.parentPathResolved : '') + '/' + area.name,
-                  selected: area.id === workItem.areaId,
-                  cssLabelClass: undefined
-                };
-              });
-            })
-          );
-        })
-      );
+    return this.getWorkItem(number).pipe(
+      filter((w) => !!w),
+      switchMap((workItem) => {
+        return this.areaQuery.getAreas().pipe(
+          map((areas) => {
+            return areas.map((area) => {
+              return {
+                key: area.id,
+                value:
+                  (area.parentPathResolved != '/' ? area.parentPathResolved : '') + '/' + area.name,
+                selected: area.id === workItem.areaId,
+                cssLabelClass: undefined,
+              };
+            });
+          }),
+        );
+      }),
+    );
   }
 
   /**
@@ -670,21 +722,21 @@ export class WorkItemQuery {
 
   getTypesForWorkItem(number: string | number): Observable<CommonSelectorUI[]> {
     return this.getWorkItem(number).pipe(
-      filter(w => !!w),
-      switchMap(workItem => {
+      filter((w) => !!w),
+      switchMap((workItem) => {
         return this.workItemTypeQuery.getWorkItemTypes().pipe(
-          map(types => {
-            return types.map(t => {
+          map((types) => {
+            return types.map((t) => {
               return {
                 key: t.id,
                 value: t.name,
                 selected: t.id === workItem.type,
-                icon: t.icon ? t.icon : ''
+                icon: t.icon ? t.icon : '',
               };
             });
-          })
+          }),
         );
-      })
+      }),
     );
   }
 
@@ -698,52 +750,55 @@ export class WorkItemQuery {
 
   getStatesForWorkItem(number: string | number): Observable<CommonSelectorUI[]> {
     return this.getWorkItem(number).pipe(
-      filter(w => !!w),
-      switchMap(workItem => {
+      filter((w) => !!w),
+      switchMap((workItem) => {
         return this.workItemTypeQuery.getWorkItemTypes().pipe(
-          map(types => types.find(type => type.id === workItem.type)),
-          map(type => {
+          map((types) => types.find((type) => type.id === workItem.type)),
+          map((type) => {
             if (!!!type) {
               return [];
             }
-            return type.fields['system.state'].type.values.map(s => {
+            return type.fields['system.state'].type.values.map((s) => {
               return {
                 key: s,
                 value: s,
-                selected: s === workItem.state
+                selected: s === workItem.state,
               };
             });
-          })
+          }),
         );
-      })
+      }),
     );
   }
 
-  get getWorkItemEntities(): Observable<{[id: string]: WorkItemUI}> {
+  get getWorkItemEntities(): Observable<{ [id: string]: WorkItemUI }> {
     return this.store.pipe(select(workItemEntities));
   }
 
   getWorkItemsByIds(ids: string[]): Observable<WorkItemUI[]> {
     const selector = createSelector(
       workItemEntities,
-      state => {
-        return ids.length > 0 ? ids.map(i => state[i])
-          // Sometime
-          .filter(item => !!item)
-          .map(item => this.resolveWorkItem(item))
-          .sort((a, b) => b.order - a.order) : [];
-      }
+      (state) => {
+        return ids.length > 0
+          ? ids
+              .map((i) => state[i])
+              // Sometime
+              .filter((item) => !!item)
+              .map((item) => this.resolveWorkItem(item))
+              .sort((a, b) => b.order - a.order)
+          : [];
+      },
     );
     return this.store.pipe(
       select(selector),
-      switchMap(this.setWorkItemsEditable.bind(this))
+      switchMap(this.setWorkItemsEditable.bind(this)),
     );
   }
 
   getWorkItemWithId(id: string): Observable<WorkItemUI> {
     const selector = createSelector(
       workItemEntities,
-      state => this.resolveWorkItem(state[id])
+      (state) => this.resolveWorkItem(state[id]),
     );
     return this.store.pipe(select(selector));
   }

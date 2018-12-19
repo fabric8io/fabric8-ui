@@ -7,7 +7,7 @@ export {
   BuildConfigs,
   combineBuildConfigAndBuilds,
   filterPipelines,
-  findBuildConfigByID
+  findBuildConfigByID,
 } from './kubernetes/model/buildconfig.model';
 
 export { BuildConfigStore } from './kubernetes/store/buildconfig.store';

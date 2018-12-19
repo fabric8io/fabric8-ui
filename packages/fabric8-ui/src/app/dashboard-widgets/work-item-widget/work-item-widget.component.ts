@@ -13,10 +13,9 @@ import { WorkItemBarchartData } from './work-item-barchart/work-item-barchart-da
   encapsulation: ViewEncapsulation.None,
   selector: 'fabric8-work-item-widget',
   templateUrl: './work-item-widget.component.html',
-  styleUrls: ['./work-item-widget.component.less']
+  styleUrls: ['./work-item-widget.component.less'],
 })
 export class WorkItemWidgetComponent implements OnInit {
-
   @Input() userOwnsSpace: boolean;
   private _myWorkItems: ConnectableObservable<WorkItem[]>;
   private subscriptions: Subscription[] = [];
@@ -39,31 +38,33 @@ export class WorkItemWidgetComponent implements OnInit {
     chartId: uniqueId('work-item-chart'),
     size: {
       height: 275,
-      width: 130
-    }
+      width: 130,
+    },
   };
 
   chartData: WorkItemBarchartData = {
     colors: {},
-    yData: []
+    yData: [],
   };
 
   constructor(
     private contexts: Contexts,
     private spacesService: SpacesService,
-    private workItemService: WorkItemService
-  ) { }
+    private workItemService: WorkItemService,
+  ) {}
 
   ngOnInit(): void {
-    this.subscriptions.push(this.contexts.current.subscribe(context => {
-      this.contextPath = context.path;
-      this.resetWorkItemCounts();
-      this.updateWorkItems();
-    }));
+    this.subscriptions.push(
+      this.contexts.current.subscribe((context) => {
+        this.contextPath = context.path;
+        this.resetWorkItemCounts();
+        this.updateWorkItems();
+      }),
+    );
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => {
+    this.subscriptions.forEach((sub) => {
       sub.unsubscribe();
     });
   }
@@ -74,23 +75,23 @@ export class WorkItemWidgetComponent implements OnInit {
 
   private updateWorkItems(): void {
     this.loading = true;
-    this._myWorkItems =
-      this.spacesService.current.pipe(switchMap(space => {
-        return this.workItemService.getWorkItems(
-          100000, {expression: {'space': `${space.id}`}}
-        );
+    this._myWorkItems = this.spacesService.current.pipe(
+      switchMap((space) => {
+        return this.workItemService.getWorkItems(100000, { expression: { space: `${space.id}` } });
       }),
-      tap((val: WorkItemsData): void => {
-        if (val.totalCount) {
-          this.myWorkItemsCount = val.totalCount;
-        } else {
-          this.myWorkItemsCount = val.workItems.length;
-        }
-      }),
-      map(val => val.workItems),
-      tap(workItems => {
+      tap(
+        (val: WorkItemsData): void => {
+          if (val.totalCount) {
+            this.myWorkItemsCount = val.totalCount;
+          } else {
+            this.myWorkItemsCount = val.workItems.length;
+          }
+        },
+      ),
+      map((val) => val.workItems),
+      tap((workItems) => {
         this.loading = false;
-        workItems.forEach(workItem => {
+        workItems.forEach((workItem) => {
           let state = workItem.attributes['system.state'];
           if (state !== undefined) {
             if (this.isStateEqual(state, this.STATE_OPEN)) {
@@ -104,7 +105,8 @@ export class WorkItemWidgetComponent implements OnInit {
         });
         this.initChartData();
       }),
-      publishReplay(1)) as ConnectableObservable<WorkItem[]>;
+      publishReplay(1),
+    ) as ConnectableObservable<WorkItem[]>;
     this._myWorkItems.connect();
   }
 

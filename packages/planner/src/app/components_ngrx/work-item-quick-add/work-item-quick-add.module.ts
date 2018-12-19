@@ -15,10 +15,10 @@ import { WorkItemQuickAddComponent } from './work-item-quick-add.component';
     CommonSelectorModule,
     FormsModule,
     InfotipModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   declarations: [WorkItemQuickAddComponent],
   exports: [WorkItemQuickAddComponent],
-  providers: [BsDropdownConfig, PermissionQuery]
+  providers: [BsDropdownConfig, PermissionQuery],
 })
 export class WorkItemQuickAddModule {}

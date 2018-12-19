@@ -6,17 +6,20 @@ var helpers = require('./helpers');
 // var DashboardPlugin = require('webpack-dashboard/plugin');
 
 const ENV = process.env.ENV || process.env.NODE_ENV || 'development';
-const FABRIC8_WIT_API_URL = process.env.FABRIC8_WIT_API_URL || 'https://api.prod-preview.openshift.io/api/';
-const FABRIC8_AUTH_API_URL = process.env.FABRIC8_AUTH_API_URL || 'https://auth.prod-preview.openshift.io/api/';
-const FABRIC8_SSO_API_URL = process.env.FABRIC8_SSO_API_URL || 'https://sso.prod-preview.openshift.io/';
-const FABRIC8_REALM = process.env.FABRIC8_REALM || "fabric8";
+const FABRIC8_WIT_API_URL =
+  process.env.FABRIC8_WIT_API_URL || 'https://api.prod-preview.openshift.io/api/';
+const FABRIC8_AUTH_API_URL =
+  process.env.FABRIC8_AUTH_API_URL || 'https://auth.prod-preview.openshift.io/api/';
+const FABRIC8_SSO_API_URL =
+  process.env.FABRIC8_SSO_API_URL || 'https://sso.prod-preview.openshift.io/';
+const FABRIC8_REALM = process.env.FABRIC8_REALM || 'fabric8';
 const FABRIC8_RECOMMENDER_API_URL = process.env.FABRIC8_RECOMMENDER_API_URL;
-const FABRIC8_FORGE_URL = process.env.FABRIC8_FORGE_URL || 'https://api.prod-preview.openshift.io/forge';
+const FABRIC8_FORGE_URL =
+  process.env.FABRIC8_FORGE_URL || 'https://api.prod-preview.openshift.io/forge';
 const API_URL = FABRIC8_WIT_API_URL;
 const PUBLIC_PATH = process.env.PUBLIC_PATH || '/';
 const extractCSS = new ExtractTextPlugin('stylesheets/[name].css');
 const extractLESS = new ExtractTextPlugin('stylesheets/[name].less');
-
 
 const METADATA = webpackMerge(commonConfig.metadata, {
   API_URL: API_URL,
@@ -27,17 +30,17 @@ const METADATA = webpackMerge(commonConfig.metadata, {
   FABRIC8_SSO_API_URL: FABRIC8_SSO_API_URL,
   FABRIC8_RECOMMENDER_API_URL: FABRIC8_RECOMMENDER_API_URL,
   FABRIC8_FORGE_URL: FABRIC8_FORGE_URL,
-  PUBLIC_PATH: PUBLIC_PATH
+  PUBLIC_PATH: PUBLIC_PATH,
 });
 
-module.exports = function (options) {
+module.exports = function(options) {
   return webpackMerge(commonConfig, {
     devtool: 'inline-source-map',
 
     entry: {
-      'polyfills': './src/polyfills.ts',
-      'vendor': './src/vendor.ts',
-      'app': './src/main.ts'
+      polyfills: './src/polyfills.ts',
+      vendor: './src/vendor.ts',
+      app: './src/main.ts',
     },
 
     output: {
@@ -45,7 +48,7 @@ module.exports = function (options) {
       publicPath: METADATA.PUBLIC_PATH,
       filename: '[name].js',
       chunkFilename: '[id].chunk.js',
-      sourceMapFilename: '[name].map'
+      sourceMapFilename: '[name].map',
     },
 
     plugins: [
@@ -54,7 +57,7 @@ module.exports = function (options) {
       extractLESS,
 
       new webpack.optimize.CommonsChunkPlugin({
-        name: ['app', 'vendor', 'polyfills']
+        name: ['app', 'vendor', 'polyfills'],
       }),
 
       /**
@@ -69,21 +72,21 @@ module.exports = function (options) {
       // NOTE: when adding more properties, make sure you include them in custom-typings.d.ts
       new webpack.DefinePlugin({
         'process.env': {
-          'ENV': JSON.stringify(METADATA.ENV),
-          'API_URL': JSON.stringify(METADATA.API_URL),
-          'FORGE_URL': JSON.stringify(METADATA.FORGE_URL),
-          'FABRIC8_AUTH_API_URL': JSON.stringify(METADATA.FABRIC8_AUTH_API_URL),
-          'FABRIC8_SSO_API_URL': JSON.stringify(METADATA.FABRIC8_SSO_API_URL),
-          'PUBLIC_PATH': JSON.stringify(METADATA.PUBLIC_PATH),
-          'FABRIC8_REALM': JSON.stringify(METADATA.FABRIC8_REALM)
-        }
-      })
+          ENV: JSON.stringify(METADATA.ENV),
+          API_URL: JSON.stringify(METADATA.API_URL),
+          FORGE_URL: JSON.stringify(METADATA.FORGE_URL),
+          FABRIC8_AUTH_API_URL: JSON.stringify(METADATA.FABRIC8_AUTH_API_URL),
+          FABRIC8_SSO_API_URL: JSON.stringify(METADATA.FABRIC8_SSO_API_URL),
+          PUBLIC_PATH: JSON.stringify(METADATA.PUBLIC_PATH),
+          FABRIC8_REALM: JSON.stringify(METADATA.FABRIC8_REALM),
+        },
+      }),
     ],
 
     devServer: {
       historyApiFallback: true,
       stats: 'minimal',
-      inline: true
-    }
+      inline: true,
+    },
   });
-}
+};

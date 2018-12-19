@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({ name: 'almSearchHighlight'})
+@Pipe({ name: 'almSearchHighlight' })
 export class AlmSearchHighlight implements PipeTransform {
   transform(val: string, search: string): any {
     if (search != '' && search.length) {
@@ -8,7 +8,9 @@ export class AlmSearchHighlight implements PipeTransform {
       search = search.toLowerCase();
       if (!lowerVal) {
         return '';
-      } else { return this.convertToOriginal(lowerVal.split(search).join('<b>' + search + '</b>'), val); }
+      } else {
+        return this.convertToOriginal(lowerVal.split(search).join('<b>' + search + '</b>'), val);
+      }
     } else {
       return val;
     }

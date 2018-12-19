@@ -5,7 +5,7 @@ import {
   Input,
   OnInit,
   ViewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
 import { cloneDeep } from 'lodash';
 import { Build } from '../../../../a-runtime-console/kubernetes/model/build.model';
@@ -15,7 +15,7 @@ import { PipelineStage } from '../../../../a-runtime-console/kubernetes/model/pi
   encapsulation: ViewEncapsulation.None,
   selector: 'fabric8-applications-stack-report',
   templateUrl: './applications-stack-report.component.html',
-  styleUrls: ['./applications-stack-report.component.less']
+  styleUrls: ['./applications-stack-report.component.less'],
 })
 export class ApplicationsStackReportComponent implements DoCheck, OnInit {
   @Input() build: Build;
@@ -25,8 +25,7 @@ export class ApplicationsStackReportComponent implements DoCheck, OnInit {
   private _pipelineStages: PipelineStage[];
   private prevStatusPhase: string;
 
-  constructor() {
-  }
+  constructor() {}
 
   ngOnInit(): void {
     this.initPipelineStages();

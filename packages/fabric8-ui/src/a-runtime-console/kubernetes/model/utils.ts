@@ -28,7 +28,6 @@ export function pathJoin(...paths: string[]): string {
   return rc;
 }
 
-
 /**
  * Returns true if the string is either null or empty
  */

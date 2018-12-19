@@ -9,17 +9,23 @@ import { of, throwError as observableThrowError } from 'rxjs';
 import { TenantService } from '../services/tenant.service';
 import { CleanupComponent } from './cleanup.component';
 
-
 describe('CleanupComponent', () => {
-
   let fixture: ComponentFixture<CleanupComponent>;
   let component: DebugNode['componentInstance'];
 
-  let mockBroadcaster: jasmine.SpyObj<Broadcaster> = jasmine.createSpyObj('Broadcaster', ['broadcast']);
+  let mockBroadcaster: jasmine.SpyObj<Broadcaster> = jasmine.createSpyObj('Broadcaster', [
+    'broadcast',
+  ]);
 
   let mockContexts: any = jasmine.createSpy('Contexts');
-  let mockSpaceService: any = jasmine.createSpyObj('SpaceService', ['deleteSpace', 'getSpacesByUser']);
-  let mockTenantService: any = jasmine.createSpyObj('TenantService', ['cleanupTenant', 'updateTenant']);
+  let mockSpaceService: any = jasmine.createSpyObj('SpaceService', [
+    'deleteSpace',
+    'getSpacesByUser',
+  ]);
+  let mockTenantService: any = jasmine.createSpyObj('TenantService', [
+    'cleanupTenant',
+    'updateTenant',
+  ]);
   let mockRouter: any = jasmine.createSpyObj('Router', ['navigate']);
   let mockLogger: any = jasmine.createSpy('Logger');
   let mockAuthenticationService: any = jasmine.createSpyObj('AuthenticationService', ['getToken']);
@@ -27,7 +33,6 @@ describe('CleanupComponent', () => {
   let mockSpace: any;
 
   beforeEach(() => {
-
     mockSpace = {
       name: 'mock-space',
       path: 'mock-path',
@@ -37,16 +42,16 @@ describe('CleanupComponent', () => {
         description: 'mock-description',
         'updated-at': 'mock-updated-at',
         'created-at': 'mock-created-at',
-        version: 0
-      }
+        version: 0,
+      },
     };
     mockContexts.current = of({
-      'user': {
-        'attributes': {
-          'username': 'mock-username'
+      user: {
+        attributes: {
+          username: 'mock-username',
         },
-        'id': 'mock-user'
-      }
+        id: 'mock-user',
+      },
     });
     mockSpaceService.getSpacesByUser.and.returnValue(of([mockSpace]));
 
@@ -60,10 +65,10 @@ describe('CleanupComponent', () => {
         { provide: Logger, useValue: mockLogger },
         { provide: AuthenticationService, useValue: mockAuthenticationService },
         { provide: UserService, useValue: mockUserService },
-        { provide: WIT_API_URL, useValue: 'http://example.com'},
-        { provide: Broadcaster, useValue: mockBroadcaster }
+        { provide: WIT_API_URL, useValue: 'http://example.com' },
+        { provide: Broadcaster, useValue: mockBroadcaster },
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     });
     TestBed.overrideProvider(TenantService, { useValue: mockTenantService });
     fixture = TestBed.createComponent(CleanupComponent);
@@ -157,7 +162,6 @@ describe('CleanupComponent', () => {
       expect(component.showWarningNotification).toHaveBeenCalled();
       expect(component.tenantResult).toBe('Tenant update failed');
     });
-
   });
 
   describe('#userNameMatches', () => {
@@ -208,5 +212,4 @@ describe('CleanupComponent', () => {
       expect(component.router.navigate).toHaveBeenCalledWith(['/', '_home']);
     });
   });
-
 });

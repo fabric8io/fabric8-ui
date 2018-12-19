@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { orderBy, take } from 'lodash';
 import { Context, Contexts } from 'ngx-fabric8-wit';
-import { combineLatest ,  Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, map, switchMap } from 'rxjs/operators';
 import {
   BuildConfig,
@@ -9,70 +9,53 @@ import {
   BuildConfigStore,
   Builds,
   BuildStore,
-  combineBuildConfigAndBuilds, filterPipelines
+  combineBuildConfigAndBuilds,
+  filterPipelines,
 } from '../../../a-runtime-console/index';
 import { Fabric8RuntimeConsoleService } from './fabric8-runtime-console.service';
 
-
 @Injectable()
 export class PipelinesService {
-
   constructor(
     private contexts: Contexts,
     private pipelinesStore: BuildConfigStore,
     private buildStore: BuildStore,
-    private fabric8RuntimeConsoleService: Fabric8RuntimeConsoleService
-  ) { }
+    private fabric8RuntimeConsoleService: Fabric8RuntimeConsoleService,
+  ) {}
 
   get current(): Observable<BuildConfig[]> {
-    return this.fabric8RuntimeConsoleService
-      .loading()
-      .pipe(
-        switchMap(() =>
-          combineLatest(
-            this.pipelinesStore
-              .loadAll()
-              .pipe(
-                distinctUntilChanged()
-              ),
-            this.buildStore
-              .loadAll()
-              .pipe(
-                distinctUntilChanged()
-              ),
-            this.contexts.current,
-            combineBuildConfigAndBuildsAndFilterOnSpace
-          )
+    return this.fabric8RuntimeConsoleService.loading().pipe(
+      switchMap(() =>
+        combineLatest(
+          this.pipelinesStore.loadAll().pipe(distinctUntilChanged()),
+          this.buildStore.loadAll().pipe(distinctUntilChanged()),
+          this.contexts.current,
+          combineBuildConfigAndBuildsAndFilterOnSpace,
         ),
-        map(filterPipelines)
-      );
+      ),
+      map(filterPipelines),
+    );
   }
 
   get recentPipelines(): Observable<BuildConfig[]> {
-    return this.fabric8RuntimeConsoleService
-      .loading()
-      .pipe(
-        switchMap(() =>
-          combineLatest(
-            this.pipelinesStore
-              .loadAll()
-              .pipe(
-                distinctUntilChanged()
-              ),
-            this.buildStore
-              .loadAll()
-              .pipe(
-                distinctUntilChanged()
-              ),
-            filterByMostRecent
-          )
+    return this.fabric8RuntimeConsoleService.loading().pipe(
+      switchMap(() =>
+        combineLatest(
+          this.pipelinesStore.loadAll().pipe(distinctUntilChanged()),
+          this.buildStore.loadAll().pipe(distinctUntilChanged()),
+          filterByMostRecent,
         ),
-        map(filterPipelines)
-      );
+      ),
+      map(filterPipelines),
+    );
   }
 }
 
-function combineBuildConfigAndBuildsAndFilterOnSpace(buildConfigs: BuildConfigs, builds: Builds, context: Context): BuildConfigs {
+function combineBuildConfigAndBuildsAndFilterOnSpace(
+  buildConfigs: BuildConfigs,
+  builds: Builds,
+  context: Context,
+): BuildConfigs {
   let pipelines = combineBuildConfigAndBuilds(buildConfigs, builds);
   let spaceId = '';
   if (context) {
@@ -87,7 +70,7 @@ function combineBuildConfigAndBuildsAndFilterOnSpace(buildConfigs: BuildConfigs,
     return pipelines;
   }
   let answer = new BuildConfigs();
-  pipelines.forEach(bc => {
+  pipelines.forEach((bc) => {
     let bcSpace = bc.labels['space'];
     if (bcSpace === spaceId) {
       answer.push(bc);
@@ -98,15 +81,19 @@ function combineBuildConfigAndBuildsAndFilterOnSpace(buildConfigs: BuildConfigs,
 
 function filterByMostRecent(buildConfigs: BuildConfigs, builds: Builds): BuildConfigs {
   let pipelines = combineBuildConfigAndBuilds(buildConfigs, builds);
-  let sortedPipelines = orderBy(pipelines, (pipeline) => {
-    if (pipeline && pipeline.lastBuild) {
-      return new Date(pipeline.lastBuild.creationTimestamp);
-    }
-    return new Date(0);
-  }, ['desc']);
+  let sortedPipelines = orderBy(
+    pipelines,
+    (pipeline) => {
+      if (pipeline && pipeline.lastBuild) {
+        return new Date(pipeline.lastBuild.creationTimestamp);
+      }
+      return new Date(0);
+    },
+    ['desc'],
+  );
 
   let answer = new BuildConfigs();
-  sortedPipelines.forEach(bc => {
+  sortedPipelines.forEach((bc) => {
     if (bc.labels['space']) {
       answer.push(bc);
     }

@@ -6,18 +6,16 @@ import { BuildConfigDeleteDialog } from '../../buildconfig/delete-dialog/delete-
 @Component({
   selector: 'fabric8-pipelines-list',
   templateUrl: './list.pipeline.component.html',
-  styleUrls: ['./list.pipeline.component.less']
+  styleUrls: ['./list.pipeline.component.less'],
 })
 export class PipelinesListComponent {
-
   @Input() pipelines: BuildConfigs;
 
   @Input() loading: boolean;
 
   @ViewChild(BuildConfigDeleteDialog) deleteDialog: BuildConfigDeleteDialog;
 
-  constructor(private buildConfigService: BuildConfigService) {
-  }
+  constructor(private buildConfigService: BuildConfigService) {}
 
   openDeleteDialog(deleteBuildConfigModal, pipeline) {
     this.deleteDialog.modal = deleteBuildConfigModal;
@@ -28,5 +26,4 @@ export class PipelinesListComponent {
   startBuild(pipeline) {
     this.buildConfigService.instantiate(pipeline);
   }
-
 }

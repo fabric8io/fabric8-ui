@@ -1,8 +1,4 @@
-import {
-  CommentMapper,
-  CommentService,
-  CommentUI
-} from './comment';
+import { CommentMapper, CommentService, CommentUI } from './comment';
 
 describe('Unit Test :: Comment Model', () => {
   it('should execute the canary test', () => {
@@ -17,20 +13,20 @@ describe('Unit Test :: Comment Model', () => {
         body: 'comment',
         'body.rendered': '<p>comment</p>',
         'created-at': '2018-01-16T10:04:22.946692Z',
-        'markup': 'Markdown'
+        markup: 'Markdown',
       },
       relationships: {
-        'creator': {
+        creator: {
           data: {
             id: '5cd88093',
-            type: 'identities'
-          }
-        }
+            type: 'identities',
+          },
+        },
       },
       links: {
-        self: 'https://api.openshift.io/api/comments/2e7c4d7c-dd2b-465b-ad76-6115068a1184'
+        self: 'https://api.openshift.io/api/comments/2e7c4d7c-dd2b-465b-ad76-6115068a1184',
       },
-      type: 'comments'
+      type: 'comments',
     };
     const output: CommentUI = cm.toUIModel(input);
     const expectedOutPut: CommentUI = {
@@ -41,7 +37,7 @@ describe('Unit Test :: Comment Model', () => {
       creatorId: '5cd88093',
       bodyRendered: '<p>comment</p>',
       parentId: null,
-      selfLink: 'https://api.openshift.io/api/comments/2e7c4d7c-dd2b-465b-ad76-6115068a1184'
+      selfLink: 'https://api.openshift.io/api/comments/2e7c4d7c-dd2b-465b-ad76-6115068a1184',
     };
     return expect(expectedOutPut).toEqual(output);
   });

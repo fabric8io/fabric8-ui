@@ -1,21 +1,6 @@
-import {
-  Component,
-  DoCheck,
-  Input,
-  OnInit,
-  ViewEncapsulation
-} from '@angular/core';
-import {
-  cloneDeep,
-  defaultsDeep,
-  isEqual,
-  merge,
-  uniqueId
-} from 'lodash';
-import {
-  ChartBase,
-  ChartDefaults
-} from 'patternfly-ng/chart';
+import { Component, DoCheck, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { cloneDeep, defaultsDeep, isEqual, merge, uniqueId } from 'lodash';
+import { ChartBase, ChartDefaults } from 'patternfly-ng/chart';
 import { DeploymentsLinechartConfig } from './deployments-linechart-config';
 import { DeploymentsLinechartData } from './deployments-linechart-data';
 
@@ -23,10 +8,9 @@ import { DeploymentsLinechartData } from './deployments-linechart-data';
   encapsulation: ViewEncapsulation.None,
   selector: 'f8-deployments-linechart',
   templateUrl: './deployments-linechart.component.html',
-  styleUrls: ['./deployments-linechart.component.less']
+  styleUrls: ['./deployments-linechart.component.less'],
 })
 export class DeploymentsLinechartComponent extends ChartBase implements DoCheck, OnInit {
-
   @Input() chartData: DeploymentsLinechartData;
   @Input() config: DeploymentsLinechartConfig;
 
@@ -83,17 +67,17 @@ export class DeploymentsLinechartComponent extends ChartBase implements DoCheck,
           format: () => {
             return '';
           },
-          outer: false
-        }
+          outer: false,
+        },
       },
       y: {
         show: this.config.showYAxis === true,
         tick: {
           format: () => {
             return '';
-          }
-        }
-      }
+          },
+        },
+      },
     };
     this.defaultConfig.grid.y.show = false;
     this.defaultConfig.point = { r: 0 };
@@ -101,11 +85,11 @@ export class DeploymentsLinechartComponent extends ChartBase implements DoCheck,
     this.defaultConfig.legend = { show: false };
     this.defaultConfig.data = {
       type: 'line',
-      columns: []
+      columns: [],
     };
     this.defaultConfig.data.colors = {
       sent: '#00b9e4', // pf-light-blue-400
-      received: '#f39d3c' // pf-orange-300
+      received: '#f39d3c', // pf-orange-300
     };
     this.defaultConfig.tooltip = this.tooltip();
     this.defaultConfig.units = '';
@@ -114,12 +98,14 @@ export class DeploymentsLinechartComponent extends ChartBase implements DoCheck,
   protected getChartData(): any {
     let data: any = {};
 
-    if (this.chartData && this.chartData.dataAvailable !== false && this.chartData.xData && this.chartData.yData) {
+    if (
+      this.chartData &&
+      this.chartData.dataAvailable !== false &&
+      this.chartData.xData &&
+      this.chartData.yData
+    ) {
       data.x = this.chartData.xData[0];
-      data.columns = [
-        this.chartData.xData,
-        ...this.chartData.yData
-      ];
+      data.columns = [this.chartData.xData, ...this.chartData.yData];
     }
     return data;
   }
@@ -158,17 +144,17 @@ export class DeploymentsLinechartComponent extends ChartBase implements DoCheck,
           center = parseInt(element.getAttribute('x'), 10);
           top = parseInt(element.getAttribute('y'), 10);
           chartBox = document.querySelector('#' + this.config.chartId).getBoundingClientRect();
-          graphOffsetX = document.querySelector('#' + this.config.chartId + ' g.c3-axis-y')
+          graphOffsetX = document
+            .querySelector('#' + this.config.chartId + ' g.c3-axis-y')
             .getBoundingClientRect().right;
           x = Math.max(0, center + graphOffsetX - chartBox.left - Math.floor(width / 2));
 
           return {
             top: top - height,
-            left: Math.min(x, chartBox.width - width)
+            left: Math.min(x, chartBox.width - width),
           };
-        } catch (e) {
-        }
-      }
+        } catch (e) {}
+      },
     };
   }
 
@@ -183,5 +169,4 @@ export class DeploymentsLinechartComponent extends ChartBase implements DoCheck,
       </div>
     `;
   }
-
 }

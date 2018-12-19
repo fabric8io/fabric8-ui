@@ -6,13 +6,12 @@ import { NamespaceScope } from './namespace.scope';
 import { NamespacedResourceService } from './namespaced.resource.service';
 import { WatcherFactory } from './watcher-factory.service';
 
-
 @Injectable()
 export class PodService extends NamespacedResourceService<Pod, Pods> {
   constructor(
     @Inject(KUBERNETES_RESTANGULAR) kubernetesRestangular: Restangular,
     namespaceScope: NamespaceScope,
-    watcherFactory: WatcherFactory
+    watcherFactory: WatcherFactory,
   ) {
     super(kubernetesRestangular, namespaceScope, '/pods', watcherFactory);
   }

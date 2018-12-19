@@ -4,30 +4,26 @@ import {
   EventEmitter,
   Input,
   Output,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import { cloneDeep } from 'lodash';
 import { User } from 'ngx-login-client';
-import {
-  SelectDropdownComponent
-} from './../../widgets/select-dropdown/select-dropdown.component';
+import { SelectDropdownComponent } from './../../widgets/select-dropdown/select-dropdown.component';
 
 @Component({
   selector: 'common-selector',
   templateUrl: './common-selector.component.html',
   styleUrls: ['./common-selector.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CommonSelectorComponent {
-
   @ViewChild('dropdown') dropdownRef: SelectDropdownComponent;
 
   private _internalItems: any[] = [];
   @Input('items') set listItemSetter(val: any[]) {
     this.backup = cloneDeep(val);
     if (this.searchValue.length) {
-      this.menuItems =
-        cloneDeep(this.backup.filter(i => i.value.indexOf(this.searchValue) > - 1));
+      this.menuItems = cloneDeep(this.backup.filter((i) => i.value.indexOf(this.searchValue) > -1));
     } else {
       this.menuItems = cloneDeep(this.backup);
     }
@@ -63,19 +59,21 @@ export class CommonSelectorComponent {
 
   onSelect(event: any) {
     // If 'No match found' selected then do nothing
-    if (event.key === null) { return; }
-    let findSelectedIndex = this.selectedItems.findIndex(i => i.key === event.key);
+    if (event.key === null) {
+      return;
+    }
+    let findSelectedIndex = this.selectedItems.findIndex((i) => i.key === event.key);
     if (this.allowMultiSelect) {
       if (findSelectedIndex > -1) {
         this.selectedItems.splice(findSelectedIndex, 1);
       } else {
-        let findItem = cloneDeep(this.backup.find(i => i.key === event.key));
+        let findItem = cloneDeep(this.backup.find((i) => i.key === event.key));
         if (findItem) {
           this.selectedItems.push(findItem);
         }
       }
     } else {
-      let findItem = cloneDeep(this.backup.find(i => i.key === event.key));
+      let findItem = cloneDeep(this.backup.find((i) => i.key === event.key));
       if (findItem) {
         this.selectedItems = [findItem];
       }
@@ -89,14 +87,14 @@ export class CommonSelectorComponent {
 
   updateSelection() {
     this.menuItems.forEach((item, index) => {
-      if (this.selectedItems.find(a => item.key === a.key)) {
+      if (this.selectedItems.find((a) => item.key === a.key)) {
         this.menuItems[index].selected = true;
       } else {
         this.menuItems[index].selected = false;
       }
     });
     this.backup.forEach((item, index) => {
-      if (this.selectedItems.find(a => item.key === a.key)) {
+      if (this.selectedItems.find((a) => item.key === a.key)) {
         this.backup[index].selected = true;
       } else {
         this.backup[index].selected = false;
@@ -110,16 +108,19 @@ export class CommonSelectorComponent {
     if (needle.length) {
       this.menuItems = cloneDeep(
         this.backup.filter(
-          i =>
-            i.value.toLowerCase().indexOf(needle.toLowerCase()) > -1 ||
-            i.stickontop
-        ));
-        if (!this.menuItems.length) {
-          this.menuItems = [{
-            key: null, value: 'No matches found.',
-            selected: false, cssLabelClass: undefined
-          }];
-        }
+          (i) => i.value.toLowerCase().indexOf(needle.toLowerCase()) > -1 || i.stickontop,
+        ),
+      );
+      if (!this.menuItems.length) {
+        this.menuItems = [
+          {
+            key: null,
+            value: 'No matches found.',
+            selected: false,
+            cssLabelClass: undefined,
+          },
+        ];
+      }
     } else {
       this.menuItems = cloneDeep(this.backup);
     }
@@ -136,12 +137,12 @@ export class CommonSelectorComponent {
     // Thus reset the value
     this.menuItems = cloneDeep(this.backup);
 
-    const compare1 = this.selectedItems.filter(i => this._selectedItemsBackup.findIndex(
-      b => b.key === i.key
-    ) === -1);
-    const compare2 = this._selectedItemsBackup.filter(i => this.selectedItems.findIndex(
-      b => b.key === i.key
-    ) === -1);
+    const compare1 = this.selectedItems.filter(
+      (i) => this._selectedItemsBackup.findIndex((b) => b.key === i.key) === -1,
+    );
+    const compare2 = this._selectedItemsBackup.filter(
+      (i) => this.selectedItems.findIndex((b) => b.key === i.key) === -1,
+    );
     if (compare1.length !== 0 || compare2.length !== 0) {
       this.onCloseSelector.emit(cloneDeep(this.selectedItems));
     }

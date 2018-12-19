@@ -18,8 +18,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private auth: AuthenticationService,
     private router: Router,
-    private loginService: LoginService) {
-  }
+    private loginService: LoginService,
+  ) {}
 
   ngOnInit(): void {
     if (this.auth.isLoggedIn()) {
@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
     this.loginService.gitHubSignIn();
   }
 
-  checkStatus(loginStatus: any){
+  checkStatus(loginStatus: any) {
     if (loginStatus.token) {
       this.router.navigate(['/'], {});
     } else {
@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  closeAlert(){
+  closeAlert() {
     this.showError = false;
   }
 }

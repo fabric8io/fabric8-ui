@@ -7,14 +7,14 @@ import {
   OnInit,
   Output,
   TemplateRef,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 
 @Component({
   selector: 'f8-select-dropdown',
   templateUrl: './select-dropdown.component.html',
   styleUrls: ['./select-dropdown.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SelectDropdownComponent implements OnInit {
   @Input() headerText: string = 'This is default header';
@@ -33,9 +33,7 @@ export class SelectDropdownComponent implements OnInit {
 
   @ViewChild('searchInput') searchInput: ElementRef;
 
-  constructor() {
-  }
-
+  constructor() {}
 
   private displayDropdown: boolean = false;
 

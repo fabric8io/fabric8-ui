@@ -4,11 +4,8 @@ import { RouterModule } from '@angular/router';
 import { MySpacesSearchSpacesDialogSpaceItemComponent } from './my-spaces-search-spaces-dialog-space-item.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule
-  ],
-  exports: [ MySpacesSearchSpacesDialogSpaceItemComponent ],
-  declarations: [ MySpacesSearchSpacesDialogSpaceItemComponent ]
+  imports: [CommonModule, RouterModule],
+  exports: [MySpacesSearchSpacesDialogSpaceItemComponent],
+  declarations: [MySpacesSearchSpacesDialogSpaceItemComponent],
 })
-export class MySpacesSearchSpacesDialogSpaceItemModule { }
+export class MySpacesSearchSpacesDialogSpaceItemModule {}

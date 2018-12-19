@@ -20,19 +20,18 @@ export interface ExtArea extends Area {
 
 // Interface for the node object of angular-tree-component
 export interface Node {
- data: {
-   id: string;
- };
+  data: {
+    id: string;
+  };
 }
 
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-areas',
   templateUrl: 'areas.component.html',
-  styleUrls: ['./areas.component.less']
+  styleUrls: ['./areas.component.less'],
 })
 export class AreasComponent implements OnInit, OnDestroy {
-
   @ViewChild(CreateAreaDialogComponent) createAreaDialog: CreateAreaDialogComponent;
   @ViewChild(ModalDirective) modal: ModalDirective;
 
@@ -56,36 +55,42 @@ export class AreasComponent implements OnInit, OnDestroy {
   constructor(
     private contexts: ContextService,
     private areaService: AreaService,
-    private userService: UserService
+    private userService: UserService,
   ) {
     this.subscriptions.add(
       this.contexts.current.subscribe((context: Context) => {
         this.context = context;
-        this.userOwnsSpace = context.space.relationships['owned-by'].data.id === this.userService.currentLoggedInUser.id;
-      })
+        this.userOwnsSpace =
+          context.space.relationships['owned-by'].data.id ===
+          this.userService.currentLoggedInUser.id;
+      }),
     );
   }
 
   ngOnInit() {
     this.actionConfig = {
-      moreActions: [{
-        id: 'addChildArea',
-        title: 'Add Child Area',
-        tooltip: 'Add Child Area'
-      }]
+      moreActions: [
+        {
+          id: 'addChildArea',
+          title: 'Add Child Area',
+          tooltip: 'Add Child Area',
+        },
+      ],
     } as ActionConfig;
 
     this.emptyStateConfig = {
       actions: {
-        primaryActions: [{
-          id: 'addArea',
-          title: 'Add Area',
-          tooltip: 'Add Area'
-        }],
-        moreActions: []
+        primaryActions: [
+          {
+            id: 'addArea',
+            title: 'Add Area',
+            tooltip: 'Add Area',
+          },
+        ],
+        moreActions: [],
       } as ActionConfig,
       title: 'Add Area',
-      info: 'Start by adding an area.'
+      info: 'Start by adding an area.',
     } as EmptyStateConfig;
 
     this.treeListConfig = {
@@ -96,21 +101,23 @@ export class AreasComponent implements OnInit, OnDestroy {
       showCheckbox: false,
       treeOptions: {
         allowDrag: false,
-        isExpandedField: 'expanded'
-      }
+        isExpandedField: 'expanded',
+      },
     } as TreeListConfig;
 
-    this.subscriptions.add(this.areaService.getAllBySpaceId(this.context.space.id).subscribe(areas => {
-      this.selectedAreaId = this.context.space.id;
-      areas.forEach((area) => {
-        if (area.attributes.parent_path == '/') {
-          this.selectedAreaId = area.id;
-          this.defaultArea = area.id;
-        }
-      });
-      this.allAreas = areas as ExtArea[]; // store all areas for filter/sort
-      this.treeAreas = this.buildTree(this.allAreas); // transform flat array into tree list
-    }));
+    this.subscriptions.add(
+      this.areaService.getAllBySpaceId(this.context.space.id).subscribe((areas) => {
+        this.selectedAreaId = this.context.space.id;
+        areas.forEach((area) => {
+          if (area.attributes.parent_path == '/') {
+            this.selectedAreaId = area.id;
+            this.defaultArea = area.id;
+          }
+        });
+        this.allAreas = areas as ExtArea[]; // store all areas for filter/sort
+        this.treeAreas = this.buildTree(this.allAreas); // transform flat array into tree list
+      }),
+    );
   }
 
   ngOnDestroy() {
@@ -218,7 +225,10 @@ export class AreasComponent implements OnInit, OnDestroy {
   private getNestedChildren(elements: ExtArea[], parent: Area): ExtArea[] {
     let areas = [];
     elements.forEach((element) => {
-      if (element.relationships.parent !== undefined && element.relationships.parent.data.id === parent.id) {
+      if (
+        element.relationships.parent !== undefined &&
+        element.relationships.parent.data.id === parent.id
+      ) {
         let children = this.getNestedChildren(elements, element);
         if (children.length > 0) {
           element.children = children;
@@ -236,8 +246,10 @@ export class AreasComponent implements OnInit, OnDestroy {
     elements.forEach((element) => {
       element.children = undefined;
       if (element.relationships.parent !== undefined) {
-        let area = this.getClosestAncestor(elements,
-          this.getArea(element.relationships.parent.data.id));
+        let area = this.getClosestAncestor(
+          elements,
+          this.getArea(element.relationships.parent.data.id),
+        );
         if (area !== undefined) {
           element.relationships.parent.data = area;
         } else {
@@ -257,8 +269,7 @@ export class AreasComponent implements OnInit, OnDestroy {
       }
     }
     if (area === undefined && parent.relationships.parent !== undefined) {
-      area = this.getClosestAncestor(elements,
-        this.getArea(parent.relationships.parent.data.id));
+      area = this.getClosestAncestor(elements, this.getArea(parent.relationships.parent.data.id));
     }
     return area;
   }

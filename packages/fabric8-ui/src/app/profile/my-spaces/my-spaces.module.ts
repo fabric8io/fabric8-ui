@@ -11,7 +11,7 @@ import { MySpacesItemModule } from './my-spaces-item/my-spaces-item.module';
 import { MySpacesRoutingModule } from './my-spaces-routing.module';
 import { MySpacesSearchSpacesDialogModule } from './my-spaces-search-dialog/my-spaces-search-spaces-dialog.module';
 import { MySpacesToolbarModule } from './my-spaces-toolbar/my-spaces-toolbar.module';
-import { MySpacesComponent }     from './my-spaces.component';
+import { MySpacesComponent } from './my-spaces.component';
 
 @NgModule({
   imports: [
@@ -25,9 +25,9 @@ import { MySpacesComponent }     from './my-spaces.component';
     MySpacesItemHeadingModule,
     MySpacesToolbarModule,
     MySpacesRoutingModule,
-    MySpacesSearchSpacesDialogModule
+    MySpacesSearchSpacesDialogModule,
   ],
-  declarations: [ MySpacesComponent ],
-  providers: [ UserSpacesService ]
+  declarations: [MySpacesComponent],
+  providers: [UserSpacesService],
 })
 export class MySpacesModule {}

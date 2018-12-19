@@ -17,7 +17,6 @@ describe('Unit Test :: UserReducer', () => {
     expect(UserInitialState).toEqual(initialState);
   });
 
-
   it('get action should return payload as state', () => {
     const users: UserState = {
       '1': {
@@ -25,15 +24,15 @@ describe('Unit Test :: UserReducer', () => {
         name: 'user 1',
         avatar: 'user1.jpg',
         username: 'user1',
-        currentUser: false
+        currentUser: false,
       },
       '2': {
         id: '2',
         name: 'user 2',
         avatar: 'user2.jpg',
         username: 'user2',
-        currentUser: false
-      }
+        currentUser: false,
+      },
     };
     const action = new UserActions.Set(users);
     const state = UserReducer(undefined, action);
@@ -47,8 +46,8 @@ describe('Unit Test :: UserReducer', () => {
         name: 'user 1',
         avatar: 'user1.jpg',
         username: 'user1',
-        currentUser: false
-      }
+        currentUser: false,
+      },
     };
 
     const action = new UserActions.Set(newUsers);
@@ -63,15 +62,15 @@ describe('Unit Test :: UserReducer', () => {
         name: 'user 1',
         avatar: 'user1.jpg',
         username: 'user1',
-        currentUser: false
+        currentUser: false,
       },
       '2': {
         id: '2',
         name: 'user 2',
         avatar: 'user2.jpg',
         username: 'user2',
-        currentUser: false
-      }
+        currentUser: false,
+      },
     };
     const newUsers: UserState = {
       '3': {
@@ -79,12 +78,11 @@ describe('Unit Test :: UserReducer', () => {
         name: 'user 3',
         avatar: 'user3.jpg',
         username: 'user3',
-        currentUser: false
-      }
+        currentUser: false,
+      },
     };
     const action = new UserActions.Set(newUsers);
     const state = UserReducer(previousState, action);
-    expect({...state}).toEqual({...{...previousState, ...newUsers}});
+    expect({ ...state }).toEqual({ ...{ ...previousState, ...newUsers } });
   });
 });
-

@@ -10,9 +10,9 @@ import { filterOutClosedItems, WorkItemsData } from '../../shared/workitem-utils
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-work-item-widget',
   templateUrl: './work-item-widget.component.html',
-  styleUrls: ['./work-item-widget.component.less']
+  styleUrls: ['./work-item-widget.component.less'],
 })
-export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
+export class WorkItemWidgetComponent implements OnDestroy, OnInit {
   currentSpace: Space;
   currentSpaceId: string = 'default';
   loading: boolean = false;
@@ -23,24 +23,28 @@ export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
   workItems: WorkItem[] = [];
 
   constructor(
-      private spacesService: Spaces,
-      private filterService: FilterService,
-      private workItemService: WorkItemService,
-      private userService: UserService) {
-    this.subscriptions.push(userService.loggedInUser.subscribe(user => {
-      this.loggedInUser = user;
-    }));
-    this.subscriptions.push(spacesService.recent.subscribe(spaces => {
-      this.recentSpaces = spaces;
-      this.fetchRecentSpace();
-    }));
+    private spacesService: Spaces,
+    private filterService: FilterService,
+    private workItemService: WorkItemService,
+    private userService: UserService,
+  ) {
+    this.subscriptions.push(
+      userService.loggedInUser.subscribe((user) => {
+        this.loggedInUser = user;
+      }),
+    );
+    this.subscriptions.push(
+      spacesService.recent.subscribe((spaces) => {
+        this.recentSpaces = spaces;
+        this.fetchRecentSpace();
+      }),
+    );
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => {
+    this.subscriptions.forEach((sub) => {
       sub.unsubscribe();
     });
   }
@@ -67,36 +71,45 @@ export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
       {},
       this.filterService.and_notation,
       this.filterService.queryBuilder(
-        'assignee', this.filterService.equal_notation, this.loggedInUser.id
-      )
+        'assignee',
+        this.filterService.equal_notation,
+        this.loggedInUser.id,
+      ),
     );
     const spaceQuery = this.filterService.queryBuilder(
-      'space', this.filterService.equal_notation, space.id
+      'space',
+      this.filterService.equal_notation,
+      space.id,
     );
     const filters = this.filterService.queryJoiner(
-      assigneeQuery, this.filterService.and_notation, spaceQuery
+      assigneeQuery,
+      this.filterService.and_notation,
+      spaceQuery,
     );
 
     this.subscriptions.push(
       this.workItemService
-        .getWorkItems(100000, {expression: filters}).pipe(
+        .getWorkItems(100000, { expression: filters })
+        .pipe(
           map((val: WorkItemsData) => val.workItems),
-          map(workItems => filterOutClosedItems(workItems)),
+          map((workItems) => filterOutClosedItems(workItems)),
           // Resolve the work item type
-          tap(workItems => workItems.forEach(workItem => this.workItemService.resolveType(workItem))),
-          tap(workItems => {
-            workItems.forEach(workItem => {
+          tap((workItems) =>
+            workItems.forEach((workItem) => this.workItemService.resolveType(workItem)),
+          ),
+          tap((workItems) => {
+            workItems.forEach((workItem) => {
               if (workItem.relationalData === undefined) {
                 workItem.relationalData = {};
               }
             });
           }),
-          tap(() => this.loading = false)
+          tap(() => (this.loading = false)),
         )
         .subscribe((workItems: WorkItem[]) => {
           this.workItems = workItems;
           this.selectRecentSpace(workItems);
-        })
+        }),
     );
   }
 

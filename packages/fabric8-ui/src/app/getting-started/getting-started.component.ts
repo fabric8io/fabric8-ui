@@ -9,10 +9,9 @@ import { ProviderService } from '../shared/account/provider.service';
   selector: 'alm-getting-started',
   templateUrl: './getting-started.component.html',
   styleUrls: ['./getting-started.component.less'],
-  providers: []
+  providers: [],
 })
 export class GettingStartedComponent implements OnDestroy, OnInit {
-
   loggedInUser: User;
   openShiftLinked: boolean = false;
   subscriptions: Subscription[] = [];
@@ -20,43 +19,44 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
   errorConnecting: boolean = false;
 
   constructor(
-      private auth: AuthenticationService,
-      private providerService: ProviderService,
-      private router: Router,
-      private route: ActivatedRoute,
-      private userService: UserService) {
-  }
+    private auth: AuthenticationService,
+    private providerService: ProviderService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private userService: UserService,
+  ) {}
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => {
+    this.subscriptions.forEach((sub) => {
       sub.unsubscribe();
     });
   }
 
   ngOnInit(): void {
-   let userSub = this.userService.loggedInUser
-     .subscribe((user) => {
-       this.loggedInUser = user;
-       if (this.loggedInUser && this.loggedInUser.attributes) {
-         let connectionSub = this.auth.isOpenShiftConnected(this.loggedInUser.attributes.cluster).subscribe((isConnected) => {
-           this.openShiftLinked = isConnected;
-           let wait = this.route.snapshot.queryParams['wait'];
-           if (!isConnected && !wait) {
-             // first time through and user isn't connected - automatically connect accounts
-             this.connectAccounts();
-           } else if (!isConnected && wait) {
-             // second time through - do not try again if wait is on URL and the user is still not connected
-             // something happened, show error
-             this.errorConnecting = true;
-           } else {
-             // success - user is connected - send home
-             this.routeToHomeIfCompleted();
-           }
-         });
-         this.subscriptions.push(connectionSub);
-       }
-     });
-   this.subscriptions.push(userSub);
+    let userSub = this.userService.loggedInUser.subscribe((user) => {
+      this.loggedInUser = user;
+      if (this.loggedInUser && this.loggedInUser.attributes) {
+        let connectionSub = this.auth
+          .isOpenShiftConnected(this.loggedInUser.attributes.cluster)
+          .subscribe((isConnected) => {
+            this.openShiftLinked = isConnected;
+            let wait = this.route.snapshot.queryParams['wait'];
+            if (!isConnected && !wait) {
+              // first time through and user isn't connected - automatically connect accounts
+              this.connectAccounts();
+            } else if (!isConnected && wait) {
+              // second time through - do not try again if wait is on URL and the user is still not connected
+              // something happened, show error
+              this.errorConnecting = true;
+            } else {
+              // success - user is connected - send home
+              this.routeToHomeIfCompleted();
+            }
+          });
+        this.subscriptions.push(connectionSub);
+      }
+    });
+    this.subscriptions.push(userSub);
   }
 
   // Actions
@@ -64,7 +64,10 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
    * Link OpenShift accounts
    */
   connectAccounts(): void {
-    this.providerService.linkOpenShift(this.loggedInUser.attributes.cluster, window.location.origin + '/_gettingstarted?wait=true');
+    this.providerService.linkOpenShift(
+      this.loggedInUser.attributes.cluster,
+      window.location.origin + '/_gettingstarted?wait=true',
+    );
   }
 
   /**
@@ -88,7 +91,7 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
    * @returns {boolean} True if the getting started page is shown
    */
   private isGettingStartedPage(): boolean {
-    return (this.router.url.indexOf('_gettingstarted') !== -1);
+    return this.router.url.indexOf('_gettingstarted') !== -1;
   }
 
   /**

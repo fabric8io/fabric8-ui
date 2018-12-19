@@ -10,21 +10,27 @@ export class ToolbarHeader extends BaseElement {
   filterDropdown = new ui.Dropdown(
     this.$('.input-group-btn'),
     this.$('.input-group-btn .dropdown-menu'),
-    'Filter-By dropdown'
+    'Filter-By dropdown',
   );
   selectFilterCondition = new ui.Dropdown(
     this.$('.filter-select'),
     this.$('.filter-select .dropdown-menu'),
-    'Select Filter Condition'
+    'Select Filter Condition',
   );
   private clearAllFilter = new ui.Clickable(this.$('.clear-filters'), 'Clear All filters');
-  showCompleted = new BaseElement(this.$('.toolbar-pf-view-selector #showCompleted'), 'Show Completed');
+  showCompleted = new BaseElement(
+    this.$('.toolbar-pf-view-selector #showCompleted'),
+    'Show Completed',
+  );
   saveFilter = new ui.Clickable(this.$('.save-filters'), 'Save');
   saveFilterDialog = new BaseElement(this.$('.save-filter-dropdown'));
   saveFilterBtn = new ui.Button(this.saveFilterDialog.$('.save-cq-btn'), 'Save');
   closeBtn = new ui.Button(this.$('.cancel-cq-btn'), 'Cancel');
   titleTextInput = new ui.TextInput(this.saveFilterDialog.$('input.form-control'), 'Query Title');
-  activeFiltersList = new ui.BaseElementArray(this.$$('.f8-filters--active li'), 'Active filters div');
+  activeFiltersList = new ui.BaseElementArray(
+    this.$$('.f8-filters--active li'),
+    'Active filters div',
+  );
   workItemList = new WorkItemList($('alm-work-item-list'));
 
   constructor(el: ElementFinder, name = 'ToolBar Header') {

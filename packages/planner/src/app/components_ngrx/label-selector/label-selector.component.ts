@@ -6,14 +6,12 @@ import {
   OnInit,
   Output,
   SimpleChanges,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import { cloneDeep } from 'lodash';
 import { LabelModel, LabelUI } from './../../models/label.model';
 import { LabelService } from './../../services/label.service';
-import {
-  SelectDropdownComponent
-} from './../../widgets/select-dropdown/select-dropdown.component';
+import { SelectDropdownComponent } from './../../widgets/select-dropdown/select-dropdown.component';
 
 // ngrx stuff
 import { Store } from '@ngrx/store';
@@ -23,28 +21,27 @@ import * as LabelActions from './../../actions/label.actions';
 @Component({
   selector: 'label-selector',
   templateUrl: './label-selector.component.html',
-  styleUrls: ['./label-selector.component.less']
+  styleUrls: ['./label-selector.component.less'],
 })
-
 export class LabelSelectorComponent implements OnInit {
-
   @ViewChild('labelname') labelnameInput: ElementRef;
   @ViewChild('dropdown') dropdownRef: SelectDropdownComponent;
   @Input('allLabels') set allLabelsSetter(labels: LabelUI[]) {
     this.allLabels = [...labels];
     this.createDisabled = true;
-    this.backup = cloneDeep(this.allLabels.map((label: LabelUI) => {
-      return {
-        id: label.id,
-        color: label.backgroundColor,
-        border: label.borderColor,
-        name: label.name,
-        selected: false
-      };
-    }));
+    this.backup = cloneDeep(
+      this.allLabels.map((label: LabelUI) => {
+        return {
+          id: label.id,
+          color: label.backgroundColor,
+          border: label.borderColor,
+          name: label.name,
+          selected: false,
+        };
+      }),
+    );
     if (this.searchValue.length) {
-      this.labels =
-        cloneDeep(this.backup.filter(i => i.name.indexOf(this.searchValue) > - 1));
+      this.labels = cloneDeep(this.backup.filter((i) => i.name.indexOf(this.searchValue) > -1));
     } else {
       this.labels = cloneDeep(this.backup);
     }
@@ -79,38 +76,35 @@ export class LabelSelectorComponent implements OnInit {
   private selectedLabels: LabelUI[] = [];
   private _selectedLabelsBackup: LabelUI[] = [];
 
-  constructor(
-    private labelService: LabelService,
-    private store: Store<AppState>
-  ) {}
+  constructor(private labelService: LabelService, private store: Store<AppState>) {}
 
   ngOnInit() {
     this.colors = [
-      {color: '#fbdebf', border: '#f39d3c'},
-      {color: '#f7bd7f', border: '#f39d3c'},
-      {color: '#fbeabc', border: '#f39d3c'},
-      {color: '#f9d67a', border: '#f39d3c'},
-      {color: '#e4f5bc', border: '#ace12e'},
-      {color: '#cfe7cd', border: '#6ec664'},
-      {color: '#9ecf99', border: '#6ec664'},
-      {color: '#bedee1', border: '#3a9ca6'},
-      {color: '#7dbdc3', border: '#3a9ca6'},
-      {color: '#beedf9', border: '#35caed'},
-      {color: '#7cdbf3', border: '#35caed'},
-      {color: '#c7bfff', border: '#8461f7'},
-      {color: '#a18fff', border: '#8461f7'},
-      {color: '#ededed', border: '#bbbbbb'},
-      {color: '#d1d1d1', border: '#bbbbbb'}
+      { color: '#fbdebf', border: '#f39d3c' },
+      { color: '#f7bd7f', border: '#f39d3c' },
+      { color: '#fbeabc', border: '#f39d3c' },
+      { color: '#f9d67a', border: '#f39d3c' },
+      { color: '#e4f5bc', border: '#ace12e' },
+      { color: '#cfe7cd', border: '#6ec664' },
+      { color: '#9ecf99', border: '#6ec664' },
+      { color: '#bedee1', border: '#3a9ca6' },
+      { color: '#7dbdc3', border: '#3a9ca6' },
+      { color: '#beedf9', border: '#35caed' },
+      { color: '#7cdbf3', border: '#35caed' },
+      { color: '#c7bfff', border: '#8461f7' },
+      { color: '#a18fff', border: '#8461f7' },
+      { color: '#ededed', border: '#bbbbbb' },
+      { color: '#d1d1d1', border: '#bbbbbb' },
     ];
     this.newSelectedColor = this.colors[Math.floor(Math.random() * this.colors.length)];
   }
 
   onSelect(event: any) {
-    let findSelectedIndex = this.selectedLabels.findIndex(i => i.id === event.id);
+    let findSelectedIndex = this.selectedLabels.findIndex((i) => i.id === event.id);
     if (findSelectedIndex > -1) {
       this.selectedLabels.splice(findSelectedIndex, 1);
     } else {
-      let findLabel = cloneDeep(this.allLabels.find(i => i.id === event.id));
+      let findLabel = cloneDeep(this.allLabels.find((i) => i.id === event.id));
       if (findLabel) {
         this.selectedLabels.push(findLabel);
       }
@@ -121,14 +115,14 @@ export class LabelSelectorComponent implements OnInit {
 
   updateSelection() {
     this.labels.forEach((label, index) => {
-      if (this.selectedLabels.find(l => label.id === l.id)) {
+      if (this.selectedLabels.find((l) => label.id === l.id)) {
         this.labels[index].selected = true;
       } else {
         this.labels[index].selected = false;
       }
     });
     this.backup.forEach((label, index) => {
-      if (this.selectedLabels.find(l => label.id === l.id)) {
+      if (this.selectedLabels.find((l) => label.id === l.id)) {
         this.backup[index].selected = true;
       } else {
         this.backup[index].selected = false;
@@ -140,9 +134,11 @@ export class LabelSelectorComponent implements OnInit {
     let needle = event.trim();
     this.searchValue = needle;
     if (needle.length) {
-      this.labels = cloneDeep(this.backup.filter(
-        i =>
-          i.name.toLocaleLowerCase().indexOf(needle.toLocaleLowerCase()) > -1));
+      this.labels = cloneDeep(
+        this.backup.filter(
+          (i) => i.name.toLocaleLowerCase().indexOf(needle.toLocaleLowerCase()) > -1,
+        ),
+      );
     } else {
       this.labels = cloneDeep(this.backup);
     }
@@ -169,13 +165,13 @@ export class LabelSelectorComponent implements OnInit {
       return;
     }
     this.createDisabled = true;
-    let labelPayload: LabelModel  = {
+    let labelPayload: LabelModel = {
       attributes: {
-        'name': name,
+        name: name,
         'background-color': this.newSelectedColor.color,
-        'border-color': this.newSelectedColor.border
+        'border-color': this.newSelectedColor.border,
       },
-      type: 'labels'
+      type: 'labels',
     };
     this.store.dispatch(new LabelActions.Add(labelPayload));
   }
@@ -190,12 +186,12 @@ export class LabelSelectorComponent implements OnInit {
     // Thus reset the value
     this.labels = cloneDeep(this.backup);
 
-    const compare1 = this.selectedLabels.filter(i => this._selectedLabelsBackup.findIndex(
-      b => b.id === i.id
-    ) === -1);
-    const compare2 = this._selectedLabelsBackup.filter(i => this.selectedLabels.findIndex(
-      b => b.id === i.id
-    ) === -1);
+    const compare1 = this.selectedLabels.filter(
+      (i) => this._selectedLabelsBackup.findIndex((b) => b.id === i.id) === -1,
+    );
+    const compare2 = this._selectedLabelsBackup.filter(
+      (i) => this.selectedLabels.findIndex((b) => b.id === i.id) === -1,
+    );
     if (compare1.length !== 0 || compare2.length !== 0) {
       this.onCloseSelector.emit(cloneDeep(this.selectedLabels));
     }

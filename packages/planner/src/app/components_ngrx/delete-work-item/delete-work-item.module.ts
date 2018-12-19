@@ -6,22 +6,9 @@ import { ModalService } from '../../services/modal.service';
 import { DeleteWorkItemComponent } from './delete-work-item.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    TooltipModule,
-    FeatureFlagModule
-  ],
-  declarations: [
-    DeleteWorkItemComponent
-  ],
-  exports: [
-    DeleteWorkItemComponent
-  ],
-  providers: [
-    ModalService,
-    TooltipConfig
-  ]
+  imports: [CommonModule, TooltipModule, FeatureFlagModule],
+  declarations: [DeleteWorkItemComponent],
+  exports: [DeleteWorkItemComponent],
+  providers: [ModalService, TooltipConfig],
 })
-
 export class DeleteWorkItemModule {}
-

@@ -4,7 +4,7 @@ import { SettingsOverviewRoutingModule } from './settings-overview-routing.modul
 import { SettingsOverviewComponent } from './settings-overview.component';
 
 @NgModule({
-  imports:      [ CommonModule, SettingsOverviewRoutingModule ],
-  declarations: [ SettingsOverviewComponent ]
+  imports: [CommonModule, SettingsOverviewRoutingModule],
+  declarations: [SettingsOverviewComponent],
 })
-export class SettingsOverviewModule { }
+export class SettingsOverviewModule {}

@@ -2,7 +2,6 @@ import { browser } from 'protractor';
 import { PlannerPage } from '../page_objects/planner';
 import * as support from '../support';
 
-
 describe('Iteration test', () => {
   let planner: PlannerPage;
   let c = new support.Constants();
@@ -31,9 +30,14 @@ describe('Iteration test', () => {
     let year = await planner.iteration.getYear();
     let lastDayOfMonth = await planner.iteration.getLastDayOfMonth();
     await planner.iteration.clickCreateIteration();
-    expect(await planner.sidePanel.getIterationDate()).toContain('new Iteration [Active]', 'Active test failed');
+    expect(await planner.sidePanel.getIterationDate()).toContain(
+      'new Iteration [Active]',
+      'Active test failed',
+    );
     expect(await planner.sidePanel.getIterationDate()).toContain(`${month} 1, ${year}`);
-    expect(await planner.sidePanel.getIterationDate()).toContain(`${month} ${lastDayOfMonth}, ${year}`);
+    expect(await planner.sidePanel.getIterationDate()).toContain(
+      `${month} ${lastDayOfMonth}, ${year}`,
+    );
   });
 
   it('should create a new child iteration', async () => {
@@ -57,12 +61,16 @@ describe('Iteration test', () => {
     await planner.workItemList.workItem(workItemTitle1).openQuickPreview();
     await planner.quickPreview.addIteration(dropdownIteration1);
     await planner.quickPreview.close();
-    await planner.workItemList.workItem(workItemTitle1).iteration.untilTextIsPresent(dropdownIteration1);
+    await planner.workItemList
+      .workItem(workItemTitle1)
+      .iteration.untilTextIsPresent(dropdownIteration1);
     expect(await planner.workItemList.iterationText(workItemTitle1)).toBe(dropdownIteration1);
     await planner.sidePanel.selectIterationKebab(dropdownIteration1);
     await planner.sidePanel.openIterationDialogue();
     await planner.iteration.editIteration(updateIteration);
-    await planner.workItemList.workItem(workItemTitle1).iteration.untilTextIsPresent(updateIteration);
+    await planner.workItemList
+      .workItem(workItemTitle1)
+      .iteration.untilTextIsPresent(updateIteration);
     expect(await planner.workItemList.iterationText(workItemTitle1)).toBe(updateIteration);
   });
 

@@ -8,9 +8,9 @@ import { User } from 'a-runtime-console/models/user';
 import { Broadcaster, Notifications } from 'ngx-base';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { Fabric8WitModule, SpaceNameModule } from 'ngx-fabric8-wit';
-import { SpaceService  } from 'ngx-fabric8-wit';
-import { UniqueSpaceNameValidatorDirective  } from 'ngx-fabric8-wit/spaces/unique-space-name.directive';
-import { ValidSpaceNameValidatorDirective  } from 'ngx-fabric8-wit/spaces/valid-space-name.directive';
+import { SpaceService } from 'ngx-fabric8-wit';
+import { UniqueSpaceNameValidatorDirective } from 'ngx-fabric8-wit/spaces/unique-space-name.directive';
+import { ValidSpaceNameValidatorDirective } from 'ngx-fabric8-wit/spaces/valid-space-name.directive';
 import { UserService } from 'ngx-login-client';
 import { ConnectableObservable, of as observableOf, Subscription, throwError } from 'rxjs';
 import { SpaceNamespaceService } from '../../shared/runtime-console/space-namespace.service';
@@ -18,7 +18,6 @@ import { AddSpaceOverlayComponent } from './add-space-overlay.component';
 import { osioMocks } from './osio-data-structure-mocks';
 
 describe('AddSpaceOverlayComponent', () => {
-
   let mockSpaceService: any;
   let mockSpaceNamespaceService: any;
   let mockUserService: any;
@@ -40,7 +39,13 @@ describe('AddSpaceOverlayComponent', () => {
     mockBroadcaster.on.and.returnValue(observableOf('dummy'));
 
     TestBed.configureTestingModule({
-      imports: [FormsModule, CommonModule, Fabric8WitModule, SpaceNameModule, ModalModule.forRoot()],
+      imports: [
+        FormsModule,
+        CommonModule,
+        Fabric8WitModule,
+        SpaceNameModule,
+        ModalModule.forRoot(),
+      ],
       declarations: [AddSpaceOverlayComponent],
       providers: [
         { provide: SpaceService, useValue: mockSpaceService },
@@ -48,8 +53,8 @@ describe('AddSpaceOverlayComponent', () => {
         { provide: UserService, useValue: mockUserService },
         { provide: Notifications, useValue: mockNotifications },
         { provide: Router, useValue: mockRouter },
-        { provide: Broadcaster, useValue: mockBroadcaster }
-      ]
+        { provide: Broadcaster, useValue: mockBroadcaster },
+      ],
     });
 
     fixture = TestBed.createComponent(AddSpaceOverlayComponent);
@@ -76,7 +81,9 @@ describe('AddSpaceOverlayComponent', () => {
 
   describe('page data validation', () => {
     beforeEach(() => {
-      mockUserService.loggedInUser = observableOf(mockUserService.currentLoggedInUser) as ConnectableObservable<User>;
+      mockUserService.loggedInUser = observableOf(
+        mockUserService.currentLoggedInUser,
+      ) as ConnectableObservable<User>;
       mockSpaceService.getSpaceByName.and.returnValue(observableOf(null));
     });
 
@@ -105,16 +112,24 @@ describe('AddSpaceOverlayComponent', () => {
       expect(component.spaceForm.valid).toBeFalsy();
       expect(getCreateSpaceButtonElement().disabled).toBeTruthy();
       expect(getNameErrorsElement()).not.toBeNull();
-      expect(getNameErrorsElement().textContent).toContain('Space Name is required to create a Space.');
+      expect(getNameErrorsElement().textContent).toContain(
+        'Space Name is required to create a Space.',
+      );
     }));
 
     it('space name validators are called', fakeAsync(() => {
-      let validSpaceNameEl = fixture.debugElement.query(By.directive(ValidSpaceNameValidatorDirective));
+      let validSpaceNameEl = fixture.debugElement.query(
+        By.directive(ValidSpaceNameValidatorDirective),
+      );
       let validSpaceNameInstance = validSpaceNameEl.injector.get(ValidSpaceNameValidatorDirective);
       spyOn(validSpaceNameInstance, 'validate');
 
-      let uniqueSpaceNameEl = fixture.debugElement.query(By.directive(UniqueSpaceNameValidatorDirective));
-      let uniqueSpaceNameInstance = uniqueSpaceNameEl.injector.get(UniqueSpaceNameValidatorDirective);
+      let uniqueSpaceNameEl = fixture.debugElement.query(
+        By.directive(UniqueSpaceNameValidatorDirective),
+      );
+      let uniqueSpaceNameInstance = uniqueSpaceNameEl.injector.get(
+        UniqueSpaceNameValidatorDirective,
+      );
       spyOn(uniqueSpaceNameInstance, 'validate');
 
       let nameElement = getNameElement();
@@ -132,7 +147,6 @@ describe('AddSpaceOverlayComponent', () => {
   });
 
   describe('page actions mapping', () => {
-
     it('create space and exit button', () => {
       mockSpaceService.create.and.returnValue(observableOf(osioMocks.createSpace()));
       mockSpaceNamespaceService.updateConfigMap.and.returnValue(observableOf({}));
@@ -213,7 +227,6 @@ describe('AddSpaceOverlayComponent', () => {
   });
 
   describe('#createSpace', () => {
-
     beforeEach(() => {
       spyOn(component.spaceForm, 'reset');
     });
@@ -287,7 +300,7 @@ describe('AddSpaceOverlayComponent', () => {
         mockUserService.currentLoggedInUser = {
           id: undefined,
           attributes: osioMocks.createUserProfile(),
-          type: 'mock-type'
+          type: 'mock-type',
         };
 
         component.createSpace();

@@ -6,19 +6,27 @@ import { NamespacedResourceService } from '../service/namespaced.resource.servic
 import { KubernetesResourceStore } from './kuberentesresource.store';
 
 @Injectable()
-export abstract class NamespacedResourceStore<T extends KubernetesResource, L extends Array<T>, R extends NamespacedResourceService<T, L>> extends KubernetesResourceStore<T, L, R> {
+export abstract class NamespacedResourceStore<
+  T extends KubernetesResource,
+  L extends Array<T>,
+  R extends NamespacedResourceService<T, L>
+> extends KubernetesResourceStore<T, L, R> {
   private namespaceSubscription: Subscription;
 
-  constructor(service: any, initialList: any, initialCurrent: any, public namespaceScope: INamespaceScope, type: any) {
+  constructor(
+    service: any,
+    initialList: any,
+    initialCurrent: any,
+    public namespaceScope: INamespaceScope,
+    type: any,
+  ) {
     super(service, initialList, initialCurrent, type);
     if (this.namespaceScope) {
-      this.namespaceSubscription = this.namespaceScope.namespace.subscribe(
-        namespace => {
-          this.service.namespace = namespace;
-          this.recreateWatcher();
-          this.reload();
-        }
-      );
+      this.namespaceSubscription = this.namespaceScope.namespace.subscribe((namespace) => {
+        this.service.namespace = namespace;
+        this.recreateWatcher();
+        this.reload();
+      });
     }
   }
 

@@ -1,17 +1,7 @@
-import {
-  AfterViewInit,
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewEncapsulation
-} from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Broadcaster } from 'ngx-base';
-import {
-  Context,
-  Contexts,
-  Space
-} from 'ngx-fabric8-wit';
+import { Context, Contexts, Space } from 'ngx-fabric8-wit';
 import { Filter, FilterConfig, FilterEvent, FilterType } from 'patternfly-ng/filter';
 import { SortEvent, SortField } from 'patternfly-ng/sort';
 import { ToolbarConfig } from 'patternfly-ng/toolbar';
@@ -29,9 +19,7 @@ export type QueryJson = {
   selector: 'alm-pipelines',
   templateUrl: 'pipelines.component.html',
   styleUrls: ['./pipelines.component.less'],
-  providers: [
-    PipelinesService
-  ]
+  providers: [PipelinesService],
 })
 export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
   toolbarConfig: ToolbarConfig;
@@ -46,7 +34,7 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
   private _currentSortField: SortField = {
     id: 'application',
     title: 'Application',
-    sortType: 'alpha'
+    sortType: 'alpha',
   } as SortField;
   private space: Space;
   private subscriptions: Subscription[] = [];
@@ -56,7 +44,7 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
     private contexts: Contexts,
     private pipelinesService: PipelinesService,
     private router: Router,
-    private broadcaster: Broadcaster
+    private broadcaster: Broadcaster,
   ) {
     this.toolbarConfig = {
       filterConfig: {
@@ -65,33 +53,33 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
             id: 'application',
             title: 'Application',
             placeholder: 'Filter by Application...',
-            type: FilterType.TEXT
+            type: FilterType.TEXT,
           },
           {
             id: 'codebase',
             title: 'Codebase',
             placeholder: 'Filter by Codebase...',
-            type: FilterType.TEXT
-          }
+            type: FilterType.TEXT,
+          },
         ],
         appliedFilters: [],
         resultsCount: this.pipelines.length,
-        tooltipPlacement: 'right'
+        tooltipPlacement: 'right',
       } as FilterConfig,
       sortConfig: {
         fields: [
           {
             id: 'application',
             title: 'Application',
-            sortType: 'alpha'
+            sortType: 'alpha',
           },
           {
             id: 'codebase',
             title: 'Codebase',
-            sortType: 'alpha'
-          }
-        ]
-      }
+            sortType: 'alpha',
+          },
+        ],
+      },
     } as ToolbarConfig;
   }
 
@@ -100,15 +88,15 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
       this.contexts.current.subscribe((context: Context) => {
         this._context = context;
         this.space = context.space;
-      }));
+      }),
+    );
 
     this.subscriptions.push(
-      this.pipelinesService.getCurrentPipelines()
-        .subscribe((buildConfigs: BuildConfig[]) => {
-          this._allPipelines = buildConfigs;
-          this.applyFilters();
-          this.applySort();
-        })
+      this.pipelinesService.getCurrentPipelines().subscribe((buildConfigs: BuildConfig[]) => {
+        this._allPipelines = buildConfigs;
+        this.applyFilters();
+        this.applySort();
+      }),
     );
 
     this.subscriptions.push(
@@ -119,7 +107,7 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
           this.consoleAvailable = false;
         }
         this.openshiftConsoleUrl = url;
-      })
+      }),
     );
   }
 
@@ -142,8 +130,8 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
     this.broadcaster.broadcast('analyticsTracker', {
       event: 'add app opened',
       data: {
-        source: 'pipelines'
-      }
+        source: 'pipelines',
+      },
     });
   }
 
@@ -179,7 +167,7 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
             matches = false;
           }
         }
-        this._appliedFilters.forEach(filter => {
+        this._appliedFilters.forEach((filter) => {
           if (filter.field.id === 'application') {
             if (!bc.id.includes(filter.value)) {
               matches = false;
@@ -200,20 +188,22 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private applySort(): void {
-    this._filteredPipelines.sort((a: BuildConfig, b: BuildConfig): number => {
-      let res = 0;
+    this._filteredPipelines.sort(
+      (a: BuildConfig, b: BuildConfig): number => {
+        let res = 0;
 
-      if (this._currentSortField.id === 'application' && a.id && b.id) {
-        res = a.id.localeCompare(b.id);
-      } else if (this._currentSortField.id === 'codebase' && a.gitUrl && b.gitUrl) {
-        res = a.gitUrl.localeCompare(b.gitUrl);
-      }
+        if (this._currentSortField.id === 'application' && a.id && b.id) {
+          res = a.id.localeCompare(b.id);
+        } else if (this._currentSortField.id === 'codebase' && a.gitUrl && b.gitUrl) {
+          res = a.gitUrl.localeCompare(b.gitUrl);
+        }
 
-      if (!this._ascending) {
-        res = res * -1;
-      }
-      return res;
-    });
+        if (!this._ascending) {
+          res = res * -1;
+        }
+        return res;
+      },
+    );
   }
 
   addQueryParams() {
@@ -237,7 +227,7 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
     });
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: this._appliedFilters.length ? {q: JSON.stringify(urlFilter)} : {}
+      queryParams: this._appliedFilters.length ? { q: JSON.stringify(urlFilter) } : {},
     });
   }
 
@@ -250,14 +240,14 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
           let codebase: string[] = queryJson.codebase;
           let appliedFilter: Filter[] = [];
           if (application !== undefined) {
-            application.forEach((app: string)  => {
+            application.forEach((app: string) => {
               appliedFilter.push({
                 field: {
                   id: 'application',
                   title: 'Application',
-                  type: 'text'
+                  type: 'text',
                 },
-                value: app
+                value: app,
               });
             });
           }
@@ -267,9 +257,9 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
                 field: {
                   id: 'codebase',
                   title: 'Codebase',
-                  type: 'text'
+                  type: 'text',
                 },
-                value: code
+                value: code,
               });
             });
           }
@@ -285,8 +275,7 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
           this.applyFilters();
           this.applySort();
         }
-      })
+      }),
     );
   }
-
 }

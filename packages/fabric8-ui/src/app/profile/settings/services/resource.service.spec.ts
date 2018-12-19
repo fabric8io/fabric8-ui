@@ -1,14 +1,16 @@
 import { User, UserService } from 'ngx-login-client';
 import { createMock } from 'testing/mock';
-import { DeploymentApiService, EnvironmentStat } from '../../../space/create/deployments/services/deployment-api.service';
+import {
+  DeploymentApiService,
+  EnvironmentStat,
+} from '../../../space/create/deployments/services/deployment-api.service';
 import { ResourceService, UsageSeverityEnvironmentStat } from './resource.service';
 
 describe('ResourceService', (): void => {
-
   enum CLASSES {
     ICON_OK = 'pficon-ok',
     ICON_WARN = 'pficon-warning-triangle-o',
-    ICON_ERR = 'pficon-error-circle-o'
+    ICON_ERR = 'pficon-error-circle-o',
   }
 
   let svc: ResourceService;
@@ -16,51 +18,54 @@ describe('ResourceService', (): void => {
   let userService: jasmine.SpyObj<UserService>;
   let envStats: EnvironmentStat[];
 
-  beforeEach((): void => {
-    deploymentsApiService = createMock(DeploymentApiService);
-    userService = createMock(UserService);
+  beforeEach(
+    (): void => {
+      deploymentsApiService = createMock(DeploymentApiService);
+      userService = createMock(UserService);
 
-    userService.currentLoggedInUser = {attributes: {username: 'userName'}} as User & jasmine.Spy;
+      userService.currentLoggedInUser = { attributes: { username: 'userName' } } as User &
+        jasmine.Spy;
 
-    let testEnvStat = {
-      attributes: {
-        name: 'test',
-        quota: {
-          cpucores: {
-            used: 1,
-            quota: 3
+      let testEnvStat = {
+        attributes: {
+          name: 'test',
+          quota: {
+            cpucores: {
+              used: 1,
+              quota: 3,
+            },
+            memory: {
+              used: 5242880,
+              quota: 5242880 * 2,
+            },
           },
-          memory: {
-            used: 5242880,
-            quota: 5242880 * 2
-          }
-        }
-      },
-      id: 'fakeId',
-      type: 'fakeType'
-    } as EnvironmentStat;
+        },
+        id: 'fakeId',
+        type: 'fakeType',
+      } as EnvironmentStat;
 
-    let otherEnvStat = {
-      attributes: {
-        name: 'fakeName',
-        quota: {
-          cpucores: {
-            used: 1,
-            quota: 3
+      let otherEnvStat = {
+        attributes: {
+          name: 'fakeName',
+          quota: {
+            cpucores: {
+              used: 1,
+              quota: 3,
+            },
+            memory: {
+              used: 5242880,
+              quota: 5242880 * 2,
+            },
           },
-          memory: {
-            used: 5242880,
-            quota: 5242880 * 2
-          }
-        }
-      },
-      id: 'fakeId',
-      type: 'fakeType'
-    } as EnvironmentStat;
+        },
+        id: 'fakeId',
+        type: 'fakeType',
+      } as EnvironmentStat;
 
-    envStats = [otherEnvStat, testEnvStat];
-    svc = new ResourceService(deploymentsApiService, userService);
-  });
+      envStats = [otherEnvStat, testEnvStat];
+      svc = new ResourceService(deploymentsApiService, userService);
+    },
+  );
 
   it('should rename environments appropriately', (): void => {
     svc.renameEnvironment(envStats[0]);
@@ -93,7 +98,9 @@ describe('ResourceService', (): void => {
   });
 
   it('should sort environments by name', () => {
-    let transformedEnvironments: UsageSeverityEnvironmentStat[] = svc.transformAndSortEnvironments(envStats);
+    let transformedEnvironments: UsageSeverityEnvironmentStat[] = svc.transformAndSortEnvironments(
+      envStats,
+    );
     expect(transformedEnvironments[0].environmentStat.attributes.name).toBe('userName');
     expect(transformedEnvironments[1].environmentStat.attributes.name).toBe('userName/fakeName');
   });

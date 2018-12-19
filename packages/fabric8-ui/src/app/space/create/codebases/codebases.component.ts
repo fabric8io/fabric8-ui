@@ -16,18 +16,9 @@ import {
   Observable,
   of as observableOf,
   Subscription,
-  timer as observableTimer
+  timer as observableTimer,
 } from 'rxjs';
-import {
-  catchError,
-  first,
-  last,
-  map,
-  mergeMap,
-  publish,
-  switchMap,
-  take
-} from 'rxjs/operators';
+import { catchError, first, last, map, mergeMap, publish, switchMap, take } from 'rxjs/operators';
 import { ProviderService } from '../../../shared/account/provider.service';
 import { Che } from './services/che';
 import { CheService } from './services/che.service';
@@ -40,7 +31,7 @@ import { GitHubService } from './services/github.service';
   selector: 'codebases',
   templateUrl: './codebases.component.html',
   styleUrls: ['./codebases.component.less'],
-  providers: [CheService, CodebasesService, DatePipe, GitHubService]
+  providers: [CheService, CodebasesService, DatePipe, GitHubService],
 })
 export class CodebasesComponent implements OnDestroy, OnInit {
   allCodebases: Codebase[];
@@ -60,62 +51,67 @@ export class CodebasesComponent implements OnDestroy, OnInit {
   disconnectedStateConfig: EmptyStateConfig;
 
   constructor(
-      private broadcaster: Broadcaster,
-      private cheService: CheService,
-      private codebasesService: CodebasesService,
-      private contexts: Contexts,
-      private datePipe: DatePipe,
-      private gitHubService: GitHubService,
-      private notifications: Notifications,
-      private authenticationService: AuthenticationService,
-      private router: Router,
-      private providerService: ProviderService) {
-    this.subscriptions.push(this.contexts.current.subscribe(val => this.context = val));
+    private broadcaster: Broadcaster,
+    private cheService: CheService,
+    private codebasesService: CodebasesService,
+    private contexts: Contexts,
+    private datePipe: DatePipe,
+    private gitHubService: GitHubService,
+    private notifications: Notifications,
+    private authenticationService: AuthenticationService,
+    private router: Router,
+    private providerService: ProviderService,
+  ) {
+    this.subscriptions.push(this.contexts.current.subscribe((val) => (this.context = val)));
     this.gitHubService.clearCache();
-    this.subscriptions.push(this.broadcaster
-      .on('codebaseAdded')
-      .subscribe((codebase: Codebase) => {
+    this.subscriptions.push(
+      this.broadcaster.on('codebaseAdded').subscribe((codebase: Codebase) => {
         this.updateCodebases();
-      }));
+      }),
+    );
 
-    this.subscriptions.push(this.broadcaster
-      .on('codebaseDeleted')
-      .subscribe(() => {
+    this.subscriptions.push(
+      this.broadcaster.on('codebaseDeleted').subscribe(() => {
         this.updateCodebases();
-      }));
+      }),
+    );
 
-    this.subscriptions.push(this.authenticationService.gitHubToken.subscribe((response) => {
-      if (response) {
-        this.gitHubConnected = true;
-      } else {
-        this.gitHubConnected = false;
-      }
-    }));
+    this.subscriptions.push(
+      this.authenticationService.gitHubToken.subscribe((response) => {
+        if (response) {
+          this.gitHubConnected = true;
+        } else {
+          this.gitHubConnected = false;
+        }
+      }),
+    );
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => {
+    this.subscriptions.forEach((sub) => {
       sub.unsubscribe();
     });
   }
 
   ngOnInit(): void {
     if (this.gitHubConnected) {
-      this.cheState = {clusterFull: false, running: false, multiTenant: false};
+      this.cheState = { clusterFull: false, running: false, multiTenant: false };
       this.updateCodebases();
       this.startIdleChe();
 
       this.emptyStateConfig = {
         actions: {
-          primaryActions: [{
-            id: 'action1',
-            title: 'Add a Codebase',
-            tooltip: 'Add a Codebase'
-          }],
-          moreActions: []
+          primaryActions: [
+            {
+              id: 'action1',
+              title: 'Add a Codebase',
+              tooltip: 'Add a Codebase',
+            },
+          ],
+          moreActions: [],
         } as ActionConfig,
         title: 'Add a Codebase',
-        info: 'Start by importing your code repository.'
+        info: 'Start by importing your code repository.',
       } as EmptyStateConfig;
 
       this.listConfig = {
@@ -127,21 +123,23 @@ export class CodebasesComponent implements OnDestroy, OnInit {
         //selectionMatchProp: 'name',
         showCheckbox: false,
         useExpandItems: true,
-        useHeading: true
+        useHeading: true,
       } as ListConfig;
     }
 
     this.disconnectedStateConfig = {
       actions: {
-        primaryActions: [{
-          id: 'connectAction',
-          title: 'Connect to GitHub',
-          tooltip: 'Connect to GitHub'
-        }],
-        moreActions: []
+        primaryActions: [
+          {
+            id: 'connectAction',
+            title: 'Connect to GitHub',
+            tooltip: 'Connect to GitHub',
+          },
+        ],
+        moreActions: [],
       } as ActionConfig,
       title: 'GitHub Disconnected',
-      info: 'You must be connected to GitHub in order to connect or create a Codebase'
+      info: 'You must be connected to GitHub in order to connect or create a Codebase',
     } as EmptyStateConfig;
   }
 
@@ -156,8 +154,8 @@ export class CodebasesComponent implements OnDestroy, OnInit {
     this.broadcaster.broadcast('analyticsTracker', {
       event: 'add app opened',
       data: {
-        source: 'codebases'
-      }
+        source: 'codebases',
+      },
     });
   }
   // Filter
@@ -218,11 +216,11 @@ export class CodebasesComponent implements OnDestroy, OnInit {
     } else if (this.currentSortField.id === 'createdAt') {
       let date1 = new Date(codebase1.gitHubRepo.createdAt); // 2011-04-07T10:12:58Z
       let date2 = new Date(codebase2.gitHubRepo.createdAt);
-      compValue = (date1 > date2) ? 1 : -1;
+      compValue = date1 > date2 ? 1 : -1;
     } else if (this.currentSortField.id === 'pushedAt') {
       let date1 = new Date(codebase1.gitHubRepo.pushedAt);
       let date2 = new Date(codebase2.gitHubRepo.pushedAt);
-      compValue = (date1 > date2) ? 1 : -1;
+      compValue = date1 > date2 ? 1 : -1;
     }
     if (!this.isAscendingSort && compValue) {
       compValue = compValue * -1;
@@ -233,7 +231,9 @@ export class CodebasesComponent implements OnDestroy, OnInit {
   sortChange($event: SortEvent): void {
     this.currentSortField = $event.field;
     this.isAscendingSort = $event.isAscending;
-    this.codebases.sort((codebase1: Codebase, codebase2: Codebase) => this.compare(codebase1, codebase2));
+    this.codebases.sort((codebase1: Codebase, codebase2: Codebase) =>
+      this.compare(codebase1, codebase2),
+    );
   }
 
   // Private
@@ -260,13 +260,14 @@ export class CodebasesComponent implements OnDestroy, OnInit {
     this.chePollTimer = observableTimer(2000, 20000).pipe(take(30));
     this.chePollSubscription = (this.chePollTimer.pipe(
       switchMap(() => this.cheService.getState()),
-      map(che => {
+      map((che) => {
         if (che !== undefined && che.running === true) {
           this.chePollSubscription.unsubscribe();
           this.cheState = che;
         }
       }),
-      publish()) as ConnectableObservable<any>).connect();
+      publish(),
+    ) as ConnectableObservable<any>).connect();
     this.subscriptions.push(this.chePollSubscription);
   }
 
@@ -275,15 +276,19 @@ export class CodebasesComponent implements OnDestroy, OnInit {
    */
   private startChe(): void {
     // Get state for Che server
-    this.subscriptions.push(this.cheService.start()
-      .subscribe(che => {
-        this.cheState = che;
-        if (che === undefined || che.running !== true) {
-          this.cheStatePoll();
-        }
-      }, error => {
-        this.cheState = null;
-      }));
+    this.subscriptions.push(
+      this.cheService.start().subscribe(
+        (che) => {
+          this.cheState = che;
+          if (che === undefined || che.running !== true) {
+            this.cheStatePoll();
+          }
+        },
+        (error) => {
+          this.cheState = null;
+        },
+      ),
+    );
   }
 
   /**
@@ -291,36 +296,43 @@ export class CodebasesComponent implements OnDestroy, OnInit {
    */
   private startIdleChe(): void {
     // Get state for Che server
-    this.subscriptions.push(this.cheService.getState()
-      .subscribe(che => {
-        if (che !== undefined && che.running === true) {
-          this.cheState = che;
-        } else {
-          this.startChe();
-        }
-      }, error => {
-        this.cheState = null;
-      }));
+    this.subscriptions.push(
+      this.cheService.getState().subscribe(
+        (che) => {
+          if (che !== undefined && che.running === true) {
+            this.cheState = che;
+          } else {
+            this.startChe();
+          }
+        },
+        (error) => {
+          this.cheState = null;
+        },
+      ),
+    );
   }
 
   /**
    * Update latest codebases for current space
    */
   private updateCodebases(): void {
-    this.fetchCodebases().subscribe((codebases: Codebase[]) => {
-      if (codebases != undefined && codebases.length > 0) {
-        this.allCodebases = codebases;
-        this.codebases = cloneDeep(codebases);
-        this.codebases.unshift({} as Codebase); // Add empty object for row header
-        this.applyFilters(this.appliedFilters);
-      } else {
-        // clear the codebases list:
-        this.allCodebases = [];
-        this.codebases = [];
-      }
-    }, error => {
-      this.handleError('Failed to retrieve codebases', NotificationType.DANGER);
-    });
+    this.fetchCodebases().subscribe(
+      (codebases: Codebase[]) => {
+        if (codebases != undefined && codebases.length > 0) {
+          this.allCodebases = codebases;
+          this.codebases = cloneDeep(codebases);
+          this.codebases.unshift({} as Codebase); // Add empty object for row header
+          this.applyFilters(this.appliedFilters);
+        } else {
+          // clear the codebases list:
+          this.allCodebases = [];
+          this.codebases = [];
+        }
+      },
+      (error) => {
+        this.handleError('Failed to retrieve codebases', NotificationType.DANGER);
+      },
+    );
   }
 
   /**
@@ -328,34 +340,37 @@ export class CodebasesComponent implements OnDestroy, OnInit {
    * @returns {Observable<Codebase[]>}
    */
   private fetchCodebases(): Observable<Codebase[]> {
-    return this.codebasesService.getCodebases(this.context.space.id).pipe(mergeMap(codebases => {
-      if (codebases.length === 0) {
-        return observableOf([]);
-      }
-      return observableForkJoin(
-        codebases.map((codebase: Codebase) => {
-          if (!this.isGitHubHtmlUrlInvalid(codebase)) {
-            return this.gitHubService.getRepoDetailsByUrl(codebase.attributes.url).pipe(
-              map(gitHubRepoDetails => {
-                codebase.gitHubRepo = {};
-                codebase.gitHubRepo.htmlUrl = gitHubRepoDetails.html_url;
-                codebase.gitHubRepo.fullName = gitHubRepoDetails.full_name;
-                codebase.gitHubRepo.createdAt = gitHubRepoDetails.created_at;
-                codebase.gitHubRepo.pushedAt = gitHubRepoDetails.pushed_at;
-                return codebase;
-              }),
-              catchError(err => {
-                // this.handleError(err, NotificationType.WARNING);
-                return observableOf(codebase);
-              }),
-              first());
-          } else {
-            this.handleError(`Invalid URL: ${codebase.attributes.url}`, NotificationType.WARNING);
-          }
-        })
-      );
-    }),
-      last());
+    return this.codebasesService.getCodebases(this.context.space.id).pipe(
+      mergeMap((codebases) => {
+        if (codebases.length === 0) {
+          return observableOf([]);
+        }
+        return observableForkJoin(
+          codebases.map((codebase: Codebase) => {
+            if (!this.isGitHubHtmlUrlInvalid(codebase)) {
+              return this.gitHubService.getRepoDetailsByUrl(codebase.attributes.url).pipe(
+                map((gitHubRepoDetails) => {
+                  codebase.gitHubRepo = {};
+                  codebase.gitHubRepo.htmlUrl = gitHubRepoDetails.html_url;
+                  codebase.gitHubRepo.fullName = gitHubRepoDetails.full_name;
+                  codebase.gitHubRepo.createdAt = gitHubRepoDetails.created_at;
+                  codebase.gitHubRepo.pushedAt = gitHubRepoDetails.pushed_at;
+                  return codebase;
+                }),
+                catchError((err) => {
+                  // this.handleError(err, NotificationType.WARNING);
+                  return observableOf(codebase);
+                }),
+                first(),
+              );
+            } else {
+              this.handleError(`Invalid URL: ${codebase.attributes.url}`, NotificationType.WARNING);
+            }
+          }),
+        );
+      }),
+      last(),
+    );
   }
 
   /**
@@ -364,16 +379,18 @@ export class CodebasesComponent implements OnDestroy, OnInit {
    * @returns {boolean}
    */
   private isGitHubHtmlUrlInvalid(codebase: Codebase): boolean {
-    return (codebase.attributes.url === undefined
-      || codebase.attributes.url.trim().length === 0
-      || codebase.attributes.url.indexOf('https://github.com') === -1
-      || codebase.attributes.url.indexOf('.git') === -1);
+    return (
+      codebase.attributes.url === undefined ||
+      codebase.attributes.url.trim().length === 0 ||
+      codebase.attributes.url.indexOf('https://github.com') === -1 ||
+      codebase.attributes.url.indexOf('.git') === -1
+    );
   }
 
   private handleError(error: string, type: NotificationType) {
     this.notifications.message({
       message: error,
-      type: type
+      type: type,
     } as Notification);
   }
 }

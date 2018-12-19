@@ -22,24 +22,17 @@ class DropdownItem extends BaseElement {
       } catch (e) {
         await this.click();
       }
-      });
+    });
   }
 }
 
-
 export class DropdownMenu extends BaseElement {
-
   constructor(element: ElementFinder, name: string = '', itemClass: string = '') {
     super(element, name);
   }
 
   item(text: string): DropdownItem {
-    let item = this.element(
-      by.cssContainingText(
-        this.itemClass ? this.itemClass : 'li',
-        text
-      )
-    );
+    let item = this.element(by.cssContainingText(this.itemClass ? this.itemClass : 'li', text));
     return new DropdownItem(item, this, text);
   }
 
@@ -48,13 +41,17 @@ export class DropdownMenu extends BaseElement {
     // supper.ready waits for item to be displayed
     await this.untilPresent();
   }
-
 }
 
 export class Dropdown extends BaseElement {
   menu: DropdownMenu;
 
-  constructor(element: ElementFinder, menuElement: ElementFinder, name: string = '', itemClass: string = '') {
+  constructor(
+    element: ElementFinder,
+    menuElement: ElementFinder,
+    name: string = '',
+    itemClass: string = '',
+  ) {
     super(element, name);
     this.menu = new DropdownMenu(menuElement);
   }
@@ -74,7 +71,6 @@ export class Dropdown extends BaseElement {
     });
   }
 }
-
 
 export class SingleSelectionDropdown extends Dropdown {
   input = new Clickable(this.$('input.combobox[type="text"]'), '');

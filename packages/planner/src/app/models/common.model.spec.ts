@@ -1,9 +1,4 @@
-import {
-  cleanObject,
-  MapTree,
-  normalizeArray,
-  switchModel
-} from './common.model';
+import { cleanObject, MapTree, normalizeArray, switchModel } from './common.model';
 
 describe('Unit Test :: Common model', () => {
   it('should execute the canary test', () => {
@@ -23,27 +18,26 @@ describe('Unit Test :: Common model', () => {
       };
     }
 
-    const mapTree: MapTree = [{
-      toPath: ['name', 'firstName'],
-      fromPath: ['user', 'name']
-    }];
+    const mapTree: MapTree = [
+      {
+        toPath: ['name', 'firstName'],
+        fromPath: ['user', 'name'],
+      },
+    ];
 
     const input = {
       user: {
-        name: 'Sanborn'
-      }
+        name: 'Sanborn',
+      },
     };
 
     const expectedOutput = {
       name: {
-        firstName: 'Sanborn'
-      }
+        firstName: 'Sanborn',
+      },
     };
 
-    return expect(expectedOutput)
-      .toEqual(
-        switchModel<InputModel, OutputModel>(input, mapTree)
-      );
+    return expect(expectedOutput).toEqual(switchModel<InputModel, OutputModel>(input, mapTree));
   });
 
   it('should correctly convert to UI model - 2', () => {
@@ -53,9 +47,9 @@ describe('Unit Test :: Common model', () => {
           user: {
             detail: {
               name: string;
-            }
-          }
-        }
+            };
+          };
+        };
       };
     }
 
@@ -71,41 +65,39 @@ describe('Unit Test :: Common model', () => {
         relationships: {
           user: {
             detail: {
-              name: 'Sanborn'
-            }
-          }
-        }
-      }
+              name: 'Sanborn',
+            },
+          },
+        },
+      },
     };
 
     const expectedOutput = {
       name: {
-        firstName: 'Sanborn'
+        firstName: 'Sanborn',
       },
-      selected: false
+      selected: false,
     };
 
-    const mapTree: MapTree = [{
-      fromPath: ['attributes', 'relationships', 'user', 'detail', 'name'],
-      toPath: ['name', 'firstName']
-    }, {
-      toPath: ['selected'],
-      toValue: false
-    }];
+    const mapTree: MapTree = [
+      {
+        fromPath: ['attributes', 'relationships', 'user', 'detail', 'name'],
+        toPath: ['name', 'firstName'],
+      },
+      {
+        toPath: ['selected'],
+        toValue: false,
+      },
+    ];
 
-    return expect(expectedOutput)
-      .toEqual(
-        switchModel<ServiceModel, UIModel>(input, mapTree)
-      );
+    return expect(expectedOutput).toEqual(switchModel<ServiceModel, UIModel>(input, mapTree));
   });
-
 });
-
 
 describe('Unit Test :: Common model :: Object cleaner', () => {
   it('Should correctly clean up an objectm - 1', () => {
     const input = {
-      name: 'Sudipta'
+      name: 'Sudipta',
     };
     return expect(input).toEqual(cleanObject(input));
   });
@@ -113,10 +105,10 @@ describe('Unit Test :: Common model :: Object cleaner', () => {
   it('Should correctly clean up an objectm - 2', () => {
     const input = {
       name: 'Sudipta',
-      address: null
+      address: null,
     };
     const expOutput = {
-      name: 'Sudipta'
+      name: 'Sudipta',
     };
     const output = cleanObject(input);
     return expect(output).toEqual(expOutput);
@@ -128,15 +120,15 @@ describe('Unit Test :: Common model :: Object cleaner', () => {
       address: {
         city: 'Bangalore',
         country: 'India',
-        pin: null
-      }
+        pin: null,
+      },
     };
     const expOutput = {
       name: 'Sudipta',
       address: {
         city: 'Bangalore',
-        country: 'India'
-      }
+        country: 'India',
+      },
     };
     const output = cleanObject(input);
     return expect(output).toEqual(expOutput);
@@ -152,10 +144,10 @@ describe('Unit Test :: Common model :: Object cleaner', () => {
           code: null,
           random: {
             one: ['one'],
-            two: null
-          }
-        }
-      }
+            two: null,
+          },
+        },
+      },
     };
     const expOutput = {
       name: 'Sudipta',
@@ -164,10 +156,10 @@ describe('Unit Test :: Common model :: Object cleaner', () => {
         country: 'India',
         pin: {
           random: {
-            one: ['one']
-          }
-        }
-      }
+            one: ['one'],
+          },
+        },
+      },
     };
     const output = cleanObject(input);
     return expect(output).toEqual(expOutput);
@@ -183,13 +175,13 @@ describe('Unit Test :: Common model :: Object cleaner', () => {
           code: null,
           random: {
             one: ['one'],
-            two: null
+            two: null,
           },
           relationships: {
-            rel1: 'rel1'
-          }
-        }
-      }
+            rel1: 'rel1',
+          },
+        },
+      },
     };
     const expOutput = {
       name: 'Sudipta',
@@ -198,10 +190,10 @@ describe('Unit Test :: Common model :: Object cleaner', () => {
         country: 'India',
         pin: {
           random: {
-            one: ['one']
-          }
-        }
-      }
+            one: ['one'],
+          },
+        },
+      },
     };
     const output = cleanObject(input, ['relationships']);
     return expect(output).toEqual(expOutput);
@@ -224,56 +216,65 @@ describe('Unit Test :: normalizeArray', () => {
     expect(
       // ignore the type error because this is the test
       // @ts-ignore
-      function(){ normalizeArray<any>('string'); } // tslint:disable-line
+      function() {
+        // @ts-ignore
+        normalizeArray<any>('string');
+      }, // tslint:disable-line
     ).toThrow(new Error('The input needs to be an array'));
   });
 
-  it('Should normalize array of objects without \'id\' key by the index', () => {
-    const input: testType[] = [{
-      name: 'Sudipta',
-      add: 'Alpine Eco'
-    }, {
-      name: 'Ibrahim',
-      add: 'Brigade'
-    }];
+  it("Should normalize array of objects without 'id' key by the index", () => {
+    const input: testType[] = [
+      {
+        name: 'Sudipta',
+        add: 'Alpine Eco',
+      },
+      {
+        name: 'Ibrahim',
+        add: 'Brigade',
+      },
+    ];
 
-    const expectedOp: {[id: string]: testType} = {
+    const expectedOp: { [id: string]: testType } = {
       '0': {
         name: 'Sudipta',
-        add: 'Alpine Eco'
+        add: 'Alpine Eco',
       },
       '1': {
         name: 'Ibrahim',
-        add: 'Brigade'
-      }
+        add: 'Brigade',
+      },
     };
 
     const op = normalizeArray<testType>(input);
     expect(op).toEqual(expectedOp);
   });
 
-  it('Should normalize array of objects with \'id\' key by the id', () => {
-    const input: testType[] = [{
-      id: '1',
-      name: 'Sudipta',
-      add: 'Alpine Eco'
-    }, {
-      id: '2',
-      name: 'Ibrahim',
-      add: 'Brigade'
-    }];
+  it("Should normalize array of objects with 'id' key by the id", () => {
+    const input: testType[] = [
+      {
+        id: '1',
+        name: 'Sudipta',
+        add: 'Alpine Eco',
+      },
+      {
+        id: '2',
+        name: 'Ibrahim',
+        add: 'Brigade',
+      },
+    ];
 
-    const expectedOp: {[id: string]: testType} = {
+    const expectedOp: { [id: string]: testType } = {
       '1': {
         id: '1',
         name: 'Sudipta',
-        add: 'Alpine Eco'
+        add: 'Alpine Eco',
       },
       '2': {
         id: '2',
         name: 'Ibrahim',
-        add: 'Brigade'
-      }
+        add: 'Brigade',
+      },
     };
 
     const op = normalizeArray<testType>(input);
@@ -281,59 +282,64 @@ describe('Unit Test :: normalizeArray', () => {
   });
 
   it('should normalize array based on the id given', () => {
-    const input: testType[] = [{
-      id: '1',
-      name: 'Sudipta',
-      add: 'Alpine Eco'
-    }, {
-      id: '2',
-      name: 'Ibrahim',
-      add: 'Brigade'
-    }];
-
-    const expectedOp: {[id: string]: testType} = {
-      'Sudipta': {
+    const input: testType[] = [
+      {
         id: '1',
         name: 'Sudipta',
-        add: 'Alpine Eco'
+        add: 'Alpine Eco',
       },
-      'Ibrahim': {
+      {
         id: '2',
         name: 'Ibrahim',
-        add: 'Brigade'
-      }
+        add: 'Brigade',
+      },
+    ];
+
+    const expectedOp: { [id: string]: testType } = {
+      Sudipta: {
+        id: '1',
+        name: 'Sudipta',
+        add: 'Alpine Eco',
+      },
+      Ibrahim: {
+        id: '2',
+        name: 'Ibrahim',
+        add: 'Brigade',
+      },
     };
 
     const op = normalizeArray<testType>(input, 'name');
     expect(op).toEqual(expectedOp);
   });
 
-  it('Should normalize array of objects with \'id\' key if given id is not in object', () => {
-    const input: testType[] = [{
-      id: '1',
-      name: 'Sudipta',
-      add: 'Alpine Eco'
-    }, {
-      id: '2',
-      name: 'Ibrahim',
-      add: 'Brigade'
-    }];
+  it("Should normalize array of objects with 'id' key if given id is not in object", () => {
+    const input: testType[] = [
+      {
+        id: '1',
+        name: 'Sudipta',
+        add: 'Alpine Eco',
+      },
+      {
+        id: '2',
+        name: 'Ibrahim',
+        add: 'Brigade',
+      },
+    ];
 
-    const expectedOp: {[id: string]: testType} = {
+    const expectedOp: { [id: string]: testType } = {
       '1': {
         id: '1',
         name: 'Sudipta',
-        add: 'Alpine Eco'
+        add: 'Alpine Eco',
       },
       '2': {
         id: '2',
         name: 'Ibrahim',
-        add: 'Brigade'
-      }
+        add: 'Brigade',
+      },
     };
 
     const op = normalizeArray<testType>(input, 'key');
     expect(op).toEqual(expectedOp);
   });
-
 });

@@ -10,7 +10,6 @@ import { PipelineModule } from '../../../../a-runtime-console/index';
 import { PipelinesRoutingModule } from './pipelines-routing.module';
 import { PipelinesComponent } from './pipelines.component';
 
-
 @NgModule({
   imports: [
     BsDropdownModule.forRoot(),
@@ -20,14 +19,11 @@ import { PipelinesComponent } from './pipelines.component';
     ToolbarModule,
     FeatureFlagModule,
     ModalModule.forRoot(),
-    TooltipModule.forRoot()
+    TooltipModule.forRoot(),
   ],
   declarations: [PipelinesComponent],
-  providers: [
-    BsDropdownConfig,
-    TooltipConfig
-  ]
+  providers: [BsDropdownConfig, TooltipConfig],
 })
 export class PipelinesModule {
-  constructor() { }
+  constructor() {}
 }

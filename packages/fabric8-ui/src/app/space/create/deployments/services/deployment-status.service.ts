@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { last } from 'lodash';
-import { combineLatest ,  Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
@@ -11,7 +11,7 @@ import { DeploymentsService } from './deployments.service';
 export enum StatusType {
   OK,
   WARN,
-  ERR
+  ERR,
 }
 
 export interface Status {
@@ -21,70 +21,86 @@ export interface Status {
 
 @Injectable()
 export class DeploymentStatusService {
-
-  private static readonly WARNING_THRESHOLD: number = .6;
+  private static readonly WARNING_THRESHOLD: number = 0.6;
   private static readonly OK_STATUS: Status = { type: StatusType.OK, message: '' };
 
-  constructor(private readonly deploymentsService: DeploymentsService) { }
+  constructor(private readonly deploymentsService: DeploymentsService) {}
 
-  getDeploymentCpuStatus(spaceId: string, environmentName: string, applicationName: string): Observable<Status> {
+  getDeploymentCpuStatus(
+    spaceId: string,
+    environmentName: string,
+    applicationName: string,
+  ): Observable<Status> {
     return this.adjustStatusForPods(
       this.deploymentsService.getPods(spaceId, environmentName, applicationName),
-      this.deploymentsService.getDeploymentCpuStat(spaceId, environmentName, applicationName, 1).pipe(
-        map((stats: CpuStat[]): Status => this.getStatStatus(last(stats), 'CPU'))
-      )
+      this.deploymentsService
+        .getDeploymentCpuStat(spaceId, environmentName, applicationName, 1)
+        .pipe(map((stats: CpuStat[]): Status => this.getStatStatus(last(stats), 'CPU'))),
     );
   }
 
-  getDeploymentMemoryStatus(spaceId: string, environmentName: string, applicationName: string): Observable<Status> {
+  getDeploymentMemoryStatus(
+    spaceId: string,
+    environmentName: string,
+    applicationName: string,
+  ): Observable<Status> {
     return this.adjustStatusForPods(
       this.deploymentsService.getPods(spaceId, environmentName, applicationName),
-      this.deploymentsService.getDeploymentMemoryStat(spaceId, environmentName, applicationName, 1).pipe(
-        map((stats: MemoryStat[]): Status => this.getStatStatus(last(stats), 'Memory'))
-      )
+      this.deploymentsService
+        .getDeploymentMemoryStat(spaceId, environmentName, applicationName, 1)
+        .pipe(map((stats: MemoryStat[]): Status => this.getStatStatus(last(stats), 'Memory'))),
     );
   }
 
-  getDeploymentAggregateStatus(spaceId: string, environmentName: string, applicationName: string): Observable<Status> {
+  getDeploymentAggregateStatus(
+    spaceId: string,
+    environmentName: string,
+    applicationName: string,
+  ): Observable<Status> {
     return combineLatest(
       this.getDeploymentCpuStatus(spaceId, environmentName, applicationName),
-      this.getDeploymentMemoryStatus(spaceId, environmentName, applicationName)
+      this.getDeploymentMemoryStatus(spaceId, environmentName, applicationName),
     ).pipe(
-      map((statuses: [Status, Status]): Status => {
-        const type: StatusType = statuses
-          .map((status: Status): StatusType => status.type)
-          .reduce((accum: StatusType, next: StatusType): StatusType => Math.max(accum, next));
-        const message: string = statuses
-          .map((status: Status): string => status.message)
-          .join(' ')
-          .trim();
-        return { type, message };
-      })
+      map(
+        (statuses: [Status, Status]): Status => {
+          const type: StatusType = statuses
+            .map((status: Status): StatusType => status.type)
+            .reduce((accum: StatusType, next: StatusType): StatusType => Math.max(accum, next));
+          const message: string = statuses
+            .map((status: Status): string => status.message)
+            .join(' ')
+            .trim();
+          return { type, message };
+        },
+      ),
     );
   }
 
   getEnvironmentCpuStatus(spaceId: string, environmentName: string): Observable<Status> {
     return this.deploymentsService
-      .getEnvironmentCpuStat(spaceId, environmentName).pipe(
-        map((stat: CpuStat): Status => this.getStatStatus(stat, 'CPU'))
-      );
+      .getEnvironmentCpuStat(spaceId, environmentName)
+      .pipe(map((stat: CpuStat): Status => this.getStatStatus(stat, 'CPU')));
   }
 
   getEnvironmentMemoryStatus(spaceId: string, environmentName: string): Observable<Status> {
     return this.deploymentsService
-      .getEnvironmentMemoryStat(spaceId, environmentName).pipe(
-        map((stat: MemoryStat): Status => this.getStatStatus(stat, 'Memory'))
-      );
+      .getEnvironmentMemoryStat(spaceId, environmentName)
+      .pipe(map((stat: MemoryStat): Status => this.getStatStatus(stat, 'Memory')));
   }
 
-  private adjustStatusForPods(pods: Observable<Pods>, status: Observable<Status>): Observable<Status> {
+  private adjustStatusForPods(
+    pods: Observable<Pods>,
+    status: Observable<Status>,
+  ): Observable<Status> {
     return combineLatest(pods, status).pipe(
-      map((val: [Pods, Status]): Status => {
-        if (val[0].total === 0) {
-          return Object.assign({}, DeploymentStatusService.OK_STATUS);
-        }
-        return val[1];
-      })
+      map(
+        (val: [Pods, Status]): Status => {
+          if (val[0].total === 0) {
+            return Object.assign({}, DeploymentStatusService.OK_STATUS);
+          }
+          return val[1];
+        },
+      ),
     );
   }
 
@@ -99,5 +115,4 @@ export class DeploymentStatusService {
     }
     return status;
   }
-
 }

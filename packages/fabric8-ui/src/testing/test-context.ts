@@ -41,19 +41,21 @@ export class TestContext<T, H> {
   }
 }
 
-export function initContext<T, H>(testedType: Type<T>, hostType: Type<H>, moduleMetadata: TestModuleMetadata = {},
-  customizer?: (t: T) => void): TestContext<T, H> {
-
+export function initContext<T, H>(
+  testedType: Type<T>,
+  hostType: Type<H>,
+  moduleMetadata: TestModuleMetadata = {},
+  customizer?: (t: T) => void,
+): TestContext<T, H> {
   const context = new TestContext<T, H>();
 
   beforeEach(async(function() {
-    const declarations = [ testedType, hostType ];
+    const declarations = [testedType, hostType];
     if (moduleMetadata && moduleMetadata.declarations) {
       declarations.push(...moduleMetadata.declarations);
     }
-    TestBed
-      .configureCompiler({ preserveWhitespaces: true } as any)
-      .configureTestingModule({...moduleMetadata, declarations})
+    TestBed.configureCompiler({ preserveWhitespaces: true } as any)
+      .configureTestingModule({ ...moduleMetadata, declarations })
       .compileComponents();
   }));
 
@@ -62,11 +64,13 @@ export function initContext<T, H>(testedType: Type<T>, hostType: Type<H>, module
     context.hostComponent = context.fixture.componentInstance;
     const testedDebugElement = context.fixture.debugElement.query(By.directive(testedType));
     if (!testedDebugElement) {
-      throw new Error('Unable to find component under test of type '
-        + testedType.name
-        + '. Please check your '
-        + hostType.name
-        + ' in the failing test');
+      throw new Error(
+        'Unable to find component under test of type ' +
+          testedType.name +
+          '. Please check your ' +
+          hostType.name +
+          ' in the failing test',
+      );
     }
     context.tested = testedDebugElement;
     context.testedDirective = testedDebugElement.injector.get(testedType);

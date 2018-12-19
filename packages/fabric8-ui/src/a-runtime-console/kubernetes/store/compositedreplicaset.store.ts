@@ -1,7 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { combineLatest } from 'rxjs/operators';
-import { combineReplicaSet, combineReplicaSets, ReplicaSet, ReplicaSets } from '../model/replicaset.model';
+import {
+  combineReplicaSet,
+  combineReplicaSets,
+  ReplicaSet,
+  ReplicaSets,
+} from '../model/replicaset.model';
 import { ReplicaSetStore } from './replicaset.store';
 import { ReplicationControllerStore } from './replicationcontroller.store';
 
@@ -14,10 +19,19 @@ export class CompositeReplicaSetStore {
   public resource: Observable<ReplicaSet>;
   public loading: Observable<boolean>;
 
-  constructor(private replicasetStore: ReplicaSetStore, private replicationcontrollerStore: ReplicationControllerStore) {
-    this.list = this.replicasetStore.list.pipe(combineLatest(this.replicationcontrollerStore.list, combineReplicaSets));
-    this.resource = this.replicasetStore.resource.pipe(combineLatest(this.replicationcontrollerStore.resource, combineReplicaSet));
-    this.loading = this.replicasetStore.loading.pipe(combineLatest(this.replicationcontrollerStore.loading, (f, s) => f && s));
+  constructor(
+    private replicasetStore: ReplicaSetStore,
+    private replicationcontrollerStore: ReplicationControllerStore,
+  ) {
+    this.list = this.replicasetStore.list.pipe(
+      combineLatest(this.replicationcontrollerStore.list, combineReplicaSets),
+    );
+    this.resource = this.replicasetStore.resource.pipe(
+      combineLatest(this.replicationcontrollerStore.resource, combineReplicaSet),
+    );
+    this.loading = this.replicasetStore.loading.pipe(
+      combineLatest(this.replicationcontrollerStore.loading, (f, s) => f && s),
+    );
   }
 
   loadAll(): Observable<ReplicaSets> {
@@ -31,4 +45,3 @@ export class CompositeReplicaSetStore {
     this.replicationcontrollerStore.load(id);
   }
 }
-

@@ -13,10 +13,7 @@ import { User } from 'ngx-login-client';
 import { Observable, of as observableOf, Subject } from 'rxjs';
 import { createMock } from 'testing/mock';
 import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
-import {
-  initContext,
-  TestContext
-} from 'testing/test-context';
+import { initContext, TestContext } from 'testing/test-context';
 import { WorkItemsData } from '../../shared/workitem-utils';
 import { CreateWorkItemWidgetComponent } from './create-work-item-widget.component';
 
@@ -25,15 +22,16 @@ import { CreateWorkItemWidgetComponent } from './create-work-item-widget.compone
     <fabric8-create-work-item-widget
       [userOwnsSpace]="userOwnsSpace"
       [currentSpace]="space"
-      [loggedInUser]="loggedInUser">
+      [loggedInUser]="loggedInUser"
+    >
     </fabric8-create-work-item-widget>
-  `
+  `,
 })
 class HostComponent {
   userOwnsSpace: boolean;
   space: Space = {
     attributes: {},
-    id: 'some-space-id'
+    id: 'some-space-id',
   } as Space;
   loggedInUser: User = {
     id: 'fakeId',
@@ -41,56 +39,72 @@ class HostComponent {
     attributes: {
       fullName: 'fakeName',
       imageURL: 'null',
-      username: 'fakeUserName'
-    }
+      username: 'fakeUserName',
+    },
   };
 }
 
 describe('CreateWorkItemWidgetComponent', () => {
   describe('Should test without WorkItems', () => {
-
     type TestingContext = TestContext<CreateWorkItemWidgetComponent, HostComponent>;
 
     const testContext: TestingContext = initContext(CreateWorkItemWidgetComponent, HostComponent, {
-      declarations: [ MockFeatureToggleComponent ],
+      declarations: [MockFeatureToggleComponent],
       imports: [NgArrayPipesModule, RouterModule, NgLetModule],
       providers: [
         { provide: ActivatedRoute, useValue: jasmine.createSpy('ActivatedRoute') },
-        { provide: LocationStrategy, useValue: jasmine.createSpyObj('LocationStrategy', ['prepareExternalUrl']) },
-        { provide: Broadcaster, useValue: createMock(Broadcaster) },
-        { provide: Contexts, useValue: ({ current: new Subject<Context>() }) },
         {
-          provide: WorkItemService, useFactory: (): WorkItemService => {
-            let workItemServiceMock = jasmine.createSpyObj('WorkItemService', ['resolveType', 'resolveAreaForWorkItem', 'getWorkItems']);
+          provide: LocationStrategy,
+          useValue: jasmine.createSpyObj('LocationStrategy', ['prepareExternalUrl']),
+        },
+        { provide: Broadcaster, useValue: createMock(Broadcaster) },
+        { provide: Contexts, useValue: { current: new Subject<Context>() } },
+        {
+          provide: WorkItemService,
+          useFactory: (): WorkItemService => {
+            let workItemServiceMock = jasmine.createSpyObj('WorkItemService', [
+              'resolveType',
+              'resolveAreaForWorkItem',
+              'getWorkItems',
+            ]);
             workItemServiceMock.resolveType.and.stub();
             workItemServiceMock.resolveAreaForWorkItem.and.stub();
-            workItemServiceMock.getWorkItems.and.returnValue(observableOf({ workItems: [] }) as Observable<WorkItemsData>);
+            workItemServiceMock.getWorkItems.and.returnValue(observableOf({
+              workItems: [],
+            }) as Observable<WorkItemsData>);
             return workItemServiceMock;
-          }
+          },
         },
         {
-          provide: FilterService, useFactory: (): FilterService => {
-            let filterServiceMock: jasmine.SpyObj<FilterService> = jasmine.createSpyObj('FilterService', ['queryBuilder', 'queryJoiner']);
+          provide: FilterService,
+          useFactory: (): FilterService => {
+            let filterServiceMock: jasmine.SpyObj<FilterService> = jasmine.createSpyObj(
+              'FilterService',
+              ['queryBuilder', 'queryJoiner'],
+            );
             return filterServiceMock;
-          }
+          },
         },
         {
-          provide: Router, useFactory: (): jasmine.SpyObj<Router> => {
+          provide: Router,
+          useFactory: (): jasmine.SpyObj<Router> => {
             let mockRouterEvent: any = {
-              'id': 1,
-              'url': 'mock-url'
+              id: 1,
+              url: 'mock-url',
             };
 
-            let mockRouter = jasmine.createSpyObj('Router', ['createUrlTree', 'navigate', 'serializeUrl']);
+            let mockRouter = jasmine.createSpyObj('Router', [
+              'createUrlTree',
+              'navigate',
+              'serializeUrl',
+            ]);
             mockRouter.events = observableOf(mockRouterEvent);
 
             return mockRouter;
-          }
-        }
+          },
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
+      schemas: [NO_ERRORS_SCHEMA],
     });
 
     it('Should show blank state if there are no workitems', function() {
@@ -110,17 +124,24 @@ describe('CreateWorkItemWidgetComponent', () => {
     it('should enable buttons if the user owns the space', function() {
       testContext.hostComponent.userOwnsSpace = true;
       testContext.detectChanges();
-      expect(testContext.fixture.debugElement.query(By.css('#spacehome-my-workitems-add-button'))).not.toBeNull();
-      expect(testContext.fixture.debugElement.query(By.css('#spacehome-my-workitems-create-button'))).not.toBeNull();
-
+      expect(
+        testContext.fixture.debugElement.query(By.css('#spacehome-my-workitems-add-button')),
+      ).not.toBeNull();
+      expect(
+        testContext.fixture.debugElement.query(By.css('#spacehome-my-workitems-create-button')),
+      ).not.toBeNull();
     });
 
     it('should disable buttons if the user does not own the space', function() {
       testContext.hostComponent.userOwnsSpace = false;
       testContext.detectChanges();
 
-      expect(testContext.fixture.debugElement.query(By.css('#spacehome-my-workitems-add-button'))).toBeNull();
-      expect(testContext.fixture.debugElement.query(By.css('#spacehome-my-workitems-create-button'))).toBeNull();
+      expect(
+        testContext.fixture.debugElement.query(By.css('#spacehome-my-workitems-add-button')),
+      ).toBeNull();
+      expect(
+        testContext.fixture.debugElement.query(By.css('#spacehome-my-workitems-create-button')),
+      ).toBeNull();
     });
   });
 
@@ -128,17 +149,17 @@ describe('CreateWorkItemWidgetComponent', () => {
     let fakeWorkItem: WorkItem = {
       attributes: {
         'system.number': 1,
-        'system.state': 'new'
+        'system.state': 'new',
       },
       relationships: {
         baseType: {
           data: {
             id: '71171e90-6d35-498f-a6a7-2083b5267c18',
-            type: 'workitemtypes'
-          }
-        }
+            type: 'workitemtypes',
+          },
+        },
       },
-      type: 'workitems'
+      type: 'workitems',
     };
 
     let fakeWorkItem1 = cloneDeep(fakeWorkItem);
@@ -150,51 +171,68 @@ describe('CreateWorkItemWidgetComponent', () => {
     let fakeWorkItems: WorkItem[] = [fakeWorkItem1, fakeWorkItem2];
 
     let fakeWorkItemsObs: Observable<WorkItemsData> = observableOf({
-      workItems: fakeWorkItems
+      workItems: fakeWorkItems,
     } as WorkItemsData);
 
     type TestingContext = TestContext<CreateWorkItemWidgetComponent, HostComponent>;
 
     const testContext: TestingContext = initContext(CreateWorkItemWidgetComponent, HostComponent, {
-      declarations: [ MockFeatureToggleComponent ],
+      declarations: [MockFeatureToggleComponent],
       imports: [NgArrayPipesModule, RouterModule, NgLetModule],
       providers: [
         { provide: ActivatedRoute, useValue: jasmine.createSpy('ActivatedRoute') },
-        { provide: LocationStrategy, useValue: jasmine.createSpyObj('LocationStrategy', ['prepareExternalUrl']) },
-        { provide: Broadcaster, useValue: createMock(Broadcaster) },
-        { provide: Contexts, useValue: ({ current: new Subject<Context>() }) },
         {
-          provide: WorkItemService, useFactory: (): WorkItemService => {
-            let workItemServiceMock = jasmine.createSpyObj('WorkItemService', ['resolveType', 'resolveAreaForWorkItem', 'getWorkItems']);
+          provide: LocationStrategy,
+          useValue: jasmine.createSpyObj('LocationStrategy', ['prepareExternalUrl']),
+        },
+        { provide: Broadcaster, useValue: createMock(Broadcaster) },
+        { provide: Contexts, useValue: { current: new Subject<Context>() } },
+        {
+          provide: WorkItemService,
+          useFactory: (): WorkItemService => {
+            let workItemServiceMock = jasmine.createSpyObj('WorkItemService', [
+              'resolveType',
+              'resolveAreaForWorkItem',
+              'getWorkItems',
+            ]);
             workItemServiceMock.resolveType.and.stub();
             workItemServiceMock.resolveAreaForWorkItem.and.stub();
-            workItemServiceMock.getWorkItems.and.returnValue(fakeWorkItemsObs as Observable<WorkItemsData>);
+            workItemServiceMock.getWorkItems.and.returnValue(fakeWorkItemsObs as Observable<
+              WorkItemsData
+            >);
             return workItemServiceMock;
-          }
+          },
         },
         {
-          provide: FilterService, useFactory: (): FilterService => {
-            let filterServiceMock: jasmine.SpyObj<FilterService> = jasmine.createSpyObj('FilterService', ['queryBuilder', 'queryJoiner']);
+          provide: FilterService,
+          useFactory: (): FilterService => {
+            let filterServiceMock: jasmine.SpyObj<FilterService> = jasmine.createSpyObj(
+              'FilterService',
+              ['queryBuilder', 'queryJoiner'],
+            );
             return filterServiceMock;
-          }
+          },
         },
         {
-          provide: Router, useFactory: (): jasmine.SpyObj<Router> => {
+          provide: Router,
+          useFactory: (): jasmine.SpyObj<Router> => {
             let mockRouterEvent: any = {
-              'id': 1,
-              'url': 'mock-url'
+              id: 1,
+              url: 'mock-url',
             };
 
-            let mockRouter = jasmine.createSpyObj('Router', ['createUrlTree', 'navigate', 'serializeUrl']);
+            let mockRouter = jasmine.createSpyObj('Router', [
+              'createUrlTree',
+              'navigate',
+              'serializeUrl',
+            ]);
             mockRouter.events = observableOf(mockRouterEvent);
 
             return mockRouter;
-          }
-        }
+          },
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
+      schemas: [NO_ERRORS_SCHEMA],
     });
 
     it('should fetch the correct work items', async(() => {
@@ -206,4 +244,3 @@ describe('CreateWorkItemWidgetComponent', () => {
     }));
   });
 });
-

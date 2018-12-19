@@ -5,18 +5,10 @@ import { debounceTime, distinctUntilChanged, map, switchMap } from 'rxjs/operato
 import { AreaQuery } from '../models/area.model';
 import { IterationQuery } from '../models/iteration.model';
 import { LabelQuery } from '../models/label.model';
-import {
-  AND, ENCLOSURE, EQUAL_QUERY,
-  NOT_EQUAL_QUERY, OR, P_START
-} from './query-keys';
+import { AND, ENCLOSURE, EQUAL_QUERY, NOT_EQUAL_QUERY, OR, P_START } from './query-keys';
 
-const keys_before_field = [
-  AND, OR, P_START
-];
-const keys_before_value = [
-  EQUAL_QUERY, NOT_EQUAL_QUERY
-];
-
+const keys_before_field = [AND, OR, P_START];
+const keys_before_value = [EQUAL_QUERY, NOT_EQUAL_QUERY];
 
 @Injectable()
 export class QuerySuggestionService {
@@ -27,23 +19,23 @@ export class QuerySuggestionService {
     private areaQuery: AreaQuery,
     private iterationQuery: IterationQuery,
     private userService: UserService,
-    private labelQuery: LabelQuery
+    private labelQuery: LabelQuery,
   ) {}
 
   private fields = of({
     'area.name': this.areaQuery.getAreaNames(),
     'iteration.name': this.iterationQuery.getIterationNames,
     'parent.number': of([]),
-    'title': of([]),
-    'assignee': this.fetchUsersBySearchValue(),
-    'label.name': this.labelQuery.getlabelNames
+    title: of([]),
+    assignee: this.fetchUsersBySearchValue(),
+    'label.name': this.labelQuery.getlabelNames,
   });
 
   fetchUsersBySearchValue() {
     return this.valueToSuggestObservable.pipe(
       debounceTime(500),
-      switchMap(value => this.userService.getUsersBySearchString(value)),
-      map(users => users.map(user => user.attributes.username))
+      switchMap((value) => this.userService.getUsersBySearchString(value)),
+      map((users) => users.map((user) => user.attributes.username)),
     );
   }
 
@@ -53,8 +45,7 @@ export class QuerySuggestionService {
    * ease of processing
    * @param query
    */
-  shouldSuggestField(query: string):
-  {suggest: boolean; value: string; lastKey: string} {
+  shouldSuggestField(query: string): { suggest: boolean; value: string; lastKey: string } {
     let output = { suggest: true, value: query.trim(), lastKey: '' };
 
     for (let i = 0; i < keys_before_field.length; i++) {
@@ -64,17 +55,16 @@ export class QuerySuggestionService {
         output = {
           suggest: true,
           value: temp[temp.length - 1].trim(),
-          lastKey: keys_before_field[i]
+          lastKey: keys_before_field[i],
         };
       }
     }
 
-    if (output.value.indexOf(EQUAL_QUERY) > -1 ||
-      output.value.indexOf(NOT_EQUAL_QUERY) > -1) {
+    if (output.value.indexOf(EQUAL_QUERY) > -1 || output.value.indexOf(NOT_EQUAL_QUERY) > -1) {
       output = {
         suggest: false,
         value: output.value,
-        lastKey: ''
+        lastKey: '',
       };
     }
 
@@ -86,7 +76,7 @@ export class QuerySuggestionService {
    * extract the field and typed value
    * @param query
    */
-  suggestValue(query: string): { field: string; value: string; } {
+  suggestValue(query: string): { field: string; value: string } {
     // split with equal
     let splitField = query.split(EQUAL_QUERY);
     // if no luck split with not equal
@@ -105,12 +95,19 @@ export class QuerySuggestionService {
     if (value[value.length - 1] == ENCLOSURE) {
       value = value.substr(0, value.length - 1);
     }
-    return {field, value};
+    return { field, value };
   }
 
-  replaceSuggestion(query_before_cursor: string, query_after_cursor: string, suggestion: string): string {
+  replaceSuggestion(
+    query_before_cursor: string,
+    query_after_cursor: string,
+    suggestion: string,
+  ): string {
     return this.replaceSuggestedValue(
-      query_before_cursor, query_after_cursor, this.valueToSuggest, suggestion
+      query_before_cursor,
+      query_after_cursor,
+      this.valueToSuggest,
+      suggestion,
     );
   }
 
@@ -129,12 +126,19 @@ export class QuerySuggestionService {
    * @param value
    * @param suggestion
    */
-  replaceSuggestedValue(query_before_cursor: string, query_after_cursor: string, value: string, suggestion: string): string {
+  replaceSuggestedValue(
+    query_before_cursor: string,
+    query_after_cursor: string,
+    value: string,
+    suggestion: string,
+  ): string {
     const all_keys = [...keys_before_field, ...keys_before_value];
-    const first_part = value == '' ? query_before_cursor :
-      query_before_cursor.substr(0, query_before_cursor.length - value.length).trim();
+    const first_part =
+      value == ''
+        ? query_before_cursor
+        : query_before_cursor.substr(0, query_before_cursor.length - value.length).trim();
     let after_cursor = query_after_cursor;
-    all_keys.forEach(key => {
+    all_keys.forEach((key) => {
       if (after_cursor !== '') {
         after_cursor = after_cursor.split(key)[0];
       }
@@ -144,39 +148,36 @@ export class QuerySuggestionService {
   }
 
   getSuggestions(): Observable<string[]> {
-    return this.queryObservable
-      .pipe(
-        distinctUntilChanged(),
-        switchMap(query => {
-          if (query === '-') { return of([]); }
-          const fieldSuggest = this.shouldSuggestField(query);
-          if (fieldSuggest.suggest) {
-            this.valueToSuggest = fieldSuggest.value;
-            this.valueToSuggestObservable.next(fieldSuggest.value);
-            return this.fields.pipe(
-              map(fields => Object.keys(fields)
-                .filter(f => f.indexOf(fieldSuggest.value) > -1)
-              )
-            );
-          } else {
-            const fieldValue = this.suggestValue(fieldSuggest.value);
-            this.valueToSuggest = fieldValue.value;
-            this.valueToSuggestObservable.next(fieldValue.value);
-            return this.fields.pipe(
-              switchMap(fields => {
-                if (fields[fieldValue.field]) {
-                  return fields[fieldValue.field].pipe(
-                    map((values: string[]) =>
-                      values.filter(v => v.indexOf(fieldValue.value) > -1)
-                    )
-                  );
-                } else {
-                  return of([]);
-                }
-              })
-            );
-          }
-        })
-      );
+    return this.queryObservable.pipe(
+      distinctUntilChanged(),
+      switchMap((query) => {
+        if (query === '-') {
+          return of([]);
+        }
+        const fieldSuggest = this.shouldSuggestField(query);
+        if (fieldSuggest.suggest) {
+          this.valueToSuggest = fieldSuggest.value;
+          this.valueToSuggestObservable.next(fieldSuggest.value);
+          return this.fields.pipe(
+            map((fields) => Object.keys(fields).filter((f) => f.indexOf(fieldSuggest.value) > -1)),
+          );
+        } else {
+          const fieldValue = this.suggestValue(fieldSuggest.value);
+          this.valueToSuggest = fieldValue.value;
+          this.valueToSuggestObservable.next(fieldValue.value);
+          return this.fields.pipe(
+            switchMap((fields) => {
+              if (fields[fieldValue.field]) {
+                return fields[fieldValue.field].pipe(
+                  map((values: string[]) => values.filter((v) => v.indexOf(fieldValue.value) > -1)),
+                );
+              } else {
+                return of([]);
+              }
+            }),
+          );
+        }
+      }),
+    );
   }
 }

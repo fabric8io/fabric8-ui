@@ -16,4 +16,3 @@ export { InfotipEffects } from './infotip.effects';
 export { UserEffects } from './user.effects';
 export { EventEffects } from './event.effects';
 export { BoardEffects } from './board.effect';
-

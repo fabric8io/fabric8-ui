@@ -10,10 +10,10 @@ import { ApplicationsListItemDetailsComponent } from './applications-list-item-d
   imports: [
     ApplicationsPipelineModule,
     CommonModule,
-    FormsModule
+    FormsModule,
     // KubernetesComponentsModule
   ],
   declarations: [ApplicationsListItemDetailsComponent],
-  exports: [ApplicationsListItemDetailsComponent]
+  exports: [ApplicationsListItemDetailsComponent],
 })
-export class ApplicationsListItemDetailsModule { }
+export class ApplicationsListItemDetailsModule {}

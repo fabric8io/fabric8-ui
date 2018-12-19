@@ -1,25 +1,16 @@
 import { Location } from '@angular/common';
-import {
-  Component,
-  NO_ERRORS_SCHEMA
-} from '@angular/core';
+import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import {
-  AuthenticationService,
-  UserService
-} from 'ngx-login-client';
+import { AuthenticationService, UserService } from 'ngx-login-client';
 import { createMock } from 'testing/mock';
-import {
-  initContext,
-  TestContext
-} from 'testing/test-context';
+import { initContext, TestContext } from 'testing/test-context';
 import { ErrorComponent } from './error.component';
 import { ErrorService } from './error.service';
 
 @Component({
-  template: '<f8-error></f8-error>'
+  template: '<f8-error></f8-error>',
 })
-class HostComponent { }
+class HostComponent {}
 
 describe('ErrorComponent', () => {
   const testContext = initContext(ErrorComponent, HostComponent, {
@@ -27,21 +18,25 @@ describe('ErrorComponent', () => {
       ErrorService,
       { provide: UserService, useValue: createMock(UserService) },
       {
-        provide: AuthenticationService, useFactory: () => {
-          const authenticationService: jasmine.SpyObj<AuthenticationService> = createMock(AuthenticationService);
+        provide: AuthenticationService,
+        useFactory: () => {
+          const authenticationService: jasmine.SpyObj<AuthenticationService> = createMock(
+            AuthenticationService,
+          );
           authenticationService.isLoggedIn.and.returnValue(false);
           return authenticationService;
-        }
+        },
       },
       {
-        provide: Location, useFactory: () => {
+        provide: Location,
+        useFactory: () => {
           const location: jasmine.SpyObj<Location> = createMock(Location);
           location.replaceState.and.stub();
           return location;
-        }
-      }
+        },
+      },
     ],
-    schemas: [ NO_ERRORS_SCHEMA ]
+    schemas: [NO_ERRORS_SCHEMA],
   });
 
   it('should replace location state if a failed route is available', function() {
@@ -59,5 +54,4 @@ describe('ErrorComponent', () => {
     errorService.updateFailedRoute('');
     expect(location.replaceState).not.toHaveBeenCalled();
   });
-
 });

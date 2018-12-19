@@ -1,21 +1,13 @@
 import { round } from 'lodash';
 import { MemoryStat } from './memory-stat';
-import {
-  MemoryUnit,
-  ordinal
-} from './memory-unit';
+import { MemoryUnit, ordinal } from './memory-unit';
 import { ScaledStat } from './scaled-stat';
 
 export class ScaledMemoryStat implements MemoryStat, ScaledStat {
-
   private _raw: number;
   private _units: MemoryUnit;
 
-  constructor(
-    private _used: number,
-    private _quota: number,
-    private _timestamp?: number
-  ) {
+  constructor(private _used: number, private _quota: number, private _timestamp?: number) {
     this._raw = this._used;
     let scale = 0;
     if (this._used !== 0) {

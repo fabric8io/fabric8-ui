@@ -15,11 +15,9 @@ import { AssigneeSelectorModule } from './../assignee-selector/assignee-selector
 import { AssigneesModule } from './../assignee/assignee.module';
 import { CommonSelectorModule } from './../common-selector/common-selector.module';
 import { LabelsModule } from './../labels/labels.module';
-import {
-  WorkItemCommentWrapperModule
-} from './../work-item-comment-wrapper/work-item-comment-wrapper.module';
+import { WorkItemCommentWrapperModule } from './../work-item-comment-wrapper/work-item-comment-wrapper.module';
 import { WorkItemEventWrapperModule } from './../work-item-event-wrapper/work-item-event-wrapper.module';
-import  { WorkItemLinkModule } from './../work-item-link/work-item-link.module';
+import { WorkItemLinkModule } from './../work-item-link/work-item-link.module';
 import { WorkItemDetailRoutingModule } from './work-item-detail-routing.module';
 import { WorkItemDetailComponent } from './work-item-detail.component';
 
@@ -35,9 +33,7 @@ import { DetailWorkItemReducer } from './../../reducers/detail-work-item.reducer
 import { LinkTypeReducer } from './../../reducers/link-type.reducer';
 import { WorkItemLinkReducer } from './../../reducers/work-item-link.reducer';
 import { initialState as initialCommentState } from './../../states/comment.state';
-import {
-  initialState as initialDetailWIState
-} from './../../states/detail-work-item.state';
+import { initialState as initialDetailWIState } from './../../states/detail-work-item.state';
 import { initialState as initialEventState } from './../../states/event.state';
 import { initialState as initialLinkTypeState } from './../../states/link-type.state';
 import { initialState as initialWILinkState } from './../../states/work-item-link.state';
@@ -60,7 +56,6 @@ import { SpaceQuery } from './../../models/space';
 import { WorkItemQuery } from './../../models/work-item';
 import { ClickOutModule } from './../../widgets/clickout/clickout.module';
 import { UserAvatarModule } from './../../widgets/user-avatar/user-avatar.module';
-
 
 @NgModule({
   imports: [
@@ -87,30 +82,34 @@ import { UserAvatarModule } from './../../widgets/user-avatar/user-avatar.module
     ReactiveFormsModule,
     ClickOutModule,
     DeleteWorkItemModule,
-    StoreModule.forFeature('detailPage', {
-      comments: CommentReducer,
-      workItem: DetailWorkItemReducer,
-      linkType: LinkTypeReducer,
-      workItemLink: WorkItemLinkReducer,
-      events: EventReducer
-    }, {
-      initialState: {
-        events: initialEventState,
-        comments: initialCommentState,
-        workItem: initialDetailWIState,
-        linkType: initialLinkTypeState,
-        workItemLink: initialWILinkState
-      }
-    }),
+    StoreModule.forFeature(
+      'detailPage',
+      {
+        comments: CommentReducer,
+        workItem: DetailWorkItemReducer,
+        linkType: LinkTypeReducer,
+        workItemLink: WorkItemLinkReducer,
+        events: EventReducer,
+      },
+      {
+        initialState: {
+          events: initialEventState,
+          comments: initialCommentState,
+          workItem: initialDetailWIState,
+          linkType: initialLinkTypeState,
+          workItemLink: initialWILinkState,
+        },
+      },
+    ),
     EffectsModule.forFeature([
       CommentEffects,
       DetailWorkItemEffects,
       EventEffects,
       LinkTypeEffects,
-      WorkItemLinkEffects
+      WorkItemLinkEffects,
     ]),
     SafePipeModule,
-    UserAvatarModule
+    UserAvatarModule,
   ],
   providers: [
     CommentQuery,
@@ -125,14 +124,9 @@ import { UserAvatarModule } from './../../widgets/user-avatar/user-avatar.module
     WorkItemQuery,
     AreaQuery,
     WorkItemTypeQuery,
-    ErrorHandler
+    ErrorHandler,
   ],
-  declarations: [
-    WorkItemDetailComponent,
-    DynamicFieldComponent
-  ],
-  exports: [
-    WorkItemDetailComponent
-  ]
+  declarations: [WorkItemDetailComponent, DynamicFieldComponent],
+  exports: [WorkItemDetailComponent],
 })
 export class WorkItemDetailModule {}

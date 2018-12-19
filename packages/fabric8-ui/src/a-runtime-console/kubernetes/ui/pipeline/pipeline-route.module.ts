@@ -12,7 +12,7 @@ import { PipelineViewPage } from './view-page/view-page.pipeline.component';
 
 const routes: Routes = [
   { path: '', component: PipelinesListPage },
-  { path: ':id', component: PipelineViewPage }
+  { path: ':id', component: PipelineViewPage },
 ];
 
 @NgModule({
@@ -24,14 +24,10 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     Fabric8CommonModule,
     KubernetesComponentsModule,
-    PipelineModule
+    PipelineModule,
   ],
-  declarations: [
-  ],
-  entryComponents: [
-  ],
-  exports: [
-  ]
+  declarations: [],
+  entryComponents: [],
+  exports: [],
 })
-export class PipelineRouteModule {
-}
+export class PipelineRouteModule {}

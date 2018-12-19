@@ -8,13 +8,7 @@ import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
 import { AppState } from './../states/app.state';
-import {
-  Mapper,
-  MapTree,
-  modelService,
-  modelUI,
-  switchModel
-} from './common.model';
+import { Mapper, MapTree, modelService, modelUI, switchModel } from './common.model';
 import { plannerSelector } from './space';
 
 export class GroupTypesModel extends modelService {
@@ -38,19 +32,19 @@ export class WITGroupAttributes {
 
 export class WorkItemRelations {
   defaultType?: {
-    data?: object,
-    links?: object
+    data?: object;
+    links?: object;
   };
   nextGroup?: {
-    data?: object,
-    links?: object
+    data?: object;
+    links?: object;
   };
   spaceTemplate?: {
-    data?: object,
-    links?: object
+    data?: object;
+    links?: object;
   };
   typeList?: {
-    data?: TypeListData[]
+    data?: TypeListData[];
   };
 }
 
@@ -76,92 +70,109 @@ export interface GroupTypeUI extends modelUI {
 }
 
 export class GroupTypeMapper implements Mapper<GroupTypeService, GroupTypeUI> {
-
-  serviceToUiMapTree: MapTree = [{
+  serviceToUiMapTree: MapTree = [
+    {
       fromPath: ['id'],
-      toPath: ['id']
-    }, {
+      toPath: ['id'],
+    },
+    {
       fromPath: ['attributes', 'name'],
-      toPath: ['name']
-    }, {
+      toPath: ['name'],
+    },
+    {
       fromPath: ['attributes', 'bucket'],
-      toPath: ['bucket']
-    }, {
+      toPath: ['bucket'],
+    },
+    {
       fromPath: ['attributes', 'level'],
-      toPath: ['level']
-    }, {
+      toPath: ['level'],
+    },
+    {
       fromPath: ['attributes', 'icon'],
-      toPath: ['icon']
-    }, {
+      toPath: ['icon'],
+    },
+    {
       fromPath: ['attributes', 'sublevel'],
-      toPath: ['sublevel']
-    }, {
+      toPath: ['sublevel'],
+    },
+    {
       fromPath: ['attributes', 'group'],
-      toPath: ['group']
-    }, {
+      toPath: ['group'],
+    },
+    {
       toPath: ['selected'],
-      toValue: false
-    }, {
+      toValue: false,
+    },
+    {
       fromPath: ['attributes', 'show-in-sidebar'],
-      toPath: ['showInSideBar']
-    }, {
+      toPath: ['showInSideBar'],
+    },
+    {
       fromPath: ['relationships', 'typeList', 'data'],
-      toPath: ['typeList']
-    }, {
+      toPath: ['typeList'],
+    },
+    {
       fromPath: ['attributes', 'description'],
       toPath: ['description'],
-      toFunction: (value) => value || 'no info-tip'
-    }];
+      toFunction: (value) => value || 'no info-tip',
+    },
+  ];
 
-  uiToServiceMapTree: MapTree = [{
-    fromPath: ['id'],
-    toPath: ['id']
-  }, {
-    fromPath: ['name'],
-    toPath: ['attributes', 'name']
-  }, {
-    fromPath: ['bucket'],
-    toPath: ['attributes', 'bucket']
-  }, {
-    fromPath: ['level'],
-    toPath: ['attributes', 'level']
-  }, {
-    fromPath: ['icon'],
-    toPath: ['attributes', 'icon']
-  }, {
-    fromPath: ['sublevel'],
-    toPath: ['attributes', 'sublevel']
-  }, {
-    fromPath: ['group'],
-    toPath: ['attributes', 'group']
-  }, {
-    fromPath: ['showInSideBar'],
-    toPath: ['attributes', 'show-in-sidebar']
-  }, {
-    fromPath: ['typeList'],
-    toPath: ['relationships', 'typeList', 'data']
-  }, {
-    toPath: ['type'],
-    toValue: 'grouptypes'
-  }];
-
+  uiToServiceMapTree: MapTree = [
+    {
+      fromPath: ['id'],
+      toPath: ['id'],
+    },
+    {
+      fromPath: ['name'],
+      toPath: ['attributes', 'name'],
+    },
+    {
+      fromPath: ['bucket'],
+      toPath: ['attributes', 'bucket'],
+    },
+    {
+      fromPath: ['level'],
+      toPath: ['attributes', 'level'],
+    },
+    {
+      fromPath: ['icon'],
+      toPath: ['attributes', 'icon'],
+    },
+    {
+      fromPath: ['sublevel'],
+      toPath: ['attributes', 'sublevel'],
+    },
+    {
+      fromPath: ['group'],
+      toPath: ['attributes', 'group'],
+    },
+    {
+      fromPath: ['showInSideBar'],
+      toPath: ['attributes', 'show-in-sidebar'],
+    },
+    {
+      fromPath: ['typeList'],
+      toPath: ['relationships', 'typeList', 'data'],
+    },
+    {
+      toPath: ['type'],
+      toValue: 'grouptypes',
+    },
+  ];
 
   toUIModel(arg: GroupTypeService): GroupTypeUI {
-    return switchModel<GroupTypeService, GroupTypeUI>(
-      arg, this.serviceToUiMapTree
-    );
+    return switchModel<GroupTypeService, GroupTypeUI>(arg, this.serviceToUiMapTree);
   }
 
   toServiceModel(arg: GroupTypeUI): GroupTypeService {
-    return switchModel<GroupTypeUI, GroupTypeService>(
-      arg, this.uiToServiceMapTree
-    );
+    return switchModel<GroupTypeUI, GroupTypeService>(arg, this.uiToServiceMapTree);
   }
 }
 
 export const groupTypeSelector = createSelector(
   plannerSelector,
-  state => state.groupTypes
+  (state) => state.groupTypes,
 );
 @Injectable()
 export class GroupTypeQuery {
@@ -169,10 +180,10 @@ export class GroupTypeQuery {
   get getGroupTypes(): Observable<GroupTypeUI[]> {
     return this.store.pipe(
       select(groupTypeSelector),
-      filter(g => g.length > 0)
+      filter((g) => g.length > 0),
     );
   }
   get getFirstGroupType(): Observable<GroupTypeUI> {
-    return this.getGroupTypes.pipe(map(g => g[0]));
+    return this.getGroupTypes.pipe(map((g) => g[0]));
   }
 }

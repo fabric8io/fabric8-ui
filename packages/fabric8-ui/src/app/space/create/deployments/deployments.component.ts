@@ -1,11 +1,5 @@
-import {
-  Component,
-  ViewEncapsulation
-} from '@angular/core';
-import {
-  Space,
-  Spaces
-} from 'ngx-fabric8-wit';
+import { Component, ViewEncapsulation } from '@angular/core';
+import { Space, Spaces } from 'ngx-fabric8-wit';
 import { Observable, timer } from 'rxjs';
 import { first, map, mergeMap, share } from 'rxjs/operators';
 import { DeploymentStatusService } from './services/deployment-status.service';
@@ -13,13 +7,16 @@ import {
   DeploymentsService,
   POLL_RATE_TOKEN,
   TIMER_TOKEN,
-  TIMESERIES_SAMPLES_TOKEN
+  TIMESERIES_SAMPLES_TOKEN,
 } from './services/deployments.service';
 
 export function timerFactory(): Observable<void> {
-  return timer(DeploymentsService.DEFAULT_INITIAL_UPDATE_DELAY, DeploymentsService.DEFAULT_POLL_RATE_MS).pipe(
+  return timer(
+    DeploymentsService.DEFAULT_INITIAL_UPDATE_DELAY,
+    DeploymentsService.DEFAULT_POLL_RATE_MS,
+  ).pipe(
     map((): void => null),
-    share()
+    share(),
   );
 }
 
@@ -33,11 +30,10 @@ export function timerFactory(): Observable<void> {
     DeploymentsService,
     { provide: TIMER_TOKEN, useFactory: timerFactory },
     { provide: TIMESERIES_SAMPLES_TOKEN, useValue: DeploymentsService.DEFAULT_FRONT_LOAD_SAMPLES },
-    { provide: POLL_RATE_TOKEN, useValue: DeploymentsService.DEFAULT_POLL_RATE_MS }
-  ]
+    { provide: POLL_RATE_TOKEN, useValue: DeploymentsService.DEFAULT_POLL_RATE_MS },
+  ],
 })
 export class DeploymentsComponent {
-
   readonly spaceId: Observable<string>;
   readonly spaceName: Observable<string>;
   readonly environments: Observable<string[]>;
@@ -45,18 +41,25 @@ export class DeploymentsComponent {
 
   constructor(
     private readonly spaces: Spaces,
-    private readonly deploymentsService: DeploymentsService
+    private readonly deploymentsService: DeploymentsService,
   ) {
     this.spaceId = this.spaces.current.pipe(
       first(),
-      map((space: Space): string => space.id)
+      map((space: Space): string => space.id),
     );
     this.spaceName = this.spaces.current.pipe(
       first(),
-      map((space: Space): string => space.attributes.name)
+      map((space: Space): string => space.attributes.name),
     );
-    this.environments = this.spaceId.pipe(mergeMap((spaceId: string): Observable<string[]> => this.deploymentsService.getEnvironments(spaceId)));
-    this.applications = this.spaceId.pipe(mergeMap((spaceId: string): Observable<string[]> => this.deploymentsService.getApplications(spaceId)));
+    this.environments = this.spaceId.pipe(
+      mergeMap(
+        (spaceId: string): Observable<string[]> => this.deploymentsService.getEnvironments(spaceId),
+      ),
+    );
+    this.applications = this.spaceId.pipe(
+      mergeMap(
+        (spaceId: string): Observable<string[]> => this.deploymentsService.getApplications(spaceId),
+      ),
+    );
   }
-
 }

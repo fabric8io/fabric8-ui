@@ -15,7 +15,9 @@ export function createMock<T extends Object>(type: Type<T>): jasmine.SpyObj<T> {
   }
   const methodNames: string[] = uniq(getClassMethods(type.prototype));
   const mock: jasmine.SpyObj<T> = jasmine.createSpyObj(type.name, methodNames);
-  methodNames.forEach((mtd: string): void => mock[mtd].and.throwError(`${type.name}#${mtd} not implemented`));
+  methodNames.forEach(
+    (mtd: string): void => mock[mtd].and.throwError(`${type.name}#${mtd} not implemented`),
+  );
   return mock;
 }
 
@@ -30,6 +32,7 @@ function getOwnMethods(klazz: Object): string[] {
   if (!klazz || klazz === Object.prototype) {
     return [];
   }
-  return Object.getOwnPropertyNames(klazz)
-    .filter((prop: string): boolean => klazz[prop] instanceof Function);
+  return Object.getOwnPropertyNames(klazz).filter(
+    (prop: string): boolean => klazz[prop] instanceof Function,
+  );
 }

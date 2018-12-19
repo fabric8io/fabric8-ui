@@ -11,11 +11,7 @@ import { FilterService } from '../../services/filter.service';
 import { WorkItemService } from '../../services/work-item.service';
 import { ToolbarPanelComponent } from './toolbar-panel.component';
 
-import {
-  AlmEditableModule,
-  AlmIconModule,
-  WidgetsModule
-} from 'ngx-widgets';
+import { AlmEditableModule, AlmIconModule, WidgetsModule } from 'ngx-widgets';
 
 //ngrx stuff
 import { EffectsModule } from '@ngrx/effects';
@@ -27,9 +23,7 @@ import { FilterEffects } from './../../effects/filter.effects';
 import { GroupTypeQuery } from './../../models/group-types.model';
 import { SpaceQuery } from './../../models/space';
 import { FilterReducer } from './../../reducers/filter.reducer';
-import {
-  initialState as initialFilterState
-} from './../../states/filter.state';
+import { initialState as initialFilterState } from './../../states/filter.state';
 
 @NgModule({
   imports: [
@@ -40,18 +34,20 @@ import {
     ToolbarModule,
     TooltipModule.forRoot(),
     WidgetsModule,
-    StoreModule.forFeature('toolbar', {
-      filters: FilterReducer
-    }, {
-      initialState: {
-        filters: initialFilterState
-      }
-    }),
-    EffectsModule.forFeature([FilterEffects])
+    StoreModule.forFeature(
+      'toolbar',
+      {
+        filters: FilterReducer,
+      },
+      {
+        initialState: {
+          filters: initialFilterState,
+        },
+      },
+    ),
+    EffectsModule.forFeature([FilterEffects]),
   ],
-  declarations: [
-    ToolbarPanelComponent
-  ],
+  declarations: [ToolbarPanelComponent],
   providers: [
     BsDropdownConfig,
     CollaboratorService,
@@ -62,8 +58,8 @@ import {
     AreaQuery,
     WorkItemTypeQuery,
     GroupTypeQuery,
-    SpaceQuery
+    SpaceQuery,
   ],
-  exports: [ToolbarPanelComponent]
+  exports: [ToolbarPanelComponent],
 })
-export class ToolbarPanelModule { }
+export class ToolbarPanelModule {}

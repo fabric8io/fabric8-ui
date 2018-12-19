@@ -7,8 +7,14 @@ import { AnalyticalReportWidgetComponent } from './analytical-report-widget.comp
 import { StackAnalysisPipe } from './stack-analysis-pipe.pipe';
 
 @NgModule({
-  imports: [CommonModule, FormsModule, LoadingWidgetModule, StackDetailsModule, StackReportInShortModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    LoadingWidgetModule,
+    StackDetailsModule,
+    StackReportInShortModule,
+  ],
   declarations: [AnalyticalReportWidgetComponent, StackAnalysisPipe],
-  exports: [AnalyticalReportWidgetComponent, StackAnalysisPipe]
+  exports: [AnalyticalReportWidgetComponent, StackAnalysisPipe],
 })
-export class AnalyticalReportWidgetModule { }
+export class AnalyticalReportWidgetModule {}

@@ -2,7 +2,6 @@ import { ElementFinder, Key } from 'protractor';
 import { BaseElement } from './base.element';
 
 export class TextInput extends BaseElement {
-
   constructor(element: ElementFinder, name: string = '') {
     super(element, name);
   }
@@ -22,4 +21,3 @@ export class TextInput extends BaseElement {
     });
   }
 }
-

@@ -1,22 +1,13 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-  SimpleChange,
-  SimpleChanges
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChange, SimpleChanges } from '@angular/core';
 import { GroupTypeUI } from '../../models/group-types.model';
 import { IterationUI } from '../../models/iteration.model';
 import { IterationListEntryComponent } from '../iteration-list-entry/iteration-list-entry.component';
 
 @Component({
-    selector: 'iteration-tree',
-    templateUrl: './iteration-tree.component.html'
+  selector: 'iteration-tree',
+  templateUrl: './iteration-tree.component.html',
 })
-
 export class IterationTreeComponent {
-
   @Input() iterationList: IterationUI[] = [];
   @Input() collection: any;
   @Input() witGroup: GroupTypeUI;

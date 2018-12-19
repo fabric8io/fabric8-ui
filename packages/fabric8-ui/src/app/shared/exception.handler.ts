@@ -9,10 +9,12 @@ export class RavenExceptionHandler extends ErrorHandler {
     super();
     if (ENV !== 'test') {
       // TODO - replace with configuration variable
-      Raven.config('https://e71023d2bd794b708ea5a4f43e914b11@errortracking.prod-preview.openshift.io/8',
-      {
-        environment: getEnvironment()
-      }).install();
+      Raven.config(
+        'https://e71023d2bd794b708ea5a4f43e914b11@errortracking.prod-preview.openshift.io/8',
+        {
+          environment: getEnvironment(),
+        },
+      ).install();
     }
   }
 
@@ -29,16 +31,20 @@ export class RavenExceptionHandler extends ErrorHandler {
 
   private ravenHandleError(err: any): void {
     const userService = this.injector.get(UserService);
-    if (userService && userService.currentLoggedInUser && userService.currentLoggedInUser.attributes) {
+    if (
+      userService &&
+      userService.currentLoggedInUser &&
+      userService.currentLoggedInUser.attributes
+    ) {
       Raven.setUserContext({
         email: userService.currentLoggedInUser.attributes.email,
-        id: userService.currentLoggedInUser.id
+        id: userService.currentLoggedInUser.id,
       });
     }
     const ex = err.originalException || err;
     const fingerprint = this.createFingerprint(ex);
     if (fingerprint && fingerprint.length > 0) {
-      Raven.captureException(ex, {fingerprint});
+      Raven.captureException(ex, { fingerprint });
     } else {
       Raven.captureException(ex);
     }

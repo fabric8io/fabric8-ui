@@ -3,7 +3,6 @@ import { MemoryUnit } from './memory-unit';
 import { ScaledMemoryStat } from './scaled-memory-stat';
 
 describe('ScaledMemoryStat', (): void => {
-
   it('should not scale 500 bytes', (): void => {
     const stat: ScaledMemoryStat = new ScaledMemoryStat(500, 1024);
     expect(stat.used).toEqual(500);
@@ -39,76 +38,85 @@ describe('ScaledMemoryStat', (): void => {
       const original: MemoryStat = {
         used: 100,
         quota: 200,
-        units: MemoryUnit.MB
+        units: MemoryUnit.MB,
       };
       const converted: ScaledMemoryStat = ScaledMemoryStat.from(original, MemoryUnit.MB);
-      expect(converted).toEqual(jasmine.objectContaining({
-        raw: 100,
-        used: 100,
-        quota: 200,
-        units: MemoryUnit.MB
-      }));
+      expect(converted).toEqual(
+        jasmine.objectContaining({
+          raw: 100,
+          used: 100,
+          quota: 200,
+          units: MemoryUnit.MB,
+        }),
+      );
     });
 
     it('should scale units down if target unit is larger than original', (): void => {
       const original: MemoryStat = {
         used: 100,
         quota: 200,
-        units: MemoryUnit.MB
+        units: MemoryUnit.MB,
       };
       const converted: ScaledMemoryStat = ScaledMemoryStat.from(original, MemoryUnit.GB);
-      expect(converted).toEqual(jasmine.objectContaining({
-        raw: 100,
-        used: 0.1,
-        quota: 0.2,
-        units: MemoryUnit.GB
-      }));
+      expect(converted).toEqual(
+        jasmine.objectContaining({
+          raw: 100,
+          used: 0.1,
+          quota: 0.2,
+          units: MemoryUnit.GB,
+        }),
+      );
     });
 
     it('should scale units down if target unit is much larger than original', (): void => {
       const original: MemoryStat = {
         used: 100,
         quota: 200,
-        units: MemoryUnit.B
+        units: MemoryUnit.B,
       };
       const converted: ScaledMemoryStat = ScaledMemoryStat.from(original, MemoryUnit.GB);
-      expect(converted).toEqual(jasmine.objectContaining({
-        raw: 100,
-        used: 0,
-        quota: 0,
-        units: MemoryUnit.GB
-      }));
+      expect(converted).toEqual(
+        jasmine.objectContaining({
+          raw: 100,
+          used: 0,
+          quota: 0,
+          units: MemoryUnit.GB,
+        }),
+      );
     });
 
     it('should scale units up if target unit is smaller than original', (): void => {
       const original: MemoryStat = {
         used: 1,
         quota: 2,
-        units: MemoryUnit.KB
+        units: MemoryUnit.KB,
       };
       const converted: ScaledMemoryStat = ScaledMemoryStat.from(original, MemoryUnit.B);
-      expect(converted).toEqual(jasmine.objectContaining({
-        raw: 1,
-        used: 1024,
-        quota: 2048,
-        units: MemoryUnit.B
-      }));
+      expect(converted).toEqual(
+        jasmine.objectContaining({
+          raw: 1,
+          used: 1024,
+          quota: 2048,
+          units: MemoryUnit.B,
+        }),
+      );
     });
 
     it('should scale units up if target unit is much smaller than original', (): void => {
       const original: MemoryStat = {
         used: 1,
         quota: 2,
-        units: MemoryUnit.GB
+        units: MemoryUnit.GB,
       };
       const converted: ScaledMemoryStat = ScaledMemoryStat.from(original, MemoryUnit.KB);
-      expect(converted).toEqual(jasmine.objectContaining({
-        raw: 1,
-        used: 1 * Math.pow(1024, 2),
-        quota: 2 * Math.pow(1024, 2),
-        units: MemoryUnit.KB
-      }));
+      expect(converted).toEqual(
+        jasmine.objectContaining({
+          raw: 1,
+          used: 1 * Math.pow(1024, 2),
+          quota: 2 * Math.pow(1024, 2),
+          units: MemoryUnit.KB,
+        }),
+      );
     });
   });
-
 });

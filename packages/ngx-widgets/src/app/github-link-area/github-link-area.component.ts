@@ -8,7 +8,7 @@ import {
   Output,
   SimpleChanges,
   ViewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { GitHubLinkService } from './github-link.service';
@@ -22,18 +22,18 @@ import { GitHubLinkService } from './github-link.service';
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'github-link-area',
-  styleUrls: [ './github-link-area.component.less'],
-  templateUrl: './github-link-area.component.html'
+  styleUrls: ['./github-link-area.component.less'],
+  templateUrl: './github-link-area.component.html',
 })
 export class GitHubLinkAreaComponent implements OnChanges, AfterViewChecked {
-
   @Input('content') content: string | SafeHtml;
   @Output('onInputEvent') onInputEvent = new EventEmitter();
 
   constructor(
     private gitHubLinkService: GitHubLinkService,
     private elementRef: ElementRef,
-    private sanitizer: DomSanitizer) {}
+    private sanitizer: DomSanitizer,
+  ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes && changes.content) {
@@ -81,21 +81,25 @@ export class GitHubLinkAreaComponent implements OnChanges, AfterViewChecked {
         // Example: Chrome works, but Protractor not.
         for (let i = 0; i < inputElements.length; ++i) {
           inputElements[i].setAttribute('data-event-attached', 'true');
-          inputElements[i].addEventListener('change', (ref: any) => {
-            // we only support checkboxes for now, but the mechanism is generic.
-            // add new interactions here if needed.
-            if (ref.target && ref.target.getAttribute('type') === 'checkbox') {
-              let indexStr = ref.target.getAttribute('data-checkbox-index');
-              this.onInputEvent.emit({
-                'type': 'checkbox',
-                // '+' converts the string to an int.
-                'extraData': {
-                  checkboxIndex: +indexStr,
-                  checked: ref.target.checked
-                }
-              });
-            }
-          }, false);
+          inputElements[i].addEventListener(
+            'change',
+            (ref: any) => {
+              // we only support checkboxes for now, but the mechanism is generic.
+              // add new interactions here if needed.
+              if (ref.target && ref.target.getAttribute('type') === 'checkbox') {
+                let indexStr = ref.target.getAttribute('data-checkbox-index');
+                this.onInputEvent.emit({
+                  type: 'checkbox',
+                  // '+' converts the string to an int.
+                  extraData: {
+                    checkboxIndex: +indexStr,
+                    checked: ref.target.checked,
+                  },
+                });
+              }
+            },
+            false,
+          );
         }
       }
     }
@@ -123,15 +127,22 @@ export class GitHubLinkAreaComponent implements OnChanges, AfterViewChecked {
    */
   replaceLink(linkData: any): void {
     this.content = this.wrapStringSafeValue(
-      this.unwrapStringSafeValue(this.content).split(linkData.match).join(
-        // tslint:disable-next-line:max-line-length
-        (linkData.state === 'open' ? '<span class="fa fa-clock-o gh-link-open" tooltip="Issue Open"></span>' : '') +
-        // tslint:disable-next-line:max-line-length
-        (linkData.state === 'closed' ? '<span class="fa fa-check gh-link-closed" tooltip="Issue Closed"></span>' : '') +
-        ((linkData.state !== 'open' && linkData.state !== 'closed') ?
-        // tslint:disable-next-line:max-line-length
-        '<span class="fa pficon-warning-triangle-o gh-link-error" tooltip="Issue State Unknown"></span>' : '')
-      )
+      this.unwrapStringSafeValue(this.content)
+        .split(linkData.match)
+        .join(
+          // tslint:disable-next-line:max-line-length
+          (linkData.state === 'open'
+            ? '<span class="fa fa-clock-o gh-link-open" tooltip="Issue Open"></span>'
+            : '') +
+            // tslint:disable-next-line:max-line-length
+            (linkData.state === 'closed'
+              ? '<span class="fa fa-check gh-link-closed" tooltip="Issue Closed"></span>'
+              : '') +
+            (linkData.state !== 'open' && linkData.state !== 'closed'
+              ? // tslint:disable-next-line:max-line-length
+                '<span class="fa pficon-warning-triangle-o gh-link-error" tooltip="Issue State Unknown"></span>'
+              : ''),
+        ),
     );
   }
 
@@ -149,23 +160,40 @@ export class GitHubLinkAreaComponent implements OnChanges, AfterViewChecked {
     // those formats.
     let thisContent = this.unwrapStringSafeValue(this.content);
     let regexp: RegExp = new RegExp(
-      '<a href="https:\/\/github.com\/([^\/]+)\/([^\/]+)\/issues\/([^"]+)[^<]*">([^<]+)<\/a>', 'gi'
+      '<a href="https://github.com/([^/]+)/([^/]+)/issues/([^"]+)[^<]*">([^<]+)</a>',
+      'gi',
     );
     let result = regexp.exec(thisContent);
     while (result) {
-      thisContent = thisContent.split(result[0])
-        .join('<a class="gh-link" href="https://github.com/' +
-          result[1] + '/' +
-          result[2] + '/' +
-          'issues/' + result[3] + '" rel="nofollow">' +
-          '<span class="fa fa-github gh-link-system"></span><span class="gh-link-label"> ' +
-          result[2] + ':' + result[3] + ' ' +
-          '<span ' +
-            'data-gh-org="' + result[1] + '" ' +
-            'data-gh-repo="' + result[2] + '" ' +
-            'data-gh-issue="' + result[3] + '" ' +
-          'class="pficon pficon-warning-triangle-o gh-link-error"></span>' +
-          '</a>');
+      thisContent = thisContent
+        .split(result[0])
+        .join(
+          '<a class="gh-link" href="https://github.com/' +
+            result[1] +
+            '/' +
+            result[2] +
+            '/' +
+            'issues/' +
+            result[3] +
+            '" rel="nofollow">' +
+            '<span class="fa fa-github gh-link-system"></span><span class="gh-link-label"> ' +
+            result[2] +
+            ':' +
+            result[3] +
+            ' ' +
+            '<span ' +
+            'data-gh-org="' +
+            result[1] +
+            '" ' +
+            'data-gh-repo="' +
+            result[2] +
+            '" ' +
+            'data-gh-issue="' +
+            result[3] +
+            '" ' +
+            'class="pficon pficon-warning-triangle-o gh-link-error"></span>' +
+            '</a>',
+        );
       result = regexp.exec(thisContent);
     }
     this.content = this.wrapStringSafeValue(thisContent);
@@ -180,7 +208,8 @@ export class GitHubLinkAreaComponent implements OnChanges, AfterViewChecked {
     let thisContent = this.unwrapStringSafeValue(this.content);
     let regexp: RegExp = new RegExp(
       // tslint:disable-next-line:max-line-length
-      '<span data-gh-org="([^"]+)" data-gh-repo="([^"]+)" data-gh-issue="([^"]+)" class="pficon pficon-warning-triangle-o gh-link-error"></span>', 'gi'
+      '<span data-gh-org="([^"]+)" data-gh-repo="([^"]+)" data-gh-issue="([^"]+)" class="pficon pficon-warning-triangle-o gh-link-error"></span>',
+      'gi',
     );
     let result = regexp.exec(thisContent);
     while (result) {
@@ -189,15 +218,13 @@ export class GitHubLinkAreaComponent implements OnChanges, AfterViewChecked {
         org: result[1],
         repo: result[2],
         issue: result[3],
-        state: 'error'
+        state: 'error',
       };
-      this.gitHubLinkService.getIssue(thisLinkData)
-        .subscribe(data => {
-          thisLinkData.state = data['state'];
-          this.replaceLink(thisLinkData);
-        });
+      this.gitHubLinkService.getIssue(thisLinkData).subscribe((data) => {
+        thisLinkData.state = data['state'];
+        this.replaceLink(thisLinkData);
+      });
       result = regexp.exec(thisContent);
     }
   }
-
 }

@@ -1,9 +1,5 @@
 import { CommonModule, LocationStrategy } from '@angular/common';
-import {
-  Component,
-  Input,
-  NO_ERRORS_SCHEMA
-} from '@angular/core';
+import { Component, Input, NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Context, Contexts } from 'ngx-fabric8-wit';
@@ -14,7 +10,7 @@ import {
   never as observableNever,
   Observable,
   of as observableOf,
-  Subject
+  Subject,
 } from 'rxjs';
 import { publish } from 'rxjs/operators';
 import { createMock } from 'testing/mock';
@@ -27,14 +23,15 @@ import { ApplicationsWidgetComponent } from './applications-widget.component';
 
 @Component({
   selector: 'fabric8-applications-list',
-  template: ''
+  template: '',
 })
 class FakeApplicationsListComponent {
   @Input() buildConfigs: BuildConfig[];
 }
 
 @Component({
-  template: '<fabric8-applications-widget [userOwnsSpace]="userOwnsSpace"></fabric8-applications-widget>'
+  template:
+    '<fabric8-applications-widget [userOwnsSpace]="userOwnsSpace"></fabric8-applications-widget>',
 })
 class HostComponent {
   userOwnsSpace: boolean;
@@ -52,130 +49,157 @@ describe('ApplicationsWidgetComponent', () => {
     attributes: {
       fullName: 'fakeName',
       imageURL: 'null',
-      username: 'fakeUserName'
-    }
+      username: 'fakeUserName',
+    },
   } as User);
 
   let buildConfig1 = {
     id: 'app1',
     name: 'app1',
     gitUrl: 'https://example.com/app1.git',
-    interestingBuilds: [{
-      buildNumber: '1',
-      firstPendingInputAction: {
-        proceedUrl: 'https://example.com/app1.git'
+    interestingBuilds: [
+      {
+        buildNumber: '1',
+        firstPendingInputAction: {
+          proceedUrl: 'https://example.com/app1.git',
+        },
+        jenkinsNamespace: 'namespace-jenkins',
+        pipelineStages: [
+          {
+            jenkinsInputURL: 'https://example.com/app1.git',
+            name: 'Build Release',
+            status: 'SUCCESS',
+          },
+          {
+            jenkinsInputURL: 'https://example.com/app1.git',
+            name: 'Rollout to Stage',
+            serviceUrl: 'https://example.com/app1.git',
+            status: 'SUCCESS',
+          },
+        ],
+        statusPhase: 'Complete',
       },
-      jenkinsNamespace: 'namespace-jenkins',
-      pipelineStages: [{
-        jenkinsInputURL: 'https://example.com/app1.git',
-        name: 'Build Release',
-        status: 'SUCCESS'
-      }, {
-        jenkinsInputURL: 'https://example.com/app1.git',
-        name: 'Rollout to Stage',
-        serviceUrl: 'https://example.com/app1.git',
-        status: 'SUCCESS'
-      }],
-      statusPhase: 'Complete'
-    }],
+    ],
     labels: {
-      space: 'space1'
+      space: 'space1',
     },
-    serviceUrls: [{
-      environmentName: 'Run',
-      name: 'app1',
-      url: 'https://example.com/app1.git'
-    }, {
-      environmentName: 'Stage',
-      name: 'app1',
-      url: 'https://example.com/app1.git'
-    }]
+    serviceUrls: [
+      {
+        environmentName: 'Run',
+        name: 'app1',
+        url: 'https://example.com/app1.git',
+      },
+      {
+        environmentName: 'Stage',
+        name: 'app1',
+        url: 'https://example.com/app1.git',
+      },
+    ],
   };
 
   let buildConfig2 = {
     id: 'app2',
     name: 'app2',
     gitUrl: 'https://example.com/app2.git',
-    interestingBuilds: [{
-      buildNumber: '1',
-      firstPendingInputAction: {
-        proceedUrl: 'https://example.com/app2.git'
+    interestingBuilds: [
+      {
+        buildNumber: '1',
+        firstPendingInputAction: {
+          proceedUrl: 'https://example.com/app2.git',
+        },
+        jenkinsNamespace: 'namespace-jenkins',
+        pipelineStages: [
+          {
+            jenkinsInputURL: 'https://example.com/app1.git',
+            name: 'Build Release',
+            status: 'SUCCESS',
+          },
+          {
+            jenkinsInputURL: 'https://example.com/app1.git',
+            name: 'Rollout to Stage',
+            serviceUrl: 'https://example.com/app1.git',
+            status: 'SUCCESS',
+          },
+          {
+            jenkinsInputURL: 'https://example.com/app1.git',
+            name: 'Approve',
+            status: 'SUCCESS',
+          },
+          {
+            jenkinsInputURL: 'https://example.com/app1.git',
+            name: 'Rollout to Run',
+            serviceUrl: 'https://example.com/app1.git',
+            status: 'SUCCESS',
+          },
+        ],
+        statusPhase: 'Complete',
       },
-      jenkinsNamespace: 'namespace-jenkins',
-      pipelineStages: [{
-        jenkinsInputURL: 'https://example.com/app1.git',
-        name: 'Build Release',
-        status: 'SUCCESS'
-      }, {
-        jenkinsInputURL: 'https://example.com/app1.git',
-        name: 'Rollout to Stage',
-        serviceUrl: 'https://example.com/app1.git',
-        status: 'SUCCESS'
-      }, {
-        jenkinsInputURL: 'https://example.com/app1.git',
-        name: 'Approve',
-        status: 'SUCCESS'
-      }, {
-        jenkinsInputURL: 'https://example.com/app1.git',
-        name: 'Rollout to Run',
-        serviceUrl: 'https://example.com/app1.git',
-        status: 'SUCCESS'
-      }],
-      statusPhase: 'Complete'
-    }],
+    ],
     labels: {
-      space: 'space2'
+      space: 'space2',
     },
-    serviceUrls: [{
-      environmentName: 'Stage',
-      name: 'app2',
-      url: 'https://example.com/app2.git'
-    }]
+    serviceUrls: [
+      {
+        environmentName: 'Stage',
+        name: 'app2',
+        url: 'https://example.com/app2.git',
+      },
+    ],
   };
 
   let buildConfig3 = {
     id: 'app3',
     name: 'app3',
     gitUrl: 'https://example.com/app3.git',
-    interestingBuilds: [{
-      buildNumber: '1',
-      firstPendingInputAction: {
-        proceedUrl: 'https://example.com/app3.git'
+    interestingBuilds: [
+      {
+        buildNumber: '1',
+        firstPendingInputAction: {
+          proceedUrl: 'https://example.com/app3.git',
+        },
+        jenkinsNamespace: 'namespace-jenkins',
+        pipelineStages: [
+          {
+            jenkinsInputURL: 'https://example.com/app1.git',
+            name: 'Build Release',
+            status: 'SUCCESS',
+          },
+          {
+            jenkinsInputURL: 'https://example.com/app1.git',
+            name: 'Rollout to Stage',
+            serviceUrl: 'https://example.com/app1.git',
+            status: 'SUCCESS',
+          },
+          {
+            jenkinsInputURL: 'https://example.com/app1.git',
+            name: 'Approve',
+            status: 'SUCCESS',
+          },
+          {
+            jenkinsInputURL: 'https://example.com/app1.git',
+            name: 'Rollout to Run',
+            serviceUrl: 'https://example.com/app1.git',
+            status: 'SUCCESS',
+          },
+        ],
+        statusPhase: 'Complete',
       },
-      jenkinsNamespace: 'namespace-jenkins',
-      pipelineStages: [{
-        jenkinsInputURL: 'https://example.com/app1.git',
-        name: 'Build Release',
-        status: 'SUCCESS'
-      }, {
-        jenkinsInputURL: 'https://example.com/app1.git',
-        name: 'Rollout to Stage',
-        serviceUrl: 'https://example.com/app1.git',
-        status: 'SUCCESS'
-      }, {
-        jenkinsInputURL: 'https://example.com/app1.git',
-        name: 'Approve',
-        status: 'SUCCESS'
-      }, {
-        jenkinsInputURL: 'https://example.com/app1.git',
-        name: 'Rollout to Run',
-        serviceUrl: 'https://example.com/app1.git',
-        status: 'SUCCESS'
-      }],
-      statusPhase: 'Complete'
-    }],
+    ],
     labels: {
-      space: 'space3'
+      space: 'space3',
     },
-    serviceUrls: [{
-      environmentName: 'Run',
-      name: 'app3',
-      url: 'https://example.com/app3.git'
-    }, {
-      environmentName: 'Stage',
-      name: 'app3',
-      url: 'https://example.com/app3.git'
-    }]
+    serviceUrls: [
+      {
+        environmentName: 'Run',
+        name: 'app3',
+        url: 'https://example.com/app3.git',
+      },
+      {
+        environmentName: 'Stage',
+        name: 'app3',
+        url: 'https://example.com/app3.git',
+      },
+    ],
   };
 
   let ctxSubj: Subject<Context> = new Subject<Context>();
@@ -187,57 +211,60 @@ describe('ApplicationsWidgetComponent', () => {
         path: '/user/space',
         space: {
           attributes: {
-            name: 'space'
-          }
-        }
+            name: 'space',
+          },
+        },
       } as Context),
       recent: observableNever(),
-      default: observableNever()
+      default: observableNever(),
     };
 
     pipelinesService = {
-      current: new BehaviorSubject<any[]>([buildConfig1, buildConfig2, buildConfig3])
+      current: new BehaviorSubject<any[]>([buildConfig1, buildConfig2, buildConfig3]),
     };
   });
 
   const testContext = initContext(ApplicationsWidgetComponent, HostComponent, {
-    imports: [
-      CommonModule,
-      LoadingWidgetModule,
-      RouterModule
-    ],
-    declarations: [
-      FakeApplicationsListComponent,
-      MockFeatureToggleComponent
-    ],
+    imports: [CommonModule, LoadingWidgetModule, RouterModule],
+    declarations: [FakeApplicationsListComponent, MockFeatureToggleComponent],
     providers: [
       { provide: ActivatedRoute, useValue: jasmine.createSpy('ActivatedRoute') },
-      { provide: Contexts, useValue: ({ current: ctxSubj }) },
-      { provide: LocationStrategy, useValue: jasmine.createSpyObj('LocationStrategy', ['prepareExternalUrl']) },
+      { provide: Contexts, useValue: { current: ctxSubj } },
+      {
+        provide: LocationStrategy,
+        useValue: jasmine.createSpyObj('LocationStrategy', ['prepareExternalUrl']),
+      },
       { provide: PipelinesService, useFactory: () => pipelinesService },
       {
-        provide: Router, useFactory: (): jasmine.SpyObj<Router> => {
+        provide: Router,
+        useFactory: (): jasmine.SpyObj<Router> => {
           let mockRouterEvent: any = {
-            'id': 1,
-            'url': 'mock-url'
+            id: 1,
+            url: 'mock-url',
           };
 
-          let mockRouter = jasmine.createSpyObj('Router', ['createUrlTree', 'navigate', 'serializeUrl']);
+          let mockRouter = jasmine.createSpyObj('Router', [
+            'createUrlTree',
+            'navigate',
+            'serializeUrl',
+          ]);
           mockRouter.events = observableOf(mockRouterEvent);
 
           return mockRouter;
-        }
+        },
       },
       {
-        provide: UserService, useFactory: () => {
+        provide: UserService,
+        useFactory: () => {
           let userService = createMock(UserService);
           userService.getUser.and.returnValue(fakeUser);
-          userService.loggedInUser = fakeUser.pipe(publish()) as ConnectableObservable<User> & jasmine.Spy;
+          userService.loggedInUser = fakeUser.pipe(publish()) as ConnectableObservable<User> &
+            jasmine.Spy;
           return userService;
-        }
-      }
+        },
+      },
     ],
-    schemas: [ NO_ERRORS_SCHEMA ]
+    schemas: [NO_ERRORS_SCHEMA],
   });
 
   describe('Applications widget with build configs', () => {
@@ -264,46 +291,62 @@ describe('ApplicationsWidgetComponent', () => {
     });
 
     it('Stage build configs to be sorted', function() {
-      expect(testContext.testedDirective.stageBuildConfigs as any[]).toEqual([buildConfig1, buildConfig3, buildConfig2]);
+      expect(testContext.testedDirective.stageBuildConfigs as any[]).toEqual([
+        buildConfig1,
+        buildConfig3,
+        buildConfig2,
+      ]);
     });
 
     it('Run build configs to be sorted', function() {
-      expect(testContext.testedDirective.runBuildConfigs as any[]).toEqual([buildConfig1, buildConfig3]);
+      expect(testContext.testedDirective.runBuildConfigs as any[]).toEqual([
+        buildConfig1,
+        buildConfig3,
+      ]);
     });
 
     it('Empty build configs to not show empty state', function() {
       testContext.hostComponent.userOwnsSpace = true;
       testContext.detectChanges();
-      expect(testContext.fixture.debugElement.query(By.css('#spacehome-applications-add-button'))).toBeNull();
+      expect(
+        testContext.fixture.debugElement.query(By.css('#spacehome-applications-add-button')),
+      ).toBeNull();
     });
 
     it('Empty build configs to show empty state', function() {
       testContext.hostComponent.userOwnsSpace = true;
       testContext.testedDirective.buildConfigs.length = 0;
       testContext.detectChanges();
-      expect(testContext.fixture.debugElement.query(By.css('#spacehome-applications-add-button'))).not.toBeNull();
+      expect(
+        testContext.fixture.debugElement.query(By.css('#spacehome-applications-add-button')),
+      ).not.toBeNull();
     });
 
     it('Empty stage and run build configs to show empty state', function() {
       testContext.testedDirective.runBuildConfigs.length = 0;
       testContext.testedDirective.stageBuildConfigs.length = 0;
       testContext.detectChanges();
-      expect(testContext.fixture.debugElement.query(By.css('#spacehome-applications-pipelines-link'))).not.toBeNull();
+      expect(
+        testContext.fixture.debugElement.query(By.css('#spacehome-applications-pipelines-link')),
+      ).not.toBeNull();
     });
 
     it('Stage or run build configs not to show empty state', function() {
-      expect(testContext.fixture.debugElement.query(By.css('#spacehome-applications-pipelines-link'))).toBeNull();
+      expect(
+        testContext.fixture.debugElement.query(By.css('#spacehome-applications-pipelines-link')),
+      ).toBeNull();
     });
   });
 
   describe('Applications widget without build configs', () => {
-
     it('should enable buttons if the user owns the space', function() {
       testContext.hostComponent.userOwnsSpace = true;
       testContext.testedDirective.buildConfigs.length = 0;
       testContext.detectChanges();
 
-      expect(testContext.fixture.debugElement.query(By.css('#spacehome-applications-add-button'))).not.toBeNull();
+      expect(
+        testContext.fixture.debugElement.query(By.css('#spacehome-applications-add-button')),
+      ).not.toBeNull();
     });
 
     it('should disable buttons if the user does not own the space', function() {
@@ -311,7 +354,9 @@ describe('ApplicationsWidgetComponent', () => {
       testContext.testedDirective.buildConfigs.length = 0;
       testContext.detectChanges();
 
-      expect(testContext.fixture.debugElement.query(By.css('#spacehome-applications-add-button'))).toBeNull();
+      expect(
+        testContext.fixture.debugElement.query(By.css('#spacehome-applications-add-button')),
+      ).toBeNull();
     });
   });
 });

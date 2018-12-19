@@ -3,7 +3,7 @@ import { ActivatedRoute, Event, NavigationEnd, Params, Router } from '@angular/r
 import { Broadcaster } from 'ngx-base';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { PermissionService, User, UserService } from 'ngx-login-client';
-import { combineLatest as observableCombineLatest, Observable,  of as observableOf } from 'rxjs';
+import { combineLatest as observableCombineLatest, Observable, of as observableOf } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MenuItem } from '../../models/menu-item';
 import { Navigation } from '../../models/navigation';
@@ -18,38 +18,46 @@ interface MenuHiddenCallback {
 @Component({
   selector: 'alm-app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.less']
+  styleUrls: ['./header.component.less'],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   imgLoaded: boolean = false;
-  isIn: boolean = false;   // store state
+  isIn: boolean = false; // store state
 
-  toggleState() { // click handler
-      let bool: boolean = this.isIn;
-      this.isIn = bool === false ? true : false;
+  toggleState() {
+    // click handler
+    let bool: boolean = this.isIn;
+    this.isIn = bool === false ? true : false;
   }
 
   menuCallbacks: Map<String, MenuHiddenCallback> = new Map<String, MenuHiddenCallback>([
     [
-      '_settings', function(headerComponent, menuItem) {
+      '_settings',
+      function(headerComponent, menuItem) {
         return headerComponent.checkContextUserEqualsLoggedInUser();
-      }
+      },
     ],
     [
-      '_resources', function(headerComponent, menuItem) {
+      '_resources',
+      function(headerComponent, menuItem) {
         return headerComponent.checkContextUserEqualsLoggedInUser();
-      }
+      },
     ],
     [
-      'settings', function(headerComponent, menuItem) {
+      'settings',
+      function(headerComponent, menuItem) {
         const subFeature = menuItem['subFeature'];
         const allFeatures = headerComponent.context.user['features'];
-        if (subFeature && allFeatures && headerComponent.menusService.isFeatureUserEnabled(subFeature, allFeatures)) {
+        if (
+          subFeature &&
+          allFeatures &&
+          headerComponent.menusService.isFeatureUserEnabled(subFeature, allFeatures)
+        ) {
           return headerComponent.loggedInUserNotSpaceAdmin();
         }
         return headerComponent.checkContextUserEqualsLoggedInUser();
-      }
-    ]
+      },
+    ],
   ]);
 
   recent: Context[];
@@ -68,24 +76,32 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private broadcaster: Broadcaster,
     private contexts: Contexts,
     private permissionService: PermissionService,
-    private menusService: MenusService
+    private menusService: MenusService,
   ) {
-    router.events.subscribe((val: Event): void => {
-      if (val instanceof NavigationEnd) {
-        this.broadcaster.broadcast('navigate', { url: val.url } as Navigation);
+    router.events.subscribe(
+      (val: Event): void => {
+        if (val instanceof NavigationEnd) {
+          this.broadcaster.broadcast('navigate', { url: val.url } as Navigation);
+          this.updateMenus();
+        }
+      },
+    );
+    this.contexts.current.subscribe(
+      (val: Context): void => {
+        this._context = val;
         this.updateMenus();
-      }
-    });
-    this.contexts.current.subscribe((val: Context): void => {
-      this._context = val;
-      this.updateMenus();
-    });
-    this.contexts.default.subscribe((val: Context): void => {
-      this._defaultContext = val;
-    });
-    this.contexts.recent.subscribe((val: Context[]): void => {
-      this.recent = val;
-    });
+      },
+    );
+    this.contexts.default.subscribe(
+      (val: Context): void => {
+        this._defaultContext = val;
+      },
+    );
+    this.contexts.recent.subscribe(
+      (val: Context[]): void => {
+        this.recent = val;
+      },
+    );
 
     // Currently logged in user
     this.userService.loggedInUser.subscribe(
@@ -96,7 +112,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.resetData();
           this.loggedInUser = null;
         }
-      }
+      },
     );
   }
 
@@ -105,17 +121,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.eventListeners.forEach(e => e.unsubscribe());
+    this.eventListeners.forEach((e) => e.unsubscribe());
   }
 
   listenToEvents(): void {
     this.eventListeners.push(
-      this.route.queryParams.subscribe((params: Params): void => {
-        this.plannerFollowQueryParams = {};
-        if (Object.keys(params).indexOf('iteration') > -1) {
-          this.plannerFollowQueryParams['iteration'] = params['iteration'];
-        }
-      })
+      this.route.queryParams.subscribe(
+        (params: Params): void => {
+          this.plannerFollowQueryParams = {};
+          if (Object.keys(params).indexOf('iteration') > -1) {
+            this.plannerFollowQueryParams['iteration'] = params['iteration'];
+          }
+        },
+      ),
     );
   }
 
@@ -127,7 +145,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   logout(): void {
     this.loginService.logout();
-
   }
 
   onImgLoad(): void {
@@ -153,11 +170,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   get isGettingStartedPage(): boolean {
-    return (this.router.url.indexOf('_gettingstarted') !== -1);
+    return this.router.url.indexOf('_gettingstarted') !== -1;
   }
 
   get isAppLauncherPage(): boolean {
-    return (this.router.url.indexOf('applauncher') !== -1);
+    return this.router.url.indexOf('applauncher') !== -1;
   }
 
   private stripQueryFromUrl(url: string) {
@@ -176,7 +193,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
         // Clear the menu's active state
         n.active = false;
         if (this.menuCallbacks.has(n.path)) {
-          this.menuCallbacks.get(n.path)(this, n).subscribe(val => n.hide = val);
+          this.menuCallbacks
+            .get(n.path)(this, n)
+            .subscribe((val) => (n.hide = val));
         }
         // lets go in reverse order to avoid matching
         // /namespace/space/create instead of /namespace/space/create/pipelines
@@ -192,7 +211,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
               n.active = true;
             }
             if (this.menuCallbacks.has(o.path)) {
-              this.menuCallbacks.get(o.path)(this, o).subscribe(val => o.hide = val);
+              this.menuCallbacks
+                .get(o.path)(this, o)
+                .subscribe((val) => (o.hide = val));
             }
           }
           if (!foundPath) {
@@ -204,21 +225,27 @@ export class HeaderComponent implements OnInit, OnDestroy {
                 n.active = true;
               }
               if (this.menuCallbacks.has(o.path)) {
-                this.menuCallbacks.get(o.path)(this, o).subscribe(val => o.hide = val);
+                this.menuCallbacks
+                  .get(o.path)(this, o)
+                  .subscribe((val) => (o.hide = val));
               }
             }
           }
           if (!foundPath && this.router.routerState.snapshot.root.firstChild) {
             // routes that can't be correctly matched based on the url should use the parent path
             for (let o of subMenus) {
-              let parentPath = decodeURIComponent('/' + this.router.routerState.snapshot.root.firstChild.url.join('/'));
+              let parentPath = decodeURIComponent(
+                '/' + this.router.routerState.snapshot.root.firstChild.url.join('/'),
+              );
               if (!foundPath && o.fullPath === parentPath) {
                 foundPath = true;
                 o.active = true;
                 n.active = true;
               }
               if (this.menuCallbacks.has(o.path)) {
-                this.menuCallbacks.get(o.path)(this, o).subscribe(val => o.hide = val);
+                this.menuCallbacks
+                  .get(o.path)(this, o)
+                  .subscribe((val) => (o.hide = val));
               }
             }
           }
@@ -234,14 +261,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
     return observableCombineLatest(
       observableOf(this.context).pipe(map((val: Context) => val.user.id)),
       this.userService.loggedInUser.pipe(map((val: User) => val.id)),
-      (a, b) => (a !== b)
+      (a, b) => a !== b,
     );
   }
 
   private loggedInUserNotSpaceAdmin(): Observable<boolean> {
     return this.permissionService
       .hasScope(this.context.space.id, 'manage')
-      .pipe(map(val => !val));
+      .pipe(map((val) => !val));
   }
-
 }

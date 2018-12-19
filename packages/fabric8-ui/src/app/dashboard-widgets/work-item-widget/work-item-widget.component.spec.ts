@@ -7,7 +7,7 @@ import { WorkItem, WorkItemService } from 'fabric8-planner';
 import { cloneDeep } from 'lodash';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { Feature, FeatureTogglesService } from 'ngx-feature-flag';
-import { Observable,  of as observableOf, Subject } from 'rxjs';
+import { Observable, of as observableOf, Subject } from 'rxjs';
 import { createMock } from 'testing/mock';
 import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
 import { SpacesService } from '../../shared/spaces.service';
@@ -30,36 +30,35 @@ describe('Dashboard: WorkItemWidgetComponent', () => {
   let workItem5: WorkItem;
 
   const mockRouterEvent: Event = {
-    'id': 1,
-    'url': 'mock-url'
+    id: 1,
+    url: 'mock-url',
   } as Event;
 
   const mockFeature: Feature = {
-    'attributes': {
-      'name': 'mock-attribute',
-      'enabled': true,
-      'user-enabled': true
-    }
+    attributes: {
+      name: 'mock-attribute',
+      enabled: true,
+      'user-enabled': true,
+    },
   } as Feature;
 
   beforeEach(() => {
-
     mockContext = {
-      'user': {
-        'attributes': {
-          'username': 'mock-username'
+      user: {
+        attributes: {
+          username: 'mock-username',
         },
-        'id': 'mock-user'
+        id: 'mock-user',
       },
-      'path': 'mock-path'
+      path: 'mock-path',
     } as Context;
 
     workItem = {
       attributes: {
         description: 'description',
-        name: 'name'
+        name: 'name',
       },
-      type: 'workitems'
+      type: 'workitems',
     } as WorkItem;
 
     let mockSpacesService: any = jasmine.createSpyObj('SpacesService', ['addRecent', 'current']);
@@ -81,34 +80,29 @@ describe('Dashboard: WorkItemWidgetComponent', () => {
     mockSpacesService.addRecent.next = {};
     mockSpacesService = {
       ...mockSpacesService,
-      ...{current: observableOf({})}
+      ...{ current: observableOf({}) },
     };
 
     TestBed.configureTestingModule({
-      imports: [
-        LoadingWidgetModule,
-        RouterModule,
-        WorkItemBarchartModule
-      ],
-      declarations: [
-        MockFeatureToggleComponent,
-        WorkItemWidgetComponent
-      ],
+      imports: [LoadingWidgetModule, RouterModule, WorkItemBarchartModule],
+      declarations: [MockFeatureToggleComponent, WorkItemWidgetComponent],
       providers: [
         {
           provide: FeatureTogglesService,
           useFactory: () => {
-            const mockFeatureTogglesService: jasmine.SpyObj<FeatureTogglesService> = createMock(FeatureTogglesService);
+            const mockFeatureTogglesService: jasmine.SpyObj<FeatureTogglesService> = createMock(
+              FeatureTogglesService,
+            );
             mockFeatureTogglesService.getFeature.and.returnValue(observableOf(mockFeature));
             return mockFeatureTogglesService;
-          }
+          },
         },
         {
           provide: ActivatedRoute,
           useFactory: () => {
             const mockActivatedRoute: any = jasmine.createSpy('ActivatedRoute');
             return mockActivatedRoute;
-          }
+          },
         },
         {
           provide: Contexts,
@@ -116,36 +110,47 @@ describe('Dashboard: WorkItemWidgetComponent', () => {
             const mockContexts: any = createMock(Contexts);
             mockContexts.current = observableOf(mockContext);
             return mockContexts;
-          }
+          },
         },
         {
           provide: LocationStrategy,
           useFactory: () => {
-            const mockLocationStrategy: jasmine.SpyObj<LocationStrategy> = jasmine.createSpyObj('LocationStrategy', ['prepareExternalUrl']);
+            const mockLocationStrategy: jasmine.SpyObj<LocationStrategy> = jasmine.createSpyObj(
+              'LocationStrategy',
+              ['prepareExternalUrl'],
+            );
             return mockLocationStrategy;
-          }
+          },
         },
         {
           provide: Router,
           useFactory: () => {
-            const mockRouter: any = jasmine.createSpyObj('Router', ['createUrlTree', 'navigate', 'serializeUrl']);
+            const mockRouter: any = jasmine.createSpyObj('Router', [
+              'createUrlTree',
+              'navigate',
+              'serializeUrl',
+            ]);
             mockRouter.events = observableOf(mockRouterEvent);
             return mockRouter;
-          }
+          },
         },
         { provide: SpacesService, useValue: mockSpacesService },
         {
           provide: WorkItemService,
           useFactory: () => {
-            const mockWorkItemService: jasmine.SpyObj<WorkItemService> = createMock(WorkItemService);
-            mockWorkItemService.getWorkItems.and.returnValue(observableOf({
-              workItems: workItems
-            } as WorkItemsData));
+            const mockWorkItemService: jasmine.SpyObj<WorkItemService> = createMock(
+              WorkItemService,
+            );
+            mockWorkItemService.getWorkItems.and.returnValue(
+              observableOf({
+                workItems: workItems,
+              } as WorkItemsData),
+            );
             return mockWorkItemService;
-          }
-        }
+          },
+        },
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     });
     fixture = TestBed.createComponent(WorkItemWidgetComponent);
     component = fixture.debugElement.componentInstance;
@@ -173,7 +178,9 @@ describe('Dashboard: WorkItemWidgetComponent', () => {
   });
 
   it('Should output a bar chart', () => {
-    let elements: DebugElement[] = fixture.debugElement.queryAll(By.css('fabric8-work-item-barchart div'));
+    let elements: DebugElement[] = fixture.debugElement.queryAll(
+      By.css('fabric8-work-item-barchart div'),
+    );
     expect(elements.length).toBe(1);
   });
 
@@ -194,7 +201,6 @@ describe('Dashboard: WorkItemWidgetComponent', () => {
   });
 
   describe('#updateWorkItems', () => {
-
     afterEach(() => {
       // ensure the component is not left in a loading state
       expect(component.loading).toEqual(false);
@@ -202,9 +208,11 @@ describe('Dashboard: WorkItemWidgetComponent', () => {
 
     it('should not detailed work item counters for work items without a system.state', () => {
       const mockWorkItemService: jasmine.SpyObj<WorkItemService> = TestBed.get(WorkItemService);
-      mockWorkItemService.getWorkItems.and.returnValue(observableOf({
-        workItems: [workItem] // workItem has no system.state attribute
-      } as WorkItemsData));
+      mockWorkItemService.getWorkItems.and.returnValue(
+        observableOf({
+          workItems: [workItem], // workItem has no system.state attribute
+        } as WorkItemsData),
+      );
 
       fixture = TestBed.createComponent(WorkItemWidgetComponent);
       component = fixture.debugElement.componentInstance;
@@ -233,9 +241,11 @@ describe('Dashboard: WorkItemWidgetComponent', () => {
       expect(component.myWorkItemsInProgress).toBeGreaterThan(0);
       expect(component.myWorkItemsResolved).toBeGreaterThan(0);
 
-      mockWorkItemService.getWorkItems.and.returnValue(observableOf({
-        workItems: []
-      } as WorkItemsData));
+      mockWorkItemService.getWorkItems.and.returnValue(
+        observableOf({
+          workItems: [],
+        } as WorkItemsData),
+      );
       mockContexts.current.next(mockContext);
       // if WI service returns empty list, counter variables should not increment after reset
       expect(component.myWorkItemsCount).toEqual(0);
@@ -259,9 +269,11 @@ describe('Dashboard: WorkItemWidgetComponent', () => {
       expect(component.chartData.yData[1]).toEqual([component.LABEL_IN_PROGRESS, 1]);
       expect(component.chartData.yData[2]).toEqual([component.LABEL_OPEN, 2]);
 
-      mockWorkItemService.getWorkItems.and.returnValue(observableOf({
-        workItems: [workItem1, workItem2, workItem3]
-      } as WorkItemsData));
+      mockWorkItemService.getWorkItems.and.returnValue(
+        observableOf({
+          workItems: [workItem1, workItem2, workItem3],
+        } as WorkItemsData),
+      );
       mockContexts.current.next(mockContext);
       // verify that chartData contains the 3 workItems worth of information
       expect(component.chartData.yData[0]).toEqual([component.LABEL_RESOLVED, 0]);
@@ -276,11 +288,13 @@ describe('Dashboard: WorkItemWidgetComponent', () => {
       component = fixture.debugElement.componentInstance;
       fixture.detectChanges();
 
-      mockWorkItemService.getWorkItems.and.returnValue(observableOf({
-        workItems: [workItem1, workItem2, workItem3],
-        nextLink: 'mock-nextLink',
-        totalCount: 5
-      } as WorkItemsData));
+      mockWorkItemService.getWorkItems.and.returnValue(
+        observableOf({
+          workItems: [workItem1, workItem2, workItem3],
+          nextLink: 'mock-nextLink',
+          totalCount: 5,
+        } as WorkItemsData),
+      );
       expect(component.myWorkItemsCount).toEqual(5);
     });
 
@@ -289,7 +303,7 @@ describe('Dashboard: WorkItemWidgetComponent', () => {
       let expectedOpen: number = 0;
       let expectedInProgress: number = 0;
       let expectedResolved: number = 0;
-      workItems.forEach(w => {
+      workItems.forEach((w) => {
         switch (w.attributes['system.state']) {
           case 'open':
             expectedOpen++;
@@ -316,5 +330,4 @@ describe('Dashboard: WorkItemWidgetComponent', () => {
       });
     });
   });
-
 });

@@ -8,7 +8,7 @@ export type Action = AreaActions.All;
 export const AreaReducer: ActionReducer<AreaState> = (state = initialState, action: Action) => {
   switch (action.type) {
     case AreaActions.GET_SUCCESS: {
-      return {...action.payload};
+      return { ...action.payload };
     }
     case AreaActions.GET_ERROR: {
       return state;
