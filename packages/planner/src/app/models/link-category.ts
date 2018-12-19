@@ -5,8 +5,8 @@ export class LinkCategory {
   // };
   type: string;
   attributes: {
-    'name': string,
-    'description': string
-    'version': Number
+    name: string;
+    description: string;
+    version: Number;
   };
 }

@@ -6,23 +6,26 @@ import { initContext } from 'testing/test-context';
 import { DeleteDeploymentModal } from './delete-deployment-modal.component';
 
 @Component({
-  template: `<delete-deployment-modal
-    [applicationId]="'fooApplicationId'"
-    [environmentName]="'fooEnvironmentName'"
-  ></delete-deployment-modal>`
+  template: `
+    <delete-deployment-modal
+      [applicationId]="'fooApplicationId'"
+      [environmentName]="'fooEnvironmentName'"
+    ></delete-deployment-modal>
+  `,
 })
-class HostComponent { }
+class HostComponent {}
 
 describe('DeleteDeploymentModal', (): void => {
-
   const testContext = initContext(DeleteDeploymentModal, HostComponent, {
-    imports: [ModalModule.forRoot()]
+    imports: [ModalModule.forRoot()],
   });
 
-  beforeEach((): void => {
-    spyOn(testContext.testedDirective.host, 'show');
-    spyOn(testContext.testedDirective.host, 'hide');
-  });
+  beforeEach(
+    (): void => {
+      spyOn(testContext.testedDirective.host, 'show');
+      spyOn(testContext.testedDirective.host, 'hide');
+    },
+  );
 
   it('should be instantiable', (): void => {
     expect(testContext.testedDirective).toBeTruthy();
@@ -56,5 +59,4 @@ describe('DeleteDeploymentModal', (): void => {
       testContext.testedDirective.confirmDeletion();
     });
   });
-
 });

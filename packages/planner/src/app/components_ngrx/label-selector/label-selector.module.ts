@@ -6,22 +6,9 @@ import { SelectDropdownModule } from './../../widgets/select-dropdown/select-dro
 import { LabelSelectorComponent } from './label-selector.component';
 
 @NgModule({
-  imports: [
-    WidgetsModule,
-    CommonModule,
-    SelectDropdownModule
-  ],
-  declarations: [
-    LabelSelectorComponent
-  ],
-  exports: [
-    LabelSelectorComponent
-  ],
-  providers: [
-    LabelService
-  ]
+  imports: [WidgetsModule, CommonModule, SelectDropdownModule],
+  declarations: [LabelSelectorComponent],
+  exports: [LabelSelectorComponent],
+  providers: [LabelService],
 })
-
-export class LabelSelectorModule {
-
-}
+export class LabelSelectorModule {}

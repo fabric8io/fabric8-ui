@@ -18,4 +18,3 @@ export class WorkspaceLinks {
 export class WorkspaceOpenLinks {
   open?: string;
 }
-

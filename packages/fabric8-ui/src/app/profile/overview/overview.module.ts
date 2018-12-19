@@ -12,8 +12,8 @@ import { WorkItemsModule } from './work-items/work-items.module';
     OverviewRoutingModule,
     SpacesModule,
     TabsModule.forRoot(),
-    WorkItemsModule
+    WorkItemsModule,
   ],
-  declarations: [ OverviewComponent ]
+  declarations: [OverviewComponent],
 })
 export class OverviewModule {}

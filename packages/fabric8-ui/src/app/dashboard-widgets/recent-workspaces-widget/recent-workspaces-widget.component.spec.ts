@@ -6,7 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Notifications } from 'ngx-base';
 import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
 import { Spaces, SpaceService } from 'ngx-fabric8-wit';
-import { Observable, of as observableOf,  throwError as observableThrowError } from 'rxjs';
+import { Observable, of as observableOf, throwError as observableThrowError } from 'rxjs';
 import { ContextService } from '../../shared/context.service';
 import { spaceMock } from '../../shared/context.service.mock';
 import { WindowService } from '../../shared/window.service';
@@ -41,38 +41,38 @@ describe('RecentWorkspacesWidgetComponent', () => {
     mockSpaceService.getSpaceByName.and.returnValue(observableOf(spaceMock));
     mockNotifications = jasmine.createSpy('Notifications');
     mockWindowService = jasmine.createSpyObj('WindowService', ['open']);
-    mockWorkspacesService = jasmine.createSpyObj('WorkspacesService', ['getWorkspaces', 'openWorkspace']);
+    mockWorkspacesService = jasmine.createSpyObj('WorkspacesService', [
+      'getWorkspaces',
+      'openWorkspace',
+    ]);
 
     TestBed.configureTestingModule({
-      imports: [
-        BrowserAnimationsModule,
-        FormsModule,
-        LoadingWidgetModule,
-        TooltipModule.forRoot()
-      ],
+      imports: [BrowserAnimationsModule, FormsModule, LoadingWidgetModule, TooltipModule.forRoot()],
       declarations: [RecentWorkspacesWidgetComponent],
       providers: [
         { provide: CodebasesService, useValue: mockCodebasesService },
         { provide: ContextService, useValue: mockContextService },
         { provide: SpaceService, useValue: mockSpaceService },
         { provide: Notifications, useValue: mockNotifications },
-        { provide: Spaces, useValue: {
-            'current': observableOf(spaceMock),
-            'recent': observableOf([spaceMock])
-          } as Spaces
+        {
+          provide: Spaces,
+          useValue: {
+            current: observableOf(spaceMock),
+            recent: observableOf([spaceMock]),
+          } as Spaces,
         },
         { provide: WindowService, useValue: mockWindowService },
         { provide: WorkspacesService, useValue: mockWorkspacesService },
-        TooltipConfig
-      ]
+        TooltipConfig,
+      ],
     });
 
     codebase = {
-      'attributes': {
-        'type': 'git',
-        'url': 'https://github.com/fabric8-ui/fabric8-ui.git'
+      attributes: {
+        type: 'git',
+        url: 'https://github.com/fabric8-ui/fabric8-ui.git',
       },
-      'type': 'codebases'
+      type: 'codebases',
     } as ExtCodebase;
     codebases = [codebase];
     mockCodebasesService.getCodebases.and.returnValue(observableOf(codebases));
@@ -80,20 +80,20 @@ describe('RecentWorkspacesWidgetComponent', () => {
     workspace = {
       attributes: {
         description: 'description',
-        name: 'name'
+        name: 'name',
       },
       links: { open: 'url' },
-      type: 'git'
+      type: 'git',
     };
     workspaces = [workspace];
     mockWorkspacesService.getWorkspaces.and.returnValue(observableOf(workspaces));
 
     workspaceLinks = {
-      links: { open: 'url' }
+      links: { open: 'url' },
     };
     mockWorkspacesService.openWorkspace.and.returnValue(observableOf(workspaceLinks));
 
-    mockWindowService.open.and.returnValue({location: { href: 'url'}});
+    mockWindowService.open.and.returnValue({ location: { href: 'url' } });
 
     fixture = TestBed.createComponent(RecentWorkspacesWidgetComponent);
     component = fixture.debugElement.componentInstance;

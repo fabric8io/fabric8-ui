@@ -1,11 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import {
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-  ViewEncapsulation
-} from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Notification, Notifications, NotificationType } from 'ngx-base';
@@ -15,7 +9,7 @@ import { Subscription } from 'rxjs';
 import {
   ExtProfile,
   ExtUser,
-  GettingStartedService
+  GettingStartedService,
 } from '../../getting-started/services/getting-started.service';
 import { gravatar } from '../../shared/gravatar/gravatar';
 import { GitHubUser } from '../../space/create/codebases/services/github';
@@ -27,7 +21,7 @@ export enum TenantUpdateStatus {
   NoAction,
   Updating,
   Success,
-  Failure
+  Failure,
 }
 
 @Component({
@@ -35,7 +29,7 @@ export enum TenantUpdateStatus {
   selector: 'alm-update',
   templateUrl: 'update.component.html',
   styleUrls: ['./update.component.less'],
-  providers: [CopyService, GettingStartedService, GitHubService, TenantService]
+  providers: [CopyService, GettingStartedService, GitHubService, TenantService],
 })
 export class UpdateComponent implements OnInit, OnDestroy {
   // Required for usage of enums in the template.
@@ -81,14 +75,14 @@ export class UpdateComponent implements OnInit, OnDestroy {
     private notifications: Notifications,
     private router: Router,
     private tenantService: TenantService,
-    private userService: UserService
+    private userService: UserService,
   ) {}
 
   ngOnInit() {
     this.subscriptions.push(
       this.contexts.current.subscribe((ctx: Context) => {
         this.context = ctx;
-      })
+      }),
     );
 
     if (this.userService.currentLoggedInUser.attributes) {
@@ -115,7 +109,7 @@ export class UpdateComponent implements OnInit, OnDestroy {
     if (result) {
       this.notifications.message({
         message: `Token copied!`,
-        type: NotificationType.SUCCESS
+        type: NotificationType.SUCCESS,
       } as Notification);
     } else {
       this.handleError('Failed to copy token', NotificationType.DANGER);
@@ -135,8 +129,8 @@ export class UpdateComponent implements OnInit, OnDestroy {
         },
         () => {
           this.handleError('Unable to link image', NotificationType.WARNING);
-        }
-      )
+        },
+      ),
     );
   }
 
@@ -155,9 +149,7 @@ export class UpdateComponent implements OnInit, OnDestroy {
   }
 
   resetPasswordUrl(): void {
-    window.open(
-      'https://developers.redhat.com/auth/realms/rhd/account/password'
-    );
+    window.open('https://developers.redhat.com/auth/realms/rhd/account/password');
   }
 
   toggleTokenPanel(): void {
@@ -177,21 +169,18 @@ export class UpdateComponent implements OnInit, OnDestroy {
           this.setUserProperties(user);
           this.notifications.message({
             message: `Profile updated!`,
-            type: NotificationType.SUCCESS
+            type: NotificationType.SUCCESS,
           } as Notification);
           this.routeToProfile();
         },
-        error => {
+        (error) => {
           if (error.status === 409) {
             this.handleError('Email already exists', NotificationType.DANGER);
           } else {
-            this.handleError(
-              'Failed to update profile',
-              NotificationType.DANGER
-            );
+            this.handleError('Failed to update profile', NotificationType.DANGER);
           }
-        }
-      )
+        },
+      ),
     );
   }
 
@@ -199,38 +188,31 @@ export class UpdateComponent implements OnInit, OnDestroy {
     this.updateTenantStatus = TenantUpdateStatus.Updating;
     this.subscriptions.push(
       this.tenantService.updateTenant().subscribe(
-        res => {
+        (res) => {
           if (res.status === 200) {
             this.updateTenantStatus = TenantUpdateStatus.Success;
             this.notifications.message({
               message: `Profile updated!`,
-              type: NotificationType.SUCCESS
+              type: NotificationType.SUCCESS,
             } as Notification);
           } else {
             this.updateTenantStatus = TenantUpdateStatus.Failure;
             this.notifications.message({
               message: `Error updating tenant`,
-              type: NotificationType.DANGER
+              type: NotificationType.DANGER,
             } as Notification);
           }
         },
         () => {
           this.updateTenantStatus = TenantUpdateStatus.Failure;
-          this.handleError(
-            'Unexpected error updating tenant',
-            NotificationType.DANGER
-          );
-        }
-      )
+          this.handleError('Unexpected error updating tenant', NotificationType.DANGER);
+        },
+      ),
     );
   }
 
   cleanupTenant(): void {
-    this.router.navigate([
-      '/',
-      this.context.user.attributes.username,
-      '_cleanup'
-    ]);
+    this.router.navigate(['/', this.context.user.attributes.username, '_cleanup']);
   }
 
   validateEmail(): void {
@@ -244,22 +226,19 @@ export class UpdateComponent implements OnInit, OnDestroy {
           if (res.status === 204) {
             this.notifications.message({
               message: `Email Verification link sent!`,
-              type: NotificationType.SUCCESS
+              type: NotificationType.SUCCESS,
             } as Notification);
           } else {
             this.notifications.message({
               message: `Error sending email verification link!`,
-              type: NotificationType.DANGER
+              type: NotificationType.DANGER,
             } as Notification);
           }
         },
         () => {
-          this.handleError(
-            'Unexpected error sending link!',
-            NotificationType.DANGER
-          );
-        }
-      )
+          this.handleError('Unexpected error sending link!', NotificationType.DANGER);
+        },
+      ),
     );
   }
 
@@ -319,25 +298,18 @@ export class UpdateComponent implements OnInit, OnDestroy {
     }
 
     this.bio = user.attributes.bio !== undefined ? user.attributes.bio : '';
-    this.company =
-      user.attributes.company !== undefined ? user.attributes.company : '';
-    this.email =
-      user.attributes.email !== undefined ? user.attributes.email : '';
+    this.company = user.attributes.company !== undefined ? user.attributes.company : '';
+    this.email = user.attributes.email !== undefined ? user.attributes.email : '';
     this.emailPrivate =
-      user.attributes.emailPrivate !== undefined
-        ? user.attributes.emailPrivate
-        : true;
+      user.attributes.emailPrivate !== undefined ? user.attributes.emailPrivate : true;
     this.emailVerified =
       (user as any).attributes.emailVerified !== undefined
         ? (user as any).attributes.emailVerified
         : false;
-    this.fullName =
-      user.attributes.fullName !== undefined ? user.attributes.fullName : '';
-    this.imageUrl =
-      user.attributes.imageURL !== undefined ? user.attributes.imageURL : '';
+    this.fullName = user.attributes.fullName !== undefined ? user.attributes.fullName : '';
+    this.imageUrl = user.attributes.imageURL !== undefined ? user.attributes.imageURL : '';
     this.url = user.attributes.url !== undefined ? user.attributes.url : '';
-    this.username =
-      user.attributes.username !== undefined ? user.attributes.username : '';
+    this.username = user.attributes.username !== undefined ? user.attributes.username : '';
   }
 
   changeTab(tab): void {
@@ -347,7 +319,7 @@ export class UpdateComponent implements OnInit, OnDestroy {
   private handleError(error: string, type: NotificationType) {
     this.notifications.message({
       message: error,
-      type: type
+      type: type,
     } as Notification);
   }
 }

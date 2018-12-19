@@ -5,25 +5,24 @@ import { ContextResolver } from './shared/context-resolver.service';
 import { ProfileResolver } from './shared/profile-resolver.service';
 
 export const routes: Routes = [
-
   // Only relevant locally, as the landing page sits on / in production
   {
     path: '',
     loadChildren: './landing-page/landing-page.module#LandingPageModule',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
 
   // Home
   {
     path: '_home',
     resolve: {
-      featureFlagConfig: FeatureFlagResolver
+      featureFlagConfig: FeatureFlagResolver,
     },
     loadChildren: './home/home.module#HomeModule',
     data: {
       title: 'Analyze',
-      featureName: 'Analyze'
-    }
+      featureName: 'Analyze',
+    },
   },
 
   // Getting started
@@ -31,8 +30,8 @@ export const routes: Routes = [
     path: '_gettingstarted',
     loadChildren: './getting-started/getting-started.module#GettingStartedModule',
     data: {
-      title: 'Getting Started'
-    }
+      title: 'Getting Started',
+    },
   },
 
   //redirect status pages
@@ -40,8 +39,8 @@ export const routes: Routes = [
     path: '_redirects/:redirectType',
     loadChildren: './layout/redirect-status/redirect-status.module#RedirectStatusModule',
     data: {
-      title: 'Redirect Status'
-    }
+      title: 'Redirect Status',
+    },
   },
 
   // Error Pages
@@ -49,8 +48,8 @@ export const routes: Routes = [
     path: '_error',
     loadChildren: './layout/error/error.module#ErrorModule',
     data: {
-      title: 'Error'
-    }
+      title: 'Error',
+    },
   },
 
   // Feature Flag
@@ -58,31 +57,31 @@ export const routes: Routes = [
     path: '_featureflag',
     loadChildren: './feature-flag/toggles.module#TogglesModule',
     data: {
-      title: 'Feature Flag'
-    }
+      title: 'Feature Flag',
+    },
   },
 
   // Profile
   {
     path: '_profile',
     resolve: {
-      context: ProfileResolver
+      context: ProfileResolver,
     },
     loadChildren: './profile/profile.module#ProfileModule',
     data: {
-      title: 'Profile'
-    }
+      title: 'Profile',
+    },
   },
 
   {
     path: ':entity',
     resolve: {
-      context: ContextResolver
+      context: ContextResolver,
     },
     loadChildren: './profile/profile.module#ProfileModule',
     data: {
-      title: 'Profile'
-    }
+      title: 'Profile',
+    },
   },
 
   // Analyze
@@ -90,13 +89,13 @@ export const routes: Routes = [
     path: ':entity/:space',
     resolve: {
       context: ContextResolver,
-      featureFlagConfig: FeatureFlagResolver
+      featureFlagConfig: FeatureFlagResolver,
     },
     loadChildren: './space/analyze/analyze.module#AnalyzeModule',
     data: {
       title: 'Analyze',
-      featureName: 'Analyze'
-    }
+      featureName: 'Analyze',
+    },
   },
 
   // Plan
@@ -104,13 +103,13 @@ export const routes: Routes = [
     path: ':entity/:space/plan',
     resolve: {
       context: ContextResolver,
-      featureFlagConfig: FeatureFlagResolver
+      featureFlagConfig: FeatureFlagResolver,
     },
     loadChildren: './space/plan/plan.module#PlanModule',
     data: {
       title: 'Plan: Backlog',
-      featureName: 'Planner'
-    }
+      featureName: 'Planner',
+    },
   },
 
   // Create
@@ -118,25 +117,25 @@ export const routes: Routes = [
     path: ':entity/:space/create',
     resolve: {
       context: ContextResolver,
-      featureFlagConfig: FeatureFlagResolver
+      featureFlagConfig: FeatureFlagResolver,
     },
     loadChildren: './space/create/create.module#CreateModule',
     data: {
       title: 'Create',
-      featureName: 'Codebases'
-    }
+      featureName: 'Codebases',
+    },
   },
 
   // Space-settings
   {
     path: ':entity/:space/settings',
     resolve: {
-      context: ContextResolver
+      context: ContextResolver,
     },
     loadChildren: './space/settings/space-settings.module#SpaceSettingsModule',
     data: {
-      title: 'Areas'
-    }
+      title: 'Areas',
+    },
   },
 
   // App Launcher
@@ -144,23 +143,23 @@ export const routes: Routes = [
     path: ':entity/:space/applauncher',
     resolve: {
       context: ContextResolver,
-      featureFlagConfig: FeatureFlagResolver
+      featureFlagConfig: FeatureFlagResolver,
     },
     loadChildren: './space/app-launcher/app-launcher.module#AppLauncherModule',
     data: {
       title: 'App Launcher',
-      featureName: 'AppLauncher'
-    }
+      featureName: 'AppLauncher',
+    },
   },
 
   {
     path: '**',
-    redirectTo: '/_error'
-  }
+    redirectTo: '/_error',
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, { enableTracing: true })],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

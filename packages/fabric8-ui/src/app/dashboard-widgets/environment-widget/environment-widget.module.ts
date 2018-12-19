@@ -8,8 +8,15 @@ import { LoadingWidgetModule } from '../loading-widget/loading-widget.module';
 import { EnvironmentWidgetComponent } from './environment-widget.component';
 
 @NgModule({
-  imports: [CommonModule, DeploymentsModule, FormsModule, LoadingWidgetModule, RouterModule, MomentModule],
+  imports: [
+    CommonModule,
+    DeploymentsModule,
+    FormsModule,
+    LoadingWidgetModule,
+    RouterModule,
+    MomentModule,
+  ],
   declarations: [EnvironmentWidgetComponent],
-  exports: [EnvironmentWidgetComponent]
+  exports: [EnvironmentWidgetComponent],
 })
-export class EnvironmentWidgetModule { }
+export class EnvironmentWidgetModule {}

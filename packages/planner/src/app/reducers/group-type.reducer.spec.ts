@@ -19,7 +19,7 @@ describe('GroupTypeReducer: ', () => {
         selected: false,
         showInSideBar: true,
         typeList: null,
-        description: 'Lorem ipsum dolor sit amet'
+        description: 'Lorem ipsum dolor sit amet',
       },
       {
         id: '44795662-db7a-44f7-a4e7-c6d41d3eff27',
@@ -31,8 +31,8 @@ describe('GroupTypeReducer: ', () => {
         selected: false,
         showInSideBar: true,
         typeList: null,
-        description: 'Lorem ipsum dolor sit amet'
-      }
+        description: 'Lorem ipsum dolor sit amet',
+      },
     ];
   });
 

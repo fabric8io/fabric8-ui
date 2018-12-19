@@ -9,8 +9,8 @@ export function gravatar(email: string, options: any = {}): string {
   options = {
     size: options.size || '100',
     rating: options.rating || 'g',
-    secure: options.secure || (location.protocol === 'https:'),
-    backup: options.backup || ''
+    secure: options.secure || location.protocol === 'https:',
+    backup: options.backup || '',
   };
 
   //setup the email address

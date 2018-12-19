@@ -12,25 +12,26 @@ describe('Redirect Status Component', () => {
     routeMock = {
       snapshot: {
         params: {
-          redirectType: '_verifyEmail'
+          redirectType: '_verifyEmail',
         },
         queryParams: {
           status: 'fail',
-          error: 'Some error'
-        }
-      }
+          error: 'Some error',
+        },
+      },
     };
 
     TestBed.configureTestingModule({
-      imports: [ RouterTestingModule.withRoutes([]) ],
-      declarations: [ RedirectStatusComponent ],
+      imports: [RouterTestingModule.withRoutes([])],
+      declarations: [RedirectStatusComponent],
       providers: [
         {
-          provide: ActivatedRoute, useValue: routeMock
-        }
+          provide: ActivatedRoute,
+          useValue: routeMock,
+        },
       ],
       // Tells the compiler not to error on unknown elements and attributes
-      schemas: [ NO_ERRORS_SCHEMA ]
+      schemas: [NO_ERRORS_SCHEMA],
     });
 
     fixture = TestBed.createComponent(RedirectStatusComponent);

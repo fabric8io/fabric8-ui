@@ -5,12 +5,12 @@ import { WorkComponent } from './work.component';
 const routes: Routes = [
   {
     path: '',
-    component: WorkComponent
-  }
+    component: WorkComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class WorkRoutingModule { }
+export class WorkRoutingModule {}

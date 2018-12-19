@@ -5,12 +5,11 @@ import { Feature, FeatureTogglesService } from 'ngx-feature-flag';
 import { AuthenticationService, PermissionService, User, UserService } from 'ngx-login-client';
 import { Subscription } from 'rxjs';
 
-
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-analyzeOverview',
   templateUrl: 'analyze-overview.component.html',
-  styleUrls: ['./analyze-overview.component.less']
+  styleUrls: ['./analyze-overview.component.less'],
 })
 export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription = new Subscription();
@@ -25,24 +24,27 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
     private broadcaster: Broadcaster,
     private contexts: Contexts,
     private userService: UserService,
-    private permissionService: PermissionService
-  ) { }
+    private permissionService: PermissionService,
+  ) {}
 
   ngOnInit() {
-    this.subscriptions.add(this.contexts.current.subscribe((ctx: Context) => {
-      this.context = ctx;
-      this.space = ctx.space;
-      this.subscriptions.add(
-        this.permissionService.hasScope(ctx.space.id, 'manage')
-          .subscribe((isAdmin: boolean) => {
+    this.subscriptions.add(
+      this.contexts.current.subscribe((ctx: Context) => {
+        this.context = ctx;
+        this.space = ctx.space;
+        this.subscriptions.add(
+          this.permissionService.hasScope(ctx.space.id, 'manage').subscribe((isAdmin: boolean) => {
             this._userIsSpaceAdmin = isAdmin;
-          })
-      );
-    }));
+          }),
+        );
+      }),
+    );
 
-    this.subscriptions.add(this.userService.loggedInUser.subscribe((user: User) => {
-      this.loggedInUser = user;
-    }));
+    this.subscriptions.add(
+      this.userService.loggedInUser.subscribe((user: User) => {
+        this.loggedInUser = user;
+      }),
+    );
 
     this._userOwnsSpace = this.checkSpaceOwner();
   }
@@ -61,8 +63,8 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
     this.broadcaster.broadcast('analyticsTracker', {
       event: 'add app opened',
       data: {
-        source: 'analyze-overview'
-      }
+        source: 'analyze-overview',
+      },
     });
   }
 

@@ -1,8 +1,4 @@
-import {
-  AreaMapper,
-  AreaService,
-  AreaUI
-} from './area.model';
+import { AreaMapper, AreaService, AreaUI } from './area.model';
 
 describe('Unit Test :: Area Modal', () => {
   it('should execute the canary test', () => {
@@ -16,16 +12,16 @@ describe('Unit Test :: Area Modal', () => {
       attributes: {
         name: 'Area 1',
         parent_path: '/40bbdd3d-8b5d/40bbdd3d-8b5e',
-        parent_path_resolved: '/devtools/planner/planner-ui'
+        parent_path_resolved: '/devtools/planner/planner-ui',
       },
-      type: 'areas'
+      type: 'areas',
     };
     const output: AreaUI = aMapper.toUIModel(input);
     const expectedOutput: AreaUI = {
       id: 'qr3R',
       name: 'Area 1',
       parentPath: '/40bbdd3d-8b5d/40bbdd3d-8b5e',
-      parentPathResolved: '/devtools/planner/planner-ui'
+      parentPathResolved: '/devtools/planner/planner-ui',
     };
     return expect(expectedOutput).toEqual(output);
   });
@@ -36,16 +32,16 @@ describe('Unit Test :: Area Modal', () => {
       id: 'qr3R',
       links: {
         related: 'https://api.openshift.io/api/areas/qr3R',
-        self: 'https://api.openshift.io/api/areas/qr3R'
+        self: 'https://api.openshift.io/api/areas/qr3R',
       },
-      type: 'areas'
+      type: 'areas',
     };
     const output: AreaUI = aMapper.toUIModel(input);
     const expectedOutput: AreaUI = {
       id: 'qr3R',
       name: null,
       parentPath: null,
-      parentPathResolved: null
+      parentPathResolved: null,
     };
     return expect(expectedOutput).toEqual(output);
   });
@@ -58,7 +54,7 @@ describe('Unit Test :: Area Modal', () => {
       id: null,
       name: null,
       parentPath: null,
-      parentPathResolved: null
+      parentPathResolved: null,
     };
     return expect(expectedOutput).toEqual(output);
   });

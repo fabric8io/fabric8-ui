@@ -7,14 +7,8 @@ import { LoadingWidgetModule } from '../../dashboard-widgets/loading-widget/load
 import { RecentSpacesWidget } from './recent-spaces-widget.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    Fabric8WitModule,
-    LoadingWidgetModule,
-    RouterModule,
-    TooltipModule
-  ],
-  exports: [ RecentSpacesWidget ],
-  declarations: [ RecentSpacesWidget ]
+  imports: [CommonModule, Fabric8WitModule, LoadingWidgetModule, RouterModule, TooltipModule],
+  exports: [RecentSpacesWidget],
+  declarations: [RecentSpacesWidget],
 })
-export class RecentSpacesWidgetModule { }
+export class RecentSpacesWidgetModule {}

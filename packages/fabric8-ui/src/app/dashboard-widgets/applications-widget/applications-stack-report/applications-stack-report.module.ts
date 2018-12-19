@@ -14,9 +14,9 @@ import { ApplicationsStackReportComponent } from './applications-stack-report.co
     KubernetesComponentsModule,
     ModalModule,
     RouterModule,
-    StackDetailsModule
+    StackDetailsModule,
   ],
   declarations: [ApplicationsStackReportComponent],
-  exports: [ApplicationsStackReportComponent]
+  exports: [ApplicationsStackReportComponent],
 })
-export class ApplicationsStackReportModule { }
+export class ApplicationsStackReportModule {}

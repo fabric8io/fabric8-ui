@@ -5,9 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { RedirectStatusData } from '../../../models/redirect-data';
 import { StatusComponent } from './status.component';
 
-
 describe('StatusComponent', () => {
-
   let component: StatusComponent;
   let fixture: ComponentFixture<StatusComponent>;
   let successImgEl: DebugElement;
@@ -18,23 +16,24 @@ describe('StatusComponent', () => {
 
   const successData: RedirectStatusData = {
     statusMessage: 'Your e-mail has been confirmed.',
-    secondaryStatusMessage: 'Thank you for validating your e-mail address. You can now continue to use CodeReady Toolchain.',
+    secondaryStatusMessage:
+      'Thank you for validating your e-mail address. You can now continue to use CodeReady Toolchain.',
     callToActionUrl: '_home',
-    callToActionLabel: 'home dashboard'
+    callToActionLabel: 'home dashboard',
   };
   const failData: RedirectStatusData = {
     statusMessage: 'Some primary error message.',
-    secondaryStatusMessage: 'It appears there is a problem with validating your e-mail. You can reset your e-mail on your Profile Page',
+    secondaryStatusMessage:
+      'It appears there is a problem with validating your e-mail. You can reset your e-mail on your Profile Page',
     callToActionUrl: '_profile',
-    callToActionLabel: 'profile'
+    callToActionLabel: 'profile',
   };
 
   beforeEach(() => {
-
     TestBed.configureTestingModule({
-      imports: [ RouterTestingModule.withRoutes([]) ],
-      declarations: [ StatusComponent ],
-      schemas: [ NO_ERRORS_SCHEMA ]
+      imports: [RouterTestingModule.withRoutes([])],
+      declarations: [StatusComponent],
+      schemas: [NO_ERRORS_SCHEMA],
     });
 
     // create component and test fixture
@@ -62,11 +61,11 @@ describe('StatusComponent', () => {
 
     expect(successImgEl).toBeTruthy();
     expect(failImgEl).toBeFalsy();
-    expect(successImgEl.nativeElement.getAttribute('src'))
-      .toEqual('../../../../assets/images/trophy.png');
+    expect(successImgEl.nativeElement.getAttribute('src')).toEqual(
+      '../../../../assets/images/trophy.png',
+    );
 
-    expect(ctaEl.nativeElement.getAttribute('href'))
-      .toEqual('/' + successData.callToActionUrl);
+    expect(ctaEl.nativeElement.getAttribute('href')).toEqual('/' + successData.callToActionUrl);
   }));
 
   it('should have fail image, msg and cta_link set', async(() => {
@@ -77,11 +76,10 @@ describe('StatusComponent', () => {
     expect(secMsgEl.nativeElement.textContent.trim()).toBe(failData.secondaryStatusMessage);
     expect(successImgEl).toBeFalsy();
     expect(failImgEl).toBeTruthy();
-    expect(failImgEl.nativeElement.getAttribute('src'))
-      .toEqual('../../../../assets/images/neutralface.png');
+    expect(failImgEl.nativeElement.getAttribute('src')).toEqual(
+      '../../../../assets/images/neutralface.png',
+    );
 
-    expect(ctaEl.nativeElement.getAttribute('href'))
-      .toEqual('/' + failData.callToActionUrl);
+    expect(ctaEl.nativeElement.getAttribute('href')).toEqual('/' + failData.callToActionUrl);
   }));
-
 });

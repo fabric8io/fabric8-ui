@@ -6,13 +6,16 @@ import { WorkItemListEntry } from './workitem-list-entry';
 export class WorkItemList extends BaseElement {
   overlay = new BaseElement(this.$('div.lock-overlay-list'), 'overlay');
   datatableHeaderdiv = new ui.BaseElement(this.$('.datatable-header'), 'datatable header div');
-  datatableHeaderCell = new ui.BaseElementArray(this.$$('datatable-header-cell'), 'datatable header cell');
+  datatableHeaderCell = new ui.BaseElementArray(
+    this.$$('datatable-header-cell'),
+    'datatable header cell',
+  );
   datatableHeaderCellLabel = new ui.BaseElementArray(this.$$('datatable-header-cell-label'));
   datatableRow = new ui.BaseElementArray(this.$$('datatable-body-row'), 'datatable row');
   childWorkItemTypeDropdown = new ui.Dropdown(
     this.$('.f8-quick-add-inline .dropdown-toggle'),
     this.$('.f8-quick-add-inline .dropdown-menu'),
-    'Child WorkItem Type dropdown'
+    'Child WorkItem Type dropdown',
   );
   empty_template = new BaseElement(this.$('.blank-slate-pf'), 'Empty work item template');
   empty_workitem_list = new BaseElement(this.empty_template.$('#title'), 'No workitems available');
@@ -42,7 +45,8 @@ export class WorkItemList extends BaseElement {
   workItem(title: string): WorkItemListEntry {
     return new WorkItemListEntry(
       this.element(by.xpath("//datatable-body-row[.//p[text()='" + title + "']]")),
-      'Work Item - ' + title);
+      'Work Item - ' + title,
+    );
   }
 
   async clickInlineQuickAdd(title: string) {
@@ -72,7 +76,10 @@ export class WorkItemList extends BaseElement {
   }
 
   async clickWorkItemDeleteIcon(title: string) {
-    await browser.actions().mouseMove(this.workItem(title)).perform();
+    await browser
+      .actions()
+      .mouseMove(this.workItem(title))
+      .perform();
     await this.workItem(title).clickDeleteIcon();
   }
 
@@ -82,7 +89,10 @@ export class WorkItemList extends BaseElement {
 
   async openDetailPage(title: string) {
     await this.overlay.untilHidden();
-    await browser.actions().mouseMove(this.workItem(title)).perform();
+    await browser
+      .actions()
+      .mouseMove(this.workItem(title))
+      .perform();
     await this.workItem(title).clickDetailIcon();
   }
 

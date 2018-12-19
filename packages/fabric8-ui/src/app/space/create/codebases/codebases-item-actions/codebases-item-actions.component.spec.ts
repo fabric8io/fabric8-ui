@@ -34,39 +34,47 @@ describe('Codebases Item Actions Component', () => {
       declarations: [CodebasesItemActionsComponent],
       providers: [
         {
-          provide: Broadcaster, useValue: broadcasterMock
+          provide: Broadcaster,
+          useValue: broadcasterMock,
         },
         {
-          provide: CheService, useValue: cheServiceMock
+          provide: CheService,
+          useValue: cheServiceMock,
         },
         {
-          provide: WorkspacesService, useValue: workspacesServiceMock
+          provide: WorkspacesService,
+          useValue: workspacesServiceMock,
         },
         {
-          provide: CodebasesService, useValue: codebasesServiceMock
+          provide: CodebasesService,
+          useValue: codebasesServiceMock,
         },
         {
-          provide: GitHubService, useValue: gitHubServiceMock
+          provide: GitHubService,
+          useValue: gitHubServiceMock,
         },
         {
-          provide: Notifications, useValue: notificationMock
-        }
+          provide: Notifications,
+          useValue: notificationMock,
+        },
       ],
       // Tells the compiler not to error on unknown elements and attributes
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     });
     fixture = TestBed.createComponent(CodebasesItemActionsComponent);
-    cheServiceMock.getState.and.returnValue(observableOf({clusterFull: false, multiTenant: true, running: true}));
+    cheServiceMock.getState.and.returnValue(
+      observableOf({ clusterFull: false, multiTenant: true, running: true }),
+    );
   });
 
   it('Create Workspace successfully', async(() => {
     // given
     let comp = fixture.componentInstance;
-    comp.codebase = { 'id': '6f5b6738-170e-490e-b3bb-d10f56b587c8' };
+    comp.codebase = { id: '6f5b6738-170e-490e-b3bb-d10f56b587c8' };
     const workspaceLinks = {
       links: {
-        open: 'http://somehwere.com'
-      }
+        open: 'http://somehwere.com',
+      },
     };
     workspacesServiceMock.createWorkspace.and.returnValue(observableOf(workspaceLinks));
     const notificationAction = { name: 'created' };
@@ -85,7 +93,7 @@ describe('Codebases Item Actions Component', () => {
   it('Create Workspace in error', async(() => {
     // given
     let comp = fixture.componentInstance;
-    comp.codebase = { 'id': '6f5b6738-170e-490e-b3bb-d10f56b587c8' };
+    comp.codebase = { id: '6f5b6738-170e-490e-b3bb-d10f56b587c8' };
     workspacesServiceMock.createWorkspace.and.returnValue(observableThrowError('ERROR'));
     const notificationAction = { name: 'ERROR' };
     notificationMock.message.and.returnValue(observableOf(notificationAction));
@@ -101,7 +109,9 @@ describe('Codebases Item Actions Component', () => {
   it('Create Workspace with capacity full', async(() => {
     // given
     let comp = fixture.componentInstance;
-    cheServiceMock.getState.and.returnValue(observableOf({clusterFull: true, multiTenant: true, running: true}));
+    cheServiceMock.getState.and.returnValue(
+      observableOf({ clusterFull: true, multiTenant: true, running: true }),
+    );
     const notificationAction = { name: 'ERROR' };
     notificationMock.message.and.returnValue(observableOf(notificationAction));
     fixture.detectChanges();
@@ -112,15 +122,14 @@ describe('Codebases Item Actions Component', () => {
     expect(notificationMock.message).toHaveBeenCalled();
   }));
 
-
   it('Delete codebase successfully', async(() => {
     // given
     let comp = fixture.componentInstance;
-    comp.codebase = { 'id': '6f5b6738-170e-490e-b3bb-d10f56b587c8' };
+    comp.codebase = { id: '6f5b6738-170e-490e-b3bb-d10f56b587c8' };
     comp.deleteCodebaseDialog = dialogMock;
     codebasesServiceMock.deleteCodebase.and.returnValue(observableOf(comp.codebase));
     broadcasterMock.on.and.returnValue(observableOf({ running: true }));
-  //  broadcasterMock.on.and.returnValue(Observable.of(code));
+    //  broadcasterMock.on.and.returnValue(Observable.of(code));
     fixture.detectChanges();
     // when
     comp.deleteCodebase();
@@ -131,7 +140,7 @@ describe('Codebases Item Actions Component', () => {
   it('Delete codebase error', async(() => {
     // given
     let comp = fixture.componentInstance;
-    comp.codebase = { 'id': '6f5b6738-170e-490e-b3bb-d10f56b587c8' };
+    comp.codebase = { id: '6f5b6738-170e-490e-b3bb-d10f56b587c8' };
     comp.deleteCodebaseDialog = dialogMock;
     codebasesServiceMock.deleteCodebase.and.returnValue(observableThrowError('ERROR'));
     const notificationAction = { name: 'ERROR' };

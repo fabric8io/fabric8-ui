@@ -4,7 +4,6 @@ import { AuthenticationService } from 'ngx-login-client';
 
 @Injectable()
 export class KeycloakTokenProvider extends TokenProvider {
-
   constructor(private authService: AuthenticationService) {
     super();
   }

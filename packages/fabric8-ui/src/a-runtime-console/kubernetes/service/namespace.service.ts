@@ -18,8 +18,10 @@ function namespaceOrProjectsUrl() {
 
 @Injectable()
 export class NamespaceService extends KubernetesService<Namespace, Namespaces> {
-
-  constructor(@Inject(KUBERNETES_RESTANGULAR) kubernetesRestangular: Restangular, watcherFactory: WatcherFactory) {
+  constructor(
+    @Inject(KUBERNETES_RESTANGULAR) kubernetesRestangular: Restangular,
+    watcherFactory: WatcherFactory,
+  ) {
     super(kubernetesRestangular.service(namespaceOrProjectsUrl()), watcherFactory);
   }
 
@@ -27,4 +29,3 @@ export class NamespaceService extends KubernetesService<Namespace, Namespaces> {
     return namespaceOrProjectsUrl();
   }
 }
-

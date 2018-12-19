@@ -18,7 +18,7 @@ describe('CommentReducer:', () => {
         creatorId: '1',
         bodyRendered: '<p>comment 1</p>',
         parentId: null,
-        selfLink: '/'
+        selfLink: '/',
       },
       {
         id: '2',
@@ -28,8 +28,8 @@ describe('CommentReducer:', () => {
         creatorId: '1',
         bodyRendered: '<p>comment 2</p>',
         parentId: null,
-        selfLink: '/'
-      }
+        selfLink: '/',
+      },
     ];
   });
 
@@ -68,7 +68,7 @@ describe('CommentReducer:', () => {
       creatorId: '1',
       bodyRendered: '<p>comment 3</p>',
       parentId: null,
-      selfLink: '/'
+      selfLink: '/',
     };
 
     const newCommentState: CommentUI[] = [
@@ -80,7 +80,7 @@ describe('CommentReducer:', () => {
         creatorId: '1',
         bodyRendered: '<p>comment 3</p>',
         parentId: null,
-        selfLink: '/'
+        selfLink: '/',
       },
       {
         id: '1',
@@ -90,7 +90,7 @@ describe('CommentReducer:', () => {
         creatorId: '1',
         bodyRendered: '<p>comment 1</p>',
         parentId: null,
-        selfLink: '/'
+        selfLink: '/',
       },
       {
         id: '2',
@@ -100,8 +100,8 @@ describe('CommentReducer:', () => {
         creatorId: '1',
         bodyRendered: '<p>comment 2</p>',
         parentId: null,
-        selfLink: '/'
-      }
+        selfLink: '/',
+      },
     ];
 
     const getSuccessAction = new CommentActions.GetSuccess(comments);
@@ -132,7 +132,7 @@ describe('CommentReducer:', () => {
       creatorId: '1',
       bodyRendered: '<p>This comment has been updated.</p>',
       parentId: null,
-      selfLink: '/'
+      selfLink: '/',
     };
 
     const newState: CommentUI[] = [
@@ -144,7 +144,7 @@ describe('CommentReducer:', () => {
         creatorId: '1',
         bodyRendered: '<p>This comment has been updated.</p>',
         parentId: null,
-        selfLink: '/'
+        selfLink: '/',
       },
       {
         id: '2',
@@ -154,8 +154,8 @@ describe('CommentReducer:', () => {
         creatorId: '1',
         bodyRendered: '<p>comment 2</p>',
         parentId: null,
-        selfLink: '/'
-      }
+        selfLink: '/',
+      },
     ];
 
     const getSuccessAction = new CommentActions.GetSuccess(comments);
@@ -168,7 +168,6 @@ describe('CommentReducer:', () => {
   });
 
   it('updateError action should return previous state', () => {
-
     const getSuccessAction = new CommentActions.GetSuccess(comments);
     const state = CommentReducer(CommentInitialState, getSuccessAction);
 
@@ -188,8 +187,8 @@ describe('CommentReducer:', () => {
         creatorId: '1',
         bodyRendered: '<p>comment 2</p>',
         parentId: null,
-        selfLink: '/'
-      }
+        selfLink: '/',
+      },
     ];
 
     const getSuccessAction = new CommentActions.GetSuccess(comments);
@@ -202,7 +201,6 @@ describe('CommentReducer:', () => {
   });
 
   it('deleteError action should return previous state', () => {
-
     const getSuccessAction = new CommentActions.GetSuccess(comments);
     const state = CommentReducer(CommentInitialState, getSuccessAction);
 

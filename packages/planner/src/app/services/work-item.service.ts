@@ -6,14 +6,9 @@ import { catchError, map } from 'rxjs/operators';
 import { Logger } from 'ngx-base';
 import { Spaces } from 'ngx-fabric8-wit';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
-import {
-  User,
-  UserService
-} from 'ngx-login-client';
+import { User, UserService } from 'ngx-login-client';
 
-import {
-  Comment
-} from '../models/comment';
+import { Comment } from '../models/comment';
 
 import { HttpErrorResponse } from '@angular/common/http';
 import { AreaModel } from '../models/area.model';
@@ -26,7 +21,6 @@ import { AreaService } from './area.service';
 
 @Injectable()
 export class WorkItemService {
-
   private workItemUrl: string = null;
   private renderUrl: string = null;
 
@@ -40,14 +34,16 @@ export class WorkItemService {
     private areaService: AreaService,
     private userService: UserService,
     private spaces: Spaces,
-    @Inject(WIT_API_URL) private baseApiUrl: string
+    @Inject(WIT_API_URL) private baseApiUrl: string,
   ) {
-    this.spaces.current.subscribe(val => this._currentSpace = val);
+    this.spaces.current.subscribe((val) => (this._currentSpace = val));
     this.logger.log('Launching WorkItemService');
   }
 
   private notifyError(message: string, httpError: any) {
-    this.logger.log('ERROR [WorkItemService] ' + message + (httpError.message ? ' ' + httpError.message : ''));
+    this.logger.log(
+      'ERROR [WorkItemService] ' + message + (httpError.message ? ' ' + httpError.message : ''),
+    );
   }
 
   private handleError(error: Error | any, msg: string) {
@@ -62,12 +58,10 @@ export class WorkItemService {
    * @param url url to the child work items
    */
   getChildren(url: string): Observable<WorkItem[]> {
-    return this.httpClientService
-      .get<{data: WorkItem[]}>(url)
-      .pipe(
-        map(response => response.data as WorkItem[]),
-        catchError(err => this.handleError(err, 'Getting children failed.'))
-      );
+    return this.httpClientService.get<{ data: WorkItem[] }>(url).pipe(
+      map((response) => response.data as WorkItem[]),
+      catchError((err) => this.handleError(err, 'Getting children failed.')),
+    );
   }
 
   /**
@@ -76,69 +70,93 @@ export class WorkItemService {
    * @param pageSize number of work items to be fetched
    * @param filters filters to the work items
    */
-  getWorkItems(pageSize: number = 20, filters: object): Observable<{workItems: WorkItem[], nextLink: string, totalCount?: number | null, included?: WorkItem[] | null, ancestorIDs?: Array<string>}> {
+  getWorkItems(
+    pageSize: number = 20,
+    filters: object,
+  ): Observable<{
+    workItems: WorkItem[];
+    nextLink: string;
+    totalCount?: number | null;
+    included?: WorkItem[] | null;
+    ancestorIDs?: Array<string>;
+  }> {
     let url = '';
     this.workItemUrl = this.baseApiUrl + 'search';
-    url = this.workItemUrl + '?page[limit]=' + pageSize + '&' + Object.keys(filters).map(k => 'filter[' + k + ']=' + encodeURIComponent(JSON.stringify(filters[k]))).join('&');
+    url =
+      this.workItemUrl +
+      '?page[limit]=' +
+      pageSize +
+      '&' +
+      Object.keys(filters)
+        .map((k) => 'filter[' + k + ']=' + encodeURIComponent(JSON.stringify(filters[k])))
+        .join('&');
     return this.httpClientService
       .get<{
-        data: WorkItem[],
+        data: WorkItem[];
         links: {
-          first?: string,
-          last?: string,
-          next?: string
-        },
+          first?: string;
+          last?: string;
+          next?: string;
+        };
         meta: {
-          totalCount: number,
-          ancestorIDs: string[]},
-        included: WorkItem[]}
-      >(url)
+          totalCount: number;
+          ancestorIDs: string[];
+        };
+        included: WorkItem[];
+      }>(url)
       .pipe(
         map((resp) => {
           return {
             workItems: resp.data as WorkItem[],
             nextLink: resp.links.next ? resp.links.next : null,
             totalCount: resp.meta ? resp.meta.totalCount : 0,
-            included: resp.included ? resp.included as WorkItem[] : [],
-            ancestorIDs: resp.meta.ancestorIDs ? resp.meta.ancestorIDs : []
+            included: resp.included ? (resp.included as WorkItem[]) : [],
+            ancestorIDs: resp.meta.ancestorIDs ? resp.meta.ancestorIDs : [],
           };
         }),
         catchError((error: Error | any) => {
           this.notifyError('Getting work items failed.', error);
           return throwError(new Error(error.message));
-        })
+        }),
       );
   }
-
 
   /**
    * This function is called from next page onwards in the scroll
    * It does pretty much same as the getWorkItems function
    */
-  getMoreWorkItems(url): Observable<{workItems: WorkItem[], nextLink: string | null, included?: WorkItem[] | null, ancestorIDs?: Array<string>}> {
+  getMoreWorkItems(
+    url,
+  ): Observable<{
+    workItems: WorkItem[];
+    nextLink: string | null;
+    included?: WorkItem[] | null;
+    ancestorIDs?: Array<string>;
+  }> {
     if (url) {
       return this.httpClientService
         .get<{
-          data: WorkItem[],
-          links: {next: string},
+          data: WorkItem[];
+          links: { next: string };
           meta: {
-            totalCount: number,
-            ancestorIDs: string[]},
-          included: WorkItem[]
+            totalCount: number;
+            ancestorIDs: string[];
+          };
+          included: WorkItem[];
         }>(url)
         .pipe(
           map((resp) => {
             return {
               workItems: resp.data as WorkItem[],
               nextLink: resp.links.next ? resp.links.next : null,
-              included: resp.included ? resp.included as WorkItem[] : [],
-              ancestorIDs: resp.meta.ancestorIDs ? resp.meta.ancestorIDs : []
+              included: resp.included ? (resp.included as WorkItem[]) : [],
+              ancestorIDs: resp.meta.ancestorIDs ? resp.meta.ancestorIDs : [],
             };
           }),
           catchError((error: Error | any) => {
             this.notifyError('Getting more work items failed.', error);
             return throwError(new Error(error.message));
-          })
+          }),
         );
     } else {
       return throwError('No more item found');
@@ -152,30 +170,32 @@ export class WorkItemService {
    * @param owner : string
    * @param space : string
    */
-  getWorkItemByNumber(id: string | number, owner: string = '', space: string = ''): Observable<WorkItem> {
+  getWorkItemByNumber(
+    id: string | number,
+    owner: string = '',
+    space: string = '',
+  ): Observable<WorkItem> {
     if (owner && space) {
-      return this.httpBackendClient.get<{data: WorkItem}>(
-        this.baseApiUrl +
-        'namedspaces' +
-        '/' + owner +
-        '/' + space +
-        '/workitems/' + id
-      )
-      .pipe(
-        map(item => item.data),
-        catchError((error: Error | any) => {
-          this.notifyError('Getting work item data failed.', error);
-          return throwError(new Error(error.message));
-        })
-      );
-    } else {
-      return this.httpClientService.get<{data: WorkItem}>(this.baseApiUrl + 'workitems/' + id)
+      return this.httpBackendClient
+        .get<{ data: WorkItem }>(
+          this.baseApiUrl + 'namedspaces' + '/' + owner + '/' + space + '/workitems/' + id,
+        )
         .pipe(
-          map(i => i.data),
+          map((item) => item.data),
           catchError((error: Error | any) => {
             this.notifyError('Getting work item data failed.', error);
             return throwError(new Error(error.message));
-          })
+          }),
+        );
+    } else {
+      return this.httpClientService
+        .get<{ data: WorkItem }>(this.baseApiUrl + 'workitems/' + id)
+        .pipe(
+          map((i) => i.data),
+          catchError((error: Error | any) => {
+            this.notifyError('Getting work item data failed.', error);
+            return throwError(new Error(error.message));
+          }),
         );
     }
   }
@@ -189,8 +209,8 @@ export class WorkItemService {
    */
   getEvents(url: string): Observable<any> {
     return this.httpClientService
-      .get<{data: Event[]}>(url)
-      .pipe(map(response => response.data));
+      .get<{ data: Event[] }>(url)
+      .pipe(map((response) => response.data));
   }
 
   /**
@@ -201,15 +221,11 @@ export class WorkItemService {
    * @param: WorkItem - wItem
    */
   resolveComments(url: string): Observable<any> {
-    return this.httpClientService
-      .get<{data: Comment[],
-        meta: any,
-        links: any}>(url)
-      .pipe(
-        map(response => {
-          return { data: response.data, meta: response.meta, links: response.links};
-        })
-      );
+    return this.httpClientService.get<{ data: Comment[]; meta: any; links: any }>(url).pipe(
+      map((response) => {
+        return { data: response.data, meta: response.meta, links: response.links };
+      }),
+    );
   }
 
   /**
@@ -220,15 +236,13 @@ export class WorkItemService {
    * @param: WorkItem - wItem
    */
   resolveLinks(url: string): Observable<any> {
-    return this.httpClientService
-      .get<{data: Link[], included: Link[]}>(url)
-      .pipe(
-        map(response => [response.data as Link[], response.included]),
-        catchError((error: Error | any) => {
-          this.notifyError('Getting linked items data failed.', error);
-          return throwError(new Error(error.message));
-        })
-      );
+    return this.httpClientService.get<{ data: Link[]; included: Link[] }>(url).pipe(
+      map((response) => [response.data as Link[], response.included]),
+      catchError((error: Error | any) => {
+        this.notifyError('Getting linked items data failed.', error);
+        return throwError(new Error(error.message));
+      }),
+    );
   }
 
   /**
@@ -237,21 +251,19 @@ export class WorkItemService {
    * @param workItemTypeUrl : string
    */
   getWorkItemTypes(workItemTypeUrl: string): Observable<any[]> {
-    return this.httpClientService
-      .get<{data: WorkItemType[]}>(workItemTypeUrl)
-      .pipe(
-        map((response) => {
-          // TODO : this line can be removed when
-          // getWorkItemTypesById function is removed
-          this.workItemTypes = response.data;
+    return this.httpClientService.get<{ data: WorkItemType[] }>(workItemTypeUrl).pipe(
+      map((response) => {
+        // TODO : this line can be removed when
+        // getWorkItemTypesById function is removed
+        this.workItemTypes = response.data;
 
-          return response.data as WorkItemType[];
-        }),
-        catchError((error: Error | any) => {
-          this.notifyError('Getting work item type information failed.', error);
-          return throwError(new Error(error.message));
-        })
-      );
+        return response.data as WorkItemType[];
+      }),
+      catchError((error: Error | any) => {
+        this.notifyError('Getting work item type information failed.', error);
+        return throwError(new Error(error.message));
+      }),
+    );
   }
 
   /**
@@ -260,28 +272,25 @@ export class WorkItemService {
    */
   delete(workItem: WorkItem): Observable<any> {
     let endpoint = workItem.links.self;
-    return this.httpClientService.delete(endpoint)
-      .pipe(
-        catchError((error: HttpErrorResponse) => {
-          this.notifyError('Deleting workitem failed.', error);
-          return throwError(error);
-        })
-      );
+    return this.httpClientService.delete(endpoint).pipe(
+      catchError((error: HttpErrorResponse) => {
+        this.notifyError('Deleting workitem failed.', error);
+        return throwError(error);
+      }),
+    );
   }
 
   /**
-    * Usage: This method create a new item
-    *
-    * @param: url
-    * @param: WorkItem - workItem (Item to be created)
-  */
+   * Usage: This method create a new item
+   *
+   * @param: url
+   * @param: WorkItem - workItem (Item to be created)
+   */
   create(url: string, workItem: WorkItem): Observable<WorkItem> {
-    let payload = JSON.stringify({data: workItem});
-      return this.httpClientService
-        .post<{data: WorkItem}>(url, payload)
-        .pipe(
-          map(response => response.data as WorkItem)
-        );
+    let payload = JSON.stringify({ data: workItem });
+    return this.httpClientService
+      .post<{ data: WorkItem }>(url, payload)
+      .pipe(map((response) => response.data as WorkItem));
   }
 
   /**
@@ -293,15 +302,15 @@ export class WorkItemService {
    */
   update(workItem: WorkItem): Observable<WorkItem> {
     return this.httpClientService
-      .patch<{data: WorkItem}>(workItem.links.self, JSON.stringify({data: workItem}))
+      .patch<{ data: WorkItem }>(workItem.links.self, JSON.stringify({ data: workItem }))
       .pipe(
-        map(response => {
+        map((response) => {
           return response.data;
         }),
         catchError((error: Error | any) => {
           this.notifyError('Updating work item failed.', error);
           return throwError(new Error(error.message));
-        })
+        }),
       );
   }
 
@@ -312,17 +321,15 @@ export class WorkItemService {
    * @param: Comment
    */
   createComment(url: string, comment: Comment): Observable<Comment> {
-    return this.httpClientService
-      .post<{data: Comment}>(url, {data: comment})
-      .pipe(
-        map(response => {
-          return response.data as Comment;
-        }),
-        catchError((error: Error | any) => {
-          this.notifyError('Creating comment failed.', error);
-          return throwError(new Error(error.message));
-        })
-      );
+    return this.httpClientService.post<{ data: Comment }>(url, { data: comment }).pipe(
+      map((response) => {
+        return response.data as Comment;
+      }),
+      catchError((error: Error | any) => {
+        this.notifyError('Creating comment failed.', error);
+        return throwError(new Error(error.message));
+      }),
+    );
   }
 
   /**
@@ -332,20 +339,18 @@ export class WorkItemService {
    */
   updateComment(comment: Comment): Observable<Comment> {
     let endpoint = comment.links.self;
-    return this.httpClientService
-      .patch<{data: Comment}>(endpoint, { 'data': comment })
-      .pipe(
-        map(response => {
-          let comment: Comment = response.data as Comment;
-          let theUser: User = this.userService.getSavedLoggedInUser();
-          comment.relationalData = { 'creator' : theUser };
-          return comment;
-        }),
-        catchError((error: Error | any) => {
-          this.notifyError('Updating comment failed.', error);
-          return throwError(new Error(error.message));
-        })
-      );
+    return this.httpClientService.patch<{ data: Comment }>(endpoint, { data: comment }).pipe(
+      map((response) => {
+        let comment: Comment = response.data as Comment;
+        let theUser: User = this.userService.getSavedLoggedInUser();
+        comment.relationalData = { creator: theUser };
+        return comment;
+      }),
+      catchError((error: Error | any) => {
+        this.notifyError('Updating comment failed.', error);
+        return throwError(new Error(error.message));
+      }),
+    );
   }
 
   /**
@@ -354,13 +359,12 @@ export class WorkItemService {
    */
   deleteComment(comment: Comment): Observable<any> {
     let endpoint = comment.links.self;
-    return this.httpClientService.delete(endpoint)
-      .pipe(
-        catchError((error: Error | any) => {
-          this.notifyError('Deleting comment failed.', error);
-          return throwError(new Error(error.message));
-        })
-      );
+    return this.httpClientService.delete(endpoint).pipe(
+      catchError((error: Error | any) => {
+        this.notifyError('Deleting comment failed.', error);
+        return throwError(new Error(error.message));
+      }),
+    );
   }
 
   /**
@@ -370,14 +374,13 @@ export class WorkItemService {
    * @return Promise of LinkType[]
    */
   getAllLinkTypes(url: string): Observable<LinkTypeService[]> {
-    return this.httpClientService.get<{data: LinkTypeService[]}>(url)
-      .pipe(
-        map(d => d.data),
-        catchError((error: Error | any) => {
-          this.notifyError('Getting link meta info failed (forward).', error);
-          return throwError(new Error(error.message));
-        })
-      );
+    return this.httpClientService.get<{ data: LinkTypeService[] }>(url).pipe(
+      map((d) => d.data),
+      catchError((error: Error | any) => {
+        this.notifyError('Getting link meta info failed (forward).', error);
+        return throwError(new Error(error.message));
+      }),
+    );
   }
 
   /**
@@ -390,10 +393,8 @@ export class WorkItemService {
    */
   createLink(url: string, link: Object): Observable<any> {
     return this.httpClientService
-      .post<{data: Link, included: any}>(url, JSON.stringify(link))
-      .pipe(
-        map(response => [response.data as Link, response.included])
-      );
+      .post<{ data: Link; included: any }>(url, JSON.stringify(link))
+      .pipe(map((response) => [response.data as Link, response.included]));
   }
 
   /**
@@ -404,15 +405,14 @@ export class WorkItemService {
    * @returns Promise<void>
    */
   deleteLink(url: string): Observable<void> {
-    return this.httpClientService
-      .delete(url);
+    return this.httpClientService.delete(url);
   }
 
   searchLinkWorkItem(term: string, spaceId: string): Observable<WorkItem[]> {
     let searchUrl = this.baseApiUrl + 'search?spaceID=' + spaceId + '&q=' + term;
     return this.httpClientService
-        .get<{data: WorkItem[]}>(searchUrl)
-        .pipe(map((response) => response.data as WorkItem[]));
+      .get<{ data: WorkItem[] }>(searchUrl)
+      .pipe(map((response) => response.data as WorkItem[]));
   }
 
   /**
@@ -425,8 +425,10 @@ export class WorkItemService {
    * @param direction: string
    */
   reOrderWorkItem(
-    spaceLink: string, workItem: WorkItem,
-    prevWiId: string | null = null, direction: string
+    spaceLink: string,
+    workItem: WorkItem,
+    prevWiId: string | null = null,
+    direction: string,
   ): Observable<WorkItem> {
     let newWItem = new WorkItem();
     let arr = [];
@@ -437,10 +439,13 @@ export class WorkItemService {
     arr.push(newWItem);
     let url = `${spaceLink}/workitems/reorder`;
     return this.httpClientService
-      .patch<{data: WorkItem}>(url, JSON.stringify({data: arr, position: {direction: direction, id: prevWiId}}))
+      .patch<{ data: WorkItem }>(
+        url,
+        JSON.stringify({ data: arr, position: { direction: direction, id: prevWiId } }),
+      )
       .pipe(
-        map(response => response.data[0] as WorkItem),
-        catchError(err => ObservableOf(newWItem as WorkItem))
+        map((response) => response.data[0] as WorkItem),
+        catchError((err) => ObservableOf(newWItem as WorkItem)),
       );
   }
 
@@ -453,19 +458,18 @@ export class WorkItemService {
       data: {
         attributes: {
           content: markDownText,
-          markup: 'Markdown'
+          markup: 'Markdown',
         },
-        type: 'rendering'
-      }
+        type: 'rendering',
+      },
     };
 
     // FIXME: make the URL great again (when we know the right API URL for this)!
     this.renderUrl = this.baseApiUrl + 'render';
     return this.httpClientService
-      .post<{data: any}>(this.renderUrl, JSON.stringify(params))
-      .pipe(map(response => response.data.attributes.renderedContent));
+      .post<{ data: any }>(this.renderUrl, JSON.stringify(params))
+      .pipe(map((response) => response.data.attributes.renderedContent));
   }
-
 
   /**
    * All the soon to be deprecated method stays behind this line
@@ -503,32 +507,33 @@ export class WorkItemService {
    */
 
   getWorkItemTypesById(id: string): Observable<WorkItemType> {
-    if (this._currentSpace && typeof(id) !== 'undefined') {
-      let workItemType = this.workItemTypes ? this.workItemTypes.find((type) => type.id === id) : null;
+    if (this._currentSpace && typeof id !== 'undefined') {
+      let workItemType = this.workItemTypes
+        ? this.workItemTypes.find((type) => type.id === id)
+        : null;
       if (workItemType) {
         return ObservableOf(workItemType);
       } else {
-        let workItemTypeUrl = this._currentSpace.links.self.split('/spaces/')[0] +
-          '/workitemtypes/' + id;
-        return this.httpClientService.get<{data: WorkItemType}>(workItemTypeUrl)
-          .pipe(
-            map((response) => {
-              workItemType = response.data as WorkItemType;
-              if (this.workItemTypes) {
-                let existingType = this.workItemTypes.find((type) => type.id === workItemType.id);
-                if (existingType) {
-                  existingType = workItemType;
-                } else {
-                  this.workItemTypes.push(workItemType);
-                }
+        let workItemTypeUrl =
+          this._currentSpace.links.self.split('/spaces/')[0] + '/workitemtypes/' + id;
+        return this.httpClientService.get<{ data: WorkItemType }>(workItemTypeUrl).pipe(
+          map((response) => {
+            workItemType = response.data as WorkItemType;
+            if (this.workItemTypes) {
+              let existingType = this.workItemTypes.find((type) => type.id === workItemType.id);
+              if (existingType) {
+                existingType = workItemType;
+              } else {
+                this.workItemTypes.push(workItemType);
               }
-              return workItemType;
-            }),
-            catchError((error: Error | any) => {
-              this.notifyError('Getting work item type info failed.', error);
-              return throwError(new Error(error.message));
-            })
-          );
+            }
+            return workItemType;
+          }),
+          catchError((error: Error | any) => {
+            this.notifyError('Getting work item type info failed.', error);
+            return throwError(new Error(error.message));
+          }),
+        );
       }
     } else {
       return ObservableOf<WorkItemType>({} as WorkItemType);
@@ -542,10 +547,11 @@ export class WorkItemService {
    * Usage: Resolve the wi type for a WorkItem
    */
   resolveType(workItem: WorkItem): void {
-    this.getWorkItemTypesById(workItem.relationships.baseType.data.id)
-      .subscribe((type: WorkItemType) => {
+    this.getWorkItemTypesById(workItem.relationships.baseType.data.id).subscribe(
+      (type: WorkItemType) => {
         workItem.relationships.baseType.data = type;
-    });
+      },
+    );
   }
 
   /**
@@ -553,8 +559,9 @@ export class WorkItemService {
    * Usage: Fetch an area by it's ID from the areas list
    */
   getAreaById(areaId: string): Observable<AreaModel> {
-    return this.areaService.getAreas()
-    .pipe(map(areas => areas.find(item => item.id == areaId)));
+    return this.areaService
+      .getAreas()
+      .pipe(map((areas) => areas.find((item) => item.id == areaId)));
   }
 
   /**
@@ -580,8 +587,9 @@ export class WorkItemService {
       workItem.relationalData.area = null;
       return;
     }
-    this.getAreaById(workItem.relationships.area.data.id)
-      .subscribe((area) => workItem.relationalData.area = area);
+    this.getAreaById(workItem.relationships.area.data.id).subscribe(
+      (area) => (workItem.relationalData.area = area),
+    );
   }
 
   /**

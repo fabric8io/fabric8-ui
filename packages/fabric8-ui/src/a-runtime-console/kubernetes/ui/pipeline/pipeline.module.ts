@@ -27,10 +27,7 @@ import { PipelineViewToolbarComponent } from './view-toolbar/view-toolbar.pipeli
 import { PipelineViewWrapperComponent } from './view-wrapper/view-wrapper.pipeline.component';
 import { PipelineViewComponent } from './view/view.pipeline.component';
 
-
-const routes: Routes = [
-  { path: ':id/history', component: PipelinesHistoryPage }
-];
+const routes: Routes = [{ path: ':id/history', component: PipelinesHistoryPage }];
 
 @NgModule({
   imports: [
@@ -43,7 +40,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     Fabric8CommonModule,
     KubernetesComponentsModule,
-    BuildConfigDialogsModule
+    BuildConfigDialogsModule,
   ],
   declarations: [
     BuildStageViewComponent,
@@ -61,19 +58,10 @@ const routes: Routes = [
     PipelinesFullHistoryPage,
     PipelinesFullHistoryToolbarComponent,
     PipelinesFullHistoryComponent,
-    StageTimePipe
+    StageTimePipe,
   ],
-  entryComponents: [
-  ],
-  exports: [
-    InputActionDialog,
-    PipelinesListComponent,
-    PipelinesListToolbarComponent
-  ],
-  providers: [
-    BsDropdownConfig,
-    JenkinsService
-  ]
+  entryComponents: [],
+  exports: [InputActionDialog, PipelinesListComponent, PipelinesListToolbarComponent],
+  providers: [BsDropdownConfig, JenkinsService],
 })
-export class PipelineModule {
-}
+export class PipelineModule {}

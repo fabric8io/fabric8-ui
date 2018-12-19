@@ -1,17 +1,12 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {
-  Catalog,
-  HelperService,
-  MissionRuntimeService
-} from 'ngx-launcher';
+import { Catalog, HelperService, MissionRuntimeService } from 'ngx-launcher';
 import { AuthenticationService } from 'ngx-login-client';
-import { Observable,  throwError as observableThrowError } from 'rxjs';
+import { Observable, throwError as observableThrowError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 @Injectable()
 export class AppLauncherMissionRuntimeService extends MissionRuntimeService {
-
   private headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
   private END_POINT: string = '';
   private API_BASE: string = 'booster-catalog/';
@@ -20,7 +15,7 @@ export class AppLauncherMissionRuntimeService extends MissionRuntimeService {
   constructor(
     private http: HttpClient,
     private auth: AuthenticationService,
-    private helperService: HelperService
+    private helperService: HelperService,
   ) {
     super();
     this.END_POINT = this.helperService.getBackendUrl();
@@ -35,8 +30,8 @@ export class AppLauncherMissionRuntimeService extends MissionRuntimeService {
       this.headers = this.headers.set('X-App', this.ORIGIN);
     }
     return this.http
-      .get<Catalog>(this.END_POINT + this.API_BASE, { headers: this.headers }).pipe(
-      catchError(this.handleError));
+      .get<Catalog>(this.END_POINT + this.API_BASE, { headers: this.headers })
+      .pipe(catchError(this.handleError));
   }
 
   private handleError(error: HttpErrorResponse | any) {

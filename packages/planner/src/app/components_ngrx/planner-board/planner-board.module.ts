@@ -7,13 +7,13 @@ import { BoardEffects } from './../../effects/board.effect';
 import {
   BoardReducer,
   BoardUIReducer,
-  ColumnWorkItemReducer
+  ColumnWorkItemReducer,
 } from './../../reducers/index.reducer';
 import { BoardService } from './../../services/board.service';
 import {
   InitialBoardState,
   InitialBoardUIState,
-  InitialColumnWorkItemState
+  InitialColumnWorkItemState,
 } from './../../states/index.state';
 
 import { PlannerLayoutModule } from './../../widgets/planner-layout/planner-layout.module';
@@ -55,7 +55,7 @@ import { F8SortByPipeModule } from './../../pipes/sort-by.module';
     BoardQuery,
     BoardUIQuery,
     ColumnWorkItemQuery,
-    ErrorHandler
+    ErrorHandler,
   ],
   imports: [
     CommonModule,
@@ -74,19 +74,19 @@ import { F8SortByPipeModule } from './../../pipes/sort-by.module';
       {
         boards: BoardReducer,
         columnWorkItem: ColumnWorkItemReducer,
-        boardUi: BoardUIReducer
+        boardUi: BoardUIReducer,
       },
       {
         initialState: {
           boards: InitialBoardState,
           columnWorkItem: InitialColumnWorkItemState,
-          boardUi: InitialBoardUIState
-        }
-      }
+          boardUi: InitialBoardUIState,
+        },
+      },
     ),
-    EffectsModule.forFeature([BoardEffects])
+    EffectsModule.forFeature([BoardEffects]),
   ],
   declarations: [PlannerBoardComponent],
-  exports: [PlannerBoardComponent]
+  exports: [PlannerBoardComponent],
 })
 export class PlannerBoardModule {}

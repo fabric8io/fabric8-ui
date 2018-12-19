@@ -9,9 +9,9 @@ import { GitHubLinkService } from './github-link.service';
  * A module containing objects associated with the GitHubLinkArea component
  */
 @NgModule({
-  imports: [ CommonModule, HttpClientModule ],
-  declarations: [ GitHubLinkAreaComponent ],
-  providers: [ GitHubLinkService ],
-  exports: [ GitHubLinkAreaComponent ]
+  imports: [CommonModule, HttpClientModule],
+  declarations: [GitHubLinkAreaComponent],
+  providers: [GitHubLinkService],
+  exports: [GitHubLinkAreaComponent],
 })
-export class GitHubLinkAreaModule { }
+export class GitHubLinkAreaModule {}

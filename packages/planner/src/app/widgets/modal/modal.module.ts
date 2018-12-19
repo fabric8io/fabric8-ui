@@ -9,19 +9,9 @@ import { ModalService } from '../../services/modal.service';
 import { ModalComponent } from './modal.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule,
-    ModalModule
-  ],
-  declarations: [
-    ModalComponent
-  ],
-  providers: [
-    ModalService
-  ],
-  exports: [
-    ModalComponent
-  ]
+  imports: [CommonModule, RouterModule, ModalModule],
+  declarations: [ModalComponent],
+  providers: [ModalService],
+  exports: [ModalComponent],
 })
-export class PlannerModalModule { }
+export class PlannerModalModule {}

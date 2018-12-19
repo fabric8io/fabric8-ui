@@ -6,9 +6,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { AboutService } from '../../shared/about.service';
 import { AboutModalComponent } from './about-modal.component';
 
-
 class aboutServiceMock {
-
   get buildNumber(): string {
     return '111.000.222';
   }
@@ -23,7 +21,6 @@ class aboutServiceMock {
 }
 
 describe('AboutModalComponent', () => {
-
   let fixture: ComponentFixture<AboutModalComponent>;
   let de: DebugElement;
   let el: HTMLElement;
@@ -34,15 +31,12 @@ describe('AboutModalComponent', () => {
   beforeEach(() => {
     let aboutServiceStub = new aboutServiceMock();
     TestBed.configureTestingModule({
-      imports: [
-        FormsModule,
-        ModalModule.forRoot()
-      ],
+      imports: [FormsModule, ModalModule.forRoot()],
       declarations: [AboutModalComponent],
       providers: [
         { provide: AboutService, useValue: aboutServiceStub },
-        { provide: Renderer2, useValue: mockRenderer }
-      ]
+        { provide: Renderer2, useValue: mockRenderer },
+      ],
     });
     fixture = TestBed.createComponent(AboutModalComponent);
     component = fixture.debugElement.componentInstance;
@@ -76,5 +70,4 @@ describe('AboutModalComponent', () => {
       expect(component.staticModal.show).toHaveBeenCalled();
     });
   });
-
 });

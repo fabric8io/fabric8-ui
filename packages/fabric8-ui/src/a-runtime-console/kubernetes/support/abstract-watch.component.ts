@@ -5,7 +5,7 @@ import {
   of as observableOf,
   Subject,
   Subscriber,
-  Subscription
+  Subscription,
 } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Deployment, Deployments } from '../model/deployment.model';
@@ -24,7 +24,11 @@ import { messageEventToResourceOperation, Operation } from '../service/resource-
 import { RouteService } from '../service/route.service';
 import { ServiceService } from '../service/service.service';
 import { Watcher } from '../service/watcher';
-import { combineDeployments, createDeploymentViews, DeploymentViews } from '../view/deployment.view';
+import {
+  combineDeployments,
+  createDeploymentViews,
+  DeploymentViews,
+} from '../view/deployment.view';
 import { createReplicaSetViews, ReplicaSetViews } from '../view/replicaset.view';
 
 /**
@@ -53,72 +57,92 @@ export class AbstractWatchComponent implements OnDestroy {
     this.watchCache.clear();
   }
 
-  protected listAndWatchServices(namespace: string, serviceService: ServiceService, routeService: RouteService): Observable<Services> {
+  protected listAndWatchServices(
+    namespace: string,
+    serviceService: ServiceService,
+    routeService: RouteService,
+  ): Observable<Services> {
     return observableCombineLatest(
       this.listAndWatch(serviceService, namespace, Service),
       this.listAndWatch(routeService, namespace, Route),
-      enrichServiceWithRoute
+      enrichServiceWithRoute,
     );
   }
 
-  listAndWatchCombinedDeployments(namespace: string, deploymentService: DeploymentService, deploymentConfigService: DeploymentConfigService): Observable<Deployments> {
+  listAndWatchCombinedDeployments(
+    namespace: string,
+    deploymentService: DeploymentService,
+    deploymentConfigService: DeploymentConfigService,
+  ): Observable<Deployments> {
     return observableCombineLatest(
       this.listAndWatch(deploymentService, namespace, Deployment),
       this.listAndWatch(deploymentConfigService, namespace, DeploymentConfig),
-      combineDeployments
+      combineDeployments,
     );
   }
 
-  listAndWatchDeployments(namespace: string, deploymentService: DeploymentService, deploymentConfigService: DeploymentConfigService, serviceService: ServiceService, routeService: RouteService): Observable<DeploymentViews> {
+  listAndWatchDeployments(
+    namespace: string,
+    deploymentService: DeploymentService,
+    deploymentConfigService: DeploymentConfigService,
+    serviceService: ServiceService,
+    routeService: RouteService,
+  ): Observable<DeploymentViews> {
     const servicesObservable = this.listAndWatchServices(namespace, serviceService, routeService);
 
-    let deployments = this.listAndWatchCombinedDeployments(namespace, deploymentService, deploymentConfigService);
+    let deployments = this.listAndWatchCombinedDeployments(
+      namespace,
+      deploymentService,
+      deploymentConfigService,
+    );
     let runtimeDeployments = observableCombineLatest(
       deployments,
       servicesObservable,
-      createDeploymentViews
+      createDeploymentViews,
     );
     return runtimeDeployments;
   }
 
-  listAndWatchReplicas(namespace: string, replicaSetService: ReplicaSetService, replicationControllerService: ReplicationControllerService, serviceService: ServiceService, routeService: RouteService): Observable<ReplicaSetViews> {
+  listAndWatchReplicas(
+    namespace: string,
+    replicaSetService: ReplicaSetService,
+    replicationControllerService: ReplicationControllerService,
+    serviceService: ServiceService,
+    routeService: RouteService,
+  ): Observable<ReplicaSetViews> {
     const servicesObservable = this.listAndWatchServices(namespace, serviceService, routeService);
 
     let replicas = observableCombineLatest(
       this.listAndWatch(replicaSetService, namespace, ReplicaSet),
       this.listAndWatch(replicationControllerService, namespace, ReplicationController),
-      combineReplicaSets
+      combineReplicaSets,
     );
-    let replicaViews = observableCombineLatest(
-      replicas,
-      servicesObservable,
-      createReplicaSetViews
-    );
+    let replicaViews = observableCombineLatest(replicas, servicesObservable, createReplicaSetViews);
     return replicaViews;
   }
-
 
   protected listAndWatch<T extends KubernetesResource, L extends Array<T>>(
     service: NamespacedResourceService<T, L>,
     namespace: string,
-    type: { new (): T; }
+    type: { new (): T },
   ): Observable<L> {
     let key = namespace + '/' + type.name;
     return this.getOrCreateSubject(key, () =>
-       observableCombineLatest(
-              //this.getOrCreateList(service, namespace, type),
-              service.list(namespace),
-              // We just emit an empty item if the watch fails
-              this.getOrCreateWatch(service, namespace, type)
-                .dataStream.pipe(catchError(() => observableOf(null))),
-              (list, msg) => this.combineListAndWatchEvent(list, msg, service, type, namespace)
-            )
+      observableCombineLatest(
+        //this.getOrCreateList(service, namespace, type),
+        service.list(namespace),
+        // We just emit an empty item if the watch fails
+        this.getOrCreateWatch(service, namespace, type).dataStream.pipe(
+          catchError(() => observableOf(null)),
+        ),
+        (list, msg) => this.combineListAndWatchEvent(list, msg, service, type, namespace),
+      ),
     );
   }
 
   protected getOrCreateSubject<T extends KubernetesResource, L extends Array<T>>(
-      key: string,
-      createObserverFn: () => Observable<L>
+    key: string,
+    createObserverFn: () => Observable<L>,
   ): Observable<L> {
     let answer = this.subjectCache[key];
     if (!answer) {
@@ -129,11 +153,10 @@ export class AbstractWatchComponent implements OnDestroy {
     return answer.asObservable();
   }
 
-
   protected getOrCreateWatch<T extends KubernetesResource, L extends Array<T>>(
     service: NamespacedResourceService<T, L>,
-      namespace: string,
-      type: { new (): T; }
+    namespace: string,
+    type: { new (): T },
   ): Watcher<L> {
     let key = namespace + '/' + type.name;
     let answer = this.watchCache[key];
@@ -147,7 +170,13 @@ export class AbstractWatchComponent implements OnDestroy {
   /**
    * Lets combine the web socket events with the latest list
    */
-  protected combineListAndWatchEvent<T extends KubernetesResource, L extends Array<T>>(array: L, msg: any, service: NamespacedResourceService<T, L>, objType: { new (): T; }, namespace: string): L {
+  protected combineListAndWatchEvent<T extends KubernetesResource, L extends Array<T>>(
+    array: L,
+    msg: any,
+    service: NamespacedResourceService<T, L>,
+    objType: { new (): T },
+    namespace: string,
+  ): L {
     let resourceOperation = messageEventToResourceOperation(msg);
     if (resourceOperation) {
       let operation = resourceOperation.operation;
@@ -160,10 +189,19 @@ export class AbstractWatchComponent implements OnDestroy {
         case Operation.DELETED:
           return createNewArrayToForceRefresh(this.deleteItemFromArray(array, resource));
         default:
-          console.log('Unknown resource option ' + operation + ' for ' + resource + ' on ' + service.serviceUrl + '/' + namespace);
+          console.log(
+            'Unknown resource option ' +
+              operation +
+              ' for ' +
+              resource +
+              ' on ' +
+              service.serviceUrl +
+              '/' +
+              namespace,
+          );
       }
     }
-/*
+    /*
     if (msg instanceof MessageEvent) {
       let me = msg as MessageEvent;
       let data = me.data;
@@ -191,7 +229,12 @@ export class AbstractWatchComponent implements OnDestroy {
     return array;
   }
 
-  protected upsertItem<T extends KubernetesResource, L extends Array<T>>(array: L, resource: any, service: NamespacedResourceService<T, L>, type: { new (): T; }): L {
+  protected upsertItem<T extends KubernetesResource, L extends Array<T>>(
+    array: L,
+    resource: any,
+    service: NamespacedResourceService<T, L>,
+    type: { new (): T },
+  ): L {
     let n = this.nameOfResource(resource);
     if (array && n) {
       for (let i = 0; i < array.length; i++) {
@@ -213,8 +256,10 @@ export class AbstractWatchComponent implements OnDestroy {
     return array;
   }
 
-
-  protected deleteItemFromArray<T extends KubernetesResource, L extends Array<T>>(array: L, resource: any): L {
+  protected deleteItemFromArray<T extends KubernetesResource, L extends Array<T>>(
+    array: L,
+    resource: any,
+  ): L {
     let n = this.nameOfResource(resource);
     if (array && n) {
       for (var i = 0; i < array.length; i++) {
@@ -262,7 +307,6 @@ export class CachingSubject<T> extends Subject<T> {
     super.next(value);
   }
 
-
   _subscribe(subscriber: Subscriber<T>): Subscription {
     if (this._hasValue) {
       subscriber.next(this._value);
@@ -274,6 +318,8 @@ export class CachingSubject<T> extends Subject<T> {
 /**
  * Lets create a new array instance to force an update event on insert or delete to lists
  */
-function createNewArrayToForceRefresh<T extends KubernetesResource, L extends Array<T>>(array: L): L {
+function createNewArrayToForceRefresh<T extends KubernetesResource, L extends Array<T>>(
+  array: L,
+): L {
   return array.slice() as L;
 }

@@ -6,7 +6,11 @@ import { WidgetsModule } from 'ngx-widgets';
 import { Observable, of } from 'rxjs';
 import { NgLetModule } from '../../shared/ng-let';
 import { SelectDropdownModule } from '../../widgets/select-dropdown/select-dropdown.module';
-import { TypeaheadDatasourceFunction, TypeaheadDropdownItem, TypeaheadSelectorComponent } from './typeahead-selector.component';
+import {
+  TypeaheadDatasourceFunction,
+  TypeaheadDropdownItem,
+  TypeaheadSelectorComponent,
+} from './typeahead-selector.component';
 /**
  * Test basic functions
  */
@@ -34,20 +38,20 @@ describe('TypeaheadSelectorComponent :: ', () => {
 
   it('updateSelection function should select correctly', () => {
     const selectedItems: TypeaheadDropdownItem[] = [
-      {key: '1', value: 'One', selected: true},
-      {key: '2', value: 'Two', selected: true}
+      { key: '1', value: 'One', selected: true },
+      { key: '2', value: 'Two', selected: true },
     ];
     const items: TypeaheadDropdownItem[] = [
-      {key: '1', value: 'One', selected: true},
-      {key: '2', value: 'Two', selected: true},
-      {key: '3', value: 'Three', selected: true},
-      {key: '4', value: 'Four', selected: true}
+      { key: '1', value: 'One', selected: true },
+      { key: '2', value: 'Two', selected: true },
+      { key: '3', value: 'Three', selected: true },
+      { key: '4', value: 'Four', selected: true },
     ];
     const exptectedOutput: TypeaheadDropdownItem[] = [
-      {key: '1', value: 'One', selected: true},
-      {key: '2', value: 'Two', selected: true},
-      {key: '3', value: 'Three', selected: false},
-      {key: '4', value: 'Four', selected: false}
+      { key: '1', value: 'One', selected: true },
+      { key: '2', value: 'Two', selected: true },
+      { key: '3', value: 'Three', selected: false },
+      { key: '4', value: 'Four', selected: false },
     ];
     expect(comp.updateSelection(items, selectedItems)).toEqual(exptectedOutput);
   });
@@ -62,18 +66,9 @@ describe('TypeaheadSelectorComponent :: ', () => {
   let subscription = null;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        TypeaheadSelectorComponent,
-        TestComponent
-      ],
-      imports: [
-        SelectDropdownModule,
-        TruncateModule,
-        WidgetsModule,
-        NgLetModule
-      ]
-    })
-    .compileComponents();
+      declarations: [TypeaheadSelectorComponent, TestComponent],
+      imports: [SelectDropdownModule, TruncateModule, WidgetsModule, NgLetModule],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -108,13 +103,13 @@ describe('TypeaheadSelectorComponent :: ', () => {
   it('menuItems propagate correct value based on search event', () => {
     fixture.detectChanges();
     let exptectedOutput = [];
-    subscription = comp.selectorRef.menuItems.subscribe(items => {
-      const selectedItems = items.filter(i => i.selected);
+    subscription = comp.selectorRef.menuItems.subscribe((items) => {
+      const selectedItems = items.filter((i) => i.selected);
       expect(selectedItems).toEqual(exptectedOutput);
     });
 
     // Now provide the search input
-    exptectedOutput = [{key: '1', value: 'One', selected: true}];
+    exptectedOutput = [{ key: '1', value: 'One', selected: true }];
     comp.selectorRef.onSearch('some input');
 
     // with no search input it shold return empty array
@@ -136,22 +131,22 @@ describe('TypeaheadSelectorComponent :: ', () => {
     comp.closeOnSelect = false;
     fixture.detectChanges();
 
-    subscription = comp.selectorRef.menuItems.subscribe(items => {
-      const selectedItems = items.filter(i => i.selected);
+    subscription = comp.selectorRef.menuItems.subscribe((items) => {
+      const selectedItems = items.filter((i) => i.selected);
       expect(selectedItems).toEqual(exptectedOutput);
     });
 
     // Need to set some search value test #1
-    exptectedOutput = [{key: '1', value: 'One', selected: true}];
+    exptectedOutput = [{ key: '1', value: 'One', selected: true }];
     comp.selectorRef.onSearch('some string');
 
     // selecting one item with multi select off
-    exptectedOutput = [{key: '2', value: 'Two', selected: true}];
-    comp.selectorRef.onSelect({key: '2', value: 'Two', selected: true});
+    exptectedOutput = [{ key: '2', value: 'Two', selected: true }];
+    comp.selectorRef.onSelect({ key: '2', value: 'Two', selected: true });
 
     // selecting another item with multi select off
-    exptectedOutput = [{key: '1', value: 'One', selected: true}];
-    comp.selectorRef.onSelect({key: '1', value: 'One', selected: true});
+    exptectedOutput = [{ key: '1', value: 'One', selected: true }];
+    comp.selectorRef.onSelect({ key: '1', value: 'One', selected: true });
 
     // turning multi select on
     comp.allowMultiSelect = true;
@@ -159,19 +154,16 @@ describe('TypeaheadSelectorComponent :: ', () => {
 
     // Selecting another item
     exptectedOutput = [
-      {key: '1', value: 'One', selected: true},
-      {key: '2', value: 'Two', selected: true}
+      { key: '1', value: 'One', selected: true },
+      { key: '2', value: 'Two', selected: true },
     ];
-    comp.selectorRef.onSelect({key: '2', value: 'Two', selected: true});
+    comp.selectorRef.onSelect({ key: '2', value: 'Two', selected: true });
 
     // De-selecting an item
-    exptectedOutput = [
-      {key: '1', value: 'One', selected: true}
-    ];
-    comp.selectorRef.onSelect({key: '2', value: 'Two', selected: true});
+    exptectedOutput = [{ key: '1', value: 'One', selected: true }];
+    comp.selectorRef.onSelect({ key: '2', value: 'Two', selected: true });
   });
 });
-
 
 /**
  * Test Host componnet
@@ -180,21 +172,24 @@ describe('TypeaheadSelectorComponent :: ', () => {
   selector: 'test-host',
   // tslint:disable-next-line:max-inline-declarations
   template: `
-    <f8-typeahead-selector #selector
+    <f8-typeahead-selector
+      #selector
       [selectedItems]="selectedItems"
       [allowMultiSelect]="allowMultiSelect"
       [dataSource]="dataSource"
-      [closeOnSelect]="closeOnSelect">
-    </f8-typeahead-selector>`
+      [closeOnSelect]="closeOnSelect"
+    >
+    </f8-typeahead-selector>
+  `,
 })
 class TestComponent {
   @ViewChild('selector') selectorRef: TypeaheadSelectorComponent;
 
   items: TypeaheadDropdownItem[] = [
-    {key: '1', value: 'One', selected: true},
-    {key: '2', value: 'Two', selected: true},
-    {key: '3', value: 'Three', selected: true},
-    {key: '4', value: 'Four', selected: true}
+    { key: '1', value: 'One', selected: true },
+    { key: '2', value: 'Two', selected: true },
+    { key: '3', value: 'Three', selected: true },
+    { key: '4', value: 'Four', selected: true },
   ];
 
   selectedItems: TypeaheadDropdownItem[] = this.items.slice(0, 2);
@@ -203,5 +198,5 @@ class TestComponent {
 
   dataSource: TypeaheadDatasourceFunction = (inp: string) => {
     return of(this.items);
-  }
+  };
 }

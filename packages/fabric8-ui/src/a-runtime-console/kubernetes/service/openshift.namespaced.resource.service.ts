@@ -7,11 +7,17 @@ import { NamespacedResourceService } from './namespaced.resource.service';
 import { Watcher } from './watcher';
 import { WatcherFactory } from './watcher-factory.service';
 
-
-export abstract class OpenShiftNamespacedResourceService<T extends KubernetesResource, L extends Array<T>> extends NamespacedResourceService<T, L> {
-  constructor(kubernetesRestangular: Restangular,
+export abstract class OpenShiftNamespacedResourceService<
+  T extends KubernetesResource,
+  L extends Array<T>
+> extends NamespacedResourceService<T, L> {
+  constructor(
+    kubernetesRestangular: Restangular,
     namespaceScope: NamespaceScope,
-    urlSuffix: string, watcherFactory: WatcherFactory, urlPrefix: string = '/oapi/v1/namespaces') {
+    urlSuffix: string,
+    watcherFactory: WatcherFactory,
+    urlPrefix: string = '/oapi/v1/namespaces',
+  ) {
     super(kubernetesRestangular, namespaceScope, urlSuffix, watcherFactory, urlPrefix);
   }
 
@@ -59,5 +65,4 @@ export abstract class OpenShiftNamespacedResourceService<T extends KubernetesRes
   protected createUnsupportedResourceError() {
     return new Error('Unsupported resource kind when not running on OpenShift');
   }
-
 }

@@ -4,11 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { ApplicationsPipelineComponent } from './applications-pipeline.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule
-  ],
+  imports: [CommonModule, FormsModule],
   declarations: [ApplicationsPipelineComponent],
-  exports: [ApplicationsPipelineComponent]
+  exports: [ApplicationsPipelineComponent],
 })
-export class ApplicationsPipelineModule { }
+export class ApplicationsPipelineModule {}

@@ -6,9 +6,7 @@ import { Logger } from 'ngx-base';
 export class CopyService {
   dom: Document;
 
-  constructor(
-      private logger: Logger,
-      @Inject(DOCUMENT) dom: Document) {
+  constructor(private logger: Logger, @Inject(DOCUMENT) dom: Document) {
     this.dom = dom;
   }
 

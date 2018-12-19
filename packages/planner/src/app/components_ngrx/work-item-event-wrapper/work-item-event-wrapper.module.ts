@@ -7,14 +7,9 @@ import { WorkItemEventModule } from '../work-item-event/work-item-event.module';
 import { WorkItemEventWrapperComponent } from './work-item-event-wrapper.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    CollapseModule,
-    EmptyStateModule,
-    WorkItemEventModule],
+  imports: [CommonModule, CollapseModule, EmptyStateModule, WorkItemEventModule],
   declarations: [WorkItemEventWrapperComponent],
   exports: [WorkItemEventWrapperComponent],
-  providers: [EventQuery]
+  providers: [EventQuery],
 })
-
-export class WorkItemEventWrapperModule { }
+export class WorkItemEventWrapperModule {}

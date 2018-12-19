@@ -1,16 +1,9 @@
-import {
-  async,
-  ComponentFixture,
-  fakeAsync,
-  inject,
-  TestBed,
-  tick
-} from '@angular/core/testing';
+import { async, ComponentFixture, fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { DebugElement } from '@angular/core';
-import { FormsModule }  from '@angular/forms';
-import { By }           from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
+import { By } from '@angular/platform-browser';
 
 import { Dialog } from './dialog';
 import { DialogComponent } from './dialog.component';
@@ -23,16 +16,19 @@ describe('Dialog component - ', () => {
 
   beforeEach(() => {
     dialog = {
-      'title': 'Dialog Title',
-      'message': 'Dialog Message',
-      'actionButtons': [{'title': 'Yes', 'value': 1, 'default': false}, {'title': 'No', 'value': 0, 'default': true}]
+      title: 'Dialog Title',
+      message: 'Dialog Message',
+      actionButtons: [
+        { title: 'Yes', value: 1, default: false },
+        { title: 'No', value: 0, default: true },
+      ],
     } as Dialog;
   });
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [BrowserAnimationsModule, FormsModule],
-      declarations: [DialogComponent]
+      declarations: [DialogComponent],
     })
       .compileComponents()
       .then(() => {
@@ -90,7 +86,7 @@ describe('Dialog component - ', () => {
     comp.dialog = dialog;
     fixture.detectChanges();
     el = fixture.debugElement.query(By.css('.modal-footer'));
-    comp.dialog.actionButtons = [{'title': 'Test Button', 'value': 1, 'default': false}];
+    comp.dialog.actionButtons = [{ title: 'Test Button', value: 1, default: false }];
     fixture.detectChanges();
     expect(el.children.length).toBe(comp.dialog.actionButtons.length);
   });
@@ -104,5 +100,4 @@ describe('Dialog component - ', () => {
       done();
     }, 300); // 300ms takes to close the modal
   });
-
 });

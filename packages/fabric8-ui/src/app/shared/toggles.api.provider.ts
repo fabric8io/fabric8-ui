@@ -9,5 +9,5 @@ let witApiUrlFactory = (api: ApiLocatorService) => {
 export let togglesApiUrlProvider = {
   provide: FABRIC8_FEATURE_TOGGLES_API_URL,
   useFactory: witApiUrlFactory,
-  deps: [ApiLocatorService]
+  deps: [ApiLocatorService],
 };

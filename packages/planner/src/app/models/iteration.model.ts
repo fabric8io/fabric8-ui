@@ -3,15 +3,9 @@ import { createFeatureSelector, createSelector, select, Store } from '@ngrx/stor
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import * as IterationActions from './../actions/iteration.actions';
-import  {IterationService as Service } from './../services/iteration.service';
+import { IterationService as Service } from './../services/iteration.service';
 import { AppState, PlannerState } from './../states/app.state';
-import {
-  Mapper,
-  MapTree,
-  modelService,
-  modelUI,
-  switchModel
-} from './common.model';
+import { Mapper, MapTree, modelService, modelUI, switchModel } from './common.model';
 
 export class IterationModel extends modelService {
   attributes?: IterationAttributes;
@@ -40,12 +34,12 @@ export class IterationLinks {
 export class IterationRelations {
   parent?: {
     data: {
-      id: string,
-      type: string
-    },
+      id: string;
+      type: string;
+    };
     links: {
-      self: string
-    }
+      self: string;
+    };
   };
   space: {
     data: {
@@ -89,126 +83,154 @@ export interface IterationUI extends modelUI {
 }
 
 export class IterationMapper implements Mapper<IterationModel, IterationUI> {
-
-  serviceToUiMapTree: MapTree = [{
+  serviceToUiMapTree: MapTree = [
+    {
       fromPath: ['id'],
-      toPath: ['id']
-    }, {
+      toPath: ['id'],
+    },
+    {
       fromPath: ['attributes', 'name'],
-      toPath: ['name']
-    }, {
+      toPath: ['name'],
+    },
+    {
       fromPath: ['attributes', 'parent_path'],
-      toPath: ['parentPath']
-    }, {
+      toPath: ['parentPath'],
+    },
+    {
       fromPath: ['attributes', 'resolved_parent_path'],
-      toPath: ['resolvedParentPath']
-    }, {
+      toPath: ['resolvedParentPath'],
+    },
+    {
       fromPath: ['attributes', 'user_active'],
-      toPath: ['userActive']
-    }, {
+      toPath: ['userActive'],
+    },
+    {
       fromPath: ['attributes', 'active_status'],
-      toPath: ['isActive']
-    }, {
+      toPath: ['isActive'],
+    },
+    {
       fromPath: ['attributes', 'startAt'],
-      toPath: ['startAt']
-    }, {
+      toPath: ['startAt'],
+    },
+    {
       fromPath: ['attributes', 'endAt'],
-      toPath: ['endAt']
-    }, {
+      toPath: ['endAt'],
+    },
+    {
       fromPath: ['attributes', 'description'],
-      toPath: ['description']
-    }, {
+      toPath: ['description'],
+    },
+    {
       fromPath: ['attributes', 'state'],
-      toPath: ['state']
-    }, {
+      toPath: ['state'],
+    },
+    {
       fromPath: ['links', 'self'],
-      toPath: ['link']
-    }, {
+      toPath: ['link'],
+    },
+    {
       fromPath: ['relationships', 'workitems', 'meta', 'total'],
-      toPath: ['workItemTotalCount']
-    }, {
+      toPath: ['workItemTotalCount'],
+    },
+    {
       fromPath: ['relationships', 'workitems', 'meta', 'closed'],
-      toPath: ['workItemClosedCount']
-    }, {
+      toPath: ['workItemClosedCount'],
+    },
+    {
       fromPath: ['hasChildren'],
-      toPath: ['hasChildren']
-    }, {
+      toPath: ['hasChildren'],
+    },
+    {
       fromPath: ['relationships', 'parent', 'data', 'id'],
-      toPath: ['parentId']
-    }, {
+      toPath: ['parentId'],
+    },
+    {
       toPath: ['selected'],
-      toValue: false
-    }, {
+      toValue: false,
+    },
+    {
       toPath: ['showChildren'],
-      toValue: false
-    }
-
+      toValue: false,
+    },
   ];
 
-  uiToServiceMapTree: MapTree = [{
+  uiToServiceMapTree: MapTree = [
+    {
       fromPath: ['id'],
-      toPath: ['id']
-    }, {
+      toPath: ['id'],
+    },
+    {
       fromPath: ['name'],
-      toPath: ['attributes', 'name']
-    }, {
+      toPath: ['attributes', 'name'],
+    },
+    {
       fromPath: ['parentPath'],
-      toPath: ['attributes', 'parent_path']
-    }, {
+      toPath: ['attributes', 'parent_path'],
+    },
+    {
       fromPath: ['resolvedParentPath'],
-      toPath: ['attributes', 'resolved_parent_path']
-    }, {
+      toPath: ['attributes', 'resolved_parent_path'],
+    },
+    {
       fromPath: ['userActive'],
-      toPath: ['attributes', 'user_active']
-    }, {
+      toPath: ['attributes', 'user_active'],
+    },
+    {
       fromPath: ['isActive'],
-      toPath: ['attributes', 'active_status']
-    }, {
+      toPath: ['attributes', 'active_status'],
+    },
+    {
       fromPath: ['startAt'],
-      toPath: ['attributes', 'startAt']
-    }, {
+      toPath: ['attributes', 'startAt'],
+    },
+    {
       fromPath: ['endAt'],
-      toPath: ['attributes', 'endAt']
-    }, {
+      toPath: ['attributes', 'endAt'],
+    },
+    {
       fromPath: ['description'],
-      toPath: ['attributes', 'description']
-    }, {
+      toPath: ['attributes', 'description'],
+    },
+    {
       fromPath: ['state'],
-      toPath: ['attributes', 'state']
-    }, {
+      toPath: ['attributes', 'state'],
+    },
+    {
       fromPath: ['link'],
-      toPath: ['links', 'self']
-    }, {
+      toPath: ['links', 'self'],
+    },
+    {
       fromPath: ['workItemTotalCount'],
-      toPath: ['relationships', 'workitems', 'meta', 'total']
-    }, {
+      toPath: ['relationships', 'workitems', 'meta', 'total'],
+    },
+    {
       fromPath: ['workItemClosedCount'],
-      toPath: ['relationships', 'workitems', 'meta', 'closed']
-    }, {
+      toPath: ['relationships', 'workitems', 'meta', 'closed'],
+    },
+    {
       fromPath: ['hasChildren'],
-      toPath: ['hasChildren']
-    }, {
+      toPath: ['hasChildren'],
+    },
+    {
       fromPath: ['parentId'],
-      toPath: ['relationships', 'parent', 'data', 'id']
-    }, {
+      toPath: ['relationships', 'parent', 'data', 'id'],
+    },
+    {
       toPath: ['relationships', 'parent', 'data', 'type'],
-      toValue: 'iterations'
-    }, {
+      toValue: 'iterations',
+    },
+    {
       toPath: ['type'],
-      toValue: 'iterations'
-    }
+      toValue: 'iterations',
+    },
   ];
 
   toUIModel(arg: IterationService): IterationUI {
-    return switchModel<IterationService, IterationUI>(
-      arg, this.serviceToUiMapTree
-    );
+    return switchModel<IterationService, IterationUI>(arg, this.serviceToUiMapTree);
   }
 
   toServiceModel(arg: IterationUI): IterationService {
-    return switchModel<IterationUI, IterationService>(
-      arg, this.uiToServiceMapTree
-    );
+    return switchModel<IterationUI, IterationService>(arg, this.uiToServiceMapTree);
   }
 }
 
@@ -217,59 +239,57 @@ export class IterationQuery {
   private plannerSelector = createFeatureSelector<PlannerState>('planner');
   private iterationSelector = createSelector(
     this.plannerSelector,
-    (state) => state.iterations
+    (state) => state.iterations,
   );
   private iterationSource = this.store.pipe(select(this.iterationSelector));
 
-  constructor(private store: Store<AppState>,
-    private iterationService: Service) {}
+  constructor(private store: Store<AppState>, private iterationService: Service) {}
 
   getIterations(): Observable<IterationUI[]> {
     return this.iterationSource.pipe(
-      map(iterations => {
-        return Object.keys(iterations).map(id => iterations[id]);
-      })
+      map((iterations) => {
+        return Object.keys(iterations).map((id) => iterations[id]);
+      }),
     );
   }
 
   getIterationObservableById(id: string): Observable<IterationUI> {
-    return this.iterationSource.pipe(select(state => state[id]));
+    return this.iterationSource.pipe(select((state) => state[id]));
   }
 
   getSelectedIteration(): Observable<IterationUI> {
-    return this.getIterations()
-      .pipe(
-        map((iterations: IterationUI[]) => {
-          return iterations.filter(it => it.selected);
-        }),
-        map(iterations => {
-          if (iterations.length === 1) {
-            return iterations[0];
-          } return null;
-        })
-      );
+    return this.getIterations().pipe(
+      map((iterations: IterationUI[]) => {
+        return iterations.filter((it) => it.selected);
+      }),
+      map((iterations) => {
+        if (iterations.length === 1) {
+          return iterations[0];
+        }
+        return null;
+      }),
+    );
   }
 
   getIterationsWithChildren(): Observable<IterationUI[]> {
-    return this.getIterations()
-      .pipe(
-        map(iterations => {
-          for (let i = 0; i < iterations.length; i++) {
-            iterations[i].children = iterations.filter(it => it.parentId === iterations[i].id);
-          }
-          let allIterations = iterations.filter((i: IterationUI) => {
-            return !this.iterationService.isRootIteration(i.parentPath);
-          });
-          return allIterations;
-        })
-      );
+    return this.getIterations().pipe(
+      map((iterations) => {
+        for (let i = 0; i < iterations.length; i++) {
+          iterations[i].children = iterations.filter((it) => it.parentId === iterations[i].id);
+        }
+        let allIterations = iterations.filter((i: IterationUI) => {
+          return !this.iterationService.isRootIteration(i.parentPath);
+        });
+        return allIterations;
+      }),
+    );
   }
 
   getIterationForTree(): Observable<IterationUI[]> {
     return this.getIterationsWithChildren().pipe(
       map((iterations: IterationUI[]) => {
         return this.iterationService.getTopLevelIterations(iterations);
-      })
+      }),
     );
   }
 
@@ -277,7 +297,7 @@ export class IterationQuery {
     return this.getIterations().pipe(
       map((iterations: IterationUI[]) => {
         return iterations.filter((iteration: IterationUI) => iteration.isActive);
-      })
+      }),
     );
   }
 
@@ -287,15 +307,13 @@ export class IterationQuery {
 
   get getIterationIds(): Observable<string[]> {
     return this.iterationSource.pipe(
-      map(iterations => {
+      map((iterations) => {
         return Object.keys(iterations);
-      })
+      }),
     );
   }
 
   get getIterationNames(): Observable<string[]> {
-    return this.getIterations().pipe(
-      map(iterations => iterations.map(it => it.name))
-    );
+    return this.getIterations().pipe(map((iterations) => iterations.map((it) => it.name)));
   }
 }

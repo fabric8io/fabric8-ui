@@ -7,15 +7,14 @@ import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operato
 
 @Component({
   host: {
-    'class': 'add-dialog'
+    class: 'add-dialog',
   },
   encapsulation: ViewEncapsulation.None,
   selector: 'add-collaborators-dialog',
   templateUrl: './add-collaborators-dialog.component.html',
-  styleUrls: ['./add-collaborators-dialog.component.less']
+  styleUrls: ['./add-collaborators-dialog.component.less'],
 })
 export class AddCollaboratorsDialogComponent implements OnInit {
-
   @Input() host: ModalDirective;
   @Input() spaceId: string;
 
@@ -26,24 +25,26 @@ export class AddCollaboratorsDialogComponent implements OnInit {
   loading: Boolean = false;
   searchTerm = new Subject<string>();
 
-  constructor(
-    private userService: UserService,
-    private collaboratorService: CollaboratorService
-  ) { }
+  constructor(private userService: UserService, private collaboratorService: CollaboratorService) {}
 
   ngOnInit(): void {
-    this.searchTerm.pipe(
-      debounceTime(200),
-      distinctUntilChanged(),
-      tap(() => this.loading = true),
-      switchMap(term => this.userService.getUsersBySearchString(term))
-    ).subscribe((users: User[]) => {
-      this.collaborators = users;
-      this.sortCollaborators();
-      this.loading = false;
-    }, () => {
-      this.collaborators = [];
-    });
+    this.searchTerm
+      .pipe(
+        debounceTime(200),
+        distinctUntilChanged(),
+        tap(() => (this.loading = true)),
+        switchMap((term) => this.userService.getUsersBySearchString(term)),
+      )
+      .subscribe(
+        (users: User[]) => {
+          this.collaborators = users;
+          this.sortCollaborators();
+          this.loading = false;
+        },
+        () => {
+          this.collaborators = [];
+        },
+      );
   }
 
   onOpen(): void {
@@ -51,11 +52,13 @@ export class AddCollaboratorsDialogComponent implements OnInit {
   }
 
   addCollaborators(): void {
-    this.collaboratorService.addCollaborators(this.spaceId, this.selectedCollaborators).subscribe(() => {
-      this.onAdded.emit(this.selectedCollaborators as User[]);
-      this.reset();
-      this.host.hide();
-    });
+    this.collaboratorService
+      .addCollaborators(this.spaceId, this.selectedCollaborators)
+      .subscribe(() => {
+        this.onAdded.emit(this.selectedCollaborators as User[]);
+        this.reset();
+        this.host.hide();
+      });
   }
 
   cancel(): void {
@@ -69,11 +72,13 @@ export class AddCollaboratorsDialogComponent implements OnInit {
   }
 
   private sortCollaborators(): void {
-    this.collaborators.sort((a: User, b: User): number => {
-      return (
-        a.attributes.fullName.localeCompare(b.attributes.fullName) ||
-        a.attributes.username.localeCompare(b.attributes.username)
-      );
-    });
+    this.collaborators.sort(
+      (a: User, b: User): number => {
+        return (
+          a.attributes.fullName.localeCompare(b.attributes.fullName) ||
+          a.attributes.username.localeCompare(b.attributes.username)
+        );
+      },
+    );
   }
 }

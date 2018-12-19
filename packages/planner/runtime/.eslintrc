@@ -1,0 +1,9 @@
+{
+  "rules": {
+    "no-use-before-define": "off",
+    "prefer-spread": "off",
+
+    "import/no-extraneous-dependencies": "off",
+    "import/no-unresolved": "off"
+  }
+}

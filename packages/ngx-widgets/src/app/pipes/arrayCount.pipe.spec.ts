@@ -10,50 +10,41 @@ let testCases: Array<ITestCase> = [
   {
     label: 'Test for null',
     input: null,
-    expect: null
+    expect: null,
   },
   {
     label: 'Test for undefined',
     input: undefined,
-    expect: null
+    expect: null,
   },
   {
     label: 'Test for simple object',
     input: () => ({ a: 1 }),
-    expect: null
+    expect: null,
   },
   {
     label: 'Test for empty array',
     input: [],
-    expect: 0
+    expect: 0,
   },
   {
     label: 'Test for an array of 5 items',
-    input: [ 'a', 'b', 'c', 'd', 'e' ],
-    expect: 5
-  }
+    input: ['a', 'b', 'c', 'd', 'e'],
+    expect: 5,
+  },
 ];
 
-describe (
-  'Pipe: count.pipe => CountPipe',
-  () => {
+describe('Pipe: count.pipe => CountPipe', () => {
+  let pipe: ArrayCount;
 
-    let pipe: ArrayCount;
+  beforeEach(() => {
+    pipe = new ArrayCount();
+  });
 
-    beforeEach (
-      () => {
-        pipe = new ArrayCount ();
-      }
-    );
-
-    for (let testCase of testCases) {
-      it (
-        testCase.label,
-        () => {
-          let result = pipe.transform (testCase.input);
-          expect (result).toEqual (testCase.expect);
-        }
-      );
-    }
+  for (let testCase of testCases) {
+    it(testCase.label, () => {
+      let result = pipe.transform(testCase.input);
+      expect(result).toEqual(testCase.expect);
+    });
   }
-);
+});

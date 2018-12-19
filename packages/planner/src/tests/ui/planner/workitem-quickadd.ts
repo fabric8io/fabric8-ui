@@ -7,11 +7,14 @@ export class WorkItemQuickAdd extends ui.BaseElement {
   titleTextInput = new ui.TextInput(this.$('input.f8-quickadd-input'), 'Work item Title');
   buttonsDiv = this.$('div.f8-quickadd__wiblk-btn.pull-right');
   addButton = new ui.Button(this.buttonsDiv.$$('button.btn.btn-primary').first(), 'Add Button');
-  addAndOpenButton = new ui.Button(this.buttonsDiv.$$('button.btn.btn-primary').last(), 'Add and Open Button');
+  addAndOpenButton = new ui.Button(
+    this.buttonsDiv.$$('button.btn.btn-primary').last(),
+    'Add and Open Button',
+  );
   workItemTypeDropdown = new ui.Dropdown(
     this.$('.f8-quickadd__wiblk button.dropdown-toggle'),
     this.$('.f8-quickadd__wiblk .dropdown-menu'),
-    'WorkItem Type dropdown'
+    'WorkItem Type dropdown',
   );
 
   constructor(el: ElementFinder, name = 'Work Item Quick Add') {
@@ -45,7 +48,7 @@ export class WorkItemQuickAdd extends ui.BaseElement {
     await this.workItemTypeDropdown.clickWhenReady();
     let array = await this.workItemTypeDropdown.menu.getTextWhenReady();
     // Split array, remove invalid entries and trim the result
-    return array.split('\n').reduce<string[]>((filtered , current) => {
+    return array.split('\n').reduce<string[]>((filtered, current) => {
       if (current) {
         filtered.push(current.trim());
       }

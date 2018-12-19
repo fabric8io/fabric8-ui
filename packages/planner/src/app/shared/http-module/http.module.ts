@@ -4,17 +4,15 @@ import { AuthInterceptor } from './auth.interceptors';
 import { HttpBackendClient, HttpClientService } from './http.service';
 
 @NgModule({
-  imports: [
-    HttpClientModule
-  ],
+  imports: [HttpClientModule],
   providers: [
     HttpClientService,
     HttpBackendClient,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
 export class PlannerHttpClientModule {}

@@ -2,7 +2,7 @@ export enum Environment {
   production = 'production',
   prodPreview = 'prod-preview',
   development = 'development',
-  prDeploy = 'prDeploy'
+  prDeploy = 'prDeploy',
 }
 
 export function getEnvironment(): Environment {

@@ -4,8 +4,8 @@ import { NgModule } from '@angular/core';
 import { SlideOutPanelComponent } from './slide-out-panel.component';
 
 @NgModule({
-  imports: [ CommonModule ],
-  declarations: [ SlideOutPanelComponent ],
-  exports: [ SlideOutPanelComponent ]
+  imports: [CommonModule],
+  declarations: [SlideOutPanelComponent],
+  exports: [SlideOutPanelComponent],
 })
-export class SlideOutPanelModule { }
+export class SlideOutPanelModule {}

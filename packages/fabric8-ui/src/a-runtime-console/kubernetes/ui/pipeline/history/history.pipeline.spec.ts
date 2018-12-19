@@ -11,14 +11,9 @@ describe('PipelinesHistoryComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule.withRoutes([]),
-        MomentModule
-      ],
-      declarations: [
-        PipelinesHistoryComponent
-      ],
-      schemas: [ NO_ERRORS_SCHEMA ]
+      imports: [RouterTestingModule.withRoutes([]), MomentModule],
+      declarations: [PipelinesHistoryComponent],
+      schemas: [NO_ERRORS_SCHEMA],
     });
   }));
 

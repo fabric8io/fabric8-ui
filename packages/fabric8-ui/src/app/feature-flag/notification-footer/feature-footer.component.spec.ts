@@ -13,35 +13,49 @@ describe('FeatureFooterComponent', () => {
   beforeEach(() => {
     config = {
       'user-level': 'internal',
-      'featuresPerLevel':
-        {
-          'experimental': [{'attributes':
-              {'description': 'Planner menu',
-                'enabled': true,
-                'enablement-level': 'experimental',
-                'user-enabled': true,
-                'name': 'Planner featureA'},
-            'id': 'Planner.featureA'}],
-          'internal': [{'attributes':
-              {'description': 'Planner menu',
-                'enabled': true,
-                'enablement-level': 'internal',
-                'user-enabled': true,
-                'name': 'Planner'},
-            'id': 'Planner'}],
-          'beta': [{'attributes':
-              {'description': 'Planner menu',
-                'enabled': true,
-                'enablement-level': 'beta',
-                'user-enabled': true,
-                'name': 'Planner featureB'},
-            'id': 'Planner.featureB'}]
-        }
+      featuresPerLevel: {
+        experimental: [
+          {
+            attributes: {
+              description: 'Planner menu',
+              enabled: true,
+              'enablement-level': 'experimental',
+              'user-enabled': true,
+              name: 'Planner featureA',
+            },
+            id: 'Planner.featureA',
+          },
+        ],
+        internal: [
+          {
+            attributes: {
+              description: 'Planner menu',
+              enabled: true,
+              'enablement-level': 'internal',
+              'user-enabled': true,
+              name: 'Planner',
+            },
+            id: 'Planner',
+          },
+        ],
+        beta: [
+          {
+            attributes: {
+              description: 'Planner menu',
+              enabled: true,
+              'enablement-level': 'beta',
+              'user-enabled': true,
+              name: 'Planner featureB',
+            },
+            id: 'Planner.featureB',
+          },
+        ],
+      },
     } as FeatureFlagConfig;
     TestBed.configureTestingModule({
       imports: [FeatureFooterModule, TooltipModule, ModalModule.forRoot()],
       declarations: [],
-      providers: []
+      providers: [],
     });
 
     hostFixture = TestBed.createComponent(FeatureFooterComponent);
@@ -54,13 +68,16 @@ describe('FeatureFooterComponent', () => {
     expect(hostComponent.experimentalFeatureText).toEqual('is 1 experimental feature');
     expect(hostComponent.internalFeatureText).toEqual('is 1 internal feature');
     expect(hostComponent.betaFeatureText).toEqual('is 1 beta feature');
-    config.featuresPerLevel.beta.push({'attributes':
-      {'description': 'Planner menu',
-        'enabled': true,
+    config.featuresPerLevel.beta.push({
+      attributes: {
+        description: 'Planner menu',
+        enabled: true,
         'enablement-level': 'beta',
         'user-enabled': true,
-        'name': 'Planner featureC'},
-      'id': 'Planner.featureC'});
+        name: 'Planner featureC',
+      },
+      id: 'Planner.featureC',
+    });
     hostComponent.descriptionPerLevel();
     expect(hostComponent.betaFeatureText).toEqual('are 2 beta features');
   }));
@@ -94,7 +111,6 @@ describe('FeatureFooterComponent', () => {
     config.featuresPerLevel.experimental = [];
     expect(hostComponent.isNotEmpty('experimental')).toBeTruthy();
   }));
-
 
   it('should not be empty for beta when there are features for beta', async(() => {
     expect(hostComponent.isNotEmpty('beta')).toBeTruthy();

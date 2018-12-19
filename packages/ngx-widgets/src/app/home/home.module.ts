@@ -6,8 +6,8 @@ import { HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home.component';
 
 @NgModule({
-  imports:      [ CommonModule, HomeRoutingModule, HttpModule ],
-  declarations: [ HomeComponent ]
+  imports: [CommonModule, HomeRoutingModule, HttpModule],
+  declarations: [HomeComponent],
 })
 export class HomeModule {
   constructor(http: Http) {}

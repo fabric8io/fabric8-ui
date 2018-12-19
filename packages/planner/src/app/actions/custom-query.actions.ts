@@ -34,7 +34,6 @@ export class AddError implements Action {
   readonly type = ADD_ERROR;
 }
 
-
 export class Get implements Action {
   readonly type = GET;
 }
@@ -59,7 +58,7 @@ export class Delete implements Action {
   readonly type = DELETE;
 }
 
-export class DeleteSuccess implements  Action {
+export class DeleteSuccess implements Action {
   payload: CustomQueryModel;
   constructor(payload: CustomQueryModel) {
     this.payload = payload;
@@ -83,8 +82,8 @@ export class SelectNone implements Action {
   readonly type = SELECT_NONE;
 }
 
-export type All
-  = Get
+export type All =
+  | Get
   | GetSuccess
   | GetError
   | AddSuccess

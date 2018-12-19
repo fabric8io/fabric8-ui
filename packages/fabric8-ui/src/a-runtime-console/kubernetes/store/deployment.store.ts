@@ -5,7 +5,11 @@ import { NamespaceScope } from '../service/namespace.scope';
 import { NamespacedResourceStore } from './namespacedresource.store';
 
 @Injectable()
-export class DeploymentStore extends NamespacedResourceStore<Deployment, Deployments, DeploymentService> {
+export class DeploymentStore extends NamespacedResourceStore<
+  Deployment,
+  Deployments,
+  DeploymentService
+> {
   constructor(deploymentService: DeploymentService, namespaceScope: NamespaceScope) {
     super(deploymentService, [], {} as Deployment, namespaceScope, Deployment);
   }

@@ -27,34 +27,36 @@ describe('FeatureAcknowledgement service:', () => {
       imports: [HttpClientTestingModule],
       providers: [
         {
-          provide: Logger, useValue: mockLog
+          provide: Logger,
+          useValue: mockLog,
         },
         {
           provide: AuthenticationService,
-          useValue: mockAuthService
+          useValue: mockAuthService,
         },
         {
           provide: UserService,
-          useValue: mockUserService
+          useValue: mockUserService,
         },
         {
           provide: WIT_API_URL,
-          useValue: 'http://example.com'
+          useValue: 'http://example.com',
         },
-        FeatureAcknowledgementService
-      ]
+        FeatureAcknowledgementService,
+      ],
     });
     featureAckService = TestBed.get(FeatureAcknowledgementService);
   });
 
   it('should tell whether a user has agreed to keep the display of feature icon', async(() => {
     // when
-    featureAckService.getToggle().pipe(
-      first())
-      .subscribe(val => {
-      // then
-      expect(val).toEqual(true);
-    });
+    featureAckService
+      .getToggle()
+      .pipe(first())
+      .subscribe((val) => {
+        // then
+        expect(val).toEqual(true);
+      });
   }));
 
   it('should tell whether a user has toggled off the display of feature icon', async(() => {
@@ -63,11 +65,12 @@ describe('FeatureAcknowledgement service:', () => {
     mockUserService.getUserByUserId.and.returnValue(observableOf(extUser));
     mockUserService.loggedInUser = observableOf(extUser);
     // when
-    featureAckService.getToggle().pipe(
-      first())
-      .subscribe(val => {
-      // then
-      expect(val).toEqual(false);
-    });
+    featureAckService
+      .getToggle()
+      .pipe(first())
+      .subscribe((val) => {
+        // then
+        expect(val).toEqual(false);
+      });
   }));
 });

@@ -62,8 +62,6 @@
     "jest/prefer-to-have-length": "off",
     "jest/valid-expect": "off",
 
-    "prettier/prettier": "off",
-
     "promise/catch-or-return": "off",
 
     "typescript/class-name-casing": "off",

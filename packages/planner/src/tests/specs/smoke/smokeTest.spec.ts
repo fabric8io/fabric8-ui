@@ -26,10 +26,10 @@ describe('Planner Smoke Tests:', () => {
 
   it('create a work item and add/remove assignee', async () => {
     let newWorkItem1 = {
-      title: 'Workitem Title',
-      description: 'Describes the work item'
-    },
-    user1 = process.env.USER_FULLNAME;
+        title: 'Workitem Title',
+        description: 'Describes the work item',
+      },
+      user1 = process.env.USER_FULLNAME;
     await planner.createWorkItem(newWorkItem1);
     expect(await planner.workItemList.hasWorkItem(newWorkItem1.title)).toBeTruthy();
     await planner.workItemList.clickWorkItem(newWorkItem1.title);
@@ -44,10 +44,10 @@ describe('Planner Smoke Tests:', () => {
   });
 
   it('update workitem title/description', async () => {
-    let newWorkItem2 = { 'title': 'Workitem Title 1'},
+    let newWorkItem2 = { title: 'Workitem Title 1' },
       updatedWorkItem = {
         title: 'New Workitem Title',
-        description: 'New WorkItem Description'
+        description: 'New WorkItem Description',
       };
     await planner.createWorkItem(newWorkItem2);
     expect(await planner.workItemList.hasWorkItem(newWorkItem2.title)).toBeTruthy();
@@ -73,7 +73,8 @@ describe('Planner Smoke Tests:', () => {
   //it might change again so not remmoving the test
   xit('Check WorkItem creator name and image is reflected', async () => {
     let prodAvatar = 'https://avatars0.githubusercontent.com/u/563119?v=3&s=25',
-      prodPreviewAvatar = 'https://www.gravatar.com/avatar/d77d23eebe9907842b8ad9f1d9905454.jpg&s=25',
+      prodPreviewAvatar =
+        'https://www.gravatar.com/avatar/d77d23eebe9907842b8ad9f1d9905454.jpg&s=25',
       workItemTitle2 = 'Workitem_Title_2',
       user1 = process.env.USER_FULLNAME;
     await planner.workItemList.clickWorkItem(workItemTitle2);
@@ -124,14 +125,18 @@ describe('Planner Smoke Tests:', () => {
     //search iteration
     await planner.workItemList.clickWorkItem(title);
     await planner.quickPreview.typeaHeadSearch(randomText);
-    expect(await planner.quickPreview.iterationDropdown.menu.getTextWhenReady()).toBe('No matches found.');
+    expect(await planner.quickPreview.iterationDropdown.menu.getTextWhenReady()).toBe(
+      'No matches found.',
+    );
     await planner.quickPreview.iterationDropdownCloseButton.clickWhenReady();
     await planner.quickPreview.iterationDropdown.clickWhenReady();
-    expect(await planner.quickPreview.iterationDropdown.menu.getTextWhenReady()).not.toBe('No matches found.');
+    expect(await planner.quickPreview.iterationDropdown.menu.getTextWhenReady()).not.toBe(
+      'No matches found.',
+    );
   });
 
   it('Edit Comment and Save', async () => {
-    let newWorkItem3 = { title:  'New Workitem' },
+    let newWorkItem3 = { title: 'New Workitem' },
       comment = 'new comment';
     await planner.createWorkItem(newWorkItem3);
     expect(await planner.workItemList.hasWorkItem(newWorkItem3.title)).toBeTruthy();
@@ -203,11 +208,15 @@ describe('Planner Smoke Tests:', () => {
     await planner.workItemList.overlay.untilHidden();
     await planner.sidePanel.clickIteration('Iteration_1');
     await planner.workItemList.overlay.untilHidden();
-    await planner.quickAdd.addWorkItem({title : 'Add new work item to iteration test'});
-    expect(await planner.workItemList.hasWorkItem('Add new work item to iteration test')).toBeTruthy();
+    await planner.quickAdd.addWorkItem({ title: 'Add new work item to iteration test' });
+    expect(
+      await planner.workItemList.hasWorkItem('Add new work item to iteration test'),
+    ).toBeTruthy();
     await planner.sidePanel.clickWorkItemGroup();
     await planner.workItemList.overlay.untilHidden();
     await planner.sidePanel.clickIteration('Iteration_1');
-    expect(await planner.workItemList.hasWorkItem('Add new work item to iteration test')).toBeTruthy();
+    expect(
+      await planner.workItemList.hasWorkItem('Add new work item to iteration test'),
+    ).toBeTruthy();
   });
 });

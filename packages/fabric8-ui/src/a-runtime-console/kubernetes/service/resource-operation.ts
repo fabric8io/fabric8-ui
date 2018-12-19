@@ -1,10 +1,11 @@
 export enum Operation {
-  ADDED, MODIFIED, DELETED
+  ADDED,
+  MODIFIED,
+  DELETED,
 }
 
 export class ResourceOperation {
-  constructor(public operation: Operation, public resource: any) {
-  }
+  constructor(public operation: Operation, public resource: any) {}
 }
 
 export function messageEventToResourceOperation(msg): ResourceOperation {
@@ -28,7 +29,14 @@ export function messageEventToResourceOperation(msg): ResourceOperation {
             case 'DELETED':
               return new ResourceOperation(Operation.DELETED, resource);
             default:
-              console.log('Unknown WebSocket event type ' + type + ' for ' + resource + ' on ' + this.service.serviceUrl);
+              console.log(
+                'Unknown WebSocket event type ' +
+                  type +
+                  ' for ' +
+                  resource +
+                  ' on ' +
+                  this.service.serviceUrl,
+              );
           }
         }
       }

@@ -22,7 +22,6 @@ export class ScalableResource extends KubernetesSpecResource {
    */
   public emptyReplicas: boolean;
 
-
   updateResource(resource) {
     resource.spec = this.spec;
     resource.spec.replicas = this.replicas;
@@ -52,6 +51,10 @@ export class ScalableResource extends KubernetesSpecResource {
     if (this.startingReplicas < 0) {
       this.startingReplicas = 0;
     }
-    this.emptyReplicas = !(this.availableReplicas || this.startingReplicas || this.terminatingReplicas);
+    this.emptyReplicas = !(
+      this.availableReplicas ||
+      this.startingReplicas ||
+      this.terminatingReplicas
+    );
   }
 }

@@ -4,11 +4,14 @@ import { NamespaceService } from '../service/namespace.service';
 import { KubernetesResourceStore } from './kuberentesresource.store';
 
 @Injectable()
-export class NamespaceStore extends KubernetesResourceStore<Namespace, Namespaces, NamespaceService> {
+export class NamespaceStore extends KubernetesResourceStore<
+  Namespace,
+  Namespaces,
+  NamespaceService
+> {
   constructor(namespaceNamespace: NamespaceService) {
     super(namespaceNamespace, [], {} as Namespace, Namespace);
   }
-
 
   protected get kind() {
     return 'Namespace';

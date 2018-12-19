@@ -19,7 +19,7 @@ describe('LabelReducer: ', () => {
           version: 0,
           backgroundColor: '#d1d1d1',
           borderColor: '#bbbbbb',
-          textColor: '#000000'
+          textColor: '#000000',
         },
         '2698b84a-c121-47b2-8ff5-28a76c808958': {
           id: '2698b84a-c121-47b2-8ff5-28a76c808958',
@@ -27,9 +27,9 @@ describe('LabelReducer: ', () => {
           version: 0,
           backgroundColor: '#a18fff',
           borderColor: '#8461f7',
-          textColor: '#000000'
-        }
-      }
+          textColor: '#000000',
+        },
+      },
     };
 
     labels = [
@@ -39,15 +39,16 @@ describe('LabelReducer: ', () => {
         version: 0,
         backgroundColor: '#d1d1d1',
         borderColor: '#bbbbbb',
-        textColor: '#000000'
-      }, {
+        textColor: '#000000',
+      },
+      {
         id: '2698b84a-c121-47b2-8ff5-28a76c808958',
         name: 'Important',
         version: 0,
         backgroundColor: '#a18fff',
         borderColor: '#8461f7',
-        textColor: '#000000'
-      }
+        textColor: '#000000',
+      },
     ];
   });
 
@@ -61,7 +62,7 @@ describe('LabelReducer: ', () => {
   it('Initial state should be an empty array', () => {
     const initialState = {
       ids: [],
-      entities: {}
+      entities: {},
     };
     expect(LabelInitialState).toEqual(initialState);
   });
@@ -88,7 +89,9 @@ describe('LabelReducer: ', () => {
     const state = LabelReducer(LabelInitialState, action);
 
     expect(state.ids).toContain('22fdcbda-6556-4940-8637-8af834499271');
-    expect(state.entities['22fdcbda-6556-4940-8637-8af834499271']).toEqual(labelState.entities['22fdcbda-6556-4940-8637-8af834499271']);
+    expect(state.entities['22fdcbda-6556-4940-8637-8af834499271']).toEqual(
+      labelState.entities['22fdcbda-6556-4940-8637-8af834499271'],
+    );
   });
 
   it('AddError action should return previous state', () => {

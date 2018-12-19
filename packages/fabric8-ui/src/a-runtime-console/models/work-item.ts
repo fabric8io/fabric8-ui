@@ -21,15 +21,15 @@ export class WorkItemAttributes {
 export class WorkItemRelations {
   assignees: {
     data: {
-      id: string,
-      type: string
-    }[]
+      id: string;
+      type: string;
+    }[];
   };
   baseType: {
     data: {
       id: string;
       type: string;
-    }
+    };
   };
   comments?: {
     links: {
@@ -39,9 +39,9 @@ export class WorkItemRelations {
   };
   creator: {
     data: {
-      id: string,
-      type: string
-    }
+      id: string;
+      type: string;
+    };
   };
 }
 

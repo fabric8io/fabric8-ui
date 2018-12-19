@@ -4,27 +4,27 @@ import { initContext } from 'testing/test-context';
 import { NotificationsComponent } from './notifications.component';
 
 @Component({
-  template: '<alm-notifications></alm-notifications>'
+  template: '<alm-notifications></alm-notifications>',
 })
-class HostComponent { }
+class HostComponent {}
 
 describe('NotificationsComponent', (): void => {
-
   describe('with user ID', (): void => {
     const testContext = initContext(NotificationsComponent, HostComponent, {
       providers: [
         {
-          provide: UserService, useFactory: (): any => ({
+          provide: UserService,
+          useFactory: (): any => ({
             currentLoggedInUser: {
               id: '1234',
               attributes: {
-                username: 'mock-username'
-              }
-            }
-          })
-        }
+                username: 'mock-username',
+              },
+            },
+          }),
+        },
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     });
 
     it('should set loggedInUserName', (): void => {
@@ -36,21 +36,21 @@ describe('NotificationsComponent', (): void => {
     const testContext = initContext(NotificationsComponent, HostComponent, {
       providers: [
         {
-          provide: UserService, useFactory: (): any => ({
+          provide: UserService,
+          useFactory: (): any => ({
             currentLoggedInUser: {
               attributes: {
-                username: 'mock-username'
-              }
-            }
-          })
-        }
+                username: 'mock-username',
+              },
+            },
+          }),
+        },
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     });
 
     it('should set loggedInUserName', (): void => {
       expect(testContext.testedDirective.loggedInUserName).toEqual('');
     });
   });
-
 });

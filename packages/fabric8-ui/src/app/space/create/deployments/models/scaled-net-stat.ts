@@ -1,20 +1,13 @@
 import { round } from 'lodash';
-import {
-  MemoryUnit,
-  ordinal
-} from './memory-unit';
+import { MemoryUnit, ordinal } from './memory-unit';
 import { NetStat } from './network-stat';
 import { ScaledStat } from './scaled-stat';
 
 export class ScaledNetStat implements NetStat, ScaledStat {
-
   private _raw: number;
   private _units: MemoryUnit;
 
-  constructor(
-    private _used: number,
-    private _timestamp?: number
-  ) {
+  constructor(private _used: number, private _timestamp?: number) {
     this._raw = _used;
     let scale = 0;
     while (this._used >= 1024 && scale < Object.keys(MemoryUnit).length) {
@@ -51,5 +44,4 @@ export class ScaledNetStat implements NetStat, ScaledStat {
     res._units = unit;
     return res;
   }
-
 }

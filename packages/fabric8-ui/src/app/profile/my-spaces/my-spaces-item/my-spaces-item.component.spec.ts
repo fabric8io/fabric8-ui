@@ -24,11 +24,11 @@ describe('My Spaces Item Component', () => {
       providers: [
         {
           provide: MySpacesItemService,
-          useFactory: (): MySpacesItemService => itemService
-        }
+          useFactory: (): MySpacesItemService => itemService,
+        },
       ],
       // Tells the compiler not to error on unknown elements and attributes
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     });
     TestBed.overrideProvider(MySpacesItemService, { useValue: itemService });
     space = {
@@ -37,7 +37,7 @@ describe('My Spaces Item Component', () => {
         description: 'This is my space',
         name: 'test1',
         'updated-at': '2017-12-07T21:25:59.811024Z',
-        version: 1
+        version: 1,
       },
       id: '3eeaa158-a68c-4ff3-9b0d-23ee3368d8b3',
       relationalData: {
@@ -57,10 +57,10 @@ describe('My Spaces Item Component', () => {
             'updated-at': '2017-12-07T21:25:59.811024Z',
             url: '',
             userID: '1477224e-25f1-4372-9cdd-a651ea588',
-            username: 'name@redhat.com'
-          }
-        }
-      }
+            username: 'name@redhat.com',
+          },
+        },
+      },
     };
     fixture = TestBed.createComponent(MySpacesItemComponent);
   });
@@ -85,11 +85,8 @@ describe('My Spaces Item Component', () => {
 
     let emissionCount: number = 0;
     fixture.detectChanges();
-    comp.collaboratorCount
-      .pipe(
-        take(2)
-      )
-      .subscribe((count: string): void => {
+    comp.collaboratorCount.pipe(take(2)).subscribe(
+      (count: string): void => {
         emissionCount++;
         if (emissionCount === 1) {
           expect(count).toEqual('-');
@@ -100,7 +97,8 @@ describe('My Spaces Item Component', () => {
         } else {
           done.fail('too many emissions');
         }
-      });
+      },
+    );
   });
 
   it('should retrieve number of workitems from service', (done: DoneFn): void => {
@@ -111,11 +109,8 @@ describe('My Spaces Item Component', () => {
 
     let emissionCount: number = 0;
     fixture.detectChanges();
-    comp.workItemCount
-      .pipe(
-        take(2)
-      )
-      .subscribe((count: string): void => {
+    comp.workItemCount.pipe(take(2)).subscribe(
+      (count: string): void => {
         emissionCount++;
         if (emissionCount === 1) {
           expect(count).toEqual('-');
@@ -125,6 +120,7 @@ describe('My Spaces Item Component', () => {
         } else {
           done.fail('too many emissions');
         }
-      });
+      },
+    );
   });
 });

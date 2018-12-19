@@ -2,15 +2,13 @@ import { Directive, ElementRef, Input, OnChanges, OnInit } from '@angular/core';
 import { IconMap } from './iconmap';
 
 @Directive({
-    selector: '[almIcon]',
-    exportAs: 'almIcon'
+  selector: '[almIcon]',
+  exportAs: 'almIcon',
 })
-
 export class AlmIconDirective implements OnInit, OnChanges {
   @Input() iconType: string = 'none';
 
-  constructor(private elementRef: ElementRef) {
-  }
+  constructor(private elementRef: ElementRef) {}
 
   ngOnInit() {
     this.addIcon();

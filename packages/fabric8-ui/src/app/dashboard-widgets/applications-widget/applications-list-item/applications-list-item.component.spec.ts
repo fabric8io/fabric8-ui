@@ -2,14 +2,14 @@ import { CommonModule, LocationStrategy } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Context, Contexts } from 'ngx-fabric8-wit';
-import { BehaviorSubject, never as observableNever,  Observable, of as observableOf } from 'rxjs';
+import { BehaviorSubject, never as observableNever, Observable, of as observableOf } from 'rxjs';
 import { initContext, TestContext } from 'testing/test-context';
 import { Build } from '../../../../a-runtime-console/index';
 import { ApplicationsListItemComponent } from './applications-list-item.component';
 
 @Component({
   selector: 'fabric8-applications-list-item-details',
-  template: ''
+  template: '',
 })
 class FakeApplicationsListItemDetailsComponent {
   @Input() build: Build;
@@ -17,15 +17,14 @@ class FakeApplicationsListItemDetailsComponent {
 
 @Component({
   selector: 'input-action-dialog',
-  template: ''
+  template: '',
 })
-class FakeInputActionDialogComponent {
-}
+class FakeInputActionDialogComponent {}
 
 @Component({
-  template: '<fabric8-applications-list-item></fabric8-applications-list-item>'
+  template: '<fabric8-applications-list-item></fabric8-applications-list-item>',
 })
-class HostComponent { }
+class HostComponent {}
 
 describe('ApplicationsListItemComponent', () => {
   type TestingContext = TestContext<ApplicationsListItemComponent, HostComponent>;
@@ -36,50 +35,60 @@ describe('ApplicationsListItemComponent', () => {
     id: 'app1',
     name: 'app1',
     gitUrl: 'https://example.com/app1.git',
-    interestingBuilds: [{
-      buildNumber: '1',
-      firstPendingInputAction: {
-        proceedUrl: 'https://example.com/app1.git'
+    interestingBuilds: [
+      {
+        buildNumber: '1',
+        firstPendingInputAction: {
+          proceedUrl: 'https://example.com/app1.git',
+        },
+        jenkinsNamespace: 'namespace-jenkins',
+        pipelineStages: [
+          {
+            jenkinsInputURL: 'https://example.com/app1.git',
+            name: 'Build Release',
+            status: 'SUCCESS',
+          },
+          {
+            jenkinsInputURL: 'https://example.com/app1.git',
+            name: 'Rollout to Stage',
+            serviceUrl: 'https://example.com/app1.git',
+            status: 'SUCCESS',
+          },
+          {
+            jenkinsInputURL: 'https://example.com/app1.git',
+            name: 'Approve',
+            status: 'SUCCESS',
+          },
+          {
+            jenkinsInputURL: 'https://example.com/app1.git',
+            name: 'Rollout to Run',
+            serviceUrl: 'https://example.com/app1.git',
+            status: 'SUCCESS',
+          },
+        ],
+        statusPhase: 'Complete',
       },
-      jenkinsNamespace: 'namespace-jenkins',
-      pipelineStages: [{
-        jenkinsInputURL: 'https://example.com/app1.git',
-        name: 'Build Release',
-        status: 'SUCCESS'
-      }, {
-        jenkinsInputURL: 'https://example.com/app1.git',
-        name: 'Rollout to Stage',
-        serviceUrl: 'https://example.com/app1.git',
-        status: 'SUCCESS'
-      }, {
-        jenkinsInputURL: 'https://example.com/app1.git',
-        name: 'Approve',
-        status: 'SUCCESS'
-      }, {
-        jenkinsInputURL: 'https://example.com/app1.git',
-        name: 'Rollout to Run',
-        serviceUrl: 'https://example.com/app1.git',
-        status: 'SUCCESS'
-      }],
-      statusPhase: 'Complete'
-    }],
+    ],
     labels: {
-      space: 'space1'
+      space: 'space1',
     },
-    serviceUrls: [{
-      environmentName: 'Run',
-      name: 'app1',
-      url: 'https://example.com/app1.git'
-    }, {
-      environmentName: 'Stage',
-      name: 'app1',
-      url: 'https://example.com/app1.git'
-    }]
+    serviceUrls: [
+      {
+        environmentName: 'Run',
+        name: 'app1',
+        url: 'https://example.com/app1.git',
+      },
+      {
+        environmentName: 'Stage',
+        name: 'app1',
+        url: 'https://example.com/app1.git',
+      },
+    ],
   };
 
   let mockRouterEvent: any = {
-    'id': 1,
-    'url': 'mock-url'
+    id: 1,
+    url: 'mock-url',
   };
 
   let mockActivatedRoute: any = jasmine.createSpy('ActivatedRoute');
@@ -93,34 +102,33 @@ describe('ApplicationsListItemComponent', () => {
         path: '/user/space',
         space: {
           attributes: {
-            name: 'space'
-          }
-        }
+            name: 'space',
+          },
+        },
       } as Context),
       recent: observableNever(),
-      default: observableNever()
+      default: observableNever(),
     };
     mockRouter.events = observableOf(mockRouterEvent);
   });
 
-  const testContext = initContext(ApplicationsListItemComponent, HostComponent, {
-    imports: [
-      CommonModule,
-      RouterModule
-    ],
-    declarations: [
-      FakeApplicationsListItemDetailsComponent,
-      FakeInputActionDialogComponent
-    ],
-    providers: [
-      { provide: ActivatedRoute, useValue: mockActivatedRoute },
-      { provide: Contexts, useFactory: () => contexts },
-      { provide: LocationStrategy, useValue: mockLocationStrategy },
-      { provide: Router, useValue: mockRouter }
-    ]
-  }, (component: ApplicationsListItemComponent): void => {
-    component.buildConfig = buildConfig as any;
-  });
+  const testContext = initContext(
+    ApplicationsListItemComponent,
+    HostComponent,
+    {
+      imports: [CommonModule, RouterModule],
+      declarations: [FakeApplicationsListItemDetailsComponent, FakeInputActionDialogComponent],
+      providers: [
+        { provide: ActivatedRoute, useValue: mockActivatedRoute },
+        { provide: Contexts, useFactory: () => contexts },
+        { provide: LocationStrategy, useValue: mockLocationStrategy },
+        { provide: Router, useValue: mockRouter },
+      ],
+    },
+    (component: ApplicationsListItemComponent): void => {
+      component.buildConfig = buildConfig as any;
+    },
+  );
 
   describe('Applications list item with build config', () => {
     it('Build config should be set', function() {

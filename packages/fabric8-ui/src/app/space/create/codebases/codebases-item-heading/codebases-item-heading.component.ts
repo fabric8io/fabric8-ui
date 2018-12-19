@@ -6,7 +6,7 @@ import { Che } from '../services/che';
   encapsulation: ViewEncapsulation.None,
   selector: 'codebases-item-heading',
   templateUrl: './codebases-item-heading.component.html',
-  styleUrls: ['./codebases-item-heading.component.less']
+  styleUrls: ['./codebases-item-heading.component.less'],
 })
 export class CodebasesItemHeadingComponent implements OnInit {
   @Input() cheState: Che;
@@ -16,13 +16,12 @@ export class CodebasesItemHeadingComponent implements OnInit {
   cheRunningMessage: string = 'Your Workspaces have loaded successfully';
   cheStartingMessage: string = 'Your Workspaces are loading...';
   cheFinishedMultiTenantMigrationMessage: string = 'Migration has finished!';
-  chePerformingMultiTenantMigrationMessage: string = 'Migrating workspaces to the new version of Che...';
+  chePerformingMultiTenantMigrationMessage: string =
+    'Migrating workspaces to the new version of Che...';
 
-  constructor() {
-  }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   /**
    * Returns the notification message based on state of Che.
@@ -33,7 +32,8 @@ export class CodebasesItemHeadingComponent implements OnInit {
     if (this.cheState !== undefined && this.cheState !== null) {
       if (this.cheState.multiTenant !== undefined && this.cheState.multiTenant === true) {
         return this.cheState.running
-          ? this.cheFinishedMultiTenantMigrationMessage : this.chePerformingMultiTenantMigrationMessage;
+          ? this.cheFinishedMultiTenantMigrationMessage
+          : this.chePerformingMultiTenantMigrationMessage;
       } else {
         return this.cheState.running ? this.cheRunningMessage : this.cheStartingMessage;
       }

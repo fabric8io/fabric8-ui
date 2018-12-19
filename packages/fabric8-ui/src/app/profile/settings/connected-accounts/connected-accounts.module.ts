@@ -7,14 +7,9 @@ import { ConnectedAccountsComponent } from './connected-accounts.component';
 
 import { TenantService } from '../../services/tenant.service';
 @NgModule({
-  imports: [
-    RouterModule,
-    CommonModule,
-    ConnectedAccountsRoutingModule,
-    TooltipModule.forRoot()
-  ],
+  imports: [RouterModule, CommonModule, ConnectedAccountsRoutingModule, TooltipModule.forRoot()],
   declarations: [ConnectedAccountsComponent],
   providers: [TenantService],
-  exports: [ConnectedAccountsComponent]
+  exports: [ConnectedAccountsComponent],
 })
-export class ConnectedAccountsModule { }
+export class ConnectedAccountsModule {}

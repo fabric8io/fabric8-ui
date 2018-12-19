@@ -9,7 +9,6 @@ import { IMyDateModel, IMyOptions } from 'mydatepicker';
 import { WorkItemUI } from '../../models/work-item';
 import { WorkItemService } from './../../services/work-item.service';
 
-
 export class DynamicUpdateEvent {
   key: string;
   newValue: any;
@@ -33,10 +32,9 @@ export class DynamicUpdateEvent {
 @Component({
   selector: 'alm-dynamic-field',
   templateUrl: './dynamic-field.component.html',
-  styleUrls: ['./dynamic-field.component.less']
+  styleUrls: ['./dynamic-field.component.less'],
 })
 export class DynamicFieldComponent implements OnInit {
-
   // pristine old value that is needed for the cancel operation.
   private oldValue = null;
   private fieldValue = null;
@@ -57,12 +55,11 @@ export class DynamicFieldComponent implements OnInit {
     // set the dropdown values
     // to support the dropdown
     if (this.fieldValue.field.type.kind === 'enum') {
-      this.dropdownMenuItems = this.extractEnumKeyValues(
-        this.fieldValue.field.type.values
-      );
+      this.dropdownMenuItems = this.extractEnumKeyValues(this.fieldValue.field.type.values);
 
-      this.dropdownSelectedItems =
-        this.dropdownMenuItems.filter(v => v.key === this.fieldValue.value);
+      this.dropdownSelectedItems = this.dropdownMenuItems.filter(
+        (v) => v.key === this.fieldValue.value,
+      );
     }
 
     // if it's an boolean type
@@ -71,8 +68,9 @@ export class DynamicFieldComponent implements OnInit {
     if (this.fieldValue.field.type.kind === 'boolean') {
       this.dropdownMenuItems = this.extractBooleanKeyValues();
 
-      this.dropdownSelectedItems =
-        this.dropdownMenuItems.filter(v => v.key === this.fieldValue.value);
+      this.dropdownSelectedItems = this.dropdownMenuItems.filter(
+        (v) => v.key === this.fieldValue.value,
+      );
     }
 
     // if it's a markup type
@@ -82,17 +80,13 @@ export class DynamicFieldComponent implements OnInit {
       if (this.fieldValue.value == null) {
         this.showField = false;
       } else if (this.markupCallBack != null) {
-        this.markupCallBack(
-          this.fieldValue.value.content,
-          this.fieldValue.value.rendered
-        );
+        this.markupCallBack(this.fieldValue.value.content, this.fieldValue.value.rendered);
         this.markupCallBack = null;
       }
     }
 
     this.oldValue = this.fieldValue.value;
   }
-
 
   // this is the type schema taken from the work item type.
   @Input() attributeDesc: any;
@@ -123,13 +117,10 @@ export class DynamicFieldComponent implements OnInit {
     openSelectorOnInputClick: true,
     editableDateField: false,
     showClearDateBtn: false,
-    componentDisabled: false
+    componentDisabled: false,
   };
 
-  constructor(
-    protected logger: Logger,
-    protected workItemService: WorkItemService
-  ) {}
+  constructor(protected logger: Logger, protected workItemService: WorkItemService) {}
 
   ngOnInit(): void {
     // // get the attribute key from the descriptor
@@ -149,8 +140,7 @@ export class DynamicFieldComponent implements OnInit {
 
   isValid() {
     if (this.fieldValue.field.type.kind === 'enum') {
-      return this.fieldValue.field.type.values
-        .findIndex(v => v === this.fieldValue.value) > -1;
+      return this.fieldValue.field.type.values.findIndex((v) => v === this.fieldValue.value) > -1;
     } else {
       return true;
     }
@@ -167,40 +157,44 @@ export class DynamicFieldComponent implements OnInit {
 
   extractEnumKeyValues(possibleOptions: string[]): any[] {
     return [
-      ...possibleOptions.map(v => {
+      ...possibleOptions.map((v) => {
         return {
           key: v,
-          value: v
+          value: v,
         };
-      })
+      }),
     ];
   }
 
   extractBooleanKeyValues(): any[] {
-    let values = [ {
-      key: null,
-      value: 'None'
-    }, {
-      key: 'true',
-      value: 'Yes'
-    }, {
-      key: 'false',
-      value: 'No'
-    }];
+    let values = [
+      {
+        key: null,
+        value: 'None',
+      },
+      {
+        key: 'true',
+        value: 'Yes',
+      },
+      {
+        key: 'false',
+        value: 'No',
+      },
+    ];
     return values;
   }
 
   onChangeDropdown(newOptions: any[]) {
-    const newValue = newOptions
-      .map(option => option.key)
-      .join();
+    const newValue = newOptions.map((option) => option.key).join();
     const oldValue = this.oldValue;
     const field = this.fieldValue.field;
     const key = this.fieldValue.key;
     this.loadingField = true;
     this.onUpdate.emit({
-      newValue, oldValue,
-      field, key
+      newValue,
+      oldValue,
+      field,
+      key,
     });
   }
 
@@ -217,8 +211,10 @@ export class DynamicFieldComponent implements OnInit {
     const key = this.fieldValue.key;
     this.loadingField = true;
     this.onUpdate.emit({
-      newValue, oldValue,
-      field, key
+      newValue,
+      oldValue,
+      field,
+      key,
     });
   }
 
@@ -227,7 +223,11 @@ export class DynamicFieldComponent implements OnInit {
       return undefined;
     } else {
       let date: Date = new Date(dateValue);
-      let convertedDate = { year: date.getUTCFullYear(), month: date.getUTCMonth() + 1, day: date.getUTCDate() } ;
+      let convertedDate = {
+        year: date.getUTCFullYear(),
+        month: date.getUTCMonth() + 1,
+        day: date.getUTCDate(),
+      };
       return convertedDate;
     }
   }
@@ -239,8 +239,10 @@ export class DynamicFieldComponent implements OnInit {
     const field = this.fieldValue.field;
     const key = this.fieldValue.key;
     this.onUpdate.emit({
-      newValue, oldValue,
-      field, key
+      newValue,
+      oldValue,
+      field,
+      key,
     });
   }
 
@@ -253,22 +255,21 @@ export class DynamicFieldComponent implements OnInit {
   markupUpdate(event: any): void {
     this.markupCallBack = event.callBack;
     if (event.rawText === this.oldValue.content) {
-      this.markupCallBack(
-        this.oldValue.content,
-        this.oldValue.rendered
-      );
+      this.markupCallBack(this.oldValue.content, this.oldValue.rendered);
       this.markupCallBack = null;
     } else {
       const newValue = {
         content: event.rawText,
-        markup: 'Markdown'
+        markup: 'Markdown',
       };
       const oldValue = this.oldValue;
       const field = this.fieldValue.field;
       const key = this.fieldValue.key;
       this.onUpdate.emit({
-        newValue, oldValue,
-        field, key
+        newValue,
+        oldValue,
+        field,
+        key,
       });
     }
   }
@@ -276,13 +277,9 @@ export class DynamicFieldComponent implements OnInit {
   showPreview(event: any): void {
     const rawText = event.rawText;
     const callBack = event.callBack;
-    this.workItemService.renderMarkDown(rawText)
-      .subscribe(renderedHtml => {
-        callBack(
-          rawText,
-          renderedHtml
-        );
-      });
+    this.workItemService.renderMarkDown(rawText).subscribe((renderedHtml) => {
+      callBack(rawText, renderedHtml);
+    });
   }
 
   cancel() {

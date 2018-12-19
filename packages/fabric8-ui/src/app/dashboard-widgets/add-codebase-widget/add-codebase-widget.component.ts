@@ -5,13 +5,10 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
 import { Broadcaster } from 'ngx-base';
-import {
-  Context,
-  Contexts
-} from 'ngx-fabric8-wit';
+import { Context, Contexts } from 'ngx-fabric8-wit';
 import { Subscription } from 'rxjs';
 import { Codebase } from '../../space/create/codebases/services/codebase';
 import { CodebasesService } from '../../space/create/codebases/services/codebases.service';
@@ -20,10 +17,9 @@ import { CodebasesService } from '../../space/create/codebases/services/codebase
   encapsulation: ViewEncapsulation.None,
   selector: 'fabric8-add-codebase-widget',
   templateUrl: './add-codebase-widget.component.html',
-  styleUrls: ['./add-codebase-widget.component.less']
+  styleUrls: ['./add-codebase-widget.component.less'],
 })
 export class AddCodebaseWidgetComponent implements OnInit, OnDestroy {
-
   codebases: Codebase[] = [];
   context: Context;
   contextPath: string;
@@ -36,29 +32,31 @@ export class AddCodebaseWidgetComponent implements OnInit, OnDestroy {
   constructor(
     private broadcaster: Broadcaster,
     private contexts: Contexts,
-    private codebaseService: CodebasesService
-  ) { }
+    private codebaseService: CodebasesService,
+  ) {}
 
   ngOnInit() {
-    this.subscriptions.push(this.broadcaster
-      .on('codebaseAdded')
-      .subscribe((codebase: Codebase) => {
+    this.subscriptions.push(
+      this.broadcaster.on('codebaseAdded').subscribe((codebase: Codebase) => {
         this.addCodebase(codebase);
-      }));
+      }),
+    );
 
-    this.subscriptions.push(this.broadcaster
-      .on('codebaseDeleted')
-      .subscribe((codebase: Codebase) => {
+    this.subscriptions.push(
+      this.broadcaster.on('codebaseDeleted').subscribe((codebase: Codebase) => {
         this.removeCodebase(codebase);
-      }));
+      }),
+    );
 
-    this.subscriptions.push(this.contexts.current.subscribe(context => {
-      this.context = context;
-      this.contextPath = context.path;
-      if (context.space) {
-        this.updateCodebases();
-      }
-    }));
+    this.subscriptions.push(
+      this.contexts.current.subscribe((context) => {
+        this.context = context;
+        this.contextPath = context.path;
+        if (context.space) {
+          this.updateCodebases();
+        }
+      }),
+    );
   }
 
   ngOnDestroy() {
@@ -80,12 +78,11 @@ export class AddCodebaseWidgetComponent implements OnInit, OnDestroy {
         this.codebases = codebases;
         this.sortCodebases();
         this.loading = false;
-      })
+      }),
     );
   }
 
   private sortCodebases(): void {
     this.codebases.sort((a: Codebase, b: Codebase): number => -1 * a.name.localeCompare(b.name));
   }
-
 }

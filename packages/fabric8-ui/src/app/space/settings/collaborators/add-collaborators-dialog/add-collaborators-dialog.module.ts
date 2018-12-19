@@ -6,8 +6,8 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { AddCollaboratorsDialogComponent } from './add-collaborators-dialog.component';
 
 @NgModule({
-  imports:      [ CommonModule, ModalModule.forRoot(), FormsModule,  NgSelectModule ],
-  declarations: [ AddCollaboratorsDialogComponent ],
-  exports: [ AddCollaboratorsDialogComponent, ModalModule ]
+  imports: [CommonModule, ModalModule.forRoot(), FormsModule, NgSelectModule],
+  declarations: [AddCollaboratorsDialogComponent],
+  exports: [AddCollaboratorsDialogComponent, ModalModule],
 })
-export class AddCollaboratorsDialogModule { }
+export class AddCollaboratorsDialogModule {}

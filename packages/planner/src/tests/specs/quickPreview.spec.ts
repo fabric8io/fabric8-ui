@@ -2,7 +2,6 @@ import { browser } from 'protractor';
 import { PlannerPage } from '../page_objects/planner';
 import * as support from '../support';
 
-
 describe('Quick preview tests: ', () => {
   let planner: PlannerPage;
   let c = new support.Constants();
@@ -33,7 +32,7 @@ describe('Quick preview tests: ', () => {
   });
 
   it('should open quickpreview and create new label', async () => {
-    let workitemname = {'title': 'test labels'},
+    let workitemname = { title: 'test labels' },
       newLabel = 'new label';
     await planner.createWorkItem(workitemname);
     await planner.workItemList.clickWorkItem(workitemname.title);
@@ -43,7 +42,7 @@ describe('Quick preview tests: ', () => {
   });
 
   it('should open quickpreview and create new label using Enter Key', async () => {
-    let workitemname = {'title': 'text labels'};
+    let workitemname = { title: 'text labels' };
     let newLabel = 'Enter Key Label';
     await planner.createWorkItem(workitemname);
     await planner.workItemList.clickWorkItem(workitemname.title);
@@ -52,7 +51,7 @@ describe('Quick preview tests: ', () => {
   });
 
   it('should link a workitem', async () => {
-    let workitemname = {'title': 'link test'},
+    let workitemname = { title: 'link test' },
       linkType = 'blocks';
     await planner.createWorkItem(workitemname);
     await planner.workItemList.clickWorkItem(workitemname.title);
@@ -70,8 +69,8 @@ describe('Quick preview tests: ', () => {
   });
 
   it('description box should not be open for wis', async () => {
-    let workitemname = {'title': 'quickpreview test'};
-    let workitemname2 = { 'title': 'description box should not be open'};
+    let workitemname = { title: 'quickpreview test' };
+    let workitemname2 = { title: 'description box should not be open' };
     await planner.createWorkItem(workitemname);
     await planner.createWorkItem(workitemname2);
     await planner.workItemList.clickWorkItem(workitemname.title);
@@ -85,17 +84,21 @@ describe('Quick preview tests: ', () => {
   });
 
   it('should close assignee dropdown when clicked outside', async () => {
-    let workitemname = {'title': 'close assignee dropdown'};
+    let workitemname = { title: 'close assignee dropdown' };
     await planner.createWorkItem(workitemname);
     await planner.workItemList.clickWorkItem(workitemname.title);
     await planner.quickPreview.assigneeDropdown.clickWhenReady();
-    expect(await planner.quickPreview.assigneeDropdownMenu.getAttribute('className')).toContain('show');
+    expect(await planner.quickPreview.assigneeDropdownMenu.getAttribute('className')).toContain(
+      'show',
+    );
     await planner.quickPreview.titleInput.clickWhenReady();
-    expect(await planner.quickPreview.assigneeDropdownMenu.getAttribute('className')).not.toContain('show');
+    expect(await planner.quickPreview.assigneeDropdownMenu.getAttribute('className')).not.toContain(
+      'show',
+    );
   });
 
   it('Should not close description box on outside click if the description is changed', async () => {
-    let workitemname = {'title': 'close description box on outside click'};
+    let workitemname = { title: 'close description box on outside click' };
     await planner.createWorkItem(workitemname);
     await planner.workItemList.clickWorkItem(workitemname.title);
     await planner.quickPreview.openDescriptionBox();

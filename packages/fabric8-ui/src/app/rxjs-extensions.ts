@@ -1,6 +1,5 @@
 // Observable class extensions
 
-
 // Observable operators
 
 import 'rxjs/operators/debounceTime';

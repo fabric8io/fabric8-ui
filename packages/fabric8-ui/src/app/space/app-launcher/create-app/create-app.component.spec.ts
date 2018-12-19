@@ -14,7 +14,7 @@ import {
   MissionRuntimeService,
   Pipeline,
   PipelineService,
-  ProjectSummaryService
+  ProjectSummaryService,
 } from 'ngx-launcher';
 import { of } from 'rxjs';
 import { createMock } from 'testing/mock';
@@ -32,47 +32,53 @@ describe('CreateAppComponent', () => {
   let cheService: jasmine.SpyObj<CheService>;
   let workSpaceService: jasmine.SpyObj<WorkspacesService>;
   const mockFeature: Feature = {
-    'attributes': {
-      'name': 'mock-attribute',
-      'enabled': true,
-      'user-enabled': true
-    }
+    attributes: {
+      name: 'mock-attribute',
+      enabled: true,
+      'user-enabled': true,
+    },
   } as Feature;
   let featureTogglesService: jasmine.SpyObj<FeatureTogglesService>;
 
   let missionRuntimeService: jasmine.SpyObj<AppLauncherMissionRuntimeService>;
-  const mockboosters: Booster[] = [{
-    name: '',
-    mission: {
-      id: '',
-      name: ''
-    },
-    runtime: {
-      id: '',
+  const mockboosters: Booster[] = [
+    {
       name: '',
-      icon: ''
+      mission: {
+        id: '',
+        name: '',
+      },
+      runtime: {
+        id: '',
+        name: '',
+        icon: '',
+      },
+      version: {
+        id: '',
+        name: '',
+      },
     },
-    version: {
-      id: '',
-      name: ''
-    }
-  }];
+  ];
   const mockCatalog: Catalog = {
     missions: [],
     runtimes: [],
-    boosters: []
+    boosters: [],
   };
 
   let pipelineService: jasmine.SpyObj<AppLauncherPipelineService>;
-  const mockPipeline: Pipeline[] = [{
-    name: '',
-    id: '',
-    platform: '',
-    stages: [{
+  const mockPipeline: Pipeline[] = [
+    {
       name: '',
-      description: ''
-    }]
-  }];
+      id: '',
+      platform: '',
+      stages: [
+        {
+          name: '',
+          description: '',
+        },
+      ],
+    },
+  ];
 
   let gitProviderService: jasmine.SpyObj<AppLauncherGitproviderService>;
   let dependencyCheckService: jasmine.SpyObj<AppLauncherDependencyCheckService>;
@@ -81,7 +87,7 @@ describe('CreateAppComponent', () => {
     mavenArtifact: '',
     projectName: '',
     projectVersion: '',
-    spacePath: ''
+    spacePath: '',
   };
 
   beforeEach(async(() => {
@@ -90,8 +96,12 @@ describe('CreateAppComponent', () => {
     cheService.start.and.returnValue(of({ running: true, multiTenant: false }));
 
     workSpaceService = createMock(WorkspacesService);
-    workSpaceService.createWorkspace.and.returnValue(of({links: {open: 'https://che.prod-preview.openshift.io/preview/woj9w'}}));
-    workSpaceService.getWorkspaces.and.returnValue(of({data: [{attributes: {name: 'woj9w', description: ''}, type: 'workspaces'}]}));
+    workSpaceService.createWorkspace.and.returnValue(
+      of({ links: { open: 'https://che.prod-preview.openshift.io/preview/woj9w' } }),
+    );
+    workSpaceService.getWorkspaces.and.returnValue(
+      of({ data: [{ attributes: { name: 'woj9w', description: '' }, type: 'workspaces' }] }),
+    );
     workSpaceService.openWorkspace.and.returnValue(of({}));
 
     featureTogglesService = createMock(FeatureTogglesService);
@@ -111,7 +121,9 @@ describe('CreateAppComponent', () => {
 
     dependencyCheckService = createMock(AppLauncherDependencyCheckService);
     dependencyCheckService.getDependencyCheck.and.returnValue(of(mockDepencyCheck));
-    dependencyCheckService.getApplicationsInASpace.and.returnValue(of([{attributes: {name: 'app-1'}}]));
+    dependencyCheckService.getApplicationsInASpace.and.returnValue(
+      of([{ attributes: { name: 'app-1' } }]),
+    );
 
     TestBed.configureTestingModule({
       imports: [
@@ -119,50 +131,55 @@ describe('CreateAppComponent', () => {
         LauncherModule,
         FeatureFlagModule,
         HttpClientTestingModule,
-        RouterTestingModule
+        RouterTestingModule,
       ],
-      declarations: [
-        CreateAppComponent
-      ],
+      declarations: [CreateAppComponent],
       providers: [
         ProjectSummaryService,
         {
           provide: CheService,
           useFactory: () => cheService,
-          deps: []
+          deps: [],
         },
         {
           provide: WorkspacesService,
           useFactory: () => workSpaceService,
-          deps: []
+          deps: [],
         },
         {
           provide: FeatureTogglesService,
           useFactory: () => featureTogglesService,
-          deps: []
+          deps: [],
         },
         {
           provide: MissionRuntimeService,
           useFactory: () => missionRuntimeService,
-          deps: []
-        }, {
+          deps: [],
+        },
+        {
           provide: PipelineService,
           useFactory: () => pipelineService,
-          deps: []
-        }, {
+          deps: [],
+        },
+        {
           provide: GitProviderService,
           useFactory: () => gitProviderService,
-          deps: []
-        }, {
+          deps: [],
+        },
+        {
           provide: DependencyCheckService,
           useFactory: () => dependencyCheckService,
-          deps: []
-        }, { provide: Notifications, useFactory: (): jasmine.SpyObj<Notifications> => {
-          const mock: jasmine.SpyObj<Notifications> = createMock(Notifications);
-          mock.message.and.returnValue(of({}));
-          return mock;
-        }}
-      ]
+          deps: [],
+        },
+        {
+          provide: Notifications,
+          useFactory: (): jasmine.SpyObj<Notifications> => {
+            const mock: jasmine.SpyObj<Notifications> = createMock(Notifications);
+            mock.message.and.returnValue(of({}));
+            return mock;
+          },
+        },
+      ],
     }).compileComponents();
   }));
 
@@ -179,7 +196,7 @@ describe('CreateAppComponent', () => {
   it('should add query params', async(() => {
     component.projectName = 'app-1';
     fixture.detectChanges();
-    const query = { 'q': '{\"application\":[\"' + component.projectName + '\"]}'};
+    const query = { q: '{"application":["' + component.projectName + '"]}' };
     expect(component.addQuery()).toEqual(query);
   }));
 });

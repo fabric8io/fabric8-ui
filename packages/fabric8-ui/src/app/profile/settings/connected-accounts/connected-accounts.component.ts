@@ -11,7 +11,7 @@ import { TenantService } from '../../services/tenant.service';
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-connected-accounts',
   templateUrl: './connected-accounts.component.html',
-  styleUrls: ['./connected-accounts.component.less']
+  styleUrls: ['./connected-accounts.component.less'],
 })
 export class ConnectedAccountsComponent implements OnDestroy, OnInit {
   context: Context;
@@ -36,30 +36,43 @@ export class ConnectedAccountsComponent implements OnDestroy, OnInit {
     auth: AuthenticationService,
     userService: UserService,
     private readonly providerService: ProviderService,
-    private tenantService: TenantService
+    private tenantService: TenantService,
   ) {
-    this.subscriptions.push(auth.gitHubToken.subscribe((token: string): void => {
-      this.gitHubLinked = (token !== undefined && token.length !== 0);
-    }));
-    this.subscriptions.push(contexts.current.subscribe((val: Context): void => {
-      this.contextUserName = val.user.attributes.username;
-    }));
+    this.subscriptions.push(
+      auth.gitHubToken.subscribe(
+        (token: string): void => {
+          this.gitHubLinked = token !== undefined && token.length !== 0;
+        },
+      ),
+    );
+    this.subscriptions.push(
+      contexts.current.subscribe(
+        (val: Context): void => {
+          this.contextUserName = val.user.attributes.username;
+        },
+      ),
+    );
 
     if (userService.currentLoggedInUser.attributes) {
       const user: User = userService.currentLoggedInUser;
-      this.subscriptions.push(auth.isOpenShiftConnected(user.attributes.cluster).subscribe((isConnected: boolean): void => {
-        this.openShiftLinked = isConnected;
-      }));
+      this.subscriptions.push(
+        auth.isOpenShiftConnected(user.attributes.cluster).subscribe(
+          (isConnected: boolean): void => {
+            this.openShiftLinked = isConnected;
+          },
+        ),
+      );
       this.cluster = user.attributes.cluster;
     }
 
-    this.subscriptions.push(this.tenantService.getTenant()
-      .pipe(
-        map(data => data.attributes.namespaces[0]['cluster-console-url'])
-      ).subscribe(url => {
-        this.consoleUrl = url;
-        this.clusterName = url.split('.')[1];
-      })
+    this.subscriptions.push(
+      this.tenantService
+        .getTenant()
+        .pipe(map((data) => data.attributes.namespaces[0]['cluster-console-url']))
+        .subscribe((url) => {
+          this.consoleUrl = url;
+          this.clusterName = url.split('.')[1];
+        }),
     );
   }
 
@@ -74,10 +87,12 @@ export class ConnectedAccountsComponent implements OnDestroy, OnInit {
   }
 
   disconnectGitHub(): void {
-    this.providerService.disconnectGitHub().subscribe((): void => {
-      this.gitHubLinked = false;
-      this.gitHubError = 'Disconnected';
-    });
+    this.providerService.disconnectGitHub().subscribe(
+      (): void => {
+        this.gitHubLinked = false;
+        this.gitHubError = 'Disconnected';
+      },
+    );
   }
 
   refreshGitHub(): void {
@@ -106,7 +121,7 @@ export class ConnectedAccountsComponent implements OnDestroy, OnInit {
       () => {
         this.gitHubError = 'Disconnected';
         this.gitHubLinked = false;
-      }
+      },
     );
   }
 
@@ -119,7 +134,7 @@ export class ConnectedAccountsComponent implements OnDestroy, OnInit {
       () => {
         this.openShiftError = 'Not Connected';
         this.openShiftLinked = false;
-      }
+      },
     );
   }
 }

@@ -27,7 +27,7 @@ let conf: Config = {
     showColors: true,
     silent: true,
     isVerbose: true,
-    defaultTimeoutInterval: 3 * 60 * 1000 // 3 mins for spec to run
+    defaultTimeoutInterval: 3 * 60 * 1000, // 3 mins for spec to run
   },
 
   directConnect: process.env.DIRECT_CONNECTION === 'true',
@@ -38,24 +38,22 @@ let conf: Config = {
   // Ref: https://github.com/angular/protractor/tree/master/exampleTypescript/asyncAwait
   SELENIUM_PROMISE_MANAGER: false,
 
-  specs: [
-    'specs/smoke/smokeTest.spec.js',
-    'specs/*.js'
-  ],
+  specs: ['specs/smoke/smokeTest.spec.js', 'specs/*.js'],
   suites: {
     smokeTest: ['specs/smoke/smokeTest.spec.js'],
     quickPreviewTest: ['specs/**/quickPreview.spec.js'],
     workItemTableTest: ['specs/**/workItemTableTest.spec.js'],
-    fullTest: ['specs/**/*.spec.js']
+    fullTest: ['specs/**/*.spec.js'],
   },
 
   //launch chrome instance
   capabilities: {
     browserName: 'chrome',
     chromeOptions: {
-      args: process.env.HEADLESS_MODE === 'true' ? ['--no-sandbox', '--headless'] : ['--no-sandbox']
+      args:
+        process.env.HEADLESS_MODE === 'true' ? ['--no-sandbox', '--headless'] : ['--no-sandbox'],
     },
-    name: 'browserAgile'
+    name: 'browserAgile',
   },
 
   // Assign the test reporter to each running instance
@@ -65,23 +63,26 @@ let conf: Config = {
       new SpecReporter({
         spec: {
           displayStacktrace: true,
-          displayDuration: true
+          displayDuration: true,
         },
         summary: {
-          displayDuration: true
-        }
-      })
+          displayDuration: true,
+        },
+      }),
     );
     // Disable control flow
     browser.ignoreSynchronization = true;
-    browser.baseUrl = browser.baseUrl + '/' + process.env.USER_NAME + '/' + process.env.SPACE_NAME_SCRUM + '/plan';
-    browser.token = encodeURIComponent(JSON.stringify({
-      access_token: process.env.AUTH_TOKEN,
-      expires_in: 1800,
-      refresh_token: process.env.REFRESH_TOKEN,
-      token_type: 'bearer'
-    }));
-  }
+    browser.baseUrl =
+      browser.baseUrl + '/' + process.env.USER_NAME + '/' + process.env.SPACE_NAME_SCRUM + '/plan';
+    browser.token = encodeURIComponent(
+      JSON.stringify({
+        access_token: process.env.AUTH_TOKEN,
+        expires_in: 1800,
+        refresh_token: process.env.REFRESH_TOKEN,
+        token_type: 'bearer',
+      }),
+    );
+  },
 };
 
 exports.config = conf;

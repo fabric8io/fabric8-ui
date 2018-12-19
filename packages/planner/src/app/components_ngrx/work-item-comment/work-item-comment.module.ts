@@ -8,16 +8,11 @@ import {
   BsDropdownModule,
   CollapseModule,
   TooltipConfig,
-  TooltipModule
+  TooltipModule,
 } from 'ngx-bootstrap';
 import { AuthenticationService } from 'ngx-login-client';
 
-import {
-  AlmEditableModule,
-  AlmIconModule,
-  MarkdownModule,
-  WidgetsModule
-} from 'ngx-widgets';
+import { AlmEditableModule, AlmIconModule, MarkdownModule, WidgetsModule } from 'ngx-widgets';
 import { SafePipeModule } from '../../pipes/safe.module';
 import { ClickOutModule } from '../../widgets/clickout/clickout.module';
 import { GlobalSettings } from './../../shared/globals';
@@ -25,11 +20,7 @@ import { CommentModule } from './../../widgets/comment-module/comment.module';
 import { UserAvatarModule } from './../../widgets/user-avatar/user-avatar.module';
 import { WorkItemCommentComponent } from './work-item-comment.component';
 
-let providers = [
-  GlobalSettings,
-  TooltipConfig,
-  BsDropdownConfig
-];
+let providers = [GlobalSettings, TooltipConfig, BsDropdownConfig];
 
 @NgModule({
   imports: [
@@ -46,12 +37,10 @@ let providers = [
     TooltipModule,
     WidgetsModule,
     SafePipeModule,
-    UserAvatarModule
+    UserAvatarModule,
   ],
-  declarations: [
-    WorkItemCommentComponent
-   ],
-  exports: [ WorkItemCommentComponent ],
-  providers: providers
+  declarations: [WorkItemCommentComponent],
+  exports: [WorkItemCommentComponent],
+  providers: providers,
 })
-export class WorkItemCommentModule { }
+export class WorkItemCommentModule {}

@@ -10,11 +10,9 @@ describe('PipelinesFullHistoryToolbarComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [
-        Fabric8CommonModule
-      ],
+      imports: [Fabric8CommonModule],
       declarations: [PipelinesFullHistoryToolbarComponent],
-      schemas: [ NO_ERRORS_SCHEMA ]
+      schemas: [NO_ERRORS_SCHEMA],
     });
   }));
 

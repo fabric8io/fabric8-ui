@@ -1,6 +1,5 @@
-import { BehaviorSubject,  Observable, Subscription, timer as observableTimer } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, timer as observableTimer } from 'rxjs';
 import { Operation, ResourceOperation } from './resource-operation';
-
 
 /**
  * A fallback if WebSockets doesn't work so we can't use the Watcher on a cluster
@@ -11,7 +10,10 @@ export class Poller<L> {
   protected pollPeriod = 3000;
   protected resourceCache = {};
 
-  constructor(protected pollListFactory: () => Observable<L>, private _dataStream: BehaviorSubject<any>) {
+  constructor(
+    protected pollListFactory: () => Observable<L>,
+    private _dataStream: BehaviorSubject<any>,
+  ) {
     this.lazyCreateSubscription();
   }
 
@@ -26,7 +28,6 @@ export class Poller<L> {
     this.close();
     this.lazyCreateSubscription();
   }
-
 
   close() {
     this.closeSubscription();
@@ -51,7 +52,7 @@ export class Poller<L> {
         },
         () => {
           this.onSubscriptionClosed();
-        }
+        },
       );
     }
   }
@@ -67,7 +68,6 @@ export class Poller<L> {
   ngOnDestroy(): void {
     this.closeSubscription();
   }
-
 
   private onListMessage(list: any) {
     // lets convert the list into resource events

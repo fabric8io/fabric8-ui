@@ -5,21 +5,14 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import { debounce } from 'lodash';
 import { NotificationType } from 'ngx-base';
-import {
-  Observable,
-  Subscription
-} from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { finalize, first } from 'rxjs/operators';
 import { NotificationsService } from '../../../../shared/notifications.service';
-import {
-  DeploymentStatusService,
-  Status,
-  StatusType
-} from '../services/deployment-status.service';
+import { DeploymentStatusService, Status, StatusType } from '../services/deployment-status.service';
 import { DeploymentsService } from '../services/deployments.service';
 import { DeleteDeploymentModal } from './delete-deployment-modal.component';
 import { DeploymentStatusIconComponent } from './deployment-status-icon.component';
@@ -27,16 +20,15 @@ import { DeploymentStatusIconComponent } from './deployment-status-icon.componen
 enum CardStatusClass {
   OK = '',
   WARN = 'status-ribbon-warn',
-  ERR = 'status-ribbon-err'
+  ERR = 'status-ribbon-err',
 }
 
 @Component({
   selector: 'deployment-card',
   templateUrl: 'deployment-card.component.html',
-  styleUrls: ['./deployment-card.component.less']
+  styleUrls: ['./deployment-card.component.less'],
 })
 export class DeploymentCardComponent implements OnDestroy, OnInit {
-
   static readonly OK_TOOLTIP: string = 'Everything is ok';
   private static readonly DEBOUNCE_TIME: number = 5000; // 5 seconds
   private static readonly MAX_DEBOUNCE_TIME: number = 10000; // 10 seconds
@@ -64,13 +56,17 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
 
   private readonly subscriptions: Array<Subscription> = [];
 
-  private readonly debouncedUpdateDetails = debounce(this.updateDetails, DeploymentCardComponent.DEBOUNCE_TIME, { maxWait: DeploymentCardComponent.MAX_DEBOUNCE_TIME });
+  private readonly debouncedUpdateDetails = debounce(
+    this.updateDetails,
+    DeploymentCardComponent.DEBOUNCE_TIME,
+    { maxWait: DeploymentCardComponent.MAX_DEBOUNCE_TIME },
+  );
 
   constructor(
     private readonly deploymentsService: DeploymentsService,
     private readonly statusService: DeploymentStatusService,
-    private readonly notifications: NotificationsService
-  ) { }
+    private readonly notifications: NotificationsService,
+  ) {}
 
   @Input() set collapsed(collapsed: boolean) {
     this._collapsed = collapsed;
@@ -93,32 +89,47 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
     this.toolTip = DeploymentCardComponent.OK_TOOLTIP;
 
     this.subscriptions.push(
-      this.statusService.getDeploymentAggregateStatus(this.spaceId, this.environment, this.applicationId)
-        .subscribe((status: Status): void => this.changeStatus(status))
+      this.statusService
+        .getDeploymentAggregateStatus(this.spaceId, this.environment, this.applicationId)
+        .subscribe((status: Status): void => this.changeStatus(status)),
     );
 
     this.subscriptions.push(
       this.deploymentsService
         .isApplicationDeployedInEnvironment(this.spaceId, this.environment, this.applicationId)
-        .subscribe((active: boolean): void => {
-          this.active = active;
+        .subscribe(
+          (active: boolean): void => {
+            this.active = active;
 
-          if (active) {
-            this.deleting = false;
+            if (active) {
+              this.deleting = false;
 
-            this.version =
-              this.deploymentsService.getVersion(this.spaceId, this.environment, this.applicationId);
+              this.version = this.deploymentsService.getVersion(
+                this.spaceId,
+                this.environment,
+                this.applicationId,
+              );
 
-            this.logsUrl =
-              this.deploymentsService.getLogsUrl(this.spaceId, this.environment, this.applicationId);
+              this.logsUrl = this.deploymentsService.getLogsUrl(
+                this.spaceId,
+                this.environment,
+                this.applicationId,
+              );
 
-            this.consoleUrl =
-              this.deploymentsService.getConsoleUrl(this.spaceId, this.environment, this.applicationId);
+              this.consoleUrl = this.deploymentsService.getConsoleUrl(
+                this.spaceId,
+                this.environment,
+                this.applicationId,
+              );
 
-            this.appUrl =
-              this.deploymentsService.getAppUrl(this.spaceId, this.environment, this.applicationId);
-          }
-        })
+              this.appUrl = this.deploymentsService.getAppUrl(
+                this.spaceId,
+                this.environment,
+                this.applicationId,
+              );
+            }
+          },
+        ),
     );
   }
 
@@ -167,30 +178,31 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
 
   delete(): void {
     this.subscriptions.push(
-      this.deploymentsService.deleteDeployment(
-        this.spaceId,
-        this.environment,
-        this.applicationId
-      ).pipe(
-        first(),
-        finalize((): void => {
-          this.deleting = false;
-        })
-      ).subscribe(
-        (success: string): void => {
-          this.notifications.message({
-            type: NotificationType.SUCCESS,
-            message: success
-          });
-          this.active = false;
-        },
-        (error: any): void => {
-          this.notifications.message({
-            type: NotificationType.WARNING,
-            message: error
-          });
-        }
-      )
+      this.deploymentsService
+        .deleteDeployment(this.spaceId, this.environment, this.applicationId)
+        .pipe(
+          first(),
+          finalize(
+            (): void => {
+              this.deleting = false;
+            },
+          ),
+        )
+        .subscribe(
+          (success: string): void => {
+            this.notifications.message({
+              type: NotificationType.SUCCESS,
+              message: success,
+            });
+            this.active = false;
+          },
+          (error: any): void => {
+            this.notifications.message({
+              type: NotificationType.WARNING,
+              message: error,
+            });
+          },
+        ),
     );
     this.lockAndDelete();
   }

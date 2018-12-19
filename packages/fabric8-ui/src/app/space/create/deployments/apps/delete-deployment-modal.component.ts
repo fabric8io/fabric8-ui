@@ -1,17 +1,23 @@
-import { Component, EventEmitter, Input, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 
 @Component({
   host: {
-    class: 'create-dialog'
+    class: 'create-dialog',
   },
   encapsulation: ViewEncapsulation.None,
   selector: 'delete-deployment-modal',
   templateUrl: './delete-deployment-modal.component.html',
-  styleUrls: ['./delete-deployment-modal.component.less']
+  styleUrls: ['./delete-deployment-modal.component.less'],
 })
 export class DeleteDeploymentModal {
-
   @Input() applicationId: string;
   @Input() environmentName: string;
   @Output() deleteEvent: EventEmitter<void> = new EventEmitter<void>();

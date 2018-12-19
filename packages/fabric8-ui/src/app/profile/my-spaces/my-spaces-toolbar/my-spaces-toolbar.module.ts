@@ -14,15 +14,10 @@ import { MySpacesToolbarComponent } from './my-spaces-toolbar.component';
     RouterModule,
     ToolbarModule,
     TooltipModule.forRoot(),
-    FeatureFlagModule
+    FeatureFlagModule,
   ],
-  declarations: [
-    MySpacesToolbarComponent
-  ],
-  providers: [
-    BsDropdownConfig,
-    TooltipConfig
-  ],
-  exports: [MySpacesToolbarComponent]
+  declarations: [MySpacesToolbarComponent],
+  providers: [BsDropdownConfig, TooltipConfig],
+  exports: [MySpacesToolbarComponent],
 })
-export class MySpacesToolbarModule { }
+export class MySpacesToolbarModule {}
