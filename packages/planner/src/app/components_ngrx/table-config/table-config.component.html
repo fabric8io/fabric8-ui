@@ -27,16 +27,16 @@
         </ul>
       </aside>
       <aside>
-        <span class="db fa fa-angle-right"
-          tooltip placement="top" tooltip="{{isNoAttributeSelected?'Please select an attribute':'Move to Displayed Attributes'}}"
-          [ngClass]="{'arrow-disabled':isNoAttributeSelected}"
+        <button class="db fa fa-angle-right btn-arrow"
+          placement="top" tooltip="Move to Displayed Attributes"
+          [disabled]="isNoAvailableAttributeSelected"
           (click)="moveToDisplay()">
-        </span>
-        <span class="db fa fa-angle-left"
-          tooltip placement="top" tooltip="{{isNoAttributeSelected?'Please select an attribute':'Move to Available Attributes'}}"
-          [ngClass]="{'arrow-disabled':isNoAttributeSelected}"
+        </button>
+        <button class="db fa fa-angle-left btn-arrow"
+          placement="top" tooltip="Move to Available Attributes"
+          [disabled]="isNoDisplayedAttributeSelected"
           (click)="moveToAvailable()">
-        </span>
+       </button>
       </aside>
       <aside>
         <small>Available Attributes</small>
