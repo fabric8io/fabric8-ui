@@ -9,7 +9,9 @@ import { DropdownOption } from './dropdown-option';
 })
 export class DropdownComponent implements OnInit {
   @Input() options: DropdownOption[];
+
   @Input() selected: DropdownOption;
+
   @Input() disabled: Boolean;
 
   @Output('change') onUpdate = new EventEmitter();

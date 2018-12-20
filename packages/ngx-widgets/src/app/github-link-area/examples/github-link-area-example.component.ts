@@ -41,8 +41,6 @@ export class GitHubLinkAreaExampleComponent implements OnInit {
   ngOnInit(): void {}
 
   inputEvent(event: any) {
-    console.log(
-      'Input Event detected on input type: ' + event.type + ' with index ' + event.extraData,
-    );
+    console.log(`Input Event detected on input type: ${event.type} with index ${event.extraData}`);
   }
 }

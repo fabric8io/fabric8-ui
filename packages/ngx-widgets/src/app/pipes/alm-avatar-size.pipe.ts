@@ -10,6 +10,6 @@ import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({ name: 'almAvatarSize' })
 export class AlmAvatarSize implements PipeTransform {
   transform(value: number, size: string): string {
-    return value + '&s=' + size;
+    return `${value}&s=${size}`;
   }
 }

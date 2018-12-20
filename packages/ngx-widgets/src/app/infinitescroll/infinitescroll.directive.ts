@@ -15,11 +15,17 @@ import {
 })
 export class InfiniteScrollDirective implements OnInit {
   @Output('initItems') initItems = new EventEmitter();
+
   @Output('fetchMore') fetchMore = new EventEmitter();
-  @Input() eachElementHeightInPx: number = 20;
-  @Input() fetchThreshold: number = 5;
-  pageSize: number = 10;
+
+  @Input() eachElementHeightInPx = 20;
+
+  @Input() fetchThreshold = 5;
+
+  pageSize = 10;
+
   lastCheckedHeight = 0;
+
   previousScrollHeight = 0;
 
   constructor(private elementRef: ElementRef) {}
@@ -44,9 +50,9 @@ export class InfiniteScrollDirective implements OnInit {
   onScrollContainer(event: any) {
     if (this.element.scrollHeight > this.lastCheckedHeight) {
       this.previousScrollHeight = this.element.scrollHeight;
-      let remainingHeight =
+      const remainingHeight =
         this.element.scrollHeight - (this.element.offsetHeight + this.element.scrollTop);
-      let remainingElement = Math.ceil(remainingHeight / this.eachElementHeightInPx);
+      const remainingElement = Math.ceil(remainingHeight / this.eachElementHeightInPx);
       if (remainingElement < this.fetchThreshold) {
         this.lastCheckedHeight = this.element.scrollHeight;
         this.fetchMore.emit();

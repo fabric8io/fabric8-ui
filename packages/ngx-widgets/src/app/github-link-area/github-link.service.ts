@@ -8,7 +8,7 @@ import { catchError } from 'rxjs/operators';
 /**
  * This is the Type used for the data returned from Github
  */
-export interface Gh_issue {
+export interface GitHubIssue {
   match: string;
   org: string;
   repo: string;
@@ -25,7 +25,7 @@ export interface Gh_issue {
  */
 @Injectable()
 export class GitHubLinkService {
-  private linkCache: Gh_issue[] = [];
+  private linkCache: GitHubIssue[] = [];
 
   constructor(private http: HttpClient) {}
 
@@ -36,44 +36,33 @@ export class GitHubLinkService {
    * once for every GitHub issue for the entire runtime of the service. This is needed
    * because GitHub is enforcing a strict rate limiting.
    */
-  getIssue(linkData: Gh_issue): Observable<Gh_issue> {
-    let cachedData = this.findInCache(linkData);
+  getIssue(linkData: GitHubIssue): Observable<GitHubIssue> {
+    const cachedData = this.findInCache(linkData);
     if (cachedData) {
       return of(cachedData);
-    } else {
-      let query: Observable<Gh_issue> = this.http
-        .get<Gh_issue>(
-          'https://api.github.com/repos/' +
-            linkData.org +
-            '/' +
-            linkData.repo +
-            '/issues/' +
-            linkData.issue,
-        )
-        .pipe(
-          catchError((error: any) => {
-            linkData.state = 'error';
-            return of(linkData);
-          }),
-        );
-      query.subscribe((data) => {
-        this.linkCache.push(data);
-      });
-      return query;
     }
+    const query: Observable<GitHubIssue> = this.http
+      .get<GitHubIssue>(
+        `https://api.github.com/repos/${linkData.org}/${linkData.repo}/issues/${linkData.issue}`,
+      )
+      .pipe(
+        catchError((error: any) => {
+          linkData.state = 'error';
+          return of(linkData);
+        }),
+      );
+    query.subscribe((data) => {
+      this.linkCache.push(data);
+    });
+    return query;
   }
 
-  private findInCache(linkData: Gh_issue): any {
+  private findInCache(linkData: GitHubIssue): any {
     for (let i = 0; i < this.linkCache.length; i++) {
-      let link = this.linkCache[i];
+      const link = this.linkCache[i];
       if (
         link.url ===
-        'https://api.github.com/repos/' +
-          linkData.org +
-          '/' +
-          linkData.repo +
-          '/issues/' +
-          linkData.issue
+        `https://api.github.com/repos/${linkData.org}/${linkData.repo}/issues/${linkData.issue}`
       ) {
         linkData.state = link.state;
         return linkData;

@@ -23,7 +23,7 @@ describe('GitHubLinkArea component - ', () => {
       });
   }));
 
-  it('Should render links from the server side rendering correctly.', () => {
+  it('should render links from the server side rendering correctly.', () => {
     // tslint:disable-next-line:max-line-length
     comp.content = `Here is a link:
        <a href="https://github.com/patternfly/patternfly-ng/issues/127">https://github.com/patternfly/patternfly-ng/issues/127</a>
@@ -39,25 +39,25 @@ describe('GitHubLinkArea component - ', () => {
     fixture.detectChanges();
     // also, using query() is also not working. Maybe sue to the dynamic update of innerHTML.
     // So we need to use the nativeElement to get a selector working.
-    let elLink: Element = fixture.debugElement.nativeElement.querySelector('.gh-link');
+    const elLink: Element = fixture.debugElement.nativeElement.querySelector('.gh-link');
     expect(elLink).not.toBeNull();
     // link text
-    let elText: Element = elLink.querySelector('.gh-link-label');
+    const elText: Element = elLink.querySelector('.gh-link-label');
     expect(elText).not.toBeNull();
     expect(elText.textContent).toBe(' patternfly-ng:127 ');
     // link target
     expect(elLink.attributes).not.toBeNull();
-    expect(elLink.attributes.length).toBe(3);
+    expect(elLink.attributes).toHaveLength(3);
     expect(elLink.attributes[1].name).toBe('href');
     expect(elLink.attributes[1].value).toBe(
       'https://github.com/patternfly/patternfly-ng/issues/127',
     );
     // state icon
-    let elIcon: Element = elLink.querySelector('.gh-link-error');
+    const elIcon: Element = elLink.querySelector('.gh-link-error');
     expect(elIcon).not.toBeNull();
   });
 
-  it('Should render links from the client side rendering correctly.', () => {
+  it('should render links from the client side rendering correctly.', () => {
     // tslint:disable-next-line:max-line-length
     comp.content = `Here is a link:
        <a href="https://github.com/patternfly/patternfly-ng/issues/127" rel="nofollow">https://github.com/patternfly/patternfly-ng/issues/127</a>
@@ -73,21 +73,21 @@ describe('GitHubLinkArea component - ', () => {
     fixture.detectChanges();
     // also, using query() is also not working. Maybe sue to the dynamic update of innerHTML.
     // So we need to use the nativeElement to get a selector working.
-    let elLink: Element = fixture.debugElement.nativeElement.querySelector('.gh-link');
+    const elLink: Element = fixture.debugElement.nativeElement.querySelector('.gh-link');
     expect(elLink).not.toBeNull();
     // link text
-    let elText: Element = elLink.querySelector('.gh-link-label');
+    const elText: Element = elLink.querySelector('.gh-link-label');
     expect(elText).not.toBeNull();
     expect(elText.textContent).toBe(' patternfly-ng:127 ');
     // link target
     expect(elLink.attributes).not.toBeNull();
-    expect(elLink.attributes.length).toBe(3);
+    expect(elLink.attributes).toHaveLength(3);
     expect(elLink.attributes[1].name).toBe('href');
     expect(elLink.attributes[1].value).toBe(
       'https://github.com/patternfly/patternfly-ng/issues/127',
     );
     // state icon
-    let elIcon: Element = elLink.querySelector('.gh-link-error');
+    const elIcon: Element = elLink.querySelector('.gh-link-error');
     expect(elIcon).not.toBeNull();
   });
 });
