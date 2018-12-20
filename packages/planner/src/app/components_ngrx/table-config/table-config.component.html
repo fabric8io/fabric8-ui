@@ -1,55 +1,57 @@
 <div class="f8-table-config__settings">
-    <div (clickOut)="clickOut()" class="dropdown-kebab-pf pull-right dropdown margin-left-10"
-      dropdown
-      [autoClose]="false"
-      [isOpen]="isTableConfigOpen"
-      (isOpenChange)="tableConfigChange($event)">
-      <button class="btn btn-link dropdown-toggle"
-        type="button" dropdownToggle>
-        <span class="fa fa-cog"
-          placement="bottom"
-          tooltip="Open Config"></span>
-      </button>
-      <div class="dropdown-menu-right dropdown-menu f8-table-config__settings-dropdown" *dropdownMenu>
-        <aside>
-          <i class="db text-right fa fa-close btn btn-link" (click)="tableConfigToggle($event)"></i>
-        </aside>
-        <aside>
-          <small>Displayed Attributes</small>
-          <ul class="f8-table-config__settings-column">
-            <li *ngFor='let col of (columns | filterColumn: "showInDisplay")'>
-              <input
-                type='checkbox'
-                [id]="col.name"
-                (change)='toggleCheckbox($event, col)'/>
-              <label [attr.for]="col.name">{{ col.name }}</label>
-            </li>
-          </ul>
-        </aside>
-        <aside>
-          <span class="db fa fa-angle-right"
-            tooltip="Move to Displayed Attributes"
-            (click)="moveToDisplay()">
-          </span>
-          <span class="db fa fa-angle-left"
-            tooltip="Move to Available Attributes"
-            (click)="moveToAvailable()">
-          </span>
-        </aside>
-        <aside>
-          <small>Available Attributes</small>
-          <ul class="f8-table-config__settings-column">
-            <li *ngFor='let col of (columns | filterColumn: "available")'>
-              <input
-                type='checkbox'
-                [id]="col.name"
-                (change)='toggleCheckbox($event, col)'/>
-              <label [attr.for]="col.name">
-                {{ col.name }}
-              </label>
-            </li>
-          </ul>
-        </aside>
-      </div>
+  <div (clickOut)="clickOut()" class="dropdown-kebab-pf pull-right dropdown margin-left-10"
+    dropdown
+    [autoClose]="false"
+    [isOpen]="isTableConfigOpen"
+    (isOpenChange)="tableConfigChange($event)">
+    <button class="btn btn-link dropdown-toggle"
+      type="button" dropdownToggle>
+      <span class="fa fa-cog"
+        placement="bottom"
+        tooltip="Open Config"></span>
+    </button>
+    <div class="dropdown-menu-right dropdown-menu f8-table-config__settings-dropdown" *dropdownMenu>
+      <aside>
+        <i class="db text-right fa fa-close btn btn-link" (click)="tableConfigToggle($event)"></i>
+      </aside>
+      <aside>
+        <small>Displayed Attributes</small>
+        <ul class="f8-table-config__settings-column">
+          <li *ngFor='let col of (columns | filterColumn: "showInDisplay")'>
+            <input
+              type='checkbox'
+              [id]="col.name"
+              (change)='toggleCheckbox($event, col)'/>
+            <label [attr.for]="col.name">{{ col.name }}</label>
+          </li>
+        </ul>
+      </aside>
+      <aside>
+        <button class="db fa fa-angle-right btn btn-default btn-arrow"
+          placement="top" tooltip="Move to Displayed Attributes"
+          [disabled]="isNoAvailableAttributeSelected"
+          (click)="moveToDisplay()">
+        </button>
+        <button class="db fa fa-angle-left btn btn-default btn-arrow"
+          placement="top" tooltip="Move to Available Attributes"
+          [disabled]="isNoDisplayedAttributeSelected"
+          (click)="moveToAvailable()">
+       </button>
+      </aside>
+      <aside>
+        <small>Available Attributes</small>
+        <ul class="f8-table-config__settings-column">
+          <li *ngFor='let col of (columns | filterColumn: "available")'>
+            <input
+              type='checkbox'
+              [id]="col.name"
+              (change)='toggleCheckbox($event, col)'/>
+            <label [attr.for]="col.name">
+              {{ col.name }}
+            </label>
+          </li>
+        </ul>
+      </aside>
     </div>
   </div>
+</div>
