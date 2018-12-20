@@ -9,14 +9,15 @@
  *
  * See: https://github.com/npm/read-package-json/issues/66
  */
-var fs = require('fs');
-var path = require('path');
-var appPath = './dist/app';
-var bundlePath = './dist/bundles';
-var bundleTargetPath = './bundles';
+const fs = require('fs');
+const path = require('path');
+
+const appPath = './dist/app';
+const bundlePath = './dist/bundles';
+const bundleTargetPath = './bundles';
 
 function copyFile(source, target) {
-  var targetFile = target;
+  let targetFile = target;
 
   // If target is a directory a new file with the same name will be created
   if (fs.existsSync(target)) {
@@ -28,10 +29,10 @@ function copyFile(source, target) {
 }
 
 function copyFolderRecursive(source, target) {
-  var files = [];
+  let files = [];
 
   // Check if folder needs to be created or integrated
-  var targetFolder = path.join(target, path.basename(source));
+  const targetFolder = path.join(target, path.basename(source));
   if (fs.lstatSync(source).isDirectory() && !fs.existsSync(targetFolder)) {
     fs.mkdirSync(targetFolder);
   }
@@ -39,8 +40,8 @@ function copyFolderRecursive(source, target) {
   // Copy
   if (fs.lstatSync(source).isDirectory()) {
     files = fs.readdirSync(source);
-    files.forEach(function(file) {
-      var curSource = path.join(source, file);
+    files.forEach((file) => {
+      const curSource = path.join(source, file);
       if (fs.lstatSync(curSource).isDirectory()) {
         copyFolderRecursive(curSource, targetFolder);
       } else {
@@ -54,8 +55,8 @@ function copyFolderRecursive(source, target) {
 
 function deleteFolderRecursive(source) {
   if (fs.existsSync(source)) {
-    fs.readdirSync(source).forEach(function(file, index) {
-      var curPath = source + '/' + file;
+    fs.readdirSync(source).forEach((file) => {
+      const curPath = `${source}/${file}`;
       if (fs.lstatSync(curPath).isDirectory()) {
         // recurse
         deleteFolderRecursive(curPath);
@@ -77,19 +78,19 @@ if (fs.existsSync('./deploy_key.enc')) {
 //
 // import { DropDownModule } from 'ngx-widgets/dropdown';
 //
-fs.readdir(appPath, function(err, items) {
-  for (var i = 0; i < items.length; i++) {
-    copyFolderRecursive(appPath + '/' + items[i], '.');
+fs.readdir(appPath, (err, items) => {
+  for (let i = 0; i < items.length; i++) {
+    copyFolderRecursive(`${appPath}/${items[i]}`, '.');
   }
   deleteFolderRecursive(appPath);
 });
 
-fs.readdir(bundlePath, function(err, items) {
+fs.readdir(bundlePath, (err, items) => {
   if (!fs.existsSync(bundleTargetPath)) {
     fs.mkdirSync(bundleTargetPath);
   }
-  for (var i = 0; i < items.length; i++) {
-    copyFolderRecursive(bundlePath + '/' + items[i], bundleTargetPath);
+  for (let i = 0; i < items.length; i++) {
+    copyFolderRecursive(`${bundlePath}/${items[i]}`, bundleTargetPath);
   }
   deleteFolderRecursive(bundlePath);
 });

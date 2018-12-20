@@ -13,9 +13,9 @@ export class AlmMomentTime implements PipeTransform {
       return '';
     }
 
-    let aMonthAgo = new Date();
+    const aMonthAgo = new Date();
     aMonthAgo.setMonth(aMonthAgo.getMonth() - 1);
-    let dateValue = new Date(val);
+    const dateValue = new Date(val);
     if (dateValue < aMonthAgo) {
       return `<span title="${moment(val).format('LLL')}">
                 ${moment(val).format('D MMM YYYY')}

@@ -65,6 +65,7 @@ export class UpdateComponent implements OnInit, OnDestroy {
   url: string;
   urlInvalid: boolean = false;
   selectedTab: number = 1;
+  bioInvalid: boolean = false;
 
   constructor(
     private auth: AuthenticationService,
@@ -100,7 +101,7 @@ export class UpdateComponent implements OnInit, OnDestroy {
   get isUpdateProfileDisabled(): boolean {
     return (
       (!this.profileForm.dirty && !this.advancedForm.dirty) ||
-      (this.emailInvalid || this.imageUrlInvalid || this.urlInvalid)
+      (this.emailInvalid || this.imageUrlInvalid || this.urlInvalid || this.bioInvalid)
     );
   }
 
@@ -244,6 +245,10 @@ export class UpdateComponent implements OnInit, OnDestroy {
 
   validateUrl(): void {
     this.urlInvalid = !this.isUrlValid();
+  }
+
+  validateBio(charsRemaining: number) {
+    this.bioInvalid = charsRemaining < 0 ? true : false;
   }
 
   private getTransientProfile(): ExtProfile {

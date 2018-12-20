@@ -6,7 +6,7 @@ import { IconMap } from './iconmap';
   exportAs: 'almIcon',
 })
 export class AlmIconDirective implements OnInit, OnChanges {
-  @Input() iconType: string = 'none';
+  @Input() iconType = 'none';
 
   constructor(private elementRef: ElementRef) {}
 
@@ -19,17 +19,15 @@ export class AlmIconDirective implements OnInit, OnChanges {
   }
 
   addIcon() {
-    var iconColor: string = 'none';
+    let iconColor = 'none';
     const element: HTMLElement = this.elementRef.nativeElement;
-    let existingClassNames = element.className.split(' ');
-    let allClassesInMap: string[] = [];
-    for (let key in IconMap) {
-      if (IconMap.hasOwnProperty(key)) {
-        IconMap[key].icon.forEach((item: string) => {
-          allClassesInMap.push(item);
-        });
-      }
-    }
+    const existingClassNames = element.className.split(' ');
+    const allClassesInMap: string[] = [];
+    Object.keys(IconMap).forEach((key) => {
+      IconMap[key].icon.forEach((item: string) => {
+        allClassesInMap.push(item);
+      });
+    });
 
     existingClassNames.forEach((item: any) => {
       if (allClassesInMap.indexOf(item) > -1) {
@@ -39,14 +37,14 @@ export class AlmIconDirective implements OnInit, OnChanges {
 
     if (this.iconType in IconMap) {
       iconColor = IconMap[this.iconType].color;
-      element.setAttribute('style', 'color:' + iconColor);
+      element.setAttribute('style', `color:${iconColor}`);
       IconMap[this.iconType].icon.forEach((item: any) => {
         element.classList.add(item);
       });
     } else {
-      iconColor = IconMap['default'].color;
-      element.setAttribute('style', 'color:' + iconColor);
-      IconMap['default'].icon.forEach((item: any) => {
+      iconColor = IconMap.default.color;
+      element.setAttribute('style', `color:${iconColor}`);
+      IconMap.default.icon.forEach((item: any) => {
         element.classList.add(item);
       });
     }

@@ -10,17 +10,17 @@ if (document.body.style.animation === undefined && CSSStyleDeclaration) {
 
 if (document.body.style['animation-name'] === undefined && CSSStyleDeclaration) {
   CSSStyleDeclaration.prototype['animation-name'] = '';
-  CSSStyleDeclaration.prototype['animationName'] = '';
+  CSSStyleDeclaration.prototype.animationName = '';
 }
 
 if (document.body.style['animation-duration'] === undefined && CSSStyleDeclaration) {
   CSSStyleDeclaration.prototype['animation-duration'] = '';
-  CSSStyleDeclaration.prototype['animationDuration'] = '';
+  CSSStyleDeclaration.prototype.animationDuration = '';
 }
 
 if (document.body.style['animation-play-state'] === undefined && CSSStyleDeclaration) {
   CSSStyleDeclaration.prototype['animation-play-state'] = '';
-  CSSStyleDeclaration.prototype['animationPlayState'] = '';
+  CSSStyleDeclaration.prototype.animationPlayState = '';
 }
 
 require('@osio/scripts/config/jest/setup.angular');
