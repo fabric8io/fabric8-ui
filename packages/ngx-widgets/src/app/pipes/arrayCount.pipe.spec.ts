@@ -6,7 +6,7 @@ interface ITestCase {
   expect: any;
 }
 
-let testCases: Array<ITestCase> = [
+const testCases: Array<ITestCase> = [
   {
     label: 'Test for null',
     input: null,
@@ -41,9 +41,10 @@ describe('Pipe: count.pipe => CountPipe', () => {
     pipe = new ArrayCount();
   });
 
-  for (let testCase of testCases) {
+  for (const testCase of testCases) {
+    // eslint-disable-next-line no-loop-func
     it(testCase.label, () => {
-      let result = pipe.transform(testCase.input);
+      const result = pipe.transform(testCase.input);
       expect(result).toEqual(testCase.expect);
     });
   }

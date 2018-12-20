@@ -8,7 +8,10 @@
  */
 export class View {
   disabled?: boolean = false;
+
   iconClass: string;
+
   id: string;
+
   title: string;
 }

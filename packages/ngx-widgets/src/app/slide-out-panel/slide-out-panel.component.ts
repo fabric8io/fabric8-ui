@@ -26,8 +26,11 @@ import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@
 })
 export class SlideOutPanelComponent implements OnInit, AfterViewInit {
   @Input() panelState: string;
+
   @Input() itemName: string;
+
   @Input() itemIcon: string;
+
   @Output() panelStateChange = new EventEmitter<string>();
 
   constructor() {}

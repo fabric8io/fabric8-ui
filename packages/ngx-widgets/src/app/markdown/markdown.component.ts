@@ -13,7 +13,6 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { Pipe, PipeTransform } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
 
 @Component({
@@ -31,20 +30,32 @@ import { SafeHtml } from '@angular/platform-browser';
  * html.
  */
 export class MarkdownComponent implements OnChanges, OnInit, AfterViewChecked {
-  @Input() fieldName: string = 'Description';
+  @Input() fieldName = 'Description';
+
   @Input('renderedText') inpRenderedText: string | SafeHtml = '';
-  @Input('rawText') inpRawText: string = '';
-  @Input() rendering: boolean = false;
-  @Input() saving: boolean = false;
-  @Input() placeholder: string = 'This is place holder';
-  @Input() editAllow: boolean = true;
-  @Input() renderedHeight: number = 300;
-  @Input() allowEmptySave: boolean = true;
+
+  @Input('rawText') inpRawText = '';
+
+  @Input() rendering = false;
+
+  @Input() saving = false;
+
+  @Input() placeholder = 'This is place holder';
+
+  @Input() editAllow = true;
+
+  @Input() renderedHeight = 300;
+
+  @Input() allowEmptySave = true;
 
   @Output() onActiveEditor = new EventEmitter();
+
   @Output() onSaveClick = new EventEmitter();
+
   @Output() showPreview = new EventEmitter();
+
   @Output() onCloseClick = new EventEmitter();
+
   @Output() onClickOut = new EventEmitter();
 
   @HostListener('document:click', ['$event.target'])
@@ -64,23 +75,37 @@ export class MarkdownComponent implements OnChanges, OnInit, AfterViewChecked {
   }
 
   @ViewChild('editorInput') editorInput: ElementRef;
+
   @ViewChild('editorBox') editorBox: ElementRef;
+
   @ViewChild('previewArea') previewArea: ElementRef;
 
   boxHeight: number;
-  enableShowMore: boolean = false;
+
+  enableShowMore = false;
+
   // these need to be public for the tests accessing them.
   renderedText: any = '';
-  rawText = '';
-  fieldEmpty: boolean = true;
-  previousRawText = '';
-  isNoDataChanged: boolean = false;
 
-  private markdownViewExpanded: boolean = false;
-  private tabBarVisible: boolean = true;
-  private viewType: string = 'preview'; // markdown
-  private editorActive: boolean = false;
+  rawText = '';
+
+  fieldEmpty = true;
+
+  previousRawText = '';
+
+  isNoDataChanged = false;
+
+  private markdownViewExpanded = false;
+
+  private tabBarVisible = true;
+
+  private viewType = 'preview';
+
+  // markdown
+  private editorActive = false;
+
   private showMore = false;
+
   private inputsDisabled = false;
 
   private previousRenderedText = '';
@@ -134,10 +159,9 @@ export class MarkdownComponent implements OnChanges, OnInit, AfterViewChecked {
 
   onInputEvent(event: any) {
     console.log(
-      'In-Markup Markdown input Event detected for input type: ' +
-        event.type +
-        ' with extraData ' +
-        JSON.stringify(event.extraData),
+      `In-Markup Markdown input Event detected for input type: ${
+        event.type
+      } with extraData ${JSON.stringify(event.extraData)}`,
     );
     // we only support this interaction on checkboxes for now.
     // the mechanic is generic, add other controls below. In case,
@@ -148,8 +172,8 @@ export class MarkdownComponent implements OnChanges, OnInit, AfterViewChecked {
       // new supported input types as well.
       this.inputsDisabled = true;
       // process the checkbox clicked, find the markdown markup reference, update it.
-      let activatedCheckboxIndex: number = event.extraData.checkboxIndex;
-      let checked: boolean = event.extraData.checked;
+      const activatedCheckboxIndex: number = event.extraData.checkboxIndex;
+      const checked: boolean = event.extraData.checked;
       let markdownMarkup: string = this.rawText;
       // the JavaScript RegExp flavour makes it hard to to nth occurence
       // expressions, so we're doing it by hand here.
@@ -164,9 +188,9 @@ export class MarkdownComponent implements OnChanges, OnInit, AfterViewChecked {
         }
         if (matchIndex === activatedCheckboxIndex && m.length > 0) {
           // JavaScript does not have a replace by index method.
-          let matchLen = m[0].length;
-          let matchEndIndex = regex.lastIndex;
-          let matchStartIndex = matchEndIndex - matchLen;
+          const matchLen = m[0].length;
+          const matchEndIndex = regex.lastIndex;
+          const matchStartIndex = matchEndIndex - matchLen;
           let replaceStr;
           if (checked) {
             replaceStr = m[0].replace(/\[[ ]*\]/, '[x]');
@@ -184,7 +208,7 @@ export class MarkdownComponent implements OnChanges, OnInit, AfterViewChecked {
       // signal that the markdown has changed to the outside world.
       this.saveClick();
     } else {
-      console.log('Input type ' + event.type + ' is not supported yet.');
+      console.log(`Input type ${event.type} is not supported yet.`);
     }
   }
 
@@ -216,9 +240,9 @@ export class MarkdownComponent implements OnChanges, OnInit, AfterViewChecked {
 
   // disables/enables the inputs on the rendered markup
   setPreviewInputsDisabled(query: string, disabled: boolean) {
-    let el = this.previewArea;
+    const el = this.previewArea;
     if (el) {
-      let queryElems = el.nativeElement.querySelectorAll(query);
+      const queryElems = el.nativeElement.querySelectorAll(query);
       if (queryElems && queryElems.length > 0) {
         // we need to use a classic loop instead of forEach here
         // as forEach on NodeLists is not supported on every browser.

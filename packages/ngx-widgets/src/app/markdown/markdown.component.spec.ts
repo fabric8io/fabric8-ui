@@ -1,8 +1,8 @@
-import { async, ComponentFixture, fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
+import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 
-import { DebugElement, SimpleChange, SimpleChanges } from '@angular/core';
+import { SimpleChange, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { BrowserModule, By, DomSanitizer } from '@angular/platform-browser';
+import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 
 import { MarkdownComponent } from './markdown.component';
 import { MarkdownModule } from './markdown.module';
@@ -22,12 +22,12 @@ describe('Markdown component - ', () => {
       });
   }));
 
-  it('Should handle Markdown checkboxes correctly.', inject(
+  it('should handle Markdown checkboxes correctly.', inject(
     [DomSanitizer],
     (domSanitizer: DomSanitizer) => {
       // tslint:disable-next-line:max-line-length
       comp.inpRawText = '# hello, markdown!\n* [ ] Item 1\n* [x] Item 2\n* [ ] Item 3';
-      let originalHTML =
+      const originalHTML =
         '<h1>hello, markdown!</h1><ul>' +
         // tslint:disable-next-line:max-line-length
         '<li><input class="markdown-checkbox" type="checkbox" data-checkbox-index="0"></input> Item 0</li>' +
@@ -52,14 +52,14 @@ describe('Markdown component - ', () => {
       // also, using query() is also not working. Maybe due to the dynamic update of innerHTML.
       // So we need to use the nativeElement to get a selector working.
       // tslint:disable-next-line:max-line-length
-      let markdownPreview: Element = fixture.debugElement.nativeElement.querySelector(
+      const markdownPreview: Element = fixture.debugElement.nativeElement.querySelector(
         '.markdown-rendered',
       );
       expect(markdownPreview).not.toBeNull();
       // preview render of the template default
-      let markdownCheckboxElementList = markdownPreview.querySelectorAll('.markdown-checkbox');
+      const markdownCheckboxElementList = markdownPreview.querySelectorAll('.markdown-checkbox');
       expect(markdownCheckboxElementList).not.toBeNull();
-      expect(markdownCheckboxElementList.length).toBe(3);
+      expect(markdownCheckboxElementList).toHaveLength(3);
       expect(markdownCheckboxElementList[0].hasAttribute('checked')).toBeFalsy();
       expect(markdownCheckboxElementList[1].hasAttribute('checked')).toBeTruthy();
       expect(markdownCheckboxElementList[2].hasAttribute('checked')).toBeFalsy();

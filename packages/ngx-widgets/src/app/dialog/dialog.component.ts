@@ -49,12 +49,13 @@ export class DialogComponent implements OnInit {
   @Output('pfDialogClick') onClick = new EventEmitter();
 
   modalFadeIn: Boolean = false;
+
   modalState: string = 'inactive';
 
   constructor() {}
 
   ngOnInit(): void {
-    //need to fade in the modal
+    // need to fade in the modal
     this.modalFadeIn = true;
     setTimeout(() => (this.modalState = 'active'));
   }
@@ -74,21 +75,21 @@ export class DialogComponent implements OnInit {
 
   @HostListener('window:keydown', ['$event'])
   onActionKeyPress(event: any): void {
-    let currentDefaultIndex = this.dialog.actionButtons.findIndex((i) => i.default);
+    const currentDefaultIndex = this.dialog.actionButtons.findIndex((i) => i.default);
     this.dialog.actionButtons[currentDefaultIndex].default = false;
-    let len = this.dialog.actionButtons.length;
-    if (event.keyCode == 37) {
+    const len = this.dialog.actionButtons.length;
+    if (event.keyCode === 37) {
       // Left arrow
-      let newDefaultIndex = (currentDefaultIndex - 1 + len) % len;
+      const newDefaultIndex = (currentDefaultIndex - 1 + len) % len;
       this.dialog.actionButtons[newDefaultIndex].default = true;
-    } else if (event.keyCode == 39) {
+    } else if (event.keyCode === 39) {
       // Right arrow
-      let newDefaultIndex = (currentDefaultIndex - 1 + len) % len;
+      const newDefaultIndex = (currentDefaultIndex - 1 + len) % len;
       this.dialog.actionButtons[newDefaultIndex].default = true;
-    } else if (event.keyCode == 13) {
+    } else if (event.keyCode === 13) {
       // Enter
       this.btnClick(this.dialog.actionButtons[currentDefaultIndex].value);
-    } else if (event.keyCode == 27) {
+    } else if (event.keyCode === 27) {
       // Esc key
       this.btnClick(0);
     }

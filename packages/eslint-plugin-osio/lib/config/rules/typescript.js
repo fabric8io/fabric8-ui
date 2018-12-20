@@ -29,7 +29,7 @@ module.exports = {
   'typescript/no-explicit-any': 'off',
 
   // Disallows explicit type declarations for variables or parameters initialized to a number, string, or boolean. (no-inferrable-types from TSLint)
-  'typescript/no-inferrable-types': ['error'],
+  'typescript/no-inferrable-types': 'off',
 
   // Disallow the use of custom TypeScript modules and namespaces
   'typescript/no-namespace': 'off',

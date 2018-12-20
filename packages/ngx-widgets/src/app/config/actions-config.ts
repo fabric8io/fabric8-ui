@@ -8,5 +8,6 @@ import { Action } from './action';
  */
 export class ActionsConfig {
   moreActions?: Action[];
+
   primaryActions: Action[];
 }
