@@ -13,20 +13,22 @@ export class InfotipEffects {
   constructor(
     private actions$: Actions,
     private infotipService: InfotipService,
-    private errHandler: ErrorHandler
+    private errHandler: ErrorHandler,
   ) {}
 
-  @Effect() getInfotips$: Observable<Action> = this.actions$
-    .pipe(
-      ofType<InfotipActions.Get>(InfotipActions.GET),
-      switchMap(action => {
-        return this.infotipService.getInfotips()
-          .pipe(
-            map(payload => new InfotipActions.GetSuccess(payload)),
-            catchError(err => this.errHandler.handleError<Action>(
-              err, 'Problem in fetching InfoTips', new InfotipActions.GetError()
-            ))
-          );
-      })
-    );
+  @Effect() getInfotips$: Observable<Action> = this.actions$.pipe(
+    ofType<InfotipActions.Get>(InfotipActions.GET),
+    switchMap((action) => {
+      return this.infotipService.getInfotips().pipe(
+        map((payload) => new InfotipActions.GetSuccess(payload)),
+        catchError((err) =>
+          this.errHandler.handleError<Action>(
+            err,
+            'Problem in fetching InfoTips',
+            new InfotipActions.GetError(),
+          ),
+        ),
+      );
+    }),
+  );
 }

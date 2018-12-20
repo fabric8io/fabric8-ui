@@ -23,22 +23,22 @@
  */
 
 import {
-  Directive, EmbeddedViewRef,
-  Input, NgModule,
+  Directive,
+  EmbeddedViewRef,
+  Input,
+  NgModule,
   TemplateRef,
-  ViewContainerRef
+  ViewContainerRef,
 } from '@angular/core';
 
-@Directive({selector: '[ngLet]'})
+@Directive({ selector: '[ngLet]' })
 export class NgLetDirective {
   private _context: NgLetContext = new NgLetContext();
   private _thenTemplateRef: TemplateRef<NgLetContext> | null = null;
   private _thenViewRef: EmbeddedViewRef<NgLetContext> | null = null;
 
-  constructor(
-    private _viewContainer: ViewContainerRef,
-    templateRef: TemplateRef<NgLetContext>) {
-      this._thenTemplateRef = templateRef;
+  constructor(private _viewContainer: ViewContainerRef, templateRef: TemplateRef<NgLetContext>) {
+    this._thenTemplateRef = templateRef;
   }
 
   @Input()
@@ -51,10 +51,10 @@ export class NgLetDirective {
     if (!this._thenViewRef) {
       this._viewContainer.clear();
       if (this._thenTemplateRef) {
-        this._thenViewRef =
-          this._viewContainer.createEmbeddedView(
-            this._thenTemplateRef, this._context
-          );
+        this._thenViewRef = this._viewContainer.createEmbeddedView(
+          this._thenTemplateRef,
+          this._context,
+        );
       }
     }
   }
@@ -65,10 +65,8 @@ export class NgLetContext {
   public ngLet: any = null;
 }
 
-
 @NgModule({
   declarations: [NgLetDirective],
-  exports: [NgLetDirective]
+  exports: [NgLetDirective],
 })
-
 export class NgLetModule {}

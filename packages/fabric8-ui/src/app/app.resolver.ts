@@ -4,15 +4,11 @@ import { of as observableOf } from 'rxjs';
 
 @Injectable()
 export class DataResolver implements Resolve<any> {
-  constructor() {
-
-  }
+  constructor() {}
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    return observableOf({ res: 'I am data'});
+    return observableOf({ res: 'I am data' });
   }
 }
 
 // an array of services to resolve routes with data
-export const APP_RESOLVER_PROVIDERS = [
-  DataResolver
-];
+export const APP_RESOLVER_PROVIDERS = [DataResolver];

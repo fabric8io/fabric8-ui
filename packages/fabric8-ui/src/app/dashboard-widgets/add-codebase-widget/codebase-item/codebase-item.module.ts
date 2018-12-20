@@ -5,12 +5,8 @@ import { CodebasesItemWorkspacesModule } from '../../../space/create/codebases/c
 import { CodebaseItemComponent } from './codebase-item.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    CodebasesItemWorkspacesModule,
-    FeatureFlagModule
-  ],
-  declarations: [ CodebaseItemComponent ],
-  exports: [ CodebaseItemComponent ]
+  imports: [CommonModule, CodebasesItemWorkspacesModule, FeatureFlagModule],
+  declarations: [CodebaseItemComponent],
+  exports: [CodebaseItemComponent],
 })
-export class CodebaseItemModule { }
+export class CodebaseItemModule {}

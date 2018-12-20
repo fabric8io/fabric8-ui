@@ -6,12 +6,13 @@ import { initialState, UserState } from '../states/user.state';
 
 export type Action = UserActions.All;
 
-export const UserReducer: ActionReducer<UserState> =
-  (state = initialState, action: Action) => {
-  if (!state) { state = {}; }
+export const UserReducer: ActionReducer<UserState> = (state = initialState, action: Action) => {
+  if (!state) {
+    state = {};
+  }
   switch (action.type) {
     case UserActions.SET: {
-      return {...state, ...action.payload};
+      return { ...state, ...action.payload };
     }
     default: {
       return state;

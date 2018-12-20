@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@angular/core';
 import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
-import { BehaviorSubject,  Observable ,  throwError as observableThrowError } from 'rxjs';
+import { BehaviorSubject, Observable, throwError as observableThrowError } from 'rxjs';
 import { catchError, map, shareReplay } from 'rxjs/operators';
 import { pathJoin } from '../model/utils';
 import { INamespaceScope } from './namespace.scope';
@@ -16,23 +16,23 @@ import { INamespaceScope } from './namespace.scope';
 export class DevNamespaceScope implements INamespaceScope {
   public namespace: Observable<string>;
 
-  private headers = new HttpHeaders({'Content-Type': 'application/json'});
+  private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
   protected userServicesUrl: string;
   private currentNamespaceValue: string;
 
-  constructor(private logger: Logger,
-              private auth: AuthenticationService,
-              private http: HttpClient,
-              @Inject(WIT_API_URL) apiUrl: string) {
-
+  constructor(
+    private logger: Logger,
+    private auth: AuthenticationService,
+    private http: HttpClient,
+    @Inject(WIT_API_URL) apiUrl: string,
+  ) {
     if (this.auth.getToken() != null) {
       this.headers = this.headers.set('Authorization', 'Bearer ' + this.auth.getToken());
     }
     this.userServicesUrl = pathJoin(apiUrl, '/user/services');
 
     //  query the user namespace from WIT API
-    this.namespace = this.http
-      .get(this.userServicesUrl, {headers: this.headers}).pipe(
+    this.namespace = this.http.get(this.userServicesUrl, { headers: this.headers }).pipe(
       shareReplay(),
       map((resp: HttpResponse<any>) => {
         let namespace = this.extractUserNamespace(resp);
@@ -43,7 +43,8 @@ export class DevNamespaceScope implements INamespaceScope {
       }),
       catchError((error: HttpErrorResponse) => {
         return this.handleError(error);
-      }));
+      }),
+    );
   }
 
   currentNamespace(): any {

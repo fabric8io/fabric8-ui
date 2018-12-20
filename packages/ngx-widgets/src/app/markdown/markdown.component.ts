@@ -11,16 +11,15 @@ import {
   Output,
   SimpleChanges,
   ViewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
-import { Pipe, PipeTransform } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'f8-markdown',
   styleUrls: ['./markdown.component.less'],
-  templateUrl: './markdown.component.html'
+  templateUrl: './markdown.component.html',
 })
 
 /**
@@ -31,21 +30,32 @@ import { SafeHtml } from '@angular/platform-browser';
  * html.
  */
 export class MarkdownComponent implements OnChanges, OnInit, AfterViewChecked {
+  @Input() fieldName = 'Description';
 
-  @Input() fieldName: string = 'Description';
   @Input('renderedText') inpRenderedText: string | SafeHtml = '';
-  @Input('rawText') inpRawText: string = '';
-  @Input() rendering: boolean = false;
-  @Input() saving: boolean = false;
-  @Input() placeholder: string = 'This is place holder';
-  @Input() editAllow: boolean = true;
-  @Input() renderedHeight: number = 300;
-  @Input() allowEmptySave: boolean = true;
+
+  @Input('rawText') inpRawText = '';
+
+  @Input() rendering = false;
+
+  @Input() saving = false;
+
+  @Input() placeholder = 'This is place holder';
+
+  @Input() editAllow = true;
+
+  @Input() renderedHeight = 300;
+
+  @Input() allowEmptySave = true;
 
   @Output() onActiveEditor = new EventEmitter();
+
   @Output() onSaveClick = new EventEmitter();
+
   @Output() showPreview = new EventEmitter();
+
   @Output() onCloseClick = new EventEmitter();
+
   @Output() onClickOut = new EventEmitter();
 
   @HostListener('document:click', ['$event.target'])
@@ -65,23 +75,37 @@ export class MarkdownComponent implements OnChanges, OnInit, AfterViewChecked {
   }
 
   @ViewChild('editorInput') editorInput: ElementRef;
+
   @ViewChild('editorBox') editorBox: ElementRef;
+
   @ViewChild('previewArea') previewArea: ElementRef;
 
   boxHeight: number;
-  enableShowMore: boolean = false;
+
+  enableShowMore = false;
+
   // these need to be public for the tests accessing them.
   renderedText: any = '';
-  rawText = '';
-  fieldEmpty: boolean = true;
-  previousRawText = '';
-  isNoDataChanged: boolean = false;
 
-  private markdownViewExpanded: boolean = false;
-  private tabBarVisible: boolean = true;
-  private viewType: string = 'preview'; // markdown
-  private editorActive: boolean = false;
+  rawText = '';
+
+  fieldEmpty = true;
+
+  previousRawText = '';
+
+  isNoDataChanged = false;
+
+  private markdownViewExpanded = false;
+
+  private tabBarVisible = true;
+
+  private viewType = 'preview';
+
+  // markdown
+  private editorActive = false;
+
   private showMore = false;
+
   private inputsDisabled = false;
 
   private previousRenderedText = '';
@@ -89,33 +113,32 @@ export class MarkdownComponent implements OnChanges, OnInit, AfterViewChecked {
   constructor(private cdr: ChangeDetectorRef, private elementRef: ElementRef) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.editAllow &&
-      this.editAllow === false &&
-      !changes.editAllow.isFirstChange) {
+    if (changes.editAllow && this.editAllow === false && !changes.editAllow.isFirstChange) {
       this.closeClick();
     }
-    if (Object.keys(changes).indexOf('inpRenderedText') > -1
-      && typeof(this.inpRenderedText) === 'undefined') {
-        console.warn('Markdown component change :: renderedText is passed undefined');
-        this.renderedText = '';
+    if (
+      Object.keys(changes).indexOf('inpRenderedText') > -1 &&
+      typeof this.inpRenderedText === 'undefined'
+    ) {
+      console.warn('Markdown component change :: renderedText is passed undefined');
+      this.renderedText = '';
     } else {
       this.renderedText = this.inpRenderedText;
     }
-    if (Object.keys(changes).indexOf('inpRawText') > -1
-      && typeof(this.inpRawText) === 'undefined') {
-        console.warn('Markdown component change :: rawText is passed undefined');
-        this.rawText = '';
+    if (Object.keys(changes).indexOf('inpRawText') > -1 && typeof this.inpRawText === 'undefined') {
+      console.warn('Markdown component change :: rawText is passed undefined');
+      this.rawText = '';
     } else {
       this.rawText = this.inpRawText;
     }
   }
 
   ngOnInit() {
-    if (typeof(this.renderedText) === 'undefined') {
+    if (typeof this.renderedText === 'undefined') {
       console.warn('Markdown component init :: renderedText is passed undefined');
       this.renderedText = '';
     }
-    if (typeof(this.rawText) === 'undefined') {
+    if (typeof this.rawText === 'undefined') {
       console.warn('Markdown component init :: rawText is passed undefined');
       this.rawText = '';
     }
@@ -135,55 +158,58 @@ export class MarkdownComponent implements OnChanges, OnInit, AfterViewChecked {
   }
 
   onInputEvent(event: any) {
-       console.log('In-Markup Markdown input Event detected for input type: ' + event.type +
-      ' with extraData ' + JSON.stringify(event.extraData));
-      // we only support this interaction on checkboxes for now.
-      // the mechanic is generic, add other controls below. In case,
-      // you need to also add support for them in github-link-area as well.
-      if (event.type === 'checkbox') {
-        // disable the inputs so we don't get into async issues when
-        // storing to the upstream component. This has to be done on
-        // new supported input types as well.
-        this.inputsDisabled = true;
-        // process the checkbox clicked, find the markdown markup reference, update it.
-        let activatedCheckboxIndex: number = event.extraData.checkboxIndex;
-        let checked: boolean = event.extraData.checked;
-        let markdownMarkup: string = this.rawText;
-        // the JavaScript RegExp flavour makes it hard to to nth occurence
-        // expressions, so we're doing it by hand here.
-        const regex = /^ *[-*] *\[[ xX]*\]/gm;
-        let m;
-        let matchIndex = 0;
-        // tslint:disable-next-line:no-conditional-assignment
-        while ((m = regex.exec(markdownMarkup)) !== null) {
-          // This is necessary to avoid infinite loops with zero-width matches.
-          if (m.index === regex.lastIndex) {
-            regex.lastIndex++;
-          }
-          if (matchIndex === activatedCheckboxIndex && m.length > 0) {
-            // JavaScript does not have a replace by index method.
-            let matchLen = m[0].length;
-            let matchEndIndex = regex.lastIndex;
-            let matchStartIndex = matchEndIndex - matchLen;
-            let replaceStr;
-            if (checked) {
-              replaceStr = m[0].replace(/\[[ ]*\]/, '[x]');
-            } else {
-              replaceStr = m[0].replace(/\[[xX]+\]/, '[ ]');
-            }
-            markdownMarkup =
-              markdownMarkup.substring(0, matchStartIndex) +
-              replaceStr +
-              markdownMarkup.substring(matchEndIndex, markdownMarkup.length);
-          }
-          matchIndex++;
+    console.log(
+      `In-Markup Markdown input Event detected for input type: ${
+        event.type
+      } with extraData ${JSON.stringify(event.extraData)}`,
+    );
+    // we only support this interaction on checkboxes for now.
+    // the mechanic is generic, add other controls below. In case,
+    // you need to also add support for them in github-link-area as well.
+    if (event.type === 'checkbox') {
+      // disable the inputs so we don't get into async issues when
+      // storing to the upstream component. This has to be done on
+      // new supported input types as well.
+      this.inputsDisabled = true;
+      // process the checkbox clicked, find the markdown markup reference, update it.
+      const activatedCheckboxIndex: number = event.extraData.checkboxIndex;
+      const checked: boolean = event.extraData.checked;
+      let markdownMarkup: string = this.rawText;
+      // the JavaScript RegExp flavour makes it hard to to nth occurence
+      // expressions, so we're doing it by hand here.
+      const regex = /^ *[-*] *\[[ xX]*\]/gm;
+      let m;
+      let matchIndex = 0;
+      // tslint:disable-next-line:no-conditional-assignment
+      while ((m = regex.exec(markdownMarkup)) !== null) {
+        // This is necessary to avoid infinite loops with zero-width matches.
+        if (m.index === regex.lastIndex) {
+          regex.lastIndex++;
         }
-        this.rawText = markdownMarkup;
-        // signal that the markdown has changed to the outside world.
-        this.saveClick();
-      } else {
-        console.log('Input type ' + event.type + ' is not supported yet.');
+        if (matchIndex === activatedCheckboxIndex && m.length > 0) {
+          // JavaScript does not have a replace by index method.
+          const matchLen = m[0].length;
+          const matchEndIndex = regex.lastIndex;
+          const matchStartIndex = matchEndIndex - matchLen;
+          let replaceStr;
+          if (checked) {
+            replaceStr = m[0].replace(/\[[ ]*\]/, '[x]');
+          } else {
+            replaceStr = m[0].replace(/\[[xX]+\]/, '[ ]');
+          }
+          markdownMarkup =
+            markdownMarkup.substring(0, matchStartIndex) +
+            replaceStr +
+            markdownMarkup.substring(matchEndIndex, markdownMarkup.length);
+        }
+        matchIndex++;
       }
+      this.rawText = markdownMarkup;
+      // signal that the markdown has changed to the outside world.
+      this.saveClick();
+    } else {
+      console.log(`Input type ${event.type} is not supported yet.`);
+    }
   }
 
   onClickMarkdownTab() {
@@ -199,7 +225,7 @@ export class MarkdownComponent implements OnChanges, OnInit, AfterViewChecked {
         this.rawText = this.editorInput.nativeElement.innerText.trim();
         this.showPreview.emit({
           rawText: this.rawText,
-          callBack: (t: string, m: string) => this.renderPreview(t, m)
+          callBack: (t: string, m: string) => this.renderPreview(t, m),
         });
         this.rendering = true;
       } else {
@@ -214,9 +240,9 @@ export class MarkdownComponent implements OnChanges, OnInit, AfterViewChecked {
 
   // disables/enables the inputs on the rendered markup
   setPreviewInputsDisabled(query: string, disabled: boolean) {
-    let el = this.previewArea;
+    const el = this.previewArea;
     if (el) {
-      let queryElems = el.nativeElement.querySelectorAll(query);
+      const queryElems = el.nativeElement.querySelectorAll(query);
       if (queryElems && queryElems.length > 0) {
         // we need to use a classic loop instead of forEach here
         // as forEach on NodeLists is not supported on every browser.
@@ -271,19 +297,20 @@ export class MarkdownComponent implements OnChanges, OnInit, AfterViewChecked {
 
   saveClick() {
     if (this.allowEmptySave || (!this.fieldEmpty && !this.allowEmptySave)) {
-      if (this.viewType === 'markdown' &&
-        this.previousRawText !== this.editorInput.nativeElement.innerText.trim()) {
+      if (
+        this.viewType === 'markdown' &&
+        this.previousRawText !== this.editorInput.nativeElement.innerText.trim()
+      ) {
         this.saving = true;
         this.onSaveClick.emit({
           rawText: this.editorInput.nativeElement.innerText.trim(),
-          callBack: (t: string, m: string) => this.saveUpdate(t, m)
+          callBack: (t: string, m: string) => this.saveUpdate(t, m),
         });
-      } else if (this.viewType === 'preview' &&
-        this.previousRawText !== this.rawText) {
+      } else if (this.viewType === 'preview' && this.previousRawText !== this.rawText) {
         this.saving = true;
         this.onSaveClick.emit({
           rawText: this.rawText,
-          callBack: (t: string, m: string) => this.saveUpdate(t, m)
+          callBack: (t: string, m: string) => this.saveUpdate(t, m),
         });
       } else {
         this.deactivateEditor();
@@ -294,7 +321,7 @@ export class MarkdownComponent implements OnChanges, OnInit, AfterViewChecked {
   editorKeyUp(event: Event) {
     // Do not use this.event.srcElement. The "event" object is not consistent
     // across browsers. Chrome has event.srcElement while firefox has event.originalTarget.
-    this.fieldEmpty = this.editorInput.nativeElement.innerText.trim()  === '';
+    this.fieldEmpty = this.editorInput.nativeElement.innerText.trim() === '';
   }
 
   closeClick() {
@@ -307,13 +334,13 @@ export class MarkdownComponent implements OnChanges, OnInit, AfterViewChecked {
 
   renderPreview(rawText: string, renderedText: string) {
     this.rendering = false;
-    if (typeof(rawText) === 'undefined') {
+    if (typeof rawText === 'undefined') {
       console.warn('Markdown component preview callback :: rawText is passed undefined');
       this.rawText = '';
     } else {
       this.rawText = rawText;
     }
-    if (typeof(renderedText) === 'undefined') {
+    if (typeof renderedText === 'undefined') {
       console.warn('Markdown component preview callback :: renderedText is passed undefined');
       this.renderedText = '';
     } else {
@@ -324,13 +351,13 @@ export class MarkdownComponent implements OnChanges, OnInit, AfterViewChecked {
 
   saveUpdate(rawText: string, renderedText: any) {
     this.saving = false;
-    if (typeof(rawText) === 'undefined') {
+    if (typeof rawText === 'undefined') {
       console.warn('Markdown component save callback :: rawText is passed undefined');
       this.rawText = '';
     } else {
       this.rawText = rawText;
     }
-    if (typeof(renderedText) === 'undefined') {
+    if (typeof renderedText === 'undefined') {
       console.warn('Markdown component save callback :: renderedText is passed undefined');
       this.renderedText = '';
     } else {

@@ -9,8 +9,21 @@ import { WatcherFactory } from './watcher-factory.service';
 export const openshiftNamespacesUrl = '/oapi/v1/namespaces/';
 
 @Injectable()
-export class DeploymentConfigService extends OpenShiftNamespacedResourceService<DeploymentConfig, DeploymentConfigs> {
-  constructor(@Inject(KUBERNETES_RESTANGULAR) kubernetesRestangular: Restangular, namespaceScope: NamespaceScope, watcherFactory: WatcherFactory) {
-    super(kubernetesRestangular, namespaceScope, '/deploymentconfigs', watcherFactory, openshiftNamespacesUrl);
+export class DeploymentConfigService extends OpenShiftNamespacedResourceService<
+  DeploymentConfig,
+  DeploymentConfigs
+> {
+  constructor(
+    @Inject(KUBERNETES_RESTANGULAR) kubernetesRestangular: Restangular,
+    namespaceScope: NamespaceScope,
+    watcherFactory: WatcherFactory,
+  ) {
+    super(
+      kubernetesRestangular,
+      namespaceScope,
+      '/deploymentconfigs',
+      watcherFactory,
+      openshiftNamespacesUrl,
+    );
   }
 }

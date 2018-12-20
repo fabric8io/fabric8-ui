@@ -1,3 +1,3 @@
 export class ProcessTemplate {
-    name: string;
+  name: string;
 }

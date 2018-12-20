@@ -5,22 +5,24 @@ import { Router } from '@angular/router';
 import { Logger, Notifications, NotificationType } from 'ngx-base';
 import { Contexts, WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
-import { Observable,  of, throwError as observableThrowError } from 'rxjs';
+import { of, throwError as observableThrowError } from 'rxjs';
 import { GettingStartedService } from '../../getting-started/services/getting-started.service';
 import { GitHubService } from '../../space/create/codebases/services/github.service';
 import { CopyService } from '../services/copy.service';
 import { TenantService } from '../services/tenant.service';
 import { TenantUpdateStatus, UpdateComponent } from './update.component';
 
-
 describe('UpdateComponent', () => {
-
   let fixture: ComponentFixture<UpdateComponent>;
   let component: DebugNode['componentInstance'];
 
   let mockAuthenticationService: any = jasmine.createSpyObj('AuthenticationService', ['getToken']);
   let mockCopyService: any = jasmine.createSpyObj('CopyService', ['copy']);
-  let mockGettingStartedService: any = jasmine.createSpyObj('GettingStartedService', ['createTransientProfile', 'update', 'ngOnDestroy']);
+  let mockGettingStartedService: any = jasmine.createSpyObj('GettingStartedService', [
+    'createTransientProfile',
+    'update',
+    'ngOnDestroy',
+  ]);
   let mockContexts: any = jasmine.createSpy('Contexts');
   let mockGitHubService: any = jasmine.createSpyObj('GitHubService', ['getUser']);
   let mockNotifications: any = jasmine.createSpyObj('Notifications', ['message']);
@@ -31,11 +33,11 @@ describe('UpdateComponent', () => {
 
   mockAuthenticationService.gitHubToken = of('gh-test-user');
   mockContexts.current = of({
-    'user': {
-      'attributes': {
-        'username': 'foobar'
-      }
-    }
+    user: {
+      attributes: {
+        username: 'foobar',
+      },
+    },
   });
 
   beforeEach(() => {
@@ -49,9 +51,9 @@ describe('UpdateComponent', () => {
         { provide: Router, useValue: mockRouter },
         { provide: UserService, useValue: mockUserService },
         { provide: Logger, useValue: mockLogger },
-        { provide: WIT_API_URL, useValue: 'http://example.com'}
+        { provide: WIT_API_URL, useValue: 'http://example.com' },
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     });
     TestBed.overrideProvider(CopyService, { useValue: mockCopyService });
     TestBed.overrideProvider(GettingStartedService, { useValue: mockGettingStartedService });
@@ -76,6 +78,12 @@ describe('UpdateComponent', () => {
       expect(result).toBeFalsy();
     });
 
+    it('should be true if bio is invalid is invalid', () => {
+      component.bioInvalid = true;
+      let result: boolean = component.isUpdateProfileDisabled;
+      expect(result).toBeTruthy();
+    });
+
     it('should be true if at least one of the urls is invalid', () => {
       component.emailInvalid = true;
       let result: boolean = component.isUpdateProfileDisabled;
@@ -87,7 +95,7 @@ describe('UpdateComponent', () => {
     it('should show a success message if token was copied', () => {
       let message = {
         message: 'Token copied!',
-        type: NotificationType.SUCCESS
+        type: NotificationType.SUCCESS,
       };
       component.copyService.copy.and.returnValue(true);
       component.copyTokenToClipboard();
@@ -97,7 +105,7 @@ describe('UpdateComponent', () => {
     it('should show an danger message if there was an error', () => {
       let message = {
         message: 'Failed to copy token',
-        type: NotificationType.DANGER
+        type: NotificationType.DANGER,
       };
       component.copyService.copy.and.returnValue(false);
       component.copyTokenToClipboard();
@@ -105,12 +113,13 @@ describe('UpdateComponent', () => {
     });
   });
 
-
   describe('#linkImageUrl', () => {
     it('should properly link the avatar image if image exists', () => {
-      component.gitHubService.getUser.and.returnValue(of({
-        'avatar_url': 'mock-image'
-      }));
+      component.gitHubService.getUser.and.returnValue(
+        of({
+          avatar_url: 'mock-image',
+        }),
+      );
       component.linkGithubImageUrl();
       expect(component.imageUrl).toBe('mock-image');
     });
@@ -118,7 +127,7 @@ describe('UpdateComponent', () => {
     it('should show an error message if no image is found', () => {
       let message = {
         message: 'No image found',
-        type: NotificationType.INFO
+        type: NotificationType.INFO,
       };
       component.gitHubService.getUser.and.returnValue(of({}));
       component.linkGithubImageUrl();
@@ -128,18 +137,16 @@ describe('UpdateComponent', () => {
     it('should show a warning message if unable to link the image', () => {
       let message = {
         message: 'Unable to link image',
-        type: NotificationType.WARNING
+        type: NotificationType.WARNING,
       };
-      component.gitHubService.getUser.and.returnValue(
-        observableThrowError('error')
-      );
+      component.gitHubService.getUser.and.returnValue(observableThrowError('error'));
       component.linkGithubImageUrl();
       expect(component.notifications.message).toHaveBeenCalledWith(message);
     });
   });
 
   describe('#routeToProfile', () => {
-    it('should route to the user\'s profile page', () => {
+    it("should route to the user's profile page", () => {
       component.routeToProfile();
       expect(component.router.navigate).toHaveBeenCalledWith(['/', 'foobar']);
     });
@@ -165,24 +172,24 @@ describe('UpdateComponent', () => {
   describe('#updateProfile', () => {
     // Mock initial profile data from GettingStartedService
     let mockUser: User = {
-      'attributes': {
-        'bio': 'old-bio',
-        'company': 'old-company',
-        'email': 'old-email',
-        'emailPrivate': false,
-        'fullName': 'old-fullName',
-        'imageURL': 'old-imageUrl',
-        'url': 'old-url',
-        'username': 'old-username'
+      attributes: {
+        bio: 'old-bio',
+        company: 'old-company',
+        email: 'old-email',
+        emailPrivate: false,
+        fullName: 'old-fullName',
+        imageURL: 'old-imageUrl',
+        url: 'old-url',
+        username: 'old-username',
       },
-      'id': 'mock-id',
-      'type': 'mock-type'
+      id: 'mock-id',
+      type: 'mock-type',
     };
 
     it('should update the profile with the expected information', () => {
       let message = {
-        'message': 'Profile updated!',
-        type: NotificationType.SUCCESS
+        message: 'Profile updated!',
+        type: NotificationType.SUCCESS,
       };
       // New profile data to be saved
       component.bio = 'new-bio';
@@ -200,8 +207,8 @@ describe('UpdateComponent', () => {
 
     it('should show an error 409 status if the e-mail provided already exists', () => {
       let message = {
-        'message': 'Email already exists',
-        type: NotificationType.DANGER
+        message: 'Email already exists',
+        type: NotificationType.DANGER,
       };
       component.gettingStartedService.createTransientProfile.and.returnValue(mockUser.attributes);
       component.gettingStartedService.update.and.returnValue(observableThrowError({ status: 409 }));
@@ -211,8 +218,8 @@ describe('UpdateComponent', () => {
 
     it('should show an error if the profile has failed to update', () => {
       let message = {
-        'message': 'Failed to update profile',
-        type: NotificationType.DANGER
+        message: 'Failed to update profile',
+        type: NotificationType.DANGER,
       };
       component.gettingStartedService.createTransientProfile.and.returnValue(mockUser.attributes);
       component.gettingStartedService.update.and.returnValue(observableThrowError('error'));
@@ -224,8 +231,8 @@ describe('UpdateComponent', () => {
   describe('#updateTenant', () => {
     it('should update the tenant if successful', () => {
       let message = {
-        'message': 'Profile updated!',
-        type: NotificationType.SUCCESS
+        message: 'Profile updated!',
+        type: NotificationType.SUCCESS,
       };
       component.tenantService.updateTenant.and.returnValue(of({ status: 200 }));
       component.updateTenant();
@@ -235,8 +242,8 @@ describe('UpdateComponent', () => {
 
     it('should show an error if the tenant has failed to update', () => {
       let message = {
-        'message': 'Error updating tenant',
-        type: NotificationType.DANGER
+        message: 'Error updating tenant',
+        type: NotificationType.DANGER,
       };
       component.tenantService.updateTenant.and.returnValue(of({ status: 404 }));
       component.updateTenant();
@@ -246,8 +253,8 @@ describe('UpdateComponent', () => {
 
     it('should show an error if the tenant has suffered an unexpected error when updating', () => {
       let message = {
-        'message': 'Unexpected error updating tenant',
-        type: NotificationType.DANGER
+        message: 'Unexpected error updating tenant',
+        type: NotificationType.DANGER,
       };
       component.tenantService.updateTenant.and.returnValue(observableThrowError('error'));
       component.updateTenant();
@@ -266,7 +273,7 @@ describe('UpdateComponent', () => {
   describe('#validateUrl', () => {
     it('should verify not-a-real-url to be an invalid url', () => {
       let urls: string[] = ['not-a-real-url', 'http://', '.com', 'htt:/not-a-real-url.some-thing.'];
-      urls.forEach(url => {
+      urls.forEach((url) => {
         component.url = url;
         component.validateUrl();
         expect(component.urlInvalid).toBeTruthy();
@@ -295,8 +302,9 @@ describe('UpdateComponent', () => {
       expect(result).toBeTruthy();
     });
 
-    it('should verify "very.(),:;<>[]\".VERY.\"very@\\ \"very\".unusual"@strange.example.com to be a valid address', () => {
-      let validAddress: string = '"very.(),:;<>[]\".VERY.\"very@\\ \"very\".unusual"@strange.example.com';
+    it('should verify "very.(),:;<>[]".VERY."very@\\ "very".unusual"@strange.example.com to be a valid address', () => {
+      let validAddress: string =
+        '"very.(),:;<>[]".VERY."very@\\ "very".unusual"@strange.example.com';
       let result = component.isEmailValid(validAddress);
       expect(result).toBeTruthy();
     });
@@ -325,5 +333,4 @@ describe('UpdateComponent', () => {
       expect(result).toBeFalsy();
     });
   });
-
 });

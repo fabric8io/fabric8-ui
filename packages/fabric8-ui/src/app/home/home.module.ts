@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { NgModule }     from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
@@ -28,9 +28,9 @@ import { WorkItemWidgetModule } from './work-item-widget/work-item-widget.module
     RecentWorkspacesWidgetModule,
     CarouselModule.forRoot(),
     ModalModule.forRoot(),
-    TooltipModule.forRoot()
+    TooltipModule.forRoot(),
   ],
-  declarations: [ HomeComponent ]
+  declarations: [HomeComponent],
 })
 export class HomeModule {
   constructor() {}

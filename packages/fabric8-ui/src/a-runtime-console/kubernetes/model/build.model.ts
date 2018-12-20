@@ -4,9 +4,7 @@ import { KubernetesSpecResource } from './kuberentesspecresource.model';
 import { PipelineStage } from './pipelinestage.model';
 import { pathJoin } from './utils';
 
-
 const serviceEnvironmentsAnnotationPrefix = 'environment.services.fabric8.io/';
-
 
 export function sortedKeys(map: Map<String, any>): string[] {
   let answer = [];
@@ -32,7 +30,10 @@ export class Build extends KubernetesSpecResource {
 
   private _pipelineStages: Array<PipelineStage>;
   private _serviceUrls: Array<ServiceUrl> = new Array<ServiceUrl>();
-  private _serviceEnvironmentsMap: Map<string, ServiceEnvironments> = new Map<string, ServiceEnvironments>();
+  private _serviceEnvironmentsMap: Map<string, ServiceEnvironments> = new Map<
+    string,
+    ServiceEnvironments
+  >();
 
   get serviceUrls(): Array<ServiceUrl> {
     // lets force the lazy creation
@@ -51,9 +52,11 @@ export class Build extends KubernetesSpecResource {
             try {
               let config = jsyaml.safeLoad(yamlText);
               if (config) {
-                let se = new ServiceEnvironments(config.environmentName as string,
+                let se = new ServiceEnvironments(
+                  config.environmentName as string,
                   config.serviceUrls as Map<string, string>,
-                  config.deploymentVersions as Map<string, string>);
+                  config.deploymentVersions as Map<string, string>,
+                );
                 this._serviceEnvironmentsMap[envKey] = se;
               }
             } catch (e) {
@@ -115,7 +118,7 @@ export class Build extends KubernetesSpecResource {
           if (obj != undefined) {
             var stages = obj.stages;
             if (stages && stages.length) {
-              stages.forEach(stage => {
+              stages.forEach((stage) => {
                 var pipelineStage = new PipelineStage(stage, this);
                 if (pipelineStage.name) {
                   this._pipelineStages.push(pipelineStage);
@@ -144,7 +147,7 @@ export class Build extends KubernetesSpecResource {
         var obj = JSON.parse(json);
         if (obj != undefined) {
           if (obj && obj.length) {
-            obj.forEach(input => {
+            obj.forEach((input) => {
               answer.push(input as PendingInputAction);
             });
           }
@@ -234,12 +237,16 @@ export class ServiceUrl {
   label: string;
 
   constructor(public environmentName: string, public name: string, public url: string) {
-    this.label = environmentName ? (environmentName + ': ' + name) : name;
+    this.label = environmentName ? environmentName + ': ' + name : name;
   }
 }
 
 export class ServiceEnvironments {
-  constructor(public environmentName: string, public serviceUrls: Map<string, string>, public deploymentVersions: Map<string, string>) {}
+  constructor(
+    public environmentName: string,
+    public serviceUrls: Map<string, string>,
+    public deploymentVersions: Map<string, string>,
+  ) {}
 
   toAppInfo(name: string): AppInfo {
     let deployUrl = this.serviceUrls[name] || '';
@@ -250,12 +257,15 @@ export class ServiceEnvironments {
 }
 
 export class AppInfo {
-  constructor(public name: string, public deployUrl: string, public version: string, public environmentName: string) {
-  }
+  constructor(
+    public name: string,
+    public deployUrl: string,
+    public version: string,
+    public environmentName: string,
+  ) {}
 }
 
-export class Builds extends Array<Build> {
-}
+export class Builds extends Array<Build> {}
 
 export class PendingInputAction {
   id: string;

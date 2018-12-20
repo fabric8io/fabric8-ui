@@ -14,14 +14,10 @@ import { PlannerCardComponent } from './planner-card.component';
     TooltipModule,
     UserAvatarModule,
     LabelsModule,
-    AssigneesModule
+    AssigneesModule,
   ],
-  declarations: [
-    PlannerCardComponent
-  ],
-  providers: [ TooltipConfig ],
-  exports: [
-    PlannerCardComponent
-  ]
+  declarations: [PlannerCardComponent],
+  providers: [TooltipConfig],
+  exports: [PlannerCardComponent],
 })
 export class PlannerCardModule {}

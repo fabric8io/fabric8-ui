@@ -16,20 +16,10 @@ import { AddSpaceOverlayComponent } from './add-space-overlay.component';
     FormsModule,
     Fabric8WitModule,
     ModalModule,
-    SpaceNameModule
+    SpaceNameModule,
   ],
-  declarations: [
-    AddSpaceOverlayComponent
-  ],
-  exports: [
-    AddSpaceOverlayComponent
-  ],
-  providers: [
-    CodebasesService,
-    SpaceTemplateService
-  ]
+  declarations: [AddSpaceOverlayComponent],
+  exports: [AddSpaceOverlayComponent],
+  providers: [CodebasesService, SpaceTemplateService],
 })
-
-export class AddSpaceOverlayModule {
-
-}
+export class AddSpaceOverlayModule {}

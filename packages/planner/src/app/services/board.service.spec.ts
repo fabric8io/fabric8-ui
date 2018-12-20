@@ -18,10 +18,10 @@ describe('BoardService :: ', () => {
       providers: [
         {
           provide: HttpClientService,
-          useValue: mockHttpClientService
+          useValue: mockHttpClientService,
         },
-        BoardService
-      ]
+        BoardService,
+      ],
     });
   });
 
@@ -31,26 +31,19 @@ describe('BoardService :: ', () => {
     expect(boardService).not.toBeUndefined();
   });
 
-  it('getBoardApiUrl :: Should fetch board api URL', done => {
+  it('getBoardApiUrl :: Should fetch board api URL', (done) => {
     const boardService = TestBed.get(BoardService);
-    boardService.http.get.and.returnValue(
-      of(spaceTemplateResponse).pipe(delay(200))
-    );
-    boardService.getBoardApiUrl('').subscribe(url => {
-      expect(url).toEqual(
-        spaceTemplateResponse.data.relationships.workitemboards.links.related
-      );
+    boardService.http.get.and.returnValue(of(spaceTemplateResponse).pipe(delay(200)));
+    boardService.getBoardApiUrl('').subscribe((url) => {
+      expect(url).toEqual(spaceTemplateResponse.data.relationships.workitemboards.links.related);
       done();
     });
   });
 
-  it('getBoards :: Should fetch list of boards', done => {
+  it('getBoards :: Should fetch list of boards', (done) => {
     const boardService = TestBed.get(BoardService);
-    boardService.http.get.and.returnValue(
-      of(boardsResponse)
-      .pipe(delay(200))
-    );
-    boardService.getBoards('').subscribe(resp => {
+    boardService.http.get.and.returnValue(of(boardsResponse).pipe(delay(200)));
+    boardService.getBoards('').subscribe((resp) => {
       expect(resp).toEqual(boardsResponse);
       done();
     });

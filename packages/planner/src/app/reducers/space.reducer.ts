@@ -6,8 +6,7 @@ import { initialState, SpaceState } from '../states/space.state';
 
 export type Action = SpaceActions.All;
 
-export const SpaceReducer: ActionReducer<SpaceState> =
-  (state = initialState, action: Action) => {
+export const SpaceReducer: ActionReducer<SpaceState> = (state = initialState, action: Action) => {
   switch (action.type) {
     case SpaceActions.GET_SUCCESS: {
       return action.payload;

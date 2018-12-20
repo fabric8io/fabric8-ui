@@ -5,5 +5,5 @@ export interface LabelState extends EntityState<LabelUI> {}
 
 export const initialState = {
   ids: [],
-  entities: {}
+  entities: {},
 };

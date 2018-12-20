@@ -15,17 +15,19 @@ export class NamespaceScope implements INamespaceScope {
 
   constructor(protected activatedRoute: ActivatedRoute, protected router: Router) {
     this.namespace = this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd),
+      filter((event) => event instanceof NavigationEnd),
       map(() => this.activatedRoute),
-      map(route => {
-          while (route.firstChild) { route = route.firstChild; }
-          return route;
+      map((route) => {
+        while (route.firstChild) {
+          route = route.firstChild;
+        }
+        return route;
       }),
-      filter(route => route.outlet === 'primary'),
-      mergeMap(route => route.params),
-      map(params => this.getNamespace(params)),
-      filter(n => n),
-      distinctUntilChanged()
+      filter((route) => route.outlet === 'primary'),
+      mergeMap((route) => route.params),
+      map((params) => this.getNamespace(params)),
+      filter((n) => n),
+      distinctUntilChanged(),
     );
   }
 

@@ -8,5 +8,5 @@ let recommenderApiUrlFactory = (api: ApiLocatorService) => {
 export let recommenderApiUrlProvider = {
   provide: RECOMMENDER_API_URL,
   useFactory: recommenderApiUrlFactory,
-  deps: [ApiLocatorService]
+  deps: [ApiLocatorService],
 };

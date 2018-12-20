@@ -8,12 +8,9 @@ import { HttpClientService } from '../shared/http-module/http.service';
 
 @Injectable()
 export class GroupTypesService {
-
   constructor(private http: HttpClientService) {}
 
   getGroupTypes(url): Observable<GroupTypesModel[]> {
-    return this.http
-      .get<{data: GroupTypesModel[]}>(url)
-      .pipe(map(r => r.data));
+    return this.http.get<{ data: GroupTypesModel[] }>(url).pipe(map((r) => r.data));
   }
 }

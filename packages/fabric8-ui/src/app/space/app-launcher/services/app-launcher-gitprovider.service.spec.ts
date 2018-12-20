@@ -1,8 +1,10 @@
-import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
-import { async, TestBed } from '@angular/core/testing';
 import {
-  Config, GitHubDetails, HelperService
-} from 'ngx-launcher';
+  HttpClientTestingModule,
+  HttpTestingController,
+  TestRequest,
+} from '@angular/common/http/testing';
+import { async, TestBed } from '@angular/core/testing';
+import { Config, GitHubDetails, HelperService } from 'ngx-launcher';
 import { AuthenticationService } from 'ngx-login-client';
 import { createMock } from 'testing/mock';
 import { FABRIC8_FORGE_API_URL } from '../../../shared/runtime-console/fabric8-ui-forge-api';
@@ -12,25 +14,26 @@ import { AppLauncherGitproviderService } from './app-launcher-gitprovider.servic
 import { ProviderService } from '../../../shared/account/provider.service';
 
 describe('Service: AppLauncherGitproviderService', () => {
-
   let service: AppLauncherGitproviderService;
   let controller: HttpTestingController;
   let user = {
     login: 'some-user',
-    avatarUrl: 'avatar-url'
+    avatarUrl: 'avatar-url',
   };
   let gitHubDetails = {
     authenticated: true,
     avatar: 'avatar-url',
     login: 'some-user',
-    organizations: {'fabric8-ui': 'fabric8-ui', 'some-user': undefined}
+    organizations: { 'fabric8-ui': 'fabric8-ui', 'some-user': undefined },
   } as GitHubDetails;
-  let orgs = {'fabric8-ui': 'fabric8-ui'};
+  let orgs = { 'fabric8-ui': 'fabric8-ui' };
   let repos = ['fabric8-ui', 'fabric-uxd'];
 
   beforeEach(() => {
     const mockProviderService = jasmine.createSpy('ProviderService');
-    const mockAuthenticationService: jasmine.SpyObj<AuthenticationService> = createMock(AuthenticationService);
+    const mockAuthenticationService: jasmine.SpyObj<AuthenticationService> = createMock(
+      AuthenticationService,
+    );
     mockAuthenticationService.getToken.and.returnValue('mock-token');
     const mockHelperService: jasmine.SpyObj<HelperService> = createMock(HelperService);
     mockHelperService.getBackendUrl.and.returnValue('http://example.com/');
@@ -42,15 +45,15 @@ describe('Service: AppLauncherGitproviderService', () => {
         { provide: ProviderService, useValue: mockProviderService },
         { provide: HelperService, useValue: mockHelperService },
         { provide: AuthenticationService, useValue: mockAuthenticationService },
-        { provide: Config, useClass: NewForgeConfig},
-        { provide: FABRIC8_FORGE_API_URL, useValue: 'http://example.com' }
-      ]
+        { provide: Config, useClass: NewForgeConfig },
+        { provide: FABRIC8_FORGE_API_URL, useValue: 'http://example.com' },
+      ],
     });
     service = TestBed.get(AppLauncherGitproviderService);
     controller = TestBed.get(HttpTestingController);
   });
 
-  it('should get GitHubDetails', async ((done: DoneFn) => {
+  it('should get GitHubDetails', async((done: DoneFn) => {
     service.getGitHubDetails().subscribe((val: GitHubDetails) => {
       expect(val).toEqual(gitHubDetails);
       done();
@@ -64,7 +67,6 @@ describe('Service: AppLauncherGitproviderService', () => {
     expect(req2.request.method).toBe('GET');
     expect(req2.request.headers.get('Authorization')).toEqual('Bearer mock-token');
     req2.flush(orgs);
-
   }));
 
   it('should get user orgs', (done: DoneFn) => {
@@ -84,7 +86,9 @@ describe('Service: AppLauncherGitproviderService', () => {
       expect(val).toBeTruthy();
       done();
     });
-    const req: TestRequest = controller.expectOne('http://example.com/services/git/repositories?organization=fabric8-ui');
+    const req: TestRequest = controller.expectOne(
+      'http://example.com/services/git/repositories?organization=fabric8-ui',
+    );
     expect(req.request.method).toBe('GET');
     expect(req.request.headers.get('Authorization')).toEqual('Bearer mock-token');
     req.flush(['fabric8-ui/test-repo']);
@@ -96,10 +100,11 @@ describe('Service: AppLauncherGitproviderService', () => {
       done();
     });
 
-    const req: TestRequest = controller.expectOne('http://example.com/services/git/repositories?organization=fabric8-ui');
+    const req: TestRequest = controller.expectOne(
+      'http://example.com/services/git/repositories?organization=fabric8-ui',
+    );
     expect(req.request.method).toBe('GET');
     expect(req.request.headers.get('Authorization')).toEqual('Bearer mock-token');
     req.flush(repos);
   });
-
 });

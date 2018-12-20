@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable ,  Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 @Injectable()
 export class ErrorService {
-
   private updateSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
   private routeSubject: Subject<string> = new Subject<string>();
 

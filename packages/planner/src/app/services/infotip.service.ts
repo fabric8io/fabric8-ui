@@ -7,12 +7,9 @@ const infotipsUrl: string = 'https://docs.openshift.io/json/infotips.json';
 
 @Injectable()
 export class InfotipService {
-  constructor(
-      private http: HttpBackendClient
-    ) {}
+  constructor(private http: HttpBackendClient) {}
 
   getInfotips(): Observable<InfotipState> {
-    return this.http
-      .get<{data: InfotipState}>(infotipsUrl);
+    return this.http.get<{ data: InfotipState }>(infotipsUrl);
   }
 }

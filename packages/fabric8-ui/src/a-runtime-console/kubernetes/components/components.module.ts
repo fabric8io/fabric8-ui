@@ -7,22 +7,18 @@ import { PipelineStatusComponent } from './pipeline-status/pipeline-status.compo
 import { PodPhaseIconComponent } from './pod-phase-icon/pod-phase-icon.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    Fabric8CommonModule
-  ],
+  imports: [CommonModule, Fabric8CommonModule],
   declarations: [
     BuildStatusIconComponent,
     KubernetesLabelsComponent,
     PodPhaseIconComponent,
-    PipelineStatusComponent
+    PipelineStatusComponent,
   ],
   exports: [
     BuildStatusIconComponent,
     KubernetesLabelsComponent,
     PodPhaseIconComponent,
-    PipelineStatusComponent
-  ]
+    PipelineStatusComponent,
+  ],
 })
-export class KubernetesComponentsModule {
-}
+export class KubernetesComponentsModule {}

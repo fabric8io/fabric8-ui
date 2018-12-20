@@ -6,15 +6,11 @@ import {
   OnDestroy,
   OnInit,
   SimpleChanges,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
 import * as c3 from 'c3';
 import * as d3 from 'd3';
-import {
-  debounce,
-  isEqual,
-  uniqueId
-} from 'lodash';
+import { debounce, isEqual, uniqueId } from 'lodash';
 import { PodPhase } from '../../models/pod-phase';
 import { Pods } from '../../models/pods';
 
@@ -22,10 +18,9 @@ import { Pods } from '../../models/pods';
   encapsulation: ViewEncapsulation.None,
   selector: 'deployments-donut-chart',
   templateUrl: './deployments-donut-chart.component.html',
-  styleUrls: ['./deployments-donut-chart.component.less']
+  styleUrls: ['./deployments-donut-chart.component.less'],
 })
 export class DeploymentsDonutChartComponent implements AfterViewInit, OnChanges, OnDestroy, OnInit {
-
   @Input() pods: Pods;
   @Input() mini: boolean;
   @Input() desiredReplicas: number;
@@ -45,16 +40,16 @@ export class DeploymentsDonutChartComponent implements AfterViewInit, OnChanges,
       donut: {
         expand: false,
         label: {
-          show: false
+          show: false,
         },
-        width: this.mini ? 5 : 10
+        width: this.mini ? 5 : 10,
       },
       size: {
         height: this.mini ? 45 : 150,
-        width: this.mini ? 45 : 150
+        width: this.mini ? 45 : 150,
       },
       legend: {
-        show: false
+        show: false,
       },
       tooltip: {
         format: {
@@ -67,25 +62,27 @@ export class DeploymentsDonutChartComponent implements AfterViewInit, OnChanges,
             }
 
             return value;
-          }
-        }
+          },
+        },
       },
       transition: {
-        duration: 0
+        duration: 0,
       },
       data: {
         type: 'donut',
-        groups: [Object.keys(PodPhase).map(p => PodPhase[p]).filter(p => p !== PodPhase.EMPTY)],
+        groups: [
+          Object.keys(PodPhase)
+            .map((p) => PodPhase[p])
+            .filter((p) => p !== PodPhase.EMPTY),
+        ],
         order: null,
         colors: this.colors,
         selection: {
-          enabled: false
+          enabled: false,
         },
-        columns: [
-          ['Empty', 1]
-        ],
-        unload: true
-      }
+        columns: [['Empty', 1]],
+        unload: true,
+      },
     };
 
     if (this.mini) {
@@ -93,7 +90,7 @@ export class DeploymentsDonutChartComponent implements AfterViewInit, OnChanges,
         top: 0,
         right: 0,
         bottom: 0,
-        left: 0
+        left: 0,
       };
     }
   }
@@ -106,15 +103,17 @@ export class DeploymentsDonutChartComponent implements AfterViewInit, OnChanges,
     if (changes.pods && !isEqual(changes.pods.previousValue, changes.pods.currentValue)) {
       this.debounceUpdateChart();
     }
-    if ((changes.desiredReplicas && !changes.desiredReplicas.firstChange) ||
-      (changes.idled && !changes.idled.firstChange)) {
+    if (
+      (changes.desiredReplicas && !changes.desiredReplicas.firstChange) ||
+      (changes.idled && !changes.idled.firstChange)
+    ) {
       this.updateCountText();
     }
   }
 
   ngOnDestroy(): void {
     if (this.chart) {
-      this.chart.unload({ done: () => this.chart = this.chart.destroy() });
+      this.chart.unload({ done: () => (this.chart = this.chart.destroy()) });
     }
   }
 
@@ -122,7 +121,7 @@ export class DeploymentsDonutChartComponent implements AfterViewInit, OnChanges,
     if (!this.mini && this.pods) {
       let smallText: string;
       if (this.desiredReplicas == null || this.desiredReplicas === this.pods.total) {
-        smallText = (this.pods.total === 1) ? 'pod' : 'pods';
+        smallText = this.pods.total === 1 ? 'pod' : 'pods';
       } else {
         smallText = `scaling to ${this.desiredReplicas}...`;
       }
@@ -163,10 +162,18 @@ export class DeploymentsDonutChartComponent implements AfterViewInit, OnChanges,
     if (bigText && !smallText) {
       donutChartTitle.text(bigText);
     } else {
-      donutChartTitle.insert('tspan', null).text(bigText)
-        .classed('donut-title-big-pf', true).attr('dy', 0).attr('x', 0);
-      donutChartTitle.insert('tspan', null).text(smallText).
-        classed('donut-title-small-pf', true).attr('dy', 20).attr('x', 0);
+      donutChartTitle
+        .insert('tspan', null)
+        .text(bigText)
+        .classed('donut-title-big-pf', true)
+        .attr('dy', 0)
+        .attr('x', 0);
+      donutChartTitle
+        .insert('tspan', null)
+        .text(smallText)
+        .classed('donut-title-small-pf', true)
+        .attr('dy', 20)
+        .attr('x', 0);
     }
   }
 }

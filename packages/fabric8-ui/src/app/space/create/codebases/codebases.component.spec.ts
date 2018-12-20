@@ -1,23 +1,8 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  Output
-} from '@angular/core';
-import {
-  async,
-  TestBed
-} from '@angular/core/testing';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { async, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import {
-  Broadcaster,
-  Notifications
-} from 'ngx-base';
-import {
-  Context,
-  Contexts,
-  Space
-} from 'ngx-fabric8-wit';
+import { Broadcaster, Notifications } from 'ngx-base';
+import { Context, Contexts, Space } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
 import {
   ActionModule,
@@ -27,7 +12,7 @@ import {
   FilterField,
   ListModule,
   SortEvent,
-  SortField
+  SortField,
 } from 'patternfly-ng';
 import {
   BehaviorSubject,
@@ -35,14 +20,11 @@ import {
   Observable,
   of as observableOf,
   Subject,
-  throwError as observableThrowError
+  throwError as observableThrowError,
 } from 'rxjs';
 import { createMock } from 'testing/mock';
 import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
-import {
-  initContext,
-  TestContext
-} from 'testing/test-context';
+import { initContext, TestContext } from 'testing/test-context';
 import { ProviderService } from '../../../shared/account/provider.service';
 import { CodebasesComponent } from './codebases.component';
 import { Che } from './services/che';
@@ -54,7 +36,7 @@ import { GitHubService } from './services/github.service';
 
 @Component({
   selector: 'codebases-toolbar',
-  template: ''
+  template: '',
 })
 class FakeCodebasesToolbar {
   @Output('onFilterChange') onFilterChange = new EventEmitter();
@@ -64,7 +46,7 @@ class FakeCodebasesToolbar {
 
 @Component({
   selector: 'codebases-item-heading',
-  template: ''
+  template: '',
 })
 class FakeCodebasesItemHeading {
   @Input() cheState: Che;
@@ -73,7 +55,7 @@ class FakeCodebasesItemHeading {
 
 @Component({
   selector: 'codebases-item',
-  template: ''
+  template: '',
 })
 class FakeCodebasesItem {
   @Input() cheState: Che;
@@ -84,7 +66,7 @@ class FakeCodebasesItem {
 
 @Component({
   selector: 'codebases-item-actions',
-  template: ''
+  template: '',
 })
 class FakeCodebasesItemActions {
   @Input() cheRunning: boolean;
@@ -94,16 +76,16 @@ class FakeCodebasesItemActions {
 
 @Component({
   selector: 'codebases-item-details',
-  template: ''
+  template: '',
 })
 class FakeCodebasesItemDetails {
   @Input() codebase: Codebase;
 }
 
 @Component({
-  template: '<codebases></codebases>'
+  template: '<codebases></codebases>',
 })
-class HostComponent { }
+class HostComponent {}
 
 describe('CodebasesComponent', () => {
   type TestingContext = TestContext<CodebasesComponent, HostComponent>;
@@ -129,19 +111,21 @@ describe('CodebasesComponent', () => {
   beforeEach(() => {
     broadcaster = createMock(Broadcaster);
     broadcastSubject = new Subject<any>();
-    broadcaster.on.and.callFake((event: string): Observable<any> => {
-      if (event === 'CodebaseAdded') {
-        return broadcastSubject;
-      }
-      return observableNever();
-    });
+    broadcaster.on.and.callFake(
+      (event: string): Observable<any> => {
+        if (event === 'CodebaseAdded') {
+          return broadcastSubject;
+        }
+        return observableNever();
+      },
+    );
 
     contexts = {
       current: observableOf({
         space: {
-          id: 'foo-space'
-        } as Space
-      } as Context)
+          id: 'foo-space',
+        } as Space,
+      } as Context),
     } as Contexts;
 
     cheService = createMock(CheService);
@@ -149,42 +133,46 @@ describe('CodebasesComponent', () => {
     cheService.start.and.returnValue(observableOf({ running: true, multiTenant: false }));
 
     codebasesService = createMock(CodebasesService);
-    codebasesSubject = new BehaviorSubject<Codebase[]>([{
-      attributes: {
-        url: 'https://github.com/foo-org/foo-project.git'
-      }
-    } as Codebase]);
+    codebasesSubject = new BehaviorSubject<Codebase[]>([
+      {
+        attributes: {
+          url: 'https://github.com/foo-org/foo-project.git',
+        },
+      } as Codebase,
+    ]);
     codebasesService.getCodebases.and.returnValue(codebasesSubject);
 
     gitHubService = createMock(GitHubService);
     gitHubService.clearCache.and.stub();
-    gitHubService.getRepoDetailsByUrl.and.callFake((url: string): Observable<GitHubRepoDetails> => {
-      if (url === 'https://github.com/foo-org/foo-project.git') {
-        const details: GitHubRepoDetails = new GitHubRepoDetails();
-        details.html_url = 'https://github.com/foo-org/foo-project/html';
-        details.full_name = 'Foo Project';
-        details.created_at = '2011-04-07T10:12:58Z';
-        details.pushed_at = '2011-04-07T10:12:58Z';
-        return observableOf(details);
-      } else if (url === 'https://github.com/bar-org/bar-project.git') {
-        const details: GitHubRepoDetails = new GitHubRepoDetails();
-        details.html_url = 'https://github.com/bar-org/bar-project/html';
-        details.full_name = 'Foo Project';
-        details.created_at = '2010-04-07T10:10:58Z';
-        details.pushed_at = '2010-04-07T10:10:58Z';
-        return observableOf(details);
-      } else if (url === 'https://github.com/foo-org/bar-project.git') {
-        return observableThrowError(new Error('404 error'));
-      } else {
-        throw new Error('Unexpected codebase URL');
-      }
-    });
+    gitHubService.getRepoDetailsByUrl.and.callFake(
+      (url: string): Observable<GitHubRepoDetails> => {
+        if (url === 'https://github.com/foo-org/foo-project.git') {
+          const details: GitHubRepoDetails = new GitHubRepoDetails();
+          details.html_url = 'https://github.com/foo-org/foo-project/html';
+          details.full_name = 'Foo Project';
+          details.created_at = '2011-04-07T10:12:58Z';
+          details.pushed_at = '2011-04-07T10:12:58Z';
+          return observableOf(details);
+        } else if (url === 'https://github.com/bar-org/bar-project.git') {
+          const details: GitHubRepoDetails = new GitHubRepoDetails();
+          details.html_url = 'https://github.com/bar-org/bar-project/html';
+          details.full_name = 'Foo Project';
+          details.created_at = '2010-04-07T10:10:58Z';
+          details.pushed_at = '2010-04-07T10:10:58Z';
+          return observableOf(details);
+        } else if (url === 'https://github.com/foo-org/bar-project.git') {
+          return observableThrowError(new Error('404 error'));
+        } else {
+          throw new Error('Unexpected codebase URL');
+        }
+      },
+    );
 
     notifications = createMock(Notifications);
     notifications.message.and.stub();
 
     authenticationService = {
-      gitHubToken: observableOf('github-token')
+      gitHubToken: observableOf('github-token'),
     } as AuthenticationService;
 
     providerService = createMock(ProviderService);
@@ -203,7 +191,7 @@ describe('CodebasesComponent', () => {
       { provide: Contexts, useFactory: () => contexts },
       { provide: Notifications, useFactory: () => notifications },
       { provide: AuthenticationService, useFactory: () => authenticationService },
-      { provide: ProviderService, useFactory: () => providerService }
+      { provide: ProviderService, useFactory: () => providerService },
     ],
     declarations: [
       FakeCodebasesToolbar,
@@ -211,14 +199,9 @@ describe('CodebasesComponent', () => {
       FakeCodebasesItem,
       FakeCodebasesItemActions,
       FakeCodebasesItemDetails,
-      MockFeatureToggleComponent
+      MockFeatureToggleComponent,
     ],
-    imports: [
-      ActionModule,
-      EmptyStateModule,
-      ListModule,
-      RouterTestingModule.withRoutes([])
-    ]
+    imports: [ActionModule, EmptyStateModule, ListModule, RouterTestingModule.withRoutes([])],
   });
 
   describe('GitHub repo details', () => {
@@ -227,14 +210,14 @@ describe('CodebasesComponent', () => {
       codebasesSubject.next([
         {
           attributes: {
-            url: 'https://github.com/foo-org/foo-project.git'
-          }
+            url: 'https://github.com/foo-org/foo-project.git',
+          },
         } as Codebase,
         {
           attributes: {
-            url: 'https://github.com/foo-org/bar-project.git'
-          }
-        } as Codebase
+            url: 'https://github.com/foo-org/bar-project.git',
+          },
+        } as Codebase,
       ]);
       codebasesSubject.complete();
 
@@ -260,15 +243,15 @@ describe('CodebasesComponent', () => {
         {
           name: 'alpha',
           attributes: {
-            url: 'https://github.com/foo-org/foo-project.git'
-          }
+            url: 'https://github.com/foo-org/foo-project.git',
+          },
         } as Codebase,
         {
           name: 'beta',
           attributes: {
-            url: 'https://github.com/bar-org/bar-project.git'
-          }
-        } as Codebase
+            url: 'https://github.com/bar-org/bar-project.git',
+          },
+        } as Codebase,
       ]);
       codebasesSubject.complete();
     });
@@ -281,11 +264,11 @@ describe('CodebasesComponent', () => {
         appliedFilters: [
           {
             field: {
-              id: 'name'
+              id: 'name',
             } as FilterField,
-            value: 'beta'
-          } as Filter
-        ]
+            value: 'beta',
+          } as Filter,
+        ],
       } as FilterEvent);
 
       expect(testContext.testedDirective.codebases.length).toEqual(1);
@@ -300,15 +283,15 @@ describe('CodebasesComponent', () => {
         {
           name: 'alpha',
           attributes: {
-            url: 'https://github.com/foo-org/foo-project.git'
-          }
+            url: 'https://github.com/foo-org/foo-project.git',
+          },
         } as Codebase,
         {
           name: 'beta',
           attributes: {
-            url: 'https://github.com/bar-org/bar-project.git'
-          }
-        } as Codebase
+            url: 'https://github.com/bar-org/bar-project.git',
+          },
+        } as Codebase,
       ]);
       codebasesSubject.complete();
     });
@@ -320,9 +303,9 @@ describe('CodebasesComponent', () => {
       testContext.testedDirective.sortChange({
         field: {
           id: 'name',
-          sortType: 'alpha'
+          sortType: 'alpha',
         } as SortField,
-        isAscending: false
+        isAscending: false,
       } as SortEvent);
       expect(testContext.testedDirective.codebases[0].name).toBe('beta');
       expect(testContext.testedDirective.codebases[1].name).toBe('alpha');
@@ -336,9 +319,9 @@ describe('CodebasesComponent', () => {
       testContext.testedDirective.sortChange({
         field: {
           id: 'createdAt',
-          sortType: 'numeric'
+          sortType: 'numeric',
         } as SortField,
-        isAscending: true
+        isAscending: true,
       } as SortEvent);
       expect(testContext.testedDirective.codebases[0].name).toBe('beta');
       expect(testContext.testedDirective.codebases[1].name).toBe('alpha');
@@ -352,9 +335,9 @@ describe('CodebasesComponent', () => {
       testContext.testedDirective.sortChange({
         field: {
           id: 'pushedAt',
-          sortType: 'numeric'
+          sortType: 'numeric',
         } as SortField,
-        isAscending: true
+        isAscending: true,
       } as SortEvent);
       expect(testContext.testedDirective.codebases[0].name).toBe('beta');
       expect(testContext.testedDirective.codebases[1].name).toBe('alpha');

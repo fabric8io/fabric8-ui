@@ -6,13 +6,8 @@ import { MySpacesItemRoutingModule } from './my-spaces-item-routing.module';
 import { MySpacesItemComponent } from './my-spaces-item.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    Fabric8WitModule,
-    FormsModule,
-    MySpacesItemRoutingModule
-  ],
-  declarations: [ MySpacesItemComponent ],
-  exports: [ MySpacesItemComponent ]
+  imports: [CommonModule, Fabric8WitModule, FormsModule, MySpacesItemRoutingModule],
+  declarations: [MySpacesItemComponent],
+  exports: [MySpacesItemComponent],
 })
 export class MySpacesItemModule {}

@@ -8,13 +8,7 @@ import { CleanupRoutingModule } from './cleanup-routing.module';
 import { CleanupComponent } from './cleanup.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    ModalModule,
-    ListModule,
-    CleanupRoutingModule
-  ],
-  declarations: [ CleanupComponent ]
+  imports: [CommonModule, FormsModule, ModalModule, ListModule, CleanupRoutingModule],
+  declarations: [CleanupComponent],
 })
 export class CleanupModule {}

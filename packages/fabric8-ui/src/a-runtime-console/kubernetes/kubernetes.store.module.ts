@@ -45,7 +45,7 @@ import { BrowserModule } from "@angular/platform-browser";
 
 @NgModule({
   imports: [
-/*
+    /*
     BrowserModule,
     RouterModule,
 */
@@ -53,9 +53,9 @@ import { BrowserModule } from "@angular/platform-browser";
     KubernetesRestangularModule,
     LocalStorageModule.withConfig({
       prefix: 'fabric8',
-      storageType: 'localStorage'
+      storageType: 'localStorage',
     }),
-    OAuthModule.forRoot()
+    OAuthModule.forRoot(),
   ],
   providers: [
     APIsStore,
@@ -93,15 +93,14 @@ import { BrowserModule } from "@angular/platform-browser";
     WatcherFactory,
     {
       provide: SpaceNamespace,
-      useClass: SpaceNamespaceService
-    }
-  ]
+      useClass: SpaceNamespaceService,
+    },
+  ],
 })
 export class KubernetesStoreModule {
   constructor(@Optional() @SkipSelf() parentModule: KubernetesStoreModule) {
     if (parentModule) {
-      throw new Error(
-        'KubernetesStoreModule is already loaded. Import it in the AppModule only');
+      throw new Error('KubernetesStoreModule is already loaded. Import it in the AppModule only');
     }
   }
 }

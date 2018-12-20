@@ -8,5 +8,5 @@ let realmFactory = (api: ApiLocatorService) => {
 export let realmProvider = {
   provide: REALM,
   useFactory: realmFactory,
-  deps: [ApiLocatorService]
+  deps: [ApiLocatorService],
 };

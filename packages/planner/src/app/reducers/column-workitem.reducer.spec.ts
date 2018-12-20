@@ -1,10 +1,9 @@
 import { GET_SUCCESS, GetSuccess } from '../actions/work-item.actions';
 import { WorkItemUI } from '../models/work-item';
-import { ColumnWorkItemState, InitialColumnWorkItemState  } from '../states/index.state';
+import { ColumnWorkItemState, InitialColumnWorkItemState } from '../states/index.state';
 import { GetError } from './../actions/board.actions';
 import * as ColumnWorkItemActions from './../actions/column-workitem.action';
 import { ColumnWorkItemReducer } from './column-workitem.reducer';
-
 
 describe('ColumnWorkitemReducer: ', () => {
   it('should update column-workitem state on [workitem] Get Success', () => {
@@ -13,29 +12,29 @@ describe('ColumnWorkitemReducer: ', () => {
         id: '1',
         title: 'Work Item 2',
         number: '2',
-        columnIds: [ '0000-000-05', '0000-000-06']
+        columnIds: ['0000-000-05', '0000-000-06'],
       },
       {
         id: '2',
         title: 'Work Item 1',
         number: '1',
-        columnIds: ['0000-000-05', '0000-000-07']
+        columnIds: ['0000-000-05', '0000-000-07'],
       },
       {
         id: '3',
         title: 'Work Item 1',
         number: '3',
-        columnIds: null
-      }
+        columnIds: null,
+      },
     ] as WorkItemUI[];
 
     const columWorkItemState: ColumnWorkItemState = {
       '0000-000-05': ['1', '2'],
       '0000-000-06': ['1'],
-      '0000-000-07': ['2']
+      '0000-000-07': ['2'],
     };
 
-    const action = new GetSuccess({workItems: workitems, nextLink: ''});
+    const action = new GetSuccess({ workItems: workitems, nextLink: '' });
     const state = ColumnWorkItemReducer(InitialColumnWorkItemState, action);
 
     expect(state).toEqual(columWorkItemState);
@@ -47,15 +46,14 @@ describe('ColumnWorkitemReducer: ', () => {
         id: '1',
         title: 'Work Item 1',
         number: '1',
-        columnIds: null
-      }
+        columnIds: null,
+      },
     ] as WorkItemUI[];
 
-    const action = new GetSuccess({workItems: workitems, nextLink: ''});
+    const action = new GetSuccess({ workItems: workitems, nextLink: '' });
     const state = ColumnWorkItemReducer(InitialColumnWorkItemState, action);
 
     expect(state).toEqual(InitialColumnWorkItemState);
-
   });
 
   it('should return the state when some other action is dispatched', () => {
@@ -68,20 +66,20 @@ describe('ColumnWorkitemReducer: ', () => {
     const columnWorkItemState: ColumnWorkItemState = {
       '0000-000-05': ['1', '2'],
       '0000-000-06': ['1'],
-      '0000-000-07': ['2', '3']
+      '0000-000-07': ['2', '3'],
     };
 
     const payload = {
       workItemId: '3',
       prevColumnId: '0000-000-07',
-      newColumnIds: ['0000-000-06', '0000-000-08']
+      newColumnIds: ['0000-000-06', '0000-000-08'],
     };
 
     const updatedState: ColumnWorkItemState = {
       '0000-000-05': ['1', '2'],
       '0000-000-06': ['1', '3'],
       '0000-000-07': ['2'],
-      '0000-000-08': ['3']
+      '0000-000-08': ['3'],
     };
 
     const action = new ColumnWorkItemActions.UpdateSuccess(payload);
@@ -93,14 +91,14 @@ describe('ColumnWorkitemReducer: ', () => {
   it('should update to previous state on [column workitem] Update Error', () => {
     const payload = {
       prevColumnId: '0000-000-07',
-      newColumnIds: ['0000-000-06', '0000-000-08']
+      newColumnIds: ['0000-000-06', '0000-000-08'],
     };
 
     const cwState: ColumnWorkItemState = {
       '0000-000-05': ['1', '2'],
       '0000-000-06': ['1', '3'],
       '0000-000-07': ['2'],
-      '0000-000-08': ['3']
+      '0000-000-08': ['3'],
     };
 
     const action = new ColumnWorkItemActions.UpdateError(payload);

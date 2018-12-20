@@ -6,13 +6,16 @@ export class CookieService {
   // a change is made in the table columns
   datatableColumnVersion = 4;
 
-  constructor() { }
+  constructor() {}
 
   setCookie(cName: string, cValue: Array<any>) {
-
-    document.cookie = cName + '=' + JSON.stringify({
-      version: this.datatableColumnVersion, value: cValue
-    });
+    document.cookie =
+      cName +
+      '=' +
+      JSON.stringify({
+        version: this.datatableColumnVersion,
+        value: cValue,
+      });
   }
 
   getCookie(itemLength: Number) {
@@ -21,13 +24,15 @@ export class CookieService {
       if (cookies[i].includes('datatableColumn')) {
         const data = JSON.parse(cookies[i].split('=')[1]);
         if (Object.keys(data).length === 2) {
-          if (data['version'] === this.datatableColumnVersion &&
-            data['value'].length === itemLength) {
-            return {status: true, array: data['value']};
+          if (
+            data['version'] === this.datatableColumnVersion &&
+            data['value'].length === itemLength
+          ) {
+            return { status: true, array: data['value'] };
           }
         }
       }
     }
-    return {status: false, array: []};
+    return { status: false, array: [] };
   }
 }

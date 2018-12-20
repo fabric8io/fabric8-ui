@@ -5,27 +5,35 @@ import {
   SafeResourceUrl,
   SafeScript,
   SafeStyle,
-  SafeUrl
+  SafeUrl,
 } from '@angular/platform-browser';
-import markdownIt from 'markdown-it';
-const markdown = new markdownIt();
+import MarkdownIt from 'markdown-it';
+
+const markdown = new MarkdownIt();
 
 @Pipe({
-  name: 'safe'
+  name: 'safe',
 })
 export class SafePipe implements PipeTransform {
+  constructor(protected sanitizer: DomSanitizer) {}
 
- constructor(protected sanitizer: DomSanitizer) {}
-
- public transform(value: any, type: string):
-  SafeHtml | SafeStyle | SafeScript | SafeUrl | SafeResourceUrl {
+  public transform(
+    value: any,
+    type: string,
+  ): SafeHtml | SafeStyle | SafeScript | SafeUrl | SafeResourceUrl {
     switch (type) {
-      case 'html': return this.sanitizer.bypassSecurityTrustHtml(value);
-      case 'style': return this.sanitizer.bypassSecurityTrustStyle(value);
-      case 'script': return this.sanitizer.bypassSecurityTrustScript(value);
-      case 'url': return this.sanitizer.bypassSecurityTrustUrl(value);
-      case 'resourceUrl': return this.sanitizer.bypassSecurityTrustResourceUrl(value);
-      default: throw new Error(`Invalid safe type specified: ${type}`);
+      case 'html':
+        return this.sanitizer.bypassSecurityTrustHtml(value);
+      case 'style':
+        return this.sanitizer.bypassSecurityTrustStyle(value);
+      case 'script':
+        return this.sanitizer.bypassSecurityTrustScript(value);
+      case 'url':
+        return this.sanitizer.bypassSecurityTrustUrl(value);
+      case 'resourceUrl':
+        return this.sanitizer.bypassSecurityTrustResourceUrl(value);
+      default:
+        throw new Error(`Invalid safe type specified: ${type}`);
     }
   }
 }
@@ -34,19 +42,22 @@ export class SafePipe implements PipeTransform {
   encapsulation: ViewEncapsulation.None,
   selector: 'markdown-example',
   styleUrls: ['./markdown-example.component.less'],
-  templateUrl: './markdown-example.component.html'
+  templateUrl: './markdown-example.component.html',
 })
 export class MarkdownExampleComponent {
-
-    private renderedText: string = '<h1>hello, markdown!\</h1><ul>' +
+  private renderedText: string =
+    '<h1>hello, markdown!</h1><ul>' +
     // tslint:disable-next-line:max-line-length
     '<li><input class="markdown-checkbox" type="checkbox" data-checkbox-index="0"></input> Item 0</li>' +
     // tslint:disable-next-line:max-line-length
     '<li><input class="markdown-checkbox" type="checkbox" checked="" data-checkbox-index="1"></input> Item 1</li>' +
     // tslint:disable-next-line:max-line-length
     '<li><input class="markdown-checkbox" type="checkbox" data-checkbox-index="2"></input> Item 2</li></ul>';
-  private renderedTextNoEdit: string = '<p>Edit is not allowed here</p>';
-  private rawText: string = '# hello, markdown!\n* [ ] Item 1\n* [x] Item 2\n* [ ] Item 3';
+
+  private renderedTextNoEdit = '<p>Edit is not allowed here</p>';
+
+  private rawText = '# hello, markdown!\n* [ ] Item 1\n* [x] Item 2\n* [ ] Item 3';
+
   private allowEdit = false;
 
   constructor(private sanitizer: DomSanitizer) {}
@@ -54,7 +65,7 @@ export class MarkdownExampleComponent {
   onSaveOrPreview(value: any) {
     const rawText = value.rawText;
     const callBack = value.callBack;
-    console.log('MarkdownExampleComponent: Received markdown markup update in client: ' + rawText);
+    console.log(`MarkdownExampleComponent: Received markdown markup update in client: ${rawText}`);
     setTimeout(() => {
       let text: string = markdown.render(rawText);
       const regex = /\[[ xX]\]|\[\]/gm;
@@ -68,24 +79,29 @@ export class MarkdownExampleComponent {
         }
         if (m.length > 0) {
           // JavaScript does not have a replace by index method.
-          let matchLen = m[0].length;
-          let matchEndIndex = regex.lastIndex;
-          let matchStartIndex = matchEndIndex - matchLen;
+          const matchLen = m[0].length;
+          const matchEndIndex = regex.lastIndex;
+          const matchStartIndex = matchEndIndex - matchLen;
           let replaceStr;
           if (m[0] === '[]' || m[0] === '[ ]') {
             // tslint:disable-next-line:max-line-length
-            replaceStr = '<input class="markdown-checkbox" type="checkbox" data-checkbox-index="' + matchIndex + '"></input>';
+            replaceStr = `<input class="markdown-checkbox" type="checkbox" data-checkbox-index="${matchIndex}"></input>`;
           } else {
             // tslint:disable-next-line:max-line-length
-            replaceStr = '<input class="markdown-checkbox" type="checkbox" checked="" data-checkbox-index="' + matchIndex + '"></input>';
+            replaceStr = `<input class="markdown-checkbox" type="checkbox" checked="" data-checkbox-index="${matchIndex}"></input>`;
           }
           // tslint:disable-next-line:max-line-length
-          text = text.substring(0, matchStartIndex) + replaceStr + text.substring(matchEndIndex, text.length);
+          text =
+            text.substring(0, matchStartIndex) +
+            replaceStr +
+            text.substring(matchEndIndex, text.length);
         }
         matchIndex++;
       }
       // tslint:disable-next-line:max-line-length
-      console.log('MarkdownExampleComponent: Rendering on service side completed, sending to component: ' + text);
+      console.log(
+        `MarkdownExampleComponent: Rendering on service side completed, sending to component: ${text}`,
+      );
       callBack(rawText, this.sanitizer.bypassSecurityTrustHtml(text));
     }, 2000);
   }
@@ -101,5 +117,4 @@ export class MarkdownExampleComponent {
   closeClicked() {
     console.log('Close clicked event works');
   }
-
 }

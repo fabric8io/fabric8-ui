@@ -1,10 +1,10 @@
 export class Fabric8UIConfig {
-
   analyticsWriteKey: string;
   branding: string;
   forgeApiUrl: string;
   analyticsRecommenderUrl: string;
-  analyticsLicenseUrl; string;
+  analyticsLicenseUrl;
+  string;
   openshiftConsoleUrl: string;
   pipelinesNamespace: string;
   recommenderApiUrl: string;
@@ -15,5 +15,4 @@ export class Fabric8UIConfig {
   kubernetesMode: string;
   authApiUrl: string;
   jenkinsApiUrl: string;
-
 }

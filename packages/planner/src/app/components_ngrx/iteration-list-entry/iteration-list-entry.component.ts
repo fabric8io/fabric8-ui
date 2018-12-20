@@ -1,15 +1,5 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  ViewEncapsulation
-} from '@angular/core';
-import {
-  ActivatedRoute,
-  Router
-} from '@angular/router';
+import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { AuthenticationService } from 'ngx-login-client';
 
@@ -22,7 +12,7 @@ import { FilterService } from './../../services/filter.service';
   encapsulation: ViewEncapsulation.None,
   selector: 'iteration-list-entry',
   templateUrl: './iteration-list-entry.component.html',
-  styleUrls: ['./iteration-list-entry.component.less']
+  styleUrls: ['./iteration-list-entry.component.less'],
 })
 export class IterationListEntryComponent implements OnInit {
   //@Input() listItem: TreeListItemComponent;
@@ -38,14 +28,11 @@ export class IterationListEntryComponent implements OnInit {
   @Output() readonly onCloseIteration = new EventEmitter<IterationUI>();
   @Output() readonly onCreateIteration = new EventEmitter<IterationUI>();
 
-
   loggedIn: Boolean = false;
   queryParams: Object = {};
   selectedItemId: string | number = 0;
 
-  constructor(private auth: AuthenticationService,
-    private filterService: FilterService
-  ) {}
+  constructor(private auth: AuthenticationService, private filterService: FilterService) {}
 
   ngOnInit(): void {
     this.loggedIn = this.auth.isLoggedIn();
@@ -78,28 +65,28 @@ export class IterationListEntryComponent implements OnInit {
   addRemoveQueryParams(iterationId: string) {
     if (this.context === 'board') {
       return {
-        q: this.constructURLforBoard(iterationId)
+        q: this.constructURLforBoard(iterationId),
       };
     }
     if (this.showCompleted && this.showTree) {
       return {
         q: this.constructURL(iterationId),
         showTree: this.showTree,
-        showCompleted: this.showCompleted
+        showCompleted: this.showCompleted,
       };
     } else if (this.showTree) {
       return {
         q: this.constructURL(iterationId),
-        showTree: this.showTree
+        showTree: this.showTree,
       };
     } else if (this.showCompleted) {
       return {
         q: this.constructURL(iterationId),
-        showCompleted: this.showCompleted
+        showCompleted: this.showCompleted,
       };
     } else {
       return {
-        q: this.constructURL(iterationId)
+        q: this.constructURL(iterationId),
       };
     }
   }
@@ -121,7 +108,7 @@ export class IterationListEntryComponent implements OnInit {
     this.onCreateIteration.emit(iteration);
   }
   calcDepth(iteration: IterationUI): string {
-    let depth = ((iteration.parentPath).split('/')).length - 1;
+    let depth = iteration.parentPath.split('/').length - 1;
     return 'depth-' + depth;
   }
 }

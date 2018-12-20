@@ -12,10 +12,10 @@ import { CodebasesItemWorkspacesComponent } from './codebases-item-workspaces.co
     CodebasesServicesModule,
     CommonModule,
     FormsModule,
-    TooltipModule.forRoot()
+    TooltipModule.forRoot(),
   ],
-  declarations: [ CodebasesItemWorkspacesComponent ],
-  exports: [ CodebasesItemWorkspacesComponent ],
-  providers: [ BsDropdownConfig, TooltipConfig ]
+  declarations: [CodebasesItemWorkspacesComponent],
+  exports: [CodebasesItemWorkspacesComponent],
+  providers: [BsDropdownConfig, TooltipConfig],
 })
 export class CodebasesItemWorkspacesModule {}

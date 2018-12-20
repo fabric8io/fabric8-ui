@@ -6,7 +6,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { MomentModule } from 'angular2-moment';
 import { AUTH_API_URL, AuthenticationService } from 'ngx-login-client';
 import { ModalModule } from 'ngx-modal';
-import { Observable,  of as observableOf } from 'rxjs';
+import { Observable, of as observableOf } from 'rxjs';
 import { JenkinsService } from '../../../../../app/shared/jenkins.service';
 import { FABRIC8_FORGE_API_URL } from '../../../../../app/shared/runtime-console/fabric8-ui-forge-api';
 import { FABRIC8_JENKINS_API_URL } from '../../../../../app/shared/runtime-console/fabric8-ui-jenkins-api';
@@ -20,11 +20,13 @@ describe('InputActionDialog', () => {
 
   let mockJenkinsService = {
     getJenkinsStatus(): Observable<any> {
-      let jenkinsStatus = observableOf([{
-        'data': {'state': 'idled'}
-      } as any]);
+      let jenkinsStatus = observableOf([
+        {
+          data: { state: 'idled' },
+        } as any,
+      ]);
       return jenkinsStatus;
-    }
+    },
   };
 
   beforeEach(async(() => {
@@ -34,7 +36,7 @@ describe('InputActionDialog', () => {
       },
       isLoggedIn: function() {
         return true;
-      }
+      },
     };
 
     TestBed.configureTestingModule({
@@ -43,32 +45,32 @@ describe('InputActionDialog', () => {
         FormsModule,
         ModalModule,
         MomentModule,
-        RouterTestingModule.withRoutes([])
+        RouterTestingModule.withRoutes([]),
       ],
-      declarations: [
-        InputActionDialog
-      ],
+      declarations: [InputActionDialog],
       providers: [
         {
           provide: AUTH_API_URL,
-          useValue: 'https://auth.fabric8.io/api/'
+          useValue: 'https://auth.fabric8.io/api/',
         },
         {
-            provide: AuthenticationService,
-            useValue: fakeAuthService
+          provide: AuthenticationService,
+          useValue: fakeAuthService,
         },
         {
-          provide: FABRIC8_FORGE_API_URL, useValue: 'http://fabric8.forge.api.url/'
+          provide: FABRIC8_FORGE_API_URL,
+          useValue: 'http://fabric8.forge.api.url/',
         },
         {
-          provide: FABRIC8_JENKINS_API_URL, useValue: 'http://fabric8.jenkins.api.url/'
+          provide: FABRIC8_JENKINS_API_URL,
+          useValue: 'http://fabric8.jenkins.api.url/',
         },
         {
-          provide: JenkinsService, useValue: mockJenkinsService
-        }
-       ]
-    })
-      .compileComponents();
+          provide: JenkinsService,
+          useValue: mockJenkinsService,
+        },
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -80,5 +82,4 @@ describe('InputActionDialog', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
 });

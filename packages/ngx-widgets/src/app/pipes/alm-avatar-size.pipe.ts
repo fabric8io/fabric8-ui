@@ -6,10 +6,10 @@ import { Pipe, PipeTransform } from '@angular/core';
  * Example:
  *   {{ URL |  almAvatarSize:20}}
  *   formats to: URL&s=20
-*/
+ */
 @Pipe({ name: 'almAvatarSize' })
 export class AlmAvatarSize implements PipeTransform {
   transform(value: number, size: string): string {
-    return value + '&s=' + size;
+    return `${value}&s=${size}`;
   }
 }

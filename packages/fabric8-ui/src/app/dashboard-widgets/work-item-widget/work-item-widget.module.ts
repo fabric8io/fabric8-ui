@@ -21,9 +21,9 @@ import { WorkItemWidgetComponent } from './work-item-widget.component';
     PlannerListModule,
     NgArrayPipesModule,
     WorkItemBarchartModule,
-    WorkItemDetailModule
+    WorkItemDetailModule,
   ],
   declarations: [WorkItemWidgetComponent],
-  exports: [WorkItemWidgetComponent]
+  exports: [WorkItemWidgetComponent],
 })
-export class WorkItemWidgetModule { }
+export class WorkItemWidgetModule {}

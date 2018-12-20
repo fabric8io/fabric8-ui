@@ -16,7 +16,11 @@ import { TruncateModule } from 'ng2-truncate';
 import { Broadcaster, Logger, Notifications } from 'ngx-base';
 import { Spaces } from 'ngx-fabric8-wit';
 import { ModalModule } from 'ngx-modal';
-import { AuthenticationService, UserService, HttpService as HttpServiceLGC } from 'ngx-login-client';
+import {
+  AuthenticationService,
+  UserService,
+  HttpService as HttpServiceLGC,
+} from 'ngx-login-client';
 
 import { HeaderModule, FooterModule, HeaderService } from 'osio-ngx-framework';
 
@@ -39,43 +43,38 @@ import { LoginService } from './services/login.service';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
-import {
-  StoreModule
-} from '@ngrx/store';
+import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 let serviceImports: Array<any[] | any | ModuleWithProviders>;
-let providers: any[] = [
-  GlobalSettings,
-  serviceImports
-];
+let providers: any[] = [GlobalSettings, serviceImports];
 
 serviceImports = [
-    Logger,
-    AuthenticationService,
-    Broadcaster,
-    LoginService,
-    UserService,
-    authApiUrlProvider,
-    Notifications,
-    HeaderService,
-    {
-      provide: Spaces,
-      useExisting: SpacesService
-    },
-    SpacesService,
-    ssoApiUrlProvider,
-  ];
-  providers = [
-    GlobalSettings,
-    witApiUrlProvider,
-    realmProvider,
-    serviceImports,
-    {
-      provide: Http,
-      useClass: HttpServiceLGC
-    }
-  ];
+  Logger,
+  AuthenticationService,
+  Broadcaster,
+  LoginService,
+  UserService,
+  authApiUrlProvider,
+  Notifications,
+  HeaderService,
+  {
+    provide: Spaces,
+    useExisting: SpacesService,
+  },
+  SpacesService,
+  ssoApiUrlProvider,
+];
+providers = [
+  GlobalSettings,
+  witApiUrlProvider,
+  realmProvider,
+  serviceImports,
+  {
+    provide: Http,
+    useClass: HttpServiceLGC,
+  },
+];
 
 @NgModule({
   imports: [
@@ -95,7 +94,7 @@ serviceImports = [
     EffectsModule.forRoot([]),
     StoreModule.forRoot({}),
     StoreDevtoolsModule.instrument({
-      maxAge: 25 //  Retains last 25 states
+      maxAge: 25, //  Retains last 25 states
     }),
     HeaderModule,
     FooterModule,
@@ -103,16 +102,12 @@ serviceImports = [
     EffectsModule.forRoot([]),
     StoreModule.forRoot({}),
     StoreDevtoolsModule.instrument({
-      maxAge: 25 //  Retains last 25 states
-    })
+      maxAge: 25, //  Retains last 25 states
+    }),
   ],
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-    LoginComponent
-  ],
+  declarations: [AppComponent, HeaderComponent, LoginComponent],
   providers: providers,
-  bootstrap: [ AppComponent ]
+  bootstrap: [AppComponent],
 })
 export class AppModule {
   constructor(private globalSettings: GlobalSettings) {}

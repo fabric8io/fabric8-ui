@@ -12,7 +12,7 @@ import { filterOutClosedItems, WorkItemsData } from '../../../shared/workitem-ut
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-work-items',
   templateUrl: './work-items.component.html',
-  styleUrls: ['./work-items.component.less']
+  styleUrls: ['./work-items.component.less'],
 })
 export class WorkItemsComponent implements OnDestroy, OnInit {
   context: Context;
@@ -29,7 +29,7 @@ export class WorkItemsComponent implements OnDestroy, OnInit {
     private spaceService: SpaceService,
     private workItemService: WorkItemService,
     private contextService: ContextService,
-    private filterService: FilterService
+    private filterService: FilterService,
   ) {}
 
   ngOnInit(): void {
@@ -41,27 +41,29 @@ export class WorkItemsComponent implements OnDestroy, OnInit {
           this.subscriptions.push(
             this.spaceService
               .getSpacesByUser(this.context.user.attributes.username)
-              .subscribe(spaces => {
+              .subscribe((spaces) => {
                 this.spaces = spaces;
                 if (this.viewingOwnAccount) {
                   this.subscriptions.push(
-                    this.spacesService.recent.subscribe((recentSpaces: Space[]): void => {
-                      if (recentSpaces && recentSpaces.length > 0) {
-                        this.spaces = uniqBy(spaces.concat(recentSpaces), 'id');
-                        this.attemptSelectSpace(recentSpaces[0]);
-                      }
-                    })
+                    this.spacesService.recent.subscribe(
+                      (recentSpaces: Space[]): void => {
+                        if (recentSpaces && recentSpaces.length > 0) {
+                          this.spaces = uniqBy(spaces.concat(recentSpaces), 'id');
+                          this.attemptSelectSpace(recentSpaces[0]);
+                        }
+                      },
+                    ),
                   );
                 }
-              })
+              }),
           );
         }
-      })
+      }),
     );
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => {
+    this.subscriptions.forEach((sub) => {
       sub.unsubscribe();
     });
   }
@@ -83,30 +85,36 @@ export class WorkItemsComponent implements OnDestroy, OnInit {
   }
 
   private fetchWorkItemsBySpace(space: Space): void {
-
     const assigneeQuery = this.filterService.queryJoiner(
       {},
       this.filterService.and_notation,
       this.filterService.queryBuilder(
-        'assignee', this.filterService.equal_notation, this.context.user.id
-      )
+        'assignee',
+        this.filterService.equal_notation,
+        this.context.user.id,
+      ),
     );
     const spaceQuery = this.filterService.queryBuilder(
-      'space', this.filterService.equal_notation, space.id
+      'space',
+      this.filterService.equal_notation,
+      space.id,
     );
     const filters = this.filterService.queryJoiner(
-      assigneeQuery, this.filterService.and_notation, spaceQuery
+      assigneeQuery,
+      this.filterService.and_notation,
+      spaceQuery,
     );
     this.subscriptions.push(
       this.workItemService
-        .getWorkItems(100000, {expression: filters})
+        .getWorkItems(100000, { expression: filters })
         .pipe(
           map((val: WorkItemsData) => val.workItems),
-          map(workItems => filterOutClosedItems(workItems))
-        // Resolve the work item type, creator and area
-        ).subscribe(workItems => {
+          map((workItems) => filterOutClosedItems(workItems)),
+          // Resolve the work item type, creator and area
+        )
+        .subscribe((workItems) => {
           this.workItems = workItems;
-        })
+        }),
     );
   }
 }

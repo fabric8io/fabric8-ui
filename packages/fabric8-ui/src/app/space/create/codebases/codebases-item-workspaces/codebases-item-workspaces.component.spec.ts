@@ -2,7 +2,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { Broadcaster, Notifications } from 'ngx-base';
-import { Observable,  of as observableOf } from 'rxjs';
+import { Observable, of as observableOf } from 'rxjs';
 import { WindowService } from '../../../../shared/window.service';
 import { CheService } from '../services/che.service';
 import { WorkspacesService } from '../services/workspaces.service';
@@ -21,7 +21,11 @@ describe('Codebases Item Details Component', () => {
     broadcasterMock = jasmine.createSpyObj('Broadcaster', ['on']);
     windowServiceMock = jasmine.createSpyObj('WindowService', ['open']);
     cheServiceMock = jasmine.createSpyObj('CheService', ['getState']);
-    workspacesServiceMock = jasmine.createSpyObj('WorkspacesService', ['getWorkspaces', 'createWorkspace', 'openWorkspace']);
+    workspacesServiceMock = jasmine.createSpyObj('WorkspacesService', [
+      'getWorkspaces',
+      'createWorkspace',
+      'openWorkspace',
+    ]);
     notificationMock = jasmine.createSpyObj('Notifications', ['message']);
 
     TestBed.configureTestingModule({
@@ -29,41 +33,54 @@ describe('Codebases Item Details Component', () => {
       declarations: [CodebasesItemWorkspacesComponent],
       providers: [
         {
-          provide: Broadcaster, useValue: broadcasterMock
+          provide: Broadcaster,
+          useValue: broadcasterMock,
         },
         {
-          provide: WindowService, useValue: windowServiceMock
+          provide: WindowService,
+          useValue: windowServiceMock,
         },
         {
-          provide: CheService, useValue: cheServiceMock
+          provide: CheService,
+          useValue: cheServiceMock,
         },
         {
-          provide: WorkspacesService, useValue: workspacesServiceMock
+          provide: WorkspacesService,
+          useValue: workspacesServiceMock,
         },
         {
-          provide: Notifications, useValue: notificationMock
-        }
+          provide: Notifications,
+          useValue: notificationMock,
+        },
       ],
       // Tells the compiler not to error on unknown elements and attributes
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     });
     fixture = TestBed.createComponent(CodebasesItemWorkspacesComponent);
     comp = fixture.componentInstance;
-    comp.codebase = { 'id': '6f5b6738-170e-490e-b3bb-d10f56b587c8', attributes: { type: 'git', url: 'toto/toto', last_used_workspace: 'me' } };
+    comp.codebase = {
+      id: '6f5b6738-170e-490e-b3bb-d10f56b587c8',
+      attributes: { type: 'git', url: 'toto/toto', last_used_workspace: 'me' },
+    };
     expectedWorkspace = {
       attributes: {
         description: 'description',
-        name: 'name'
+        name: 'name',
       },
       links: { open: 'url' },
-      type: 'git'
+      type: 'git',
     };
     expectedWorkspaces = [expectedWorkspace];
     const workspaceCreatedEvent = {
-      codebase: { 'id': '6f5b6738-170e-490e-b3bb-d10f56b587c8', attributes: { type: 'git', url: 'toto/toto' } },
-      workspaceName: 'MyWorkspace'
+      codebase: {
+        id: '6f5b6738-170e-490e-b3bb-d10f56b587c8',
+        attributes: { type: 'git', url: 'toto/toto' },
+      },
+      workspaceName: 'MyWorkspace',
     };
-    cheServiceMock.getState.and.returnValue(observableOf({clusterFull: false, multiTenant: true, running: true}));
+    cheServiceMock.getState.and.returnValue(
+      observableOf({ clusterFull: false, multiTenant: true, running: true }),
+    );
     workspacesServiceMock.getWorkspaces.and.returnValue(observableOf(expectedWorkspaces));
     broadcasterMock.on.and.returnValue(observableOf(workspaceCreatedEvent));
     spyOn(comp, 'updateWorkspacesPoll');
@@ -100,7 +117,9 @@ describe('Codebases Item Details Component', () => {
   it('Create Workspace with capacity full', () => {
     // given
     let comp = fixture.componentInstance;
-    cheServiceMock.getState.and.returnValue(observableOf({clusterFull: true, multiTenant: true, running: true}));
+    cheServiceMock.getState.and.returnValue(
+      observableOf({ clusterFull: true, multiTenant: true, running: true }),
+    );
     const notificationAction = { name: 'ERROR' };
     notificationMock.message.and.returnValue(observableOf(notificationAction));
     fixture.detectChanges();
@@ -115,11 +134,11 @@ describe('Codebases Item Details Component', () => {
     // given
     const workspaceLinks = {
       links: {
-        open: 'http://somewhere.com'
-      }
+        open: 'http://somewhere.com',
+      },
     };
     workspacesServiceMock.openWorkspace.and.returnValue(observableOf(workspaceLinks));
-    windowServiceMock.open.and.returnValue({location: { href: 'test'}});
+    windowServiceMock.open.and.returnValue({ location: { href: 'test' } });
     fixture.detectChanges();
 
     // when
@@ -131,7 +150,9 @@ describe('Codebases Item Details Component', () => {
 
   it('Open workspace with capacity full', () => {
     // given
-    cheServiceMock.getState.and.returnValue(observableOf({clusterFull: true, multiTenant: true, running: true}));
+    cheServiceMock.getState.and.returnValue(
+      observableOf({ clusterFull: true, multiTenant: true, running: true }),
+    );
     const notificationAction = { name: 'ERROR' };
     notificationMock.message.and.returnValue(observableOf(notificationAction));
     fixture.detectChanges();

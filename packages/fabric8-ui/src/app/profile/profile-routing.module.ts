@@ -13,43 +13,43 @@ const routes: Routes = [
         path: '_spaces',
         loadChildren: './my-spaces/my-spaces.module#MySpacesModule',
         data: {
-          title: 'Spaces'
-        }
+          title: 'Spaces',
+        },
       },
       {
         path: '_update',
         loadChildren: './update/update.module#UpdateModule',
         data: {
-          title: 'Profile'
-        }
+          title: 'Profile',
+        },
       },
       {
         path: '_cleanup',
         loadChildren: './cleanup/cleanup.module#CleanupModule',
         data: {
-          title: 'Reset Environment'
-        }
+          title: 'Reset Environment',
+        },
       },
       {
         path: '_settings',
         loadChildren: './settings/settings.module#SettingsModule',
         data: {
-          title: 'Settings'
-        }
+          title: 'Settings',
+        },
       },
       {
         path: '_tenant',
         loadChildren: './tenant/tenant.module#TenantModule',
         data: {
-          title: 'Tenant'
-        }
-      }
-    ]
-  }
+          title: 'Tenant',
+        },
+      },
+    ],
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class ProfileRoutingModule { }
+export class ProfileRoutingModule {}

@@ -34,12 +34,12 @@ import { CodebasesComponent } from './codebases.component';
     FormsModule,
     ListModule,
     TooltipModule.forRoot(),
-    FeatureFlagModule
+    FeatureFlagModule,
   ],
-  declarations: [ CodebasesComponent ],
-  exports: [ CodebasesComponent ],
-  providers: [ BsDropdownConfig, TooltipConfig ]
+  declarations: [CodebasesComponent],
+  exports: [CodebasesComponent],
+  providers: [BsDropdownConfig, TooltipConfig],
 })
 export class CodebasesModule {
-  constructor() { }
+  constructor() {}
 }

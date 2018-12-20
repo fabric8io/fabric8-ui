@@ -7,7 +7,6 @@ import { MenuedContextType } from './menued-context-type';
 
 @Injectable()
 export class MenusService {
-
   readonly menus: Map<ContextType, MenuItem[]>;
 
   constructor() {
@@ -25,56 +24,59 @@ export class MenusService {
                 name: 'Areas',
                 path: '',
                 icon: '',
-                menus: []
+                menus: [],
               },
               {
                 name: 'Collaborators',
-                path: 'collaborators'
-              }
-            ]
-          }, {
+                path: 'collaborators',
+              },
+            ],
+          },
+          {
             name: 'Analyze',
-            path: ''
-          }, {
+            path: '',
+          },
+          {
             name: 'Plan',
             feature: 'Planner',
             path: 'plan',
             menus: [
               {
                 name: 'Backlog',
-                path: ''
-              }
-              , {
+                path: '',
+              },
+              {
                 name: 'Board',
-                path: 'board'
-              }
-              , {
+                path: 'board',
+              },
+              {
                 name: 'Query',
                 feature: 'PlannerQuery',
-                path: 'query'
-              }
-            ]
-          }, {
+                path: 'query',
+              },
+            ],
+          },
+          {
             name: 'Create',
             path: 'create',
             menus: [
               {
                 name: 'Codebases',
-                path: ''
+                path: '',
               },
               {
                 name: 'Pipelines',
-                path: 'pipelines'
+                path: 'pipelines',
               },
               {
                 name: 'Deployments',
                 feature: 'Deployments',
-                path: 'deployments'
-              }
-            ]
-          }
-        ]
-      ]
+                path: 'deployments',
+              },
+            ],
+          },
+        ],
+      ],
     ]);
   }
 
@@ -118,33 +120,50 @@ export class MenusService {
       }
       let menuToDelete = [];
       for (let menu of res.menus) {
-        if ((menu['feature'] && context.user['features'] && !this.isFeatureEnabled(menu['feature'], context.user['features']))
-          || (menu['feature'] && context.user['features'] && this.isFeatureNonApplicable(menu['feature'], context.user['features']))) {
+        if (
+          (menu['feature'] &&
+            context.user['features'] &&
+            !this.isFeatureEnabled(menu['feature'], context.user['features'])) ||
+          (menu['feature'] &&
+            context.user['features'] &&
+            this.isFeatureNonApplicable(menu['feature'], context.user['features']))
+        ) {
           menuToDelete.push(menu);
         } else {
           menu.fullPath = this.buildPath(context.path, menu.path);
           if (menu.menus) {
             let subMenuToDelete = [];
             for (let subMenu of menu.menus) {
-              if ((subMenu['feature'] && context.user['features'] && !this.isFeatureEnabled(subMenu['feature'], context.user['features']))
-              || (subMenu['feature'] && context.user['features'] && this.isFeatureNonApplicable(subMenu['feature'], context.user['features']))) {
+              if (
+                (subMenu['feature'] &&
+                  context.user['features'] &&
+                  !this.isFeatureEnabled(subMenu['feature'], context.user['features'])) ||
+                (subMenu['feature'] &&
+                  context.user['features'] &&
+                  this.isFeatureNonApplicable(subMenu['feature'], context.user['features']))
+              ) {
                 subMenuToDelete.push(subMenu);
               } else {
                 subMenu.fullPath = this.buildPath(context.path, menu.path, subMenu.path);
               }
             }
-            if (subMenuToDelete.length > 0) { // some subMenu need to be removed
-              menu.menus = menu.menus.filter(obj => subMenuToDelete.filter(m => m.name === obj.name).length == 0);
+            if (subMenuToDelete.length > 0) {
+              // some subMenu need to be removed
+              menu.menus = menu.menus.filter(
+                (obj) => subMenuToDelete.filter((m) => m.name === obj.name).length == 0,
+              );
             }
           }
         }
       }
-      if (menuToDelete.length > 0) { // some menu need to be remove
-        res.menus = res.menus.filter(obj => menuToDelete.filter(m => m.name === obj.name).length == 0);
+      if (menuToDelete.length > 0) {
+        // some menu need to be remove
+        res.menus = res.menus.filter(
+          (obj) => menuToDelete.filter((m) => m.name === obj.name).length == 0,
+        );
       }
       context.type = res;
     }
-
   }
 
   private buildPath(...args: string[]): string {

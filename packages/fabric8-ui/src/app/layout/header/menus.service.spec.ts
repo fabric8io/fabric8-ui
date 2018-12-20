@@ -5,102 +5,102 @@ import { MenusService } from './menus.service';
 
 describe('MenuService service: it', () => {
   let menusService: MenusService;
-    const featuresEnabled = [
+  const featuresEnabled = [
     {
-      'attributes': {
+      attributes: {
         'user-enabled': true,
-        'enabled': true,
+        enabled: true,
         'enablement-level': 'internal',
-        'description': 'boo',
-        'name': 'Planner'
+        description: 'boo',
+        name: 'Planner',
       },
-      'id': 'Planner'
+      id: 'Planner',
     },
     {
-      'attributes': {
+      attributes: {
         'user-enabled': true,
-        'enabled': true,
+        enabled: true,
         'enablement-level': 'beta',
-        'description': 'boo',
-        'name': 'Deployments'
+        description: 'boo',
+        name: 'Deployments',
       },
-      'id': 'Deployments'
-    }
+      id: 'Deployments',
+    },
   ];
   const fullMenu = [
-      {
-        'name':  '',
-        'path':  'settings',
-        'icon':  'pficon pficon-settings',
-        'menus': [
-          {
-            'name':  'Areas',
-            'path':  '',
-            'icon':  '',
-            'menus': [],
-            'fullPath':  '/ckrych@redhat.com/test2/settings'
-          },
-          {
-            'name':  'Collaborators',
-            'path':  'collaborators',
-            'fullPath':  '/ckrych@redhat.com/test2/settings/collaborators'
-          }
-        ],
-        'fullPath':  '/ckrych@redhat.com/test2/settings'
-      },
-      {
-        'name':  'Analyze',
-        'path':  '',
-        'fullPath':  '/ckrych@redhat.com/test2'
-      },
-      {
-        'name':  'Plan',
-        'feature':  'Planner',
-        'path':  'plan',
-        'menus': [
-          {
-            'name':  'Backlog',
-            'path':  '',
-            'fullPath':  '/ckrych@redhat.com/test2/plan'
-          },
-          {
-            'name':  'Board',
-            'path':  'board',
-            'fullPath':  '/ckrych@redhat.com/test2/plan/board'
-          },
-          {
-            'name':  'Query',
-            'feature': 'PlannerQuery',
-            'path':  'query',
-            'fullPath':  '/ckrych@redhat.com/test2/plan/query'
-          }
-        ],
-        'fullPath':  '/ckrych@redhat.com/test2/plan'
-      },
-      {
-        'name':  'Create',
-        'path':  'create',
-        'menus': [
-          {
-            'name':  'Codebases',
-            'path':  '',
-            'fullPath':  '/ckrych@redhat.com/test2/create'
-          },
-          {
-            'name':  'Pipelines',
-            'path':  'pipelines',
-            'fullPath':  '/ckrych@redhat.com/test2/create/pipelines'
-          },
-          {
-            'name':  'Deployments',
-            'feature':  'Deployments',
-            'path':  'deployments',
-            'fullPath':  '/ckrych@redhat.com/test2/create/deployments'
-          }
-        ],
-        'fullPath':  '/ckrych@redhat.com/test2/create'
-      }
-    ];
+    {
+      name: '',
+      path: 'settings',
+      icon: 'pficon pficon-settings',
+      menus: [
+        {
+          name: 'Areas',
+          path: '',
+          icon: '',
+          menus: [],
+          fullPath: '/ckrych@redhat.com/test2/settings',
+        },
+        {
+          name: 'Collaborators',
+          path: 'collaborators',
+          fullPath: '/ckrych@redhat.com/test2/settings/collaborators',
+        },
+      ],
+      fullPath: '/ckrych@redhat.com/test2/settings',
+    },
+    {
+      name: 'Analyze',
+      path: '',
+      fullPath: '/ckrych@redhat.com/test2',
+    },
+    {
+      name: 'Plan',
+      feature: 'Planner',
+      path: 'plan',
+      menus: [
+        {
+          name: 'Backlog',
+          path: '',
+          fullPath: '/ckrych@redhat.com/test2/plan',
+        },
+        {
+          name: 'Board',
+          path: 'board',
+          fullPath: '/ckrych@redhat.com/test2/plan/board',
+        },
+        {
+          name: 'Query',
+          feature: 'PlannerQuery',
+          path: 'query',
+          fullPath: '/ckrych@redhat.com/test2/plan/query',
+        },
+      ],
+      fullPath: '/ckrych@redhat.com/test2/plan',
+    },
+    {
+      name: 'Create',
+      path: 'create',
+      menus: [
+        {
+          name: 'Codebases',
+          path: '',
+          fullPath: '/ckrych@redhat.com/test2/create',
+        },
+        {
+          name: 'Pipelines',
+          path: 'pipelines',
+          fullPath: '/ckrych@redhat.com/test2/create/pipelines',
+        },
+        {
+          name: 'Deployments',
+          feature: 'Deployments',
+          path: 'deployments',
+          fullPath: '/ckrych@redhat.com/test2/create/deployments',
+        },
+      ],
+      fullPath: '/ckrych@redhat.com/test2/create',
+    },
+  ];
   beforeEach(() => {
     menusService = new MenusService();
   });
@@ -144,9 +144,9 @@ describe('MenuService service: it', () => {
     let menus = myContext.type['menus'];
     let createMenu = menus[3];
     expect(createMenu.menus.length).toEqual(2);
-    expect(createMenu.menus.filter(subMenu => subMenu.name == 'Deployments').length == 0);
-    expect(createMenu.menus.filter(subMenu => subMenu.name == 'Codebases').length == 1);
-    expect(createMenu.menus.filter(subMenu => subMenu.name == 'Pipelines').length == 1);
+    expect(createMenu.menus.filter((subMenu) => subMenu.name == 'Deployments').length == 0);
+    expect(createMenu.menus.filter((subMenu) => subMenu.name == 'Codebases').length == 1);
+    expect(createMenu.menus.filter((subMenu) => subMenu.name == 'Pipelines').length == 1);
   });
 
   it('should return a filtered sub-menu if some features are internal and user in non internal', () => {
@@ -164,9 +164,8 @@ describe('MenuService service: it', () => {
     let menus = myContext.type['menus'];
     let createMenu = menus[3];
     expect(createMenu.menus.length).toEqual(2);
-    expect(createMenu.menus.filter(subMenu => subMenu.name == 'Deployments').length == 0);
-    expect(createMenu.menus.filter(subMenu => subMenu.name == 'Codebases').length == 1);
-    expect(createMenu.menus.filter(subMenu => subMenu.name == 'Pipelines').length == 1);
+    expect(createMenu.menus.filter((subMenu) => subMenu.name == 'Deployments').length == 0);
+    expect(createMenu.menus.filter((subMenu) => subMenu.name == 'Codebases').length == 1);
+    expect(createMenu.menus.filter((subMenu) => subMenu.name == 'Pipelines').length == 1);
   });
-
 });

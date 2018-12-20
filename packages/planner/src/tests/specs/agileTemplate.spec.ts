@@ -2,7 +2,6 @@ import { browser } from 'protractor';
 import { PlannerPage } from '../page_objects/planner';
 import * as support from '../support';
 
-
 describe('Agile template tests: ', () => {
   let plannerAgile: PlannerPage;
   let c = new support.Constants();
@@ -32,7 +31,7 @@ describe('Agile template tests: ', () => {
   });
 
   it('should create a workitem of type defect and update Effort', async () => {
-    let newWorkItem = { title: 'Workitem of type Defect', type : 'Defect'};
+    let newWorkItem = { title: 'Workitem of type Defect', type: 'Defect' };
     await plannerAgile.createWorkItem(newWorkItem);
     expect(plannerAgile.workItemList.hasWorkItem(newWorkItem.title)).toBeTruthy();
     /* Update Effort */
@@ -44,19 +43,23 @@ describe('Agile template tests: ', () => {
   });
 
   it('should create a workitem of type Theme and update Business value', async () => {
-    let newWorkItem = { title: 'Workitem of type Theme', type : 'Theme'};
+    let newWorkItem = { title: 'Workitem of type Theme', type: 'Theme' };
     await plannerAgile.createWorkItem(newWorkItem);
     expect(plannerAgile.workItemList.hasWorkItem(newWorkItem.title)).toBeTruthy();
     /* Update Business Value */
     await plannerAgile.workItemList.clickWorkItem(newWorkItem.title);
     await plannerAgile.quickPreview.updateBusinessValue('Business value for this Theme');
-    await plannerAgile.quickPreview.businessValue.untilTextIsPresentInValue('Business value for this Theme');
-    expect(await plannerAgile.quickPreview.businessValue.getAttribute('value')).toBe('Business value for this Theme');
+    await plannerAgile.quickPreview.businessValue.untilTextIsPresentInValue(
+      'Business value for this Theme',
+    );
+    expect(await plannerAgile.quickPreview.businessValue.getAttribute('value')).toBe(
+      'Business value for this Theme',
+    );
     await plannerAgile.quickPreview.close();
   });
 
   it('Dynamic fields should not get closed on outside click if the field value is changed', async () => {
-    let newWorkItem = { title: 'Workitem of type Story', type : 'Story'};
+    let newWorkItem = { title: 'Workitem of type Story', type: 'Story' };
     await plannerAgile.createWorkItem(newWorkItem);
     expect(plannerAgile.workItemList.hasWorkItem(newWorkItem.title)).toBeTruthy();
     /* Edit Story Points */
@@ -70,7 +73,7 @@ describe('Agile template tests: ', () => {
   });
 
   it('should create a workitem of type THEME and check for the order of child types in dropdown', async () => {
-    let newWorkItem = { title: 'Theme 1', type : 'Theme'};
+    let newWorkItem = { title: 'Theme 1', type: 'Theme' };
     await plannerAgile.createWorkItem(newWorkItem);
     expect(plannerAgile.workItemList.hasWorkItem(newWorkItem.title)).toBeTruthy();
     // open the inline quick add for newly created WorkItem
@@ -84,7 +87,7 @@ describe('Agile template tests: ', () => {
   });
 
   it('should create a workitem of type EPIC and check for the order of child types in dropdown', async () => {
-    let newWorkItem = { title: 'Epic 1', type : 'Epic'};
+    let newWorkItem = { title: 'Epic 1', type: 'Epic' };
     await plannerAgile.createWorkItem(newWorkItem);
     expect(plannerAgile.workItemList.hasWorkItem(newWorkItem.title)).toBeTruthy();
     // open the inline quick add for newly created WorkItem
@@ -98,7 +101,7 @@ describe('Agile template tests: ', () => {
   });
 
   it('should create a workitem of type STORY and check for the order of child types in dropdown', async () => {
-    let newWorkItem = { title: 'Story 1', type : 'Story'};
+    let newWorkItem = { title: 'Story 1', type: 'Story' };
     await plannerAgile.createWorkItem(newWorkItem);
     expect(plannerAgile.workItemList.hasWorkItem(newWorkItem.title)).toBeTruthy();
     // open the inline quick add for newly created WorkItem

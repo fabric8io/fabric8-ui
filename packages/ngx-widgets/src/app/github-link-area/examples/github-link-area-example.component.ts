@@ -1,25 +1,23 @@
-import {
-  Component,
-  OnInit
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'github-link-area-example',
-  styles: [`
-    .sample-form .form-horizontal .form-group {
-      margin-left: 0;
-    }
-    .padding-top-15 {
-      padding-top: 15px;
-    }
-    .padding-bottom-15 {
-      padding-bottom: 15px;
-    }
-  `],
-  templateUrl: './github-link-area-example.component.html'
+  styles: [
+    `
+      .sample-form .form-horizontal .form-group {
+        margin-left: 0;
+      }
+      .padding-top-15 {
+        padding-top: 15px;
+      }
+      .padding-bottom-15 {
+        padding-bottom: 15px;
+      }
+    `,
+  ],
+  templateUrl: './github-link-area-example.component.html',
 })
 export class GitHubLinkAreaExampleComponent implements OnInit {
-
   content: string = `There is some text in here.
     And some checkboxes:<ul>
     <li><input type="checkbox" data-checkbox-index="0"></input>An Item.</li>
@@ -43,7 +41,6 @@ export class GitHubLinkAreaExampleComponent implements OnInit {
   ngOnInit(): void {}
 
   inputEvent(event: any) {
-    console.log('Input Event detected on input type: ' + event.type +
-      ' with index ' + event.extraData);
+    console.log(`Input Event detected on input type: ${event.type} with index ${event.extraData}`);
   }
 }

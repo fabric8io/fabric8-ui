@@ -12,12 +12,13 @@ describe('CustomQueryReducer: ', () => {
       {
         id: 'a34f7349-caee-4b6a-a344-cf3f52d9a12a',
         attributes: {
-          fields: '{"$AND":[{"space":{"$EQ":"f7fa05ae-5642-4ba8-acf4-355b544fb662"}},{"typegroup.name":{"$EQ":"Scenarios"}},{"assignee":{"$EQ":"5502a92a-15ee-4a7d-a151-fb6395030994"}}]}',
-          title: 'My work item'
+          fields:
+            '{"$AND":[{"space":{"$EQ":"f7fa05ae-5642-4ba8-acf4-355b544fb662"}},{"typegroup.name":{"$EQ":"Scenarios"}},{"assignee":{"$EQ":"5502a92a-15ee-4a7d-a151-fb6395030994"}}]}',
+          title: 'My work item',
         },
         selected: false,
-        type: 'queries'
-      }
+        type: 'queries',
+      },
     ];
   });
 
@@ -62,12 +63,13 @@ describe('CustomQueryReducer: ', () => {
       {
         id: 'a34f7349-caee-4b6a-a344-cf3f52d9a12a',
         attributes: {
-          fields: '{"$AND":[{"space":{"$EQ":"f7fa05ae-5642-4ba8-acf4-355b544fb662"}},{"typegroup.name":{"$EQ":"Scenarios"}},{"assignee":{"$EQ":"5502a92a-15ee-4a7d-a151-fb6395030994"}}]}',
-          title: 'My work item'
+          fields:
+            '{"$AND":[{"space":{"$EQ":"f7fa05ae-5642-4ba8-acf4-355b544fb662"}},{"typegroup.name":{"$EQ":"Scenarios"}},{"assignee":{"$EQ":"5502a92a-15ee-4a7d-a151-fb6395030994"}}]}',
+          title: 'My work item',
         },
         selected: true,
-        type: 'queries'
-      }
+        type: 'queries',
+      },
     ];
 
     const action = new CustomQueryActions.GetSuccess(queries);
@@ -84,12 +86,13 @@ describe('CustomQueryReducer: ', () => {
       {
         id: 'a34f7349-caee-4b6a-a344-cf3f52d9a12a',
         attributes: {
-          fields: '{"$AND":[{"space":{"$EQ":"f7fa05ae-5642-4ba8-acf4-355b544fb662"}},{"typegroup.name":{"$EQ":"Scenarios"}},{"assignee":{"$EQ":"5502a92a-15ee-4a7d-a151-fb6395030994"}}]}',
-          title: 'My work item'
+          fields:
+            '{"$AND":[{"space":{"$EQ":"f7fa05ae-5642-4ba8-acf4-355b544fb662"}},{"typegroup.name":{"$EQ":"Scenarios"}},{"assignee":{"$EQ":"5502a92a-15ee-4a7d-a151-fb6395030994"}}]}',
+          title: 'My work item',
         },
         selected: false,
-        type: 'queries'
-      }
+        type: 'queries',
+      },
     ];
     const action = new CustomQueryActions.GetSuccess(queries);
     const state = CustomQueryReducer(CustomQueryInitialState, action);

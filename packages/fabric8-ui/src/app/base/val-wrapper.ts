@@ -6,7 +6,6 @@
  * an object from a stream.
  */
 export class ValWrapper<T> {
-
   /**
    * The value
    */
@@ -18,5 +17,4 @@ export class ValWrapper<T> {
    * that take a long time to return and, for example, display a spinner.
    */
   loading?: boolean;
-
 }

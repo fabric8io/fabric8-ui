@@ -26,14 +26,14 @@ import './assets/stylesheets/shared/osio.less';
 /**
  * Bootstrap our Angular app with a top level NgModule
  */
-export function main(): Promise < any > {
+export function main(): Promise<any> {
   return platformBrowserDynamic()
     .bootstrapModule(AppModule, { preserveWhitespaces: true })
     .then((ngModuleRef: any) => {
       return process.env.HMR ? hmrModule(ngModuleRef, module) : ngModuleRef;
     })
     .then(decorateModuleRef)
-    .catch(err => console.error(err));
+    .catch((err) => console.error(err));
 }
 
 // this turns on Service Workers, but it is currently cause us to have to hard refresh twice to see any change

@@ -10,7 +10,7 @@ import {
   LauncherModule,
   Pipeline,
   PipelineService,
-  ProjectSummaryService
+  ProjectSummaryService,
 } from 'ngx-launcher';
 import { of } from 'rxjs';
 import { createMock } from 'testing/mock';
@@ -23,24 +23,28 @@ describe('CreateAppComponent', () => {
   let component: ImportAppComponent;
   let fixture: ComponentFixture<ImportAppComponent>;
   const mockFeature: Feature = {
-    'attributes': {
-      'name': 'mock-attribute',
-      'enabled': true,
-      'user-enabled': true
-    }
+    attributes: {
+      name: 'mock-attribute',
+      enabled: true,
+      'user-enabled': true,
+    },
   } as Feature;
   let featureTogglesService: jasmine.SpyObj<FeatureTogglesService>;
 
   let pipelineService: jasmine.SpyObj<AppLauncherPipelineService>;
-  const mockPipeline: Pipeline[] = [{
-    name: '',
-    id: '',
-    platform: '',
-    stages: [{
+  const mockPipeline: Pipeline[] = [
+    {
       name: '',
-      description: ''
-    }]
-  }];
+      id: '',
+      platform: '',
+      stages: [
+        {
+          name: '',
+          description: '',
+        },
+      ],
+    },
+  ];
 
   let gitProviderService: jasmine.SpyObj<AppLauncherGitproviderService>;
   let dependencyCheckService: jasmine.SpyObj<AppLauncherDependencyCheckService>;
@@ -49,11 +53,10 @@ describe('CreateAppComponent', () => {
     mavenArtifact: '',
     projectName: '',
     projectVersion: '',
-    spacePath: ''
+    spacePath: '',
   };
 
   beforeEach(async(() => {
-
     featureTogglesService = createMock(FeatureTogglesService);
     featureTogglesService.getFeature.and.returnValue(of(mockFeature));
     featureTogglesService.isFeatureUserEnabled.and.returnValue(of(true));
@@ -67,7 +70,9 @@ describe('CreateAppComponent', () => {
 
     dependencyCheckService = createMock(AppLauncherDependencyCheckService);
     dependencyCheckService.getDependencyCheck.and.returnValue(of(mockDepencyCheck));
-    dependencyCheckService.getApplicationsInASpace.and.returnValue(of([{attributes: {name: 'app-1'}}]));
+    dependencyCheckService.getApplicationsInASpace.and.returnValue(
+      of([{ attributes: { name: 'app-1' } }]),
+    );
 
     TestBed.configureTestingModule({
       imports: [
@@ -75,32 +80,32 @@ describe('CreateAppComponent', () => {
         LauncherModule,
         FeatureFlagModule,
         HttpClientTestingModule,
-        RouterTestingModule
+        RouterTestingModule,
       ],
-      declarations: [
-        ImportAppComponent
-      ],
+      declarations: [ImportAppComponent],
       providers: [
         ProjectSummaryService,
         {
           provide: FeatureTogglesService,
           useFactory: () => featureTogglesService,
-          deps: []
+          deps: [],
         },
         {
           provide: PipelineService,
           useFactory: () => pipelineService,
-          deps: []
-        }, {
+          deps: [],
+        },
+        {
           provide: GitProviderService,
           useFactory: () => gitProviderService,
-          deps: []
-        }, {
+          deps: [],
+        },
+        {
           provide: DependencyCheckService,
           useFactory: () => dependencyCheckService,
-          deps: []
-        }
-      ]
+          deps: [],
+        },
+      ],
     }).compileComponents();
   }));
 
@@ -117,7 +122,7 @@ describe('CreateAppComponent', () => {
   it('should add query params', async(() => {
     component.projectName = 'app-1';
     fixture.detectChanges();
-    const query = { 'q': '{\"application\":[\"' + component.projectName + '\"]}'};
+    const query = { q: '{"application":["' + component.projectName + '"]}' };
     expect(component.addQuery()).toEqual(query);
   }));
 });

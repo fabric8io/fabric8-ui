@@ -4,7 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { Contexts } from 'ngx-fabric8-wit';
 import { Observable, of as observableOf } from 'rxjs';
 import { GitHubService } from '../services/github.service';
-import { ContextsMock, expectedGitHubRepoCommit, expectedGitHubRepoDetails, expectedGitHubRepoLicense } from '../services/github.service.mock';
+import {
+  ContextsMock,
+  expectedGitHubRepoCommit,
+  expectedGitHubRepoDetails,
+  expectedGitHubRepoLicense,
+} from '../services/github.service.mock';
 import { CodebasesItemDetailsComponent } from './codebases-item-details.component';
 
 describe('Codebases Item Details Component', () => {
@@ -12,21 +17,28 @@ describe('Codebases Item Details Component', () => {
   let fixture;
 
   beforeEach(() => {
-    gitHubServiceMock = jasmine.createSpyObj('GitHubService', ['getRepoDetailsByUrl', 'getRepoLastCommitByUrl', 'getRepoCommitStatusByUrl', 'getRepoLicenseByUrl']);
+    gitHubServiceMock = jasmine.createSpyObj('GitHubService', [
+      'getRepoDetailsByUrl',
+      'getRepoLastCommitByUrl',
+      'getRepoCommitStatusByUrl',
+      'getRepoLicenseByUrl',
+    ]);
 
     TestBed.configureTestingModule({
       imports: [FormsModule],
       declarations: [CodebasesItemDetailsComponent],
       providers: [
         {
-          provide: Contexts, useClass: ContextsMock
+          provide: Contexts,
+          useClass: ContextsMock,
         },
         {
-          provide: GitHubService, useValue: gitHubServiceMock
-        }
+          provide: GitHubService,
+          useValue: gitHubServiceMock,
+        },
       ],
       // Tells the compiler not to error on unknown elements and attributes
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     });
     fixture = TestBed.createComponent(CodebasesItemDetailsComponent);
   });
@@ -35,31 +47,33 @@ describe('Codebases Item Details Component', () => {
     // given
     let comp = fixture.componentInstance;
     comp.codebase = {
-      'id': '6f5b6738-170e-490e-b3bb-d10f56b587c8',
+      id: '6f5b6738-170e-490e-b3bb-d10f56b587c8',
       attributes: {
         type: 'git',
-        url: 'toto/toto'
+        url: 'toto/toto',
       },
       gitHubRepo: {
         htmlUrl: 'htmlUrl',
         fullName: 'fullName',
         createdAt: 'createdAt',
-        pushedAt: 'pushedAt'
-      }
+        pushedAt: 'pushedAt',
+      },
     };
     const expectedLastCommit = {
-      'ref': '',
-      'url': 'toto/toto',
-      'object': {
-        'sha': 'SHA-LALA-SHA-LALALA',
-        'type': 'file',
-        'url': 'toto'
-      }
+      ref: '',
+      url: 'toto/toto',
+      object: {
+        sha: 'SHA-LALA-SHA-LALALA',
+        type: 'file',
+        url: 'toto',
+      },
     };
     gitHubServiceMock.getRepoDetailsByUrl.and.returnValue(observableOf(expectedGitHubRepoDetails));
     gitHubServiceMock.getRepoLastCommitByUrl.and.returnValue(observableOf(expectedLastCommit));
     gitHubServiceMock.getRepoLicenseByUrl.and.returnValue(observableOf(expectedGitHubRepoLicense));
-    gitHubServiceMock.getRepoCommitStatusByUrl.and.returnValue(observableOf(expectedGitHubRepoCommit));
+    gitHubServiceMock.getRepoCommitStatusByUrl.and.returnValue(
+      observableOf(expectedGitHubRepoCommit),
+    );
     fixture.detectChanges();
 
     // when init
@@ -80,11 +94,11 @@ describe('Codebases Item Details Component', () => {
     // given
     let comp = fixture.componentInstance;
     comp.codebase = {
-      'id': '6f5b6738-170e-490e-b3bb-d10f56b587c8',
+      id: '6f5b6738-170e-490e-b3bb-d10f56b587c8',
       attributes: {
         type: 'git',
-        url: 'toto/toto'
-      }
+        url: 'toto/toto',
+      },
     };
     fixture.detectChanges();
 
@@ -96,5 +110,4 @@ describe('Codebases Item Details Component', () => {
     expect(gitHubServiceMock.getRepoLicenseByUrl).not.toHaveBeenCalled();
     expect(gitHubServiceMock.getRepoCommitStatusByUrl).not.toHaveBeenCalled();
   }));
-
 });

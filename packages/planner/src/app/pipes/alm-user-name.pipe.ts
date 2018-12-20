@@ -5,7 +5,7 @@ import { User } from 'ngx-login-client';
 @Pipe({ name: 'almUserName', pure: true })
 export class AlmUserName implements PipeTransform {
   transform(userObj: User | null = null, notFound: string = 'User not found'): string {
-    if (typeof(userObj) === 'undefined' || userObj === null) {
+    if (typeof userObj === 'undefined' || userObj === null) {
       return notFound;
     }
     if (userObj.hasOwnProperty('attributes')) {

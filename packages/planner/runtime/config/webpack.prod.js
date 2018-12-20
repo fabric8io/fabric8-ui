@@ -20,7 +20,7 @@ const webpackMerge = require('webpack-merge');
 /**
  * Webpack Constants
  */
-const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
+const ENV = (process.env.NODE_ENV = process.env.ENV = 'production');
 const FORGE_URL = process.env.FORGE_URL;
 const PUBLIC_PATH = process.env.PUBLIC_PATH || '/';
 const FABRIC8_REALM = process.env.FABRIC8_REALM || 'fabric8';
@@ -29,7 +29,7 @@ const METADATA = webpackMerge(commonConfig.metadata, {
   ENV: ENV,
   FORGE_URL: FORGE_URL,
   PUBLIC_PATH: PUBLIC_PATH,
-  FABRIC8_REALM: FABRIC8_REALM
+  FABRIC8_REALM: FABRIC8_REALM,
 });
 
 module.exports = webpackMerge(commonConfig, {
@@ -38,10 +38,7 @@ module.exports = webpackMerge(commonConfig, {
   entry: helpers.root('index.ts'),
 
   // require those dependencies but don't bundle them
-  externals: [
-    /^@angular\//,
-    /^rxjs\//
-  ],
+  externals: [/^@angular\//, /^rxjs\//],
 
   output: {
     path: helpers.root('dist'),
@@ -49,7 +46,7 @@ module.exports = webpackMerge(commonConfig, {
     filename: 'bundles/fabric8-planner.js',
     library: 'fabric8-planner',
     libraryTarget: 'umd',
-    umdNamedDefine: true
+    umdNamedDefine: true,
   },
 
   // htmlLoader: {
@@ -64,12 +61,12 @@ module.exports = webpackMerge(commonConfig, {
     //new webpack.optimize.UglifyJsPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
-        'ENV': JSON.stringify(METADATA.ENV),
-        'FORGE_URL': JSON.stringify(METADATA.FORGE_URL),
-        'FABRIC8_REALM': JSON.stringify(METADATA.FABRIC8_REALM),
-        'PUBLIC_PATH' : JSON.stringify(METADATA.PUBLIC_PATH)
-      }
-    })
+        ENV: JSON.stringify(METADATA.ENV),
+        FORGE_URL: JSON.stringify(METADATA.FORGE_URL),
+        FABRIC8_REALM: JSON.stringify(METADATA.FABRIC8_REALM),
+        PUBLIC_PATH: JSON.stringify(METADATA.PUBLIC_PATH),
+      },
+    }),
   ],
   /*
    * Include polyfills or mocks for various node stuff
@@ -83,7 +80,6 @@ module.exports = webpackMerge(commonConfig, {
     process: false,
     module: false,
     clearImmediate: false,
-    setImmediate: false
-  }
-
+    setImmediate: false,
+  },
 });

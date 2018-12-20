@@ -23,11 +23,10 @@ import { WorkItemCellComponent } from './work-item-cell.component';
     TruncateModule,
     UserAvatarModule,
     WidgetsModule,
-    DeleteWorkItemModule
-],
+    DeleteWorkItemModule,
+  ],
   declarations: [WorkItemCellComponent],
   exports: [WorkItemCellComponent],
-  providers: [TooltipConfig]
+  providers: [TooltipConfig],
 })
-
 export class WorkItemCellModule {}

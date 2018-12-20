@@ -5,18 +5,24 @@ import { ConfigMap } from './configmap.model';
 import { openShiftBrowseResourceUrl } from './helpers';
 import { isSecretsNamespace, isSystemNamespace, Namespace, Namespaces } from './namespace.model';
 
-
 export class SpaceConfig {
-  constructor(public namespace: string, public environmentsConfigMap: ConfigMap, public spacesConfigMap: ConfigMap) {
-  }
+  constructor(
+    public namespace: string,
+    public environmentsConfigMap: ConfigMap,
+    public spacesConfigMap: ConfigMap,
+  ) {}
 }
 
 /**
  * Allows a namespace to be split up into separate logical spaces using labels in kubernetes/openshift
  */
 export class LabelSpace implements Entity {
-  constructor(public name: string, public label: string, public description: string, public order: number) {
-  }
+  constructor(
+    public name: string,
+    public label: string,
+    public description: string,
+    public order: number,
+  ) {}
 
   get id(): string {
     return this.name;
@@ -36,7 +42,11 @@ export class Space {
    */
   firstEnvironmentNamespace: string;
 
-  constructor(public namespace: Namespace, namespaces: Namespaces, public spaceConfig: SpaceConfig) {
+  constructor(
+    public namespace: Namespace,
+    namespaces: Namespaces,
+    public spaceConfig: SpaceConfig,
+  ) {
     if (namespace) {
       this.id = namespace.id;
       this.name = namespace.name;
@@ -45,7 +55,7 @@ export class Space {
 
     let map = new Map<string, Namespace>();
     if (namespaces) {
-      namespaces.forEach(ns => {
+      namespaces.forEach((ns) => {
         const nsName = ns.name;
         map[nsName] = ns;
 
@@ -87,8 +97,10 @@ export class Space {
     return null;
   }
 
-
-  protected loadEnvironments(configMap: ConfigMap, namespaceMap: Map<string, Namespace>): Environment[] {
+  protected loadEnvironments(
+    configMap: ConfigMap,
+    namespaceMap: Map<string, Namespace>,
+  ): Environment[] {
     let answer = [];
     var data = configMap.data;
     if (data) {
@@ -104,14 +116,24 @@ export class Space {
               if (order === undefined) {
                 order = 1000;
               }
-              let env = new Environment(key, config.name || key, namespaceName, this, ns, config, order);
+              let env = new Environment(
+                key,
+                config.name || key,
+                namespaceName,
+                this,
+                ns,
+                config,
+                order,
+              );
               answer.push(env);
             }
           }
         }
       });
     } else {
-      console.log('No data for ConfigMap ' + configMap.name + ' in namespace ' + configMap.namespace);
+      console.log(
+        'No data for ConfigMap ' + configMap.name + ' in namespace ' + configMap.namespace,
+      );
     }
 
     answer.sort((a: Environment, b: Environment) => {
@@ -149,7 +171,9 @@ export class Space {
         }
       });
     } else {
-      console.log('No data for ConfigMap ' + configMap.name + ' in namespace ' + configMap.namespace);
+      console.log(
+        'No data for ConfigMap ' + configMap.name + ' in namespace ' + configMap.namespace,
+      );
     }
     answer.sort((a: LabelSpace, b: LabelSpace) => {
       if (a.order < b.order) {
@@ -172,7 +196,15 @@ export class Space {
 export class Environment {
   openShiftConsoleUrl: string;
 
-  constructor(public key: string, public name: string, public namespaceName: string, public space: Space, public namespace: Namespace, public config: any, public order: number) {
+  constructor(
+    public key: string,
+    public name: string,
+    public namespaceName: string,
+    public space: Space,
+    public namespace: Namespace,
+    public config: any,
+    public order: number,
+  ) {
     if (namespace) {
       this.openShiftConsoleUrl = openShiftBrowseResourceUrl(namespace, currentOAuthConfig());
     }
@@ -240,4 +272,3 @@ export function asSpaces(spaces: Space[]): Spaces {
   answer.sort((a, b) => (a.name || '').localeCompare(b.name));
   return answer;
 }
-

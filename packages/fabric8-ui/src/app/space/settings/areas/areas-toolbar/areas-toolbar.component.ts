@@ -8,7 +8,7 @@ import {
   SimpleChanges,
   TemplateRef,
   ViewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
 import { FilterConfig, FilterEvent, FilterField } from 'patternfly-ng/filter';
 import { SortConfig, SortEvent } from 'patternfly-ng/sort';
@@ -18,7 +18,7 @@ import { ToolbarConfig } from 'patternfly-ng/toolbar';
   encapsulation: ViewEncapsulation.None,
   selector: 'areas-toolbar',
   templateUrl: './areas-toolbar.component.html',
-  styleUrls: ['./areas-toolbar.component.less']
+  styleUrls: ['./areas-toolbar.component.less'],
 })
 export class AreasToolbarComponent implements OnChanges, OnInit {
   @Input() resultsCount: number = 0;
@@ -35,8 +35,7 @@ export class AreasToolbarComponent implements OnChanges, OnInit {
   sortConfig: SortConfig;
   toolbarConfig: ToolbarConfig;
 
-  constructor() {
-  }
+  constructor() {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.resultsCount && this.filterConfig) {
@@ -48,30 +47,34 @@ export class AreasToolbarComponent implements OnChanges, OnInit {
 
   ngOnInit(): void {
     this.filterConfig = {
-      fields: [{
-        id: 'area',
-        title: 'Area',
-        placeholder: 'Filter by Area...',
-        type: 'text'
-      }] as FilterField[],
+      fields: [
+        {
+          id: 'area',
+          title: 'Area',
+          placeholder: 'Filter by Area...',
+          type: 'text',
+        },
+      ] as FilterField[],
       appliedFilters: [],
       resultsCount: 0,
       selectedCount: 0,
-      totalCount: 0
+      totalCount: 0,
     } as FilterConfig;
 
     this.sortConfig = {
-      fields: [{
-        id: 'area',
-        title:  'Area',
-        sortType: 'alpha'
-      }],
-      isAscending: this.isAscendingSort
+      fields: [
+        {
+          id: 'area',
+          title: 'Area',
+          sortType: 'alpha',
+        },
+      ],
+      isAscending: this.isAscendingSort,
     } as SortConfig;
 
     this.toolbarConfig = {
       filterConfig: this.filterConfig,
-      sortConfig: this.sortConfig
+      sortConfig: this.sortConfig,
     } as ToolbarConfig;
   }
 

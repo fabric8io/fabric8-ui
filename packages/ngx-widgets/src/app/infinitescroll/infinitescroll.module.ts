@@ -1,11 +1,11 @@
-import { CommonModule }       from '@angular/common';
-import { NgModule }           from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
-import { InfiniteScrollDirective }   from './infinitescroll.directive';
+import { InfiniteScrollDirective } from './infinitescroll.directive';
 
 @NgModule({
-  imports:      [ CommonModule ],
-  declarations: [ InfiniteScrollDirective ],
-  exports:      [ InfiniteScrollDirective ]
+  imports: [CommonModule],
+  declarations: [InfiniteScrollDirective],
+  exports: [InfiniteScrollDirective],
 })
-export class InfiniteScrollModule { }
+export class InfiniteScrollModule {}

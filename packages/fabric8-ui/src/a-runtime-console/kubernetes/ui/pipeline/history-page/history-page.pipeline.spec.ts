@@ -22,18 +22,14 @@ describe('PipelinesHistoryPage', () => {
     let mockAPIsStore: any = jasmine.createSpyObj('APIsStore', ['load']);
     mockAPIsStore.loading = observableEmpty();
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule
-      ],
-      declarations: [
-        PipelinesHistoryPage
-      ],
+      imports: [RouterTestingModule],
+      declarations: [PipelinesHistoryPage],
       providers: [
         { provide: BuildConfigStore, useValue: mockBuildConfigStore },
         { provide: BuildStore, useValue: mockBuildStore },
-        { provide: APIsStore, useValue: mockAPIsStore }
+        { provide: APIsStore, useValue: mockAPIsStore },
       ],
-      schemas: [ NO_ERRORS_SCHEMA ]
+      schemas: [NO_ERRORS_SCHEMA],
     });
   }));
 

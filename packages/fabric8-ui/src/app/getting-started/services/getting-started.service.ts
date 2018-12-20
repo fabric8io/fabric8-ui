@@ -1,14 +1,15 @@
-import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpHeaders
-} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Inject, Injectable, OnDestroy } from '@angular/core';
 import { cloneDeep } from 'lodash';
 import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService, Profile, User, UserService } from 'ngx-login-client';
-import { ConnectableObservable, Observable, Subscription, throwError as observableThrowError } from 'rxjs';
+import {
+  ConnectableObservable,
+  Observable,
+  Subscription,
+  throwError as observableThrowError,
+} from 'rxjs';
 import { catchError, map, publish } from 'rxjs/operators';
 
 interface ExtUserResponse {
@@ -32,11 +33,12 @@ export class GettingStartedService implements OnDestroy {
   private usersUrl: string;
 
   constructor(
-      protected auth: AuthenticationService,
-      protected http: HttpClient,
-      protected logger: Logger,
-      protected userService: UserService,
-      @Inject(WIT_API_URL) apiUrl: string) {
+    protected auth: AuthenticationService,
+    protected http: HttpClient,
+    protected logger: Logger,
+    protected userService: UserService,
+    @Inject(WIT_API_URL) apiUrl: string,
+  ) {
     if (this.auth.getToken() != undefined) {
       this.headers = this.headers.set('Authorization', 'Bearer ' + this.auth.getToken());
     }
@@ -44,7 +46,7 @@ export class GettingStartedService implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => {
+    this.subscriptions.forEach((sub) => {
       sub.unsubscribe();
     });
   }
@@ -53,15 +55,21 @@ export class GettingStartedService implements OnDestroy {
     let profile: ExtUser;
 
     (this.userService.loggedInUser.pipe(
-      map((user: User): void => {
-        profile = cloneDeep(user) as ExtUser;
-        if (profile.attributes !== undefined) {
-          profile.attributes.contextInformation = (user as ExtUser).attributes.contextInformation || {};
-        }
-      }),
-      publish()) as ConnectableObservable<User>).connect();
+      map(
+        (user: User): void => {
+          profile = cloneDeep(user) as ExtUser;
+          if (profile.attributes !== undefined) {
+            profile.attributes.contextInformation =
+              (user as ExtUser).attributes.contextInformation || {};
+          }
+        },
+      ),
+      publish(),
+    ) as ConnectableObservable<User>).connect();
 
-    return (profile !== undefined && profile.attributes !== undefined) ? profile.attributes : {} as ExtProfile;
+    return profile !== undefined && profile.attributes !== undefined
+      ? profile.attributes
+      : ({} as ExtProfile);
   }
 
   /**
@@ -72,10 +80,10 @@ export class GettingStartedService implements OnDestroy {
    */
   getExtProfile(id: string): Observable<ExtUser> {
     let url = `${this.usersUrl}/${id}`;
-    return this.http
-      .get<ExtUserResponse>(url, { headers: this.headers }).pipe(
+    return this.http.get<ExtUserResponse>(url, { headers: this.headers }).pipe(
       map((response: ExtUserResponse): ExtUser => response.data),
-      catchError((error: HttpErrorResponse): Observable<ExtUser> => this.handleError(error)));
+      catchError((error: HttpErrorResponse): Observable<ExtUser> => this.handleError(error)),
+    );
   }
 
   /**
@@ -88,13 +96,13 @@ export class GettingStartedService implements OnDestroy {
     const payload: any = JSON.stringify({
       data: {
         attributes: profile,
-        type: 'identities'
-      }
+        type: 'identities',
+      },
     });
-    return this.http
-      .patch<ExtUserResponse>(this.usersUrl, payload, { headers: this.headers }).pipe(
+    return this.http.patch<ExtUserResponse>(this.usersUrl, payload, { headers: this.headers }).pipe(
       map((response: ExtUserResponse): ExtUser => response.data),
-      catchError((error: HttpErrorResponse): Observable<ExtUser> => this.handleError(error)));
+      catchError((error: HttpErrorResponse): Observable<ExtUser> => this.handleError(error)),
+    );
   }
 
   // Private

@@ -9,14 +9,13 @@ import { ProviderService } from '../../../shared/account/provider.service';
 
 @Injectable()
 export class AppLauncherGitproviderService implements GitProviderService {
-
   private END_POINT: string = '';
   private API_BASE: string = 'services/git/';
   private PROVIDER: string = 'GitHub';
   private headers: HttpHeaders = new HttpHeaders({
     'Content-Type': 'application/json',
     'X-App': 'osio',
-    'x-git-provider': this.PROVIDER
+    'x-git-provider': this.PROVIDER,
   });
 
   private gitHubUserLogin: string;
@@ -26,7 +25,7 @@ export class AppLauncherGitproviderService implements GitProviderService {
     private http: HttpClient,
     private auth: AuthenticationService,
     private helperService: HelperService,
-    private providerService: ProviderService
+    private providerService: ProviderService,
   ) {
     if (this.helperService) {
       this.END_POINT = this.helperService.getBackendUrl();
@@ -52,29 +51,27 @@ export class AppLauncherGitproviderService implements GitProviderService {
    */
   private getGitHubUserData(): Observable<any> {
     let url = this.END_POINT + this.API_BASE + 'user';
-    return this.http
-      .get(url, { headers: this.headers }).pipe(
-        catchError((error: HttpErrorResponse) => {
-          return throwError(error);
-        }));
+    return this.http.get(url, { headers: this.headers }).pipe(
+      catchError((error: HttpErrorResponse) => {
+        return throwError(error);
+      }),
+    );
   }
-
 
   /**
-  * Get GitHub Organizations associated with given user name
-  *
-  * @param userName The GitHub user name
-  * @returns {Observable<any>}
-  */
+   * Get GitHub Organizations associated with given user name
+   *
+   * @param userName The GitHub user name
+   * @returns {Observable<any>}
+   */
   getUserOrgs(userName: string): Observable<any> {
     let url = this.END_POINT + this.API_BASE + 'organizations';
-    return this.http
-      .get(url, { headers: this.headers }).pipe(
-        catchError((error: HttpErrorResponse) => {
-          return throwError(error);
-        }));
+    return this.http.get(url, { headers: this.headers }).pipe(
+      catchError((error: HttpErrorResponse) => {
+        return throwError(error);
+      }),
+    );
   }
-
 
   /**
    * Returns GitHub details associated with the logged in user
@@ -82,33 +79,39 @@ export class AppLauncherGitproviderService implements GitProviderService {
    * @returns {Observable<GitHubDetails>} The GitHub details associated with the logged in user
    */
   getGitHubDetails(): Observable<GitHubDetails> {
-    return this.getGitHubUserData().pipe(mergeMap(user => {
-      if (user && user.login) {
-        this.gitHubUserLogin = user.login;
-        let orgs: { [name: string]: string } = {};
-        return this.getUserOrgs(user.login).pipe(mergeMap(orgsArr => {
-          if (orgsArr && orgsArr.length >= 0) {
-            this.repositories[''] = AppLauncherGitproviderService.removeOrganizationPrefix(user.repositories);
-            for (let i = 0; i < orgsArr.length; i++) {
-              orgs[orgsArr[i]] = orgsArr[i];
-            }
-            orgs[user.login] = undefined;
-            let gitHubDetails = {
-              authenticated: true,
-              avatar: user.avatarUrl,
-              login: user.login,
-              organizations: orgs,
-              repositoryList: this.repositories['']
-            } as GitHubDetails;
-            return of(gitHubDetails);
-          } else {
-            return EMPTY;
-          }
-        }));
-      } else {
-        return EMPTY;
-      }
-    }));
+    return this.getGitHubUserData().pipe(
+      mergeMap((user) => {
+        if (user && user.login) {
+          this.gitHubUserLogin = user.login;
+          let orgs: { [name: string]: string } = {};
+          return this.getUserOrgs(user.login).pipe(
+            mergeMap((orgsArr) => {
+              if (orgsArr && orgsArr.length >= 0) {
+                this.repositories[''] = AppLauncherGitproviderService.removeOrganizationPrefix(
+                  user.repositories,
+                );
+                for (let i = 0; i < orgsArr.length; i++) {
+                  orgs[orgsArr[i]] = orgsArr[i];
+                }
+                orgs[user.login] = undefined;
+                let gitHubDetails = {
+                  authenticated: true,
+                  avatar: user.avatarUrl,
+                  login: user.login,
+                  organizations: orgs,
+                  repositoryList: this.repositories[''],
+                } as GitHubDetails;
+                return of(gitHubDetails);
+              } else {
+                return EMPTY;
+              }
+            }),
+          );
+        } else {
+          return EMPTY;
+        }
+      }),
+    );
   }
 
   /**
@@ -123,7 +126,7 @@ export class AppLauncherGitproviderService implements GitProviderService {
     return this.getRepositories(org).pipe(
       map((repositories) => {
         return repositories.indexOf(fullName) !== -1;
-      })
+      }),
     );
   }
 
@@ -134,7 +137,9 @@ export class AppLauncherGitproviderService implements GitProviderService {
    * @returns {Observable<any>} list of existing GitHub repos
    */
   getGitHubRepoList(org: string): Observable<any> {
-    return this.getRepositories(org).pipe(map(AppLauncherGitproviderService.removeOrganizationPrefix));
+    return this.getRepositories(org).pipe(
+      map(AppLauncherGitproviderService.removeOrganizationPrefix),
+    );
   }
 
   private getRepositories(org: string = ''): Observable<string[]> {
@@ -145,11 +150,12 @@ export class AppLauncherGitproviderService implements GitProviderService {
       return of(this.repositories[org]);
     }
     return this.http.get<string[]>(this.createUrl(org), { headers: this.headers }).pipe(
-      map((json) => json ? json as string[] : []),
-      tap((repositories) => this.repositories[org] = repositories),
+      map((json) => (json ? (json as string[]) : [])),
+      tap((repositories) => (this.repositories[org] = repositories)),
       catchError((error: HttpErrorResponse) => {
         return throwError(error);
-      }));
+      }),
+    );
   }
 
   // Private

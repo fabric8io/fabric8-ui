@@ -17,9 +17,9 @@ import { UpdateComponent } from './update.component';
     RemainingCharsCountModule,
     UpdateRoutingModule,
     SpacesModule,
-    WorkItemsModule
+    WorkItemsModule,
   ],
-  declarations: [ UpdateComponent ],
-  providers: [ OwnerGuard ]
+  declarations: [UpdateComponent],
+  providers: [OwnerGuard],
 })
 export class UpdateModule {}

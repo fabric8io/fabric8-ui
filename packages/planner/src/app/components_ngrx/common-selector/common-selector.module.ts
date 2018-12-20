@@ -7,20 +7,8 @@ import { SelectDropdownModule } from './../../widgets/select-dropdown/select-dro
 import { CommonSelectorComponent } from './common-selector.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    SelectDropdownModule,
-    TruncateModule,
-    WidgetsModule
-  ],
-  declarations: [
-    CommonSelectorComponent
-  ],
-  exports: [
-    CommonSelectorComponent
-  ]
+  imports: [CommonModule, SelectDropdownModule, TruncateModule, WidgetsModule],
+  declarations: [CommonSelectorComponent],
+  exports: [CommonSelectorComponent],
 })
-
-export class CommonSelectorModule {
-
-}
+export class CommonSelectorModule {}

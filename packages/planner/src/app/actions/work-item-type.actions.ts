@@ -2,7 +2,7 @@ import { Action } from '@ngrx/store';
 import {
   WorkItemTypeMapper,
   WorkItemTypeService,
-  WorkItemTypeUI
+  WorkItemTypeUI,
 } from './../models/work-item-type';
 
 export const GET = '[wi-type] Get';
@@ -25,7 +25,4 @@ export class GetError implements Action {
   readonly type = GET_ERROR;
 }
 
-export type All
-  = Get
-  | GetSuccess
-  | GetError;
+export type All = Get | GetSuccess | GetError;

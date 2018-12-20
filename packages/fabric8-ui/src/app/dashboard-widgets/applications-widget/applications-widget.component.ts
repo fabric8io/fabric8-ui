@@ -5,7 +5,7 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { isEmpty, orderBy } from 'lodash';
@@ -19,7 +19,7 @@ import { PipelinesService } from '../../shared/runtime-console/pipelines.service
   encapsulation: ViewEncapsulation.None,
   selector: 'fabric8-applications-widget',
   templateUrl: './applications-widget.component.html',
-  styleUrls: ['./applications-widget.component.less']
+  styleUrls: ['./applications-widget.component.less'],
 })
 export class ApplicationsWidgetComponent implements OnDestroy, OnInit {
   @Input() userOwnsSpace: boolean;
@@ -36,10 +36,12 @@ export class ApplicationsWidgetComponent implements OnDestroy, OnInit {
 
   private subscriptions: Subscription[] = [];
 
-  constructor(private context: Contexts,
-              private pipelinesService: PipelinesService,
-              private router: Router,
-              private userService: UserService) {
+  constructor(
+    private context: Contexts,
+    private pipelinesService: PipelinesService,
+    private router: Router,
+    private userService: UserService,
+  ) {
     // Fetch pipeline build configs and filter based on application deployment stage
     this.subscriptions.push(
       this.pipelinesService.current.subscribe((buildConfigs: BuildConfig[]) => {
@@ -49,42 +51,47 @@ export class ApplicationsWidgetComponent implements OnDestroy, OnInit {
         this.sortBuildConfigs();
         this.alignBuildConfigs();
         this.loading = false;
-      }));
-    this.subscriptions.push(userService.loggedInUser.subscribe(user => {
-      this.loggedInUser = user;
-    }));
-    this.subscriptions.push(context.current.subscribe((ctx: Context) => {
-      this.currentSpace = ctx.space;
-    }));
+      }),
+    );
+    this.subscriptions.push(
+      userService.loggedInUser.subscribe((user) => {
+        this.loggedInUser = user;
+      }),
+    );
+    this.subscriptions.push(
+      context.current.subscribe((ctx: Context) => {
+        this.currentSpace = ctx.space;
+      }),
+    );
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => {
+    this.subscriptions.forEach((sub) => {
       sub.unsubscribe();
     });
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   get applicationsInProgress(): number {
     let result = 0;
     if (this.buildConfigsAvailable) {
-      result = this.buildConfigs.length - (this.stageBuildConfigs.length + this.runBuildConfigs.length);
+      result =
+        this.buildConfigs.length - (this.stageBuildConfigs.length + this.runBuildConfigs.length);
     }
     return result;
   }
 
   get buildConfigsAvailable(): boolean {
-    return !(isEmpty(this.buildConfigs));
+    return !isEmpty(this.buildConfigs);
   }
 
   get runConfigsAvailable(): boolean {
-    return !(isEmpty(this.runBuildConfigs));
+    return !isEmpty(this.runBuildConfigs);
   }
 
   get stageConfigsAvailable(): boolean {
-    return !(isEmpty(this.stageBuildConfigs));
+    return !isEmpty(this.stageBuildConfigs);
   }
 
   // Private

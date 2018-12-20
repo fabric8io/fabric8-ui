@@ -158,7 +158,6 @@ export class BuildConfig extends KubernetesSpecResource {
     return answer;
   }
 
-
   updateValuesFromResource() {
     super.updateValuesFromResource();
 
@@ -170,7 +169,7 @@ export class BuildConfig extends KubernetesSpecResource {
     let type = strategy.type || '';
 
     this.lastVersion = status.lastVersion || 0;
-    this.lastBuildName = this.lastVersion ? this.name + '-' +  this.lastVersion : '';
+    this.lastBuildName = this.lastVersion ? this.name + '-' + this.lastVersion : '';
     this.lastBuildPath = this.lastBuildName ? this.name + '/builds/' + this.lastBuildName : '';
     this.iconStyle = defaultBuildIconStyle;
 
@@ -189,7 +188,13 @@ export class BuildConfig extends KubernetesSpecResource {
     if (oauthConfig) {
       let openShiftConsoleUrl = oauthConfig.openshiftConsoleUrl;
       if (openShiftConsoleUrl && namespace && name) {
-        this.editPipelineUrl = pathJoin(openShiftConsoleUrl, '/project/', namespace, '/edit/pipelines/', name);
+        this.editPipelineUrl = pathJoin(
+          openShiftConsoleUrl,
+          '/project/',
+          namespace,
+          '/edit/pipelines/',
+          name,
+        );
       }
     }
 
@@ -205,9 +210,7 @@ export class BuildConfig extends KubernetesSpecResource {
   }
 }
 
-export class BuildConfigs extends Array<BuildConfig> {
-}
-
+export class BuildConfigs extends Array<BuildConfig> {}
 
 export function findBuildConfigByID(buildConfigs: BuildConfigs, params: Params): BuildConfig {
   let id = params['id'];
@@ -223,26 +226,29 @@ export function findBuildConfigByID(buildConfigs: BuildConfigs, params: Params):
   return id;
 }
 
-export function combineBuildConfigAndBuilds(buildConfigs: BuildConfigs, builds: Builds): BuildConfigs {
-    let map = {};
-    let bcBuilds = {};
-    if (builds) {
-      builds.forEach(s => {
-        map[s.name] = s;
-        let bcName = s.buildConfigName;
-        if (bcName) {
-          let list = bcBuilds[bcName];
-          if (!list) {
-            list = new Array<Build>();
-            bcBuilds[bcName] = list;
-          }
-          list.push(s);
+export function combineBuildConfigAndBuilds(
+  buildConfigs: BuildConfigs,
+  builds: Builds,
+): BuildConfigs {
+  let map = {};
+  let bcBuilds = {};
+  if (builds) {
+    builds.forEach((s) => {
+      map[s.name] = s;
+      let bcName = s.buildConfigName;
+      if (bcName) {
+        let list = bcBuilds[bcName];
+        if (!list) {
+          list = new Array<Build>();
+          bcBuilds[bcName] = list;
         }
-      });
-    }
-    if (buildConfigs) {
-      buildConfigs.forEach(bc => {
-/*
+        list.push(s);
+      }
+    });
+  }
+  if (buildConfigs) {
+    buildConfigs.forEach((bc) => {
+      /*
         let lastVersionName = bc.lastBuildName;
         if (lastVersionName) {
           let build = map[lastVersionName];
@@ -251,23 +257,21 @@ export function combineBuildConfigAndBuilds(buildConfigs: BuildConfigs, builds: 
           }
         }
 */
-        let name = bc.name;
-        if (name) {
-          let list = bcBuilds[name];
-          if (list) {
-            bc.builds = list;
-          }
+      let name = bc.name;
+      if (name) {
+        let list = bcBuilds[name];
+        if (list) {
+          bc.builds = list;
         }
-      });
-    }
-    return buildConfigs;
-
-
+      }
+    });
   }
+  return buildConfigs;
+}
 
 export function filterPipelines(buildConfigs: BuildConfigs): BuildConfigs {
   var answer = new BuildConfigs();
-  buildConfigs.forEach(bc => {
+  buildConfigs.forEach((bc) => {
     if (bc.isPipeline) {
       answer.push(bc);
     }
@@ -280,7 +284,7 @@ export function filterPipelines(buildConfigs: BuildConfigs): BuildConfigs {
  */
 export function appInfos(buildConfigs: BuildConfigs): Map<string, EnvironmentApps> {
   let answer = new Map<string, EnvironmentApps>();
-  buildConfigs.forEach(bc => {
+  buildConfigs.forEach((bc) => {
     let appEnv = bc.environmentApp;
     for (let environmentKey in appEnv) {
       let app = appEnv[environmentKey];

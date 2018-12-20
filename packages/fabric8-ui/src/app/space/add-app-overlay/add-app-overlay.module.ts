@@ -18,21 +18,14 @@ import { AddAppOverlayComponent } from './add-app-overlay.component';
     Fabric8WitModule,
     FormsModule,
     ModalModule.forRoot(),
-    PopoverModule.forRoot()
+    PopoverModule.forRoot(),
   ],
-  declarations: [
-    AddAppOverlayComponent
-  ],
-  exports: [
-    AddAppOverlayComponent
-  ],
+  declarations: [AddAppOverlayComponent],
+  exports: [AddAppOverlayComponent],
   providers: [
     CodebasesService,
     { provide: DependencyCheckService, useClass: AppLauncherDependencyCheckService },
-    DeploymentApiService
-  ]
+    DeploymentApiService,
+  ],
 })
-
-export class AddAppOverlayModule {
-
-}
+export class AddAppOverlayModule {}

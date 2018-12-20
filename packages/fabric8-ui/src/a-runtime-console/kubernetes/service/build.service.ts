@@ -10,16 +10,21 @@ import { WatcherFactory } from './watcher-factory.service';
 
 @Injectable()
 export class BuildService extends NamespacedResourceService<Build, Builds> {
-
   constructor(
     @Inject(KUBERNETES_RESTANGULAR) kubernetesRestangular: Restangular,
     namespaceScope: DevNamespaceScope,
     private apiStore: APIsStore,
-    watcherFactory: WatcherFactory
+    watcherFactory: WatcherFactory,
   ) {
-    super(kubernetesRestangular, namespaceScope, '/builds', watcherFactory, getOpenShiftBuildUriPrefix());
+    super(
+      kubernetesRestangular,
+      namespaceScope,
+      '/builds',
+      watcherFactory,
+      getOpenShiftBuildUriPrefix(),
+    );
 
-    apiStore.loading.subscribe(loading => {
+    apiStore.loading.subscribe((loading) => {
       if (!loading) {
         // force recalculation of the URL
         this._serviceUrl = null;
@@ -33,5 +38,4 @@ export class BuildService extends NamespacedResourceService<Build, Builds> {
     }
     return '';
   }
-
 }

@@ -22,9 +22,9 @@ import { EditSpaceDescriptionWidgetComponent } from './edit-space-description-wi
     ModalModule.forRoot(),
     PopoverModule.forRoot(),
     InfiniteScrollModule,
-    RouterModule
+    RouterModule,
   ],
   declarations: [EditSpaceDescriptionWidgetComponent],
-  exports: [EditSpaceDescriptionWidgetComponent]
+  exports: [EditSpaceDescriptionWidgetComponent],
 })
-export class EditSpaceDescriptionWidgetModule { }
+export class EditSpaceDescriptionWidgetModule {}

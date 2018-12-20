@@ -10,14 +10,12 @@ export class Namespace extends KubernetesResource {
     return 'Namespace';
   }
 
-
   defaultIconUrl(): string {
     return '';
   }
 }
 
-export class Namespaces extends Array<Namespace> {
-}
+export class Namespaces extends Array<Namespace> {}
 
 export function isSecretsNamespace(namespace: Namespace) {
   return namespace && namespace.labels['group'] === 'secrets';
@@ -29,7 +27,6 @@ export function isSystemNamespace(namespace: Namespace) {
 
 const systemNamespaceNames = {
   'kube-system': 'kubernetes',
-  'openshift': 'openshift',
-  'openshift-infra': 'openshift'
+  openshift: 'openshift',
+  'openshift-infra': 'openshift',
 };
-

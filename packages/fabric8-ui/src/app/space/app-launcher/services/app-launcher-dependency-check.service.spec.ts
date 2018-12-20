@@ -1,32 +1,34 @@
 import { TestBed } from '@angular/core/testing';
 import { Context } from 'ngx-fabric8-wit';
-import {
-    DependencyCheck
-} from 'ngx-launcher';
-import { Observable ,  of as observableOf } from 'rxjs';
+import { DependencyCheck } from 'ngx-launcher';
+import { Observable, of as observableOf } from 'rxjs';
 import { ContextService } from '../../../shared/context.service';
 import { DeploymentApiService } from '../../create/deployments/services/deployment-api.service';
 import { AppLauncherDependencyCheckService } from './app-launcher-dependency-check.service';
 
 let mockDeploymentApiService: any = {
   getApplications(): Observable<any[]> {
-      return observableOf([{
-          attributes: {name: 'app-apr-10-2018-4-25'}
-      }, {
-          attributes: {name: 'app-may-11-2018'}
-      }, {
-          attributes: {name: 'app-may-14-1-04'}
-      }]);
-  }
+    return observableOf([
+      {
+        attributes: { name: 'app-apr-10-2018-4-25' },
+      },
+      {
+        attributes: { name: 'app-may-11-2018' },
+      },
+      {
+        attributes: { name: 'app-may-14-1-04' },
+      },
+    ]);
+  },
 };
 
 function initTestBed() {
   TestBed.configureTestingModule({
     providers: [
-        AppLauncherDependencyCheckService,
-        { provide: ContextService, useClass: mockContextService },
-        { provide: DeploymentApiService, useValue: mockDeploymentApiService }
-    ]
+      AppLauncherDependencyCheckService,
+      { provide: ContextService, useClass: mockContextService },
+      { provide: DeploymentApiService, useValue: mockDeploymentApiService },
+    ],
   });
 }
 
@@ -37,16 +39,18 @@ let mockContext = {
     id: 'c814a58b-6220-4670-80cf-a2196899a59d',
     attributes: {
       'created-at': '2018-04-24T11:15:59.164872Z',
-      'description': '',
-      'name': 'my-space-apr24-4-43',
+      description: '',
+      name: 'my-space-apr24-4-43',
       'updated-at': '2018-04-24T11:15:59.164872Z',
-      'version': 0
-    }
-  }
+      version: 0,
+    },
+  },
 } as Context;
 
 class mockContextService {
-  get current(): Observable<Context> { return observableOf(mockContext); }
+  get current(): Observable<Context> {
+    return observableOf(mockContext);
+  }
 }
 
 describe('Service: AppLauncherDependencyCheckService', () => {
@@ -57,7 +61,7 @@ describe('Service: AppLauncherDependencyCheckService', () => {
     projectName: '',
     projectVersion: '1.0.0',
     spacePath: '/c814a58b-6220-4670-80cf-a2196899a59d',
-    targetEnvironment: 'os'
+    targetEnvironment: 'os',
   } as DependencyCheck;
 
   beforeEach(() => {
@@ -71,5 +75,4 @@ describe('Service: AppLauncherDependencyCheckService', () => {
       done();
     });
   });
-
 });

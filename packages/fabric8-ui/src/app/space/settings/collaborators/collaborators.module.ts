@@ -20,15 +20,11 @@ import { CollaboratorsComponent } from './collaborators.component';
     AddCollaboratorsDialogModule,
     ModalModule.forRoot(),
     Fabric8WitModule,
-    FeatureFlagModule
+    FeatureFlagModule,
   ],
-  declarations: [
-    CollaboratorsComponent
-  ],
-  providers: [
-    BsDropdownConfig
-  ]
+  declarations: [CollaboratorsComponent],
+  providers: [BsDropdownConfig],
 })
 export class CollaboratorsModule {
-  constructor() { }
+  constructor() {}
 }

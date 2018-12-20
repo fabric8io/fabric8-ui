@@ -6,7 +6,11 @@ import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService, UserService } from 'ngx-login-client';
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ExtProfile, ExtUser, GettingStartedService } from '../../getting-started/services/getting-started.service';
+import {
+  ExtProfile,
+  ExtUser,
+  GettingStartedService,
+} from '../../getting-started/services/getting-started.service';
 
 /**
  * A service to manage the user acknowledgement to dismiss the warning displayed by the experimental feature banner
@@ -20,13 +24,14 @@ export class FeatureAcknowledgementService extends GettingStartedService impleme
     protected http: HttpClient,
     protected logger: Logger,
     protected userService: UserService,
-    @Inject(WIT_API_URL) apiUrl: string) {
+    @Inject(WIT_API_URL) apiUrl: string,
+  ) {
     super(auth, http, logger, userService, apiUrl);
   }
 
   ngOnDestroy(): void {
     super.ngOnDestroy();
-    this.subscriptions.forEach(sub => {
+    this.subscriptions.forEach((sub) => {
       sub.unsubscribe();
     });
   }
@@ -38,16 +43,18 @@ export class FeatureAcknowledgementService extends GettingStartedService impleme
    */
   getToggle(): Observable<boolean> {
     return this.userService.loggedInUser.pipe(
-      map(user => {
+      map((user) => {
         let acknowledged: boolean = true;
         let profile;
         profile = cloneDeep(user) as ExtUser;
         if (profile.attributes !== undefined) {
-          profile.attributes.contextInformation = (user as ExtUser).attributes.contextInformation || {};
+          profile.attributes.contextInformation =
+            (user as ExtUser).attributes.contextInformation || {};
           acknowledged = Boolean(profile.attributes.contextInformation.featureAcknowledgement);
         }
         return acknowledged;
-      }));
+      }),
+    );
   }
 
   /**
@@ -60,12 +67,17 @@ export class FeatureAcknowledgementService extends GettingStartedService impleme
     delete profile.featureLevel;
     profile.contextInformation.featureAcknowledgement = value;
 
-    this.subscriptions.push(this.update(profile).subscribe(() => {
-      // tell all component the show indicator value has chnaged
-      this.showIconChanged.emit({value});
-    }, error => {
-      this.logger.error(`Failed to save acknowledge state: ${error}`);
-    }));
+    this.subscriptions.push(
+      this.update(profile).subscribe(
+        () => {
+          // tell all component the show indicator value has chnaged
+          this.showIconChanged.emit({ value });
+        },
+        (error) => {
+          this.logger.error(`Failed to save acknowledge state: ${error}`);
+        },
+      ),
+    );
   }
 
   // Private

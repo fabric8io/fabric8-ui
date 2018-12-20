@@ -1,4 +1,13 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { NgForm, NgModel } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Area, AreaAttributes, AreaService } from 'ngx-fabric8-wit';
@@ -7,21 +16,19 @@ export enum AreaCreationStatus {
   OK,
   EMPTY_NAME_FAILURE,
   EXCEED_LENGTH_FAILURE,
-  UNIQUE_VALIDATION_FAILURE
+  UNIQUE_VALIDATION_FAILURE,
 }
 
 @Component({
   host: {
-    'class': 'create-dialog'
+    class: 'create-dialog',
   },
   encapsulation: ViewEncapsulation.None,
   selector: 'create-area-dialog',
   templateUrl: './create-area-dialog.component.html',
-  styleUrls: ['./create-area-dialog.component.less']
+  styleUrls: ['./create-area-dialog.component.less'],
 })
-
 export class CreateAreaDialogComponent implements OnInit {
-
   @Input() host: ModalDirective;
   @Input() parentId: string;
   @Input() areas: Area[];
@@ -37,9 +44,7 @@ export class CreateAreaDialogComponent implements OnInit {
   name: string;
   private _areaCreationStatus: AreaCreationStatus;
 
-  constructor(
-    private areaService: AreaService) {
-  }
+  constructor(private areaService: AreaService) {}
 
   public onOpen() {
     this.focus();
@@ -81,12 +86,15 @@ export class CreateAreaDialogComponent implements OnInit {
     area.attributes = new AreaAttributes();
     area.attributes.name = this.name.trim();
     area.type = 'areas';
-    this.areaService.create(this.parentId, area).subscribe(newArea => {
-      this.onAdded.emit(newArea);
-      this.host.hide();
-    }, error => {
-      this.handleError(error.json());
-    });
+    this.areaService.create(this.parentId, area).subscribe(
+      (newArea) => {
+        this.onAdded.emit(newArea);
+        this.host.hide();
+      },
+      (error) => {
+        this.handleError(error.json());
+      },
+    );
   }
 
   itemPath(item: AreaAttributes) {
@@ -104,7 +112,7 @@ export class CreateAreaDialogComponent implements OnInit {
 
   handleError(error: any) {
     if (error.errors.length) {
-      error.errors.forEach(error => {
+      error.errors.forEach((error) => {
         if (error.status === '409') {
           this._areaCreationStatus = AreaCreationStatus.UNIQUE_VALIDATION_FAILURE;
         }
@@ -115,5 +123,4 @@ export class CreateAreaDialogComponent implements OnInit {
   get areaCreationStatus(): AreaCreationStatus {
     return this._areaCreationStatus;
   }
-
 }

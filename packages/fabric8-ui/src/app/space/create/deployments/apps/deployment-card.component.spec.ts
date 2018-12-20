@@ -4,46 +4,34 @@ import {
   EventEmitter,
   Input,
   NO_ERRORS_SCHEMA,
-  Output
+  Output,
 } from '@angular/core';
-import {
-  fakeAsync,
-  TestBed,
-  tick
-} from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import {
   BsDropdownConfig,
   BsDropdownModule,
-  BsDropdownToggleDirective
+  BsDropdownToggleDirective,
 } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import 'patternfly/dist/js/patternfly-settings.js';
-import {
-  BehaviorSubject,
-  of,
-  Subject
-} from 'rxjs';
+import { BehaviorSubject, of, Subject } from 'rxjs';
 import { createMock } from 'testing/mock';
 import { initContext } from 'testing/test-context';
 import { NotificationsService } from '../../../../shared/notifications.service';
-import {
-  DeploymentStatusService,
-  Status,
-  StatusType
-} from '../services/deployment-status.service';
+import { DeploymentStatusService, Status, StatusType } from '../services/deployment-status.service';
 import { DeploymentsService } from '../services/deployments.service';
 import { DeploymentCardComponent } from './deployment-card.component';
 
 @Component({
-  template: '<deployment-card></deployment-card>'
+  template: '<deployment-card></deployment-card>',
 })
-class HostComponent { }
+class HostComponent {}
 
 @Component({
   selector: 'delete-deployment-modal',
-  template: ''
+  template: '',
 })
 class FakeDeleteDeploymentModal {
   @Input() applicationId: string;
@@ -52,56 +40,71 @@ class FakeDeleteDeploymentModal {
 }
 
 describe('DeploymentCardComponent', () => {
+  const testContext = initContext(
+    DeploymentCardComponent,
+    HostComponent,
+    {
+      declarations: [FakeDeleteDeploymentModal],
+      imports: [BsDropdownModule.forRoot(), CollapseModule.forRoot(), ModalModule.forRoot()],
+      providers: [
+        BsDropdownConfig,
+        {
+          provide: NotificationsService,
+          useFactory: () =>
+            jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']),
+        },
+        {
+          provide: DeploymentsService,
+          useFactory: (): jasmine.SpyObj<DeploymentsService> => {
+            const svc: jasmine.SpyObj<DeploymentsService> = createMock(DeploymentsService);
 
-  const testContext = initContext(DeploymentCardComponent, HostComponent, {
-    declarations: [FakeDeleteDeploymentModal],
-    imports: [
-      BsDropdownModule.forRoot(),
-      CollapseModule.forRoot(),
-      ModalModule.forRoot()
-    ],
-    providers: [
-      BsDropdownConfig,
-      { provide: NotificationsService, useFactory: () => jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']) },
-      {
-        provide: DeploymentsService, useFactory: (): jasmine.SpyObj<DeploymentsService> => {
-          const svc: jasmine.SpyObj<DeploymentsService> = createMock(DeploymentsService);
+            svc.getVersion.and.returnValue(of('1.2.3'));
+            svc.getDeploymentCpuStat.and.returnValue(of([{ used: 1, quota: 2, timestamp: 1 }]));
+            svc.getDeploymentMemoryStat.and.returnValue(
+              of([{ used: 3, quota: 4, units: 'GB', timestamp: 1 }]),
+            );
+            svc.getAppUrl.and.returnValue(of('mockAppUrl'));
+            svc.getConsoleUrl.and.returnValue(of('mockConsoleUrl'));
+            svc.getLogsUrl.and.returnValue(of('mockLogsUrl'));
+            svc.deleteDeployment.and.returnValue(of('mockDeletedMessage'));
+            svc.isApplicationDeployedInEnvironment.and.returnValue(
+              new BehaviorSubject<boolean>(true),
+            );
+            svc.deleteDeployment.and.returnValue(new Subject<string>());
 
-          svc.getVersion.and.returnValue(of('1.2.3'));
-          svc.getDeploymentCpuStat.and.returnValue(of([{ used: 1, quota: 2, timestamp: 1 }]));
-          svc.getDeploymentMemoryStat.and.returnValue(of([{ used: 3, quota: 4, units: 'GB', timestamp: 1 }]));
-          svc.getAppUrl.and.returnValue(of('mockAppUrl'));
-          svc.getConsoleUrl.and.returnValue(of('mockConsoleUrl'));
-          svc.getLogsUrl.and.returnValue(of('mockLogsUrl'));
-          svc.deleteDeployment.and.returnValue(of('mockDeletedMessage'));
-          svc.isApplicationDeployedInEnvironment.and.returnValue(new BehaviorSubject<boolean>(true));
-          svc.deleteDeployment.and.returnValue(new Subject<string>());
-
-          return svc;
-        }
-      },
-      {
-        provide: DeploymentStatusService, useFactory: (): jasmine.SpyObj<DeploymentStatusService> => {
-          const svc: jasmine.SpyObj<DeploymentStatusService> = createMock(DeploymentStatusService);
-          svc.getDeploymentAggregateStatus.and.returnValue(new BehaviorSubject({ type: StatusType.WARN, message: 'warning message' }));
-          return svc;
-        }
-      }
-    ],
-    schemas: [NO_ERRORS_SCHEMA]
-  },
+            return svc;
+          },
+        },
+        {
+          provide: DeploymentStatusService,
+          useFactory: (): jasmine.SpyObj<DeploymentStatusService> => {
+            const svc: jasmine.SpyObj<DeploymentStatusService> = createMock(
+              DeploymentStatusService,
+            );
+            svc.getDeploymentAggregateStatus.and.returnValue(
+              new BehaviorSubject({ type: StatusType.WARN, message: 'warning message' }),
+            );
+            return svc;
+          },
+        },
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    },
     (component: DeploymentCardComponent): void => {
       component.spaceId = 'mockSpaceId';
       component.applicationId = 'mockAppId';
       component.environment = 'mockEnvironment';
-    });
+    },
+  );
 
   it('should be active by default', (): void => {
     expect(testContext.testedDirective).toBeTruthy();
   });
 
   it('should not display inactive environments', fakeAsync((): void => {
-    TestBed.get(DeploymentsService).isApplicationDeployedInEnvironment().next(false);
+    TestBed.get(DeploymentsService)
+      .isApplicationDeployedInEnvironment()
+      .next(false);
     expect(testContext.testedDirective.active).toBeFalsy();
   }));
 
@@ -149,17 +152,31 @@ describe('DeploymentCardComponent', () => {
   it('should invoke deployments service calls with the correct arguments', (): void => {
     const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
 
-    expect(mockSvc.isApplicationDeployedInEnvironment).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
+    expect(mockSvc.isApplicationDeployedInEnvironment).toHaveBeenCalledWith(
+      'mockSpaceId',
+      'mockEnvironment',
+      'mockAppId',
+    );
     expect(mockSvc.getLogsUrl).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
-    expect(mockSvc.getConsoleUrl).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
+    expect(mockSvc.getConsoleUrl).toHaveBeenCalledWith(
+      'mockSpaceId',
+      'mockEnvironment',
+      'mockAppId',
+    );
     expect(mockSvc.getAppUrl).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
   });
 
   it('should set icon status from DeploymentStatusService aggregate', (): void => {
-    const mockStatusSvc: jasmine.SpyObj<DeploymentStatusService> = TestBed.get(DeploymentStatusService);
+    const mockStatusSvc: jasmine.SpyObj<DeploymentStatusService> = TestBed.get(
+      DeploymentStatusService,
+    );
     const mockStatus: Subject<Status> = mockStatusSvc.getDeploymentAggregateStatus();
 
-    expect(mockStatusSvc.getDeploymentAggregateStatus).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
+    expect(mockStatusSvc.getDeploymentAggregateStatus).toHaveBeenCalledWith(
+      'mockSpaceId',
+      'mockEnvironment',
+      'mockAppId',
+    );
     expect(testContext.testedDirective.toolTip).toEqual('warning message');
     expect(testContext.testedDirective.iconClass).toEqual('pficon-warning-triangle-o');
     expect(testContext.testedDirective.cardStatusClass).toEqual('status-ribbon-warn');
@@ -180,12 +197,15 @@ describe('DeploymentCardComponent', () => {
       let menuItems: DebugElement[];
 
       function getItemByLabel(label: string): DebugElement {
-        return menuItems
-          .filter((item: DebugElement): boolean => item.nativeElement.textContent.includes(label))[0];
+        return menuItems.filter(
+          (item: DebugElement): boolean => item.nativeElement.textContent.includes(label),
+        )[0];
       }
 
       beforeEach(fakeAsync((): void => {
-        const de: DebugElement = testContext.fixture.debugElement.query(By.directive(BsDropdownToggleDirective));
+        const de: DebugElement = testContext.fixture.debugElement.query(
+          By.directive(BsDropdownToggleDirective),
+        );
         de.triggerEventHandler('click', new CustomEvent('click'));
 
         testContext.fixture.detectChanges();
@@ -219,10 +239,16 @@ describe('DeploymentCardComponent', () => {
 
       it('should call the delete service method when the modal event fires', fakeAsync((): void => {
         const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
-        const de: DebugElement = testContext.fixture.debugElement.query(By.directive(FakeDeleteDeploymentModal));
+        const de: DebugElement = testContext.fixture.debugElement.query(
+          By.directive(FakeDeleteDeploymentModal),
+        );
         expect(mockSvc.deleteDeployment).not.toHaveBeenCalled();
         de.componentInstance.deleteEvent.emit();
-        expect(mockSvc.deleteDeployment).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
+        expect(mockSvc.deleteDeployment).toHaveBeenCalledWith(
+          'mockSpaceId',
+          'mockEnvironment',
+          'mockAppId',
+        );
       }));
     });
   });

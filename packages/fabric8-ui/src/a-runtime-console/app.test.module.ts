@@ -8,8 +8,8 @@ import { OnLogin } from './shared/onlogin.service';
 let userServiceMock: any = jasmine.createSpy('UserService');
 userServiceMock.currentLoggedInUser = {
   attributes: {
-    username: 'username'
-  }
+    username: 'username',
+  },
 };
 
 @NgModule({
@@ -22,8 +22,8 @@ userServiceMock.currentLoggedInUser = {
     { provide: UserService, useClass: userServiceMock },
     {
       provide: DevNamespaceScope,
-      useClass: TestDevNamespaceScope
-    }
-  ]
+      useClass: TestDevNamespaceScope,
+    },
+  ],
 })
-export class TestAppModule { }
+export class TestAppModule {}

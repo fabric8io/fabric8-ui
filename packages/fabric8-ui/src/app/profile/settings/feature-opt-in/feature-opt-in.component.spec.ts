@@ -11,11 +11,16 @@ import { of } from 'rxjs';
 import { createMock } from 'testing/mock';
 import { initContext, TestContext } from 'testing/test-context';
 import { FeatureAcknowledgementService } from '../../../feature-flag/service/feature-acknowledgement.service';
-import { ExtProfile, GettingStartedService } from '../../../getting-started/services/getting-started.service';
+import {
+  ExtProfile,
+  GettingStartedService,
+} from '../../../getting-started/services/getting-started.service';
 import { FeatureOptInComponent } from './feature-opt-in.component';
 
 @Component({
-  template: `<alm-feature-opt-in></alm-feature-opt-in>`
+  template: `
+    <alm-feature-opt-in></alm-feature-opt-in>
+  `,
 })
 class HostComponent {}
 
@@ -34,80 +39,89 @@ describe('FeatureOptInComponent', () => {
       attributes: {
         featureLevel: 'beta',
         email: 'somebody@email.com',
-        emailVerified: true
-      }
+        emailVerified: true,
+      },
     };
     toggleServiceMock.getAllFeaturesEnabledByLevel.and.returnValue(of([]));
     toggleAckServiceMock.getToggle.and.returnValue(of(true));
   });
 
   const testContext = initContext(FeatureOptInComponent, HostComponent, {
-    imports: [
-      CommonModule,
-      FormsModule,
-      ListModule,
-      JwBootstrapSwitchNg2Module
-    ],
+    imports: [CommonModule, FormsModule, ListModule, JwBootstrapSwitchNg2Module],
     providers: [
-      { provide: GettingStartedService, useFactory: (): jasmine.SpyObj<GettingStartedService> => {
-        const mock: jasmine.SpyObj<GettingStartedService> = createMock(GettingStartedService);
-        mock.createTransientProfile.and.returnValue({ featureLevel: 'beta' } as ExtProfile);
-        mock.update.and.returnValue(of({}));
-        return mock;
-      }},
-      { provide: Notifications, useFactory: (): jasmine.SpyObj<Notifications> => {
-        const mock: jasmine.SpyObj<Notifications> = createMock(Notifications);
-        mock.message.and.returnValue(of({}));
-        return mock;
-      }},
-      { provide: UserService, useFactory: (): jasmine.SpyObj<UserService> => {
-        const mock: jasmine.SpyObj<UserService> = createMock(UserService);
-        (mock as any).currentLoggedInUser = {
-          attributes: {
-            featureLevel: 'beta',
-            email: 'somebody@email.com',
-            emailVerified: true
-          }
-        };
-        return mock;
-      }},
-      { provide: FeatureTogglesService, useFactory: (): jasmine.SpyObj<FeatureTogglesService> => {
-        const mock: jasmine.SpyObj<FeatureTogglesService> = createMock(FeatureTogglesService);
-        mock.getAllFeaturesEnabledByLevel.and.returnValue(of([]));
-        return mock;
-      }},
-      { provide: FeatureAcknowledgementService, useFactory: () => toggleAckServiceMock }
-    ]
+      {
+        provide: GettingStartedService,
+        useFactory: (): jasmine.SpyObj<GettingStartedService> => {
+          const mock: jasmine.SpyObj<GettingStartedService> = createMock(GettingStartedService);
+          mock.createTransientProfile.and.returnValue({ featureLevel: 'beta' } as ExtProfile);
+          mock.update.and.returnValue(of({}));
+          return mock;
+        },
+      },
+      {
+        provide: Notifications,
+        useFactory: (): jasmine.SpyObj<Notifications> => {
+          const mock: jasmine.SpyObj<Notifications> = createMock(Notifications);
+          mock.message.and.returnValue(of({}));
+          return mock;
+        },
+      },
+      {
+        provide: UserService,
+        useFactory: (): jasmine.SpyObj<UserService> => {
+          const mock: jasmine.SpyObj<UserService> = createMock(UserService);
+          (mock as any).currentLoggedInUser = {
+            attributes: {
+              featureLevel: 'beta',
+              email: 'somebody@email.com',
+              emailVerified: true,
+            },
+          };
+          return mock;
+        },
+      },
+      {
+        provide: FeatureTogglesService,
+        useFactory: (): jasmine.SpyObj<FeatureTogglesService> => {
+          const mock: jasmine.SpyObj<FeatureTogglesService> = createMock(FeatureTogglesService);
+          mock.getAllFeaturesEnabledByLevel.and.returnValue(of([]));
+          return mock;
+        },
+      },
+      { provide: FeatureAcknowledgementService, useFactory: () => toggleAckServiceMock },
+    ],
   });
 
   it('should sort feature per level', function() {
-    const features = [   {
-      'attributes': {
-        'description': 'main dashboard view',
-        'enabled': true,
-        'enablement-level': 'released',
-        'user-enabled': true
-      },
-      'id': 'Analyze'
-    },
+    const features = [
       {
-        'attributes': {
-          'description': 'new home dashboard experience',
-          'enabled': true,
+        attributes: {
+          description: 'main dashboard view',
+          enabled: true,
+          'enablement-level': 'released',
+          'user-enabled': true,
+        },
+        id: 'Analyze',
+      },
+      {
+        attributes: {
+          description: 'new home dashboard experience',
+          enabled: true,
           'enablement-level': 'internal',
-          'user-enabled': false
+          'user-enabled': false,
         },
-        'id': 'Analyze.newHomeDashboard'
+        id: 'Analyze.newHomeDashboard',
       },
       {
-        'attributes': {
-          'description': 'new space dashboard experience',
-          'enabled': true,
+        attributes: {
+          description: 'new space dashboard experience',
+          enabled: true,
           'enablement-level': 'experimental',
-          'user-enabled': true
+          'user-enabled': true,
         },
-        'id': 'Analyze.newSpaceDashboard'
-      }] as Feature[];
+        id: 'Analyze.newSpaceDashboard',
+      },
+    ] as Feature[];
     testContext.testedDirective.featureLevel = 'experimental';
     const result = testContext.testedDirective.featureByLevel(features);
 
@@ -119,46 +133,56 @@ describe('FeatureOptInComponent', () => {
 
   describe('updateProfile', () => {
     it('should call GettingStartedService#update and send a notification', function() {
-      const gettingStartedService: jasmine.SpyObj<GettingStartedService> = TestBed.get(GettingStartedService);
+      const gettingStartedService: jasmine.SpyObj<GettingStartedService> = TestBed.get(
+        GettingStartedService,
+      );
       const notifications: jasmine.SpyObj<Notifications> = TestBed.get(Notifications);
 
       testContext.testedDirective.updateProfile({
         item: { name: 'beta' },
-        selectedItems: [ { name: 'beta' } ]
+        selectedItems: [{ name: 'beta' }],
       });
       expect(gettingStartedService.update).toHaveBeenCalled();
       expect(notifications.message).toHaveBeenCalled();
     });
 
     it('should update the feature level', function() {
-      const gettingStartedService: jasmine.SpyObj<GettingStartedService> = TestBed.get(GettingStartedService);
+      const gettingStartedService: jasmine.SpyObj<GettingStartedService> = TestBed.get(
+        GettingStartedService,
+      );
       const notifications: jasmine.SpyObj<Notifications> = TestBed.get(Notifications);
 
       expect(testContext.testedDirective.featureLevel).toBe('beta');
       testContext.testedDirective.featureLevel = 'experimental';
       testContext.testedDirective.updateProfile({
         item: { name: 'experimental' },
-        selectedItems: [{ name: 'experimental' }]
+        selectedItems: [{ name: 'experimental' }],
       });
 
-      expect(gettingStartedService.update).toHaveBeenCalledWith({ featureLevel: 'experimental', contextInformation: Object({}) } as ExtProfile);
-      expect(notifications.message).toHaveBeenCalledWith(jasmine.objectContaining({
-        message: 'Profile updated!',
-        type: NotificationType.SUCCESS
-      }));
+      expect(gettingStartedService.update).toHaveBeenCalledWith({
+        featureLevel: 'experimental',
+        contextInformation: Object({}),
+      } as ExtProfile);
+      expect(notifications.message).toHaveBeenCalledWith(
+        jasmine.objectContaining({
+          message: 'Profile updated!',
+          type: NotificationType.SUCCESS,
+        }),
+      );
     });
 
     it('should cancel events deselecting a feature level', function() {
-      const gettingStartedService: jasmine.SpyObj<GettingStartedService> = TestBed.get(GettingStartedService);
+      const gettingStartedService: jasmine.SpyObj<GettingStartedService> = TestBed.get(
+        GettingStartedService,
+      );
       const notifications: jasmine.SpyObj<Notifications> = TestBed.get(Notifications);
 
       testContext.testedDirective.updateProfile({
         item: { name: 'beta' },
-        selectedItems: []
+        selectedItems: [],
       });
       expect(gettingStartedService.update).not.toHaveBeenCalled();
       expect(notifications.message).not.toHaveBeenCalled();
     });
   });
-
 });

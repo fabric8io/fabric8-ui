@@ -1,38 +1,14 @@
-import {
-  Component,
-  Injectable,
-  NO_ERRORS_SCHEMA
-} from '@angular/core';
-import {
-  fakeAsync,
-  TestBed,
-  tick
-} from '@angular/core/testing';
-import {
-  ActivatedRouteSnapshot,
-  Resolve,
-  Router,
-  RouterStateSnapshot
-} from '@angular/router';
+import { Component, Injectable, NO_ERRORS_SCHEMA } from '@angular/core';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import {
-  Broadcaster,
-  Logger
-} from 'ngx-base';
+import { Broadcaster, Logger } from 'ngx-base';
 import { BsModalService } from 'ngx-bootstrap/modal';
-import {
-  Context,
-  Spaces
-} from 'ngx-fabric8-wit';
+import { Context, Spaces } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
-import { never as observableNever,
-  Observable,
-  Subject
-} from 'rxjs';
+import { never as observableNever, Observable, Subject } from 'rxjs';
 import { createMock } from 'testing/mock';
-import {
-  initContext
-} from 'testing/test-context';
+import { initContext } from 'testing/test-context';
 import { OnLogin } from '../a-runtime-console/index';
 import { AppComponent } from './app.component';
 import { FeatureAcknowledgementService } from './feature-flag/service/feature-acknowledgement.service';
@@ -45,14 +21,14 @@ import { LoginService } from './shared/login.service';
 import { NotificationsService } from './shared/notifications.service';
 
 @Component({
-  template: '<f8-app></f8-app>'
+  template: '<f8-app></f8-app>',
 })
-class HostComponent { }
+class HostComponent {}
 
 @Component({
-  template: ''
+  template: '',
 })
-class MockChildComponent { }
+class MockChildComponent {}
 
 @Injectable()
 class MockContextResolver implements Resolve<Context> {
@@ -73,20 +49,21 @@ describe('AppComponent', () => {
           path: ':entity',
           component: MockChildComponent,
           resolve: {
-            context: MockContextResolver
-          }
+            context: MockContextResolver,
+          },
         },
-        { path: '**', redirectTo: '/_error' }
-      ])
+        { path: '**', redirectTo: '/_error' },
+      ]),
     ],
-    declarations: [ MockChildComponent ],
+    declarations: [MockChildComponent],
     providers: [
       {
-        provide: AboutService, useValue: {
+        provide: AboutService,
+        useValue: {
           buildVersion: '1.2.3',
           buildNumber: '123',
-          buildTimestamp: '02468'
-        }
+          buildTimestamp: '02468',
+        },
       },
       { provide: LoginService, useValue: jasmine.createSpyObj('LoginService', ['login']) },
       { provide: NotificationsService, useValue: { actionSubject: new Subject<any>() } },
@@ -97,52 +74,62 @@ describe('AppComponent', () => {
       { provide: BrandingService, useValue: createMock(BrandingService) },
       { provide: BsModalService, useValue: createMock(BsModalService) },
       { provide: ProviderService, useValue: createMock(ProviderService) },
-      { provide: FeatureAcknowledgementService, useValue: jasmine.createSpyObj('FeatureAcknowledgementService', ['getToggle'])},
       {
-        provide: Broadcaster, useFactory: () => {
+        provide: FeatureAcknowledgementService,
+        useValue: jasmine.createSpyObj('FeatureAcknowledgementService', ['getToggle']),
+      },
+      {
+        provide: Broadcaster,
+        useFactory: () => {
           const broadcaster: jasmine.SpyObj<Broadcaster> = createMock(Broadcaster);
           broadcaster.on.and.returnValue(observableNever());
           return broadcaster;
-        }
+        },
       },
       {
-        provide: ErrorService, useFactory: () => {
+        provide: ErrorService,
+        useFactory: () => {
           const svc: jasmine.SpyObj<ErrorService> = createMock(ErrorService);
           svc.updateFailedRoute.and.stub();
           return svc;
-        }
+        },
       },
       {
-        provide: Logger, useFactory: () => {
+        provide: Logger,
+        useFactory: () => {
           const logger: jasmine.SpyObj<Logger> = createMock(Logger);
           logger.error.and.stub();
           return logger;
-        }
+        },
       },
-      MockContextResolver
+      MockContextResolver,
     ],
-    schemas: [ NO_ERRORS_SCHEMA ]
+    schemas: [NO_ERRORS_SCHEMA],
   });
 
   it('should call ErrorService#updateFailedRoute on invalid URL', fakeAsync(() => {
     const testRouter: Router = TestBed.get(Router);
     const mockErrorService: jasmine.SpyObj<ErrorService> = TestBed.get(ErrorService);
-    testRouter.navigate(['/', 'nonexistent', 'app', 'path']).then((status: boolean): void => {
-      expect(status).toBeTruthy();
-      expect(testRouter.url).toEqual('/_error');
-      tick();
-      expect(mockErrorService.updateFailedRoute).toHaveBeenCalledWith('/nonexistent/app/path');
-    });
+    testRouter.navigate(['/', 'nonexistent', 'app', 'path']).then(
+      (status: boolean): void => {
+        expect(status).toBeTruthy();
+        expect(testRouter.url).toEqual('/_error');
+        tick();
+        expect(mockErrorService.updateFailedRoute).toHaveBeenCalledWith('/nonexistent/app/path');
+      },
+    );
   }));
 
-  it ('should call ErrorService#updateFailedRoute when context resolution fails', fakeAsync(() => {
+  it('should call ErrorService#updateFailedRoute when context resolution fails', fakeAsync(() => {
     const testRouter: Router = TestBed.get(Router);
     const mockErrorService: jasmine.SpyObj<ErrorService> = TestBed.get(ErrorService);
-    testRouter.navigate(['/', 'foo']).then((status: boolean): void => {
-      tick();
-      expect(testRouter.url).toEqual('/_error');
-      expect(mockErrorService.updateFailedRoute).toHaveBeenCalledWith('/foo');
-    });
+    testRouter.navigate(['/', 'foo']).then(
+      (status: boolean): void => {
+        tick();
+        expect(testRouter.url).toEqual('/_error');
+        expect(mockErrorService.updateFailedRoute).toHaveBeenCalledWith('/foo');
+      },
+    );
     const contextResolver: MockContextResolver = TestBed.get(MockContextResolver);
     contextResolver.subject.error('');
     contextResolver.subject.complete();

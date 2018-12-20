@@ -14,17 +14,14 @@ describe('PipelinesFullHistoryComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule.withRoutes([]),
-        MomentModule
-      ],
+      imports: [RouterTestingModule.withRoutes([]), MomentModule],
       declarations: [
         BuildStageViewComponent,
         InputActionDialog,
         PipelinesFullHistoryComponent,
-        StageTimePipe
+        StageTimePipe,
       ],
-      schemas: [ NO_ERRORS_SCHEMA ]
+      schemas: [NO_ERRORS_SCHEMA],
     });
   }));
 

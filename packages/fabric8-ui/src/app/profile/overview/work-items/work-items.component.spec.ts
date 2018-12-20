@@ -4,7 +4,7 @@ import { FilterService, WorkItemService } from 'fabric8-planner';
 import { List, take } from 'lodash';
 import { Contexts, Space, Spaces, SpaceService, WIT_API_URL } from 'ngx-fabric8-wit';
 import { User } from 'ngx-login-client';
-import { Observable ,  of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { createMock } from 'testing/mock';
 import { initContext, TestContext } from 'testing/test-context';
 import { ContextService } from '../../../shared/context.service';
@@ -12,7 +12,7 @@ import { WorkItemsData } from '../../../shared/workitem-utils';
 import { WorkItemsComponent } from './work-items.component';
 
 @Component({
-  template: '<alm-work-items></alm-work-items>'
+  template: '<alm-work-items></alm-work-items>',
 })
 class HostComponent {}
 
@@ -28,85 +28,104 @@ describe('WorkItemsComponent', () => {
   const mockContext: any = {
     user: {
       attributes: {
-        username: 'mock-username'
+        username: 'mock-username',
       },
-      id: 'mock-user'
-    }
+      id: 'mock-user',
+    },
   };
 
   const mockSpaces: any = [
-    { name: 'mock-space-1', id: 'mock-space-id-1', attributes: { name: 'mock-space-1'} },
-    { name: 'mock-space-2', id: 'mock-space-id-2', attributes: { name: 'mock-space-2'} },
-    { name: 'mock-space-3', id: 'mock-space-id-3', attributes: { name: 'mock-space-3'} },
-    { name: 'mock-space-4', id: 'mock-space-id-4', attributes: { name: 'mock-space-4'} },
-    { name: 'mock-space-5', id: 'mock-space-id-5', attributes: { name: 'mock-space-5'} },
-    { name: 'mock-space-6', id: 'mock-space-id-6', attributes: { name: 'mock-space-6'} },
-    { name: 'mock-space-7', id: 'mock-space-id-7', attributes: { name: 'mock-space-7'} },
-    { name: 'mock-space-8', id: 'mock-space-id-8', attributes: { name: 'mock-space-8'} },
-    { name: 'mock-space-9', id: 'mock-space-id-9', attributes: { name: 'mock-space-9'} },
-    { name: 'mock-space-10', id: 'mock-space-id-10', attributes: { name: 'mock-space-10'} },
-    { name: 'mock-space-11', id: 'mock-space-id-11', attributes: { name: 'mock-space-11'} },
-    { name: 'mock-space-12', id: 'mock-space-id-12', attributes: { name: 'mock-space-12'} },
-    { name: 'mock-space-13', id: 'mock-space-id-13', attributes: { name: 'mock-space-13'} }
+    { name: 'mock-space-1', id: 'mock-space-id-1', attributes: { name: 'mock-space-1' } },
+    { name: 'mock-space-2', id: 'mock-space-id-2', attributes: { name: 'mock-space-2' } },
+    { name: 'mock-space-3', id: 'mock-space-id-3', attributes: { name: 'mock-space-3' } },
+    { name: 'mock-space-4', id: 'mock-space-id-4', attributes: { name: 'mock-space-4' } },
+    { name: 'mock-space-5', id: 'mock-space-id-5', attributes: { name: 'mock-space-5' } },
+    { name: 'mock-space-6', id: 'mock-space-id-6', attributes: { name: 'mock-space-6' } },
+    { name: 'mock-space-7', id: 'mock-space-id-7', attributes: { name: 'mock-space-7' } },
+    { name: 'mock-space-8', id: 'mock-space-id-8', attributes: { name: 'mock-space-8' } },
+    { name: 'mock-space-9', id: 'mock-space-id-9', attributes: { name: 'mock-space-9' } },
+    { name: 'mock-space-10', id: 'mock-space-id-10', attributes: { name: 'mock-space-10' } },
+    { name: 'mock-space-11', id: 'mock-space-id-11', attributes: { name: 'mock-space-11' } },
+    { name: 'mock-space-12', id: 'mock-space-id-12', attributes: { name: 'mock-space-12' } },
+    { name: 'mock-space-13', id: 'mock-space-id-13', attributes: { name: 'mock-space-13' } },
   ];
 
   const mockRecentSpaces: any = [
-    { name: 'mock-space-1', id: 'mock-space-id-1', attributes: { name: 'mock-space-1'} },
-    { name: 'mock-space-14', id: 'mock-space-id-14', attributes: { name: 'mock-space-14'} }
+    { name: 'mock-space-1', id: 'mock-space-id-1', attributes: { name: 'mock-space-1' } },
+    { name: 'mock-space-14', id: 'mock-space-id-14', attributes: { name: 'mock-space-14' } },
   ];
 
   const testContext = initContext(WorkItemsComponent, HostComponent, {
     declarations: [TakePipe],
     providers: [
-      { provide: Contexts, useFactory: () => {
+      {
+        provide: Contexts,
+        useFactory: () => {
           let mockContexts: any = createMock(Contexts);
           mockContexts.current = of(mockContext) as Observable<Context>;
           return mockContexts;
-        }
+        },
       },
-      { provide: Spaces, useFactory: () => {
+      {
+        provide: Spaces,
+        useFactory: () => {
           let mockSpacesService: any = createMock(Spaces);
           mockSpacesService.recent = of(mockRecentSpaces) as Observable<Space[]>;
           return mockSpacesService;
-        }
+        },
       },
       {
-        provide: FilterService, useFactory: () => {
-          let filterServiceMock = jasmine.createSpyObj('FilterService', ['queryBuilder', 'queryJoiner']);
+        provide: FilterService,
+        useFactory: () => {
+          let filterServiceMock = jasmine.createSpyObj('FilterService', [
+            'queryBuilder',
+            'queryJoiner',
+          ]);
           return filterServiceMock;
-        }
+        },
       },
-      { provide: SpaceService, useFactory: () => {
+      {
+        provide: SpaceService,
+        useFactory: () => {
           let mockSpaceService: jasmine.SpyObj<SpaceService> = createMock(SpaceService);
           mockSpaceService.getSpacesByUser.and.returnValue(of(mockSpaces) as Observable<Space[]>);
           return mockSpaceService;
-        }
+        },
       },
-      { provide: WorkItemService, useFactory: () => {
+      {
+        provide: WorkItemService,
+        useFactory: () => {
           let mockWorkItemService: jasmine.SpyObj<WorkItemService> = createMock(WorkItemService);
-          mockWorkItemService.getWorkItems.and.returnValue(of({ workItems: [] }) as Observable<WorkItemsData>);
-          mockWorkItemService.buildUserIdMap.and.returnValue(of(mockContext.user) as Observable<User>);
+          mockWorkItemService.getWorkItems.and.returnValue(of({ workItems: [] }) as Observable<
+            WorkItemsData
+          >);
+          mockWorkItemService.buildUserIdMap.and.returnValue(of(mockContext.user) as Observable<
+            User
+          >);
           return mockWorkItemService;
-        }
+        },
       },
-      { provide: ContextService, useFactory: () => {
+      {
+        provide: ContextService,
+        useFactory: () => {
           let mockContextService: jasmine.SpyObj<ContextService> = createMock(ContextService);
           mockContextService.viewingOwnContext.and.returnValue(true);
           return mockContextService;
-        }
+        },
       },
-      { provide: WIT_API_URL, useValue: 'http://example.com' }
+      { provide: WIT_API_URL, useValue: 'http://example.com' },
     ],
-    schemas: [NO_ERRORS_SCHEMA]
+    schemas: [NO_ERRORS_SCHEMA],
   });
 
   describe('Combobox', () => {
     it('should exist when > 0 spaces', function() {
-      let el: DebugElement = testContext.fixture.debugElement.query(By.css('.work-item-dropdown')).nativeElement;
+      let el: DebugElement = testContext.fixture.debugElement.query(By.css('.work-item-dropdown'))
+        .nativeElement;
       expect(el).toBeDefined();
     });
 
-    it('should contain all the user\'s spaces and recent spaces', function() {
+    it("should contain all the user's spaces and recent spaces", function() {
       let de: DebugElement[] = testContext.fixture.debugElement.queryAll(By.css('option'));
       // Spaces duplicated in both user and recent should only exist once
       // default 'Select a space ..' message + 13 mock user spaces + 1 mock recent space +  = 15 options
@@ -130,5 +149,4 @@ describe('WorkItemsComponent', () => {
       expect(select.attributes['onblur']).toEqual('this.size=0;');
     });
   });
-
 });

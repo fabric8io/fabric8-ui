@@ -1,8 +1,12 @@
 import {
   AfterViewInit,
-  Component, EventEmitter,
-  Input, OnChanges,
-  OnInit, Output, ViewChild
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  ViewChild,
 } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Observable } from 'rxjs';
@@ -18,7 +22,7 @@ import { WorkItemService } from './../../services/work-item.service';
 @Component({
   selector: 'alm-work-item-comment',
   templateUrl: './work-item-comment.component.html',
-  styleUrls: ['./work-item-comment.component.less']
+  styleUrls: ['./work-item-comment.component.less'],
 })
 export class WorkItemCommentComponent implements OnInit, AfterViewInit {
   @Input() loadingComments: boolean = true;
@@ -36,7 +40,7 @@ export class WorkItemCommentComponent implements OnInit, AfterViewInit {
   constructor(
     private workItemService: WorkItemService,
     private modalService: ModalService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
   ) {}
 
   ngOnInit() {}
@@ -60,7 +64,7 @@ export class WorkItemCommentComponent implements OnInit, AfterViewInit {
     const rawText = event.rawText;
     const callBack = event.callBack;
     let newComment: CommentUI = {
-      body: rawText
+      body: rawText,
     } as CommentUI;
     if (event.hasOwnProperty('parentId')) {
       newComment['parentId'] = event.parentId;
@@ -76,13 +80,9 @@ export class WorkItemCommentComponent implements OnInit, AfterViewInit {
   showPreview(event: any): void {
     const rawText = event.rawText;
     const callBack = event.callBack;
-    this.workItemService.renderMarkDown(rawText)
-      .subscribe(renderedHtml => {
-        callBack(
-          rawText,
-          this.sanitizer.bypassSecurityTrustHtml(renderedHtml)
-        );
-      });
+    this.workItemService.renderMarkDown(rawText).subscribe((renderedHtml) => {
+      callBack(rawText, this.sanitizer.bypassSecurityTrustHtml(renderedHtml));
+    });
   }
 
   updateComment(comment: CommentUI): void {
@@ -104,7 +104,7 @@ export class WorkItemCommentComponent implements OnInit, AfterViewInit {
   }
 
   resetCommentDraft(event: any = null): void {
-    let commentbox  = event.target,
+    let commentbox = event.target,
       placeholder = event.target.dataset.placeholder;
 
     if (event.type === 'focus' && commentbox.textContent === placeholder) {

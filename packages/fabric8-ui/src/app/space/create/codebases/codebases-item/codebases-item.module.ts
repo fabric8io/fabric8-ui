@@ -12,9 +12,9 @@ import { CodebasesItemComponent } from './codebases-item.component';
     CodebasesItemWorkspacesModule,
     CommonModule,
     FormsModule,
-    JwBootstrapSwitchNg2Module
+    JwBootstrapSwitchNg2Module,
   ],
-  declarations: [ CodebasesItemComponent ],
-  exports: [ CodebasesItemComponent ]
+  declarations: [CodebasesItemComponent],
+  exports: [CodebasesItemComponent],
 })
 export class CodebasesItemModule {}

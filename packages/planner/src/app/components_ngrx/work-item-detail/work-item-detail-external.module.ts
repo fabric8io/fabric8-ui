@@ -17,7 +17,7 @@ let providers = [
   IterationService,
   LabelService,
   TooltipConfig,
-  CollaboratorService
+  CollaboratorService,
 ];
 
 @NgModule({
@@ -25,10 +25,8 @@ let providers = [
     WorkItemDetailRoutingModule,
     WorkItemDetailModule,
     TooltipModule,
-    PlannerHttpClientModule
+    PlannerHttpClientModule,
   ],
-  providers: providers
+  providers: providers,
 })
-export class WorkItemDetailExternalModule {
-
-}
+export class WorkItemDetailExternalModule {}

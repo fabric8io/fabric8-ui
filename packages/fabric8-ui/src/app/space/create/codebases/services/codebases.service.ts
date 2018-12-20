@@ -1,13 +1,9 @@
-import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpHeaders
-} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
-import { Observable,  throwError as observableThrowError } from 'rxjs';
+import { Observable, throwError as observableThrowError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Codebase } from './codebase';
 
@@ -31,7 +27,7 @@ export class CodebasesService {
     private http: HttpClient,
     private logger: Logger,
     private auth: AuthenticationService,
-    @Inject(WIT_API_URL) apiUrl: string
+    @Inject(WIT_API_URL) apiUrl: string,
   ) {
     let headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
     if (this.auth.getToken() != undefined) {
@@ -52,10 +48,10 @@ export class CodebasesService {
   addCodebase(spaceId: string, codebase: Codebase): Observable<Codebase> {
     const url: string = `${this.spacesUrl}/${spaceId}/codebases`;
     const payload: string = JSON.stringify(new Payload<Codebase>(codebase));
-    return this.http
-      .post<Payload<Codebase>>(url, payload, { headers: this.headers }).pipe(
+    return this.http.post<Payload<Codebase>>(url, payload, { headers: this.headers }).pipe(
       map((payload: Payload<Codebase>): Codebase => payload.data),
-      catchError((error: HttpErrorResponse): Observable<Codebase> => this.handleError(error)));
+      catchError((error: HttpErrorResponse): Observable<Codebase> => this.handleError(error)),
+    );
   }
 
   /**
@@ -66,14 +62,19 @@ export class CodebasesService {
    */
   getCodebases(spaceId: string): Observable<Codebase[]> {
     const url: string = `${this.spacesUrl}/${spaceId}/codebases`;
-    return this.http
-      .get<Payload<Codebase[]>>(url, { headers: this.headers }).pipe(
+    return this.http.get<Payload<Codebase[]>>(url, { headers: this.headers }).pipe(
       map((payload: Payload<Codebase[]>): Codebase[] => payload.data),
-      tap((codebases: Codebase[]): void => codebases.forEach((codebase: Codebase): void => {
-        codebase.name = this.getName(codebase);
-        codebase.url = this.getUrl(codebase);
-      })),
-      catchError((error: HttpErrorResponse): Observable<Codebase[]> => this.handleError(error)));
+      tap(
+        (codebases: Codebase[]): void =>
+          codebases.forEach(
+            (codebase: Codebase): void => {
+              codebase.name = this.getName(codebase);
+              codebase.url = this.getUrl(codebase);
+            },
+          ),
+      ),
+      catchError((error: HttpErrorResponse): Observable<Codebase[]> => this.handleError(error)),
+    );
   }
 
   /**
@@ -110,10 +111,10 @@ export class CodebasesService {
   updateCodebases(codebase: Codebase): Observable<Codebase> {
     const url: string = `${this.codebasesUrl}/${codebase.id}`;
     const payload: string = JSON.stringify(new Payload<Codebase>(codebase));
-    return this.http
-      .patch<Payload<Codebase>>(url, payload, { headers: this.headers }).pipe(
+    return this.http.patch<Payload<Codebase>>(url, payload, { headers: this.headers }).pipe(
       map((payload: Payload<Codebase>): Codebase => payload.data),
-      catchError((error: HttpErrorResponse): Observable<Codebase> => this.handleError(error)));
+      catchError((error: HttpErrorResponse): Observable<Codebase> => this.handleError(error)),
+    );
   }
 
   /**
@@ -125,10 +126,10 @@ export class CodebasesService {
   update(codebase: Codebase): Observable<Codebase> {
     const url: string = `${this.spacesUrl}/${codebase.id}`;
     const payload: string = JSON.stringify({ data: codebase });
-    return this.http
-      .patch<Payload<Codebase>>(url, payload, { headers: this.headers }).pipe(
+    return this.http.patch<Payload<Codebase>>(url, payload, { headers: this.headers }).pipe(
       map((payload: Payload<Codebase>): Codebase => payload.data),
-      catchError((error: HttpErrorResponse): Observable<Codebase> => this.handleError(error)));
+      catchError((error: HttpErrorResponse): Observable<Codebase> => this.handleError(error)),
+    );
   }
 
   /**
@@ -139,10 +140,10 @@ export class CodebasesService {
    */
   deleteCodebase(codebase: Codebase): Observable<Codebase> {
     const url: string = `${this.codebasesUrl}/${codebase.id}`;
-    return this.http
-      .delete(url, { headers: this.headers }).pipe(
+    return this.http.delete(url, { headers: this.headers }).pipe(
       map((): Codebase => codebase),
-      catchError((error: HttpErrorResponse): Observable<Codebase> => this.handleError(error)));
+      catchError((error: HttpErrorResponse): Observable<Codebase> => this.handleError(error)),
+    );
   }
 
   // Private
@@ -154,8 +155,7 @@ export class CodebasesService {
    * @returns {Observable<Codebase[]>}
    */
   private getCodebasesDelegate(url: string): Observable<Codebase[]> {
-    return this.http
-      .get<Payload<Codebase[]>>(url, { headers: this.headers }).pipe(
+    return this.http.get<Payload<Codebase[]>>(url, { headers: this.headers }).pipe(
       map((payload: Payload<Codebase[]>) => {
         // Extract links from JSON API response.
         // and set the nextLink, if server indicates more resources
@@ -168,11 +168,14 @@ export class CodebasesService {
         }
         return payload.data;
       }),
-      tap((codebases: Codebase[]) => codebases.forEach((codebase: Codebase) => {
-        codebase.name = this.getName(codebase);
-        codebase.url = this.getUrl(codebase);
-      })),
-      catchError((error: HttpErrorResponse) => this.handleError(error)));
+      tap((codebases: Codebase[]) =>
+        codebases.forEach((codebase: Codebase) => {
+          codebase.name = this.getName(codebase);
+          codebase.url = this.getUrl(codebase);
+        }),
+      ),
+      catchError((error: HttpErrorResponse) => this.handleError(error)),
+    );
   }
 
   private handleError(error: HttpErrorResponse): Observable<any> {
@@ -190,10 +193,12 @@ export class CodebasesService {
 
   private getUrl(codebase: Codebase): string {
     if (codebase.attributes.type === 'git') {
-      return codebase.attributes.url.replace('.git', '').replace(':', '/').replace('git@', 'https://');
+      return codebase.attributes.url
+        .replace('.git', '')
+        .replace(':', '/')
+        .replace('git@', 'https://');
     } else {
       return codebase.attributes.url;
     }
   }
-
 }

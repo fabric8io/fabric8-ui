@@ -7,23 +7,23 @@ import {
   Input,
   OnChanges,
   OnInit,
-  Output
+  Output,
 } from '@angular/core';
 
 @Directive({
-    selector: '[almEditable]',
-    exportAs: 'almEditable'
+  selector: '[almEditable]',
+  exportAs: 'almEditable',
 })
 export class AlmEditableDirective implements OnInit, OnChanges {
-
   @Output('onUpdate') onUpdate = new EventEmitter();
+
   @Input() editable = true;
 
   private content: any = '';
+
   private element: HTMLElement = this.elementRef.nativeElement;
 
-  constructor(private elementRef: ElementRef) {
-  }
+  constructor(private elementRef: ElementRef) {}
 
   ngOnInit() {
     this.element.style.whiteSpace = 'pre-wrap';
@@ -41,12 +41,11 @@ export class AlmEditableDirective implements OnInit, OnChanges {
   }
 
   onEdit() {
-    let newContent = this.element.innerText;
+    const newContent = this.element.innerText;
     if (this.content !== newContent) {
       this.content = newContent;
       this.onUpdate.emit(this.content);
     }
-
   }
 
   makeEditable() {
@@ -69,11 +68,11 @@ export class AlmEditableDirective implements OnInit, OnChanges {
   focusField() {
     setTimeout(() => {
       if (this.element.childNodes.length) {
-        let range = document.createRange();
-        let sel = window.getSelection();
+        const range = document.createRange();
+        const sel = window.getSelection();
         range.setStart(
           this.element.childNodes[this.element.childNodes.length - 1],
-          this.element.childNodes[this.element.childNodes.length - 1].childNodes.length
+          this.element.childNodes[this.element.childNodes.length - 1].childNodes.length,
         );
         range.collapse(true);
         sel.removeAllRanges();

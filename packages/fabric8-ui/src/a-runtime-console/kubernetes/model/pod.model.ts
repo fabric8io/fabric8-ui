@@ -49,5 +49,4 @@ export class Pod extends KubernetesSpecResource {
   }
 }
 
-export class Pods extends Array<Pod> {
-}
+export class Pods extends Array<Pod> {}

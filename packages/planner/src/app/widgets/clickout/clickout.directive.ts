@@ -5,14 +5,13 @@ import {
   HostListener,
   Inject,
   Input,
-  Output
+  Output,
 } from '@angular/core';
 
 @Directive({
-  selector: '[clickOut]'
+  selector: '[clickOut]',
 })
 export class ClickOutDirective {
-
   @Input('exclude') exclude: string;
 
   @Output('clickOut') readonly clickOut: EventEmitter<any> = new EventEmitter();
@@ -35,11 +34,12 @@ export class ClickOutDirective {
   }
 
   private isExcluded: boolean = false;
-  constructor(private element: ElementRef) {
-  }
+  constructor(private element: ElementRef) {}
 
   excludeCheck(target: HTMLElement) {
-    const excludeElements = Array.from(document.querySelectorAll(this.exclude)) as Array<HTMLElement>;
+    const excludeElements = Array.from(document.querySelectorAll(this.exclude)) as Array<
+      HTMLElement
+    >;
     for (let element of excludeElements) {
       if (element.contains(target)) {
         return true;

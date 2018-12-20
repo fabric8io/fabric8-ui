@@ -4,7 +4,7 @@ import {
   HostListener,
   OnInit,
   ViewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -21,10 +21,9 @@ import { SpaceNamespaceService } from '../../shared/runtime-console/space-namesp
   encapsulation: ViewEncapsulation.None,
   selector: 'f8-add-space-overlay',
   styleUrls: ['./add-space-overlay.component.less'],
-  templateUrl: './add-space-overlay.component.html'
+  templateUrl: './add-space-overlay.component.html',
 })
 export class AddSpaceOverlayComponent implements OnInit {
-
   @ViewChild('addSpaceOverlayNameInput') spaceNameInput: ElementRef;
   @ViewChild('modalAddSpaceOverlay') modalAddSpaceOverlay: ModalDirective;
   @ViewChild('spaceForm') spaceForm: NgForm;
@@ -42,24 +41,26 @@ export class AddSpaceOverlayComponent implements OnInit {
     private notifications: Notifications,
     private userService: UserService,
     private spaceNamespaceService: SpaceNamespaceService,
-    private broadcaster: Broadcaster
+    private broadcaster: Broadcaster,
   ) {}
 
   ngOnInit() {
-    this.subscriptions.push(this.broadcaster.on('showAddSpaceOverlay').subscribe((arg: boolean) => {
-      if (typeof arg === 'boolean') {
-        if (arg) {
-          this.addAppFlow = null;
-          this.modalAddSpaceOverlay.show();
-        } else {
-          this.modalAddSpaceOverlay.hide();
+    this.subscriptions.push(
+      this.broadcaster.on('showAddSpaceOverlay').subscribe((arg: boolean) => {
+        if (typeof arg === 'boolean') {
+          if (arg) {
+            this.addAppFlow = null;
+            this.modalAddSpaceOverlay.show();
+          } else {
+            this.modalAddSpaceOverlay.hide();
+          }
         }
-      }
-    }));
+      }),
+    );
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => {
+    this.subscriptions.forEach((sub) => {
       sub.unsubscribe();
     });
   }
@@ -71,8 +72,10 @@ export class AddSpaceOverlayComponent implements OnInit {
   createSpace(showAddAppOverlay: boolean = true) {
     if (!this.userService.currentLoggedInUser || !this.userService.currentLoggedInUser.id) {
       this.notifications.message({
-        message: `Failed to create "${this.spaceName}". Invalid user: "${this.userService.currentLoggedInUser}"`,
-        type: NotificationType.DANGER
+        message: `Failed to create "${this.spaceName}". Invalid user: "${
+          this.userService.currentLoggedInUser
+        }"`,
+        type: NotificationType.DANGER,
       } as Notification);
       return;
     }
@@ -83,36 +86,45 @@ export class AddSpaceOverlayComponent implements OnInit {
     space.attributes.description = this.spaceDescription;
     space.relationships['owned-by'].data.id = this.userService.currentLoggedInUser.id;
 
-    this.subscriptions.push(this.spaceService.create(space).pipe(
-      switchMap(createdSpace => {
-        return this.spaceNamespaceService
-          .updateConfigMap(observableOf(createdSpace)).pipe(
-          map(() => createdSpace),
-          // Ignore any errors coming out here, we've logged and notified them earlier
-          catchError(err => observableOf(createdSpace)));
-      }))
-      .subscribe(createdSpace => {
-          this.router.navigate([createdSpace.relationalData.creator.attributes.username,
-            createdSpace.attributes.name]);
-          if (showAddAppOverlay) {
-            this.showAddAppOverlay();
-          }
-          this.hideAddSpaceOverlay();
-          this.canSubmit = true;
-        },
-        err => {
-          this.canSubmit = true;
-          this.notifications.message({
-            message: `Failed to create "${this.spaceName}"`,
-            type: NotificationType.DANGER
-        } as Notification);
-    }));
+    this.subscriptions.push(
+      this.spaceService
+        .create(space)
+        .pipe(
+          switchMap((createdSpace) => {
+            return this.spaceNamespaceService.updateConfigMap(observableOf(createdSpace)).pipe(
+              map(() => createdSpace),
+              // Ignore any errors coming out here, we've logged and notified them earlier
+              catchError((err) => observableOf(createdSpace)),
+            );
+          }),
+        )
+        .subscribe(
+          (createdSpace) => {
+            this.router.navigate([
+              createdSpace.relationalData.creator.attributes.username,
+              createdSpace.attributes.name,
+            ]);
+            if (showAddAppOverlay) {
+              this.showAddAppOverlay();
+            }
+            this.hideAddSpaceOverlay();
+            this.canSubmit = true;
+          },
+          (err) => {
+            this.canSubmit = true;
+            this.notifications.message({
+              message: `Failed to create "${this.spaceName}"`,
+              type: NotificationType.DANGER,
+            } as Notification);
+          },
+        ),
+    );
   }
 
   hideAddSpaceOverlay(): void {
     this.broadcaster.broadcast('showAddSpaceOverlay', false);
     this.broadcaster.broadcast('analyticsTracker', {
-      event: 'add space closed'
+      event: 'add space closed',
     });
   }
 
@@ -121,8 +133,8 @@ export class AddSpaceOverlayComponent implements OnInit {
     this.broadcaster.broadcast('analyticsTracker', {
       event: 'add app opened',
       data: {
-        source: 'space-overlay'
-      }
+        source: 'space-overlay',
+      },
     });
   }
 
@@ -146,25 +158,25 @@ export class AddSpaceOverlayComponent implements OnInit {
     space.relationships = {
       areas: {
         links: {
-          related: ''
-        }
+          related: '',
+        },
       },
       iterations: {
         links: {
-          related: ''
-        }
+          related: '',
+        },
       },
       workitemtypegroups: {
         links: {
-          related: ''
-        }
+          related: '',
+        },
       },
       'owned-by': {
         data: {
           id: '',
-          type: 'identities'
-        }
-      }
+          type: 'identities',
+        },
+      },
     };
     return space;
   }

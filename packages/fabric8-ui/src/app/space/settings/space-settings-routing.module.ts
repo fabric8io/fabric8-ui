@@ -17,22 +17,22 @@ const routes: Routes = [
         path: 'areas',
         loadChildren: './areas/areas.module#AreasModule',
         data: {
-          title: 'Areas'
-        }
+          title: 'Areas',
+        },
       },
       {
         path: 'collaborators',
         loadChildren: './collaborators/collaborators.module#CollaboratorsModule',
         data: {
-          title: 'Collaborators'
-        }
-      }
-    ]
-  }
+          title: 'Collaborators',
+        },
+      },
+    ],
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class SpaceSettingsRoutingModule { }
+export class SpaceSettingsRoutingModule {}

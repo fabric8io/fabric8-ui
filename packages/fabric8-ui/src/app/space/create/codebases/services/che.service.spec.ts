@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import {
   HttpClientTestingModule,
   HttpTestingController,
-  TestRequest
+  TestRequest,
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { Logger } from 'ngx-base';
@@ -14,22 +14,21 @@ import { Che } from './che';
 import { CheService } from './che.service';
 
 describe('CheService', () => {
-
   let service: CheService;
   let controller: HttpTestingController;
 
   beforeEach(function(): void {
     TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule ],
+      imports: [HttpClientTestingModule],
       providers: [
         CheService,
         {
           provide: WIT_API_URL,
-          useValue: 'https://example.com/api/'
+          useValue: 'https://example.com/api/',
         },
         {
           provide: Logger,
-          useFactory: (): jasmine.SpyObj<Logger> => createMock(Logger)
+          useFactory: (): jasmine.SpyObj<Logger> => createMock(Logger),
         },
         {
           provide: AuthenticationService,
@@ -37,9 +36,9 @@ describe('CheService', () => {
             const svc: jasmine.SpyObj<AuthenticationService> = createMock(AuthenticationService);
             svc.getToken.and.returnValue('mock-auth-token');
             return svc;
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
     service = TestBed.get(CheService);
     controller = TestBed.get(HttpTestingController);
@@ -52,12 +51,14 @@ describe('CheService', () => {
   describe('#getState', () => {
     it('should send an Authorization header', function(done: DoneFn): void {
       service
-        .getState().pipe(
-        first())
-        .subscribe((): void => {
-          controller.verify();
-          done();
-        });
+        .getState()
+        .pipe(first())
+        .subscribe(
+          (): void => {
+            controller.verify();
+            done();
+          },
+        );
       const req: TestRequest = controller.expectOne('https://example.com/api/codebases/che/state');
       expect(req.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
       req.flush({});
@@ -65,12 +66,14 @@ describe('CheService', () => {
 
     it('should send a GET', function(done: DoneFn): void {
       service
-        .getState().pipe(
-        first())
-        .subscribe((): void => {
-          controller.verify();
-          done();
-        });
+        .getState()
+        .pipe(first())
+        .subscribe(
+          (): void => {
+            controller.verify();
+            done();
+          },
+        );
       const req: TestRequest = controller.expectOne('https://example.com/api/codebases/che/state');
       expect(req.request.method).toEqual('GET');
       req.flush({});
@@ -80,47 +83,53 @@ describe('CheService', () => {
       const che: Che = {
         clusterFull: false,
         multiTenant: false,
-        running: true
+        running: true,
       };
       service
-        .getState().pipe(
-        first())
-        .subscribe((c: Che): void => {
-          expect(c).toEqual(che);
-          controller.verify();
-          done();
-        });
+        .getState()
+        .pipe(first())
+        .subscribe(
+          (c: Che): void => {
+            expect(c).toEqual(che);
+            controller.verify();
+            done();
+          },
+        );
       controller.expectOne('https://example.com/api/codebases/che/state').flush(che);
     });
 
     it('should handle errors', function(done: DoneFn): void {
       TestBed.get(Logger).error.and.stub();
-      service
-        .getState()
-        .subscribe(
-          () => done.fail('should have received an error'),
-          (err: any): void => {
-            const errorMessage: string = 'Http failure response for https://example.com/api/codebases/che/state: 0 ';
-            expect(err).toEqual(errorMessage);
-            const httpErrorResponse: HttpErrorResponse = TestBed.get(Logger).error.calls.first().args[0];
-            expect(httpErrorResponse.message).toEqual(errorMessage);
-            controller.verify();
-            done();
-          }
-        );
-      controller.expectOne('https://example.com/api/codebases/che/state').error(new ErrorEvent('some error'));
+      service.getState().subscribe(
+        () => done.fail('should have received an error'),
+        (err: any): void => {
+          const errorMessage: string =
+            'Http failure response for https://example.com/api/codebases/che/state: 0 ';
+          expect(err).toEqual(errorMessage);
+          const httpErrorResponse: HttpErrorResponse = TestBed.get(Logger).error.calls.first()
+            .args[0];
+          expect(httpErrorResponse.message).toEqual(errorMessage);
+          controller.verify();
+          done();
+        },
+      );
+      controller
+        .expectOne('https://example.com/api/codebases/che/state')
+        .error(new ErrorEvent('some error'));
     });
   });
 
   describe('#start', () => {
     it('should send an Authorization header', function(done: DoneFn): void {
       service
-        .start().pipe(
-        first())
-        .subscribe((): void => {
-          controller.verify();
-          done();
-        });
+        .start()
+        .pipe(first())
+        .subscribe(
+          (): void => {
+            controller.verify();
+            done();
+          },
+        );
       const req: TestRequest = controller.expectOne('https://example.com/api/codebases/che/start');
       expect(req.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
       req.flush({});
@@ -128,12 +137,14 @@ describe('CheService', () => {
 
     it('should send a PATCH', function(done: DoneFn): void {
       service
-        .start().pipe(
-        first())
-        .subscribe((): void => {
-          controller.verify();
-          done();
-        });
+        .start()
+        .pipe(first())
+        .subscribe(
+          (): void => {
+            controller.verify();
+            done();
+          },
+        );
       const req: TestRequest = controller.expectOne('https://example.com/api/codebases/che/start');
       expect(req.request.method).toEqual('PATCH');
       req.flush({});
@@ -143,36 +154,39 @@ describe('CheService', () => {
       const che: Che = {
         clusterFull: false,
         multiTenant: false,
-        running: true
+        running: true,
       };
       service
-        .start().pipe(
-        first())
-        .subscribe((c: Che): void => {
-          expect(c).toEqual(che);
-          controller.verify();
-          done();
-        });
+        .start()
+        .pipe(first())
+        .subscribe(
+          (c: Che): void => {
+            expect(c).toEqual(che);
+            controller.verify();
+            done();
+          },
+        );
       controller.expectOne('https://example.com/api/codebases/che/start').flush(che);
     });
 
     it('should handle errors', function(done: DoneFn): void {
       TestBed.get(Logger).error.and.stub();
-      service
-        .start()
-        .subscribe(
-          () => done.fail('should have received an error'),
-          (err: any): void => {
-            const errorMessage: string = 'Http failure response for https://example.com/api/codebases/che/start: 0 ';
-            expect(err).toEqual(errorMessage);
-            const httpErrorResponse: HttpErrorResponse = TestBed.get(Logger).error.calls.first().args[0];
-            expect(httpErrorResponse.message).toEqual(errorMessage);
-            controller.verify();
-            done();
-          }
-        );
-      controller.expectOne('https://example.com/api/codebases/che/start').error(new ErrorEvent('some error'));
+      service.start().subscribe(
+        () => done.fail('should have received an error'),
+        (err: any): void => {
+          const errorMessage: string =
+            'Http failure response for https://example.com/api/codebases/che/start: 0 ';
+          expect(err).toEqual(errorMessage);
+          const httpErrorResponse: HttpErrorResponse = TestBed.get(Logger).error.calls.first()
+            .args[0];
+          expect(httpErrorResponse.message).toEqual(errorMessage);
+          controller.verify();
+          done();
+        },
+      );
+      controller
+        .expectOne('https://example.com/api/codebases/che/start')
+        .error(new ErrorEvent('some error'));
     });
   });
-
 });

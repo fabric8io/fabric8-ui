@@ -9,16 +9,10 @@ describe('UserAvatarComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [
-        CommonModule,
-        TooltipModule.forRoot()
-      ],
-      declarations: [ UserAvatarComponent ],
-      providers: [
-        TooltipConfig
-      ]
-    })
-    .compileComponents();
+      imports: [CommonModule, TooltipModule.forRoot()],
+      declarations: [UserAvatarComponent],
+      providers: [TooltipConfig],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

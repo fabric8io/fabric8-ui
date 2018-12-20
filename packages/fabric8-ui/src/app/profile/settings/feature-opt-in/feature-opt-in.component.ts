@@ -5,7 +5,11 @@ import { UserService } from 'ngx-login-client';
 import { ListComponent, ListConfig, ListEvent } from 'patternfly-ng';
 import { first } from 'rxjs/operators';
 import { FeatureAcknowledgementService } from '../../../feature-flag/service/feature-acknowledgement.service';
-import { ExtProfile, ExtUser, GettingStartedService } from '../../../getting-started/services/getting-started.service';
+import {
+  ExtProfile,
+  ExtUser,
+  GettingStartedService,
+} from '../../../getting-started/services/getting-started.service';
 
 interface FeatureLevel {
   name: string;
@@ -21,10 +25,9 @@ interface FeatureLevel {
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-feature-opt-in',
   templateUrl: './feature-opt-in.component.html',
-  styleUrls: ['./feature-opt-in.component.less']
+  styleUrls: ['./feature-opt-in.component.less'],
 })
 export class FeatureOptInComponent implements OnInit {
-
   @ViewChild(ListComponent) listComponent: ListComponent;
 
   featureLevel: string;
@@ -38,7 +41,7 @@ export class FeatureOptInComponent implements OnInit {
     private readonly notifications: Notifications,
     private readonly userService: UserService,
     private readonly toggleService: FeatureTogglesService,
-    private readonly toggleServiceAck: FeatureAcknowledgementService
+    private readonly toggleServiceAck: FeatureAcknowledgementService,
   ) {
     this.listConfig = {
       dblClick: false,
@@ -47,7 +50,7 @@ export class FeatureOptInComponent implements OnInit {
       selectionMatchProp: 'name',
       showCheckbox: false,
       showRadioButton: true,
-      useExpandItems: true
+      useExpandItems: true,
     } as ListConfig;
   }
 
@@ -60,20 +63,24 @@ export class FeatureOptInComponent implements OnInit {
     }
     this.featureLevel = event.item.name;
     const profile: ExtProfile = this.getTransientProfile();
-    this.gettingStartedService.update(profile).pipe(first()).subscribe(
-      (user: ExtUser): void => {
-        this.userService.currentLoggedInUser = user;
-        this.notifications.message({
-          message: `Profile updated!`,
-          type: NotificationType.SUCCESS
-        });
-      },
-      () => {
-        this.notifications.message({
-          message: 'Failed to update profile',
-          type: NotificationType.DANGER
-        });
-      });
+    this.gettingStartedService
+      .update(profile)
+      .pipe(first())
+      .subscribe(
+        (user: ExtUser): void => {
+          this.userService.currentLoggedInUser = user;
+          this.notifications.message({
+            message: `Profile updated!`,
+            type: NotificationType.SUCCESS,
+          });
+        },
+        () => {
+          this.notifications.message({
+            message: 'Failed to update profile',
+            type: NotificationType.DANGER,
+          });
+        },
+      );
   }
 
   private getTransientProfile(): ExtProfile {
@@ -94,10 +101,16 @@ export class FeatureOptInComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.toggleServiceAck.getToggle().pipe(first()).subscribe((state: boolean): void => {
-      this.state = state;
-    });
-    this.featureLevel = (this.userService.currentLoggedInUser.attributes as ExtProfile).featureLevel;
+    this.toggleServiceAck
+      .getToggle()
+      .pipe(first())
+      .subscribe(
+        (state: boolean): void => {
+          this.state = state;
+        },
+      );
+    this.featureLevel = (this.userService.currentLoggedInUser
+      .attributes as ExtProfile).featureLevel;
     this.items = [
       {
         name: 'released',
@@ -106,7 +119,7 @@ export class FeatureOptInComponent implements OnInit {
         description: 'Use the generally available version of CodeReady Toolchain.',
         detailDescription: 'These features have been released and are part of the product release.',
         features: [],
-        displayed: true
+        displayed: true,
       },
       {
         name: 'beta',
@@ -117,41 +130,50 @@ export class FeatureOptInComponent implements OnInit {
                 These features are currently in beta testing and have no guarantee of performance or stability.<br/>
                 Use these at your own risk.`,
         features: [],
-        displayed: true
+        displayed: true,
       },
       {
         name: 'experimental',
         selected: this.featureLevel === 'experimental',
         title: 'Experimental Features',
-        description: 'Enable access to experimental features that are in the early stages of testing and may not work as expected.',
+        description:
+          'Enable access to experimental features that are in the early stages of testing and may not work as expected.',
         detailDescription: `
                 These features are currently in experimental testing and have no guarantee of performance or stability.<br/>
                 Use these at your own risk.`,
         features: [],
-        displayed: true
+        displayed: true,
       },
       {
         name: 'internal',
         selected: this.featureLevel === 'internal',
         title: 'Internal Experimental Features',
-        description: 'Enable access to experimental features that are only available to internal Red Hat users.',
+        description:
+          'Enable access to experimental features that are only available to internal Red Hat users.',
         detailDescription: `
                 These features are currently in internal testing and have no guarantee of performance or stability.<br/>
                 Use these at your own risk.`,
         features: [],
-        displayed:  this.userService.currentLoggedInUser.attributes.email.endsWith('redhat.com') && (this.userService.currentLoggedInUser.attributes as any).emailVerified
-      }
+        displayed:
+          this.userService.currentLoggedInUser.attributes.email.endsWith('redhat.com') &&
+          (this.userService.currentLoggedInUser.attributes as any).emailVerified,
+      },
     ];
 
-    this.toggleService.getAllFeaturesEnabledByLevel().pipe(first()).subscribe((features: Feature[]): void => {
-      const featurePerLevel = this.featureByLevel(features);
-      for (const item of this.items) {
-        item.features = featurePerLevel[item.name];
-      }
-    });
+    this.toggleService
+      .getAllFeaturesEnabledByLevel()
+      .pipe(first())
+      .subscribe(
+        (features: Feature[]): void => {
+          const featurePerLevel = this.featureByLevel(features);
+          for (const item of this.items) {
+            item.features = featurePerLevel[item.name];
+          }
+        },
+      );
   }
 
-  onChange(event: { previousValue: boolean, currentValue: boolean }): void {
+  onChange(event: { previousValue: boolean; currentValue: boolean }): void {
     this.toggleServiceAck.setToggle(event.currentValue);
   }
 
@@ -196,8 +218,7 @@ export class FeatureOptInComponent implements OnInit {
       internal,
       experimental,
       beta,
-      released
+      released,
     };
   }
-
 }

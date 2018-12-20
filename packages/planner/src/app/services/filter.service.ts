@@ -7,9 +7,16 @@ import { HttpClientService } from '../shared/http-module/http.service';
 import { WorkItem } from './../models/work-item';
 
 import {
-  AND, ENCLOSURE, EQUAL, IN,
-  NOT_EQUAL, NOT_IN, OR, P_END,
-  P_START, SUB_STR
+  AND,
+  ENCLOSURE,
+  EQUAL,
+  IN,
+  NOT_EQUAL,
+  NOT_IN,
+  OR,
+  P_END,
+  P_START,
+  SUB_STR,
 } from './query-keys';
 
 @Injectable()
@@ -27,41 +34,29 @@ export class FilterService {
   public sub_str_notation = SUB_STR;
   public str_enclouser = ENCLOSURE;
   public special_keys = {
-    'null': null,
-    'true': true,
-    'false': false,
-    '': null
+    null: null,
+    true: true,
+    false: false,
+    '': null,
   };
 
-  private compare_notations: string[] = [
-    EQUAL,
-    NOT_EQUAL,
-    IN,
-    NOT_IN,
-    SUB_STR
-  ];
+  private compare_notations: string[] = [EQUAL, NOT_EQUAL, IN, NOT_IN, SUB_STR];
 
-  private join_notations: string[] = [
-    AND,
-    OR
-  ];
+  private join_notations: string[] = [AND, OR];
 
   private filtertoWorkItemMap = {
-    'assignee': ['relationships', 'assignees', 'data', ['id']],
-    'creator': ['relationships', 'creator', 'data', 'id'],
-    'area': ['relationships', 'area', 'data', 'id'],
-    'workitemtype': ['relationships', 'baseType', 'data', 'id'],
-    'iteration': ['relationships', 'iteration', 'data', 'id'],
-    'state': ['attributes', 'system.state']
+    assignee: ['relationships', 'assignees', 'data', ['id']],
+    creator: ['relationships', 'creator', 'data', 'id'],
+    area: ['relationships', 'area', 'data', 'id'],
+    workitemtype: ['relationships', 'baseType', 'data', 'id'],
+    iteration: ['relationships', 'iteration', 'data', 'id'],
+    state: ['attributes', 'system.state'],
   };
 
-  constructor(
-    private httpClientService: HttpClientService,
-    private route: ActivatedRoute
-  ) {}
+  constructor(private httpClientService: HttpClientService, private route: ActivatedRoute) {}
 
   setFilterValues(id, value): void {
-    let index = this.activeFilters.findIndex(f => f.id === id);
+    let index = this.activeFilters.findIndex((f) => f.id === id);
     if (index > -1 && value !== undefined) {
       this.activeFilters[index].paramKey = 'filter[' + id + ']';
       this.activeFilters[index].value = value;
@@ -69,7 +64,7 @@ export class FilterService {
       this.activeFilters.push({
         id: id,
         paramKey: 'filter[' + id + ']',
-        value: value
+        value: value,
       });
     }
     //Emit filter update event
@@ -77,7 +72,7 @@ export class FilterService {
   }
 
   getFilterValue(id): any {
-    const filter = this.activeFilters.find(f => f.id === id);
+    const filter = this.activeFilters.find((f) => f.id === id);
     return filter ? filter.value : null;
   }
 
@@ -91,8 +86,12 @@ export class FilterService {
       let arr = this.getFiltersFromUrl();
       arr = arr.concat(this.activeFilters);
       //remove duplicates
-      arr = arr
-      .filter((thing, index, self) => self.findIndex((t) => {return t.id === thing.id; }) === index);
+      arr = arr.filter(
+        (thing, index, self) =>
+          self.findIndex((t) => {
+            return t.id === thing.id;
+          }) === index,
+      );
       return arr;
     } else {
       return this.activeFilters;
@@ -106,10 +105,10 @@ export class FilterService {
     let refCurrentFilter = [];
     if (this.route.snapshot.queryParams['q']) {
       let urlString = this.route.snapshot.queryParams['q']
-      .replace(' ' + AND + ' ', ' ')
-      .replace(' ' + OR + ' ', ' ')
-      .replace(P_START, '')
-      .replace(P_END, '');
+        .replace(' ' + AND + ' ', ' ')
+        .replace(' ' + OR + ' ', ' ')
+        .replace(P_START, '')
+        .replace(P_END, '');
       let temp_arr = urlString.split(' ');
       for (let i = 0; i < temp_arr.length; i++) {
         let arr = temp_arr[i].split(':');
@@ -117,19 +116,21 @@ export class FilterService {
           refCurrentFilter.push({
             id: arr[0],
             paramKey: 'filter[' + arr[0] + ']',
-            value: arr[1]
+            value: arr[1],
           });
         }
       }
     }
     //active filter will have the transient filters
     //witgroup and space are permanent filters
-    return refCurrentFilter.filter(f => f.id === 'typegroup.name' || f.id === 'space' || f.id === 'iteration');
+    return refCurrentFilter.filter(
+      (f) => f.id === 'typegroup.name' || f.id === 'space' || f.id === 'iteration',
+    );
   }
 
   clearFilters(keys: string[] = []): void {
     if (keys.length) {
-      this.activeFilters = this.activeFilters.filter(f => keys.indexOf(f.id) > -1);
+      this.activeFilters = this.activeFilters.filter((f) => keys.indexOf(f.id) > -1);
     } else {
       this.activeFilters = [];
     }
@@ -141,19 +142,17 @@ export class FilterService {
    * @return Observable of FilterModel[] - Array of filters
    */
   getFilters(apiUrl): Observable<FilterModel[]> {
-    return this.httpClientService
-      .get<{data: FilterModel[]}>(apiUrl)
-      .pipe(
-        map(response => response.data as FilterModel[]),
-        catchError((error: Error | any) => {
-          console.log('API returned error: ', error.message);
-          return throwError('Error  - [FilterService - getFilters]' + error.message);
-        })
-      );
+    return this.httpClientService.get<{ data: FilterModel[] }>(apiUrl).pipe(
+      map((response) => response.data as FilterModel[]),
+      catchError((error: Error | any) => {
+        console.log('API returned error: ', error.message);
+        return throwError('Error  - [FilterService - getFilters]' + error.message);
+      }),
+    );
   }
 
   returnFilters() {
-      return this.filters;
+    return this.filters;
   }
 
   /**
@@ -168,16 +167,20 @@ export class FilterService {
     //concat both arrays
     refCurrentFilter = refCurrentFilter.concat(this.activeFilters);
     //remove duplicates
-    refCurrentFilter = refCurrentFilter
-    .filter((thing, index, self) => self.findIndex((t) => {return t.id === thing.id; }) === index);
-    return refCurrentFilter.every(filter => {
+    refCurrentFilter = refCurrentFilter.filter(
+      (thing, index, self) =>
+        self.findIndex((t) => {
+          return t.id === thing.id;
+        }) === index,
+    );
+    return refCurrentFilter.every((filter) => {
       if (filter.id && Object.keys(this.filtertoWorkItemMap).indexOf(filter.id) > -1) {
         let currentAttr = workItem;
         return this.filtertoWorkItemMap[filter.id].every((attr, map_index) => {
           if (Array.isArray(attr)) {
             if (Array.isArray(currentAttr)) {
               let innerAttr = currentAttr;
-              return currentAttr.some(item => {
+              return currentAttr.some((item) => {
                 return item[attr[0]] == filter.value;
               });
             } else {
@@ -185,7 +188,10 @@ export class FilterService {
             }
           } else if (currentAttr[attr]) {
             currentAttr = currentAttr[attr];
-            if (map_index === this.filtertoWorkItemMap[filter.id].length - 1 && currentAttr != filter.value) {
+            if (
+              map_index === this.filtertoWorkItemMap[filter.id].length - 1 &&
+              currentAttr != filter.value
+            ) {
               return false;
             } else {
               return true;
@@ -217,7 +223,8 @@ export class FilterService {
     // then enclosed the string and return it
     if (
       query.split(' ').length > 1 &&
-      !(query[0] === ENCLOSURE && query[query.length - 1] === ENCLOSURE)) {
+      !(query[0] === ENCLOSURE && query[query.length - 1] === ENCLOSURE)
+    ) {
       return ENCLOSURE + query + ENCLOSURE;
     }
     return query;
@@ -243,19 +250,34 @@ export class FilterService {
     let processedObject = '';
     // If onptions has any length enclose processedObject with ()
     if (Object.keys(options).length > 1) {
-      processedObject = P_START + Object.keys(options).map(key => {
-        return typeof(options[key]) !== 'string' ? key + ':' + options[key] :
-          options[key].split(',').map(val => {
-            return key + ':' + this.encloseValue(val.trim());
-          }).join(' ' + AND + ' ');
-      }).join(' ' + AND + ' ') + P_END;
+      processedObject =
+        P_START +
+        Object.keys(options)
+          .map((key) => {
+            return typeof options[key] !== 'string'
+              ? key + ':' + options[key]
+              : options[key]
+                  .split(',')
+                  .map((val) => {
+                    return key + ':' + this.encloseValue(val.trim());
+                  })
+                  .join(' ' + AND + ' ');
+          })
+          .join(' ' + AND + ' ') +
+        P_END;
     } else if (Object.keys(options).length === 1) {
-      processedObject = Object.keys(options).map(key => {
-        return typeof(options[key]) !== 'string' ? key + ':' + options[key] :
-          options[key].split(',').map(val => {
-            return key + ':' + this.encloseValue(val.trim());
-          }).join(' ' + AND + ' ');
-      }).join(' ' + AND + ' ');
+      processedObject = Object.keys(options)
+        .map((key) => {
+          return typeof options[key] !== 'string'
+            ? key + ':' + options[key]
+            : options[key]
+                .split(',')
+                .map((val) => {
+                  return key + ':' + this.encloseValue(val.trim());
+                })
+                .join(' ' + AND + ' ');
+        })
+        .join(' ' + AND + ' ');
     } else {
       return decodeURIComponent(existingQuery);
     }
@@ -297,9 +319,10 @@ export class FilterService {
     if (this.compare_notations.indexOf(compare.trim()) == -1) {
       throw new Error('Not a valid compare notation');
     }
-    let op = {}; op[key.trim()] = {};
+    let op = {};
+    op[key.trim()] = {};
     if (Array.isArray(value)) {
-      op[key.trim()][compare.trim()] = value.map(v => v.trim());
+      op[key.trim()][compare.trim()] = value.map((v) => v.trim());
     } else {
       op[key.trim()][compare.trim()] = value === null ? null : value.trim();
     }
@@ -349,53 +372,34 @@ export class FilterService {
         // put all of them under one joiner
         if (join === newJoiner && join === existingJoiner) {
           let op = {};
-          op[join] = [
-            ...existingQueryObject[join],
-            ...newQueryObject[join]
-          ];
+          op[join] = [...existingQueryObject[join], ...newQueryObject[join]];
           return op;
-        } else if (existingQueryObject[existingJoiner].length === 1 &&
-          newQueryObject[newJoiner].length === 1) {
-            let op = {};
-            op[join] = [
-              ...existingQueryObject[existingJoiner],
-              ...newQueryObject[newJoiner]
-            ];
-            return op;
+        } else if (
+          existingQueryObject[existingJoiner].length === 1 &&
+          newQueryObject[newJoiner].length === 1
+        ) {
+          let op = {};
+          op[join] = [...existingQueryObject[existingJoiner], ...newQueryObject[newJoiner]];
+          return op;
         } else if (existingQueryObject[existingJoiner].length === 1) {
           let op = {};
           if (newJoiner === join) {
-            op[join] = [
-              ...existingQueryObject[existingJoiner],
-              ...newQueryObject[newJoiner]
-            ];
+            op[join] = [...existingQueryObject[existingJoiner], ...newQueryObject[newJoiner]];
           } else {
-            op[join] = [
-              ...existingQueryObject[existingJoiner],
-              newQueryObject
-            ];
+            op[join] = [...existingQueryObject[existingJoiner], newQueryObject];
           }
           return op;
         } else if (newQueryObject[newJoiner].length === 1) {
           let op = {};
           if (existingJoiner === join) {
-            op[join] = [
-              ...existingQueryObject[existingJoiner],
-              ...newQueryObject[newJoiner]
-            ];
+            op[join] = [...existingQueryObject[existingJoiner], ...newQueryObject[newJoiner]];
           } else {
-            op[join] = [
-              existingQueryObject,
-              ...newQueryObject[newJoiner]
-            ];
+            op[join] = [existingQueryObject, ...newQueryObject[newJoiner]];
           }
           return op;
         } else {
           let op = {};
-          op[join] = [
-            existingQueryObject,
-            newQueryObject
-          ];
+          op[join] = [existingQueryObject, newQueryObject];
           return op;
         }
       } else {
@@ -406,15 +410,9 @@ export class FilterService {
           let op = {};
           // If existingQueryObject has only one item in the array
           if (existingQueryObject[existingJoiner].length === 1) {
-            op[join] = [
-              ...existingQueryObject[existingJoiner],
-              newQueryObject
-            ];
+            op[join] = [...existingQueryObject[existingJoiner], newQueryObject];
           } else {
-            op[join] = [
-              existingQueryObject,
-              newQueryObject
-            ];
+            op[join] = [existingQueryObject, newQueryObject];
           }
           return op;
         }
@@ -426,7 +424,11 @@ export class FilterService {
    * Query string to JSON conversion
    */
   queryToJson(query: string, first_level: boolean = true): any {
-    let temp = [], p_count = 0, p_start = -1, new_str = '', output = {};
+    let temp = [],
+      p_count = 0,
+      p_start = -1,
+      new_str = '',
+      output = {};
     // counting on parenthesis
     // Replacing highest level of enclosed querries with __temp__
     // for example -
@@ -435,7 +437,9 @@ export class FilterService {
     // tmp queue has a:b $AND c:d
     for (let i = 0; i < query.length; i++) {
       if (query[i] === P_START) {
-        if (p_start < 0) { p_start = i; }
+        if (p_start < 0) {
+          p_start = i;
+        }
         p_count += 1;
       }
       if (p_start === -1) {
@@ -461,7 +465,7 @@ export class FilterService {
       // or some query with or without __temp__ in it
       // We replace the __temp__ with the actual string
       // Pass it through the same function
-      output[OR] = arr.map(item => {
+      output[OR] = arr.map((item) => {
         item = item.trim();
         if (item == '__temp__') {
           item = temp.pop();
@@ -476,7 +480,7 @@ export class FilterService {
       arr = new_str.split(AND);
       if (arr.length > 1) {
         // Do the same as earlier
-        output[AND] = arr.map(item => {
+        output[AND] = arr.map((item) => {
           if (item.trim() == '__temp__') {
             item = temp.pop();
           }
@@ -492,7 +496,7 @@ export class FilterService {
         }
         let keyIndex = -1;
         let splitter = '';
-        for (let i = 0; i < new_str.length; i ++) {
+        for (let i = 0; i < new_str.length; i++) {
           if (new_str[i] === ':' || new_str[i] === '!') {
             splitter = new_str[i];
             keyIndex = i;
@@ -501,13 +505,13 @@ export class FilterService {
         }
         let key = new_str.substring(0, keyIndex).trim();
         let value = new_str.substring(keyIndex + 1).trim();
-        let val_arr = value.split(',').map(i => i.trim());
+        let val_arr = value.split(',').map((i) => i.trim());
         dObj[key] = {};
         if (splitter === '!') {
           if (val_arr.length > 1) {
             dObj[key][NOT_IN] = val_arr;
           } else {
-            if (Object.keys(this.special_keys).findIndex(k => k === val_arr[0]) > -1) {
+            if (Object.keys(this.special_keys).findIndex((k) => k === val_arr[0]) > -1) {
               dObj[key][NOT_EQUAL] = this.special_keys[val_arr[0]];
             } else if (key === 'title') {
               dObj[key][SUB_STR] = this.clearEnclosedValue(val_arr[0]);
@@ -519,7 +523,7 @@ export class FilterService {
           if (val_arr.length > 1) {
             dObj[key][IN] = val_arr;
           } else {
-            if (Object.keys(this.special_keys).findIndex(k => k === val_arr[0]) > -1) {
+            if (Object.keys(this.special_keys).findIndex((k) => k === val_arr[0]) > -1) {
               dObj[key][EQUAL] = this.special_keys[val_arr[0]];
             } else if (key === 'title') {
               dObj[key][SUB_STR] = this.clearEnclosedValue(val_arr[0]);
@@ -538,39 +542,43 @@ export class FilterService {
     return output;
   }
 
-
   jsonToQuery(obj: object): string {
     let key = Object.keys(obj)[0]; // key will be AND or OR
     let value = obj[key];
-    return P_START + value.map(item => {
-      if (Object.keys(item)[0] == AND || Object.keys(item)[0] == OR) {
-        return this.jsonToQuery(item);
-      } else {
-        let data_key = Object.keys(item)[0];
-        let data = item[data_key];
-        let conditional_operator = Object.keys(data)[0];
-        let splitter: string = '';
+    return (
+      P_START +
+      value
+        .map((item) => {
+          if (Object.keys(item)[0] == AND || Object.keys(item)[0] == OR) {
+            return this.jsonToQuery(item);
+          } else {
+            let data_key = Object.keys(item)[0];
+            let data = item[data_key];
+            let conditional_operator = Object.keys(data)[0];
+            let splitter: string = '';
 
-        switch (conditional_operator) {
-          case EQUAL:
-            splitter = ':';
-            return data_key + splitter + this.encloseValue(data[conditional_operator]);
-          case NOT_EQUAL:
-            splitter = '!';
-            return data_key + splitter + this.encloseValue(data[conditional_operator]);
-          case IN:
-            splitter = ':';
-            return data_key + splitter + data[conditional_operator].join();
-          case NOT_IN:
-            splitter = '!';
-            return data_key + splitter + data[conditional_operator].join();
-          case SUB_STR:
-            splitter = ':';
-            return data_key + splitter + this.encloseValue(data[conditional_operator]);
-        }
-      }
-    })
-    .join(' ' + key + ' ') + P_END;
+            switch (conditional_operator) {
+              case EQUAL:
+                splitter = ':';
+                return data_key + splitter + this.encloseValue(data[conditional_operator]);
+              case NOT_EQUAL:
+                splitter = '!';
+                return data_key + splitter + this.encloseValue(data[conditional_operator]);
+              case IN:
+                splitter = ':';
+                return data_key + splitter + data[conditional_operator].join();
+              case NOT_IN:
+                splitter = '!';
+                return data_key + splitter + data[conditional_operator].join();
+              case SUB_STR:
+                splitter = ':';
+                return data_key + splitter + this.encloseValue(data[conditional_operator]);
+            }
+          }
+        })
+        .join(' ' + key + ' ') +
+      P_END
+    );
   }
 
   /**
@@ -588,7 +596,10 @@ export class FilterService {
       let decodedQuery = this.queryToJson(queryString);
       // we ignore non-AND queries for now, might want to extend that later.
       if (!decodedQuery[AND] && !(decodedQuery[OR] && decodedQuery[OR].length === 1)) {
-        console.log('The current query is not supported by getConditionFromQuery() (non-AND query): ' + queryString);
+        console.log(
+          'The current query is not supported by getConditionFromQuery() (non-AND query): ' +
+            queryString,
+        );
         return undefined;
       } else {
         let terms: any[] = decodedQuery[AND] ? decodedQuery[AND] : decodedQuery[OR];
@@ -603,7 +614,10 @@ export class FilterService {
           console.log('Condition key not found in query: ' + key + ', query= ' + queryString);
           return undefined;
         } else {
-          console.log('The current query is not supported by getConditionFromQuery() (bad format): ' + queryString);
+          console.log(
+            'The current query is not supported by getConditionFromQuery() (bad format): ' +
+              queryString,
+          );
           // use standard non-context create dialog
           return undefined;
         }
@@ -613,32 +627,26 @@ export class FilterService {
 
   // Temporary function to deal with single level $AND operator
   queryToFlat(query: string) {
-    return query.replace(/^\((.+)\)$/, '$1')
-      .split(AND).map((item, index) => {
+    return query
+      .replace(/^\((.+)\)$/, '$1')
+      .split(AND)
+      .map((item, index) => {
         // regex to match field:value pattern.
         // for item=title:A:D, field -> title and value -> A:D
         let filterValue = /(^[^:]+):(.*)$/.exec(item);
-      return {
-        field: filterValue[1].trim(),
-        index: index,
-        value: filterValue[2].trim()
-      };
-    });
+        return {
+          field: filterValue[1].trim(),
+          index: index,
+          value: filterValue[2].trim(),
+        };
+      });
   }
 
   flatToQuery(arr: any[]) {
     let query = {};
-    arr.forEach(item => {
-      const newQuery = this.queryBuilder(
-        item.field,
-        EQUAL,
-        item.value
-      );
-      query = this.queryJoiner(
-        query,
-        AND,
-        newQuery
-      );
+    arr.forEach((item) => {
+      const newQuery = this.queryBuilder(item.field, EQUAL, item.value);
+      query = this.queryJoiner(query, AND, newQuery);
     });
     return query;
   }
@@ -652,11 +660,13 @@ export class FilterService {
   isOnlyChildQuery(query: string): string | null {
     try {
       const jsonQuery = this.queryToJson(query);
-      if (jsonQuery[OR] &&
+      if (
+        jsonQuery[OR] &&
         jsonQuery[OR].length === 1 &&
         jsonQuery[OR][0]['parent.number'] &&
-        jsonQuery[OR][0]['parent.number'][EQUAL]) {
-          return jsonQuery[OR][0]['parent.number'][EQUAL];
+        jsonQuery[OR][0]['parent.number'][EQUAL]
+      ) {
+        return jsonQuery[OR][0]['parent.number'][EQUAL];
       }
     } catch {}
     return null;
