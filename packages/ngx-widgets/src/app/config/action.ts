@@ -12,11 +12,18 @@
  */
 export class Action {
   disabled?: boolean = false;
+
   id?: string;
+
   name: string;
+
   separator?: boolean = false;
+
   template?: string;
+
   type?: string;
+
   title?: string;
+
   visible?: boolean;
 }

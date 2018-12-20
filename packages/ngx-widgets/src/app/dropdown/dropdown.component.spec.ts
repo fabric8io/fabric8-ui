@@ -1,4 +1,4 @@
-import { async, ComponentFixture, fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DebugElement } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -56,7 +56,7 @@ describe('Dropdown component - ', () => {
       });
   }));
 
-  it('Should toggle the dropdown on click', () => {
+  it('should toggle the dropdown on click', () => {
     comp.options = options;
     comp.selected = slectedOption;
     fixture.detectChanges();
@@ -75,7 +75,7 @@ describe('Dropdown component - ', () => {
     expect(testEl).toBeNull();
   });
 
-  it('Should trigger event on change with the correct selected option', (done) => {
+  it('should trigger event on change with the correct selected option', (done) => {
     comp.onUpdate.subscribe((data: any) => {
       expect(data.newOption).toBe(options[1]);
       done();
@@ -89,7 +89,7 @@ describe('Dropdown component - ', () => {
     // Click on the label to open the list
     el.triggerEventHandler('click', {});
     fixture.detectChanges();
-    let option2El = fixture.debugElement.query(By.css('.option2'));
+    const option2El = fixture.debugElement.query(By.css('.option2'));
 
     // Click on an item from the list
     option2El.triggerEventHandler('click', {});

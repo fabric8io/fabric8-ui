@@ -8,5 +8,6 @@ import { View } from './view';
  */
 export class ViewsConfig {
   currentView?: View;
+
   views: View[];
 }

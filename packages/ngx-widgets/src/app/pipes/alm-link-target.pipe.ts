@@ -6,15 +6,15 @@ export class AlmLinkTarget implements PipeTransform {
     let result = '';
     // var linkType = args[1];
     if (
-      links['relationships']['source']['data']['id'] == workItem['id'] &&
-      links['relationships']['link_type']['data']['id'] == linkType['id']
+      links.relationships.source.data.id === workItem.id &&
+      links.relationships.link_type.data.id === linkType.id
     ) {
-      result = links['relationships']['target']['data']['id'];
+      result = links.relationships.target.data.id;
     } else if (
-      links['relationships']['target']['data']['id'] == workItem['id'] &&
-      links['relationships']['link_type']['data']['id'] == linkType['id']
+      links.relationships.target.data.id === workItem.id &&
+      links.relationships.link_type.data.id === linkType.id
     ) {
-      result = links['relationships']['source']['data']['id'];
+      result = links.relationships.source.data.id;
     }
     return result;
   }
