@@ -1,22 +1,19 @@
-import {
-  Component,
-  ElementRef,
-  HostListener,
-  OnInit,
-  ViewChild,
-  ViewEncapsulation,
-} from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-base';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { Context, SpaceService } from 'ngx-fabric8-wit';
+import { SpaceService } from 'ngx-fabric8-wit';
 import { Space, SpaceAttributes } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
 import { of as observableOf, Subscription } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { SpaceNamespaceService } from '../../shared/runtime-console/space-namespace.service';
 
+export type spaceModal = {
+  show: boolean;
+  flow: string;
+};
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'f8-add-space-overlay',
@@ -46,11 +43,18 @@ export class AddSpaceOverlayComponent implements OnInit {
 
   ngOnInit() {
     this.subscriptions.push(
-      this.broadcaster.on('showAddSpaceOverlay').subscribe((arg: boolean) => {
+      this.broadcaster.on('showAddSpaceOverlay').subscribe((arg: spaceModal | boolean) => {
         if (typeof arg === 'boolean') {
           if (arg) {
             this.addAppFlow = null;
             this.modalAddSpaceOverlay.show();
+          } else {
+            this.modalAddSpaceOverlay.hide();
+          }
+        } else if (typeof arg === 'object') {
+          if (arg.show) {
+            this.modalAddSpaceOverlay.show();
+            this.addAppFlow = arg.flow;
           } else {
             this.modalAddSpaceOverlay.hide();
           }
@@ -129,7 +133,7 @@ export class AddSpaceOverlayComponent implements OnInit {
   }
 
   showAddAppOverlay(): void {
-    this.broadcaster.broadcast('showAddAppOverlay', true);
+    this.broadcaster.broadcast('showAddAppOverlay', { show: true, selectedFlow: this.addAppFlow });
     this.broadcaster.broadcast('analyticsTracker', {
       event: 'add app opened',
       data: {
