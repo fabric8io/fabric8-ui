@@ -3,7 +3,7 @@
     <div class="card-pf-heading-details f8-card-heading-details">
       <ng-container *ngIf="userOwnsSpace">
         <a class="btn btn-link f8-card-heading-btn-link" (click)="addToSpace.emit()">
-          <i id="pipelines-add-to-space-icon" class="pficon pficon-add-circle-o"></i>
+          <i id="pipelines-add-to-space-icon" class="pficon pficon-add-circle-o" placement="bottom" tooltip="{{buildConfigsCount === 0 ? 'Create' : 'Add'}} a Pipeline"></i>
         </a>
       </ng-container>
     </div>

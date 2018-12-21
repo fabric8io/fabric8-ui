@@ -9,7 +9,7 @@
       <div class="card-pf-heading-details f8-card-heading-details">
         <div *ngIf="userOwnsSpace">
           <a class="btn btn-link f8-card-heading-btn-link" (click)="addToSpace.emit()">
-            <i id="test-add-codebase-circle-button" class="pficon pficon-add-circle-o"></i>
+            <i id="test-add-codebase-circle-button" class="pficon pficon-add-circle-o" placement="bottom" tooltip="{{codebases.length === 0 ? 'Create' : 'Add'}} a Codebase"></i>
           </a>
         </div>
       </div>
@@ -53,7 +53,7 @@
       <div class="card-pf-heading-details f8-card-heading-details">
         <div *ngIf="userOwnsSpace">
           <a class="btn btn-link f8-card-heading-btn-link" (click)="addToSpace.emit()">
-            <i id="spacehome-codebases-add-button" class="pficon pficon-add-circle-o"></i>
+            <i id="spacehome-codebases-add-button" class="pficon pficon-add-circle-o" placement="bottom" tooltip="{{codebases.length === 0 ? 'Create' : 'Add'}} a Codebase"></i>
           </a>
         </div>
       </div>

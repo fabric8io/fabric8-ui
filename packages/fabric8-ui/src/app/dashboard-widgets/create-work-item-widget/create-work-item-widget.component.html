@@ -13,7 +13,7 @@
             class="btn btn-link f8-card-heading-btn-link"
             [routerLink]="[contextPath | async, 'plan']"
           >
-            <i class="pficon pficon-add-circle-o"></i>
+            <i class="pficon pficon-add-circle-o" placement="bottom" tooltip="{{workItems?.length === 0 ? 'Create' : 'Add'}} a Workitem"></i>
           </a>
         </div>
       </div>
