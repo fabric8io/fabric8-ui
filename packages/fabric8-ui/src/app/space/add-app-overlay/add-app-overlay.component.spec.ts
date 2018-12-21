@@ -367,13 +367,6 @@ describe('AddAppOverlayComponent', () => {
         tick();
         expect(component.selectedFlow).toEqual('');
       }));
-
-      it('should match when provided', fakeAsync(() => {
-        component.preselectedFlow = 'createapp';
-        component.ngOnInit();
-        tick();
-        expect(component.selectedFlow).toEqual('createapp');
-      }));
     });
   });
 });

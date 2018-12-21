@@ -242,6 +242,7 @@ describe('AddSpaceOverlayComponent', () => {
     function testCreateSpace(showAddAppOverlay: boolean) {
       component.spaceName = 'SpaceA';
       component.spaceDescription = 'DescriptionA';
+      component.addAppFlow = 'importapp';
 
       mockSpaceNamespaceService.updateConfigMap.and.callFake(function() {
         return observableOf({});
@@ -277,7 +278,7 @@ describe('AddSpaceOverlayComponent', () => {
 
       if (showAddAppOverlay) {
         expect(broadcastArgument[0][0]).toBe('showAddAppOverlay');
-        expect(broadcastArgument[0][1]).toBe(true);
+        expect(broadcastArgument[0][1]).toEqual({ show: true, selectedFlow: 'importapp' });
         expect(broadcastArgument[2][0]).toBe('showAddSpaceOverlay');
         expect(broadcastArgument[2][1]).toBe(false);
       } else {

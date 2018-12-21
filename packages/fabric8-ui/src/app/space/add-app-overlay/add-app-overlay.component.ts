@@ -23,6 +23,10 @@ import {
   DeploymentApiService,
 } from '../create/deployments/services/deployment-api.service';
 
+export type appModal = {
+  show: boolean;
+  selectedFlow: string;
+};
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'f8-add-app-overlay',
@@ -32,7 +36,6 @@ import {
 export class AddAppOverlayComponent implements OnInit, OnDestroy {
   @ViewChild('projectNameInput') projectNameInput: ElementRef;
   @ViewChild('modalAddAppOverlay') modalAddAppOverlay: ModalDirective;
-  @Input() preselectedFlow: string;
   @ViewChild('appForm') appForm: NgForm;
 
   currentSpace: Space;
@@ -88,16 +91,21 @@ export class AddAppOverlayComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    if (this.preselectedFlow) {
-      this.selectedFlow = this.preselectedFlow;
-    }
-
     this.subscriptions.push(
-      this.broadcaster.on('showAddAppOverlay').subscribe((show: boolean) => {
-        if (show) {
-          this.modalAddAppOverlay.show();
-        } else {
-          this.modalAddAppOverlay.hide();
+      this.broadcaster.on('showAddAppOverlay').subscribe((arg: appModal | boolean) => {
+        if (typeof arg === 'boolean') {
+          if (arg) {
+            this.modalAddAppOverlay.show();
+          } else {
+            this.modalAddAppOverlay.hide();
+          }
+        } else if (typeof arg === 'object') {
+          if (arg.show) {
+            this.selectedFlow = arg.selectedFlow;
+            this.modalAddAppOverlay.show();
+          } else {
+            this.modalAddAppOverlay.show();
+          }
         }
       }),
     );

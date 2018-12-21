@@ -10,6 +10,10 @@ import { of as observableOf, Subscription } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { SpaceNamespaceService } from '../../shared/runtime-console/space-namespace.service';
 
+export type spaceModal = {
+  show: boolean;
+  flow: string;
+};
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'f8-add-space-overlay',
@@ -39,7 +43,7 @@ export class AddSpaceOverlayComponent implements OnInit {
 
   ngOnInit() {
     this.subscriptions.push(
-      this.broadcaster.on('showAddSpaceOverlay').subscribe((arg: any) => {
+      this.broadcaster.on('showAddSpaceOverlay').subscribe((arg: spaceModal | boolean) => {
         if (typeof arg === 'boolean') {
           if (arg) {
             this.addAppFlow = null;
@@ -129,7 +133,7 @@ export class AddSpaceOverlayComponent implements OnInit {
   }
 
   showAddAppOverlay(): void {
-    this.broadcaster.broadcast('showAddAppOverlay', true);
+    this.broadcaster.broadcast('showAddAppOverlay', { show: true, selectedFlow: this.addAppFlow });
     this.broadcaster.broadcast('analyticsTracker', {
       event: 'add app opened',
       data: {
