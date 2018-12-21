@@ -85,7 +85,7 @@ export class FabPlannerIterationModalComponent implements OnInit, OnDestroy, OnC
     private broadcaster: Broadcaster,
     private store: Store<AppState>,
     private iterationQuery: IterationQuery,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.resetValues();
@@ -163,10 +163,14 @@ export class FabPlannerIterationModalComponent implements OnInit, OnDestroy, OnC
     }
   }
 
-  ngOnChanges() {}
+  ngOnChanges() { }
 
   ngOnDestroy() {
     // prevent memory leak when component is destroyed
+  }
+
+  get isNameFieldEmpty(): boolean {
+    return this.iteration.name.trim().length <= 0;
   }
 
   openCreateUpdateModal(type: string = 'create', iteration: IterationUI | null = null, e?: any) {
