@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
 import { FeatureFlagModule } from 'ngx-feature-flag';
 import { LoadingWidgetModule } from '../loading-widget/loading-widget.module';
 import { AddCodebaseWidgetRoutingModule } from './add-codebase-widget-routing.module';
@@ -15,8 +16,10 @@ import { CodebaseItemModule } from './codebase-item/codebase-item.module';
     FeatureFlagModule,
     LoadingWidgetModule,
     CodebaseItemModule,
+    TooltipModule.forRoot(),
   ],
   declarations: [AddCodebaseWidgetComponent],
   exports: [AddCodebaseWidgetComponent],
+  providers: [TooltipConfig],
 })
 export class AddCodebaseWidgetModule {}
