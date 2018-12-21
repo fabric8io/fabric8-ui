@@ -1,41 +1,75 @@
 <div [collapse]="collapsed">
   <ng-container *ngIf="active">
-    <hr>
-    <deployments-donut [applicationId]="applicationId" [environment]="environment" [spaceId]="spaceId" [mini]="false"></deployments-donut>
+    <hr />
+    <deployments-donut
+      [applicationId]="applicationId"
+      [environment]="environment"
+      [spaceId]="spaceId"
+      [mini]="false"
+    ></deployments-donut>
 
-    <ng-container *ngIf="hasPods | async">
+    <ng-container *ngIf="(hasPods | async)">
       <p class="resource-usage-header">
         Resource Usage
         <span class="badge resource-badge" *ngIf="usageMessage">
-          <span class="pficon-warning-triangle-o"></span>
-          {{ usageMessage }}
+          <span class="pficon-warning-triangle-o"></span> {{ usageMessage }}
         </span>
       </p>
 
       <div class="deployment-chart" [ngClass]="cpuChartClass">
         <div class="chart-column-left">
-          <pfng-sparkline-chart class="chart-sparkline" (chartLoaded)="cpuChartLoaded($event)" [config]="cpuConfig" [chartData]="cpuData"></pfng-sparkline-chart>
+          <pfng-sparkline-chart
+            class="chart-sparkline"
+            (chartLoaded)="cpuChartLoaded($event)"
+            [config]="cpuConfig"
+            [chartData]="cpuData"
+          ></pfng-sparkline-chart>
         </div>
         <div class="chart-column-right">
-          <deployment-graph-label [ngClass]="cpuLabelClass" type="CPU" dataMeasure="Cores" [value]="cpuVal" [valueUpperBound]="cpuMax"></deployment-graph-label>
+          <deployment-graph-label
+            [ngClass]="cpuLabelClass"
+            type="CPU"
+            dataMeasure="Cores"
+            [value]="cpuVal"
+            [valueUpperBound]="cpuMax"
+          ></deployment-graph-label>
         </div>
       </div>
 
       <div class="deployment-chart" [ngClass]="memChartClass">
         <div class="chart-column-left">
-          <pfng-sparkline-chart class="chart-sparkline" (chartLoaded)="memChartLoaded($event)" [config]="memConfig" [chartData]="memData"></pfng-sparkline-chart>
+          <pfng-sparkline-chart
+            class="chart-sparkline"
+            (chartLoaded)="memChartLoaded($event)"
+            [config]="memConfig"
+            [chartData]="memData"
+          ></pfng-sparkline-chart>
         </div>
         <div class="chart-column-right">
-          <deployment-graph-label [ngClass]="memLabelClass" type="Memory" [dataMeasure]="memUnits" [value]="memVal" [valueUpperBound]="memMax"></deployment-graph-label>
+          <deployment-graph-label
+            [ngClass]="memLabelClass"
+            type="Memory"
+            [dataMeasure]="memUnits"
+            [value]="memVal"
+            [valueUpperBound]="memMax"
+          ></deployment-graph-label>
         </div>
       </div>
 
       <div class="deployment-chart">
         <div class="chart-column-left">
-          <f8-deployments-linechart (chartLoaded)="netChartLoaded($event)" [config]="netConfig" [chartData]="netData"></f8-deployments-linechart>
+          <f8-deployments-linechart
+            (chartLoaded)="netChartLoaded($event)"
+            [config]="netConfig"
+            [chartData]="netData"
+          ></f8-deployments-linechart>
         </div>
         <div class="chart-column-right">
-          <deployment-graph-label type="Network" [dataMeasure]="netUnits + '/s'" [value]="netVal"></deployment-graph-label>
+          <deployment-graph-label
+            type="Network"
+            [dataMeasure]="netUnits + '/s'"
+            [value]="netVal"
+          ></deployment-graph-label>
         </div>
       </div>
     </ng-container>

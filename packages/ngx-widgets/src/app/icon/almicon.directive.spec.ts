@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+
 import { AlmIconTest } from './almicon-test.component';
 import { AlmIconDirective } from './almicon.directive';
 
@@ -13,11 +13,11 @@ describe('AlmIcon directive - ', () => {
     });
   });
 
-  it('Canary test should pass', () => {
+  it('canary test should pass', () => {
     expect(true).toBeTruthy();
   });
 
-  it('Should apply appropriate class and color', () => {
+  it('should apply appropriate class and color', () => {
     TestBed.overrideComponent(AlmIconTest, {
       set: {
         template: '<span almIcon iconType="new"></span>',
@@ -28,13 +28,13 @@ describe('AlmIcon directive - ', () => {
         fixture = TestBed.createComponent(AlmIconTest);
         comp = fixture.componentInstance;
         fixture.detectChanges();
-        let compiled = fixture.debugElement.nativeElement.querySelector('span');
+        const compiled = fixture.debugElement.nativeElement.querySelector('span');
         expect(compiled.className).toBe('fa fa-star');
         expect(compiled.style.color).toBe('rgb(88, 47, 192)');
       });
   });
 
-  it('Should apply default class and color', () => {
+  it('should apply default class and color', () => {
     TestBed.overrideComponent(AlmIconTest, {
       set: {
         template: '<span almIcon iconType="anything"></span>',
@@ -45,7 +45,7 @@ describe('AlmIcon directive - ', () => {
         fixture = TestBed.createComponent(AlmIconTest);
         comp = fixture.componentInstance;
         fixture.detectChanges();
-        let compiled = fixture.debugElement.nativeElement.querySelector('span');
+        const compiled = fixture.debugElement.nativeElement.querySelector('span');
         expect(compiled.className).toBe('fa fa-crosshairs');
         expect(compiled.style.color).toBe('rgb(0, 0, 0)');
       });

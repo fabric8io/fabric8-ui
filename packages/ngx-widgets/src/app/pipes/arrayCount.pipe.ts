@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class ArrayCount implements PipeTransform {
   transform(objArray: Array<any>) {
-    if (false === objArray instanceof Array) {
+    if (objArray instanceof Array === false) {
       return null;
     }
 

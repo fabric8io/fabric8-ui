@@ -18,6 +18,8 @@ export class TableConfigComponent {
   @Input() columns;
   @Output() readonly onMovetoAvailable: EventEmitter<any[]> = new EventEmitter();
   @Output() readonly onMovetoDisplay: EventEmitter<any[]> = new EventEmitter();
+  isNoDisplayedAttributeSelected: Boolean = true;
+  isNoAvailableAttributeSelected: Boolean = true;
 
   private isTableConfigOpen;
 
@@ -32,8 +34,25 @@ export class TableConfigComponent {
     } else {
       col.selected = false;
     }
+    this.checkIfNoColumnSelected();
   }
 
+  checkIfNoColumnSelected() {
+    this.isNoAvailableAttributeSelected = true;
+    this.isNoDisplayedAttributeSelected = true;
+    this.columns
+      .filter((col) => col.selected)
+      .forEach((col) => {
+        if (this.isNoAvailableAttributeSelected || this.isNoDisplayedAttributeSelected) {
+          if (col.available === true) {
+            this.isNoAvailableAttributeSelected = false;
+          }
+          if (col.display === true) {
+            this.isNoDisplayedAttributeSelected = false;
+          }
+        }
+      });
+  }
   /**
    * set display property true of selected cols
    * shows these column in table
@@ -80,6 +99,7 @@ export class TableConfigComponent {
    *  i.e. hidden columns
    */
   updateColumnIndex() {
+    this.checkIfNoColumnSelected();
     let index = 0;
     this.columns.forEach((col) => {
       if (col.display === true) {

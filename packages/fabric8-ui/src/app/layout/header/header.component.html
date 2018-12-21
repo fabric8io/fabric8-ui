@@ -1,109 +1,118 @@
-<div *ngIf="isGettingStartedPage || isAppLauncherPage; then showGettingStartedHeader else showHeader"></div>
+<div
+  *ngIf="isGettingStartedPage || isAppLauncherPage; then showGettingStartedHeader; else showHeader"
+></div>
 <ng-template #showGettingStartedHeader>
   <nav class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
-    <img src="../../../assets/images/codeready_toolchain_small.png" class="navbar-getting-started-logo" />
-     <!-- user profile dropdown -->
-        <ul id="getting_started_header_rightDropdown" class="nav navbar-nav navbar-right">
-          <li class="login-block">
-            <a *ngIf="!loggedInUser" (click)="login();">
-            <span class="login-block-logged-out-user">
-              <i id="getting_started_header_login" class="pficon pficon-user"></i>
+    <img
+      src="../../../assets/images/codeready_toolchain_small.png"
+      class="navbar-getting-started-logo"
+    />
+    <!-- user profile dropdown -->
+    <ul id="getting_started_header_rightDropdown" class="nav navbar-nav navbar-right">
+      <li class="login-block">
+        <a *ngIf="!loggedInUser" (click)="login()">
+          <span class="login-block-logged-out-user">
+            <i id="getting_started_header_login" class="pficon pficon-user"></i>
+          </span>
+          Log In
+        </a>
+      </li>
+      <li *ngIf="loggedInUser" dropdown class="pull-right dropdown user-dropdown-menu">
+        <a
+          class="user-dropdown dropdown-toggle"
+          title="{{ loggedInUser.attributes.fullName }}"
+          dropdownToggle
+        >
+          <div
+            *ngIf="loggedInUser"
+            id="getting_started_header_dropdownToggle2"
+            class="user-dropdown-items"
+          >
+            <span class="user-dropdown__user-icon">
+              <span *ngIf="!imgLoaded" class="pficon pficon-user"></span>
+              <img
+                (load)="onImgLoad()"
+                src="{{ loggedInUser.attributes.imageURL }}"
+                class="icon-user"
+                [ngClass]="{ show: imgLoaded, 'img-icon': imgLoaded, hide: !imgLoaded }"
+              />
             </span>
-              Log In
-            </a>
-          </li>
-          <li *ngIf="loggedInUser" dropdown class="pull-right dropdown user-dropdown-menu">
-            <a class="user-dropdown dropdown-toggle" title="{{loggedInUser.attributes.fullName}}" dropdownToggle>
-              <div *ngIf="loggedInUser" id="getting_started_header_dropdownToggle2" class="user-dropdown-items">
-              <span class="user-dropdown__user-icon">
-                <span *ngIf="!imgLoaded" class="pficon pficon-user"></span>
-                <img (load)="onImgLoad()" src="{{loggedInUser.attributes.imageURL}}" class="icon-user" [ngClass]="{'show' : imgLoaded,'img-icon' : imgLoaded, 'hide' : !imgLoaded}">
-              </span>
-              <span class="user-dropdown__username">{{loggedInUser.attributes.fullName}}</span>
-              <span class="caret"></span>
-            </div>
-            </a>
-            <ul class="dropdown-menu" *dropdownMenu>
-              <!--li class="divider"></li-->
-              <li id="getting_started_header_logout">
-                <a *ngIf="loggedInUser" (click)="logout();" class="pointer">
-                  Log Out
-                </a>
-              </li>
-            </ul>
+            <span class="user-dropdown__username">{{ loggedInUser.attributes.fullName }}</span>
+            <span class="caret"></span>
+          </div>
+        </a>
+        <ul class="dropdown-menu" *dropdownMenu>
+          <!--li class="divider"></li-->
+          <li id="getting_started_header_logout">
+            <a *ngIf="loggedInUser" (click)="logout()" class="pointer"> Log Out </a>
           </li>
         </ul>
+      </li>
+    </ul>
   </nav>
 </ng-template>
 <ng-template #showHeader>
-  <nav class="navbar navbar-default navbar-inverse navbar-pf navbar-fixed-top" role="navigation"
-       *ngIf="context">
+  <nav
+    class="navbar navbar-default navbar-inverse navbar-pf navbar-fixed-top"
+    role="navigation"
+    *ngIf="context"
+  >
     <div class="container-fluid">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" (click)="toggleState()">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
+          <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span>
+          <span class="icon-bar"></span> <span class="icon-bar"></span>
         </button>
       </div>
-      <div class="collapse navbar-collapse" [ngClass]="{ 'in' : isIn }">
+      <div class="collapse navbar-collapse" [ngClass]="{ in: isIn }">
         <ul class="nav navbar-nav">
           <li class="context dropdown recent-items-dropdown" dropdown *ngIf="loggedInUser">
-            <a class="recent-items-toggle io-recent-items-active dropdown-toggle" dropdownToggle data-toggle="tooltip" title="{{context.name}}">
+            <a
+              class="recent-items-toggle io-recent-items-active dropdown-toggle"
+              dropdownToggle
+              data-toggle="tooltip"
+              title="{{ context.name }}"
+            >
               <div id="header_dropdownToggle" class="recent-items-toggle-text">
-              <span class="nav-item-icon">
-                <span class=" {{context.type?.icon}}"></span>
-              </span>
-                <span>{{context.name}}</span>
-                <span class="nav-item-icon">
-                <span class="caret"></span>
-              </span>
+                <span class="nav-item-icon"> <span class=" {{ context.type?.icon }}"></span> </span>
+                <span>{{ context.name }}</span>
+                <span class="nav-item-icon"> <span class="caret"></span> </span>
               </div>
             </a>
             <!-- current Space and recent items dropdown -->
             <ul class="dropdown-menu recent-items" *dropdownMenu>
               <li class="recent-items-toggle" *ngFor="let m of recent">
-                <a class="recent-items-toggle-text-dropdown"
+                <a
+                  class="recent-items-toggle-text-dropdown"
                   [routerLink]="[m.path]"
                   *ngIf="m.path !== null && m.path != context.path"
-                  data-toggle="tooltip" title="{{m.name}}">
-                  <span class="nav-item-icon">
-                    <span class=" {{m.type.icon}}"></span>
-                  </span>
-                  <span>{{m.name}}</span>
+                  data-toggle="tooltip"
+                  title="{{ m.name }}"
+                >
+                  <span class="nav-item-icon"> <span class=" {{ m.type.icon }}"></span> </span>
+                  <span>{{ m.name }}</span>
                 </a>
                 <a *ngIf="m.path === null">
-                  <span class="nav-item-icon">
-                    <span class=" {{m.type.icon}}"></span>
-                  </span>
-                  <span>{{m.name}}</span>
+                  <span class="nav-item-icon"> <span class=" {{ m.type.icon }}"></span> </span>
+                  <span>{{ m.name }}</span>
                 </a>
               </li>
               <li class="divider"></li>
               <li class="header_createSpace">
                 <a class="create-space-anchor" (click)="showAddSpaceOverlay()">
-                  <span class="nav-item-icon">
-                    <i class="pficon pficon-add-circle-o"></i>
-                  </span>
-                    Create Space
+                  <span class="nav-item-icon"> <i class="pficon pficon-add-circle-o"></i> </span>
+                  Create Space
                 </a>
               </li>
               <li id="header_spaces">
-                <a [routerLink]="[loggedInUser.attributes.username,'_spaces']">
-                  <span class="nav-item-icon">
-                    <i class="fa fa-th"></i>
-                  </span>
-                  Spaces
+                <a [routerLink]="[loggedInUser.attributes.username, '_spaces']">
+                  <span class="nav-item-icon"> <i class="fa fa-th"></i> </span> Spaces
                 </a>
               </li>
               <li class="divider"></li>
               <li id="header_home">
                 <a [routerLink]="['_home']">
-                <span class="nav-item-icon">
-                  <i class="pficon pficon-home"></i>
-                </span>
-                  Home
+                  <span class="nav-item-icon"> <i class="pficon pficon-home"></i> </span> Home
                 </a>
               </li>
             </ul>
@@ -111,7 +120,13 @@
         </ul>
         <!-- user profile dropdown -->
         <ul id="header_rightDropdown" class="nav navbar-nav navbar-right">
-          <li id="header_documentation" dropdown class="dropdown icon-dropdown icon-dropdown-documentation" placement="top" tooltip="Documentation">
+          <li
+            id="header_documentation"
+            dropdown
+            class="dropdown icon-dropdown icon-dropdown-documentation"
+            placement="top"
+            tooltip="Documentation"
+          >
             <a class="dropdown-toggle" dropdownToggle>
               <span class="pficon pficon-help pficon-white"></span>
             </a>
@@ -119,9 +134,7 @@
               <div class="arrow"></div>
               <ul class="list-group">
                 <li class="list-group-item">
-                  <a href="https://docs.openshift.io" target="_blank">
-                    Documentation
-                  </a>
+                  <a href="https://docs.openshift.io" target="_blank"> Documentation </a>
                 </li>
                 <li id="header_createIssue" class="list-group-item">
                   <a href="https://github.com/openshiftio/openshift.io/issues" target="_blank">
@@ -129,80 +142,90 @@
                   </a>
                 </li>
                 <li id="header_loggedinChat" class="list-group-item">
-                  <a href="https://chat.openshift.io/developers/channels/town-square" target="top" class="pointer">
+                  <a
+                    href="https://chat.openshift.io/developers/channels/town-square"
+                    target="top"
+                    class="pointer"
+                  >
                     Chat with us
                   </a>
                 </li>
                 <li id="header_loggedinAbout" class="list-group-item">
-                  <a (click)="aboutModal.open()" class="pointer">
-                    About CodeReady Toolchain
-                  </a>
+                  <a (click)="aboutModal.open()" class="pointer"> About CodeReady Toolchain </a>
                 </li>
               </ul>
             </div>
           </li>
           <li class="login-block">
-            <a *ngIf="!loggedInUser" (click)="login();">
-            <span class="login-block-logged-out-user">
-              <i id="header_login" class="pficon pficon-user"></i>
-            </span>
+            <a *ngIf="!loggedInUser" (click)="login()">
+              <span class="login-block-logged-out-user">
+                <i id="header_login" class="pficon pficon-user"></i>
+              </span>
               Log In
             </a>
           </li>
           <li *ngIf="loggedInUser" dropdown class="pull-right dropdown user-dropdown-menu">
-            <a class="user-dropdown dropdown-toggle" title="{{loggedInUser.attributes.fullName}}" dropdownToggle>
+            <a
+              class="user-dropdown dropdown-toggle"
+              title="{{ loggedInUser.attributes.fullName }}"
+              dropdownToggle
+            >
               <div *ngIf="loggedInUser" id="header_dropdownToggle2" class="user-dropdown-items">
-              <span class="user-dropdown__user-icon">
-                <span *ngIf="!imgLoaded" class="pficon pficon-user"></span>
-                <img (load)="onImgLoad()" src="{{loggedInUser.attributes.imageURL}}" class="icon-user" [ngClass]="{'show' : imgLoaded,'img-icon' : imgLoaded, 'hide' : !imgLoaded}">
-              </span>
-              <span class="user-dropdown__username">{{loggedInUser.attributes.fullName}}</span>
-              <span class="caret"></span>
-            </div>
+                <span class="user-dropdown__user-icon">
+                  <span *ngIf="!imgLoaded" class="pficon pficon-user"></span>
+                  <img
+                    (load)="onImgLoad()"
+                    src="{{ loggedInUser.attributes.imageURL }}"
+                    class="icon-user"
+                    [ngClass]="{ show: imgLoaded, 'img-icon': imgLoaded, hide: !imgLoaded }"
+                  />
+                </span>
+                <span class="user-dropdown__username">{{ loggedInUser.attributes.fullName }}</span>
+                <span class="caret"></span>
+              </div>
             </a>
             <ul class="dropdown-menu" *dropdownMenu>
               <li id="header_loggedinProfile">
-                <a [routerLink]="[loggedInUser.attributes.username]">
-                  Profile
-                </a>
+                <a [routerLink]="[loggedInUser.attributes.username]"> Profile </a>
               </li>
               <li>
-                <a [routerLink]="[loggedInUser.attributes.username + '/_settings']">
-                  Settings
-                </a>
+                <a [routerLink]="[loggedInUser.attributes.username + '/_settings']"> Settings </a>
               </li>
               <li class="divider"></li>
               <li id="header_logout">
-                <a *ngIf="loggedInUser" (click)="logout();" class="pointer">
-                  Log Out
-                </a>
+                <a *ngIf="loggedInUser" (click)="logout()" class="pointer"> Log Out </a>
               </li>
             </ul>
           </li>
         </ul>
         <!-- secondary navigation for all sub-links -->
         <ul class="nav navbar-nav navbar-primary persistent-secondary">
-          <li *ngFor="let m of context?.type?.menus" [class.active]="m.active" [class.with-no-children]="(m.menus||[]).length===0">
+          <li
+            *ngFor="let m of context?.type?.menus"
+            [class.active]="m.active"
+            [class.with-no-children]="(m.menus || []).length === 0"
+          >
             <a [routerLink]="[m.fullPath]" *ngIf="!m.hide">
-            <span *ngIf="m.icon" class="nav-item-icon">
-              <span class="{{m.icon}}"></span>
-            </span>
-              <span *ngIf="m.name">{{m.name}}</span>
+              <span *ngIf="m.icon" class="nav-item-icon"> <span class="{{ m.icon }}"></span> </span>
+              <span *ngIf="m.name">{{ m.name }}</span>
             </a>
             <ul class="nav navbar-nav navbar-persistent" *ngIf="m.menus">
               <li *ngFor="let n of m.menus" [class.active]="n.active">
-                <a [routerLink]="[n.fullPath]" [queryParams]="plannerFollowQueryParams" *ngIf="!n.hide">
-                <span>
-                  {{n.name}}
-                </span>
+                <a
+                  [routerLink]="[n.fullPath]"
+                  [queryParams]="plannerFollowQueryParams"
+                  *ngIf="!n.hide"
+                >
+                  <span> {{ n.name }} </span>
                 </a>
               </li>
             </ul>
           </li>
         </ul>
-      </div> <!-- .navbar-collapse -->
-    </div> <!-- /.container-fluid -->
+      </div>
+      <!-- .navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
   </nav>
-  <fab-about-modal #aboutModal>
-  </fab-about-modal>
+  <fab-about-modal #aboutModal> </fab-about-modal>
 </ng-template>

@@ -1,10 +1,24 @@
-<div class="modal fade" bsModal #modalAddAppOverlay="bs-modal" tabindex="-1" role="dialog" aria-hidden="true"
-  [config]="{ keyboard: true }" (onHidden)="onHidden()" (onShown)="onShown()">
+<div
+  class="modal fade"
+  bsModal
+  #modalAddAppOverlay="bs-modal"
+  tabindex="-1"
+  role="dialog"
+  aria-hidden="true"
+  [config]="{ keyboard: true }"
+  (onHidden)="onHidden()"
+  (onShown)="onShown()"
+>
   <div class="modal-dialog f8-modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         Create an Application
-        <button type="button" class="close pull-right" aria-label="Close" (click)="hideAddAppOverlay()">
+        <button
+          type="button"
+          class="close pull-right"
+          aria-label="Close"
+          (click)="hideAddAppOverlay()"
+        >
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -16,62 +30,99 @@
           <div class="row f8-add-app-overlay__container">
             <section class="col-sm-6 f8-add-app-overlay__left-section">
               <form class="form" role="form" #appForm="ngForm">
-                <div class="alert alert-danger alert-dismissable" *ngIf="projectName && isProjectNameAvailable === false">
-                  <span class="pficon pficon-error-circle-o"></span>
-                  Application name is already used in your current Space. Please enter a new one.
+                <div
+                  class="alert alert-danger alert-dismissable"
+                  *ngIf="projectName && isProjectNameAvailable === false"
+                >
+                  <span class="pficon pficon-error-circle-o"></span> Application name is already
+                  used in your current Space. Please enter a new one.
                 </div>
-                <div class="col-sm-10" [ngClass]="{'has-error': projectName && isProjectNameValid === false}">
+                <div
+                  class="col-sm-10"
+                  [ngClass]="{ 'has-error': projectName && isProjectNameValid === false }"
+                >
                   <label class="f8-add-app-overlay__label" for="projectName">
-                    <span class="required">*</span>
-                    Name
+                    <span class="required">*</span> Name
                   </label>
-                  <input id="projectName" name="projectName" type="text" class="form-control code-imports__step_input" placeholder="Enter Application Name"
+                  <input
+                    id="projectName"
+                    name="projectName"
+                    type="text"
+                    class="form-control code-imports__step_input"
+                    placeholder="Enter Application Name"
                     #projectNameInput
-                    aria-label="Application Name Input" required
+                    aria-label="Application Name Input"
+                    required
                     [(ngModel)]="projectName"
                     [value]="projectName | lowercase"
                     (keyup)="validateProjectName()"
                     autocomplete="off"
                     afinput
-                    [autofocus]="true">
+                    [autofocus]="true"
+                  />
                   <p class="font-size-small f8-add-app-overlay__tip help-block">
-                    Name must contain 4-40 characters, contain only letters, numbers, hyphens,
-                    not start with a number, and not start or end with hyphens.
+                    Name must contain 4-40 characters, contain only letters, numbers, hyphens, not
+                    start with a number, and not start or end with hyphens.
                   </p>
                   <label class="f8-add-app-overlay__label">
-                    <span class="required">*</span>
-                    Select one of the following options
+                    <span class="required">*</span> Select one of the following options
                   </label>
-                  <div class="row card-pf card-pf-view card-pf-view-select card-pf-view-single-select f8-add-app-overlay__card"
-                    [ngClass]="{'active': importApp.checked}" (click)="updateLauncherFlowSelection('importapp')">
+                  <div
+                    class="row card-pf card-pf-view card-pf-view-select card-pf-view-single-select f8-add-app-overlay__card"
+                    [ngClass]="{ active: importApp.checked }"
+                    (click)="updateLauncherFlowSelection('importapp')"
+                  >
                     <div class="col-sm-1 f8-add-app-overlay__card-col-left">
-                      <input name="import" type="radio" [(ngModel)]="selectedFlow" value="importapp" #importApp required>
+                      <input
+                        name="import"
+                        type="radio"
+                        [(ngModel)]="selectedFlow"
+                        value="importapp"
+                        #importApp
+                        required
+                      />
                     </div>
                     <div class="col-sm-8 f8-add-app-overlay__card-col-middle">
                       <h5>Import an existing codebase</h5>
-                      <p>
-                        Use code you already have as the foundation for your new application.
-                      </p>
+                      <p>Use code you already have as the foundation for your new application.</p>
                     </div>
                     <div class="col-sm-3 f8-add-app-overlay__card-col-right">
-                      <img class="f8-add-app-overlay__image" src="../../../assets/images/import-application.png" alt="Import Application">
+                      <img
+                        class="f8-add-app-overlay__image"
+                        src="../../../assets/images/import-application.png"
+                        alt="Import Application"
+                      />
                     </div>
                   </div>
                   <h4 class="text-center">- OR -</h4>
-                  <div class="row card-pf card-pf-view card-pf-view-select card-pf-view-single-select f8-add-app-overlay__card margin-top-20"
-                    [ngClass]="{'active': createApp.checked}" (click)="updateLauncherFlowSelection('createapp')">
+                  <div
+                    class="row card-pf card-pf-view card-pf-view-select card-pf-view-single-select f8-add-app-overlay__card margin-top-20"
+                    [ngClass]="{ active: createApp.checked }"
+                    (click)="updateLauncherFlowSelection('createapp')"
+                  >
                     <div class="col-sm-1 f8-add-app-overlay__card-col-left">
-                      <input name="import" type="radio" [(ngModel)]="selectedFlow" value="createapp" #createApp required>
+                      <input
+                        name="import"
+                        type="radio"
+                        [(ngModel)]="selectedFlow"
+                        value="createapp"
+                        #createApp
+                        required
+                      />
                     </div>
                     <div class="col-sm-8 f8-add-app-overlay__card-col-middle">
                       <h5>Create a new codebase</h5>
                       <p>
-                        Choose from a variety of Red Hat certified templates to generate the foundation for
-                        a new application in the Openshift ecosystem.
+                        Choose from a variety of Red Hat certified templates to generate the
+                        foundation for a new application in the Openshift ecosystem.
                       </p>
                     </div>
                     <div class="col-sm-3 f8-add-app-overlay__card-col-right">
-                      <img class="f8-add-app-overlay__image" src="../../../assets/images/create-application.png" alt="Create Application">
+                      <img
+                        class="f8-add-app-overlay__image"
+                        src="../../../assets/images/create-application.png"
+                        alt="Create Application"
+                      />
                     </div>
                   </div>
                 </div>
@@ -80,38 +131,46 @@
             <section class="col-sm-6 f8-add-app-overlay__right-section">
               <h5>What happens when I create an application?</h5>
               <p>
-                When you create an application in CodeReady Toolchain, a new codebase
-                is created and stored in your git repository. CodeReady Toolchain also
-                generates a new pipeline and pipeline environments for the application
-                and starts an initial build.
+                When you create an application in CodeReady Toolchain, a new codebase is created and
+                stored in your git repository. CodeReady Toolchain also generates a new pipeline and
+                pipeline environments for the application and starts an initial build.
               </p>
               <p>
-                <a href="https://docs.openshift.io/getting-started-guide.html#creating_new_application-hello-world" target="_blank">
+                <a
+                  href="https://docs.openshift.io/getting-started-guide.html#creating_new_application-hello-world"
+                  target="_blank"
+                >
                   Learn more <i class="fa fa-external-link"></i>
                 </a>
               </p>
-              <br/>
+              <br />
               <h5>What is a codebase?</h5>
               <p>
-                A codebase is a generic representation of an application's code.
-                CodeReady Toolchain also stores application metadata for version control.
-                Since CodeReady Toolchain provides a hosted instance of Eclipse Che, you can
-                create a workspace for any application and use the browser-based IDE
-                and containerized development/testing environment to make updates to your codebase.
+                A codebase is a generic representation of an application's code. CodeReady Toolchain
+                also stores application metadata for version control. Since CodeReady Toolchain
+                provides a hosted instance of Eclipse Che, you can create a workspace for any
+                application and use the browser-based IDE and containerized development/testing
+                environment to make updates to your codebase.
               </p>
               <p>
-                <a href="https://docs.openshift.io/getting-started-guide.html#about_application_codebases" target="_blank">
+                <a
+                  href="https://docs.openshift.io/getting-started-guide.html#about_application_codebases"
+                  target="_blank"
+                >
                   Learn more <i class="fa fa-external-link"></i>
                 </a>
               </p>
-              <br/>
+              <br />
               <h5>When should I import a codebase?</h5>
               <p>
-                If you have existing code in a GitHub repository, you can choose the import
-                option and use that code as a foundation for an application in CodeReady Toolchain.
+                If you have existing code in a GitHub repository, you can choose the import option
+                and use that code as a foundation for an application in CodeReady Toolchain.
               </p>
               <p>
-                <a href="https://docs.openshift.io/getting-started-guide.html#importing-existing-project" target="_blank">
+                <a
+                  href="https://docs.openshift.io/getting-started-guide.html#importing-existing-project"
+                  target="_blank"
+                >
                   Learn more <i class="fa fa-external-link"></i>
                 </a>
               </p>
@@ -119,10 +178,24 @@
           </div>
         </div>
         <div class="modal-footer f8-add-app-overlay__modal-footer">
-          <button type="button" class="btn btn-default btn-lg" (click)="hideAddAppOverlay()">Cancel</button>
-          <button type="button" id="cancelImportsButton" class="btn btn-primary btn-lg margin-left-20"
-            [disabled]="!appForm.valid || selectedFlow === '' || !isProjectNameValid || !isProjectNameAvailable || navigationInProgress"
-            (click)="routeToLaunchApp()">Next <i *ngIf="navigationInProgress" class="pficon pficon-in-progress fa-spin"></i></button>
+          <button type="button" class="btn btn-default btn-lg" (click)="hideAddAppOverlay()">
+            Cancel
+          </button>
+          <button
+            type="button"
+            id="cancelImportsButton"
+            class="btn btn-primary btn-lg margin-left-20"
+            [disabled]="
+              !appForm.valid ||
+              selectedFlow === '' ||
+              !isProjectNameValid ||
+              !isProjectNameAvailable ||
+              navigationInProgress
+            "
+            (click)="routeToLaunchApp()"
+          >
+            Next <i *ngIf="navigationInProgress" class="pficon pficon-in-progress fa-spin"></i>
+          </button>
         </div>
       </div>
     </div>

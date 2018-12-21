@@ -2,10 +2,8 @@
   <div class="cards-pf">
     <div class="row row-cards-pf">
       <div class="col-xs-12 col-sm-4 col-md-2"></div>
-      <div class="col-xs-12 col-sm-4 col-md-3" *ngFor="let environment of environments | async">
-        <h4 class="env-card-title">
-          {{environment}}
-        </h4>
+      <div class="col-xs-12 col-sm-4 col-md-3" *ngFor="let environment of (environments | async)">
+        <h4 class="env-card-title">{{ environment }}</h4>
       </div>
     </div>
   </div>
@@ -14,12 +12,16 @@
       <div class="col-xs-6 col-sm-4 col-md-2">
         <h4 id="deploymentCardApplicationTitle">
           <a class="application-title" (click)="collapsed[application] = !collapsed[application]">
-            <span [ngClass]="collapsed[application] ? 'fa fa-angle-right' : 'fa fa-angle-down'"></span>&nbsp;&nbsp;{{application}}
+            <span
+              [ngClass]="collapsed[application] ? 'fa fa-angle-right' : 'fa fa-angle-down'"
+            ></span
+            >&nbsp;&nbsp;{{ application }}
           </a>
         </h4>
       </div>
-      <deployment-card class="col-xs-6 col-sm-4 col-md-3"
-        *ngFor="let environment of environments | async"
+      <deployment-card
+        class="col-xs-6 col-sm-4 col-md-3"
+        *ngFor="let environment of (environments | async)"
         [spaceId]="spaceId"
         [applicationId]="application"
         [environment]="environment"
@@ -34,19 +36,24 @@
     <div class="col-xs-6 col-sm-4 col-md-2">
       <div class="row row-cards-pf" *ngFor="let application of applications">
         <h4 class="not-deployed-application-title">
-          <a class="application-title-empty-state">
-            &nbsp;&nbsp;{{application}}
-          </a>
+          <a class="application-title-empty-state"> &nbsp;&nbsp;{{ application }} </a>
         </h4>
       </div>
     </div>
     <div class="deployments-empty-state col-sm-4 col-sm-offset-2">
-      <img src="../../../../../assets/images/deployments_emptystate_nodeployments.png"/>
+      <img src="../../../../../assets/images/deployments_emptystate_nodeployments.png" />
       <div class="deployments-empty-state-text">
-        <h2 class="deployments-empty-state-text-heading">None of your applications have been deployed yet.</h2>
+        <h2 class="deployments-empty-state-text-heading">
+          None of your applications have been deployed yet.
+        </h2>
         <p>
-          Check for upcoming deployments on the <a [routerLink]="[spacePath | async, 'create', 'pipelines']">Pipelines</a> page,
-          and use the <a [routerLink]="['/', username | async, '_settings', 'resources']">Resource Usage panel</a> to verify you have the space for another deployment.
+          Check for upcoming deployments on the
+          <a [routerLink]="[spacePath | async, 'create', 'pipelines']">Pipelines</a> page, and use
+          the
+          <a [routerLink]="['/', username | async, '_settings', 'resources']"
+            >Resource Usage panel</a
+          >
+          to verify you have the space for another deployment.
         </p>
       </div>
     </div>

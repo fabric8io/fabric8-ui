@@ -14,6 +14,7 @@ import { Component, EventEmitter, Output, ViewEncapsulation } from '@angular/cor
 })
 export class ContainerTogglerComponent {
   @Output() nextBtn = new EventEmitter();
+
   @Output() prevBtn = new EventEmitter();
 
   constructor() {}

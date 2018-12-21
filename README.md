@@ -4,11 +4,12 @@
 [![codecov](https://codecov.io/gh/fabric8io/fabric8-ui/branch/master/graph/badge.svg)](https://codecov.io/gh/fabric8io/fabric8-ui)
 
 ## Development environment
+
 ### Run fabric8-ui with remote backends
 
-You need to setup your shell to point to the right cluster so that it can talk to the required back end services like KeyCloak, WIT, Forge, OpenShift etc.  
+You need to setup your shell to point to the right cluster so that it can talk to the required back end services like KeyCloak, WIT, Forge, OpenShift etc.
 
-We provide various sample environments out of the box which make it easier to get started. They are all located as bash scripts in `environments`.  
+We provide various sample environments out of the box which make it easier to get started. They are all located as bash scripts in `environments`.
 
 The default one you should use when you want to develop on the console is to reuse openshift.io production cluster:
 
@@ -28,7 +29,7 @@ source environments/local-cluster.sh
 
 Requires `node` version 8.3.0 and `npm` 5.3.0. Consider using [Node Version Manager](https://github.com/creationix/nvm).
 
-Run `npm install`. 
+Run `npm install`.
 This will download all the required dependencies to be able to start the UI.
 
 Run `npm start`. This will start the UI with live reload enabled. Then navigate to <http://localhost:3000>.
@@ -38,27 +39,37 @@ Run `npm start`. This will start the UI with live reload enabled. Then navigate 
 We use [jest](https://github.com/facebook/jest) test loader because it's faster than karma execution.
 
 #### All tests
+
 ```
 npm run test
 ```
+
 > Note: the first execution of the test take longer, subsequent calls are cached and much faster.
 
 #### Watch mode
+
 If you want to run all test in a `feature-flag` folder in watch mode:
+
 ```
 npm run test -- feature-flag -- --watch=true
 ```
+
 > Note: You don't need to specify full path for the name of the test.
+
 #### Debug
+
 ```
 npm run test:debug
 ```
-or to debug a specific test: 
+
+or to debug a specific test:
+
 ```
 npm run test:debug -- feature-flag.service
 ```
-* Go to chrome: chrome://inspect
-* Let go the debugger and put debugger in your test.
+
+- Go to chrome: chrome://inspect
+- Let go the debugger and put debugger in your test.
 
 To debug in your prefer IDE consolt [Jest debugging documentation](https://jestjs.io/docs/en/troubleshooting#debugging-in-vs-code).
 
@@ -67,8 +78,11 @@ To debug in your prefer IDE consolt [Jest debugging documentation](https://jestj
 Run `ext install EditorConfig` to read the .editorconfig file
 
 ### Feature flag
+
 To learn how to toggle your work in progress development, read our [wiki page on fabric8-toggles](https://github.com/fabric8-ui/fabric8-ui/wiki/fabric8-toggles).
+
 ## HTML, CSS and Less
+
 | [Code Guidelines](https://fabric8-ui.github.io/fabric8-ux/code-guidelines)
 
 fabric8-ui uses HTML5 elements where appropriate, and practices
@@ -84,6 +98,7 @@ If you only want to make a change to a specific component, do so in that compone
 The file `osio.less` is imported into every component Less file using `@import (reference)`, so all files inside of the `/shared` directory will be used by each component.
 
 ## Code Quality
+
 fabric8-ui utilizes [stylelint](https://github.com/stylelint/stylelint) and [htmlhint](https://github.com/yaniswang/HTMLHint) to check the `less` and `html` code. As part of each linter, we include three files: `.stylelintrc`, `.stylelintignore` and `.htmlhintrc`.
 
 The `.stylelintrc` configuration file controls our configuration for the stylelinter, which only checks folders and files that are not included in the `.stylelintignore` file. This allows us to exclude certain areas of the application, as needed.
@@ -102,18 +117,20 @@ npm install htmlhint -g
 ```
 
 After installing stylelint and htmlhint globally, you can run the following commands:
-* `stylelint "**/*.less"`
+
+- `stylelint "**/*.less"`
 
 This will run stylelint against all `.less` files in fabric8-ui/src, using the `.stylelintrc` configuration file.
 
-* `htmlhint`
+- `htmlhint`
 
 This will run htmlhint against all `html` files in fabric8-ui/src, using the `.htmlhintrc` configuration file. This command **will not** ignore the files and folders dictated in the `webpack.common.js` file, leading to the possibility of errors being displayed that will not appear at build time.
 
 Alternatively, if you would like to check a subset of folders, or a specific file, you can do so by altering your htmlhint command:
-  ```
-    cat src/app/layout/header/header.component.html | htmlhint stdin
-  ```
+
+```
+  cat src/app/layout/header/header.component.html | htmlhint stdin
+```
 
 ## Integrations
 
@@ -129,7 +146,7 @@ new [Space](https://github.com/fabric8-ui/ngx-fabric8-wit/blob/master/src/app/mo
 
 ### UI integrations
 
-####  Notifications
+#### Notifications
 
 To send a notification to the user, the module should import [ngx-fabric8-wit](https://github.com/fabric8-ui/ngx-fabric8-wit)
 and inject the [Notifications](https://github.com/fabric8-ui/ngx-base/blob/master/src/app/notifications/notifications.ts)
@@ -149,12 +166,14 @@ Module not found: Error: Can't resolve 'C' in ...
 ```
 
 To address this, we can make the parent module 'A' be aware of the existence of 'C', by making changes in
+
 ```
 tsconfig.json
 ```
+
 of the parent module 'A'.
 
-Inside "compilerOptions", 
+Inside "compilerOptions",
 Add an object key, "baseUrl" which basically identifies the base of the project and all the other urls are relative to this.
 Add an object key, "paths" as below
 
@@ -190,7 +209,7 @@ versioning rules.
 
 ### Commit Message Format
 
-A commit message consists of a **header**, **body** and **footer**.  The header has a **type**, **scope** and **subject**:
+A commit message consists of a **header**, **body** and **footer**. The header has a **type**, **scope** and **subject**:
 
 ```
 <type>(<scope>): <subject>
@@ -207,11 +226,11 @@ to read on GitHub as well as in various git tools.
 
 ### Revert
 
-If the commit reverts a previous commit, it should begin with `revert: `, followed by the header of the reverted commit. In the body it should say: `This reverts commit <hash>.`, where the hash is the SHA of the commit being reverted.
+If the commit reverts a previous commit, it should begin with `revert:`, followed by the header of the reverted commit. In the body it should say: `This reverts commit <hash>.`, where the hash is the SHA of the commit being reverted.
 
 ### Type
 
-If the prefix is `fix`, `feat`,  or `perf`, it will always appear in the changelog.
+If the prefix is `fix`, `feat`, or `perf`, it will always appear in the changelog.
 
 Other prefixes are up to your discretion. Suggested prefixes are `docs`, `chore`, `style`, `refactor`, and `test` for non-changelog related tasks.
 
@@ -224,9 +243,9 @@ The scope could be anything specifying place of the commit change. For example `
 
 The subject contains succinct description of the change:
 
-* use the imperative, present tense: "change" not "changed" nor "changes"
-* don't capitalize first letter
-* no dot (.) at the end
+- use the imperative, present tense: "change" not "changed" nor "changes"
+- don't capitalize first letter
+- no dot (.) at the end
 
 ### Body
 
@@ -245,7 +264,6 @@ A detailed explanation can be found in this [document][commit-message-format].
 Based on https://github.com/angular/angular.js/blob/master/CONTRIBUTING.md#commit
 
 [commit-message-format]: https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y/edit#
-
 
 ### Examples
 
@@ -283,13 +301,12 @@ This reverts commit 667ecc1654a317a13331b17617d973392f415f02.
 
 Commitizen helps you craft correct commit messages. Install it using `npm install commitizen -g`. Then run `git cz` rather than `git commit`.
 
-
 ### Running End-to-End (E2E) Tests
 
-A set of E2E tests have been written to verify the operation of major features 
-such as the creation of a build pipeline. 
+A set of E2E tests have been written to verify the operation of major features
+such as the creation of a build pipeline.
 
-These E2E tests are configured to be run locally in a shell, locally in a docker container, 
+These E2E tests are configured to be run locally in a shell, locally in a docker container,
 and in a docker container in Centos CI. The tests can be run against a local or remote server by specifying
 the server's URL as a parameter to the tests.
 
@@ -306,16 +323,19 @@ npm run e2e
 ```
 
 To clean up the `fabric8-test` project:
+
 ```
 npm run e2e:clean
 ```
 
 To delete the e2e configuration file and re-prompt for all data:
+
 ```
 npm run e2e:reconfig
 ```
 
 To run the e2e tests using the last configuration without prompting:
+
 ```
 npm run e2e:last
 ```

@@ -16,7 +16,7 @@
       }
       aside {
         float: right;
-        width: ~"calc(e('45% - 30px'))"; // lesshint-disable-line
+        width: ~'calc(45% - 30px)';
         height: 100%;
         padding-left: (@grid-gutter-width/6);
         padding-right: (@grid-gutter-width/6);
@@ -40,7 +40,7 @@
     &-column {
       float: left;
       width: 100%;
-      height: ~"calc(e('100% - 30px'))"; // lesshint-disable-line
+      height: ~'calc(100% - 30px)';
       padding: (@grid-gutter-width/3);
       list-style: none;
       background-color: @color-pf-white;
@@ -54,5 +54,8 @@
     .fa {
       font-size: 16px;
     }
+    .btn-arrow {
+      margin-top: 10px;
+    }    
   }
 }

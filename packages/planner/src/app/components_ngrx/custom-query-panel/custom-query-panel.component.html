@@ -1,46 +1,48 @@
 <div class="f8-cf">
   <!-- Custom Filters -->
   <div class="f8-cf__hdr nohover">
-    <span class="dib fa fa-filter margin-right-15
+    <span
+      class="dib fa fa-filter margin-right-15
       padding-top-2 padding-bottom-3"
-      tooltip="{{sidePanelOpen ? '' : 'My Filters'}}"
-      placement="right"></span>
-    <p class="padding-0 margin-0"
-      [class.dib]="sidePanelOpen"
-      [class.hide]="!sidePanelOpen">
+      tooltip="{{ sidePanelOpen ? '' : 'My Filters' }}"
+      placement="right"
+    ></span>
+    <p class="padding-0 margin-0" [class.dib]="sidePanelOpen" [class.hide]="!sidePanelOpen">
       My Filters ({{ customQueries.length }})
     </p>
   </div>
-  <ul class="list-group"
-    [class.show]="sidePanelOpen"
-    [class.hide]="!sidePanelOpen">
-    <li class="f8-cf__list-type"
-      id="{{'cf-list-' + counter}}"
+  <ul class="list-group" [class.show]="sidePanelOpen" [class.hide]="!sidePanelOpen">
+    <li
+      class="f8-cf__list-type"
+      id="{{ 'cf-list-' + counter }}"
       *ngFor="let query of customQueries"
-      [class.f8-cf--selected]="query?.selected">
+      [class.f8-cf--selected]="query?.selected"
+    >
       <div class="dropdown-kebab-pf pull-right dropdown f8-cf-kebab" dropdown>
-        <button class="btn btn-link dropdown-toggle"
+        <button
+          class="btn btn-link dropdown-toggle"
           type="button"
           aria-haspopup="true"
           aria-expanded="true"
           (click)="stopPropagation($event)"
-          id="{{'cf-kebab-' + counter}}"
-          dropdownToggle>
+          id="{{ 'cf-kebab-' + counter }}"
+          dropdownToggle
+        >
           <i class="fa fa-ellipsis-v"></i>
         </button>
         <ul class="dropdown-menu-right dropdown-menu" *dropdownMenu>
-          <li>
-            <a class="pointer" (click)="confirmCustomQueryDelete($event, query)">
-              Delete
-            </a>
-          </li>
+          <li><a class="pointer" (click)="confirmCustomQueryDelete($event, query)"> Delete </a></li>
         </ul>
       </div>
-      <a class="f8-cf__list-type-link"
+      <a
+        class="f8-cf__list-type-link"
         [routerLink]="getRouterLink()"
         [attr.data-id]="query.id"
-        [queryParams]="addRemoveQueryParams(query.attributes.fields)">
-          <span class="db" title="{{ query.attributes.title }}">{{ query.attributes.title  | truncate : 15 }}</span>
+        [queryParams]="addRemoveQueryParams(query.attributes.fields)"
+      >
+        <span class="db" title="{{ query.attributes.title }}">{{
+          query.attributes.title | truncate: 15
+        }}</span>
       </a>
     </li>
   </ul>

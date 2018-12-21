@@ -9,7 +9,7 @@ import { SlideOutPanelComponent } from './slide-out-panel.component';
 describe('Slide out component - ', () => {
   let comp: SlideOutPanelComponent;
   let fixture: ComponentFixture<SlideOutPanelComponent>;
-  let panelState: string = 'in';
+  const panelState = 'in';
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -29,21 +29,21 @@ describe('Slide out component - ', () => {
   }));
 
   it('should have a detail panel rendered', () => {
-    let elements = fixture.debugElement.queryAll(By.css('.detail-panel'));
-    expect(elements.length).toBe(1);
+    const elements = fixture.debugElement.queryAll(By.css('.detail-panel'));
+    expect(elements).toHaveLength(1);
   });
 
   it('should have a header and icon', () => {
-    let detailId = fixture.debugElement.query(By.css('.detail-id'));
+    const detailId = fixture.debugElement.query(By.css('.detail-id'));
     expect(detailId).not.toBeNull();
     expect(detailId.nativeElement.textContent.trim().slice(0, 'Name'.length)).toBe('name');
 
-    let icon = fixture.debugElement.queryAll(By.css('.fa-calendar'));
-    expect(icon.length).toBe(1);
+    const icon = fixture.debugElement.queryAll(By.css('.fa-calendar'));
+    expect(icon).toHaveLength(1);
   });
 
-  it('should update the drawer when clicked', function() {
-    let result = fixture.debugElement.query(By.css('.detail-close'));
+  it('should update the drawer when clicked', () => {
+    const result = fixture.debugElement.query(By.css('.detail-close'));
 
     expect(comp.panelState).toBe('in');
     result.triggerEventHandler('click', {});
@@ -52,13 +52,13 @@ describe('Slide out component - ', () => {
     expect(comp.panelState).toBe('out');
   });
 
-  it('should notify when the panel is closed', function(done) {
+  it('should notify when the panel is closed', (done) => {
     comp.panelStateChange.subscribe((data: string) => {
       expect(data).toBe('out');
       done();
     });
 
-    let result = fixture.debugElement.query(By.css('.detail-close'));
+    const result = fixture.debugElement.query(By.css('.detail-close'));
 
     expect(comp.panelState).toBe('in');
     result.triggerEventHandler('click', {});

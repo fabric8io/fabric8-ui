@@ -17,8 +17,14 @@
 <ng-template #loading>
   <div class="card-pf">
     <div class="card-pf-body resource-card-body">
-      <loading-utilization-bar [resourceTitle]="'CPU'" [resourceUnit]="'Cores'"></loading-utilization-bar>
-      <loading-utilization-bar [resourceTitle]="'Memory'" [resourceUnit]="'MB'"></loading-utilization-bar>
+      <loading-utilization-bar
+        [resourceTitle]="'CPU'"
+        [resourceUnit]="'Cores'"
+      ></loading-utilization-bar>
+      <loading-utilization-bar
+        [resourceTitle]="'Memory'"
+        [resourceUnit]="'MB'"
+      ></loading-utilization-bar>
     </div>
   </div>
 </ng-template>

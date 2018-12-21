@@ -1,16 +1,20 @@
 <div class="toolbar-header f8-toolbar">
   <pfng-toolbar
-      [config]="toolbarConfig"
-      [viewTemplate]="addAreasTemplate"
-      (onFilterChange)="filterChange($event)"
-      (onSortChange)="sortChange($event)">
+    [config]="toolbarConfig"
+    [viewTemplate]="addAreasTemplate"
+    (onFilterChange)="filterChange($event)"
+    (onSortChange)="sortChange($event)"
+  >
     <ng-template #addAreasTemplate>
       <span
-        class="with-cursor-pointer" placement="top" tooltip="Add Areas"
-        *ngIf="userOwnsSpace"  (click)="addArea($event)">
+        class="with-cursor-pointer"
+        placement="top"
+        tooltip="Add Areas"
+        *ngIf="userOwnsSpace"
+        (click)="addArea($event)"
+      >
         <span class="add-codebase-tooltip">
-          <i class="pficon pficon-add-circle-o margin-top-4"></i>
-          Add Areas
+          <i class="pficon pficon-add-circle-o margin-top-4"></i> Add Areas
         </span>
       </span>
     </ng-template>

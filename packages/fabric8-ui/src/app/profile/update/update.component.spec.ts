@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { Logger, Notifications, NotificationType } from 'ngx-base';
 import { Contexts, WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
-import { Observable, of, throwError as observableThrowError } from 'rxjs';
+import { of, throwError as observableThrowError } from 'rxjs';
 import { GettingStartedService } from '../../getting-started/services/getting-started.service';
 import { GitHubService } from '../../space/create/codebases/services/github.service';
 import { CopyService } from '../services/copy.service';
@@ -76,6 +76,12 @@ describe('UpdateComponent', () => {
       component.advancedForm.dirty = false;
       let result: boolean = component.isUpdateProfileDisabled;
       expect(result).toBeFalsy();
+    });
+
+    it('should be true if bio is invalid is invalid', () => {
+      component.bioInvalid = true;
+      let result: boolean = component.isUpdateProfileDisabled;
+      expect(result).toBeTruthy();
     });
 
     it('should be true if at least one of the urls is invalid', () => {

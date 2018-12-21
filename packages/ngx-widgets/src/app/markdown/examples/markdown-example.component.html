@@ -13,7 +13,8 @@
         [renderedText]="renderedText | safe: 'html'"
         (onSaveClick)="onSaveOrPreview($event)"
         (showPreview)="onSaveOrPreview($event)"
-        (onCloseClick)="closeClicked()">
+        (onCloseClick)="closeClicked()"
+      >
       </f8-markdown>
     </div>
   </div>
@@ -27,7 +28,8 @@
         [placeholder]="'This is placeholder text'"
         [allowEmptySave]="false"
         (onSaveClick)="onSaveOrPreview($event)"
-        (showPreview)="onSaveOrPreview($event)">
+        (showPreview)="onSaveOrPreview($event)"
+      >
       </f8-markdown>
     </div>
   </div>
@@ -40,7 +42,8 @@
         [renderedText]="''"
         [placeholder]="'This is placeholder text'"
         (onSaveClick)="onSaveOrPreview($event)"
-        (showPreview)="onSaveOrPreview($event)">
+        (showPreview)="onSaveOrPreview($event)"
+      >
       </f8-markdown>
     </div>
   </div>
@@ -53,12 +56,11 @@
         [editAllow]="allowEdit"
         [renderedText]="renderedTextNoEdit"
         (onSaveClick)="onSaveOrPreview($event)"
-        (showPreview)="onSaveOrPreview($event)">
+        (showPreview)="onSaveOrPreview($event)"
+      >
       </f8-markdown>
     </div>
-    <div class="col-xs-2">
-      <button (click)="allowEdit=!allowEdit">Allow edit</button>
-    </div>
+    <div class="col-xs-2"><button (click)="allowEdit = !allowEdit">Allow edit</button></div>
   </div>
 
   <label> Undefined value </label>
@@ -68,7 +70,8 @@
         [rawText]="undefined"
         [renderedText]="undefined"
         (onSaveClick)="onSaveOrPreviewUndefined($event)"
-        (showPreview)="onSaveOrPreviewUndefined($event)">
+        (showPreview)="onSaveOrPreviewUndefined($event)"
+      >
       </f8-markdown>
     </div>
   </div>
