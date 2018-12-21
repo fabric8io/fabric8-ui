@@ -2,18 +2,12 @@
   <div class="col-xs-12">
     <div class="row resource-header-colour list-group-item">
       <div>
-        <div class="col-xs-6">
-          <b>Projects</b>
+        <div class="col-xs-6"><b>Projects</b></div>
+        <div class="col-xs-3">
+          <div class="resources-center-text resources-remove-margin"><b>CPU</b> (Cores)</div>
         </div>
         <div class="col-xs-3">
-          <div class="resources-center-text resources-remove-margin">
-            <b>CPU</b> (Cores)
-          </div>
-        </div>
-        <div class="col-xs-3">
-          <div class="resources-center-text resources-remove-margin">
-            <b>Memory</b> (GB)
-          </div>
+          <div class="resources-center-text resources-remove-margin"><b>Memory</b> (GB)</div>
         </div>
       </div>
     </div>
@@ -22,17 +16,50 @@
         <div class="list-group-item">
           <div class="list-view-pf-main-info">
             <div class="col-xs-6">
-              <resource-status-icon class="resource-description" [iconClass]="proj.iconClass"></resource-status-icon>
-              <p class="resource-description resources-remove-margin">{{ proj.environmentStat.attributes.name }}</p>
+              <resource-status-icon
+                class="resource-description"
+                [iconClass]="proj.iconClass"
+              ></resource-status-icon>
+              <p class="resource-description resources-remove-margin">
+                {{ proj.environmentStat.attributes.name }}
+              </p>
             </div>
-            <div class="col-xs-3" [class.resources-full-capacity]="proj.environmentStat.attributes.quota.cpucores.used == proj.environmentStat.attributes.quota.cpucores.quota">
-              <div class="resources-center-text resources-remove-margin" *ngIf="proj.environmentStat.attributes.quota.cpucores; else loadingMsg">
-                <b>{{ proj.environmentStat.attributes.quota.cpucores.used }}|{{ proj.environmentStat.attributes.quota.cpucores.quota }}</b> used
+            <div
+              class="col-xs-3"
+              [class.resources-full-capacity]="
+                proj.environmentStat.attributes.quota.cpucores.used ==
+                proj.environmentStat.attributes.quota.cpucores.quota
+              "
+            >
+              <div
+                class="resources-center-text resources-remove-margin"
+                *ngIf="proj.environmentStat.attributes.quota.cpucores; else loadingMsg"
+              >
+                <b
+                  >{{ proj.environmentStat.attributes.quota.cpucores.used }}|{{
+                    proj.environmentStat.attributes.quota.cpucores.quota
+                  }}</b
+                >
+                used
               </div>
             </div>
-            <div class="col-xs-3" [class.resources-full-capacity]="proj.environmentStat.attributes.quota.memory.used == proj.environmentStat.attributes.quota.memory.quota">
-              <div class="resources-center-text resources-remove-margin" *ngIf="proj.environmentStat.attributes.quota.memory; else loadingMsg">
-                <b>{{ proj.environmentStat.attributes.quota.memory.used }}|{{ proj.environmentStat.attributes.quota.memory.quota }}</b> used
+            <div
+              class="col-xs-3"
+              [class.resources-full-capacity]="
+                proj.environmentStat.attributes.quota.memory.used ==
+                proj.environmentStat.attributes.quota.memory.quota
+              "
+            >
+              <div
+                class="resources-center-text resources-remove-margin"
+                *ngIf="proj.environmentStat.attributes.quota.memory; else loadingMsg"
+              >
+                <b
+                  >{{ proj.environmentStat.attributes.quota.memory.used }}|{{
+                    proj.environmentStat.attributes.quota.memory.quota
+                  }}</b
+                >
+                used
               </div>
             </div>
           </div>
@@ -43,6 +70,4 @@
 </div>
 
 <!-- Loading message template -->
-<ng-template #loadingMsg>
-  <p>Loading...</p>
-</ng-template>
+<ng-template #loadingMsg> <p>Loading...</p> </ng-template>

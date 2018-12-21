@@ -1,73 +1,64 @@
-<div class="f8-itr-entry"
+<div
+  class="f8-itr-entry"
   [ngClass]="calcDepth(iteration)"
   [class.f8-itr-entry--selected]="iteration.selected"
-  [attr.data-id]="iteration.id">
-  <span  class="fa margin-right-15"
-    *ngIf="!iteration.hasChildren"></span>
+  [attr.data-id]="iteration.id"
+>
+  <span class="fa margin-right-15" *ngIf="!iteration.hasChildren"></span>
   <span
     class="fa fa-angle-right margin-right-15"
     (click)="toggleChildrenDisplay(iteration)"
-    *ngIf="iteration.hasChildren && !iteration.showChildren">
+    *ngIf="iteration.hasChildren && !iteration.showChildren"
+  >
   </span>
   <span
     class="fa fa-angle-down margin-right-15"
     (click)="toggleChildrenDisplay(iteration)"
-    *ngIf="iteration.hasChildren && iteration.showChildren">
+    *ngIf="iteration.hasChildren && iteration.showChildren"
+  >
   </span>
-  <div class="dropdown-kebab-pf pull-right dropdown"
-    dropdown>
-    <button class="btn btn-link dropdown-toggle"
+  <div class="dropdown-kebab-pf pull-right dropdown" dropdown>
+    <button
+      class="btn btn-link dropdown-toggle"
       type="button"
       aria-haspopup="true"
       aria-expanded="true"
-      dropdownToggle>
+      dropdownToggle
+    >
       <i class="fa fa-ellipsis-v"></i>
     </button>
-    <ul class="dropdown-menu-right dropdown-menu"
-      *dropdownMenu>
+    <ul class="dropdown-menu-right dropdown-menu" *dropdownMenu>
       <li>
-        <a class="pointer" (click)="editIteration(iteration)"
-          >
-          Edit {{ iteration.name | truncate : 15 }}
+        <a class="pointer" (click)="editIteration(iteration)">
+          Edit {{ iteration.name | truncate: 15 }}
         </a>
       </li>
       <li *ngIf="iteration.isActive">
-        <a class="pointer"
-          (click)="closeIteration(iteration)">
-            Close
-        </a>
+        <a class="pointer" (click)="closeIteration(iteration)"> Close </a>
       </li>
-      <li>
-        <a class="pointer"
-          (click)="createIteration(iteration)">
-            Create child
-        </a>
-      </li>
+      <li><a class="pointer" (click)="createIteration(iteration)"> Create child </a></li>
     </ul>
   </div>
   <a
     class="f8-itr__header"
     [routerLink]="[]"
     [queryParams]="addRemoveQueryParams(iteration.id)"
-    title="{{iteration.name}}">
+    title="{{ iteration.name }}"
+  >
     <div class="truncate padding-right-15">
-      <span class="f8-itr-name truncate">{{ iteration.name | truncate : 15 }}</span>
-      <span class="active-tag"
-      *ngIf="iteration.isActive" >[Active]</span>
+      <span class="f8-itr-name truncate">{{ iteration.name | truncate: 15 }}</span>
+      <span class="active-tag" *ngIf="iteration.isActive">[Active]</span>
     </div>
     <div class="f8-itr-status">
       <span *ngIf="iteration.endAt && iteration.startAt">
-        {{ (iteration.startAt | date:longDate) }}
-        -
-        {{ (iteration.endAt | date:longDate) }}
+        {{ iteration.startAt | date: longDate }} - {{ iteration.endAt | date: longDate }}
       </span>
       <span *ngIf="iteration.startAt && !iteration.endAt">
-        Start Date: {{ (iteration.startAt | date:longDate) }}
+        Start Date: {{ iteration.startAt | date: longDate }}
       </span>
       <span *ngIf="iteration.endAt && !iteration.startAt">
-        End Date: {{ (iteration.endAt | date:longDate)}}
+        End Date: {{ iteration.endAt | date: longDate }}
       </span>
     </div>
   </a>
 </div>
-

@@ -1,68 +1,71 @@
 <div class="f8-dynamic-control" *ngIf="showField">
-  <label class="pull-left padding-left-15 control-label padding-top-0"
-    [attr.for]="fieldValue.key">
-    {{ fieldValue.field.label | truncate:15 }}
+  <label class="pull-left padding-left-15 control-label padding-top-0" [attr.for]="fieldValue.key">
+    {{ fieldValue.field.label | truncate: 15 }}
   </label>
   <div class="f8-dynamic-control-content">
-    <span *ngIf="loadingField"
-      class="spinner spinner-sm spinner-inline">
-    </span>
+    <span *ngIf="loadingField" class="spinner spinner-sm spinner-inline"> </span>
     <div *ngIf="!loadingField">
-
       <f8-inlineinput
         class="dynamic-integer-field"
-        *ngIf="fieldValue.field.type.kind==='integer' || fieldValue.field.type.kind==='string'|| fieldValue.field.type.kind==='float'"
+        *ngIf="
+          fieldValue.field.type.kind === 'integer' ||
+          fieldValue.field.type.kind === 'string' ||
+          fieldValue.field.type.kind === 'float'
+        "
         [disabled]="!editAllow"
         [type]="fieldValue.field.type.kind"
         [value]="fieldValue.value"
         (onSave)="saveInputField($event)"
-        [placeholder]="fieldValue.field.label">
+        [placeholder]="fieldValue.field.label"
+      >
       </f8-inlineinput>
 
       <!-- workitemtype field type: dropdown -->
       <common-selector
-        *ngIf="fieldValue.field.type.kind==='enum'"
+        *ngIf="fieldValue.field.type.kind === 'enum'"
         [allowUpdate]="editAllow"
         [headerText]="fieldValue.field.label + ' dropdown'"
         [items]="dropdownMenuItems"
         [selectedItems]="dropdownSelectedItems"
         class="dynamic-enum-dropdown"
-        (onCloseSelector)="onChangeDropdown($event)">
+        (onCloseSelector)="onChangeDropdown($event)"
+      >
       </common-selector>
 
       <!-- workitemtype field type: boolean -->
       <common-selector
-        *ngIf="fieldValue.field.type.kind==='boolean'"
+        *ngIf="fieldValue.field.type.kind === 'boolean'"
         [noValueLabel]="'None'"
         [allowUpdate]="editAllow"
         [headerText]="fieldValue.field.label + ' dropdown'"
         [items]="dropdownMenuItems"
         [selectedItems]="dropdownSelectedItems"
         class="dynamic-boolean-dropdown"
-        (onCloseSelector)="onChangeDropdown($event)">
+        (onCloseSelector)="onChangeDropdown($event)"
+      >
       </common-selector>
-
 
       <!-- workitemtype field type: markup -->
       <f8-markdown
         #markup
-        *ngIf="fieldValue.field.type.kind==='markup'"
+        *ngIf="fieldValue.field.type.kind === 'markup'"
         [editAllow]="editAllow"
         [rawText]="fieldValue?.value?.content"
         [renderedText]="fieldValue?.value?.rendered"
         (onSaveClick)="markupUpdate($event)"
         (showPreview)="showPreview($event)"
-        (onClickOut)="$event ? markup.closeClick() : ''">
+        (onClickOut)="$event ? markup.closeClick() : ''"
+      >
       </f8-markdown>
 
       <!-- workitemtype field type: instant (datetime) -->
-      <div class="f8-dynamic-control-datepicker"
-        *ngIf="fieldValue.field.type.kind==='instant'">
-      <my-date-picker
-        [options]="datePickerOptions"
-        [selDate]="dateValue"
-        (dateChanged)="onDateChanged($event)"
-        placeholder="Set Date"></my-date-picker>
+      <div class="f8-dynamic-control-datepicker" *ngIf="fieldValue.field.type.kind === 'instant'">
+        <my-date-picker
+          [options]="datePickerOptions"
+          [selDate]="dateValue"
+          (dateChanged)="onDateChanged($event)"
+          placeholder="Set Date"
+        ></my-date-picker>
       </div>
 
       <!-- TODO: -->
@@ -91,26 +94,26 @@
           )">
       </span> -->
 
-      <button class="btn btn-lg btn-primary detail-action-btn"
+      <button
+        class="btn btn-lg btn-primary detail-action-btn"
         type="button"
         *ngIf="isButtonsVisible()"
-        (click)="save()">
+        (click)="save()"
+      >
         <span class="fa fa-check"></span>
       </button>
-      <button class="btn btn-lg btn-default detail-action-btn"
+      <button
+        class="btn btn-lg btn-default detail-action-btn"
         type="button"
         *ngIf="isButtonsVisible()"
-        (click)="cancel()">
+        (click)="cancel()"
+      >
         <span class="pficon pficon-close"></span>
       </button>
     </div>
   </div>
-  <div class="errorMessage"
-    *ngIf="!isValid()">
+  <div class="errorMessage" *ngIf="!isValid()">
     {{ fieldValue.field.label }} is not given or not in the right format.
   </div>
-  <div class="errorMessage"
-    *ngIf="error">
-    Error on {{ fieldValue.field.label }}: {{ error }}.
-  </div>
+  <div class="errorMessage" *ngIf="error">Error on {{ fieldValue.field.label }}: {{ error }}.</div>
 </div>

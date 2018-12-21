@@ -6,19 +6,29 @@
         <h1>Edit Booster Catalog</h1>
         <div class="form-group">
           <label for="boosterGitRef" class="control-label">Booster ref</label>
-          <div [ngClass]="{'has-error': boosterGitRefInvalid}">
-            <input type="text" class="form-control" id="boosterGitRef" name="boosterGitRef"
-                   placeholder="Booster catalog git ref"
-                   [(ngModel)]="boosterGitRef">
+          <div [ngClass]="{ 'has-error': boosterGitRefInvalid }">
+            <input
+              type="text"
+              class="form-control"
+              id="boosterGitRef"
+              name="boosterGitRef"
+              placeholder="Booster catalog git ref"
+              [(ngModel)]="boosterGitRef"
+            />
           </div>
         </div>
         <div class="form-group">
           <label for="boosterGitRepo" class="control-label">Booster repo</label>
-          <div [ngClass]="{'has-error': boosterGitRepoInvalid}">
-            <input type="url" class="form-control" id="boosterGitRepo" name="boosterGitRepo"
-                   placeholder="Booster catalog git repository URL"
-                   [(ngModel)]="boosterGitRepo"
-                   (change)="boosterGitRepoValidate()">
+          <div [ngClass]="{ 'has-error': boosterGitRepoInvalid }">
+            <input
+              type="url"
+              class="form-control"
+              id="boosterGitRepo"
+              name="boosterGitRepo"
+              placeholder="Booster catalog git repository URL"
+              [(ngModel)]="boosterGitRepo"
+              (change)="boosterGitRepoValidate()"
+            />
           </div>
         </div>
       </div>
@@ -26,33 +36,63 @@
       <div class="col-xs-12 col-sm-4">
         <h1>Edit Tenant Template Version</h1>
         <div class="form-group">
-          <label for="templatesRepoBlob" class="control-label">Git Blob SHA the templates should be downloaded from (mandatory)</label>
-          <div [ngClass]="{'has-error': templatesRepoBlobInvalid}">
-            <input type="text" class="form-control" id="templatesRepoBlob" name="templatesRepoBlob"
-                   placeholder="Repository blob SHA"
-                   [(ngModel)]="templatesRepoBlob">
+          <label for="templatesRepoBlob" class="control-label"
+            >Git Blob SHA the templates should be downloaded from (mandatory)</label
+          >
+          <div [ngClass]="{ 'has-error': templatesRepoBlobInvalid }">
+            <input
+              type="text"
+              class="form-control"
+              id="templatesRepoBlob"
+              name="templatesRepoBlob"
+              placeholder="Repository blob SHA"
+              [(ngModel)]="templatesRepoBlob"
+            />
           </div>
         </div>
         <div class="form-group">
-          <label for="templatesRepo" class="control-label">Repository URL (default is <code>https://github.com/fabric8-services/fabric8-tenant</code>)</label>
-          <div [ngClass]="{'has-error': templatesRepoInvalid}">
-            <input type="text" class="form-control" id="templatesRepo" name="templatesRepo"
-                   placeholder="Repository URL"
-                   [(ngModel)]="templatesRepo"
-                   (change)="templatesRepoValidate()">
+          <label for="templatesRepo" class="control-label"
+            >Repository URL (default is
+            <code>https://github.com/fabric8-services/fabric8-tenant</code>)</label
+          >
+          <div [ngClass]="{ 'has-error': templatesRepoInvalid }">
+            <input
+              type="text"
+              class="form-control"
+              id="templatesRepo"
+              name="templatesRepo"
+              placeholder="Repository URL"
+              [(ngModel)]="templatesRepo"
+              (change)="templatesRepoValidate()"
+            />
           </div>
         </div>
         <div class="form-group">
-          <label for="templatesRepoDir" class="control-label">Templates directory in the repository (default is <code>environment/templates/</code>)</label>
-          <div [ngClass]="{'has-error': templatesRepoDirInvalid}">
-            <input type="url" class="form-control" id="templatesRepoDir" name="templatesRepoDir" placeholder="Templates directory" [(ngModel)]="templatesRepoDir">
+          <label for="templatesRepoDir" class="control-label"
+            >Templates directory in the repository (default is
+            <code>environment/templates/</code>)</label
+          >
+          <div [ngClass]="{ 'has-error': templatesRepoDirInvalid }">
+            <input
+              type="url"
+              class="form-control"
+              id="templatesRepoDir"
+              name="templatesRepoDir"
+              placeholder="Templates directory"
+              [(ngModel)]="templatesRepoDir"
+            />
           </div>
         </div>
         <div class="form-group">
           <label for="updateTenant" class="control-label">Auto-update your tenant?</label>
           <div>
-            <input type="checkbox" class="form-control" id="updateTenant" name="updateTenant"
-                   [(ngModel)]="updateTenant">
+            <input
+              type="checkbox"
+              class="form-control"
+              id="updateTenant"
+              name="updateTenant"
+              [(ngModel)]="updateTenant"
+            />
           </div>
         </div>
       </div>
@@ -61,18 +101,27 @@
   <div class="profile-bar">
     <div class="profile-bar-buttons col-xs-12">
       <div class="center-block">
-        <button id="saveButton"
-                class="btn btn-primary btn-update btn-lg col-auto ml-auto"
-                [disabled]="isUpdateProfileDisabled"
-                (click)="updateProfile()">Save and Update Tenant
+        <button
+          id="saveButton"
+          class="btn btn-primary btn-update btn-lg col-auto ml-auto"
+          [disabled]="isUpdateProfileDisabled"
+          (click)="updateProfile()"
+        >
+          Save and Update Tenant
         </button>
-        <button id="clearButton"
-                class="btn btn-default btn-update btn-lg col-auto md-auto"
-                (click)="resetProfile()">Clear Values
+        <button
+          id="clearButton"
+          class="btn btn-default btn-update btn-lg col-auto md-auto"
+          (click)="resetProfile()"
+        >
+          Clear Values
         </button>
-        <button id="cancelButton"
-                class="btn btn-default btn-lg col-auto mr-auto"
-                (click)="routeToProfile()">Cancel
+        <button
+          id="cancelButton"
+          class="btn btn-default btn-lg col-auto mr-auto"
+          (click)="routeToProfile()"
+        >
+          Cancel
         </button>
       </div>
     </div>

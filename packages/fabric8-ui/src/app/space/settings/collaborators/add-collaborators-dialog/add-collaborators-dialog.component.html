@@ -1,6 +1,4 @@
-<div class="modal-header">
-  <b>Add collaborators</b>
-</div>
+<div class="modal-header"><b>Add collaborators</b></div>
 
 <div class="modal-body">
   <form role="form" #collaboratorsForm="ngForm" (ngSubmit)="addCollaborators()" novalidate>
@@ -20,51 +18,79 @@
             [hideSelected]="true"
             [loading]="loading"
             [typeahead]="searchTerm"
-            [(ngModel)]="selectedCollaborators" required>
+            [(ngModel)]="selectedCollaborators"
+            required
+          >
             <ng-template ng-typetosearch-tmp>
-              <div class="ng-option disabled">
-                  Start typing...
-              </div>
+              <div class="ng-option disabled">Start typing...</div>
             </ng-template>
             <ng-template ng-notfound-tmp let-searchTerm="searchTerm">
-              <div class="ng-option disabled">
-                No user found for "{{searchTerm}}"
-              </div>
+              <div class="ng-option disabled">No user found for "{{ searchTerm }}"</div>
             </ng-template>
             <ng-template ng-loadingtext-tmp let-searchTerm="searchTerm">
-              <div class="ng-option disabled">
-                Fetching users for "{{searchTerm}}"
-              </div>
+              <div class="ng-option disabled">Fetching users for "{{ searchTerm }}"</div>
             </ng-template>
             <ng-template ng-label-tmp let-item="item" let-clear="clear">
-                <span *ngIf="(item.attributes.imageURL !== undefined && item.attributes.imageURL.length !== 0); then showImageUrl else defaultImageUrl"></span>
-                <ng-template #showImageUrl>
-                  <span class="ng-value-label">
-                    <img [src]="item.attributes.imageURL" class="icon-user" width="20px" height="20px">
-                    {{item.attributes.fullName}} ({{item.attributes.username}})
-                  </span>
-                </ng-template>
-                <ng-template #defaultImageUrl>
-                  <span class="ng-value-label">
-                    <img src="../../../../../assets/images/profile-user.png" class="icon-user" width="20px" height="20px">
-                    {{item.attributes.fullName}} ({{item.attributes.username}})
-                  </span>
-                </ng-template>
-                <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
-            </ng-template>
-
-            <ng-template ng-option-tmp let-item="item">
-              <span *ngIf="(item.attributes.imageURL !== undefined && item.attributes.imageURL.length !== 0); then showImageUrl else defaultImageUrl"></span>
+              <span
+                *ngIf="
+                  item.attributes.imageURL !== undefined && item.attributes.imageURL.length !== 0;
+                  then showImageUrl;
+                  else defaultImageUrl
+                "
+              ></span>
               <ng-template #showImageUrl>
                 <span class="ng-value-label">
-                  <img [src]="item.attributes.imageURL" class="icon-user" width="20px" height="20px">
-                  {{item.attributes.fullName}} ({{item.attributes.username}})
+                  <img
+                    [src]="item.attributes.imageURL"
+                    class="icon-user"
+                    width="20px"
+                    height="20px"
+                  />
+                  {{ item.attributes.fullName }} ({{ item.attributes.username }})
                 </span>
               </ng-template>
               <ng-template #defaultImageUrl>
                 <span class="ng-value-label">
-                  <img src="../../../../../assets/images/profile-user.png" class="icon-user" width="20px" height="20px">
-                  {{item.attributes.fullName}} ({{item.attributes.username}})
+                  <img
+                    src="../../../../../assets/images/profile-user.png"
+                    class="icon-user"
+                    width="20px"
+                    height="20px"
+                  />
+                  {{ item.attributes.fullName }} ({{ item.attributes.username }})
+                </span>
+              </ng-template>
+              <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+            </ng-template>
+
+            <ng-template ng-option-tmp let-item="item">
+              <span
+                *ngIf="
+                  item.attributes.imageURL !== undefined && item.attributes.imageURL.length !== 0;
+                  then showImageUrl;
+                  else defaultImageUrl
+                "
+              ></span>
+              <ng-template #showImageUrl>
+                <span class="ng-value-label">
+                  <img
+                    [src]="item.attributes.imageURL"
+                    class="icon-user"
+                    width="20px"
+                    height="20px"
+                  />
+                  {{ item.attributes.fullName }} ({{ item.attributes.username }})
+                </span>
+              </ng-template>
+              <ng-template #defaultImageUrl>
+                <span class="ng-value-label">
+                  <img
+                    src="../../../../../assets/images/profile-user.png"
+                    class="icon-user"
+                    width="20px"
+                    height="20px"
+                  />
+                  {{ item.attributes.fullName }} ({{ item.attributes.username }})
                 </span>
               </ng-template>
             </ng-template>
@@ -75,12 +101,14 @@
     <div class="modal-footer">
       <div class="add-footer">
         <div>
-          <button class="btn btn-default margin-right-5" type="button" (click)="cancel()">Cancel</button>
-          <button class="btn btn-primary" [disabled]="!collaboratorsForm.form.valid" type="submit">Add</button>
+          <button class="btn btn-default margin-right-5" type="button" (click)="cancel()">
+            Cancel
+          </button>
+          <button class="btn btn-primary" [disabled]="!collaboratorsForm.form.valid" type="submit">
+            Add
+          </button>
         </div>
       </div>
     </div>
   </form>
-
 </div>
-

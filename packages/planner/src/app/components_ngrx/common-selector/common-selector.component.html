@@ -10,33 +10,24 @@
   (onSelect)="onSelect($event)"
   (onSearch)="onSearch($event)"
   (onOpen)="onOpen($event)"
-  (onClose)="onClose($event)">
+  (onClose)="onClose($event)"
+>
   <ng-template #toggleButtonRef>
-    <span
-      [class.toggle]="allowUpdate"
-      [class.active]="isOpen"
-      [class.disable]="!allowUpdate">
-      <span
-        class="dropdown-toggle"
-        *ngFor="let item of _selectedItemsBackup">
-        <i *ngIf="item?.icon"
-          [ngClass]="['margin-right-10', item.icon]"></i>
+    <span [class.toggle]="allowUpdate" [class.active]="isOpen" [class.disable]="!allowUpdate">
+      <span class="dropdown-toggle" *ngFor="let item of _selectedItemsBackup">
+        <i *ngIf="item?.icon" [ngClass]="['margin-right-10', item.icon]"></i>
         {{ item.value | truncate: toggleTruncate }}
       </span>
-      <span
-        class="dropdown-toggle"
-        *ngIf="!_selectedItemsBackup.length">
-        {{ noValueLabel }}
-      </span>
-      <span
-        [class.fa-angle-up]="isOpen"
-        [class.fa-angle-down]="!isOpen"
-        class="fa"></span>
+      <span class="dropdown-toggle" *ngIf="!_selectedItemsBackup.length"> {{ noValueLabel }} </span>
+      <span [class.fa-angle-up]="isOpen" [class.fa-angle-down]="!isOpen" class="fa"></span>
     </span>
   </ng-template>
   <ng-template #dropdownItem let-value="value" let-description="description" let-icon="icon">
     <i *ngIf="icon" [ngClass]="['margin-right-10', icon]"></i>
-    <span class="item-value" [innerHTML]="value | truncate: itemTruncate | almSearchHighlight: searchValue">
+    <span
+      class="item-value"
+      [innerHTML]="value | truncate: itemTruncate | almSearchHighlight: searchValue"
+    >
     </span>
     <span class="item-desc margin-left-10">{{ description }}</span>
   </ng-template>

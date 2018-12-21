@@ -1,9 +1,8 @@
-<header>
-  <alm-app-header></alm-app-header>
-</header>
+<header><alm-app-header></alm-app-header></header>
 <pfng-toast-notification-list
-    [notifications]="notifications.current"
-    (onActionSelect)="handleAction($event)">
+  [notifications]="notifications.current"
+  (onActionSelect)="handleAction($event)"
+>
 </pfng-toast-notification-list>
 
 <!-- Create new space modal -->
@@ -22,5 +21,8 @@
 
 <!-- Github connection warning modal -->
 <ng-template #connectToGithubModal>
-  <pfng-empty-state [config]="disconnectedStateConfig" (onActionSelect)="connectToGithub($event)"></pfng-empty-state>
+  <pfng-empty-state
+    [config]="disconnectedStateConfig"
+    (onActionSelect)="connectToGithub($event)"
+  ></pfng-empty-state>
 </ng-template>

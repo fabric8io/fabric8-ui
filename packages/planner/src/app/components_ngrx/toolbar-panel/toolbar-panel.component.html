@@ -5,77 +5,101 @@
     [viewTemplate]="addTemplate"
     (onFilterChange)="filterChange($event)"
     (onFilterFieldSelect)="selectFilterType($event)"
-    (onFilterTypeAhead)="filterQueries($event)">
+    (onFilterTypeAhead)="filterQueries($event)"
+  >
   </pfng-toolbar>
 </div>
-<div class="f8-filters">  
-  <span class="dib margin-right-10"
-    *ngIf="activeFilterFromSidePane !== ''">
+<div class="f8-filters">
+  <span class="dib margin-right-10" *ngIf="activeFilterFromSidePane !== ''">
     <strong>{{ totalCount | async }}</strong> in {{ activeFilterFromSidePanel }}
   </span>
-  <div class="f8-filters--active"
-    *ngIf="activeFilters.length">
+  <div class="f8-filters--active" *ngIf="activeFilters.length">
     <ul class="list-inline">
       <li *ngFor="let filter of activeFilters">
         <span class="active-filter label label-info">
           {{ filter.field }}: {{ filter.displayValue }}
           <span
             class="margin-left-5 pficon pficon-close pointer"
-            (click)="isFilterSaveOpen=false; removeFilter(filter)">
+            (click)="isFilterSaveOpen = false; removeFilter(filter)"
+          >
           </span>
         </span>
       </li>
     </ul>
-    <a class="pointer"
-      *ngIf="activeFilters.length > 1"
-      (click)="removeAllFilters()">
+    <a class="pointer" *ngIf="activeFilters.length > 1" (click)="removeAllFilters()">
       Clear all filters
     </a>
-    <div class="dropdown-kebab-pf dropdown save-filter-dropdown"
-      [autoClose]="false" #filterSaveDropdown
+    <div
+      class="dropdown-kebab-pf dropdown save-filter-dropdown"
+      [autoClose]="false"
+      #filterSaveDropdown
       [isOpen]="isFilterSaveOpen"
       (isOpenChange)="saveFilterDropdownChange($event)"
-      dropdown>
-      <a dropdownToggle class="save-filters margin-left-10"
-        *ngIf="activeFilters.length > 0 && showSaveFilterButton">
-          Save
+      dropdown
+    >
+      <a
+        dropdownToggle
+        class="save-filters margin-left-10"
+        *ngIf="activeFilters.length > 0 && showSaveFilterButton"
+      >
+        Save
       </a>
-      <div *dropdownMenu class="dropdown-menu-{{dropdownPlacement}} dropdown-menu">
+      <div *dropdownMenu class="dropdown-menu-{{ dropdownPlacement }} dropdown-menu">
         <aside>
-          <i class="db text-right fa fa-close btn btn-link"
-            (click)="closeFilterSave(filterSaveInp)"></i>
+          <i
+            class="db text-right fa fa-close btn btn-link"
+            (click)="closeFilterSave(filterSaveInp)"
+          ></i>
         </aside>
         <div>
-          <input class="form-control ng-pristine ng-valid ng-touched"
-          (keyup.enter)="saveFilters(filterSaveInp)"
-          #filterSaveInp/>
+          <input
+            class="form-control ng-pristine ng-valid ng-touched"
+            (keyup.enter)="saveFilters(filterSaveInp)"
+            #filterSaveInp
+          />
         </div>
         <div class="save-filter-action">
-          <button class="btn btn-primary pull-right margin-left-5 save-cq-btn"
+          <button
+            class="btn btn-primary pull-right margin-left-5 save-cq-btn"
             (click)="saveFilters(filterSaveInp)"
-            [disabled]="!filterSaveInp.value">Save</button>
-          <button class="btn pull-right margin-right-5 cancel-cq-btn" 
-            (click)="closeFilterSave(filterSaveInp)">Cancel</button>
+            [disabled]="!filterSaveInp.value"
+          >
+            Save
+          </button>
+          <button
+            class="btn pull-right margin-right-5 cancel-cq-btn"
+            (click)="closeFilterSave(filterSaveInp)"
+          >
+            Cancel
+          </button>
         </div>
       </div>
     </div>
   </div>
 </div>
-<ng-template #actionsTemplate>
-</ng-template>
+<ng-template #actionsTemplate> </ng-template>
 <ng-template #addTemplate>
-  <input type="checkbox"
-    name="show completed" id="showCompleted"
+  <input
+    type="checkbox"
+    name="show completed"
+    id="showCompleted"
     [checked]="isShowCompletedOn"
     (change)="showCompletedToggle($event)"
-    [disabled]="isStateFilterSelected">
-  <label class="show-close__label checkbox-label"
+    [disabled]="isStateFilterSelected"
+  />
+  <label
+    class="show-close__label checkbox-label"
     for="showCompleted"
-    [class.inactive]="isStateFilterSelected">&nbsp;Show Completed</label>
+    [class.inactive]="isStateFilterSelected"
+    >&nbsp;Show Completed</label
+  >
 
-  <input type="checkbox"
+  <input
+    type="checkbox"
     [checked]="isShowTreeOn"
     (change)="showTreeToggle($event)"
-    name="Show Tree" id="showTree">
+    name="Show Tree"
+    id="showTree"
+  />
   <label class="show-tree__label checkbox-label" for="showTree">&nbsp;Show Tree</label>
 </ng-template>

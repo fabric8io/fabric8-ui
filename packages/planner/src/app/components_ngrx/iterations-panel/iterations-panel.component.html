@@ -2,56 +2,47 @@
 <div class="f8-itr">
   <!-- Active iteration -->
   <div class="f8-itr-hdr nohover">
-    <div class="f8-itr__add"
-      [class.show]="sidePanelOpen"
-      [class.hide]="!sidePanelOpen">
-      <a *ngIf="loggedIn && editEnabled"
+    <div class="f8-itr__add" [class.show]="sidePanelOpen" [class.hide]="!sidePanelOpen">
+      <a
+        *ngIf="loggedIn && editEnabled"
         class="text-right pointer"
-        (click)="modal.openCreateUpdateModal('create', null, $event);">
-        <i class="pficon-add-circle-o pull-right f8-itr__add-btn"
-          id="add-iteration-icon" placement="bottom"
-          tooltip="Add an Iteration"></i>
+        (click)="modal.openCreateUpdateModal('create', null, $event)"
+      >
+        <i
+          class="pficon-add-circle-o pull-right f8-itr__add-btn"
+          id="add-iteration-icon"
+          placement="bottom"
+          tooltip="Add an Iteration"
+        ></i>
       </a>
     </div>
-    <span class="dib fa fa-repeat margin-right-15
+    <span
+      class="dib fa fa-repeat margin-right-15
       padding-top-2 padding-bottom-3"
-      tooltip="{{sidePanelOpen ? '' : 'Active Iteration'}}"
-      placement="right">
+      tooltip="{{ sidePanelOpen ? '' : 'Active Iteration' }}"
+      placement="right"
+    >
     </span>
-    <p class="margin-0"
-      [class.dib]="sidePanelOpen"
-      [class.hide]="!sidePanelOpen">
-      Iterations
-  </p>
-    <infotip
-      [infotipText]="infotipText"
-      [class.dib]="sidePanelOpen"
-      [class.hide]="!sidePanelOpen">
+    <p class="margin-0" [class.dib]="sidePanelOpen" [class.hide]="!sidePanelOpen">Iterations</p>
+    <infotip [infotipText]="infotipText" [class.dib]="sidePanelOpen" [class.hide]="!sidePanelOpen">
     </infotip>
   </div>
-  <ul class="f8-itr__container"
-    [class.show]="sidePanelOpen"
-    [class.hide]="!sidePanelOpen">
-    <li class="active"
-      *ngFor="let iteration of activeIterations | async">
+  <ul class="f8-itr__container" [class.show]="sidePanelOpen" [class.hide]="!sidePanelOpen">
+    <li class="active" *ngFor="let iteration of (activeIterations | async)">
       <a
         [routerLinkActive]="'f8-itr--selected'"
-        [routerLink]="[]" [attr.data-id]="iteration.id"
+        [routerLink]="[]"
+        [attr.data-id]="iteration.id"
         [queryParams]="addRemoveQueryParams(iteration.id)"
-        title="{{ iteration.resolvedParentPath +
-          '/' + iteration.name }}">
-          <span id="{{ iteration.resolvedParentPath +
-              '/' + iteration.name }}">
-            {{iteration.resolvedParentPath +
-              '/' + iteration.name | truncate : -20   }}
-          </span>
-          <span class="fa pull-right margin-top-3"
-            [class.fa-check]="iteration.selected"></span>
-          <span
-            *ngIf="iteration.isActive"
-            class="active-tag pull-right margin-right-5">
-              [Active]
-          </span>
+        title="{{ iteration.resolvedParentPath + '/' + iteration.name }}"
+      >
+        <span id="{{ iteration.resolvedParentPath + '/' + iteration.name }}">
+          {{ iteration.resolvedParentPath + '/' + iteration.name | truncate: -20 }}
+        </span>
+        <span class="fa pull-right margin-top-3" [class.fa-check]="iteration.selected"></span>
+        <span *ngIf="iteration.isActive" class="active-tag pull-right margin-right-5">
+          [Active]
+        </span>
       </a>
     </li>
   </ul>
@@ -73,10 +64,12 @@
       </div>
     </form> -->
   <!-- Nested Iteration Display -->
-  <div class="f8-itr__list"
+  <div
+    class="f8-itr__list"
     [class.show]="sidePanelOpen"
     [class.hide]="!sidePanelOpen"
-    *ngIf="treeIterations | async as iterations">
+    *ngIf="(treeIterations | async) as iterations"
+  >
     <iteration-tree
       [iterationList]="iterations"
       [collection]="collection"
@@ -86,11 +79,11 @@
       [context]="context"
       (onEditIteration)="onEdit($event)"
       (onCloseIteration)="onClose($event)"
-      (onCreateIteration)="onCreateChild($event)">
+      (onCreateIteration)="onCreateChild($event)"
+    >
     </iteration-tree>
   </div>
 </div>
 <!-- Iteration End-->
 
-<fab-planner-iteration-modal #modal>
-</fab-planner-iteration-modal>
+<fab-planner-iteration-modal #modal> </fab-planner-iteration-modal>

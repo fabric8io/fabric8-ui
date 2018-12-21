@@ -6,15 +6,21 @@
           <h3>
             <b>
               <a class="resource-title" (click)="resourcesCollapsed = !resourcesCollapsed">
-                <span [ngClass]="resourcesCollapsed ? 'fa fa-angle-right' : 'fa fa-angle-down'"></span>&nbsp;&nbsp;Resource Usage
+                <span
+                  [ngClass]="resourcesCollapsed ? 'fa fa-angle-right' : 'fa fa-angle-down'"
+                ></span
+                >&nbsp;&nbsp;Resource Usage
               </a>
             </b>
           </h3>
         </div>
         <div [collapse]="resourcesCollapsed">
-          <div *ngIf="environments | async as environmentsList; else loading">
+          <div *ngIf="(environments | async) as environmentsList; else loading">
             <div class="col-xs-12 col-sm-4 col-md-3" *ngFor="let environment of environmentsList">
-              <resource-card [spaceId]="spaceId | async" [environment]="environment"></resource-card>
+              <resource-card
+                [spaceId]="spaceId | async"
+                [environment]="environment"
+              ></resource-card>
             </div>
           </div>
           <ng-template #loading>

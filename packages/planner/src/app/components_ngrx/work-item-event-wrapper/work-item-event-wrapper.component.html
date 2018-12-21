@@ -1,17 +1,14 @@
 <div class="f8-event" id="wi-event">
-  <ul class="f8-event-content nav nav-tabs nav-tabs-pf" 
-    id="wi-event-content" 
-    *ngIf="true">
+  <ul class="f8-event-content nav nav-tabs nav-tabs-pf" id="wi-event-content" *ngIf="true">
     <!-- Refactoring needed to toogle view -->
-    <li class="f8-toggle-caret" 
-      (click)="isCollapsedTimeline = !isCollapsedTimeline">
-      <i class="fa fa-icon" [ngClass]="{'fa-angle-right': isCollapsedTimeline,
-        'fa-angle-down': !isCollapsedTimeline}">
+    <li class="f8-toggle-caret" (click)="isCollapsedTimeline = !isCollapsedTimeline">
+      <i
+        class="fa fa-icon"
+        [ngClass]="{ 'fa-angle-right': isCollapsedTimeline, 'fa-angle-down': !isCollapsedTimeline }"
+      >
       </i>
     </li>
-    <li 
-      [class.active]="!isCollapsedTimeline" 
-      (click)="isCollapsedTimeline = !isCollapsedTimeline">
+    <li [class.active]="!isCollapsedTimeline" (click)="isCollapsedTimeline = !isCollapsedTimeline">
       <a>
         <span>Timeline</span>
         <ng-template #loading>
@@ -20,16 +17,10 @@
       </a>
     </li>
   </ul>
-  <div [collapse]="isCollapsedTimeline" 
-    *ngIf="(events | async).length > 0">
-    <work-item-event 
-      *ngFor="let event of events | async" 
-      [event]="event">
-    </work-item-event>
+  <div [collapse]="isCollapsedTimeline" *ngIf="(events | async).length > 0">
+    <work-item-event *ngFor="let event of (events | async)" [event]="event"> </work-item-event>
   </div>
-  <div [collapse]="isCollapsedTimeline" 
-    *ngIf="(events | async).length < 1">
-    <pfng-empty-state
-        [config]="emptyStateConfig"></pfng-empty-state>
+  <div [collapse]="isCollapsedTimeline" *ngIf="(events | async).length < 1">
+    <pfng-empty-state [config]="emptyStateConfig"></pfng-empty-state>
   </div>
 </div>

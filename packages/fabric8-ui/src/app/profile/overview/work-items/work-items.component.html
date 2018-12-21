@@ -3,29 +3,30 @@
     <div class="card-pf-heading f8-card-heading">
       <h2 class="card-pf-title">
         Work Items
-      <span class="work-item-dropdown" *ngIf="spaces.length !== 0">
-        <select class="form-control" size=0
-                [(ngModel)]="currentSpaceId"
-                (ngModelChange)="fetchWorkItems()"
-                onmousedown="if(this.options.length>10){this.size=10;}"
-                onchange="this.size=0;"
-                onblur="this.size=0;">
-          <option value="default">Select a space to work with...</option>
-          <option *ngFor="let space of spaces" [value]="space.id">
-            {{space.attributes.name}}
-          </option>
-        </select>
-      </span>
+        <span class="work-item-dropdown" *ngIf="spaces.length !== 0">
+          <select
+            class="form-control"
+            size="0"
+            [(ngModel)]="currentSpaceId"
+            (ngModelChange)="fetchWorkItems()"
+            onmousedown="if(this.options.length>10){this.size=10;}"
+            onchange="this.size=0;"
+            onblur="this.size=0;"
+          >
+            <option value="default">Select a space to work with...</option>
+            <option *ngFor="let space of spaces" [value]="space.id">
+              {{ space.attributes.name }}
+            </option>
+          </select>
+        </span>
       </h2>
     </div>
   </div>
   <div class="card-pf-body f8-card-body">
-    <div *ngIf="workItems.length === 0; then showBlankState else showWorkItems"></div>
+    <div *ngIf="workItems.length === 0; then showBlankState; else showWorkItems"></div>
     <ng-template #showBlankState>
       <div class="col-xs-12 f8-blank-slate-card">
-        <div class="f8-blank-slate-icon">
-          <i class="pficon pficon-info"></i>
-        </div>
+        <div class="f8-blank-slate-icon"><i class="pficon pficon-info"></i></div>
         <p>Work items reflect the work to be done within a space.</p>
         <p>Once you create a space or join a space, your work items will begin displaying here.</p>
       </div>
@@ -33,17 +34,35 @@
     <ng-template #showWorkItems>
       <div class="col-xs-12 f8-card-list">
         <ul class="list-group list-view-pf list-view-pf-view list-view-pf-striped">
-          <li class="list-group-item" *ngFor="let workItem of workItems | take: 6">
+          <li class="list-group-item" *ngFor="let workItem of (workItems | take: 6)">
             <div class="list-view-pf-main-info">
               <div class="list-view-pf-body">
                 <div class="list-view-pf-description">
                   <div class="list-group-item-text">
-                    <span almIcon [iconType]="workItem.attributes['system.state']" class="color-grey pull-left f8-list-group-item-icon"></span>
-                    <span class="color-grey pull-left fa {{workItem.relationships?.baseType?.data?.attributes?.icon}} f8-list-group-item-icon"></span>
-                    <span>{{workItem.attributes['system.number']}}</span>
+                    <span
+                      almIcon
+                      [iconType]="workItem.attributes['system.state']"
+                      class="color-grey pull-left f8-list-group-item-icon"
+                    ></span>
+                    <span
+                      class="color-grey pull-left fa {{
+                        workItem.relationships?.baseType?.data?.attributes?.icon
+                      }} f8-list-group-item-icon"
+                    ></span>
+                    <span>{{ workItem.attributes['system.number'] }}</span>
                     <span class="work-item-title" *ngIf="workItem.attributes">
-                      <a [routerLink]="['/', currentSpace.relationalData.creator.attributes.username, currentSpace.attributes.name, 'plan', 'detail', workItem.attributes['system.number']]" class="f8-list-group-item-link">
-                        {{workItem.attributes['system.title']}}
+                      <a
+                        [routerLink]="[
+                          '/',
+                          currentSpace.relationalData.creator.attributes.username,
+                          currentSpace.attributes.name,
+                          'plan',
+                          'detail',
+                          workItem.attributes['system.number']
+                        ]"
+                        class="f8-list-group-item-link"
+                      >
+                        {{ workItem.attributes['system.title'] }}
                       </a>
                     </span>
                   </div>

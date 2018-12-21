@@ -3,20 +3,14 @@
 </div>
 <div class="settings-nav" id="settings-options-nav" role="navigation">
   <ul class="nav nav-tabs nav-tabs-pf">
-    <li routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-      <a [routerLink]="['/' + loggedInUserName + '/_settings/']">
-        Connected Services
-      </a>
+    <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <a [routerLink]="['/' + loggedInUserName + '/_settings/']"> Connected Services </a>
     </li>
-    <li routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-      <a [routerLink]="['/' + loggedInUserName + '/_settings/feature-opt-in']">
-        Features Opt-in
-      </a>
+    <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <a [routerLink]="['/' + loggedInUserName + '/_settings/feature-opt-in']"> Features Opt-in </a>
     </li>
-    <li routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-      <a [routerLink]="['/' + loggedInUserName + '/_settings/resources']">
-        Resources
-      </a>
+    <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <a [routerLink]="['/' + loggedInUserName + '/_settings/resources']"> Resources </a>
     </li>
   </ul>
 </div>

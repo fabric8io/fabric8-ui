@@ -2,39 +2,56 @@
   <div class="card-pf-heading f8-card-heading">
     <h2 class="card-pf-title">
       Recent Pipelines
-      <span id="recent-pipelines-badge" class="badge f8-card-badge">{{buildConfigsCount}}</span>
+      <span id="recent-pipelines-badge" class="badge f8-card-badge">{{ buildConfigsCount }}</span>
     </h2>
   </div>
   <div class="card-pf-body f8-card-body">
-    <fabric8-loading-widget message="Please wait while we load your recent pipelines"
-                            *ngIf="loading"></fabric8-loading-widget>
-    <div class="f8-blank-slate-card blank-slate-recent-pipelines-card" *ngIf="!(buildConfigsCount) && !loading">
+    <fabric8-loading-widget
+      message="Please wait while we load your recent pipelines"
+      *ngIf="loading"
+    ></fabric8-loading-widget>
+    <div
+      class="f8-blank-slate-card blank-slate-recent-pipelines-card"
+      *ngIf="!buildConfigsCount && !loading"
+    >
       <h3>Pipelines reflect integration and deployment stages that code goes through</h3>
-      <p>
-        Pipelines display here when you commit and build your codebase.
-      </p>
+      <p>Pipelines display here when you commit and build your codebase.</p>
     </div>
-    <ul id="recent-pipelines-list" class="list-group" *ngIf="(buildConfigsCount) > 0 && !loading">
+    <ul id="recent-pipelines-list" class="list-group" *ngIf="buildConfigsCount > 0 && !loading">
       <li class="list-group-item" *ngFor="let buildconfig of buildConfigs">
         <div class="f8-card__pipeline-column">
-          <span class="{{buildconfig.iconStyle}} fa-spin" title="{{buildconfig.statusPhase}}" *ngIf="buildconfig.iconStyle === 'pficon-running'"></span>
-          <span class="{{buildconfig.iconStyle}}" title="{{buildconfig.statusPhase}}" *ngIf="buildconfig.iconStyle !== 'pficon-running'"></span>
-          <a id="spacehome-pipelines-title" [routerLink]="['/', contextPath, buildconfig.labels['space'], 'create', 'pipelines']"
-            class="f8-card__pipeline-column-name">
-            {{buildconfig.name}}
+          <span
+            class="{{ buildconfig.iconStyle }} fa-spin"
+            title="{{ buildconfig.statusPhase }}"
+            *ngIf="buildconfig.iconStyle === 'pficon-running'"
+          ></span>
+          <span
+            class="{{ buildconfig.iconStyle }}"
+            title="{{ buildconfig.statusPhase }}"
+            *ngIf="buildconfig.iconStyle !== 'pficon-running'"
+          ></span>
+          <a
+            id="spacehome-pipelines-title"
+            [routerLink]="['/', contextPath, buildconfig.labels['space'], 'create', 'pipelines']"
+            class="f8-card__pipeline-column-name"
+          >
+            {{ buildconfig.name }}
           </a>
           <span>|</span>
-          <a [href]="buildconfig.openShiftConsoleUrl" target="_blank" class="f8-card__pipeline-column-build">
-            Build #{{buildconfig.lastVersion}}
+          <a
+            [href]="buildconfig.openShiftConsoleUrl"
+            target="_blank"
+            class="f8-card__pipeline-column-build"
+          >
+            Build #{{ buildconfig.lastVersion }}
             <i class="fa fa-external-link" aria-hidden="true"></i>
           </a>
         </div>
         <div class="f8-card__pipeline-column-start">
-          Started: {{buildconfig.lastBuild?.creationTimestamp | date:'short'}}
+          Started: {{ buildconfig.lastBuild?.creationTimestamp | date: 'short' }}
         </div>
         <div class="f8-card__pipeline-column-status">
-          Status:
-          <b>{{buildconfig.statusPhase || 'Unknown'}}</b>
+          Status: <b>{{ buildconfig.statusPhase || 'Unknown' }}</b>
         </div>
       </li>
     </ul>
