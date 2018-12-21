@@ -7,21 +7,24 @@
   <div class="row">
     <div class="col-sm-12">
       <div class="form-group">
-        <alm-slide-out-panel (panelStateChange)="togglePanelState($event)" [panelState]="panelState" [itemName]="itemName" [itemIcon]="itemIcon">
+        <alm-slide-out-panel
+          (panelStateChange)="togglePanelState($event)"
+          [panelState]="panelState"
+          [itemName]="itemName"
+          [itemIcon]="itemIcon"
+        >
         </alm-slide-out-panel>
       </div>
     </div>
   </div>
   <div class="row">
-    <div class="col-md-12">
-      <label class="events-label">Panel state: </label>
-    </div>
+    <div class="col-md-12"><label class="events-label">Panel state: </label></div>
   </div>
   <div class="row">
     <div class="col-md-12">
       <input type="button" (click)="togglePanel()" value="Toggle Panel" />
-      <div>Item name: {{itemName}}</div>
-      <div>Panel open: {{panelState}}</div>
+      <div>Item name: {{ itemName }}</div>
+      <div>Panel open: {{ panelState }}</div>
     </div>
   </div>
 </div>

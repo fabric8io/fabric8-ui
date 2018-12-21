@@ -1,23 +1,41 @@
 <div id="pipelines" class="">
   <div class="toolbar-header-pipelines">
-    <pfng-toolbar [config]="toolbarConfig"
-                  [viewTemplate]="addOpenShiftConsoleLink"
-                  (onFilterChange)="filterChange($event)"
-                  (onSortChange)="sortChange($event)">
+    <pfng-toolbar
+      [config]="toolbarConfig"
+      [viewTemplate]="addOpenShiftConsoleLink"
+      (onFilterChange)="filterChange($event)"
+      (onSortChange)="sortChange($event)"
+    >
       <ng-template #addOpenShiftConsoleLink>
         <div class="openshift-links" placement="bottom">
-          <div class='pull-right dropdown-kebab-pf dropdown' dropdown>
-            <button class='btn btn-link pull-right dropdown-toggle' type='button'
-                    aria-haspopup='true' aria-expanded='true' dropdownToggle>
-              <span class='fa fa-ellipsis-v'></span>
+          <div class="pull-right dropdown-kebab-pf dropdown" dropdown>
+            <button
+              class="btn btn-link pull-right dropdown-toggle"
+              type="button"
+              aria-haspopup="true"
+              aria-expanded="true"
+              dropdownToggle
+            >
+              <span class="fa fa-ellipsis-v"></span>
             </button>
-            <ul class='dropdown-menu-right dropdown-menu' aria-labelledby='dropdownKebabRight9' role="menu" *dropdownMenu>
+            <ul
+              class="dropdown-menu-right dropdown-menu"
+              aria-labelledby="dropdownKebabRight9"
+              role="menu"
+              *dropdownMenu
+            >
               <li>
-                <a id="appLauncherAnchor" class="feature-anchor" (click)="showAddAppOverlay()">Add to Space</a>
+                <a id="appLauncherAnchor" class="feature-anchor" (click)="showAddAppOverlay()"
+                  >Add to Space</a
+                >
               </li>
               <li class="divider"></li>
-              <li [ngClass]="{'disabled': !consoleAvailable}">
-                <a [href]="openshiftConsoleUrl" *ngIf="consoleAvailable; else consoleDisabled" target="_blank">
+              <li [ngClass]="{ disabled: !consoleAvailable }">
+                <a
+                  [href]="openshiftConsoleUrl"
+                  *ngIf="consoleAvailable; else consoleDisabled"
+                  target="_blank"
+                >
                   Open in OpenShift Console
                 </a>
                 <ng-template #consoleDisabled>
@@ -37,10 +55,12 @@
     <div class="row">
       <div class="col-md-12">
         <div class="pipeline-list-view">
-          <fabric8-pipelines-list [pipelines]="pipelines" [loading]="false"></fabric8-pipelines-list>
+          <fabric8-pipelines-list
+            [pipelines]="pipelines"
+            [loading]="false"
+          ></fabric8-pipelines-list>
         </div>
       </div>
     </div>
   </div>
 </div>
-

@@ -1,54 +1,54 @@
-<div [class.f8-wi-container]="detailContext=='detail'">
-  <div class="f8-detail form-horizontal work-item-page"
-    id="wi-detail-form"
-    *ngIf="workItem">
+<div [class.f8-wi-container]="detailContext == 'detail'">
+  <div class="f8-detail form-horizontal work-item-page" id="wi-detail-form" *ngIf="workItem">
     <fieldset *ngIf="(workItem.typeObs | async) as type">
-      <div class="f8-detail__header"
-        #detailHeader>
-        <span
-          class="pficon-close pull-right close f8-detail--close"
-          (click)="closeDetail()">
+      <div class="f8-detail__header" #detailHeader>
+        <span class="pficon-close pull-right close f8-detail--close" (click)="closeDetail()">
         </span>
-        <div *ngIf="detailContext=='preview'">
+        <div *ngIf="detailContext == 'preview'">
           <div class="pull-left">
-            <f8-delete-workitem *ngIf="context === 'query'"
+            <f8-delete-workitem
+              *ngIf="context === 'query'"
               class="padding-right-5"
               (onDelete)="closeDetail()"
-              [workItem]="workItem">
+              [workItem]="workItem"
+            >
             </f8-delete-workitem>
             <b>#{{ workItem.number }}</b>
-            <span class="detail-created-date created-by"
-              *ngIf="workItem.id">
+            <span class="detail-created-date created-by" *ngIf="workItem.id">
               created by
-              <span id="preview_created_by"
-                *ngIf="workItem?.creatorObs | async; let creator">
-                {{ creator.name }}</span>
-              <span id="preview_created_at"
-                [innerHTML]="workItem.createdAt | almMomentTime"></span>
+              <span id="preview_created_by" *ngIf="(workItem?.creatorObs | async); let creator">
+                {{ creator.name }}</span
+              >
+              <span id="preview_created_at" [innerHTML]="workItem.createdAt | almMomentTime"></span>
             </span>
-            <a class="pull-right" style="padding-left: 120px"
-              [routerLink]="context === 'list' ? ['detail', workItem.number] : ['../', 'detail', workItem.number]"
-              [queryParams]="queryParams">
-              View full details
-              <span class="fa fa-list-alt"></span>
+            <a
+              class="pull-right"
+              style="padding-left: 120px"
+              [routerLink]="
+                context === 'list'
+                  ? ['detail', workItem.number]
+                  : ['../', 'detail', workItem.number]
+              "
+              [queryParams]="queryParams"
+            >
+              View full details <span class="fa fa-list-alt"></span>
             </a>
           </div>
         </div>
-        <div *ngIf="detailContext=='detail'">
+        <div *ngIf="detailContext == 'detail'">
           <f8-delete-workitem
             class="padding-right-5"
             (onDelete)="closeDetail()"
-            [workItem]="workItem">
+            [workItem]="workItem"
+          >
           </f8-delete-workitem>
           <b>#{{ workItem.number }}</b>
-          <span class="detail-created-date created-by"
-            *ngIf="workItem.id">
+          <span class="detail-created-date created-by" *ngIf="workItem.id">
             created by
-            <span id="preview_created_by"
-              *ngIf="workItem?.creatorObs | async; let creator">
-              {{ creator.name }}</span>
-            <span id="preview_created_at"
-              [innerHTML]="workItem.createdAt | almMomentTime"></span>
+            <span id="preview_created_by" *ngIf="(workItem?.creatorObs | async); let creator">
+              {{ creator.name }}</span
+            >
+            <span id="preview_created_at" [innerHTML]="workItem.createdAt | almMomentTime"></span>
           </span>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12 margin-top-15 padding-0">
@@ -59,7 +59,8 @@
               [disabled]="!workItem?.editable"
               [value]="workItem.title"
               (onSave)="saveTitle($event)"
-              [placeholder]="'Enter title'">
+              [placeholder]="'Enter title'"
+            >
             </f8-inlineinput>
           </div>
         </div>
@@ -68,22 +69,18 @@
       <div class="f8-detail__detail width-100" #detailContent>
         <div
           class="col-xs-12 col-sm-12 padding-v-15"
-          [class.f8-detail__detail-wrap]="detailContext=='detail'"
-          [class.col-md-7]="detailContext=='detail'"
-          [class.col-lg-7]="detailContext=='detail'"
-          [class.col-md-12]="detailContext=='preview'"
-          [class.col-lg-12]="detailContext=='preview'">
-
+          [class.f8-detail__detail-wrap]="detailContext == 'detail'"
+          [class.col-md-7]="detailContext == 'detail'"
+          [class.col-lg-7]="detailContext == 'detail'"
+          [class.col-md-12]="detailContext == 'preview'"
+          [class.col-lg-12]="detailContext == 'preview'"
+        >
           <!-- Work item type dropdown -->
           <div class="form-group">
             <section class="f8-detail__area">
-              <label class="pull-left padding-left-15 control-label">
-                Type
-              </label>
+              <label class="pull-left padding-left-15 control-label"> Type </label>
               <div class="f8-detail__content">
-                <span *ngIf="loadingTypes"
-                  class="spinner spinner-sm spinner-inline">
-                </span>
+                <span *ngIf="loadingTypes" class="spinner spinner-sm spinner-inline"> </span>
                 <common-selector
                   *ngIf="!loadingTypes"
                   class="type-dropdown"
@@ -92,7 +89,8 @@
                   [items]="workItemTypeSource | async"
                   [noValueLabel]="'None'"
                   [selectedItems]="selectedWorkItemTypes | async"
-                  (onCloseSelector)="updateType($event)">
+                  (onCloseSelector)="updateType($event)"
+                >
                 </common-selector>
               </div>
             </section>
@@ -106,9 +104,7 @@
                 {{ type.fields['system.state']?.label || 'Label' }}
               </label>
               <div class="f8-detail__content">
-                <span *ngIf="loadingStates"
-                  class="spinner spinner-sm spinner-inline">
-                </span>
+                <span *ngIf="loadingStates" class="spinner spinner-sm spinner-inline"> </span>
                 <common-selector
                   *ngIf="!loadingStates"
                   class="state-dropdown"
@@ -117,13 +113,13 @@
                   [items]="workItemStateSource | async"
                   [noValueLabel]="'None'"
                   [selectedItems]="selectedWorkItemStates | async"
-                  (onCloseSelector)="onChangeState($event)">
+                  (onCloseSelector)="onChangeState($event)"
+                >
                 </common-selector>
               </div>
             </section>
           </div>
           <!-- work-item state dropdown end -->
-
 
           <div class="form-group">
             <!-- assignee -->
@@ -131,24 +127,24 @@
               <label class="pull-left padding-left-15 control-label">
                 {{ type.fields['system.assignees']?.label || 'Label' }}
               </label>
-              <div class="f8-detail__content" #assignee >
-                <span *ngIf="loadingAssignees"
-                  class="spinner spinner-sm spinner-inline">
-                </span>
-                <f8-assignee *ngIf="!loadingAssignees"
+              <div class="f8-detail__content" #assignee>
+                <span *ngIf="loadingAssignees" class="spinner spinner-sm spinner-inline"> </span>
+                <f8-assignee
+                  *ngIf="!loadingAssignees"
                   [showFullName]="true"
-                  [assignees]="workItem?.assigneesObs | async">
+                  [assignees]="workItem?.assigneesObs | async"
+                >
                 </f8-assignee>
-                <div class="user-search"
-                  *ngIf="workItem?.editable">
-                    <assignee-selector
-                      [allUsers]="collaborators"
-                      [selectedAssignees]="workItem?.assigneesObs | async"
-                      [editAllow]="workItem?.editable"
-                      [loggedInUser]="loggedInUser"
-                      (onOpenSelector)="onAssigneeSelectorOpen($event)"
-                      (onCloseAssignee)="assignUser($event)">
-                    </assignee-selector>
+                <div class="user-search" *ngIf="workItem?.editable">
+                  <assignee-selector
+                    [allUsers]="collaborators"
+                    [selectedAssignees]="workItem?.assigneesObs | async"
+                    [editAllow]="workItem?.editable"
+                    [loggedInUser]="loggedInUser"
+                    (onOpenSelector)="onAssigneeSelectorOpen($event)"
+                    (onCloseAssignee)="assignUser($event)"
+                  >
+                  </assignee-selector>
                 </div>
               </div>
             </section>
@@ -160,9 +156,7 @@
                 {{ type.fields['system.area']?.label || 'Label' }}
               </label>
               <div class="f8-detail__content">
-                <span *ngIf="loadingArea"
-                  class="spinner spinner-sm spinner-inline">
-                </span>
+                <span *ngIf="loadingArea" class="spinner spinner-sm spinner-inline"> </span>
                 <common-selector
                   *ngIf="!loadingArea"
                   class="area-dropdown"
@@ -173,7 +167,8 @@
                   [selectedItems]="selectedAreas | async"
                   [itemTruncate]="-25"
                   [toggleTruncate]="1000"
-                  (onCloseSelector)="areaUpdated($event)">
+                  (onCloseSelector)="areaUpdated($event)"
+                >
                 </common-selector>
               </div>
             </section>
@@ -186,9 +181,7 @@
                 {{ type.fields['system.iteration']?.label || 'Label' }}
               </label>
               <div class="f8-detail__content">
-                <span *ngIf="loadingIteration"
-                  class="spinner spinner-sm spinner-inline">
-                </span>
+                <span *ngIf="loadingIteration" class="spinner spinner-sm spinner-inline"> </span>
                 <common-selector
                   *ngIf="!loadingIteration"
                   class="iteration-dropdown"
@@ -199,7 +192,8 @@
                   [selectedItems]="selectedIterations | async"
                   [itemTruncate]="-25"
                   [toggleTruncate]="1000"
-                  (onCloseSelector)="iterationUpdated($event)">
+                  (onCloseSelector)="iterationUpdated($event)"
+                >
                 </common-selector>
               </div>
             </section>
@@ -212,22 +206,22 @@
                 {{ type.fields['system.labels']?.label || 'Label' }}
               </label>
               <div class="f8-detail__content">
-                <span *ngIf="loadingLabels"
-                  class="spinner spinner-sm spinner-inline">
-                </span>
-                <f8-label *ngIf="!loadingLabels"
-                  [labels]='workItem?.labelsObs | async'
+                <span *ngIf="loadingLabels" class="spinner spinner-sm spinner-inline"> </span>
+                <f8-label
+                  *ngIf="!loadingLabels"
+                  [labels]="workItem?.labelsObs | async"
                   (onRemoveLabel)="removeLable($event)"
                   [allowDelete]="workItem?.editable"
-                  [context]="detailContext">
+                  [context]="detailContext"
+                >
                 </f8-label>
-                <div class="f8-detail__labels--selector"
-                  *ngIf="loggedIn">
+                <div class="f8-detail__labels--selector" *ngIf="loggedIn">
                   <label-selector
                     [allLabels]="labels"
                     [selectedLabels]="workItem?.labelsObs | async"
                     [allowUpdate]="workItem?.editable"
-                    (onCloseSelector)="updateLabels($event)">
+                    (onCloseSelector)="updateLabels($event)"
+                  >
                   </label-selector>
                 </div>
               </div>
@@ -237,19 +231,26 @@
           <!-- Description -->
           <div class="form-group">
             <section class="f8-detail__area">
-              <label class="pull-left padding-left-15 control-label">
-                Description
-              </label>
+              <label class="pull-left padding-left-15 control-label"> Description </label>
               <div class="f8-detail__content">
                 <f8-markdown
                   id="wi-desc-div"
                   [editAllow]="workItem?.editable"
-                  [rawText]="workItem.descriptionRendered!==null ? workItem.description : workItem.description.content"
-                  [renderedText]="(workItem.descriptionRendered!==null ? workItem.descriptionRendered : workItem.description.rendered) | safe: 'html'"
+                  [rawText]="
+                    workItem.descriptionRendered !== null
+                      ? workItem.description
+                      : workItem.description.content
+                  "
+                  [renderedText]="
+                    (workItem.descriptionRendered !== null
+                      ? workItem.descriptionRendered
+                      : workItem.description.rendered) | safe: 'html'
+                  "
                   (onSaveClick)="descUpdate($event)"
                   (showPreview)="showPreview($event)"
                   (onClickOut)="$event ? descMarkdown.closeClick() : ''"
-                  #descMarkdown>
+                  #descMarkdown
+                >
                 </f8-markdown>
               </div>
             </section>
@@ -257,45 +258,47 @@
 
           <div class="dynamic-fields-wrap">
             <!-- Extra fields Start -->
-            <div class="form-group margin-bottom-0"
-              *ngFor="let field of dynamicKeyValueFields">
+            <div class="form-group margin-bottom-0" *ngFor="let field of dynamicKeyValueFields">
               <alm-dynamic-field
                 class="db"
                 [keyValueField]="field"
                 [editAllow]="workItem?.editable"
-                (onUpdate)="dynamicFieldUpdated($event)">
+                (onUpdate)="dynamicFieldUpdated($event)"
+              >
               </alm-dynamic-field>
             </div>
             <!-- Extra fields End -->
           </div>
         </div>
 
-        <div class="col-xs-12 col-sm-12 padding-0"
-          [class.f8-detail__detail-wrap--right]="detailContext=='detail'"
-          [class.f8-detail__detail-wrap]="detailContext=='detail'"
-          [class.col-md-5]="detailContext=='detail'"
-          [class.col-lg-5]="detailContext=='detail'"
-          [class.col-md-12]="detailContext=='preview'"
-          [class.col-lg-12]="detailContext=='preview'">
+        <div
+          class="col-xs-12 col-sm-12 padding-0"
+          [class.f8-detail__detail-wrap--right]="detailContext == 'detail'"
+          [class.f8-detail__detail-wrap]="detailContext == 'detail'"
+          [class.col-md-5]="detailContext == 'detail'"
+          [class.col-lg-5]="detailContext == 'detail'"
+          [class.col-md-12]="detailContext == 'preview'"
+          [class.col-lg-12]="detailContext == 'preview'"
+        >
           <work-item-link
             [context]="context"
             [detailContext]="detailContext"
             [workItem]="workItem"
             [loggedIn]="loggedIn"
-            (onLinkClick)="setWorkItem($event.number)">
+            (onLinkClick)="setWorkItem($event.number)"
+          >
           </work-item-link>
           <work-item-comment-wrapper
             [workItem]="workItem"
             [loggedInUser]="loggedInUser"
-            [loggedIn]="loggedIn">
+            [loggedIn]="loggedIn"
+          >
           </work-item-comment-wrapper>
-          <work-item-event-wrapper
-            [workItem]="workItem">
-          </work-item-event-wrapper>
+          <work-item-event-wrapper [workItem]="workItem"> </work-item-event-wrapper>
         </div>
       </div>
     </fieldset>
   </div>
 </div>
 
-<osio-modal *ngIf="detailContext=='detail'"></osio-modal>
+<osio-modal *ngIf="detailContext == 'detail'"></osio-modal>

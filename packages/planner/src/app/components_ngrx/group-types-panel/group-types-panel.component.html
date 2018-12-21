@@ -2,23 +2,24 @@
   <li class="list-group-item" *ngFor="let item of groupTypes">
     <a
       class="f8-group-filter__type pointer"
-      id="{{item.group}}"
+      id="{{ item.group }}"
       (click)="groupTypeClickHandler($event, item)"
       [class.selected]="item.selected"
-      *ngIf="item.showInSideBar">
-        <span class="dib margin-right-10 {{ item.icon }}"
-          tooltip="{{sidePanelOpen ? '' : item.name }}"
-          placement="right"></span>
-        <span
-          [class.dib]="sidePanelOpen"
-          [class.hide]="!sidePanelOpen">
-        {{ item.name }}</span>
-        <infotip
-          [infotipId]="'infotip-group-type-'+item.id"
-          [class.dib]="sidePanelOpen"
-          [class.hide]="!sidePanelOpen"
-          [infotipText]="item.description">
-        </infotip>
+      *ngIf="item.showInSideBar"
+    >
+      <span
+        class="dib margin-right-10 {{ item.icon }}"
+        tooltip="{{ sidePanelOpen ? '' : item.name }}"
+        placement="right"
+      ></span>
+      <span [class.dib]="sidePanelOpen" [class.hide]="!sidePanelOpen"> {{ item.name }}</span>
+      <infotip
+        [infotipId]="'infotip-group-type-' + item.id"
+        [class.dib]="sidePanelOpen"
+        [class.hide]="!sidePanelOpen"
+        [infotipText]="item.description"
+      >
+      </infotip>
     </a>
     <!--If group is execution show a header and then embed the iteration component -->
     <div *ngIf="item.bucket === 'iteration'">
@@ -31,9 +32,9 @@
         [showCompleted]="showCompleted"
         [sidePanelOpen]="sidePanelOpen"
         [infotipText]="getInfotipText(item.id) | async"
-        [context]="context">
+        [context]="context"
+      >
       </fab-planner-iteration>
     </div>
   </li>
 </ul>
-

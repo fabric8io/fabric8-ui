@@ -1,46 +1,44 @@
-  <ng-container *ngIf="assignees.length < 1">
-    <span class="dib fa fa-user-plus user-assign-icon margin-right-5"></span>
-    <small *ngIf="!overlapAvatar" class="dib">Unassigned</small>
-  </ng-container>
-  <ng-container *ngIf="showFullName">
-    <div class="f8-assignees dib margin-right-15 margin-bottom-7"
-      *ngFor="let assignee of assignees">
-      <user-avatar
-        [imgTooltip]="assignee?.name"
-        [imgPlacement]="'left'"
-        [imgSrc]="assignee?.avatar | almAvatarSize: 25">
-      </user-avatar>
-      <span>
-        {{ assignee.name }}
+<ng-container *ngIf="assignees.length < 1">
+  <span class="dib fa fa-user-plus user-assign-icon margin-right-5"></span>
+  <small *ngIf="!overlapAvatar" class="dib">Unassigned</small>
+</ng-container>
+<ng-container *ngIf="showFullName">
+  <div class="f8-assignees dib margin-right-15 margin-bottom-7" *ngFor="let assignee of assignees">
+    <user-avatar
+      [imgTooltip]="assignee?.name"
+      [imgPlacement]="'left'"
+      [imgSrc]="assignee?.avatar | almAvatarSize: 25"
+    >
+    </user-avatar>
+    <span> {{ assignee.name }} </span>
+  </div>
+</ng-container>
+<ng-container *ngIf="!showFullName">
+  <div class="f8-assignees dib margin-bottom-7">
+    <user-avatar
+      *ngFor="let assignee of (assignees | slice: 0:truncateAfter)"
+      [imgTooltip]="assignee?.name"
+      [imgPlacement]="'left'"
+      [imgSrc]="assignee?.avatar | almAvatarSize: 25"
+      [ngClass]="{ 'user-avatar--overlap': overlapAvatar }"
+    >
+    </user-avatar>
+    <div dropdown class="dib dropdown" placement="right">
+      <span
+        dropdownToggle
+        class="dib dropdown-toggle pointer"
+        *ngIf="truncateAfter !== undefined && assignees.length > 3"
+      >
+        {{ assignees.length - truncateAfter }}+
       </span>
+      <ul *dropdownMenu class="dropdown-menu label-dropdown dropdown-menu-right">
+        <li *ngFor="let assignee of (assignees | slice: truncateAfter)">
+          <a>
+            <user-avatar [imgSrc]="assignee?.avatar | almAvatarSize: 25"> </user-avatar>
+            <span class="pointer"> {{ assignee?.name }} </span>
+          </a>
+        </li>
+      </ul>
     </div>
-  </ng-container>
-  <ng-container *ngIf="!showFullName">
-    <div class="f8-assignees dib margin-bottom-7">
-      <user-avatar
-        *ngFor="let assignee of assignees | slice:0:truncateAfter"
-        [imgTooltip]="assignee?.name"
-        [imgPlacement]="'left'"
-        [imgSrc]="assignee?.avatar | almAvatarSize: 25"
-        [ngClass]="{'user-avatar--overlap': overlapAvatar}">
-      </user-avatar>
-      <div dropdown class="dib dropdown" placement="right">
-        <span dropdownToggle class="dib dropdown-toggle pointer"
-          *ngIf="truncateAfter!==undefined && assignees.length > 3">
-            {{ assignees.length - truncateAfter }}+
-        </span>
-        <ul *dropdownMenu class="dropdown-menu label-dropdown dropdown-menu-right">
-          <li *ngFor="let assignee of assignees | slice:truncateAfter;">
-            <a>
-              <user-avatar
-                [imgSrc]="assignee?.avatar | almAvatarSize: 25">
-              </user-avatar>
-              <span class="pointer">
-                {{ assignee?.name }}
-              </span>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </ng-container>
+  </div>
+</ng-container>

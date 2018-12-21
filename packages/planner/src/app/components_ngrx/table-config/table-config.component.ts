@@ -40,12 +40,18 @@ export class TableConfigComponent {
   checkIfNoColumnSelected() {
     this.isNoAvailableAttributeSelected = true;
     this.isNoDisplayedAttributeSelected = true;
-    this.columns.filter(col => col.selected).forEach(col => {
-      if( this.isNoAvailableAttributeSelected || this.isNoDisplayedAttributeSelected ) {
-        if ( col.available === true ) { this.isNoAvailableAttributeSelected = false; }
-        if ( col.display === true ) { this.isNoDisplayedAttributeSelected = false; }
-      }
-    });
+    this.columns
+      .filter((col) => col.selected)
+      .forEach((col) => {
+        if (this.isNoAvailableAttributeSelected || this.isNoDisplayedAttributeSelected) {
+          if (col.available === true) {
+            this.isNoAvailableAttributeSelected = false;
+          }
+          if (col.display === true) {
+            this.isNoDisplayedAttributeSelected = false;
+          }
+        }
+      });
   }
   /**
    * set display property true of selected cols

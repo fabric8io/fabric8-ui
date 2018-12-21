@@ -1,34 +1,62 @@
-<div id="spacehome-analytical-report-card" class="analytical-report-widget card-pf f8-card card-pf-utilization">
+<div
+  id="spacehome-analytical-report-card"
+  class="analytical-report-widget card-pf f8-card card-pf-utilization"
+>
   <div class="card-pf-heading f8-card-heading">
     <h2 id="spacehome-analytical-report-title" class="card-pf-title">
       Stack Report Recommendations
       <span *ngIf="buildConfigsCount > 0" class="recommender-selector">
-        <select id="spacehome-analytical-report-combobox" name="pipeSelect" [(ngModel)]="currentPipeline" (change)="selectedPipeline()"
-          class="form-control">
+        <select
+          id="spacehome-analytical-report-combobox"
+          name="pipeSelect"
+          [(ngModel)]="currentPipeline"
+          (change)="selectedPipeline()"
+          class="form-control"
+        >
           <option disabled value="default">Select a pipeline...</option>
-          <option *ngFor="let build of pipelines | filter; let i = index;" [ngValue]="build.id">{{ build.name }}</option>
+          <option *ngFor="let build of (pipelines | filter); let i = index" [ngValue]="build.id">{{
+            build.name
+          }}</option>
         </select>
       </span>
     </h2>
   </div>
   <div class="card-pf-body f8-card-body">
-    <ng-container *ngIf="buildConfigsCount > 0; then showReport else showBlankState"></ng-container>
+    <ng-container
+      *ngIf="buildConfigsCount > 0; then showReport; else showBlankState"
+    ></ng-container>
     <ng-template #showBlankState>
-      <fabric8-loading-widget message="Please wait while we load your stack report recommendations"
-                              *ngIf="loading === true"></fabric8-loading-widget>
+      <fabric8-loading-widget
+        message="Please wait while we load your stack report recommendations"
+        *ngIf="loading === true"
+      ></fabric8-loading-widget>
       <div class="card-pf-body f8-card-body pipelines-absent" *ngIf="loading !== true">
         <div class="f8-blank-slate-card">
           <h3>No results found</h3>
           <p>
-            When you run a build, a stack analysis is run that will provide insights around your technology stack.
+            When you run a build, a stack analysis is run that will provide insights around your
+            technology stack.
           </p>
         </div>
       </div>
     </ng-template>
     <ng-template #showReport>
       <div class="fabric8-stack-analysis">
-        <div *ngIf="currentBuild && currentBuild.annotations && currentBuild.annotations['fabric8.io/bayesian.analysisUrl']">
-          <stack-report-inshort *ngIf="stackUrl !== ''" [buildNumber]="currentBuild.buildNumber" [appName]="currentBuild.buildConfigName" [repoInfo]="currentBuild && currentBuild.repositoryInformation" [stackUrl]="stackUrl && stackUrl" [pipeline]="currentPipeline && currentPipeline"></stack-report-inshort>
+        <div
+          *ngIf="
+            currentBuild &&
+            currentBuild.annotations &&
+            currentBuild.annotations['fabric8.io/bayesian.analysisUrl']
+          "
+        >
+          <stack-report-inshort
+            *ngIf="stackUrl !== ''"
+            [buildNumber]="currentBuild.buildNumber"
+            [appName]="currentBuild.buildConfigName"
+            [repoInfo]="currentBuild && currentBuild.repositoryInformation"
+            [stackUrl]="stackUrl && stackUrl"
+            [pipeline]="currentPipeline && currentPipeline"
+          ></stack-report-inshort>
         </div>
       </div>
     </ng-template>

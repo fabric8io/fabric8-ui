@@ -1,5 +1,4 @@
-<f8launcher
-  (onCancel)="cancel()" [gettingStartedInfo]="false">
+<f8launcher (onCancel)="cancel()" [gettingStartedInfo]="false">
   <div class="f8launcher-container_nav">
     <f8launcher-step-indicator #stepIndicator></f8launcher-step-indicator>
   </div>
@@ -8,56 +7,56 @@
       #missionRuntimeStep
       id="MissionRuntime"
       styleClass="mission-runtime"
-      title="Select Mission & Runtime" [canChangeVersion]="false">
+      title="Select Mission & Runtime"
+      [canChangeVersion]="false"
+    >
     </f8launcher-missionruntime-step>
     <f8launcher-releasestrategy-step
       #releasestrategy
       id="ReleaseStrategy"
       styleClass="release-strategy"
-      title="Select Pipeline">
+      title="Select Pipeline"
+    >
     </f8launcher-releasestrategy-step>
     <f8launcher-gitprovider-step
       #gitProvider
       id="GitProvider"
       styleClass="git-provider"
-      title="Authorize Git Provider">
+      title="Authorize Git Provider"
+    >
     </f8launcher-gitprovider-step>
     <f8launcher-projectsummary-step
       id="ProjectSummary"
       styleClass="project-summary"
-      title="Confirm Application Summary & Setup">
-      <f8launcher-mission-runtime-review
-        [stepId]="missionRuntimeStep.id">
+      title="Confirm Application Summary & Setup"
+    >
+      <f8launcher-mission-runtime-review [stepId]="missionRuntimeStep.id">
       </f8launcher-mission-runtime-review>
-      <f8launcher-release-strategy-review
-        [stepId]="releasestrategy.id">
+      <f8launcher-release-strategy-review [stepId]="releasestrategy.id">
       </f8launcher-release-strategy-review>
-      <f8launcher-target-environment-review
-        stepId="shared">
-      </f8launcher-target-environment-review>
-      <f8launcher-gitprovider-review
-        [stepId]="gitProvider.id">
-      </f8launcher-gitprovider-review>
+      <f8launcher-target-environment-review stepId="shared"> </f8launcher-target-environment-review>
+      <f8launcher-gitprovider-review [stepId]="gitProvider.id"> </f8launcher-gitprovider-review>
     </f8launcher-projectsummary-step>
   </div>
   <div class="f8launcher-container_completed-footer">
-    <button class="btn btn-primary btn-lg" (click)="complete()">
-      Return to your Dashboard
-    </button>
-    <f8-feature-toggle
-      featureName="AppLauncher.NextButtons"
-      [userLevel]="user">
+    <button class="btn btn-primary btn-lg" (click)="complete()">Return to your Dashboard</button>
+    <f8-feature-toggle featureName="AppLauncher.NextButtons" [userLevel]="user">
     </f8-feature-toggle>
     <ng-template #user>
-      <a class="btn btn-primary btn-lg margin-left-10"
+      <a
+        class="btn btn-primary btn-lg margin-left-10"
         [routerLink]="['../../../', 'create', 'pipelines']"
-        [queryParams]="addQuery()" (click)="viewPipeline()">
+        [queryParams]="addQuery()"
+        (click)="viewPipeline()"
+      >
         View Pipeline
       </a>
-    <button class="btn btn-primary btn-lg margin-left-10 f8launcher-openIDE"
-      (click)="createWorkSpace()">
-      Edit Application in Web IDE
-    </button>
+      <button
+        class="btn btn-primary btn-lg margin-left-10 f8launcher-openIDE"
+        (click)="createWorkSpace()"
+      >
+        Edit Application in Web IDE
+      </button>
     </ng-template>
   </div>
 </f8launcher>

@@ -3,40 +3,50 @@
     <ng-template #tooltipTemplateInternal>
       <div>
         <span *ngIf="featurePageConfig?.featuresPerLevel?.internal?.length !== 0">
-          <strong>There {{internalFeatureText}} on this page.</strong>
+          <strong>There {{ internalFeatureText }} on this page.</strong>
           <ul>
             <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.internal">
-              <span class="pficon pficon-info"></span>
-              {{feature.attributes.name}}
+              <span class="pficon pficon-info"></span> {{ feature.attributes.name }}
             </li>
           </ul>
         </span>
         <span *ngIf="featurePageConfig?.featuresPerLevel?.experimental?.length !== 0">
-          <strong>There {{experimentalFeatureText}} on this page.</strong>            <ul>
+          <strong>There {{ experimentalFeatureText }} on this page.</strong>
+          <ul>
             <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.experimental">
-              <span class="pficon pficon-info"></span>
-              {{feature.attributes.name}}
+              <span class="pficon pficon-info"></span> {{ feature.attributes.name }}
             </li>
           </ul>
         </span>
         <span *ngIf="featurePageConfig?.featuresPerLevel?.beta?.length !== 0">
-          <strong>There {{betaFeatureText}} on this page.</strong>
+          <strong>There {{ betaFeatureText }} on this page.</strong>
           <ul>
             <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.beta">
-              <span class="pficon pficon-info"></span>
-              {{feature.attributes.name}}
+              <span class="pficon pficon-info"></span> {{ feature.attributes.name }}
             </li>
           </ul>
-          </span>
+        </span>
       </div>
     </ng-template>
-    <div *ngIf="!noFeaturesInInternal" triggers="click" placement="top" [tooltip]="tooltipTemplateInternal" class="internal">
+    <div
+      *ngIf="!noFeaturesInInternal"
+      triggers="click"
+      placement="top"
+      [tooltip]="tooltipTemplateInternal"
+      class="internal"
+    >
       <i class="fa fa-1x"></i>
     </div>
     <ng-template #tooltipTemplateInternalEmpty>
       <div><strong>There are no internal features on this page.</strong></div>
     </ng-template>
-    <div *ngIf="noFeaturesInInternal" triggers="click" placement="top" [tooltip]="tooltipTemplateInternalEmpty" class="internal">
+    <div
+      *ngIf="noFeaturesInInternal"
+      triggers="click"
+      placement="top"
+      [tooltip]="tooltipTemplateInternalEmpty"
+      class="internal"
+    >
       <i class="fa fa-1x"></i>
     </div>
   </div>
@@ -45,32 +55,42 @@
     <ng-template #tooltipTemplateExperimental>
       <div>
         <span *ngIf="featurePageConfig?.featuresPerLevel?.experimental?.length !== 0">
-          <strong>There {{experimentalFeatureText}} on this page.</strong>
+          <strong>There {{ experimentalFeatureText }} on this page.</strong>
           <ul>
             <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.experimental">
-              <span class="pficon pficon-info"></span>
-              {{feature.attributes.name}}
+              <span class="pficon pficon-info"></span> {{ feature.attributes.name }}
             </li>
           </ul>
         </span>
         <span *ngIf="featurePageConfig?.featuresPerLevel?.beta?.length !== 0">
-          <strong>There {{betaFeatureText}} on this page.</strong>
-            <ul>
-              <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.beta">
-                <span class="pficon pficon-info"></span>
-                {{feature.attributes.name}}
-              </li>
-            </ul>
-          </span>
+          <strong>There {{ betaFeatureText }} on this page.</strong>
+          <ul>
+            <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.beta">
+              <span class="pficon pficon-info"></span> {{ feature.attributes.name }}
+            </li>
+          </ul>
+        </span>
       </div>
     </ng-template>
-    <div *ngIf="!noFeaturesInExperimental" triggers="click" placement="top" [tooltip]="tooltipTemplateExperimental" class="experimental">
+    <div
+      *ngIf="!noFeaturesInExperimental"
+      triggers="click"
+      placement="top"
+      [tooltip]="tooltipTemplateExperimental"
+      class="experimental"
+    >
       <i class="fa fa-1x"></i>
     </div>
     <ng-template #tooltipTemplateExperimentalEmpty>
       <div><strong>There are no experimental features on this page.</strong></div>
     </ng-template>
-    <div *ngIf="noFeaturesInExperimental" triggers="click" placement="top" [tooltip]="tooltipTemplateExperimentalEmpty" class="experimental">
+    <div
+      *ngIf="noFeaturesInExperimental"
+      triggers="click"
+      placement="top"
+      [tooltip]="tooltipTemplateExperimentalEmpty"
+      class="experimental"
+    >
       <i class="fa fa-1x"></i>
     </div>
   </div>
@@ -79,26 +99,36 @@
     <ng-template #tooltipTemplateBeta>
       <div *ngIf="!noFeaturesInBeta">
         <span *ngIf="featurePageConfig?.featuresPerLevel?.beta?.length !== 0">
-          <strong>There {{betaFeatureText}} on this page.</strong>
+          <strong>There {{ betaFeatureText }} on this page.</strong>
           <ul>
             <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.beta">
-              <span class="pficon pficon-info"></span>
-              {{feature.attributes.name}}
+              <span class="pficon pficon-info"></span> {{ feature.attributes.name }}
             </li>
           </ul>
         </span>
       </div>
     </ng-template>
-    <div *ngIf="!noFeaturesInBeta" triggers="click" placement="top" [tooltip]="tooltipTemplateBeta" class="beta">
+    <div
+      *ngIf="!noFeaturesInBeta"
+      triggers="click"
+      placement="top"
+      [tooltip]="tooltipTemplateBeta"
+      class="beta"
+    >
       <i class="fa fa-1x"></i>
     </div>
     <ng-template #tooltipTemplateBetaEmpty>
       <div><strong>There are no beta features on this page.</strong></div>
     </ng-template>
-    <div *ngIf="noFeaturesInBeta" triggers="click" placement="top" [tooltip]="tooltipTemplateBetaEmpty" class="beta">
+    <div
+      *ngIf="noFeaturesInBeta"
+      triggers="click"
+      placement="top"
+      [tooltip]="tooltipTemplateBetaEmpty"
+      class="beta"
+    >
       <i class="fa fa-1x"></i>
     </div>
   </div>
-  <div *ngSwitchCase="'released'">
-  </div>
+  <div *ngSwitchCase="'released'"></div>
 </div>

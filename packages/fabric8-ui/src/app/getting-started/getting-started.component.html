@@ -1,13 +1,16 @@
-<div class="blank-slate-pf col-sm-8 col-sm-offset-2" id="getting-started-error" *ngIf="errorConnecting">
+<div
+  class="blank-slate-pf col-sm-8 col-sm-offset-2"
+  id="getting-started-error"
+  *ngIf="errorConnecting"
+>
   <div class="blank-slate-pf-icon">
     <img src="../../assets/images/badconnection.svg" class="f8-getting-started-image" />
   </div>
-  <h1>
-    We're having trouble connecting your account.
-  </h1>
+  <h1>We're having trouble connecting your account.</h1>
   <p>
-    It looks like we're having trouble linking your CodeReady Toolchain account to your OpenShift Online account.  This is preventing you from logging into your
-    CodeReady Toolchain account.  Please log out and try to log in again.
+    It looks like we're having trouble linking your CodeReady Toolchain account to your OpenShift
+    Online account. This is preventing you from logging into your CodeReady Toolchain account.
+    Please log out and try to log in again.
   </p>
   <div class="blank-slate-pf-main-action">
     <button class="btn btn-primary btn-lg" (click)="logOut()">Log Out</button>

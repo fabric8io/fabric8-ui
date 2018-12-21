@@ -5,20 +5,22 @@
     (onFilterChange)="filterChange($event)"
     (onSortChange)="sortChange($event)"
     (onToggleChange)="toggleChange($event)"
-    [resultsCount]="resultsCount">
+    [resultsCount]="resultsCount"
+  >
   </my-spaces-toolbar>
   <div class="container-fluid margin-bottom-20">
     <div class="row">
       <div class="col-sm-12">
         <pfng-list
-            [actionHeadingTemplate]="actionHeadingTemplate"
-            [actionTemplate]="actionTemplate"
-            [config]="listConfig"
-            [items]="spaces"
-            [itemHeadingTemplate]="itemHeadingTemplate"
-            [itemTemplate]="itemTemplate"
-            (onPinChange)="handlePinChange($event.item)"
-            (onActionSelect)="handleAction($event)">
+          [actionHeadingTemplate]="actionHeadingTemplate"
+          [actionTemplate]="actionTemplate"
+          [config]="listConfig"
+          [items]="spaces"
+          [itemHeadingTemplate]="itemHeadingTemplate"
+          [itemTemplate]="itemTemplate"
+          (onPinChange)="handlePinChange($event.item)"
+          (onActionSelect)="handleAction($event)"
+        >
           <ng-template #itemHeadingTemplate>
             <my-spaces-item-heading class="spaces-heading"></my-spaces-item-heading>
           </ng-template>
@@ -30,9 +32,11 @@
             <span class="margin-right-5"></span>
           </ng-template>
           <ng-template #actionTemplate let-item="item" let-index="index">
-            <my-spaces-item-actions [space]="item"
-                                    (onDeleteSpace)="confirmDeleteSpace($event, deleteSpace)"
-                                    (onPinChange)="handlePinChange($event)"></my-spaces-item-actions>
+            <my-spaces-item-actions
+              [space]="item"
+              (onDeleteSpace)="confirmDeleteSpace($event, deleteSpace)"
+              (onPinChange)="handlePinChange($event)"
+            ></my-spaces-item-actions>
           </ng-template>
         </pfng-list>
       </div>
@@ -43,8 +47,7 @@
 <!-- Delete Space modal -->
 <ng-template #deleteSpace title="Remove the space">
   <div class="modal-header">
-    <button class="close" aria-label="Close" type="button"
-            (click)="closeModal()">
+    <button class="close" aria-label="Close" type="button" (click)="closeModal()">
       <span aria-hidden="true">&times;</span>
     </button>
     <dt class="modal-title">Remove Space</dt>

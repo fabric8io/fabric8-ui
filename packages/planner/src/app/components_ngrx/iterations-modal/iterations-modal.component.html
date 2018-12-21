@@ -5,20 +5,23 @@
   [closeOnOutsideClick]="false"
   (onOpen)="actionOnOpen()"
   (onClose)="actionOnClose()"
-  (onSubmit)="actionOnSubmit()">
+  (onSubmit)="actionOnSubmit()"
+>
   <modal-content>
     <div class="col-xs-12 col-sm-12 col-md-12">
-      <div *ngIf="modalType=='update' || modalType=='create' || modalType=='createChild'">
+      <div *ngIf="modalType == 'update' || modalType == 'create' || modalType == 'createChild'">
         <div class="form-group" [class.has-error]="validationError">
           <div class="search-pf-input-group">
             <label for="iteration-name">Name <span class="field-required-icon">*</span></label>
             <input
               id="iteration-name"
-              type="text" class="form-control"
+              type="text"
+              class="form-control"
               placeholder="Iteration Name"
               [(ngModel)]="iteration.name"
               (keyup.enter)="actionOnSubmit()"
-              (keyup)="removeError()">
+              (keyup)="removeError()"
+            />
             <span class="error-block">
               <span class="help-block" id="iteration-help-label">{{ validationString }}</span>
             </span>
@@ -27,15 +30,42 @@
         <div class="form-group">
           <label for="parent-iteration">Parent Iteration</label>
           <div class="posRel input-group dropdown open active">
-            <input id="parent-iteration" class="form-control " type="text" #iterationSearch (keyup)="filterIteration($event)"
-            autocomplete="off" [value]="selectedParentIterationName" (focus)="iterationSearchFocus();" [disabled]="iterationSearchDisable">
-            <ul class="f8-iteration-modal-list dropdown-menu dropdown-ul" *ngIf="showIterationDropdown" #iterationList>
-              <li *ngIf="!filteredIterations.length" (click)="showIterationDropdown = !showIterationDropdown">No matches found.</li>
-              <li *ngFor="let iteration of filteredIterations;" id='{{iteration.key}}'  [attr.data-id]="iteration.key" (click)="setParentIteration(iteration);">
-                <span [innerHTML]="(iteration.value) | almSearchHighlight: iterationSearch.value"></span>
+            <input
+              id="parent-iteration"
+              class="form-control "
+              type="text"
+              #iterationSearch
+              (keyup)="filterIteration($event)"
+              autocomplete="off"
+              [value]="selectedParentIterationName"
+              (focus)="iterationSearchFocus()"
+              [disabled]="iterationSearchDisable"
+            />
+            <ul
+              class="f8-iteration-modal-list dropdown-menu dropdown-ul"
+              *ngIf="showIterationDropdown"
+              #iterationList
+            >
+              <li
+                *ngIf="!filteredIterations.length"
+                (click)="showIterationDropdown = !showIterationDropdown"
+              >
+                No matches found.
+              </li>
+              <li
+                *ngFor="let iteration of filteredIterations"
+                id="{{ iteration.key }}"
+                [attr.data-id]="iteration.key"
+                (click)="setParentIteration(iteration)"
+              >
+                <span
+                  [innerHTML]="iteration.value | almSearchHighlight: iterationSearch.value"
+                ></span>
               </li>
             </ul>
-            <span class="input-group-addon pointer" (click)="iterationSearchFocus();"> <span class="caret"></span> </span>
+            <span class="input-group-addon pointer" (click)="iterationSearchFocus()">
+              <span class="caret"></span>
+            </span>
           </div>
         </div>
         <div class="form-group">
@@ -46,12 +76,20 @@
             placeholder="Describe this iteration's goals and what it will include."
             id="iteration-description"
             rows="3"
-            [(ngModel)]="iteration.description">
+            [(ngModel)]="iteration.description"
+          >
           </textarea>
         </div>
       </div>
-      <div *ngIf="modalType=='create' || modalType=='update' || modalType=='start' || modalType=='createChild'"
-        class="form-group datepicker-container">
+      <div
+        *ngIf="
+          modalType == 'create' ||
+          modalType == 'update' ||
+          modalType == 'start' ||
+          modalType == 'createChild'
+        "
+        class="form-group datepicker-container"
+      >
         <div class="date-container padding-right-5 dib">
           <label>Start Date</label>
           <my-date-picker
@@ -59,7 +97,8 @@
             [options]="startDatePickerOptions"
             (dateChanged)="onStartDateChanged($event)"
             (calendarToggle)="onStartCalendarToggle($event)"
-            [(ngModel)]="startDate"></my-date-picker>
+            [(ngModel)]="startDate"
+          ></my-date-picker>
         </div>
         <div class="date-container padding-left-5 dib">
           <label>End Date</label>
@@ -68,20 +107,26 @@
             [options]="endDatePickerOptions"
             (dateChanged)="onEndDateChanged($event)"
             (calendarToggle)="onEndCalendarToggle($event)"
-            [(ngModel)]="endDate"></my-date-picker>
+            [(ngModel)]="endDate"
+          ></my-date-picker>
         </div>
       </div>
-      <div *ngIf="modalType=='create' || modalType=='update' || modalType=='createChild'">
+      <div *ngIf="modalType == 'create' || modalType == 'update' || modalType == 'createChild'">
         <label class="f8-active-label">Force Active: </label>
-          <switch (onChecked)="onChecked($event)"
-            [isChecked]="iteration.userActive" id="active-switch"></switch>
+        <switch
+          (onChecked)="onChecked($event)"
+          [isChecked]="iteration.userActive"
+          id="active-switch"
+        ></switch>
       </div>
-      <div *ngIf="modalType=='close'"
-        class="form-group datepicker-container">
+      <div *ngIf="modalType == 'close'" class="form-group datepicker-container">
         Do you really want to close this iteration?
       </div>
       <div class="error-block" [class.space-error]="spaceError">
-        <span class="help-block">There is already a current iteration. You must close the current iteration before starting this one.</span>
+        <span class="help-block"
+          >There is already a current iteration. You must close the current iteration before
+          starting this one.</span
+        >
       </div>
     </div>
   </modal-content>
@@ -90,14 +135,21 @@
       <button
         [disabled]="submitLoading"
         class="btn btn-default margin-right-10"
-        id="cancel-iteration-button" type="submit"
-        value="0" (click)="createUpdateIterationDialog.close()">
+        id="cancel-iteration-button"
+        type="submit"
+        value="0"
+        (click)="createUpdateIterationDialog.close()"
+      >
         Cancel
       </button>
-      <button class="btn btn-primary"
+      <button
+        class="btn btn-primary"
         [disabled]="submitLoading"
-        id="create-iteration-button" type="submit" value="0"
-        (click)="createUpdateIterationDialog.onSubmit.emit(undefined)">
+        id="create-iteration-button"
+        type="submit"
+        value="0"
+        (click)="createUpdateIterationDialog.onSubmit.emit(undefined)"
+      >
         {{ submitBtnTxt }}
       </button>
     </div>

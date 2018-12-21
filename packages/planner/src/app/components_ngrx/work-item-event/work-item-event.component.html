@@ -2,77 +2,83 @@
   <user-avatar
     class="pull-left"
     *ngIf="(event.modifier | async)?.avatar"
-    [imgSrc]= "(event.modifier | async)?.avatar | almAvatarSize: 25"
-    container="body">
+    [imgSrc]="(event.modifier | async)?.avatar | almAvatarSize: 25"
+    container="body"
+  >
   </user-avatar>
   <div class="f8-event-body margin-v-3">
-      <strong class="f8-event-author pull-left">
-        {{ (event.modifier | async)?.name.split(' ')[0] }}
-      </strong>
-      &nbsp;
-      <!-- Decription -->
-      <span *ngIf="textType === 'description'">
-        edited the description
-      </span>
+    <strong class="f8-event-author pull-left">
+      {{ (event.modifier | async)?.name.split(' ')[0] }}
+    </strong>
+    &nbsp;
+    <!-- Decription -->
+    <span *ngIf="textType === 'description'"> edited the description </span>
 
-      <!-- Single Value Change -->
-      <span *ngIf="textType === 'attribute'">
-        <span [innerHTML]=intermediateText></span>
-        <i> '{{ event.oldValue }}' </i>
-        {{ toText }}
-        <i> '{{ event.newValue }}'</i>
-      </span>
+    <!-- Single Value Change -->
+    <span *ngIf="textType === 'attribute'">
+      <span [innerHTML]="intermediateText"></span> <i> '{{ event.oldValue }}' </i> {{ toText }}
+      <i> '{{ event.newValue }}'</i>
+    </span>
 
-      <!--Area, Iteration, Assignee -->
-      <span class="margin-h-5" style="display: contents;"
-        *ngIf="textType === 'relationship' || textType === 'assignee'" >
-        <span [innerHTML]=intermediateText></span>
-        <i class="margin-h-3"
-          *ngFor="let item of event.newValueRelationshipsObs"> '{{ (item | async)?.name }}' </i>
-        <ng-container *ngIf="toText && textType === 'assignee'">{{ toText }}
-          <i  class="margin-h-3"
-            *ngFor="let item of event.oldValueRelationshipsObs"> '{{ (item | async)?.name }}'</i>
+    <!--Area, Iteration, Assignee -->
+    <span
+      class="margin-h-5"
+      style="display: contents;"
+      *ngIf="textType === 'relationship' || textType === 'assignee'"
+    >
+      <span [innerHTML]="intermediateText"></span>
+      <i class="margin-h-3" *ngFor="let item of event.newValueRelationshipsObs">
+        '{{ (item | async)?.name }}'
+      </i>
+      <ng-container *ngIf="toText && textType === 'assignee'"
+        >{{ toText }}
+        <i class="margin-h-3" *ngFor="let item of event.oldValueRelationshipsObs">
+          '{{ (item | async)?.name }}'</i
+        >
+      </ng-container>
+      <ng-container *ngIf="(event.oldValueRelationshipsObs[0] | async) as it">
+        <ng-container *ngIf="toText && textType === 'relationship' && it.parentPath !== '/'">
+          {{ toText }} <i class="margin-h-3"> '{{ it.name }}'</i>
         </ng-container>
-        <ng-container *ngIf="event.oldValueRelationshipsObs[0] | async as it">
-          <ng-container *ngIf="toText && textType === 'relationship' && it.parentPath !== '/'">
-            {{ toText }}
-            <i class="margin-h-3"> '{{ it.name }}'</i>
-          </ng-container>
-        </ng-container>
-      </span>
+      </ng-container>
+    </span>
 
-      <!-- WorkitemType -->
-      <span class="margin-h-5" style="display: contents;" *ngIf="textType === 'typeChange'">
-        <span [innerHTML]=intermediateText></span>
-        <i  class="margin-h-3"
-        *ngFor="let item of event.oldValueRelationshipsObs"> '{{ (item | async)?.name }}'</i>
-        <ng-container *ngIf="toText">{{ toText }} </ng-container>
-        <i class="margin-h-3"
-          *ngFor="let item of event.newValueRelationshipsObs"> '{{ (item | async)?.name }}' </i>
-      </span>
+    <!-- WorkitemType -->
+    <span class="margin-h-5" style="display: contents;" *ngIf="textType === 'typeChange'">
+      <span [innerHTML]="intermediateText"></span>
+      <i class="margin-h-3" *ngFor="let item of event.oldValueRelationshipsObs">
+        '{{ (item | async)?.name }}'</i
+      >
+      <ng-container *ngIf="toText">{{ toText }} </ng-container>
+      <i class="margin-h-3" *ngFor="let item of event.newValueRelationshipsObs">
+        '{{ (item | async)?.name }}'
+      </i>
+    </span>
 
-      <!--Labels-->
-      <div class="audit-trail__label"
-        *ngIf="textType === 'label'" >
-        <span [innerHTML]=intermediateText></span>
-        <f8-label class="margin-h-5"
-          *ngIf='(event.newValueRelationshipsObs | async)?.length > 0'
-          [labels]='event.newValueRelationshipsObs | async'
+    <!--Labels-->
+    <div class="audit-trail__label" *ngIf="textType === 'label'">
+      <span [innerHTML]="intermediateText"></span>
+      <f8-label
+        class="margin-h-5"
+        *ngIf="(event.newValueRelationshipsObs | async)?.length > 0"
+        [labels]="event.newValueRelationshipsObs | async"
+        [allowDelete]="false"
+        [context]="'detail'"
+      >
+      </f8-label>
+      <ng-container *ngIf="toText">
+        <span> {{ toText }} </span>
+        <f8-label
+          class="margin-left-5"
+          [labels]="event.oldValueRelationshipsObs | async"
           [allowDelete]="false"
-          [context]="'detail'">
+          [context]="'detail'"
+        >
         </f8-label>
-        <ng-container *ngIf="toText">
-          <span> {{ toText }} </span>
-          <f8-label class="margin-left-5"
-            [labels]='event.oldValueRelationshipsObs | async'
-            [allowDelete]="false"
-            [context]="'detail'">
-          </f8-label>
-        </ng-container>
-      </div>
-      <small class="f8-event--create-time"
-        [tooltip]="event.timestamp | date:'medium'">
-        | {{ event.timestamp | f8Time }}
-      </small>
+      </ng-container>
     </div>
+    <small class="f8-event--create-time" [tooltip]="event.timestamp | date: 'medium'">
+      | {{ event.timestamp | f8Time }}
+    </small>
+  </div>
 </div>

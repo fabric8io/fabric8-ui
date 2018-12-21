@@ -3,20 +3,40 @@
     <span class="fa fa-ellipsis-v"></span>
   </button>
   <ul class="dropdown-menu-right dropdown-menu" aria-labelledby="dropdownKebab" *dropdownMenu>
-    <li [ngClass]="{'disabled': workspaceBusy || !codebase.gitHubRepo}"
-        [attr.role]="'menuitem'">
-      <a href="javascript:void(0)" class="dropdown-item secondary-action" *ngIf="!workspaceBusy && codebase.gitHubRepo; else createDisabled"
-         (click)="createWorkspace()">Create workspace</a>
+    <li [ngClass]="{ disabled: workspaceBusy || !codebase.gitHubRepo }" [attr.role]="'menuitem'">
+      <a
+        href="javascript:void(0)"
+        class="dropdown-item secondary-action"
+        *ngIf="!workspaceBusy && codebase.gitHubRepo; else createDisabled"
+        (click)="createWorkspace()"
+        >Create workspace</a
+      >
       <ng-template #createDisabled>
-        <a href="javascript:void(0)" class="dropdown-item secondary-action" *ngIf="workspaceBusy"
-          tooltip="Waiting for Che..." disabled>Create workspace</a>
-        <a href="javascript:void(0)" class="dropdown-item secondary-action" *ngIf="!codebase.gitHubRepo"
-          tooltip="GitHub repository is not accessible" disabled>Create workspace</a>
+        <a
+          href="javascript:void(0)"
+          class="dropdown-item secondary-action"
+          *ngIf="workspaceBusy"
+          tooltip="Waiting for Che..."
+          disabled
+          >Create workspace</a
+        >
+        <a
+          href="javascript:void(0)"
+          class="dropdown-item secondary-action"
+          *ngIf="!codebase.gitHubRepo"
+          tooltip="GitHub repository is not accessible"
+          disabled
+          >Create workspace</a
+        >
       </ng-template>
     </li>
     <li [attr.role]="'menuitem'">
-      <a href="javascript:void(0)" class="dropdown-item secondary-action"
-         (click)="confirmDeleteCodebase($event)">Remove codebase</a>
+      <a
+        href="javascript:void(0)"
+        class="dropdown-item secondary-action"
+        (click)="confirmDeleteCodebase($event)"
+        >Remove codebase</a
+      >
     </li>
   </ul>
 </span>
@@ -24,7 +44,11 @@
 <div class="modal fade" bsModal #modal="bs-modal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-md">
     <div class="modal-content" tabindex="0">
-      <codebase-delete-dialog [host]="modal" [codebase]="codebase" (onDelete)="onDeleteCodebase($event)"></codebase-delete-dialog>
+      <codebase-delete-dialog
+        [host]="modal"
+        [codebase]="codebase"
+        (onDelete)="onDeleteCodebase($event)"
+      ></codebase-delete-dialog>
     </div>
   </div>
 </div>

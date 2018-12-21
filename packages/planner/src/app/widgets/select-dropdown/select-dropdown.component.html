@@ -1,44 +1,37 @@
 <div (clickOut)="clickOut()" class="select-dropdown-container dropdown">
   <span (click)="openDropdown()">
-    <ng-container *ngTemplateOutlet="toggleButtonRef">
-    </ng-container>
+    <ng-container *ngTemplateOutlet="toggleButtonRef"> </ng-container>
   </span>
-  <div class="select-dropdown dropdown-menu dropdown-menu-left"
-    [class.show]="displayDropdown">
+  <div class="select-dropdown dropdown-menu dropdown-menu-left" [class.show]="displayDropdown">
     <div class="select-dropdown-header">
       <span> {{ headerText }} </span>
-      <span
-        class=" pull-right pficon-close close-pointer"
-        (click)="closeDropdown()"></span>
+      <span class=" pull-right pficon-close close-pointer" (click)="closeDropdown()"></span>
     </div>
-    <div
-      class="select-dropdown-search"
-      *ngIf="showSearch">
-      <input (keyup)="searchItem(searchInput.value)"
+    <div class="select-dropdown-search" *ngIf="showSearch">
+      <input
+        (keyup)="searchItem(searchInput.value)"
         #searchInput
-        class="select-dropdown-search-input" />
+        class="select-dropdown-search-input"
+      />
       <span *ngIf="!loading" class="fa fa-search in-input-icon"></span>
       <span *ngIf="loading" class="spinner spinner-sm in-input-icon"></span>
     </div>
     <ul class="select-dropdown-menu">
       <li
         *ngFor="let item of menuItems"
-        [class.item-li]="item.key!==null"
-        [class.item-li-disabled]="item.key===null"
+        [class.item-li]="item.key !== null"
+        [class.item-li-disabled]="item.key === null"
         [class.item-selected]="item.selected"
-        (click)="selectItem(item)">
-        <span class="fa fa-check tick"
-          *ngIf="item.selected">
-        </span>
+        (click)="selectItem(item)"
+      >
+        <span class="fa fa-check tick" *ngIf="item.selected"> </span>
         <div class="dynamic-item">
-          <ng-container *ngTemplateOutlet="dropdownItem; context: item" >
-          </ng-container>
+          <ng-container *ngTemplateOutlet="dropdownItem; context: item"> </ng-container>
         </div>
       </li>
     </ul>
     <div *ngIf="dropdownFooter" class="select-dropdown-footer">
-      <ng-container *ngTemplateOutlet="dropdownFooter" >
-      </ng-container>
+      <ng-container *ngTemplateOutlet="dropdownFooter"> </ng-container>
     </div>
   </div>
 </div>
