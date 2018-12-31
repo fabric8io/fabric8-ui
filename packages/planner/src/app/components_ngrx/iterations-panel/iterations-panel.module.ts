@@ -19,6 +19,7 @@ import { IterationTreeComponent } from '../iteration-tree/iteration-tree.compone
 import { FabPlannerIterationModalComponent } from '../iterations-modal/iterations-modal.component';
 import { SwitchModule } from './../../widgets/switch/switch.module';
 import { IterationComponent } from './iterations-panel.component';
+import { AutofocusModule } from 'ngx-widgets';
 
 // ngrx stuff
 import { StoreModule } from '@ngrx/store';
@@ -41,6 +42,7 @@ import { initialUIState } from './../../states/iteration.state';
     WidgetsModule,
     RouterModule,
     InfotipModule,
+    AutofocusModule,
     StoreModule.forFeature(
       'iterationPanel',
       {

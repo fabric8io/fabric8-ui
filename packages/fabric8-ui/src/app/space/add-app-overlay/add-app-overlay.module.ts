@@ -8,7 +8,7 @@ import { DependencyCheckService } from 'ngx-launcher';
 import { AppLauncherDependencyCheckService } from '../app-launcher/services/app-launcher-dependency-check.service';
 import { CodebasesService } from '../create/codebases/services/codebases.service';
 import { DeploymentApiService } from '../create/deployments/services/deployment-api.service';
-import { AutofocusModule } from './../../shared/autofocus.directive';
+import { AutofocusModule } from 'ngx-widgets';
 import { AddAppOverlayComponent } from './add-app-overlay.component';
 
 @NgModule({
