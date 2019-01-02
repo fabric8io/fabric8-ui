@@ -1,149 +1,160 @@
-<div class="container-fluid row f8-wi-container " #containerHeight>
-  <div class="lock-overlay-list" *ngIf="uiLockedAll">
-    <div class="spinner-container">
-      <h2 class="spinner"></h2>
-      <h2>Loading ...</h2>
-      <h4>Please wait, we are loading your data.</h4>
-    </div>
-  </div>
+<f8-feature-toggle
+  featureName="PlannerQuery"
+  [userLevel]="query"
+  [showFeatureOptIn]="true"
+></f8-feature-toggle>
 
-  <work-item-preview-panel
-    #quickPreview
-    (onOpen)="isQuickPreviewOpen = true"
-    (onClose)="isQuickPreviewOpen = false"
-    [context]="'query'"
-  >
-  </work-item-preview-panel>
+<ng-template #query>
+  <div class="container-fluid row f8-wi-container " #containerHeight>
+    <div class="lock-overlay-list" *ngIf="uiLockedAll">
+      <div class="spinner-container">
+        <h2 class="spinner"></h2>
+        <h2>Loading ...</h2>
+        <h4>Please wait, we are loading your data.</h4>
+      </div>
+    </div>
 
-  <div #querySearch class="f8-query__input-wrapper">
-    <div class="dropdown" [isOpen]="isSuggestionDropdownOpen" [autoClose]="false" dropdown>
-      <span
-        *ngIf="searchQuery !== '' && !queryInput.disabled"
-        class="close f8-query__clear-button"
-        [class.pficon-spinner2]="valueLoading"
-        [class.pficon-close]="!valueLoading"
-        tooltip="Press ctrl+backspace to clear"
-        placement="left"
-        (click)="clearInputField()"
-      ></span>
-      <input
-        #queryInput
-        class="f8-query__input"
-        [disabled]="disableInput"
-        (keyup)="fetchWorkItemForQuery($event, queryInput.value, queryInput.selectionStart)"
-        (keydown)="onInputKeyPress($event)"
-        [(ngModel)]="searchQuery"
-        (click)="onClickSearchField($event)"
-        (blur)="onBlurSearchField()"
-        placeholder="Enter your Query..."
-      />
-      <ng-container *ngIf="(querySuggestion | async) as suggestions">
-        <ul class="suggestion-box dropdown-menu" *dropdownMenu>
-          <list-item
-            *ngFor="let suggestion of suggestions"
-            [item]="suggestion"
-            (click)="onSelectSuggestion(suggestion, queryInput.value, queryInput.selectionStart)"
-            >{{ suggestion }}</list-item
-          >
-        </ul>
-      </ng-container>
+    <work-item-preview-panel
+      #quickPreview
+      (onOpen)="isQuickPreviewOpen = true"
+      (onClose)="isQuickPreviewOpen = false"
+      [context]="'query'"
+    >
+    </work-item-preview-panel>
+
+    <div #querySearch class="f8-query__input-wrapper">
+      <div class="dropdown" [isOpen]="isSuggestionDropdownOpen" [autoClose]="false" dropdown>
+        <span
+          *ngIf="searchQuery !== '' && !queryInput.disabled"
+          class="close f8-query__clear-button"
+          [class.pficon-spinner2]="valueLoading"
+          [class.pficon-close]="!valueLoading"
+          tooltip="Press ctrl+backspace to clear"
+          placement="left"
+          (click)="clearInputField()"
+        ></span>
+        <input
+          #queryInput
+          class="f8-query__input"
+          [disabled]="disableInput"
+          (keyup)="fetchWorkItemForQuery($event, queryInput.value, queryInput.selectionStart)"
+          (keydown)="onInputKeyPress($event)"
+          [(ngModel)]="searchQuery"
+          (click)="onClickSearchField($event)"
+          (blur)="onBlurSearchField()"
+          placeholder="Enter your Query..."
+        />
+        <ng-container *ngIf="(querySuggestion | async) as suggestions">
+          <ul class="suggestion-box dropdown-menu" *dropdownMenu>
+            <list-item
+              *ngFor="let suggestion of suggestions"
+              [item]="suggestion"
+              (click)="onSelectSuggestion(suggestion, queryInput.value, queryInput.selectionStart)"
+              >{{ suggestion }}</list-item
+            >
+          </ul>
+        </ng-container>
+      </div>
+      <span class="f8-query__input-hint">Press Enter to Search....</span>
     </div>
-    <span class="f8-query__input-hint">Press Enter to Search....</span>
-  </div>
-  <div class="f8-query__breadcrumbs container-fluid">
-    <div class="col-md-8 col-lg-9 col-sm-6 padding-0">
-      <ng-container *ngFor="let breadcrumb of breadcrumbs; let i = index">
-        >&nbsp;
-        <span class="pointer breadcrumbs" (click)="navigateToQuery(breadcrumb)">
-          {{ breadcrumbsText(i, breadcrumb) }}
-        </span> </ng-container
-      >&nbsp;>&nbsp;<span class="current-query">{{ currentQuery }}</span>
-    </div>
-    <div class="col-md-4 col-lg-3 col-sm-6 padding-0 text-right">
-      <export-csv [isDisabled]="(workItemsSource | async).length <= 0"></export-csv>
-      <div
-        *ngIf="!(addDisabled | async)"
-        class="dropdown-kebab-pf dropdown f8-query__create-workitem"
-        [autoClose]="false"
-        (clickOut)="closeCreateWorkItemDialog($event)"
-        [isOpen]="isCreateWorkitemDropdownOpen"
-        (isOpenChange)="createWorkItemDialogChange($event)"
-        dropdown
-      >
-        <button type="button" class="btn btn-primary dropdown-toggle " dropdownToggle>
-          Create WorkItem
-        </button>
-        <div *dropdownMenu class="dropdown-menu-right dropdown-menu f8-query__create-workitem-menu">
-          <aside>
-            <i
-              class="fa fa-close btn btn-link f8-query__create-workitem-close"
-              (click)="closeCreateWorkItemDialog($event)"
-            ></i>
-          </aside>
-          <alm-work-item-quick-add
-            *ngIf="(quickAddWorkItemTypes | async) as quickAddWorkItemTypes"
-            [wilistview]="'wi-query-view'"
-            [workItemTypes]="quickAddWorkItemTypes"
-            [selectedType]="quickAddWorkItemTypes[0]"
-            [selectedIteration]="selectedIterationSource | async"
+    <div class="f8-query__breadcrumbs container-fluid">
+      <div class="col-md-8 col-lg-9 col-sm-6 padding-0">
+        <ng-container *ngFor="let breadcrumb of breadcrumbs; let i = index">
+          >&nbsp;
+          <span class="pointer breadcrumbs" (click)="navigateToQuery(breadcrumb)">
+            {{ breadcrumbsText(i, breadcrumb) }}
+          </span> </ng-container
+        >&nbsp;>&nbsp;<span class="current-query">{{ currentQuery }}</span>
+      </div>
+      <div class="col-md-4 col-lg-3 col-sm-6 padding-0 text-right">
+        <export-csv [isDisabled]="(workItemsSource | async).length <= 0"></export-csv>
+        <div
+          *ngIf="!(addDisabled | async)"
+          class="dropdown-kebab-pf dropdown f8-query__create-workitem"
+          [autoClose]="false"
+          (clickOut)="closeCreateWorkItemDialog($event)"
+          [isOpen]="isCreateWorkitemDropdownOpen"
+          (isOpenChange)="createWorkItemDialogChange($event)"
+          dropdown
+        >
+          <button type="button" class="btn btn-primary dropdown-toggle " dropdownToggle>
+            Create WorkItem
+          </button>
+          <div
+            *dropdownMenu
+            class="dropdown-menu-right dropdown-menu f8-query__create-workitem-menu"
           >
-          </alm-work-item-quick-add>
+            <aside>
+              <i
+                class="fa fa-close btn btn-link f8-query__create-workitem-close"
+                (click)="closeCreateWorkItemDialog($event)"
+              ></i>
+            </aside>
+            <alm-work-item-quick-add
+              *ngIf="(quickAddWorkItemTypes | async) as quickAddWorkItemTypes"
+              [wilistview]="'wi-query-view'"
+              [workItemTypes]="quickAddWorkItemTypes"
+              [selectedType]="quickAddWorkItemTypes[0]"
+              [selectedIteration]="selectedIterationSource | async"
+            >
+            </alm-work-item-quick-add>
+          </div>
         </div>
+      </div>
+    </div>
+
+    <div class="f8-wi-list">
+      <div class="f8-wi-list-wrap" *ngLet="(workItemsSource | async) as workitems" #listContainer>
+        <ngx-datatable
+          #myTable
+          *ngIf="!!workitems.length"
+          class="material fullscreen"
+          [columnMode]="'force'"
+          [scrollbarH]="true"
+          [scrollbarV]="true"
+          [headerHeight]="headerHeight"
+          [rows]="workitems"
+          [rowHeight]="contentItemHeight"
+          [sorts]="[{ prop: 'order', dir: 'desc' }]"
+          [selected]="selectedRows"
+          [selectionType]="'single'"
+          (scroll)="onScroll($event.offsetY, workitems.length)"
+          almInfiniteScroll
+          [eachElementHeightInPx]="contentItemHeight"
+          (initItems)="checkPageSize($event)"
+        >
+          <!-- FLAT LIST -->
+          <!-- columns number-assignees -->
+          <ngx-datatable-column
+            *ngFor="let c of (columns | filterColumn: 'display')"
+            [name]="c.name"
+            [resizeable]="false"
+            [width]="c.width"
+            [sortable]="c.name === 'Title'"
+            [cellClass]="'cell-class'"
+            [headerClass]="'header-cell'"
+          >
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <work-item-cell
+                [row]="row"
+                [col]="c.prop"
+                [context]="'query'"
+                (onQuickPreview)="onPreview($event)"
+                (onChildExploration)="onChildExploration($event)"
+                (onDelete)="isQuickPreviewOpen ? closePreview() : ''"
+                [class.f8-wi__table-config]="c.prop === 'label' || c.prop === 'assignees'"
+                [class.planner-hack-title-truncate]="c.prop === 'title'"
+              >
+              </work-item-cell>
+            </ng-template>
+          </ngx-datatable-column>
+        </ngx-datatable>
+
+        <pfng-empty-state *ngIf="!workitems?.length && !uiLockedList" [config]="emptyStateConfig">
+        </pfng-empty-state>
       </div>
     </div>
   </div>
 
-  <div class="f8-wi-list">
-    <div class="f8-wi-list-wrap" *ngLet="(workItemsSource | async) as workitems" #listContainer>
-      <ngx-datatable
-        #myTable
-        *ngIf="!!workitems.length"
-        class="material fullscreen"
-        [columnMode]="'force'"
-        [scrollbarH]="true"
-        [scrollbarV]="true"
-        [headerHeight]="headerHeight"
-        [rows]="workitems"
-        [rowHeight]="contentItemHeight"
-        [sorts]="[{ prop: 'order', dir: 'desc' }]"
-        [selected]="selectedRows"
-        [selectionType]="'single'"
-        (scroll)="onScroll($event.offsetY, workitems.length)"
-        almInfiniteScroll
-        [eachElementHeightInPx]="contentItemHeight"
-        (initItems)="checkPageSize($event)"
-      >
-        <!-- FLAT LIST -->
-        <!-- columns number-assignees -->
-        <ngx-datatable-column
-          *ngFor="let c of (columns | filterColumn: 'display')"
-          [name]="c.name"
-          [resizeable]="false"
-          [width]="c.width"
-          [sortable]="c.name === 'Title'"
-          [cellClass]="'cell-class'"
-          [headerClass]="'header-cell'"
-        >
-          <ng-template let-row="row" ngx-datatable-cell-template>
-            <work-item-cell
-              [row]="row"
-              [col]="c.prop"
-              [context]="'query'"
-              (onQuickPreview)="onPreview($event)"
-              (onChildExploration)="onChildExploration($event)"
-              (onDelete)="isQuickPreviewOpen ? closePreview() : ''"
-              [class.f8-wi__table-config]="c.prop === 'label' || c.prop === 'assignees'"
-              [class.planner-hack-title-truncate]="c.prop === 'title'"
-            >
-            </work-item-cell>
-          </ng-template>
-        </ngx-datatable-column>
-      </ngx-datatable>
-
-      <pfng-empty-state *ngIf="!workitems?.length && !uiLockedList" [config]="emptyStateConfig">
-      </pfng-empty-state>
-    </div>
-  </div>
-</div>
-
-<osio-modal></osio-modal>
+  <osio-modal></osio-modal>
+</ng-template>

@@ -15,14 +15,7 @@ export const routes: Routes = [
   // Home
   {
     path: '_home',
-    resolve: {
-      featureFlagConfig: FeatureFlagResolver,
-    },
     loadChildren: './home/home.module#HomeModule',
-    data: {
-      title: 'Analyze',
-      featureName: 'Analyze',
-    },
   },
 
   // Getting started
@@ -89,13 +82,8 @@ export const routes: Routes = [
     path: ':entity/:space',
     resolve: {
       context: ContextResolver,
-      featureFlagConfig: FeatureFlagResolver,
     },
     loadChildren: './space/analyze/analyze.module#AnalyzeModule',
-    data: {
-      title: 'Analyze',
-      featureName: 'Analyze',
-    },
   },
 
   // Plan
@@ -103,13 +91,8 @@ export const routes: Routes = [
     path: ':entity/:space/plan',
     resolve: {
       context: ContextResolver,
-      featureFlagConfig: FeatureFlagResolver,
     },
     loadChildren: './space/plan/plan.module#PlanModule',
-    data: {
-      title: 'Plan: Backlog',
-      featureName: 'Planner',
-    },
   },
 
   // Create
@@ -117,13 +100,8 @@ export const routes: Routes = [
     path: ':entity/:space/create',
     resolve: {
       context: ContextResolver,
-      featureFlagConfig: FeatureFlagResolver,
     },
     loadChildren: './space/create/create.module#CreateModule',
-    data: {
-      title: 'Create',
-      featureName: 'Codebases',
-    },
   },
 
   // Space-settings
@@ -143,13 +121,8 @@ export const routes: Routes = [
     path: ':entity/:space/applauncher',
     resolve: {
       context: ContextResolver,
-      featureFlagConfig: FeatureFlagResolver,
     },
     loadChildren: './space/app-launcher/app-launcher.module#AppLauncherModule',
-    data: {
-      title: 'App Launcher',
-      featureName: 'AppLauncher',
-    },
   },
 
   {
