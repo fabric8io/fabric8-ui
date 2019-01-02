@@ -21,17 +21,6 @@ const routes: Routes = [
           featureName: 'Pipelines',
         },
       },
-      {
-        path: 'deployments',
-        loadChildren: './deployments/deployments.module#DeploymentsModule',
-        resolve: {
-          featureFlagConfig: FeatureFlagResolver,
-        },
-        data: {
-          title: 'Deployments',
-          featureName: 'Deployments',
-        },
-      },
     ],
   },
 ];
