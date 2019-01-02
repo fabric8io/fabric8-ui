@@ -95,32 +95,26 @@
           [defaultLevel]="noWorkItemsCard"
         ></f8-feature-toggle>
         <ng-template #myWorkItemsCard>
-          <div class="col-xs-12 col-md-4">
+          <div class="col-xs-12 col-md-6">
             <fabric8-create-work-item-widget
               [userOwnsSpace]="userOwnsSpace"
               [currentSpace]="space"
               [loggedInUser]="loggedInUser"
             ></fabric8-create-work-item-widget>
           </div>
-          <div class="col-xs-12 col-md-4">
+          <div class="col-xs-12 col-md-6">
             <fabric8-pipelines-widget
               [userOwnsSpace]="userOwnsSpace"
               (addToSpace)="showAddAppOverlay()"
             ></fabric8-pipelines-widget>
-          </div>
-          <div class="col-xs-12 col-md-4">
-            <fabric8-environment-widget></fabric8-environment-widget>
           </div>
         </ng-template>
         <ng-template #noWorkItemsCard>
-          <div class="col-xs-12 col-md-6">
+          <div class="col-xs-12 col-md-12">
             <fabric8-pipelines-widget
               [userOwnsSpace]="userOwnsSpace"
               (addToSpace)="showAddAppOverlay()"
             ></fabric8-pipelines-widget>
-          </div>
-          <div class="col-xs-12 col-md-6">
-            <fabric8-environment-widget></fabric8-environment-widget>
           </div>
         </ng-template>
       </div>
