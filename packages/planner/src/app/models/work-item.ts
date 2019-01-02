@@ -673,7 +673,7 @@ export class WorkItemQuery {
             return orderBy(iterations, 'name', 'asc').map((i) => {
               return {
                 key: i.id,
-                value: (i.resolvedParentPath != '/' ? i.resolvedParentPath : '') + '/' + i.name,
+                value: i.resolvedParentPath != '/' ? '/' + i.name : '/',
                 selected: i.id === workitem.iterationId,
                 cssLabelClass: undefined,
               };
