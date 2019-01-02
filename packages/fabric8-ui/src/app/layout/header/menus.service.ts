@@ -68,11 +68,6 @@ export class MenusService {
                 name: 'Pipelines',
                 path: 'pipelines',
               },
-              {
-                name: 'Deployments',
-                feature: 'Deployments',
-                path: 'deployments',
-              },
             ],
           },
         ],

@@ -91,12 +91,6 @@ describe('MenuService service: it', () => {
           path: 'pipelines',
           fullPath: '/ckrych@redhat.com/test2/create/pipelines',
         },
-        {
-          name: 'Deployments',
-          feature: 'Deployments',
-          path: 'deployments',
-          fullPath: '/ckrych@redhat.com/test2/create/deployments',
-        },
       ],
       fullPath: '/ckrych@redhat.com/test2/create',
     },
@@ -144,7 +138,6 @@ describe('MenuService service: it', () => {
     let menus = myContext.type['menus'];
     let createMenu = menus[3];
     expect(createMenu.menus.length).toEqual(2);
-    expect(createMenu.menus.filter((subMenu) => subMenu.name == 'Deployments').length == 0);
     expect(createMenu.menus.filter((subMenu) => subMenu.name == 'Codebases').length == 1);
     expect(createMenu.menus.filter((subMenu) => subMenu.name == 'Pipelines').length == 1);
   });
@@ -164,7 +157,6 @@ describe('MenuService service: it', () => {
     let menus = myContext.type['menus'];
     let createMenu = menus[3];
     expect(createMenu.menus.length).toEqual(2);
-    expect(createMenu.menus.filter((subMenu) => subMenu.name == 'Deployments').length == 0);
     expect(createMenu.menus.filter((subMenu) => subMenu.name == 'Codebases').length == 1);
     expect(createMenu.menus.filter((subMenu) => subMenu.name == 'Pipelines').length == 1);
   });
