@@ -44,6 +44,7 @@ export class WorkItemQuickAddComponent
   @ViewChild('inlinequickAddElement') inlinequickAddElement: ElementRef;
 
   @Input() parentWorkItemId: string = null;
+  @Input() parentWorkItemIterationId: string = null;
   @Input() workItemTypes: WorkItemTypeUI[] = [];
   @Input() selectedType: WorkItemTypeUI = null;
   @Input() selectedIteration: IterationUI = null;
@@ -192,6 +193,17 @@ export class WorkItemQuickAddComponent
         },
       };
     }
+
+    // Set the parent iteration for new child work item
+    if (this.parentWorkItemIterationId) {
+      this.workItem.relationships.iteration = {
+        data: {
+          id: this.parentWorkItemIterationId,
+          type: 'iterations',
+        },
+      };
+    }
+
     this.createId = new Date().getTime();
 
     if (this.workItem.attributes['system.title']) {

@@ -117,6 +117,7 @@
                 [selectedType]="type?.childTypes?.length ? type.childTypes[0] : null"
                 [selectedIteration]="selectedIterationSource | async"
                 [parentWorkItemId]="row.id"
+                [parentWorkItemIterationId]="row.iterationId"
                 (onStartCreateWI)="onCreateStart($event)"
               >
               </alm-work-item-quick-add>
