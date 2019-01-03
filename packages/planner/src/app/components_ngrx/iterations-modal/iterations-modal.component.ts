@@ -51,6 +51,7 @@ export class FabPlannerIterationModalComponent implements OnInit, OnDestroy, OnC
   selectedParentIterationName: string = '';
   iterationSearchDisable: Boolean = false;
   showIterationDropdown: Boolean = false;
+  modalOpened: boolean = false;
   validationString: string = 'Something went wrong.';
 
   private startDatePickerOptions: IMyOptions = {
@@ -85,7 +86,7 @@ export class FabPlannerIterationModalComponent implements OnInit, OnDestroy, OnC
     private broadcaster: Broadcaster,
     private store: Store<AppState>,
     private iterationQuery: IterationQuery,
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.resetValues();
@@ -163,7 +164,7 @@ export class FabPlannerIterationModalComponent implements OnInit, OnDestroy, OnC
     }
   }
 
-  ngOnChanges() { }
+  ngOnChanges() {}
 
   ngOnDestroy() {
     // prevent memory leak when component is destroyed
@@ -177,7 +178,7 @@ export class FabPlannerIterationModalComponent implements OnInit, OnDestroy, OnC
     if (e) {
       e.stopPropagation();
     }
-
+    this.modalOpened = true;
     this.modalType = type;
     if (iteration) {
       this.iteration = cloneDeep(iteration);
@@ -255,6 +256,7 @@ export class FabPlannerIterationModalComponent implements OnInit, OnDestroy, OnC
   }
 
   actionOnClose() {
+    this.modalOpened = false;
     this.resetValues();
   }
 
