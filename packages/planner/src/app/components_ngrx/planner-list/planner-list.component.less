@@ -24,10 +24,10 @@
       color: @color-pf-black;
       transform: translate(-50%, -50%);
       h2 {
-        margin-top: .5em;
+        margin-top: 0.5em;
       }
       .spinner {
-        &:before {
+        &::before {
           content: unset;
         }
         position: relative;
@@ -45,7 +45,7 @@
       width: 100%;
       overflow-y: auto;
       .f8-planner-list-title {
-        max-width: ~'calc(e("100% - 20px"))';
+        max-width: ~'calc(100% - 20px)';
       }
       //List entry tree view specific css
       .tree-node-level-2 .list-pf-item {
@@ -69,23 +69,23 @@
         }
         aside {
           float: right;
-          width: ~'calc(e("45% - 30px"))';
+          width: ~'calc(45% - 30px)';
           height: 100%;
-          padding-left: (@grid-gutter-width/6);
-          padding-right: (@grid-gutter-width/6);
+          padding-left: (@grid-gutter-width / 6);
+          padding-right: (@grid-gutter-width / 6);
           &:first-child,
           &:nth-child(3) {
             width: 10%;
-            padding: 0 (@grid-gutter-width/3);
+            padding: 0 (@grid-gutter-width / 3);
             span.fa {
               width: 100%;
               text-align: center;
-              padding: (@grid-gutter-width/6) 0;
-              margin: (@grid-gutter-width/6) 0;
+              padding: (@grid-gutter-width / 6) 0;
+              margin: (@grid-gutter-width / 6) 0;
               font-size: @pf-icon-2x;
             }
             &:nth-child(3) {
-              margin-top: ((@grid-gutter-width/3)*5);
+              margin-top: ((@grid-gutter-width / 3) * 5);
             }
           }
         }
@@ -94,7 +94,7 @@
         float: left;
         width: 100%;
         height: ~'calc(e("100% - 30px"))';
-        padding: (@grid-gutter-width/3);
+        padding: (@grid-gutter-width / 3);
         list-style: none;
         background-color: @color-pf-white;
         border: 1px solid;
