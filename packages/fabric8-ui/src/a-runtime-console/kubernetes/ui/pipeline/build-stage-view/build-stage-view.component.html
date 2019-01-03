@@ -52,7 +52,7 @@
       </ng-template>
       <ng-template #pipelinesStarted>
         <div class="pipeline">
-          <div class="pipeline-stage " *ngFor="let stage of displayStages">
+          <div class="pipeline-stage " *ngFor="let stage of displayStages; first as isFirstStage">
             <div column="" class="pipeline-stage-column">
               <div
                 id="pipeine-stage-name"
@@ -97,7 +97,7 @@
                 build &&
                 build.annotations &&
                 build.annotations['fabric8.io/bayesian.analysisUrl'] &&
-                ['Build Release', 'Build Image'].includes(stage.name) &&
+                isFirstStage &&
                 stage.status === 'SUCCESS'
               "
               class="col-xs-12"
