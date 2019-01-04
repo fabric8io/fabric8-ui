@@ -16,6 +16,7 @@ export { DropdownOption } from './dropdown/dropdown-option';
 export { AlmEditableModule } from './editable/almeditable.module';
 export { AlmIconModule } from './icon/almicon.module';
 export { InfiniteScrollModule } from './infinitescroll/infinitescroll.module';
+export { AutofocusModule } from './autofocus/autofocus.module';
 
 // Config
 export { Action } from './config/action';

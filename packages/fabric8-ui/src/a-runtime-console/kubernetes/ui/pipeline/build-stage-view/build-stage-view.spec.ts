@@ -92,20 +92,6 @@ describe('BuildStageViewComponent', () => {
         id: '20',
         name: 'Build Image',
         pauseDurationMillis: 0,
-        status: 'SUCCESS',
-      },
-      {
-        durationMillis: 172579,
-        environmentName: 'Stage',
-        id: '60',
-        name: 'Rollout to Stage',
-        pauseDurationMillis: 0,
-        serviceUrl:
-          'http://app-test-apr-12-11-jakumar-stage.8a09.starter-us-east-2.openshiftapps.com',
-        serviceUrlMap: {
-          'app-test-apr-12-11':
-            'http://app-test-apr-12-11-jakumar-stage.8a09.starter-us-east-2.openshiftapps.com',
-        },
         status: 'FAILED',
       },
     ],
@@ -252,12 +238,12 @@ describe('BuildStageViewComponent', () => {
     expect(buildStackReportShow).toBeDefined();
   });
 
-  it('should show stack report button when stage Build Image completed', () => {
+  it('should not show stack report button when Build first stage is completed with failure', () => {
     component.build = buildDataStage;
     fixture.detectChanges();
     element = fixture.nativeElement;
     let buildStackReportShow = element.querySelector('#stack-report-btn-cntr');
-    expect(buildStackReportShow).toBeDefined();
+    expect(buildStackReportShow).toBeNull();
   });
 
   it('should not show stack report button when pipeline stages are not there', () => {

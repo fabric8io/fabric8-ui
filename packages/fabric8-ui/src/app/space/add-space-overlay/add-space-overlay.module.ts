@@ -6,7 +6,7 @@ import { SpaceTemplateService } from '../../shared/space-template.service';
 
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { CodebasesService } from '../create/codebases/services/codebases.service';
-import { AutofocusModule } from './../../shared/autofocus.directive';
+import { AutofocusModule } from 'ngx-widgets';
 import { AddSpaceOverlayComponent } from './add-space-overlay.component';
 
 @NgModule({

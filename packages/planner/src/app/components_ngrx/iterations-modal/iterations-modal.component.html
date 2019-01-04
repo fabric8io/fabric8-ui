@@ -7,7 +7,7 @@
   (onClose)="actionOnClose()"
   (onSubmit)="actionOnSubmit()"
 >
-  <modal-content>
+  <modal-content *ngIf="modalOpened">
     <div class="col-xs-12 col-sm-12 col-md-12">
       <div *ngIf="modalType == 'update' || modalType == 'create' || modalType == 'createChild'">
         <div class="form-group" [class.has-error]="validationError">
@@ -15,12 +15,15 @@
             <label for="iteration-name">Name <span class="field-required-icon">*</span></label>
             <input
               id="iteration-name"
+              #iterationName
               type="text"
               class="form-control"
               placeholder="Iteration Name"
               [(ngModel)]="iteration.name"
               (keyup.enter)="actionOnSubmit()"
               (keyup)="removeError()"
+              afinput
+              [autofocus]="true"
             />
             <span class="error-block">
               <span class="help-block" id="iteration-help-label">{{ validationString }}</span>
