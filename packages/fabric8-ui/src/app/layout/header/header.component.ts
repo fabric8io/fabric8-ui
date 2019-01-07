@@ -169,8 +169,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-  get isGettingStartedPage(): boolean {
-    return this.router.url.indexOf('_gettingstarted') !== -1;
+  get isHomePage(): boolean {
+    let wait = this.route.snapshot.queryParams['wait'];
+    return this.router.url.indexOf('_home') !== -1 && wait;
   }
 
   get isAppLauncherPage(): boolean {

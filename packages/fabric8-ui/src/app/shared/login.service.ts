@@ -104,7 +104,7 @@ export class LoginService {
         )
         .subscribe((token) => (this.openShiftToken = token));
       // Navigate back to the current URL to clear up the query string
-      this.router.navigateByUrl(this.router.url);
+      this.router.navigateByUrl(LoginService.DEFAULT_URL);
     } else if (this.authService.isLoggedIn()) {
       // Handle the case the user is already logged in
       this.authService.onLogIn();

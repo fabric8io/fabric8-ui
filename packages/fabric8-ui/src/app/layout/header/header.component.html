@@ -1,6 +1,4 @@
-<div
-  *ngIf="isGettingStartedPage || isAppLauncherPage; then showGettingStartedHeader; else showHeader"
-></div>
+<div *ngIf="isHomePage || isAppLauncherPage; then showGettingStartedHeader; else showHeader"></div>
 <ng-template #showGettingStartedHeader>
   <nav class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
     <img
