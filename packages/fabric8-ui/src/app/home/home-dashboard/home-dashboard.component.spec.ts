@@ -8,13 +8,13 @@ import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.componen
 import { initContext, TestContext } from 'testing/test-context';
 
 import { User, UserService } from 'ngx-login-client';
-import { LoadingWidgetComponent } from '../dashboard-widgets/loading-widget/loading-widget.component';
-import { LoadingWidgetModule } from '../dashboard-widgets/loading-widget/loading-widget.module';
-import { UserSpacesService } from '../shared/user-spaces.service';
-import { HomeComponent } from './home.component';
+import { LoadingWidgetComponent } from '../../dashboard-widgets/loading-widget/loading-widget.component';
+import { LoadingWidgetModule } from '../../dashboard-widgets/loading-widget/loading-widget.module';
+import { UserSpacesService } from '../../shared/user-spaces.service';
+import { HomeDashboardComponent } from './home-dashboard.component';
 
 @Component({
-  template: '<alm-home></alm-home>',
+  template: '<alm-home-dashboard></alm-home-dashboard>',
 })
 class HostComponent {}
 
@@ -90,10 +90,10 @@ function getModuleMetadata(countObservable: Observable<number>): TestModuleMetad
   };
 }
 
-describe('HomeComponent', (): void => {
+describe('HomeDashboardComponent', (): void => {
   describe('no Spaces', (): void => {
-    const testContext: TestContext<HomeComponent, HostComponent> = initContext(
-      HomeComponent,
+    const testContext: TestContext<HomeDashboardComponent, HostComponent> = initContext(
+      HomeDashboardComponent,
       HostComponent,
       getModuleMetadata(of(0)),
     );
@@ -114,8 +114,8 @@ describe('HomeComponent', (): void => {
   });
 
   describe('while loading', (): void => {
-    const testContext: TestContext<HomeComponent, HostComponent> = initContext(
-      HomeComponent,
+    const testContext: TestContext<HomeDashboardComponent, HostComponent> = initContext(
+      HomeDashboardComponent,
       HostComponent,
       getModuleMetadata(never()),
     );
@@ -144,8 +144,8 @@ describe('HomeComponent', (): void => {
   });
 
   describe('with Spaces', (): void => {
-    const testContext: TestContext<HomeComponent, HostComponent> = initContext(
-      HomeComponent,
+    const testContext: TestContext<HomeDashboardComponent, HostComponent> = initContext(
+      HomeDashboardComponent,
       HostComponent,
       getModuleMetadata(of(2)),
     );
