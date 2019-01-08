@@ -25,12 +25,14 @@ import { NgLetModule } from '../../shared/ng-let';
 import { ClickOutModule } from '../../widgets/clickout/clickout.module';
 import { ListItemModule } from '../../widgets/list-item/list-item.module';
 import { WorkItemQuickAddModule } from '../work-item-quick-add/work-item-quick-add.module';
+import { ExportCsvModule } from '../export-csv/export-csv.module';
 
 @NgModule({
   imports: [
     BsDropdownModule,
     CommonModule,
     ClickOutModule,
+    ExportCsvModule,
     FormsModule,
     FilterColumnModule,
     EmptyStateModule,

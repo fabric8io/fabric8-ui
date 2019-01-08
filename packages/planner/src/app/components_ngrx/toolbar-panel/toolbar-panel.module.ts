@@ -24,6 +24,7 @@ import { GroupTypeQuery } from './../../models/group-types.model';
 import { SpaceQuery } from './../../models/space';
 import { FilterReducer } from './../../reducers/filter.reducer';
 import { initialState as initialFilterState } from './../../states/filter.state';
+import { ExportCsvModule } from '../export-csv/export-csv.module';
 
 @NgModule({
   imports: [
@@ -31,6 +32,7 @@ import { initialState as initialFilterState } from './../../states/filter.state'
     AlmIconModule,
     BsDropdownModule,
     CommonModule,
+    ExportCsvModule,
     ToolbarModule,
     TooltipModule.forRoot(),
     WidgetsModule,

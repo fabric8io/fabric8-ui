@@ -49,42 +49,47 @@
       </ng-container>
     </div>
     <span class="f8-query__input-hint">Press Enter to Search....</span>
-    <div
-      *ngIf="!(addDisabled | async)"
-      class="dropdown-kebab-pf dropdown f8-query__create-workitem"
-      [autoClose]="false"
-      (clickOut)="closeCreateWorkItemDialog($event)"
-      [isOpen]="isCreateWorkitemDropdownOpen"
-      (isOpenChange)="createWorkItemDialogChange($event)"
-      dropdown
-    >
-      <button type="button" class="btn btn-primary dropdown-toggle" dropdownToggle>
-        Create WorkItem
-      </button>
-      <div *dropdownMenu class="dropdown-menu-right dropdown-menu f8-query__create-workitem-menu">
-        <aside>
-          <i
-            class="fa fa-close btn btn-link f8-query__create-workitem-close"
-            (click)="closeCreateWorkItemDialog($event)"
-          ></i>
-        </aside>
-        <alm-work-item-quick-add
-          *ngIf="(quickAddWorkItemTypes | async) as quickAddWorkItemTypes"
-          [wilistview]="'wi-query-view'"
-          [workItemTypes]="quickAddWorkItemTypes"
-          [selectedType]="quickAddWorkItemTypes[0]"
-          [selectedIteration]="selectedIterationSource | async"
-        >
-        </alm-work-item-quick-add>
-      </div>
-    </div>
-    <div>
+  </div>
+  <div class="f8-query__breadcrumbs container-fluid">
+    <div class="col-md-8 col-lg-9 col-sm-6 padding-0">
       <ng-container *ngFor="let breadcrumb of breadcrumbs; let i = index">
         >&nbsp;
         <span class="pointer breadcrumbs" (click)="navigateToQuery(breadcrumb)">
           {{ breadcrumbsText(i, breadcrumb) }}
         </span> </ng-container
       >&nbsp;>&nbsp;<span class="current-query">{{ currentQuery }}</span>
+    </div>
+    <div class="col-md-4 col-lg-3 col-sm-6 padding-0 text-right">
+      <export-csv [isDisabled]="(workItemsSource | async).length <= 0"></export-csv>
+      <div
+        *ngIf="!(addDisabled | async)"
+        class="dropdown-kebab-pf dropdown f8-query__create-workitem"
+        [autoClose]="false"
+        (clickOut)="closeCreateWorkItemDialog($event)"
+        [isOpen]="isCreateWorkitemDropdownOpen"
+        (isOpenChange)="createWorkItemDialogChange($event)"
+        dropdown
+      >
+        <button type="button" class="btn btn-primary dropdown-toggle " dropdownToggle>
+          Create WorkItem
+        </button>
+        <div *dropdownMenu class="dropdown-menu-right dropdown-menu f8-query__create-workitem-menu">
+          <aside>
+            <i
+              class="fa fa-close btn btn-link f8-query__create-workitem-close"
+              (click)="closeCreateWorkItemDialog($event)"
+            ></i>
+          </aside>
+          <alm-work-item-quick-add
+            *ngIf="(quickAddWorkItemTypes | async) as quickAddWorkItemTypes"
+            [wilistview]="'wi-query-view'"
+            [workItemTypes]="quickAddWorkItemTypes"
+            [selectedType]="quickAddWorkItemTypes[0]"
+            [selectedIteration]="selectedIterationSource | async"
+          >
+          </alm-work-item-quick-add>
+        </div>
+      </div>
     </div>
   </div>
 
