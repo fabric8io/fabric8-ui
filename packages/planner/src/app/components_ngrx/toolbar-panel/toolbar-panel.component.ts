@@ -83,6 +83,7 @@ export class ToolbarPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 
   showSaveFilterButton: boolean = true;
   isFilterSaveOpen: boolean = false;
+  totalCount: Observable<number>;
 
   // the type of the list is changed (Hierarchy/Flat).
   currentListType: string = 'Hierarchy';
@@ -111,7 +112,6 @@ export class ToolbarPanelComponent implements OnInit, AfterViewInit, OnDestroy {
   private activeFilters = [];
   private activeFilterFromSidePanel: string = '';
   private currentQuery: string = '';
-  private totalCount: Observable<number>;
 
   private isShowTreeOn: boolean = false;
   private isShowCompletedOn: boolean = false;
