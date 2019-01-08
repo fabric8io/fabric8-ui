@@ -34,10 +34,10 @@
         [routerLink]="[]"
         [attr.data-id]="iteration.id"
         [queryParams]="addRemoveQueryParams(iteration.id)"
-        title="{{ iteration.resolvedParentPath + '/' + iteration.name }}"
+        title="{{ iteration.resolvedParentPath + '/' + iteration.name | f8RootIteration }}"
       >
         <span id="{{ iteration.resolvedParentPath + '/' + iteration.name }}">
-          {{ iteration.resolvedParentPath + '/' + iteration.name | truncate: -20 }}
+          {{ iteration.resolvedParentPath + '/' + iteration.name | f8RootIteration | truncate: -20  }}
         </span>
         <span class="fa pull-right margin-top-3" [class.fa-check]="iteration.selected"></span>
         <span *ngIf="iteration.isActive" class="active-tag pull-right margin-right-5">

@@ -72,14 +72,14 @@
   id="table-iteration"
   *ngIf="col === 'iteration'"
   tooltip="{{
-    (row.iterationObs | async)?.parentPath === '/' ? '/' : (row.iterationObs | async)?.name
+    (row.iterationObs | async)?.parentPath === '/' ? '/' : '/' + (row.iterationObs | async)?.name
   }}"
   placement="left"
 >
   {{
     (row.iterationObs | async)?.parentPath === '/'
       ? '/'
-      : ((row.iterationObs | async)?.name | truncate: 12)
+      : '/' + ((row.iterationObs | async)?.name | truncate: 12)
   }}
 </span>
 
