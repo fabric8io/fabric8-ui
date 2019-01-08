@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { CollapseModule } from 'ngx-bootstrap';
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { InfotipModule } from '../infotip/infotip.module';
+import { F8RootIterationModule } from '../../pipes/root-iteration.module';
 
 import { MyDatePickerModule } from 'mydatepicker';
 import { DragulaModule } from 'ng2-dragula';
@@ -43,6 +44,7 @@ import { initialUIState } from './../../states/iteration.state';
     RouterModule,
     InfotipModule,
     AutofocusModule,
+    F8RootIterationModule,
     StoreModule.forFeature(
       'iterationPanel',
       {
