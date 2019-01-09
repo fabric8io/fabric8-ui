@@ -26,7 +26,6 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.loggedInUser = this.userService.currentLoggedInUser;
-    console.log(this.loggedInUser);
     if (this.loggedInUser.attributes && this.loggedInUser.attributes.cluster) {
       this.linkOpenshiftAccounts();
     }
@@ -38,7 +37,6 @@ export class HomeComponent implements OnInit {
       .isOpenShiftConnected(this.loggedInUser.attributes.cluster)
       .subscribe((isConnected) => {
         this.openShiftLinked = isConnected;
-        console.log('connection', this.openShiftLinked);
         let wait = this.route.snapshot.queryParams['wait'];
         if (!isConnected && !wait) {
           // first time through and user isn't connected - automatically connect accounts

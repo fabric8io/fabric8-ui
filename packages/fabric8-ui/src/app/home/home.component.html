@@ -1,5 +1,7 @@
 <section id="account-not-linked">
-  <div *ngIf="errorConnecting && !loading"><f8-link-error></f8-link-error></div>
+  <div *ngIf="errorConnecting && !loading" style="margin-top:95px">
+    <f8-link-error></f8-link-error>
+  </div>
 </section>
 <fabric8-loading-widget
   message="Please wait while we load your spaces"
