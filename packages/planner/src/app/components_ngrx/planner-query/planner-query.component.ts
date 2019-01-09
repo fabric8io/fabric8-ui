@@ -58,7 +58,7 @@ export class PlannerQueryComponent implements OnInit, OnDestroy, AfterViewChecke
   ).pipe(
     delay(500),
     switchMap(([space, query]) => {
-      if (query.hasOwnProperty('q')) {
+      if (query.hasOwnProperty('q') && query.q !== '') {
         this.searchQuery = query.q;
         this.disableInput = false;
         this.currentQuery = this.breadcrumbsText('', query);

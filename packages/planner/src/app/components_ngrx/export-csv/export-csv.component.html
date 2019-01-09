@@ -1,0 +1,10 @@
+<a
+  class="btn btn-default"
+  *ngLet="(csvLink | async) as link"
+  [class.disabled]="isDisabled"
+  [attr.href]="!isDisabled ? link : '#'"
+  tooltip="Download a .csv file of currently shown work items"
+  placement="bottom"
+  download
+  >Export CSV</a
+>

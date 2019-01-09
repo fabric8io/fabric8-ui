@@ -62,7 +62,7 @@
                 (click)="setParentIteration(iteration)"
               >
                 <span
-                  [innerHTML]="iteration.value | almSearchHighlight: iterationSearch.value"
+                  [innerHTML]="iteration.value | almSearchHighlight: iterationSearch.value | f8RootIteration"
                 ></span>
               </li>
             </ul>
