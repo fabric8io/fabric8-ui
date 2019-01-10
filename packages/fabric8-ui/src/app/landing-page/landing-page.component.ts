@@ -10,8 +10,10 @@ import { LoginService } from '../shared/login.service';
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-landing-page',
   templateUrl: './landing-page.component.html',
+  styleUrls: ['./landing-page.component.less'],
 })
 export class LandingPageComponent implements OnInit {
+  isLoggedIn: boolean = false;
   constructor(
     private broadcaster: Broadcaster,
     private loginService: LoginService,
@@ -19,13 +21,13 @@ export class LandingPageComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    if (this.authService.isLoggedIn()) {
+    this.isLoggedIn = this.authService.isLoggedIn();
+    if (this.isLoggedIn) {
       this.loginService.redirectAfterLogin();
     }
   }
 
   login() {
-    this.loginService.redirectUrl = '/_gettingstarted';
     this.broadcaster.broadcast('login');
     this.loginService.redirectToAuth();
   }

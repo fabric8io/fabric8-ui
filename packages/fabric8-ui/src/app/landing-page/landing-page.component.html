@@ -1,3 +1,29 @@
-<div class="row" id="signUp">
+<div class="row" id="signUp" *ngIf="!isLoggedIn">
   <button id="login" class="center-block btn btn-primary " (click)="login()">Log In</button>
+</div>
+<div id="app-loader" *ngIf="isLoggedIn">
+  <header>
+    <div class="preboot-header-bar-primary"></div>
+    <div class="preboot-header-bar-secondary"></div>
+  </header>
+  <section>
+    <div class="preboot-container container-fluid">
+      <div class="progress-description">
+        <div class="spinner spinner-xs spinner-inline"></div>
+        <strong>Loading...</strong>
+      </div>
+      <div class="progress">
+        <div
+          class="progress-bar progress-bar-striped active"
+          role="progressbar"
+          aria-valuenow="100"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          style="width: 100%;"
+        >
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+    </div>
+  </section>
 </div>
