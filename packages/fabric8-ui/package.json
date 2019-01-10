@@ -67,7 +67,7 @@
     "ng2-truncate": "1.3.17",
     "ngx-base": "4.0.0",
     "ngx-bootstrap": "3.1.1",
-    "ngx-fabric8-wit": "8.3.0",
+    "ngx-fabric8-wit": "10.0.1",
     "ngx-feature-flag": "1.2.0",
     "ngx-launcher": "3.4.8",
     "ngx-login-client": "2.8.0",
