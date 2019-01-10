@@ -90,7 +90,7 @@ export class CleanupComponent implements OnInit, OnDestroy {
       if (!space['erased']) {
         space['progress'] = 'Erasing space';
         space['statusIcon'] = 'spinner spinner-lg';
-        let spaceObservable = this.spaceService.deleteSpace(space, true).pipe(
+        let spaceObservable = this.spaceService.delete(space, true).pipe(
           map(() => {
             space['erased'] = true;
             space['progress'] = 'Space successfully erased';

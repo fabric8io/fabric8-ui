@@ -271,7 +271,7 @@ export class MySpacesComponent implements OnDestroy, OnInit {
   removeSpace(): void {
     if (this.context && this.context.user && this.spaceToDelete) {
       let space = this.spaceToDelete;
-      this.spaceService.deleteSpace(space).subscribe(
+      this.spaceService.delete(space).subscribe(
         (): void => {
           let index: any = findIndex(
             this._spaces,
