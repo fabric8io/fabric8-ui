@@ -60,6 +60,7 @@ import { ContextCurrentUserGuard } from './shared/context-current-user-guard.ser
 import { ContextResolver } from './shared/context-resolver.service';
 import { ContextService } from './shared/context.service';
 import { forgeApiUrlProvider } from './shared/forge-api.provider';
+import { buildToolDetectorApiUrlProvider } from './shared/build-tool-detector-api.provider';
 import { jenkinsApiUrlProvider } from './shared/jenkins-api.provider';
 import { LoginService } from './shared/login.service';
 import { NotificationsService } from './shared/notifications.service';
@@ -199,6 +200,7 @@ export type StoreType = {
       useClass: Fabric8UIOnLogin,
     },
     forgeApiUrlProvider,
+    buildToolDetectorApiUrlProvider,
     GettingStartedService,
     HttpInterceptorProviders,
     jenkinsApiUrlProvider,

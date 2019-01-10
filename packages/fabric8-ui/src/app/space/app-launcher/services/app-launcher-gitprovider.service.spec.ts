@@ -12,6 +12,7 @@ import { NewForgeConfig } from '../shared/new-forge.config';
 import { AppLauncherGitproviderService } from './app-launcher-gitprovider.service';
 
 import { ProviderService } from '../../../shared/account/provider.service';
+import { FABRIC8_BUILD_TOOL_DETECTOR_API_URL } from '../../../shared/runtime-console/fabric8-ui-build-tool-detector-api';
 
 describe('Service: AppLauncherGitproviderService', () => {
   let service: AppLauncherGitproviderService;
@@ -28,6 +29,7 @@ describe('Service: AppLauncherGitproviderService', () => {
   } as GitHubDetails;
   let orgs = { 'fabric8-ui': 'fabric8-ui' };
   let repos = ['fabric8-ui', 'fabric-uxd'];
+  let detectedTool = { 'build-tool-type': 'nodejs' };
 
   beforeEach(() => {
     const mockProviderService = jasmine.createSpy('ProviderService');
@@ -47,6 +49,7 @@ describe('Service: AppLauncherGitproviderService', () => {
         { provide: AuthenticationService, useValue: mockAuthenticationService },
         { provide: Config, useClass: NewForgeConfig },
         { provide: FABRIC8_FORGE_API_URL, useValue: 'http://example.com' },
+        { provide: FABRIC8_BUILD_TOOL_DETECTOR_API_URL, useValue: 'http://example.com' },
       ],
     });
     service = TestBed.get(AppLauncherGitproviderService);
@@ -107,4 +110,13 @@ describe('Service: AppLauncherGitproviderService', () => {
     expect(req.request.headers.get('Authorization')).toEqual('Bearer mock-token');
     req.flush(repos);
   });
+
+  it('should detect the build tool', async((done: DoneFn) => {
+    service
+      .getDetectedBuildRuntime('https%3A%2F%2Fgithub.com%2Ffabric8-ui%2Ffabric8-ui')
+      .subscribe((buildTool) => {
+        expect(buildTool).toEqual(detectedTool);
+        done();
+      });
+  }));
 });

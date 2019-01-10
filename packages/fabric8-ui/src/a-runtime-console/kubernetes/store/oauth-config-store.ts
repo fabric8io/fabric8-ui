@@ -25,6 +25,7 @@ export class OAuthConfig {
   public ssoApiUrl: string;
   public forgeApiUrl: string;
   public recommenderApiUrl: string;
+  public buildToolDetectorApiUrl: string;
 
   constructor(data: any) {
     var config = data || {};
@@ -48,6 +49,7 @@ export class OAuthConfig {
     this.ssoApiUrl = config.sso_api_url || '';
     this.forgeApiUrl = config.forge_api_url || '';
     this.recommenderApiUrl = config.recommender_api_url || '';
+    this.buildToolDetectorApiUrl = config.build_tool_detector_api_url || '';
 
     if (!this.issuer && this.authorizeUri) {
       // lets default the issuer from the authorize Uri

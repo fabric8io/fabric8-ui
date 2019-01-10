@@ -1,11 +1,13 @@
+import { FABRIC8_BUILD_TOOL_DETECTOR_API_URL } from './../../../shared/runtime-console/fabric8-ui-build-tool-detector-api';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { GitHubDetails, GitProviderService, HelperService } from 'ngx-launcher';
+import { Injectable, Inject } from '@angular/core';
+import { GitHubDetails, GitProviderService, HelperService, BuildTool } from 'ngx-launcher';
 import { AuthenticationService } from 'ngx-login-client';
 import { EMPTY, Observable, of, throwError } from 'rxjs';
 import { catchError, map, mergeMap, tap } from 'rxjs/operators';
 
 import { ProviderService } from '../../../shared/account/provider.service';
+import { cloneDeep } from 'lodash';
 
 @Injectable()
 export class AppLauncherGitproviderService implements GitProviderService {
@@ -26,6 +28,7 @@ export class AppLauncherGitproviderService implements GitProviderService {
     private auth: AuthenticationService,
     private helperService: HelperService,
     private providerService: ProviderService,
+    @Inject(FABRIC8_BUILD_TOOL_DETECTOR_API_URL) private detectorApiUrl: string,
   ) {
     if (this.helperService) {
       this.END_POINT = this.helperService.getBackendUrl();
@@ -139,6 +142,18 @@ export class AppLauncherGitproviderService implements GitProviderService {
   getGitHubRepoList(org: string): Observable<any> {
     return this.getRepositories(org).pipe(
       map(AppLauncherGitproviderService.removeOrganizationPrefix),
+    );
+  }
+
+  getDetectedBuildRuntime(repoUrl: string): Observable<BuildTool> {
+    let headers = cloneDeep(this.headers);
+    headers = headers.delete('X-App');
+    headers = headers.delete('x-git-provider');
+    const url = this.detectorApiUrl + 'detect/build/' + repoUrl;
+    return this.http.get<BuildTool>(url, { headers: headers }).pipe(
+      catchError((error: HttpErrorResponse) => {
+        return throwError(error);
+      }),
     );
   }
 
