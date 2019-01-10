@@ -153,7 +153,7 @@ describe('MySpacesComponent', (): void => {
           const mockSpaceService: any = createMock(SpaceService);
           mockSpaceService.getSpacesByUser.and.returnValue(of([spaceMock1, spaceMock2]));
           mockSpaceService.getSpaceById.and.returnValue(of([spaceMock3]));
-          mockSpaceService.deleteSpace.and.stub();
+          mockSpaceService.delete.and.stub();
           return mockSpaceService;
         },
       },
@@ -349,19 +349,19 @@ describe('MySpacesComponent', (): void => {
   });
 
   describe('#removeSpace', (): void => {
-    it('should delegate to spaceService.deleteSpace for deletion', (): void => {
+    it('should delegate to spaceService.delete for deletion', (): void => {
       const component: MySpacesComponent = testContext.testedDirective;
       const mockSpaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
-      spyOn(mockSpaceService, 'deleteSpace').and.returnValue(of(spaceMock1));
+      spyOn(mockSpaceService, 'delete').and.returnValue(of(spaceMock1));
       component.confirmDeleteSpace(spaceMock1, mockTemplateRef);
       component.removeSpace();
-      expect(mockSpaceService.deleteSpace).toHaveBeenCalledWith(spaceMock1);
+      expect(mockSpaceService.delete).toHaveBeenCalledWith(spaceMock1);
     });
 
     it('should remove the selected space out of _spaces', (): void => {
       const component: MySpacesComponent = testContext.testedDirective;
       const mockSpaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
-      spyOn(mockSpaceService, 'deleteSpace').and.returnValue(of(spaceMock1));
+      spyOn(mockSpaceService, 'delete').and.returnValue(of(spaceMock1));
       spyOn(component, 'savePins').and.callThrough();
       component.confirmDeleteSpace(spaceMock1, mockTemplateRef);
       expect(component.spaces).toEqual([spaceMock1, spaceMock2]);
@@ -369,11 +369,11 @@ describe('MySpacesComponent', (): void => {
       expect(component.spaces).toEqual([spaceMock2]);
     });
 
-    it('should log an error if spaceService.deleteSpace fails', (): void => {
+    it('should log an error if spaceService.delete fails', (): void => {
       const component: MySpacesComponent = testContext.testedDirective;
       const mockLogger: jasmine.SpyObj<Logger> = TestBed.get(Logger);
       const mockSpaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
-      spyOn(mockSpaceService, 'deleteSpace').and.returnValue(observableThrowError('error'));
+      spyOn(mockSpaceService, 'delete').and.returnValue(observableThrowError('error'));
       component.confirmDeleteSpace(spaceMock1, mockTemplateRef);
       component.removeSpace();
       expect(mockLogger.error).toHaveBeenCalledWith('error');
