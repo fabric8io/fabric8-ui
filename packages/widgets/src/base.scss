@@ -1,0 +1,9 @@
+$pf-global--enable-font-overpass-cdn: true !default;
+$pf-global--load-pf-3: false !default;
+$pf-global--enable-reset: true !default;
+
+@import '~@patternfly/patternfly-next/sass-utilities/all';
+@import '~@patternfly/patternfly-next/variables';
+@import '~@patternfly/patternfly-next/fonts';
+@import '~@patternfly/patternfly-next/base';
+@import '~@patternfly/patternfly-next/themes';

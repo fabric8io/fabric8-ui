@@ -1,8 +1,8 @@
-This package provides OpenShift.io Common UI Components and styling for web applications.
+This package provides CodeReady Toolchain Common UI Components and styling for web applications.
 
 Start the style guide dev server:
 
-```sh
+```shell
 npm start
 ```
 
