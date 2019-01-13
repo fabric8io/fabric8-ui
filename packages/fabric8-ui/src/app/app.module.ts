@@ -98,6 +98,12 @@ import { HttpInterceptorProviders } from './shared/interceptors/index';
 import { RequestCache } from './shared/request-cache.service';
 import { togglesApiUrlProvider } from './shared/toggles.api.provider';
 
+/**
+ * Import application wide styles
+ */
+import '../assets/stylesheets/fabric8-ui-global-overrides.less';
+import '../assets/stylesheets/shared/osio.less';
+
 // Application wide providers
 const APP_PROVIDERS = [...APP_RESOLVER_PROVIDERS, AppState];
 

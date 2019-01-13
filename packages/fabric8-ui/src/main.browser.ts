@@ -18,12 +18,6 @@ import { decorateModuleRef } from './app/environment';
 import { AppModule } from './app/index';
 
 /**
- * Import application wide styles
- */
-import './assets/stylesheets/fabric8-ui-global-overrides.less';
-import './assets/stylesheets/shared/osio.less';
-
-/**
  * Bootstrap our Angular app with a top level NgModule
  */
 export function main(): Promise<any> {
