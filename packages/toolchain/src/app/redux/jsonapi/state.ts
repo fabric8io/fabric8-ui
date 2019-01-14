@@ -1,4 +1,4 @@
-import { ResourceObject } from '../../api/models/jsonapi';
+import { ErrorObject, ResourceObject } from '../../api/models/jsonapi';
 import { SpaceResource, UserResource, FeatureResource, ResourceResource } from '../../api/models';
 
 export type JsonapiState = {
@@ -26,6 +26,7 @@ export interface Entity<R extends ResourceObject> {
   isFetching?: boolean;
   didInvalidate?: boolean;
   resource?: R;
+  error?: ErrorObject;
 }
 
 export interface Collection {
@@ -36,6 +37,7 @@ export interface Collection {
   isFetching?: boolean;
   didInvalidate?: boolean;
   entities?: EntityRef[];
+  error?: ErrorObject;
 }
 
 export interface PageInfo {

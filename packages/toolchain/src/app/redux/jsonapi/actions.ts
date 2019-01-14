@@ -1,5 +1,5 @@
 import { ThunkAction } from 'redux-thunk';
-import { DataDocument } from '../../api/models/jsonapi';
+import { DataDocument, ErrorObject, JsonApiError } from '../../api/models/jsonapi';
 import { fetchDocument as fetchDocumentApi } from '../../api/jsonapi.client';
 import { AppState } from '../appState';
 import { createAction, ActionsUnion } from '../utils';
@@ -25,6 +25,19 @@ const receivedEntity = (
     receivedAt,
   });
 
+const receivedEntityError = (
+  type: string,
+  id: string,
+  error: ErrorObject,
+  receivedAt: number = Date.now(),
+) =>
+  createAction(JsonapiActionTypes.RECEIVED_ENTITY_ERROR, {
+    type,
+    id,
+    error,
+    receivedAt,
+  });
+
 const invalidateEntity = (type: string, id: string) =>
   createAction(JsonapiActionTypes.INVALIDATE_ENTITY, { type, id });
 
@@ -39,6 +52,17 @@ const receivedCollection = (
   createAction(JsonapiActionTypes.RECEIVED_COLLECTION, {
     url,
     dataDocument,
+    receivedAt,
+  });
+
+const receivedCollectionError = (
+  url: string,
+  error: ErrorObject,
+  receivedAt: number = Date.now(),
+) =>
+  createAction(JsonapiActionTypes.RECEIVED_COLLECTION_ERROR, {
+    url,
+    error,
     receivedAt,
   });
 
@@ -71,9 +95,11 @@ const receivedNextCollection = (
 const actions = {
   requestEntity,
   receivedEntity,
+  receivedEntityError,
   invalidateEntity,
   requestCollection,
   receivedCollection,
+  receivedCollectionError,
   invalidateCollection,
   requestNextCollection,
   receivedNextCollection,
@@ -105,12 +131,20 @@ export function fetchEntity(type: string, id: string): ThunkResult {
         dispatch(requestCollection(url));
       }
 
-      const result = await fetchDocumentApi(url);
-
-      const receivedAt = Date.now();
-      dispatch(receivedEntity(type, id, result, receivedAt));
-      if (process.env.NODE_ENV !== 'production') {
-        dispatch(receivedCollection(url, result, receivedAt));
+      try {
+        const result = await fetchDocumentApi(url);
+        const receivedAt = Date.now();
+        dispatch(receivedEntity(type, id, result, receivedAt));
+        if (process.env.NODE_ENV !== 'production') {
+          dispatch(receivedCollection(url, result, receivedAt));
+        }
+      } catch (e) {
+        const jsonApiError = e as JsonApiError;
+        const receivedAt = Date.now();
+        dispatch(receivedEntityError(type, id, jsonApiError.error, receivedAt));
+        if (process.env.NODE_ENV !== 'production') {
+          dispatch(receivedCollectionError(url, jsonApiError.error, receivedAt));
+        }
       }
     }
   };
@@ -127,9 +161,13 @@ export function fetchCollection(url: string): ThunkResult {
     ) {
       dispatch(requestCollection(url));
 
-      const result = await fetchDocumentApi(url);
-
-      dispatch(receivedCollection(url, result));
+      try {
+        const result = await fetchDocumentApi(url);
+        dispatch(receivedCollection(url, result));
+      } catch (e) {
+        const jsonApiError = e as JsonApiError;
+        dispatch(receivedCollectionError(url, jsonApiError.error));
+      }
     }
   };
 }

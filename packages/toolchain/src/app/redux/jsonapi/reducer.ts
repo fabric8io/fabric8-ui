@@ -116,6 +116,15 @@ export const jsonapiReducer = (
         addEntities(draft, action.payload.receivedAt, action.payload.dataDocument);
         break;
 
+      case JsonapiActionTypes.RECEIVED_ENTITY_ERROR:
+        {
+          const entity = draft.entities[action.payload.type][action.payload.id];
+          entity.didInvalidate = true;
+          entity.isFetching = false;
+          entity.error = action.payload.error;
+        }
+        break;
+
       case JsonapiActionTypes.INVALIDATE_ENTITY:
         if (
           draft.entities[action.payload.type] &&
@@ -152,6 +161,15 @@ export const jsonapiReducer = (
             : collection.entities.length;
           updatePaginationLinks(collection, action.payload.dataDocument);
           addEntities(draft, action.payload.receivedAt, action.payload.dataDocument);
+        }
+        break;
+
+      case JsonapiActionTypes.RECEIVED_COLLECTION_ERROR:
+        {
+          const collection = draft.collections[action.payload.url];
+          collection.didInvalidate = true;
+          collection.isFetching = false;
+          collection.error = action.payload.error;
         }
         break;
 
@@ -202,17 +220,3 @@ export const jsonapiReducer = (
     }
     return undefined;
   });
-
-// REQUEST_ENTITY = '@Jsonapi:REQUEST_ENTITY',
-// RECEIVED_ENTITY = '@Jsonapi:RECEIVED_ENTITY',
-// INVALIDATE_ENTITY = '@Jsonapi:INVALIDATE_ENTITY',
-
-// REQUEST_COLLECTION = '@Jsonapi:REQUEST_COLLECTION',
-// RECEIVED_COLLECTION = '@Jsonapi:RECEIVED_COLLECTION',
-// INVALIDATE_COLLECTION = '@Jsonapi:INVALIDATE_COLLECTION',
-
-// REQUEST_NEXT_COLLECTION = '@Jsonapi:REQUEST_NEXT_COLLECTION',
-// RECEIVED_NEXT_COLLECTION = '@Jsonapi:RECEIVED_NEXT_COLLECTION',
-
-// // REQUEST_PREV_COLLECTION = '@Jsonapi:REQUEST_PREV_COLLECTION',
-// // RECEIVED_PREV_COLLECTION = '@Jsonapi:RECEIVED_PREV_COLLECTION',

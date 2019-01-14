@@ -1,3 +1,7 @@
+export interface JsonApiError extends Error {
+  error: ErrorObject;
+}
+
 export type MetaObject = { [key: string]: any };
 
 export interface DocumentBase {
@@ -19,7 +23,10 @@ export interface ErrorsDocument extends DocumentBase {
   errors: ErrorObject[];
 }
 
-export interface DataDocument<A = {}, T extends string = string> extends DocumentBase {
+export interface DataDocument<
+  A extends AttributesObject = AttributesObject,
+  T extends string = string
+> extends DocumentBase {
   data: ResourceObject<A, T> | ResourceObject<A, T>[];
   included?: Included;
 }

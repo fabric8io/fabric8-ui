@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { getCurrentUserSpacesUrl, getCurrentUserUrl } from '../../api/api-urls';
+import { getCurrentUserSpacesUrl, getCurrentUserUrl, getFeaturesUrl } from '../../api/api-urls';
 import { UserResource } from '../../api/models';
 import { AppState } from '../appState';
 import { getCollectionEntityRefs, getEntityResources, first } from '../jsonapi/selectors';
@@ -30,3 +30,6 @@ export const getFeatureById = createSelector(
   (_: AppState, id: string) => id,
   (map, id) => map[id] && map[id].resource,
 );
+
+export const getFeatureCollection = (state: AppState) =>
+  state.jsonapi.collections[getFeaturesUrl()];

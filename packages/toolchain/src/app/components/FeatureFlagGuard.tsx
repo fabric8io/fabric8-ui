@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { ThunkDispatch } from '../redux/utils';
 import { AppState } from '../redux/appState';
 import { fetchFeatures } from '../redux/wit/actions';
-import { getFeatureById } from '../redux/wit/selectors';
+import { getFeatureCollection, getFeatureById } from '../redux/wit/selectors';
 
 export interface FeatureFlagGuardProps {
   featureId: string;
@@ -42,9 +42,10 @@ const mapStateToProps = (state: AppState, ownProps: FeatureFlagGuardProps): Stat
       loaded: true,
     };
   }
+  const collection = getFeatureCollection(state);
   return {
     enabled: false,
-    loaded: false,
+    loaded: collection && !collection.isFetching,
   };
 };
 
