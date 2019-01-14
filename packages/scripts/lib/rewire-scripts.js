@@ -8,6 +8,22 @@ const IgnoreNotFoundExportPlugin = require('./IgnoreNotFoundExportPlugin');
 
 process.env.SKIP_PREFLIGHT_CHECK = true;
 
+// Find a test config by walking up the parent directories.
+function locateTsConfig(pathName) {
+  const tsConfigTestPath = path.resolve(pathName, 'tsconfig.test.json');
+  if (fs.existsSync(tsConfigTestPath)) {
+    return tsConfigTestPath;
+  }
+  const tsConfigPath = path.resolve(pathName, 'tsconfig.json');
+  if (fs.existsSync(tsConfigPath)) {
+    return tsConfigPath;
+  }
+  if (pathName === '/') {
+    return undefined;
+  }
+  return locateTsConfig(path.resolve(pathName, '../'));
+}
+
 function rewireEnv() {
   // load env before paths because env will clear the module cache for paths
   const getClientEnvironment = require('react-scripts/config/env');
@@ -138,7 +154,10 @@ function rewireWebpack(prod) {
         limit: 10000,
         name: `${staticDir}/media/[name].[hash:8].[ext]`,
         // TODO why is this path needed?
-        includePaths: [path.resolve(__dirname, '../../../node_modules/patternfly/dist/fonts/')],
+        includePaths: [
+          path.resolve(paths.appPath, 'node_modules/patternfly/dist/fonts/'),
+          path.resolve(__dirname, '../../../node_modules/patternfly/dist/fonts/'),
+        ],
       },
     },
     // add loaders for angular support
@@ -161,6 +180,17 @@ function rewireWebpack(prod) {
             // FIXME why doesn't patternfly use ~ for referencing packages in node_modules?
             // This is such a hack....
             paths: [
+              path.resolve(paths.appPath, 'node_modules'),
+              path.resolve(paths.appPath, 'node_modules/patternfly/dist/less'),
+              path.resolve(paths.appPath, 'node_modules/patternfly/dist/less/dependencies'),
+              path.resolve(
+                paths.appPath,
+                'node_modules/patternfly/dist/less/dependencies/bootstrap',
+              ),
+              path.resolve(
+                paths.appPath,
+                'node_modules/patternfly/dist/less/dependencies/font-awesome',
+              ),
               path.resolve(__dirname, '../../../node_modules'),
               path.resolve(__dirname, '../../../node_modules/patternfly/dist/less'),
               path.resolve(__dirname, '../../../node_modules/patternfly/dist/less/dependencies'),
@@ -189,6 +219,17 @@ function rewireWebpack(prod) {
             // FIXME why doesn't patternfly use ~ for referencing packages in node_modules?
             // This is such a hack....
             paths: [
+              path.resolve(paths.appPath, 'node_modules'),
+              path.resolve(paths.appPath, 'node_modules/patternfly/dist/less'),
+              path.resolve(paths.appPath, 'node_modules/patternfly/dist/less/dependencies'),
+              path.resolve(
+                paths.appPath,
+                'node_modules/patternfly/dist/less/dependencies/bootstrap',
+              ),
+              path.resolve(
+                paths.appPath,
+                'node_modules/patternfly/dist/less/dependencies/font-awesome',
+              ),
               path.resolve(__dirname, '../../../node_modules'),
               path.resolve(__dirname, '../../../node_modules/patternfly/dist/less'),
               path.resolve(__dirname, '../../../node_modules/patternfly/dist/less/dependencies'),
@@ -267,6 +308,7 @@ function rewireWebpack(prod) {
       // We want to block webpack's emit and wait for the checker to complete and add any errors
       // to webpack's compilation.
       async: false,
+      tsconfig: locateTsConfig(paths.appPath),
     }),
   );
   config.plugins.push(new IgnoreNotFoundExportPlugin());
@@ -296,22 +338,6 @@ function rewireWebpack(prod) {
     );
   }
   require.cache[require.resolve(webpackConfig)].exports = config;
-}
-
-// Find a test config by walking up the parent directories.
-function locateTsConfig(pathName) {
-  const tsConfigTestPath = path.resolve(pathName, 'tsconfig.test.json');
-  if (fs.existsSync(tsConfigTestPath)) {
-    return tsConfigTestPath;
-  }
-  const tsConfigPath = path.resolve(pathName, 'tsconfig.json');
-  if (fs.existsSync(tsConfigPath)) {
-    return tsConfigPath;
-  }
-  if (pathName === '/') {
-    return undefined;
-  }
-  return locateTsConfig(path.resolve(pathName, '../'));
 }
 
 function rewireJest() {

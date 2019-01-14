@@ -6,13 +6,7 @@
     (onSortChange)="sortChange($event)"
   >
     <ng-template #addAreasTemplate>
-      <span
-        class="with-cursor-pointer"
-        placement="top"
-        tooltip="Add Areas"
-        *ngIf="userOwnsSpace"
-        (click)="addArea($event)"
-      >
+      <span class="with-cursor-pointer" *ngIf="userOwnsSpace" (click)="addArea($event)">
         <span class="add-codebase-tooltip">
           <i class="pficon pficon-add-circle-o margin-top-4"></i> Add Areas
         </span>
