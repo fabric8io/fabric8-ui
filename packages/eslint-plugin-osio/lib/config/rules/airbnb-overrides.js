@@ -15,4 +15,15 @@ module.exports = {
   'no-return-assign': ['error', 'except-parens'],
 
   'react/jsx-one-expression-per-line': 'off',
+
+  // Disallow nested ternary expressions
+  'no-nested-ternary': 'off',
+
+  // disallow reassignment of function parameters
+  'no-param-reassign': [
+    'error',
+    {
+      props: false,
+    },
+  ],
 };

@@ -1,0 +1,19 @@
+.osio-ui-PageSection {
+  &.is-sticky {
+    position: sticky;
+    top: 0;
+    z-index: var(--pf-global--ZIndex--xs);
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: var(--pf-global--BorderColor--light);
+  }
+
+  &.is-padding-none {
+    padding: 0;
+  }
+
+  &.is-padding-sm {
+    padding-top: var(--pf-global--spacer--sm);
+    padding-bottom: var(--pf-global--spacer--sm);
+  }
+}

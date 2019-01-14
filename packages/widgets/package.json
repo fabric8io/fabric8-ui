@@ -1,19 +1,30 @@
 {
   "name": "@osio/widgets",
   "version": "0.0.1",
-  "description": "OpenShift.io common components.",
+  "description": "CodeReady Toolchain common components.",
   "license": "Apache-2.0",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
   "scripts": {
     "start": "npm run styleguide",
     "styleguide": "styleguidist server --config styleguide/config/styleguide.config.js",
     "styleguide:build": "styleguidist build --config styleguide/config/styleguide.config.js"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@types/classnames": "2.2.6",
+    "@patternfly/patternfly-next": "1.0.109",
+    "@patternfly/react-core": "1.43.5",
+    "@patternfly/react-icons": "2.9.5",
+    "@patternfly/react-styles": "2.3.0",
+    "@patternfly/react-tokens": "1.9.4",
+    "classnames": "2.2.6",
+    "patternfly-react": "2.28.2"
+  },
   "devDependencies": {
     "@osio/scripts": "0.0.1",
-    "path": "^0.12.7",
-    "react-docgen-typescript": "^1.10.0",
-    "react-styleguidist": "^7.3.10"
+    "react-docgen-typescript": "^1.12.2",
+    "react-styleguidist": "9.0.0-beta4",
+    "webpack-merge": "4.0.0"
   },
   "peerDependencies": {
     "react": ">= 16 < 17",

@@ -1,34 +1,83 @@
-import React, { Component } from 'react';
-import './Button.scss';
+import React, { ReactNode, SFC } from 'react';
+import { Button as PButton, ButtonType, ButtonVariant } from '@patternfly/react-core';
+import { OneOf } from '../../typeUtils';
+
+export { ButtonType, ButtonVariant };
 
 export interface ButtonProps {
-  /**
-   * Button content.
-   */
-  children: React.ReactChild;
+  children?: ReactNode;
+  isBlock?: boolean;
+  isDisabled?: boolean;
+  variant?: OneOf<typeof ButtonVariant, keyof typeof ButtonVariant>;
+  type?: OneOf<typeof ButtonType, keyof typeof ButtonType>;
+  onClick?(event: React.MouseEvent<HTMLElement>): void;
 
   /**
-   * Callback when button is clicked.
+   *
    */
-  onClick(): void;
+  href?: string;
 
   /**
-   * The button type.
+   * Shorthand for 'primary' variant.
    */
-  type?: 'button' | 'submit' | 'reset';
+  isPrimary?: boolean;
+
+  /**
+   * Shorthand for 'secondary' variant.
+   */
+  isSecondary?: boolean;
+
+  /**
+   * Shorthand for 'tertiary' variant.
+   */
+  isTertiary?: boolean;
+
+  /**
+   * Shorthand for 'danger' variant.
+   */
+  isDanger?: boolean;
+
+  /**
+   * Shorthand for 'plain' variant.
+   */
+  isPlain?: boolean;
+
+  /**
+   * Shorthand for 'link' variant.
+   */
+  isLink?: boolean;
 }
 
-/**
- * Button component description.
- */
-export class Button extends Component<ButtonProps> {
-  render() {
-    return <button type="button" className="osio-widgets-Button" {...this.props} />;
-  }
-}
+const Button: SFC<ButtonProps> = ({
+  isPrimary,
+  isSecondary,
+  isTertiary,
+  isDanger,
+  isPlain,
+  isLink,
+  href,
+  ...props
+}) => (
+  <PButton
+    component={href ? 'a' : undefined}
+    href={href}
+    variant={
+      isPrimary
+        ? ButtonVariant.primary
+        : isSecondary
+        ? ButtonVariant.secondary
+        : isTertiary
+        ? ButtonVariant.tertiary
+        : isDanger
+        ? ButtonVariant.danger
+        : isPlain
+        ? ButtonVariant.plain
+        : isLink
+        ? ButtonVariant.link
+        : undefined
+    }
+    {...props}
+  />
+);
 
-// Example of functional component:
-//
-// export function Button(props: ButtonProps) {
-//   return <button type="button" className="osio-widgets-Button" {...props} />;
-// }
+export default Button;
