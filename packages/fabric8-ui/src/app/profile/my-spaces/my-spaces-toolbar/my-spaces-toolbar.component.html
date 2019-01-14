@@ -17,22 +17,11 @@
     >
       <ng-template #toolbarTemplate>
         <span class="vertical-separator padding-right-10">
-          <button
-            class="btn btn-default"
-            type="button"
-            tooltip="Search Spaces"
-            placement="top"
-            (click)="searchSpaces($event)"
-          >
+          <button class="btn btn-default" type="button" (click)="searchSpaces($event)">
             Find a Space to Join
           </button>
         </span>
-        <span
-          class="with-cursor-pointer padding-left-10"
-          placement="top"
-          tooltip="Create Space"
-          (click)="createSpace($event)"
-        >
+        <span class="with-cursor-pointer padding-left-10" (click)="createSpace($event)">
           <span class="add-space-tooltip">
             <i class="pficon pficon-add-circle-o margin-top-4"></i> Create Space
           </span>
