@@ -15,4 +15,5 @@ window.Fabric8UIEnv = {
   witApiUrl: '{{ .Env.FABRIC8_WIT_API_URL }}',
   authApiUrl: '{{ .Env.FABRIC8_AUTH_API_URL }}',
   tenantApiUrl: '{{ .Env.FABRIC8_TENANT_API_URL }}',
+  buildToolDetectorApiUrl: '{{ .Env.FABRIC8_BUILD_TOOL_DETECTOR_API_URL }}',
 };

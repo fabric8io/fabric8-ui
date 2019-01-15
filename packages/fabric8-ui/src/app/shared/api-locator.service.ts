@@ -13,6 +13,7 @@ const DEFAULT_API_ENV_VAR_NAMES = new Map<string, string>([
   ['auth', 'FABRIC8_AUTH_API_URL'],
   ['jenkins', 'FABRIC8_JENKINS_API_URL'],
   ['toggles', 'FABRIC8_FEATURE_TOGGLES_API_URL'],
+  ['detector', 'FABRIC8_BUILD_TOOL_DETECTOR_API_URL'],
 ]);
 
 const DEFAULT_API_PREFIXES = new Map<string, string>([
@@ -23,6 +24,7 @@ const DEFAULT_API_PREFIXES = new Map<string, string>([
   ['forge', 'forge.api'],
   ['auth', 'auth'],
   ['jenkins', 'jenkins.api'],
+  ['detector', 'detector.api'],
 ]);
 
 const DEFAULT_API_PATHS = new Map<string, string>([['wit', 'api/'], ['auth', 'api/']]);
@@ -50,6 +52,10 @@ export class BaseApiLocatorService {
 
   get forgeApiUrl(): string {
     return this.config.forgeApiUrl || this.buildApiUrl('forge');
+  }
+
+  get buildToolDetectorApiUrl(): string {
+    return this.config.buildToolDetectorApiUrl || this.buildApiUrl('detector');
   }
 
   get ssoApiUrl(): string {

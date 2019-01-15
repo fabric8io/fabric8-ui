@@ -15,6 +15,7 @@
   "ws_api_server": "{{ .Env.WS_K8S_API_SERVER }}",
   "ws_api_server_base_path": "{{ .Env.WS_K8S_API_SERVER_BASE_PATH }}",
   "ws_api_server_protocol": "{{ .Env.WS_K8S_API_SERVER_PROTOCOL }}",
+  "build_tool_detector_api_url": "{{ .Env.FABRIC8_BUILD_TOOL_DETECTOR_API_URL }}",
   "oauth": {
     "oauth_authorize_uri": "{{ .Env.OAUTH_AUTHORIZE_URI }}",
     "oauth_client_id": "{{ .Env.OAUTH_CLIENT_ID }}",
