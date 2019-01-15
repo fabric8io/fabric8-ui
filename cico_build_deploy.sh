@@ -1,7 +1,7 @@
 #!/bin/bash
 
 HOME_DIR="/home/fabric8/fabric8-ui"
-APP_DIR="packages/fabric8-ui"
+APP_DIR="packages/toolchain"
 BUILDER_CONT="fabric8-ui-builder"
 DEPLOY_CONT="fabric8-ui-deploy"
 REGISTRY="quay.io"
