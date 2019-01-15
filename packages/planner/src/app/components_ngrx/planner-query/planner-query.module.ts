@@ -26,6 +26,7 @@ import { ClickOutModule } from '../../widgets/clickout/clickout.module';
 import { ListItemModule } from '../../widgets/list-item/list-item.module';
 import { WorkItemQuickAddModule } from '../work-item-quick-add/work-item-quick-add.module';
 import { ExportCsvModule } from '../export-csv/export-csv.module';
+import { FeatureFlagModule } from 'ngx-feature-flag';
 
 @NgModule({
   imports: [
@@ -47,6 +48,7 @@ import { ExportCsvModule } from '../export-csv/export-csv.module';
     NgLetModule,
     PlannerModalModule,
     ListItemModule,
+    FeatureFlagModule,
   ],
   declarations: [PlannerQueryComponent],
   exports: [PlannerQueryComponent],

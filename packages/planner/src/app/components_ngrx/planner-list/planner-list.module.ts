@@ -48,6 +48,7 @@ import { WorkItemQuery } from './../../models/work-item';
 import { ErrorHandler } from '../../effects/work-item-utils';
 import { FilterColumnModule } from '../../pipes/column-filter.module';
 import { TableConfigModule } from './../table-config/table-config.module';
+import { FeatureFlagModule } from 'ngx-feature-flag';
 
 let providers = [
   WorkItemService,
@@ -98,6 +99,7 @@ let providers = [
     TableConfigModule,
     TruncateModule,
     WorkItemCellModule,
+    FeatureFlagModule,
   ],
   declarations: [PlannerListComponent],
   providers: providers,

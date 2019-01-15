@@ -38,6 +38,7 @@ import { SpaceQuery } from './../../models/space';
 import { UserQuery } from './../../models/user';
 import { WorkItemQuery } from './../../models/work-item';
 import { F8SortByPipeModule } from './../../pipes/sort-by.module';
+import { FeatureFlagModule } from 'ngx-feature-flag';
 
 @NgModule({
   providers: [
@@ -68,6 +69,7 @@ import { F8SortByPipeModule } from './../../pipes/sort-by.module';
     PlannerModalModule,
     WorkItemPreviewPanelModule,
     SidepanelModule,
+    FeatureFlagModule,
     TooltipModule.forRoot(),
     StoreModule.forFeature(
       'boardView',
