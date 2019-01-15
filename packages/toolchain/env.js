@@ -16,6 +16,7 @@ function getProductionEnv() {
     FABRIC8_BRANDING = 'fabric8',
     ANALYTICS_RECOMMENDER_URL,
     ANALYTICS_LICENSE_URL,
+    FABRIC8_BUILD_TOOL_DETECTOR_API_URL,
   } = process.env;
 
   return {
@@ -35,6 +36,7 @@ function getProductionEnv() {
     FABRIC8_BRANDING,
     ANALYTICS_RECOMMENDER_URL,
     ANALYTICS_LICENSE_URL,
+    FABRIC8_BUILD_TOOL_DETECTOR_API_URL,
   };
 }
 
@@ -56,6 +58,7 @@ function getDevelopmentEnv() {
     FABRIC8_BRANDING = 'fabric8',
     ANALYTICS_RECOMMENDER_URL,
     ANALYTICS_LICENSE_URL,
+    FABRIC8_BUILD_TOOL_DETECTOR_API_URL = 'https://detector.api.prod-preview.openshift.io',
   } = process.env;
 
   return {
@@ -75,6 +78,7 @@ function getDevelopmentEnv() {
     FABRIC8_BRANDING,
     ANALYTICS_RECOMMENDER_URL,
     ANALYTICS_LICENSE_URL,
+    FABRIC8_BUILD_TOOL_DETECTOR_API_URL,
   };
 }
 
