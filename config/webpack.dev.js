@@ -28,7 +28,7 @@ const FABRIC8_FORGE_API_URL =
   process.env.FABRIC8_FORGE_API_URL || 'https://forge.api.prod-preview.openshift.io';
 const FABRIC8_BUILD_TOOL_DETECTOR_API_URL =
   process.env.FABRIC8_BUILD_TOOL_DETECTOR_API_URL ||
-  'https://detector.api.prod-preview.openshift.io/api/';
+  'https://detector.api.prod-preview.openshift.io';
 const FABRIC8_FEATURE_TOGGLES_API_URL = process.env.FABRIC8_FEATURE_TOGGLES_API_URL;
 const FABRIC8_WIT_API_URL =
   process.env.FABRIC8_WIT_API_URL || 'https://prod-preview.openshift.io/api/';

@@ -45,7 +45,7 @@ export FABRIC8_WIT_API_URL="http://wit.fabric8.${VM_IP}.nip.io/api/"
 export FABRIC8_AUTH_API_URL="http://auth.fabric8.${VM_IP}.nip.io/api/"
 export FABRIC8_FORGE_API_URL="http://forge.fabric8.${VM_IP}.nip.io/"
 export FABRIC8_TENANT_API_URL="http://f8tenant.fabric8.${VM_IP}.nip.io/"
-export FABRIC8_BUILD_TOOL_DETECTOR_API_URL="http://detector.fabric8.${VM_IP}.nip.io"
+export FABRIC8_BUILD_TOOL_DETECTOR_API_URL="http://detector.fabric8.${VM_IP}.nip.io/"
 #export FABRIC8_SSO_API_URL="http://sso.fabric8.${VM_IP}.nip.io/"
 export FABRIC8_SSO_API_URL="${FABRIC8_TENANT_API_URL}"
 
