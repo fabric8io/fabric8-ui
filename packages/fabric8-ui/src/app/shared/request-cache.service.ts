@@ -7,7 +7,7 @@ export interface RequestCacheItem {
   lastRead: number;
 }
 
-const CACHE_TTL = 300; // maximum cache age (ms)
+const CACHE_TTL = 5000; // maximum cache age (ms)
 
 @Injectable()
 export class RequestCache {
