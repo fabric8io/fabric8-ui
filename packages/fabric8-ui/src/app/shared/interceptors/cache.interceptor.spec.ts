@@ -53,7 +53,7 @@ describe(`CacheHttpInterceptor`, () => {
     httpMock.expectOne(testUrl);
 
     // move time forward beyond TTL to expire cache
-    Date.now = () => 500;
+    Date.now = () => 10000;
 
     httpClient.get(testUrl).subscribe();
     httpMock.expectOne(testUrl);
