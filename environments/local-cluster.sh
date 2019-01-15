@@ -39,7 +39,7 @@ echo "Configured to connect to kubernetes cluster at https://${PROXIED_K8S_API_S
 export FABRIC8_SSO_API_URL="https://`oc get route keycloak --template={{.spec.host}}`/"
 export FABRIC8_WIT_API_URL="https://`oc get route wit --template={{.spec.host}}`/api/"
 export FABRIC8_FORGE_API_URL="https://`oc get route forge --template={{.spec.host}}`/"
-export FABRIC8_BUILD_TOOL_DETECTOR_API_URL="https://`oc get route detector --template={{.spec.host}}`/api/"
+export FABRIC8_BUILD_TOOL_DETECTOR_API_URL="https://`oc get route detector --template={{.spec.host}}`/"
 
 # Below variables have to be set explicitly during development
 export ANALYTICS_RECOMMENDER_URL=""

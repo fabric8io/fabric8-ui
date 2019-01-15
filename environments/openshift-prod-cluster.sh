@@ -43,7 +43,7 @@ export FABRIC8_FORGE_API_URL="https://forge.api.openshift.io"
 
 export FABRIC8_JENKINS_API_URL="https://jenkins.api.openshift.io"
 
-export FABRIC8_BUILD_TOOL_DETECTOR_API_URL="https://detector.api.openshift.io/api/"
+export FABRIC8_BUILD_TOOL_DETECTOR_API_URL="https://detector.api.openshift.io"
 
 # Below variables have to be set explicitly during development
 export ANALYTICS_RECOMMENDER_URL=""

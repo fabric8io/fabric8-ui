@@ -49,7 +49,7 @@ function getDevelopmentEnv() {
     FABRIC8_SSO_API_URL = 'https://sso.prod-preview.openshift.io/',
     FABRIC8_AUTH_API_URL = 'https://auth.prod-preview.openshift.io/api/',
     FABRIC8_RECOMMENDER_API_URL = 'https://api-bayesian.dev.rdu2c.fabric8.io/api/v1/',
-    FABRIC8_BUILD_TOOL_DETECTOR_API_URL = 'https://detector.api.prod-preview.openshift.io/api/',
+    FABRIC8_BUILD_TOOL_DETECTOR_API_URL = 'https://detector.api.prod-preview.openshift.io',
     FORGE_URL: FABRIC8_FORGE_URL,
     FABRIC8_PIPELINES_NAMESPACE,
     FABRIC8_JENKINS_API_URL,
