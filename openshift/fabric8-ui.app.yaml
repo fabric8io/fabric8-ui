@@ -54,6 +54,11 @@ objects:
                 configMapKeyRef:
                   name: f8ui
                   key:  analytics.license.url
+            - name: FABRIC8_BUILD_TOOL_DETECTOR_API_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: f8ui
+                  key: fabric8.build.tool.detector.api.url
             - name: WS_K8S_API_SERVER
               value: ${ws_k8s_api_server}
             - name: K8S_API_SERVER_PROTOCOL
@@ -67,8 +72,6 @@ objects:
               value: ${fabric8_feature_toggles_api_url}
             - name: FABRIC8_JENKINS_API_URL
               value: ${fabric8_jenkins_api_url}
-            - name: FABRIC8_BUILD_TOOL_DETECTOR_API_URL
-              value: ${fabric8_build_tool_detector_api_url}
             - name: OAUTH_ISSUER
               valueFrom:
                 configMapKeyRef:
@@ -177,6 +180,4 @@ parameters:
 - name: fabric8_feature_toggles_api_url
   value: ''
 - name: fabric8_jenkins_api_url
-  value: ''
-- name: fabric8_build_tool_detector_api_url
   value: ''

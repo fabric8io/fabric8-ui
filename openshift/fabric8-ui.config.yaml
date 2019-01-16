@@ -18,3 +18,4 @@ data:
   oauth.issuer: ""
   oauth.authorize.uri: ""
   oauth.logout.uri: ""
+  fabric8.build.tool.detector.api.url: ""
