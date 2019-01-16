@@ -25,10 +25,12 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loggedInUser = this.userService.currentLoggedInUser;
-    if (this.loggedInUser.attributes && this.loggedInUser.attributes.cluster) {
-      this.linkOpenshiftAccounts();
-    }
+    this.userService.loggedInUser.subscribe((user: User) => {
+      this.loggedInUser = user;
+      if (user.attributes && user.attributes.cluster) {
+        this.linkOpenshiftAccounts();
+      }
+    });
   }
 
   linkOpenshiftAccounts() {
