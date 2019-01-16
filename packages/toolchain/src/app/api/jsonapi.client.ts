@@ -13,12 +13,6 @@ export class JsonApiError extends Error implements IJsonApiError {
   }
 }
 
-// function createJsonApiError(error: ErrorObject): JsonApiError {
-//   const e: any = new Error(error.detail || error.title);
-//   e.error = error;
-//   return e;
-// }
-
 export async function fetchDocument(url: string): Promise<DataDocument> {
   try {
     return (await axiosClient.get<DataDocument>(url)).data;

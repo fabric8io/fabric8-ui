@@ -1,6 +1,6 @@
 #!/bin/bash
 
-APP_DIR="packages/fabric8-ui"
+APP_DIR="packages/toolchain"
 
 # Exit on error
 set -e
