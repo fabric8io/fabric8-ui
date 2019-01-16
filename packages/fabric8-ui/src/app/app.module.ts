@@ -1,5 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
-import { ApplicationRef, ErrorHandler, NgModule } from '@angular/core';
+import { ApplicationRef, ErrorHandler, Injector, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -20,6 +20,7 @@ import { WidgetsModule } from 'ngx-widgets';
 import { ActionModule } from 'patternfly-ng/action';
 import { EmptyStateModule } from 'patternfly-ng/empty-state';
 import { NotificationService, ToastNotificationListModule } from 'patternfly-ng/notification';
+import { StaticInjector } from 'ngx-launcher';
 import {
   // Base functionality for the runtime console
   KubernetesRestangularModule,
@@ -244,7 +245,11 @@ export type StoreType = {
   bootstrap: [AppComponent],
 })
 export class AppModule {
-  constructor(public appRef: ApplicationRef, public appState: AppState) {}
+  constructor(public appRef: ApplicationRef, public appState: AppState, injector: Injector) {
+    /* Below line is needed to get the broadcaster instance from AppModule which is
+    used in `ngx-launcher` to broadcast events for telemetry */
+    StaticInjector.setInjector(injector);
+  }
 
   hmrOnInit(store: StoreType) {
     if (!store || !store.state) {
