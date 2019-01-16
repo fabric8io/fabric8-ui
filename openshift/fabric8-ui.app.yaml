@@ -181,5 +181,3 @@ parameters:
   value: ''
 - name: fabric8_jenkins_api_url
   value: ''
-- name: fabric8_build_tool_detector_api_url
-  value: ''
