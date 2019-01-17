@@ -119,4 +119,15 @@ describe('Service: AppLauncherGitproviderService', () => {
         done();
       });
   }));
+
+  it('should create correct build tool detector api url', () => {
+    const correctUrl = 'https://www.example.com/api/detect/build/';
+    const apiUrl = 'https://www.example.com';
+    const url = service.constructApiUrl(apiUrl, 'api/detect/build/');
+    expect(url).toBe(correctUrl);
+
+    const apiUrl1 = 'https://www.example.com/';
+    const url1 = service.constructApiUrl(apiUrl1, 'api/detect/build/');
+    expect(url1).toBe(correctUrl);
+  });
 });
