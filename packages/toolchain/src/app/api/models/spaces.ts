@@ -30,11 +30,9 @@ export interface SpaceAttributes {
 }
 
 export interface SpaceResource extends ResourceObject<SpaceAttributes, SpaceType> {
-  relationships:
-    | RelationshipsObject
-    | {
-        'owned-by': {
-          data: ResourceIdentifierObject<'identifies'>;
-        };
-      };
+  relationships: {
+    'owned-by': {
+      data: ResourceIdentifierObject<'identifies'>;
+    };
+  };
 }

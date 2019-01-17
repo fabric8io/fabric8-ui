@@ -26,10 +26,10 @@ export const PageContent: React.SFC<Props> = ({
           <SpaceDropdownPageSection {...spaceContext} />
         </Route>
         <Route path="/_home" exact>
-          <SpaceDropdownPageSection {...spaceContext} />
+          <SpaceDropdownPageSection {...spaceContext} subPath={undefined} />
         </Route>
         <Route path="/" exact>
-          <SpaceDropdownPageSection {...spaceContext} />
+          <SpaceDropdownPageSection {...spaceContext} subPath={undefined} />
         </Route>
       </Switch>
       <Switch>

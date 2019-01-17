@@ -7,7 +7,8 @@ export const getCurrentUserSpacesUrl = () => `${WIT_API_URL}user/spaces`;
 export const getCurrentUserUrl = () => `${AUTH_API_URL}user`;
 export const getFeaturesUrl = () => `${FEATURE_TOGGLES_API_URL}features?strategy=enableByLevel`;
 export const getSpaceByIdUrl = (id: string) => `${WIT_API_URL}spaces/${id}`;
-export const getUserByIdUrl = (id: string) => `${WIT_API_URL}user/${id}`;
+export const getUserByIdUrl = (id: string) => `${AUTH_API_URL}users/${id}`;
+export const getNamedSpacesUrl = (username: string) => `${WIT_API_URL}namedspaces/${username}`;
 
 export const getEntityUrl = (type: string, id: string) => {
   switch (type) {

@@ -6,7 +6,6 @@ import { AppState } from '../../redux/appState';
 import withContext, { WithContextProps } from '../../hoc/withContext';
 import NavRouteGroup from './NavRouteGroup';
 import { getCurrentUser } from '../../redux/wit/selectors';
-import { NO_SPACE_PATH } from '../../redux/context/constants';
 
 interface StateProps {
   authUsername: string;
@@ -18,18 +17,18 @@ type Props = StateProps & WithContextProps;
 // abstract unwanted functionality in `widgets`
 const noop = () => {};
 
-const Navigation: React.SFC<Props> = ({ authUsername, username, spacenamePath }: Props) => {
+const Navigation: React.SFC<Props> = ({
+  authUsername,
+  username,
+  spacename,
+  spacenamePath,
+}: Props) => {
   const userSegment = username || authUsername;
   const userSpacePath = userSegment ? `/${userSegment}/${spacenamePath}` : null;
   return (
     <Nav onSelect={noop} onToggle={noop} aria-label="Main navigation">
       <NavList>
-        <NavRoute
-          // path must match /_home while href will navigate to
-          path={userSpacePath && spacenamePath !== NO_SPACE_PATH ? userSpacePath : '/_home'}
-          href={userSpacePath && spacenamePath !== NO_SPACE_PATH ? userSpacePath : ''}
-          exact
-        >
+        <NavRoute path={username && spacename ? userSpacePath : '/_home'} exact>
           Overview
         </NavRoute>
         {userSpacePath && (
@@ -57,7 +56,7 @@ const Navigation: React.SFC<Props> = ({ authUsername, username, spacenamePath }:
           </>
         )}
         {authUsername && (
-          <NavRoute path={`/${authUsername}/_spaces`} exact>
+          <NavRoute path={`/${userSegment}/_spaces`} exact>
             Spaces
           </NavRoute>
         )}
