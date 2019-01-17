@@ -6,6 +6,7 @@ import { AppState } from '../../redux/appState';
 import withContext, { WithContextProps } from '../../hoc/withContext';
 import NavRouteGroup from './NavRouteGroup';
 import { getCurrentUser } from '../../redux/wit/selectors';
+import { NO_SPACE_PATH } from '../../redux/context/constants';
 
 interface StateProps {
   authUsername: string;
@@ -23,7 +24,12 @@ const Navigation: React.SFC<Props> = ({ authUsername, username, spacenamePath }:
   return (
     <Nav onSelect={noop} onToggle={noop} aria-label="Main navigation">
       <NavList>
-        <NavRoute path={userSpacePath || ''} exact>
+        <NavRoute
+          // path must match /_home while href will navigate to
+          path={userSpacePath && spacenamePath !== NO_SPACE_PATH ? userSpacePath : '/_home'}
+          href={userSpacePath && spacenamePath !== NO_SPACE_PATH ? userSpacePath : ''}
+          exact
+        >
           Overview
         </NavRoute>
         {userSpacePath && (

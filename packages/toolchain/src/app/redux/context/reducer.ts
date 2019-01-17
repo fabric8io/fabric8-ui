@@ -30,7 +30,7 @@ function getContext(pathname: string): ContextState {
   }
   const context = {
     username: matchResult ? matchResult.params.username : undefined,
-    subPath: matchResult ? matchResult.params.subPath : pathname,
+    subPath: matchResult ? matchResult.params.subPath : pathname.startsWith('/_') ? '' : pathname,
     spacename:
       matchResult && matchResult.params.spacename !== NO_SPACE_PATH
         ? matchResult.params.spacename
@@ -39,6 +39,9 @@ function getContext(pathname: string): ContextState {
 
   if (matchResult && matchResult.params.spacename) {
     context.spacenamePath = matchResult.params.spacename;
+  } else if (pathname.length === 0 || pathname === '/') {
+    // if navigating to the root, reset the spacenamePath
+    context.spacenamePath = NO_SPACE_PATH;
   }
 
   return context;
