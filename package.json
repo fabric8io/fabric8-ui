@@ -18,7 +18,7 @@
     "reinstall": "npm run clean && npm install",
     "start": "npm run tmp_e2e_workaround",
     "test": "CI=1 lerna run test --stream",
-    "tmp_e2e_workaround": "npm run bootstrap && npm start --prefix packages/fabric8-ui"
+    "tmp_e2e_workaround": "npm run bootstrap && npm start --prefix packages/toolchain"
   },
   "engines": {
     "node": "= 8.3.0",

@@ -4,10 +4,10 @@ import React from 'react';
 import AngularModuleRenderer from '../angular/AngularModuleRenderer';
 
 // need to import first otherwise bootstrap styles take precedence
-import 'fabric8-ui/src/vendor.browser';
+import 'ngx-fabric8-ui/src/vendor.browser';
 
 // eslint-disable-next-line import/order
-import { AppModule } from 'fabric8-ui/src/app';
+import { AppModule } from 'ngx-fabric8-ui/src/app';
 
 const AngularFabric8UI: React.SFC = () => (
   <AngularModuleRenderer
