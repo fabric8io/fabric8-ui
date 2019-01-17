@@ -95,8 +95,13 @@ describe('LandingPageComponent', () => {
     expect(testHomeContext).toBeDefined();
   });
 
+  it('should have a defined user after login', function() {
+    const homeComponent: HomeComponent = testHomeContext.testedDirective;
+    expect(homeComponent.loggedInUser).toBeDefined();
+  });
+
   it('should stop loading after resolving', function() {
     const homeComponent: HomeComponent = testHomeContext.testedDirective;
-    expect(homeComponent.loading).toBeFalsy;
+    expect(homeComponent.loading).toBeFalsy();
   });
 });
