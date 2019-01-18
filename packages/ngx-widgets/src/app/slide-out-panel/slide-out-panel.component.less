@@ -1,0 +1,41 @@
+@import (reference) '../../assets/stylesheets/ngx-widgets.less';
+
+//detail panel
+.detail-panel {
+  position: fixed;
+  left: auto;
+  top: 81px;
+  right: 0;
+  bottom: 0;
+  width: 50%;
+  min-width: 250px;
+  border-left: 1px solid;
+  border-left-color: darken(@color-pf-white, 20%);
+  background-color: @color-pf-white;
+  -webkit-box-shadow: -4px 0 2px -2px @color-pf-black-300;
+     -moz-box-shadow: -4px 0 2px -2px @color-pf-black-300;
+          box-shadow: -4px 0 2px -2px @color-pf-black-300;
+  z-index: 100;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  label { font-weight: 400; }
+  .form-group {
+    margin-bottom: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+  .clear-float { clear: both; }
+  .detail-close {
+    cursor: pointer;
+    font-size: em(18);
+  }
+  .detail-id {
+    margin: 0;
+    padding-left: .6em;
+    font-size: @pf-icon-2x;
+    font-weight: 700;
+    /* stylelint-disable */
+    line-height: 1 !important;
+    /* stylelint-enable */
+  }
+}

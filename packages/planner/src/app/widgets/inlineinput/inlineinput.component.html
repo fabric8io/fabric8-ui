@@ -1,0 +1,62 @@
+<div
+  class="inlineinput-container"
+  [class.read-only]="disabled"
+  (clickOut)="input.value == inputValue || input.value == '' ? closeClick() : ''"
+>
+  <textarea
+    #input
+    autosize
+    (click)="startEditing(true)"
+    [init_height]="23"
+    [attr.disabled]="(!allowOnLineClickEdit || disabled) && !editing ? '' : null"
+    [attr.placeholder]="placeholder"
+    [class.active]="editing"
+    [ngModel]="inputValue"
+    class="input-field inlineinput-textarea"
+    (keydown.enter)="submitOnEnter($event)"
+    (keydown)="onkeyDown($event)"
+  >
+  </textarea>
+  <div
+    *ngIf="editing"
+    (click)="saveClick()"
+    class="btn btn-primary action-btn btn-save inlineinput-btn-save"
+    [class.disabled]="saving"
+  >
+    <i class="fa fa-check"></i>
+  </div>
+  <div
+    class="btn btn-default action-btn inlineinput-btn-cancel"
+    *ngIf="editing"
+    (click)="closeClick()"
+  >
+    <i class="fa fa-close"></i>
+  </div>
+
+  <!--
+    We can not put *ngIf in this component.
+    Understand the following flow -
+    1. You click on the edit icon
+    2. The value for `editing` goes true
+    3. Thus this section is out of the DOM
+    4. In the `clickOut` directive it checks if the
+       target (clicked) element is not under the host element.
+    5. But since the target element is out of the DOM it's considered
+       as a cliked out side.
+    6. As per `(clickOut)="closeClick()"` the closeClick function is called
+    7. The `editing` value will reset to false.
+
+    To solve this, we are just using show / hide class
+    instead of completely removing it form *ngIf
+
+    TODO: Evaluate the solution and come up with a better one if there is any
+  -->
+  <div (click)="startEditing(false)" class="editor-icon-container" [class.hide]="editing">
+    <i class="pficon-edit edit-icon"></i>
+  </div>
+  <div *ngIf="editing">
+    <div class="error-message" *ngIf="errorMessage.length">
+      <small>{{ errorMessage }}</small>
+    </div>
+  </div>
+</div>

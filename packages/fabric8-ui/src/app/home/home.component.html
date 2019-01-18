@@ -1,0 +1,12 @@
+<section id="account-not-linked">
+  <div *ngIf="errorConnecting && !loading" style="margin-top:95px">
+    <f8-link-error></f8-link-error>
+  </div>
+</section>
+<fabric8-loading-widget
+  message="Please wait while we load your spaces"
+  *ngIf="loading === true"
+></fabric8-loading-widget>
+<section id="homepage" *ngIf="!errorConnecting && !loading">
+  <alm-home-dashboard></alm-home-dashboard>
+</section>

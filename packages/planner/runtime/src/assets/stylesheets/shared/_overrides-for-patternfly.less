@@ -1,0 +1,36 @@
+@import (reference) '_variables';
+
+// overwrite PatternFly header
+.navbar {
+  margin: 0;
+  border-radius: 0;
+  border-top-color: @color-pf-red;
+  .container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+//button Styling
+.btn {
+  border-radius: 0;
+}
+//remove toolbar box shadow
+.toolbar-pf { box-shadow: none !important;
+  // add border top to filter results
+  &-results {
+    border-top : 1px solid;
+    border-top-color: @color-pf-black-300;
+  }
+}
+
+//increase font size for these elements, overriding PatternFly
+.form-control,
+.btn,
+.dropdown-menu,
+.badge { font-size: @font-size-base; }
+.dropdown {
+  a {
+    cursor: pointer;
+    &:hover { text-decoration: none; }
+  }
+}

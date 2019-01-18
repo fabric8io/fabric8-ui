@@ -1,0 +1,191 @@
+@import (reference) '_typography.less';
+///////////////////////////
+// icon styles
+///////////////////////////
+// @import 'icons';
+
+///////////////////////////
+// Utility styles
+///////////////////////////
+body {
+  position: relative;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  font-family: 'Open Sans', sans-serif;
+  /* stylelint-disable */
+  /* required to overwrite the default PatternFly font size */
+  font-size: @font-size-base !important;
+  /* stylelint-enable */
+}
+.fill-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0;
+  margin: 0;
+  border-width: 0;
+}
+
+// .fill-container {
+//   position: absolute;
+//   top: 0;
+//   bottom: 0;
+//   left: 0;
+//   right: 0;
+//   padding: 0;
+//   margin: 0;
+//   border-width: 0;
+// }
+// @import 'layout-debug';
+///////////////////////
+// Styles relating to general html document
+///////////////////////
+// * { box-sizing: border-box; }
+// body {
+//   // Ensure that body element height at 'least' fills the viewport.
+//   // This means it can grow beyond, but wont be less
+//   @include debug-stretch-to-fit-viewport;
+//   position: relative;
+//   display: flex;
+//   margin: 0;
+//   padding: 0;
+//   min-height: 100vh;
+// }
+// //////////////////////
+// // flex utility styles
+// //////////////////////
+// @mixin flex-grow-x(@count:12) {
+//   @for @i from 1 through @count {
+//   .flex-grow-#{@i} { flex: @i; }
+//   }
+// }
+// // create 12 flex grow partitions
+// @include flex-grow-x(12);
+// .flex-container {
+//   display: flex;
+//   &.in-column-direction { flex-direction: column; }
+//   &.in-row-direction { flex-direction: row; }
+//   &.with-wrap { flex-wrap: wrap; }
+//   // Make sure the main,section,aside parts fill the screen and collapse header and footer if not there
+//   >main,
+//    section,
+//    aside {
+//     @extend .flex-grow-1;
+//   }
+//   >.container-fluid {
+//     position: relative;
+//     flex-grow: 1;
+//     width: 100%;
+//   }
+// }
+// .app {
+//   @extend .flex-grow-1;
+//   @extend .flex-container;
+// }
+// // an app component is a marker class for angular component dom elements
+// .app-component {
+//   //root app component
+//   &.app {
+//     >footer {
+//       .footer {
+//         text-align: @textCenter;
+//         font-size: @font-size-small;
+//         border-top: 1px solid;
+//         border-top-color: @color-pf-blue-300;
+//       }
+//     }
+//   }
+//   // Note: making relative positioning helps positioning but creates extra margins
+//   // on nested components, but it offers good absolute positioning options for
+//   // child elements
+//   position: relative;
+//   @include debug-app-component;
+// }
+@content-padding:0;
+header,
+footer {
+  padding:@content-padding;
+}
+// // helps to ensure that scrolling does not cross app footer or header
+// // the reason for not using flex is that view will not always be a flex-container
+// // This plays out in scenarios where view requires animation like slide ins/slie outs
+// // These are not good for flex
+.btn { min-width: 90px; }
+// // chromeless dialog suppresses all chrome in the ng2-bootstrap modal component
+// .chromeless-modal {
+//   .modal-content {
+//     display: flex;
+//     border:solid 0;
+//     border-color: lime;
+//     padding: 0;
+//     margin: 0;
+//     .modal-header { display: none; }
+//     .modal-footer{ display: none; }
+//     .modal-body {
+//       flex: 1;
+//       display: flex;
+//       border: solid 0;
+//       border-color: orangered;
+//       padding: 0;
+//       .chromeless-modal-content {
+//         flex: 1;
+//         display: flex;
+//         border: solid 0;
+//         border-color: brown;
+//         padding: 0;
+//       }
+//     }
+//   }
+// }
+// // wizard
+// @wizard-padding:@grid-gutter-width/2;
+// .wizard-container {
+//   flex: 1;
+//   display: flex;
+//   border: solid 0;
+//   border-color: orange;
+//   position: relative;
+//   .wizard {
+//     flex: 1;
+//     display: flex;
+//     border: solid 0;
+//     border-color: darkorange;
+//     position: relative;
+//     padding: 0;
+//     padding-bottom: @wizard-padding;
+//     .wizard-step {
+//       display: none;
+//       // at least 50% of view height
+//       min-height: 50vh;
+//       &.active{
+//         display: flex;
+//         flex-direction: column;
+//       }
+//       flex: 1;
+//       border: solid 0;
+//       border-color: olivedrab;
+//       >header {
+//         display: flex;
+//         position: relative;
+//         justify-content: center;
+//         padding: @wizard-padding;
+//         background-color: @navbar-default-bg;
+//       }
+//       >section {
+//         flex: 1;
+//         display: flex;
+//         position: relative;
+//       }
+//       >footer {
+//         display: flex;
+//         position: relative;
+//         justify-content: flex-end;
+//         padding: @wizard-padding;
+//         padding-bottom: 0;
+//       }
+//     }
+//   }
+// }

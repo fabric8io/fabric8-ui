@@ -1,0 +1,191 @@
+@import (reference) '../../../assets/stylesheets/_base';
+
+.f8-quickadd {
+  height: 69px; //height is given to avoid jumping between this block and addWorkItemBlk
+  text-align: left;
+  background: @color-pf-black-200;
+  border-top: 1px solid;
+  border-top-color: @color-pf-black-300;
+  cursor: pointer;
+  &__addwi {
+    padding: 21px 0;
+    color: @navbar-pf-border-color;
+    &-savebtn {
+      display: inline-block;
+      margin: 0;
+      &:hover {
+        text-decoration: none;
+      }
+    }
+    i {
+      display: inline-block;
+      color: @navbar-pf-border-color;
+      &:hover {
+        color: @navbar-pf-border-color;
+      }
+    }
+  }
+  &__wiblk {
+    padding-right: 10px;
+    padding-left: 10px;
+    .dropdown {
+      position: relative;
+      button[data-toggle='dropdown'] {
+        display: inline-flex;
+        height: 26px;
+      }
+      .dropdown-menu {
+        i {
+          display: inline-block;
+          min-width: 16px;
+          text-align: left;
+        }
+      }
+    }
+    &-story {
+      overflow: hidden;
+    }
+    &-btn {
+      &-add {
+        min-width: 30px;
+        height: 27px;
+        i {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}
+//quick Add card view css
+.f8-quickadd-card {
+  float: left;
+  position: relative;
+  box-shadow: none;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  border-top: 0;
+  background: none;
+  &__addwi {
+    background: @color-pf-white;
+    text-align: center;
+    padding: 10px 15px;
+    border: 2px solid;
+    border-color: @color-pf-black-400;
+    &-savebtn {
+      i {
+        font-size: 18px;
+        color: @color-pf-blue-400;
+      }
+    }
+  }
+  &__wiblk {
+    margin-top: 5px;
+    margin-bottom: 0;
+    margin-left: 0;
+    background: @color-pf-white;
+    border: 2px solid;
+    border-color: @color-pf-black-400;
+    .dropdown {
+      button[data-toggle='dropdown'] {
+        display: inline-flex;
+        height: 26px;
+      }
+      .dropdown-menu {
+        top: auto;
+        i {
+          display: inline-block;
+          min-width: 16px;
+          text-align: left;
+        }
+      }
+    }
+    .f8-quickadd-desc {
+      width: 100%;
+      height: 29px;
+      margin-top: 5px;
+    }
+    &-btn-add {
+      margin-top: 5px;
+      margin-bottom: 10px;
+      margin-left: -10px;
+    }
+    &-btn-close {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      color: @color-pf-black;
+    }
+  }
+}
+@media (max-width: @grid-float-breakpoint) {
+  .f8-quickadd {
+    &__addwi {
+      padding: 10px;
+      i,
+      h4 {
+        display: block;
+      }
+      i {
+        margin-bottom: 5px;
+      }
+    }
+    &__wiblk {
+      padding: 10px;
+    }
+  }
+}
+@-moz-document url-prefix() {
+  .f8-quickadd__wiblk-story {
+    .f8-quickadd-desc {
+      max-height: 26px;
+    }
+  }
+}
+
+.f8-quickadd-query {
+  &__wrapper {
+    margin-right: 30px;
+    margin-left: 30px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+    input {
+      min-width: 360px;
+    }
+  }
+
+  &__dropdown {
+    margin-top: 15px;
+  }
+
+  &__create {
+    position: absolute;
+    top: 110px;
+    right: 160px;
+  }
+
+  &__create-open {
+    position: absolute;
+    top: 110px;
+    right: 30px;
+  }
+}
+
+.item-desc {
+  display: block;
+  font-size: 12px;
+  font-style: italic;
+  line-height: 17px;
+  color: @color-pf-black-500;
+}
+
+.planner-dropdown-item {
+  padding: 1px 10px;
+  &:hover {
+    background-color: @color-pf-blue-50;
+    border-color: @color-pf-blue-100;
+  }
+}
+
+

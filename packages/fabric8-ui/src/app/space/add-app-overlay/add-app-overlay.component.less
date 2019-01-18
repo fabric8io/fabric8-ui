@@ -1,0 +1,50 @@
+@import (reference) '../../../assets/stylesheets/shared/osio.less';
+@icon-path: '../../../assets/stylesheets/shared/_icons.less';
+
+.f8-modal-lg {
+  width: 1500px;
+  max-width: calc(100% - 20px);
+}
+
+.f8-add-app-overlay {
+  .required {
+    color: @color-pf-red;
+  }
+  &__container {
+    padding: 30px 20px;
+  }
+  &__tip {
+    margin-bottom: 40px;
+  }
+  &__label {
+    font-weight: normal;
+  }
+  &__card {
+    padding: 20px 30px;
+  }
+  &__card-col-left {
+    border-right: 2px solid @color-pf-black-200;
+    padding: 0;
+  }
+  &__card-col-middle h5 {
+    font-weight: 600;
+    margin-top: 0;
+  }
+  &__card-col-left {
+    padding: 0;
+  }
+  &__image {
+    width: 80px;
+  }
+  &__left-section {
+    border-right: 3px solid @color-pf-black-200;
+  }
+  &__right-section {
+    padding: 0 40px;
+  }
+  &__modal-footer {
+    border-top: 3px solid @color-pf-black-200;
+    margin-top: 0;
+    padding: 30px;
+  }
+}

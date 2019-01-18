@@ -1,0 +1,6 @@
+<div [@slideInOut]="sidePanelState" class="side-panel">
+  <ng-container *ngTemplateOutlet="sidePanelContent"> </ng-container>
+</div>
+<div class="content-wrapper" [@slideInOutContent]="sidePanelState === 'in' ? 'out' : 'in'">
+  <ng-container *ngTemplateOutlet="sectionContent"> </ng-container>
+</div>

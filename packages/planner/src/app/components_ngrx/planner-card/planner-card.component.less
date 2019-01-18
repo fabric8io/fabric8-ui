@@ -1,0 +1,43 @@
+@import (reference) '../../../assets/stylesheets/_base';
+@import '../../../assets/stylesheets/_planner-layout';
+
+.f8-custom {
+  &-card {
+    &-header {
+      position: relative;
+      padding-top: 18px;
+      padding-right: 18px;
+      padding-left: 46px;
+      .wi-type-icon-wrapper {
+        position: absolute;
+        top: 17px;
+        left: 18px;
+        font-size: 18px;
+      }
+      .title-wrapper {
+        .creator {
+          color: @color-pf-black-400;
+        }
+      }
+    }
+    &-body {
+      padding-top: 15px;
+      padding-right: 18px;
+      padding-bottom: 15px;
+      padding-left: 46px;
+      .sprint-name {
+        width: 50%;
+        float: left;
+      }
+      .assignee {
+        text-align: right;
+      }
+    }
+    &-footer {
+      padding-right: 18px;
+      padding-bottom: 18px;
+      padding-left: 46px;
+    }
+    cursor: move;
+  }
+}

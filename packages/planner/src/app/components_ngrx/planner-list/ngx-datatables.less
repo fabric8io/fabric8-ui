@@ -1,0 +1,99 @@
+@import (reference) '../../../assets/stylesheets/_base';
+/// ngx-datatables css
+
+.cell-class {
+  overflow: visible !important;
+  .datatable-body-cell-label {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    label {
+      margin: 0;
+    }
+  }
+}
+.header-cell {
+  font-weight: bold !important;
+  overflow: visible !important;
+  color: @color-pf-black !important;
+}
+.datatable-row-detail {
+  overflow-y: visible;
+}
+.datatable-header {
+  overflow: visible !important;
+}
+.fullscreen {
+  position: absolute !important;
+  height: auto !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+}
+a.quick-add-icon {
+  width: 100%;
+  font-size: 16px;
+  text-align: center;
+  text-decoration: none;
+  opacity: .4;
+}
+// Css for row selection
+.ngx-datatable.material.single-selection .datatable-body-row.active,
+.ngx-datatable.material.single-selection .datatable-body-row.active .datatable-row-group,
+.ngx-datatable.material.single-selection .datatable-body-row.active:hover,
+.ngx-datatable.material.single-selection .datatable-body-row.active:hover .datatable-row-group,
+.ngx-datatable.material.single-selection .datatable-body-row.active:focus,
+.ngx-datatable.material.single-selection .datatable-body-row.active:focus .datatable-row-group {
+  background-color: @color-pf-black-200 !important;
+}
+// css for row hover
+.ngx-datatable.material:not(.cell-selection) .datatable-body-row:hover,
+.ngx-datatable.material:not(.cell-selection) .datatable-body-row:hover .datatable-row-group,
+.ngx-datatable.material.cell-selection .datatable-body-cell:hover,
+.ngx-datatable.material.cell-selection .datatable-body-cell:hover .datatable-row-group {
+  background-color: @color-pf-blue-50;
+  transition-property: background;
+  transition-duration: .3s;
+  transition-timing-function: linear;
+}
+// css to show icons on hover(quickAdd, quickPreview, detailPreview, dragHandle)
+.datatable-body-row:hover,
+.datatable-body-row.active {
+  .table-dnd-container,
+  .wi-detail-icon,
+  a.quick-add-icon {
+    opacity: 1;
+  }
+}
+.datatable-body-cell,
+.datatable-header-cell {
+  border-right: 1px solid;
+  border-right-color: @color-pf-black-300;
+  &:last-child {
+    border-right-width: 0;
+  }
+}
+.datatable-row-wrapper:last-child {
+  border-bottom: 1px solid;
+  border-bottom-color: @color-pf-black-200;
+}
+.datatable-header-cell,
+.datatable-body-cell {
+  padding: ((@grid-gutter-width/10)) ((@grid-gutter-width/3));
+}
+.datatable-body-cell {
+  overflow-x: visible !important;
+}
+.tree-icon {
+  min-width: 15px;
+  &.tree-icon__disabled {
+    opacity: .4;
+    cursor: not-allowed;
+  }
+}
+.icon-loader {
+  margin-left: -4px;
+  margin-right: 6px;
+}

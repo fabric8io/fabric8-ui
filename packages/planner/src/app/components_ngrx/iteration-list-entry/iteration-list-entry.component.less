@@ -1,0 +1,71 @@
+@import (reference) '../../../assets/stylesheets/_base';
+@import (reference) '../../../assets/stylesheets/shared/_formulas';
+
+.f8-itr {
+  &-entry {
+    width: 100%;
+    padding: 5px;
+    padding-right: 10px;
+    border-left: 4px solid;
+    border-left-color: transparent;
+    .badge {
+      background-color: @color-pf-black;
+    }
+    .fa {
+      float: left;
+      width: 15px;
+      height: 30px;
+      padding: 5px;
+      font-size: 16px;
+      &:hover {
+        color: @color-pf-blue;
+        transition: color ease-in 200ms;
+      }
+    }
+    &:hover {
+      background-color: @color-pf-black-700;
+    }
+    &--selected {
+      border-left-color: @color-pf-blue;
+      background-color: @color-pf-black-800;
+    }
+    .dropdown-kebab-pf {
+      .btn-link {
+        color: @color-pf-white;
+        margin-left: -30px;
+      }
+      .dropdown-menu-right {
+        right: -10px;
+      }
+      &:hover {
+        .btn-link {
+          color: @color-pf-blue;
+          transition: color ease-in 200ms;
+        }
+      }
+    }
+  }
+  &__header {
+    color: @color-pf-white;
+    cursor: pointer;
+    &:hover {
+      color: @color-pf-blue;
+      text-decoration: none;
+      transition: color ease-in 200ms;
+    }
+    &:focus,
+    &:visited {
+      text-decoration: none;
+    }
+  }
+  &-status {
+    font-size: 12px;
+    color: @color-pf-black-600;
+  }
+  .active-tag {
+    font-size: 12px;
+    font-weight: 600;
+    color: @color-pf-black-600;
+  }
+}
+.calc-itr-depth(4);

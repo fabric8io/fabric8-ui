@@ -1,0 +1,19 @@
+@import (reference) 'shared/_variables';
+.gu {
+  &-mirror {
+    position: fixed !important;
+    z-index: 9999 !important;
+    margin: 0 !important;
+    background-color: @color-pf-white;
+    cursor: grabbing;
+    opacity: 1;
+    -ms-filter: 'progid:DXImageTransform.Microsoft.Alpha(Opacity=80)';
+    filter: alpha(opacity=80);
+  }
+  &-hide { display: none!important; }
+  &-unselectable { user-select: none!important; }
+  &-transit {
+    border-color: @color-pf-black-400;
+    opacity: .1;
+  }
+}

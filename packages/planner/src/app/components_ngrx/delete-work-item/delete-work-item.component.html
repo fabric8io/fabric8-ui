@@ -1,0 +1,12 @@
+<f8-feature-toggle featureName="Planner.deleteWorkItem" [userLevel]="internal"></f8-feature-toggle>
+<ng-template #internal>
+  <span
+    *ngIf="(allowDelete | async)"
+    id="wi-delete-icon"
+    class="pficon-delete delete-icon pointer"
+    placement="right"
+    tooltip="Delete work item"
+    (click)="deleteWorkItem($event)"
+  >
+  </span>
+</ng-template>

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+APP_DIR="packages/toolchain"
+
 # Exit on error
 set -e
 
@@ -59,6 +61,9 @@ echo "NPM Install starting: $(date)"
 docker exec fabric8-ui-builder npm install
 echo "NPM Install Complete: $(date)"
 
+docker exec fabric8-ui-builder npm run bootstrap
+echo "Lerna Bootstrap Complete: $(date)"
+
 ## Exec unit tests
 docker exec fabric8-ui-builder ./run_unit_tests.sh
 echo 'CICO: unit tests OK'
@@ -67,5 +72,5 @@ echo 'CICO: unit tests OK'
 
 
 ## All ok, build prod version
-docker exec fabric8-ui-builder npm run build:prod
+docker exec fabric8-ui-builder npm run build --prefix ${APP_DIR}
 echo "Build Complete: $(date)"

@@ -1,0 +1,33 @@
+= Alternate ways to run Planner
+:icons:
+:toc: macro
+:toc-title:
+:toclevels: 1
+
+Planner can also be run locally using the following alternate ways:
+
+== Minishift
+Follow the instructions listed in link:https://github.com/fabric8-services/fabric8-wit/tree/master/minishift[Running dependent services on OpenShift] to run Planner using Minishift.
+
+== Docker Compose
+You can run Planner using Docker Compose as follows:
+
+.Prerequisite
+Ensure you have Docker and Docker Compose set up and the service running in your  system.
+
+.Procedure
+. Build the Planner image from source
++
+----
+docker build -t fabric8-planner-runtime
+----
++
+. Run the stack with Docker Compose. This runs Planner, Core, DB, Auth & Auth’s DB images orchestrated to work together.
++
+----
+docker-compose up
+----
++
+IMPORTANT: If wit/core fails to start with `docker-compose up`, run `docker-compose start core` on another terminal. This will continue the `stdout` on the former terminal and the later terminal can be closed after invoking the command.
+
+. Visit http://localhost:8088 on your browser to access the app at this point.

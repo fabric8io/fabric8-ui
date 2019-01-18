@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "inlineSourceMap": true,
+    "declaration": false,
+    "noImplicitAny": false
+  },
+  "files": [
+    "protractor.conf.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

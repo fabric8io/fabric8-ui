@@ -1,0 +1,92 @@
+= Useful scripts and tasks
+
+The Planner delegates task running to `gulp` and allows parametric subtasks in the format of `npm run <task> \-- --subtask`.
+
+The `scripts` section of the link:package.json[*_package.json_*] file lists the main tasks i.e. `build`, `clean`, and `test`.
+
+The following table lists the available npm scripts managed with `gulp` tasks:
+
+[cols="1,1,3,4a", options="header"]
+|===
+|Task
+|Subtask
+|Command
+|Description
+
+.6+| Build
+
+| *[default]* app
+v|`npm run build` or
+`npm run build \-- --app`
+| Builds the planner library
+
+| [line-through]#image#
+v|`npm run build \-- --image`
+| Creates container image for the app
+
+| release
+v|`npm run build \-- --release`
+| Publishes the library to `*npm*` registry
+
+| [line-through]#tarball#
+v|`npm run build \-- --tarball`
+| Packs the library into a tarball
+
+| [line-through]#validate#
+v|`npm run build \-- --validate`
+| Dry runs the build for validation
+
+| watch
+v|`npm run build \-- --watch`
+| Rebuilds planner library on file changes
+
+
+.7+| Clean
+
+| *[default]* all
+v|`npm run clean` or
+`npm run clean \-- --all`
+| Fully resets the project
+
+| cache
+v|`npm run clean \-- --cache`
+| Clears `*npm*` cache
+
+| config
+v|`npm run clean \-- --config`
+| Resets app config & env_vars
+
+| dist
+v|`npm run clean \-- --dist`
+| Removes the build artifacts
+
+| images
+v|`npm run clean \-- --images`
+| Stops containers & removes the images
+
+| modules
+v|`npm run clean \-- --modules`
+| Removes all `*node*` modules
+
+| temp
+v|`npm run clean \-- --temp`
+| Removes temp files and artifacts
+
+
+.3+| Tests
+
+| unit
+v|`npm run tests \-- --unit`
+| Runs the unit tests
+//Commented out as not yet implemented
+//| func
+//v|`npm run tests \-- --func`
+| Runs the functional tests
+
+//| smok
+//v|`npm run tests \-- --smok`
+| Runs the smoke tests
+
+|===
+
+To further understand the routines triggered by the subtask parameters refer to the link:gulpfile.js[*_gulpfile_*].

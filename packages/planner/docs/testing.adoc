@@ -1,0 +1,43 @@
+= Testing Planner
+:icons:
+:toc: macro
+:toc-title:
+:toclevels: 1
+
+toc::[]
+
+The following sections describe the tests used in Planner.
+
+== Unit tests
+
+To run the unit tests use:
+----
+$ npm run tests -- --unit
+----
+
+== Functional tests
+.Prerequisite
+* To run the tests ensure that you have an account on prod-preview.openshift.io
+
+.Procedure
+To run the functional tests:
+
+. Login to prod-preview.openshift.io.
+. Get the refresh token:
+.. In the Google Chrome browser, press kbd:[F12] to open the *Chrome Devtools* pane and navigate to the *Application* tab.
+.. In the *Storage* section expand *Local Storage* and click on *prod-preview.openshift.io*.
+.. Copy the value for the `refresh_token` key.
+
+. Run the tests with the following command:
+----
+REFRESH_TOKEN=<YOUR_REFRESH_TOKEN> USER_NAME=<YOUR_PROD-PREVIEW-USERNAME> tests/run_e2e_tests.sh
+----
+
+The functional tests support the following configuration variables:
+
+* `BASE_URL`: (default: https://prod-preview.openshift.io) - The tests are executed against this URL. To run tests against locally running integrated planner set the base url to http://localhost:3000.
+* `HEADLESS_MODE` (default=false): When `HEADLESS_MODE` is set, Protractor runs tests in headless chrome, similar to CI/CD environment.
+* `REFRESH_TOKEN`: This variable is required for authentication. See step 2 in the Run tests section to get this token.
+* `USER_NAME`: This variable is also required for authentication. `USER_NAME` is your prod-preview account username
+
+For further details see link:../tests/README.adoc[Test Runner] documentation.

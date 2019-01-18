@@ -1,5 +1,7 @@
 #!/bin/bash
 
+HOME_DIR="/home/fabric8/fabric8-ui"
+APP_DIR="packages/toolchain"
 BUILDER_CONT="fabric8-ui-builder"
 DEPLOY_CONT="fabric8-ui-deploy"
 REGISTRY="quay.io"
@@ -52,16 +54,20 @@ docker ps -a | grep -q "${BUILDER_CONT}" && docker rm "${BUILDER_CONT}"
 if [ ! -d dist ]; then
   mkdir dist
 
-  docker run --detach=true --name="${BUILDER_CONT}" -t -v $(pwd)/dist:/dist:Z -e BUILD_NUMBER -e BUILD_URL -e BUILD_TIMESTAMP -e JENKINS_URL -e GIT_BRANCH -e "CI=true" -e GH_TOKEN -e NPM_TOKEN -e FABRIC8_BRANDING=openshiftio -e FABRIC8_REALM=fabric8 "${BUILDER_CONT}"
+  docker run --detach=true --name="${BUILDER_CONT}" -t -v $(pwd)/dist:/build:Z -e BUILD_NUMBER -e BUILD_URL -e BUILD_TIMESTAMP -e JENKINS_URL -e GIT_BRANCH -e "CI=true" -e GH_TOKEN -e NPM_TOKEN -e FABRIC8_BRANDING=openshiftio -e FABRIC8_REALM=fabric8 "${BUILDER_CONT}"
 
-  # Build almigty-ui
+  # Install talamer monorepo packages
   docker exec "${BUILDER_CONT}" npm install
+
+  # Bootstrap the project dependencies
+  docker exec "${BUILDER_CONT}" npm run bootstrap
 
   ## Exec unit tests
   docker exec "${BUILDER_CONT}" ./run_unit_tests.sh
 
   echo 'CICO: unit tests OK'
-  ./upload_to_codecov.sh
+  # TODO re-instate when we have code coverage
+  #./upload_to_codecov.sh
 
   # In order to run semantic-release we need a non detached HEAD, see https://github.com/semantic-release/semantic-release/issues/329
   docker exec "${BUILDER_CONT}" git checkout master
@@ -69,14 +75,14 @@ if [ ! -d dist ]; then
   docker exec "${BUILDER_CONT}" env
 
   ## Run the prod build
-  docker exec "${BUILDER_CONT}" npm run build:prod
+  docker exec "${BUILDER_CONT}" npm run build --prefix ${APP_DIR}
 
   docker exec "${BUILDER_CONT}" git branch -va
   # Set the GIT_BRANCH to master since cico sets it to origin/master
   docker exec "${BUILDER_CONT}" env GIT_BRANCH=master
   docker exec "${BUILDER_CONT}" env
-  docker exec "${BUILDER_CONT}" npm run semantic-release-origin-master || :
-  docker exec -u root "${BUILDER_CONT}" cp -r /home/fabric8/fabric8-ui/dist /
+  docker exec "${BUILDER_CONT}" npm run semantic-release-origin-master --prefix ${APP_DIR} || :
+  docker exec -u root "${BUILDER_CONT}" cp -r ${HOME_DIR}/${APP_DIR}/build /
 fi
 
 set +e

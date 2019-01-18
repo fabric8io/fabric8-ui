@@ -1,0 +1,83 @@
+<f8-feature-toggle
+  featureName="PlannerQuery"
+  [userLevel]="board"
+  [showFeatureOptIn]="true"
+></f8-feature-toggle>
+
+<ng-template #board>
+  <div class="container-fluid f8-wi-container" #containerHeight>
+    <div class="lock-overlay-list" *ngIf="(boardUiQuery.boardLocked | async)">
+      <div class="spinner-container">
+        <h2 class="spinner"></h2>
+        <h2>Loading ...</h2>
+        <h4>Please wait, we are loading your data.</h4>
+      </div>
+    </div>
+
+    <main class="row">
+      <alm-planner-layout
+        #plannerLayout
+        (sidePanelStateChange)="togglePanelState($event)"
+        [sidePanelContent]="sidePanel"
+        [sectionContent]="sectionPanel"
+      >
+      </alm-planner-layout>
+      <work-item-preview-panel #quickPreview [context]="'board'"> </work-item-preview-panel>
+    </main>
+  </div>
+
+  <ng-template #sidePanel>
+    <aside class="f8-sidepanel">
+      <div class="lock-overlay-list" *ngIf="uiLockedSidebar">
+        <div class="spinner-container">
+          <h2 class="spinner"></h2>
+          <h2>Loading ...</h2>
+          <h4>Please wait, we are loading your data.</h4>
+        </div>
+      </div>
+      <a class="f8-sidepanel--toggle">
+        <span
+          class="fa f8-sidepanel--toggle-icon fa-lg"
+          [class.fa-angle-double-left]="sidePanelOpen"
+          [class.fa-angle-double-right]="!sidePanelOpen"
+          (click)="plannerLayout.toggleSidePanel()"
+          tooltip="{{ sidePanelOpen ? 'Hide Panel' : 'Show Panel' }}"
+          placement="right"
+        >
+        </span>
+      </a>
+      <side-panel [sidePanelOpen]="sidePanelOpen" [context]="'board'"> </side-panel>
+    </aside>
+  </ng-template>
+
+  <ng-template #sectionPanel>
+    <div class="f8-wi-board" #boardContainer>
+      <ng-container *ngIf="(board$ | async) as board">
+        <f8-planner-column
+          class="f8-planner-column"
+          *ngFor="let column of board.columns"
+          [columnBody]="boardColumnBody"
+          [itemCount]="(column.workItems | async)?.length"
+          [columnName]="column.title"
+        >
+          <ng-template #boardColumnBody>
+            <div
+              class="f8-board-column__body"
+              [dragula]="'board-column'"
+              [attr.data-id]="column.id"
+            >
+              <f8-planner-card
+                *ngFor="let workitem of (column.workItems | async)"
+                [class.item-not-draggable]="!workitem?.editable"
+                [workItem]="workitem"
+                (onTitleClick)="openQuickPreview($event)"
+              ></f8-planner-card>
+            </div>
+          </ng-template>
+        </f8-planner-column>
+      </ng-container>
+    </div>
+  </ng-template>
+
+  <osio-modal></osio-modal>
+</ng-template>

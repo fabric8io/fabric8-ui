@@ -1,0 +1,32 @@
+@import (reference) 'ngx-widgets.less';
+//custom variables
+@width100: 100%;
+@em-base-font-size: 12;
+@rem-base-font-size: 10;
+// positions
+@textLeft: left;
+@textRight: right;
+@textCenter: center;
+@pf-icon-2x: 2em;
+
+/* stylelint-disable */
+.color-grey { color: @color-pf-black-800 !important; }
+/* stylelint-enable */
+
+.containerPadd { padding: em(96) 0 em(66) 0; }
+.containerPadd-nologin { padding-bottom: 0; }
+
+.dn { display: none; }
+.dib { display: inline-block; }
+.db { display: block; }
+
+.width-100 { width: 100%; }
+.height-100 { height:100%; }
+.overflow-auto { overflow: auto; }
+.textCenter { text-align: @textCenter; }
+
+.truncate-ellipsis {
+  display: table;
+  table-layout: fixed;
+  white-space: nowrap;
+}

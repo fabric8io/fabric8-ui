@@ -1,0 +1,71 @@
+<div class="f8-comment-body">
+  <user-avatar
+    class="pull-left"
+    id="{{ 'comment_avatar_' + comment.id }}"
+    *ngIf="(comment.creator | async)?.avatar"
+    container="body"
+    [imgSrc]="(comment.creator | async)?.avatar | almAvatarSize: 25"
+  >
+  </user-avatar>
+  <div>
+    <strong class="f8-comment-author pull-left" id="{{ 'comment_username_' + counter }}">
+      {{ (comment.creator | async)?.name }}
+    </strong>
+    <small class="f8-comment--create-time pull-right" id="{{ 'comment_time_' + counter }}">
+      {{ comment.createdAt | date: 'medium' }}
+    </small>
+  </div>
+
+  <div class="width-100 pull-left comment">
+    <f8-markdown
+      [attr.id]="'comment_body_' + counter"
+      [editAllow]="comment.allowEdit"
+      [rawText]="comment.body"
+      [renderedText]="comment.bodyRendered | safe: 'html'"
+      [placeholder]="'Add a new comment...'"
+      [allowEmptySave]="false"
+      (onSaveClick)="updateComment($event, comment)"
+      (showPreview)="showPreview($event)"
+    >
+    </f8-markdown>
+  </div>
+
+  <!-- Add reply section -->
+  <div
+    class="width-100 pull-left reply"
+    [class.reply-div-active]="replyActive"
+    [class.reply-div]="!replyActive"
+    *ngIf="!comment.parentId"
+  >
+    <!-- Add reply button-->
+    <button
+      class="btn pull-right"
+      type="button"
+      (click)="replyActive = true; replyEditor?.enableEditor()"
+    >
+      {{ 'Reply' }}
+    </button>
+
+    <!-- Reply editor -->
+    <f8-markdown
+      #replyEditor
+      [class.hide]="!replyActive"
+      [editAllow]="true"
+      [rawText]="''"
+      [renderedText]="''"
+      [placeholder]="'Add a new reply...'"
+      [allowEmptySave]="false"
+      (onSaveClick)="createComment($event); replyActive = false"
+      (showPreview)="showPreview($event)"
+      (onCloseClick)="replyActive = false"
+    >
+    </f8-markdown>
+
+    <fabric8-comment
+      *ngFor="let childComment of comment.children"
+      [comment]="childComment"
+      (onUpdateRequest)="updateChildComment($event)"
+    >
+    </fabric8-comment>
+  </div>
+</div>

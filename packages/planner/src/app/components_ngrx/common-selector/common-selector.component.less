@@ -1,0 +1,23 @@
+@import (reference) '../../../assets/stylesheets/_base';
+
+.active {
+  color: @color-pf-blue-300;
+}
+.disable {
+  color: @color-pf-black-300;
+  cursor: not-allowed;
+}
+.toggle {
+  cursor: pointer;
+  font-weight: 600;
+  &:hover {
+    color: @color-pf-blue-300;
+  }
+}
+.item-desc {
+  display: block;
+  font-size: 12px;
+  font-style: italic;
+  line-height: 17px;
+  color: @color-pf-black-400;
+}

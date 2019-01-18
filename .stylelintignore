@@ -1,7 +1,7 @@
-# Ignore guidelines for stylelint
-# These are to be written in the same format as gitignore
-# Any directories or files are automatically found by the stylelint process
-
-# Ignore certain shared Less files
-src/assets/stylesheets/shared/_formulas.less
-
+node_modules
+**/node_modules/
+coverage
+build
+dist
+/packages/planner
+/packages/ngx-widgets

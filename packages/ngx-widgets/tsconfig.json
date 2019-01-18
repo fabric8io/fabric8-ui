@@ -1,0 +1,24 @@
+{
+  "extends": "../scripts/config/tsconfig/tsconfig.json",
+  "angularCompilerOptions": {
+    "skipTemplateCodegen": true,
+    "strictMetadataEmit": true
+  },
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "rootDir": ".",
+    "noImplicitReturns": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "strictNullChecks": false,
+
+    "types": [
+      "jest",
+      "jasmine",
+      "node"
+    ]
+  },
+  "include": [
+    "src"
+  ]
+}

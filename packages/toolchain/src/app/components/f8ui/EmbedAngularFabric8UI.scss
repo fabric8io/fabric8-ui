@@ -1,0 +1,60 @@
+// These are workarounds issues with bringing in PF4 and fabric8-ui
+
+/* stylelint-disable */
+
+html body {
+  padding-top: 0 !important;
+  overflow: hidden;
+  font-size: var(--pf-global--FontSize--md) !important;
+}
+
+// Needed so that dialogs embedded within f8-app can surface beyond the main content area
+.pf-c-page__main {
+  z-index: auto;
+}
+
+f8-app {
+  background-color: #ededed;
+  min-height: 100%;
+  font-size: 14px !important;
+  font-family: 'Open Sans', sans-serif;
+
+  & > header {
+    display: none;
+  }
+
+  .f8-wi-container {
+    margin-top: 0 !important;
+  }
+
+  .toolbar-header-pipelines,
+  .toolbar-header-codebases {
+    padding-top: 0 !important;
+  }
+
+  f8launcher {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    overflow: auto;
+  }
+
+  .f8launcher {
+    top: 0;
+  }
+
+  .f8launcher-container_nav {
+    padding-top: 0;
+  }
+
+  .f8launcher-container_main--start h1 {
+    margin-top: 1em;
+  }
+
+  .f8launcher .sticky.close {
+    top: 20px;
+  }
+}

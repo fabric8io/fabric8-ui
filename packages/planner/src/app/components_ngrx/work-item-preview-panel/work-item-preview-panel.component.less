@@ -1,0 +1,29 @@
+@import (reference) '../../../assets/stylesheets/_base';
+
+.f8-quick-preview {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  width: 40%;
+  min-width: 250px;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  background: @color-pf-white;
+  border-left: 1px solid;
+  border-left-color: (darken(@color-pf-white, 20%));
+  box-shadow: -4px 0 2px -2px @color-pf-black-300;
+  label {
+    font-weight: 400;
+  }
+}
+
+@media (max-width: @grid-float-breakpoint) {
+  .f8-quick-preview {
+    top: 0;
+    width: 100%;
+    padding: 0;
+  }
+}

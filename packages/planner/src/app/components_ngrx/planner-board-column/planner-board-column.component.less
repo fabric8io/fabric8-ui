@@ -1,0 +1,31 @@
+@import (reference) '../../../assets/stylesheets/_base';
+
+.f8-board {
+  &-column {
+    height: 100%;
+    width: 25%;
+    background-color: @color-pf-black-200;
+    border: 1px solid @color-pf-black-300;
+    display: inline-block;
+    &__header {
+      padding-top: 20px;
+      padding-right: 10px;
+      padding-bottom: 10px;
+      padding-left: 10px;
+      &-title {
+        font-weight: 600;
+        padding-left: 8px;
+      }
+    }
+    &__wrapper {
+      padding-top: 5px;
+      padding-right: 20px;
+      padding-bottom: 20px;
+      padding-left: 20px;
+      white-space: normal;
+      overflow-y: auto;
+      overflow-x: hidden;
+      height: ~'calc(e("100% - 58px"))';
+    }
+  }
+}

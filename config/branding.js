@@ -8,11 +8,11 @@ exports.assets = {
     }
   },
   openshiftio: {
-    favicon: {
-      path: './src/assets/icon/openshift_icon.svg'
-    },
+    //favicon: {
+      //path: './src/assets/icon/openshift_icon.svg'
+    //},
     title: {
-      prefix: 'OpenShift.io'
+      prefix: 'CodeReady Toolchain'
     }
   },
 }

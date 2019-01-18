@@ -1,0 +1,52 @@
+@import (reference) '_variables';
+///////////////////////////
+// Utility styles
+///////////////////////////
+// custom classes
+.db {
+  display: block;
+}
+.dib {
+  display: inline-block;
+}
+.posRel {
+  position: relative;
+}
+.width-100 {
+  width: 100%;
+}
+.height-100 {
+  height: 100%;
+}
+.overflow-auto {
+  overflow: auto;
+}
+
+//colors
+.color-grey {
+  color: @color-pf-black-800;
+}
+
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.padding-left-0 {
+  padding-left: 0;
+}
+//infotip css
+.popover-container {
+  //changing minimum width from 235px to 375px to avoid overlapping of workitem rows
+  //in the planner list with the infotip popover.
+  min-width: 375px;
+  cursor: default;
+}
+.infoArea:hover,
+.f8-itr-hdr h3:hover,
+.f8-group-filter__type:hover {
+  .infotip-icon {
+    opacity: 1;
+    transition: opacity ease-in .3s;
+  }
+}

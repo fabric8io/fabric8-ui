@@ -1,0 +1,144 @@
+<div class="f8-link-container" id="wi-link">
+  <!-- This should be separated out as a separate component -->
+  <!--
+    There used to be a tab feature but since we don't need it any more
+    I am removing that code for now.
+    While building a new component we should take care of that tab feature
+    too.
+  -->
+  <ul class="f8-link__nav-list nav nav-tabs nav-tabs-pf">
+    <li class="f8-toggle-caret" (click)="showLinkComponent = !showLinkComponent">
+      <i
+        class="fa fa-icon f8-toggle-caret-right"
+        [ngClass]="{ 'fa-angle-down': showLinkComponent, 'fa-angle-right': !showLinkComponent }"
+      ></i>
+    </li>
+    <li [class.active]="showLinkComponent" (click)="showLinkComponent = !showLinkComponent">
+      <a *ngLet="(workItemLinksCountSource | async) as linkCount">
+        <span>Links</span>
+        <!--
+          When the link count is -1 links are loading
+          Else they are loaded
+        -->
+        <span class="badge" id="wi-link-total" *ngIf="linkCount > -1; else loadingNav">
+          {{ linkCount }}
+        </span>
+
+        <!--
+          The loading icon instead of the link count
+          when the count is -1 and links are loading
+        -->
+        <ng-template #loadingNav>
+          <span class="spinner spinner-sm spinner-inline nav-spinner"></span>
+        </ng-template>
+      </a>
+    </li>
+  </ul>
+  <!-- End of navigation -->
+
+  <!-- Link section container -->
+  <div class="f8-link__content" id="wi-link-content" *ngIf="showLinkComponent">
+    <!-- links container loaded -->
+    <ng-container *ngLet="(workItemLinksCountSource | async) as linkCount">
+      <!--
+        If links are still loading we render loadingContainer template
+        Or render this template
+      -->
+      <ng-container *ngIf="linkCount > -1; else loadingContainer">
+        <ng-container *ngLet="(workItemLinksSource | async) as links">
+          <!-- Link creator -->
+          <div
+            class="f8-link__content-editor width-100"
+            *ngLet="(linkTypesSource | async) as lTypes"
+          >
+            <div><label>Create Link</label></div>
+            <span>This item</span>
+            <common-selector
+              id="wi-link-type"
+              class="type-selector margin-left-5 margin-right-5"
+              [allowUpdate]="!lockCreation"
+              [noValueLabel]="'None'"
+              [headerText]="'Choose a link type'"
+              [items]="lTypes"
+              [selectedItems]="selectedLinkType ? [selectedLinkType] : []"
+              (onCloseSelector)="onSelectRelation($event)"
+            >
+            </common-selector>
+            <span> item </span>
+            <f8-typeahead-selector
+              id="workitem-link-search"
+              class="type-selector margin-left-5"
+              [allowUpdate]="!lockCreation"
+              [dataSource]="searchWorkItem.bind(this)"
+              [selectedItems]="selectedWorkItem ? [selectedWorkItem] : []"
+              [noValueLabel]="'None'"
+              [headerText]="'Search for work item'"
+              [toggleTruncate]="40"
+              (onCloseSelector)="onSelectWorkItem($event)"
+            ></f8-typeahead-selector>
+            <span>.</span>
+            <button
+              id="bind-link"
+              [class.disabled]="!(selectedLinkType && selectedWorkItem && !lockCreation)"
+              (click)="createLink($event)"
+              class="btn btn-primary pull-right margin-right-10"
+            >
+              Create Link
+            </button>
+          </div>
+          <!-- Link creator ends -->
+
+          <!-- List of links -->
+          <!-- This part should go in a different component-->
+          <div class="f8-link__list" *ngIf="links.length">
+            <p class="f8-link__list-header">Existing links</p>
+            <div *ngFor="let linkDict of (links | groupWorkItemLinks: workItem.id)">
+              <p class="f8-link__list-type-header">
+                {{ linkDict.linkType[linkDict.linkDirection] }}
+              </p>
+              <ul class="padding-left-0">
+                <li
+                  *ngFor="let wi of linkDict.workItems; let i = index"
+                  class="f8-link__list-item"
+                  [@linkState]="wi.newlyAdded ? 'active' : 'inactive'"
+                >
+                  <a
+                    [routerLink]="
+                      detailContext === 'preview'
+                        ? context === 'list'
+                          ? 'detail/' + wi.number
+                          : '../' + 'detail/' + wi.number
+                        : '../' + wi.number
+                    "
+                    (click)="detailContext === 'detail' && onLinkClicked(wi.number)"
+                  >
+                    <span
+                      class="f8-link__list-item-title"
+                      [id]="wi.id + '-text'"
+                      [innerHTML]="wi.number + ' - ' + wi.title"
+                    >
+                    </span>
+                  </a>
+                  <a
+                    *ngIf="workItem.editable"
+                    (click)="deleteLink($event, linkDict.links[i], workItem)"
+                  >
+                    <i
+                      class="pull-right pficon pficon-close list-close-icon margin-top-5"
+                      id="closeLink_{{ counterlink }}"
+                    ></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+    <!-- links container ends -->
+
+    <!-- links container loading -->
+    <ng-template #loadingContainer> <span>Loading...</span> </ng-template>
+    <!-- links container loading ends -->
+  </div>
+</div>

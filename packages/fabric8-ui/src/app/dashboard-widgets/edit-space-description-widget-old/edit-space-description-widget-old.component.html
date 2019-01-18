@@ -1,0 +1,45 @@
+<div class="edit-space-description-widget-old">
+  <h2 class="margin-0">
+    <b>{{ space?.attributes.name }}</b>
+  </h2>
+  <!-- There must be no spaces here, otherwise we end up with random whitespace in the editable-->
+  <div *ngIf="userOwnsSpace; else userDoesNotOwnSpace" class="form-group">
+    <textarea
+      row="2"
+      placeholder="Description goes here"
+      class="space-description form-control"
+      *ngIf="isEditing && (isEditable() | async)"
+      (keyup.enter)="onUpdateDescription(description.value)"
+      (keydown.enter)="preventDef($event)"
+      #description
+      >{{ space?.attributes.description }}</textarea
+    >
+    <div *ngIf="isEditing">
+      <button
+        id="_btn_cancel"
+        class="pull-right btn btn-default edit-space-description-btn"
+        (click)="stopEditingDescription()"
+      >
+        <span class="fa fa-close"></span>
+      </button>
+      <!--Save icon-->
+      <button
+        id="workItemTitle_btn_save"
+        class="pull-right btn btn-primary edit-space-description-btn "
+        (click)="saveDescription()"
+      >
+        <span class="fa fa-check"></span>
+      </button>
+    </div>
+    <span
+      *ngIf="!isEditing || !(isEditable() | async)"
+      (click)="startEditingDescription()"
+      class="edit-space-description-span"
+    >
+      {{ space?.attributes.description || 'Enter a description' }}
+    </span>
+  </div>
+</div>
+<ng-template #userDoesNotOwnSpace>
+  <p>{{ space?.attributes.description }}</p>
+</ng-template>

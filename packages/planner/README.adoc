@@ -1,0 +1,99 @@
+= Fabric8 Planner
+
+image:https://jenkins.cd.test.fabric8.io/job/fabric8-ui/job/fabric8-planner/job/master/badge/icon[Jenkins, link="https://jenkins.cd.test.fabric8.io/job/fabric8-ui/job/fabric8-planner/job/master/"]
+image:https://img.shields.io/npm/v/fabric8-planner.svg[npm, link="https://npmjs.com/package/fabric8-planner"]
+image:https://codecov.io/gh/fabric8-ui/fabric8-planner/branch/master/graph/badge.svg[Codecov.io, link="https://codecov.io/gh/fabric8-ui/fabric8-planner"]
+image:https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic%20release-b4d455.svg[Semantic Release, link="https://github.com/semantic-release/semantic-release"]
+
+:icons:
+:toc: macro
+:toc-title:
+:toclevels: 2
+
+toc::[]
+
+== Overview
+Fabric8 Planner is a task planner and the issue tracker front-end for link:https://openshift.io/[openshift.io].
+It uses the link:https://github.com/fabric8-services/fabric8-wit[Fabric8 Work Item Tracker] as the back-end.
+
+The Planner project provides a component library which is used by other applications to provide a task planning front-end.
+
+The Planner is available as an npm package. It can not be run by itself as it is an Angular component library. However, for development and testing purpose, a minimal runtime environment is available in the link:runtime[*runtime*] directory.
+
+You can run Planner either as a minimal Standalone component or as an Integrated component using an external webapp like the *fabric8-ui*. It is recommended to use the Integrated component to build and run Planner.
+
+== Quickstart
+
+The Planner can be quickly built using the link:scripts/run-planner.sh[launcher script].
+
+You can use the launcher script to build the Planner either as an Integrated component using an external webapp like the fabric8-ui or as a Standalone component.
+
+=== Integrated mode
+
+NOTE: The Integrated mode is the default mode for building Planner using this script.
+
+.Prerequisite
+* Ensure that Node.js (v8.3.0) and npm are installed in your system.
+
+.Procedure
+. To build and run the Planner with an integrated environment such as fabric8-ui (or an external web app) use:
++
+----
+$ scripts/run-planner.sh
+----
++
+This script supports the following flags:
+
+* Use -r - to re-install everything
+* Use -s - to start Planner in standalone mode using the runtime
+* Use -f - to set the path to Fabric8 UI directory (This requires path argument)
+* Use -p - to set the path to the Planner directory (This requires the path argument)
+
++
+For example:
+* Use `scripts/run-planner.sh -r -s` to re-install planner and run it in standalone mode.
+* Use `scripts/run-planner.sh -r -f /home/User/fabric8-ui` if you wish to set the platform path. By default, the Fabric8 UI path is assumed to be Planner_Path/..
+
+. Access the service on:
+http://localhost:3000
+
+=== Standalone mode
+The Standalone Mode uses prod-preview backend by default.
+
+. To build and run a standalone, minimal runtime implementation of the Planner using the prod-preview database use:
++
+----
+$ scripts/run-planner.sh --standalone
+----
++
+Or
++
+----
+$ scripts/run-planner.sh -s
+----
++
+. Access the service on http://localhost:8080
+. Get an auth token:
+.. Navigate to http://api.prod-preview.openshift.io/api/login/authorize?redirect=https://api.openshift.io/api/status
+.. Log in with your OSIO user name (for example, <username>+preview@redhat.com). The part after "?token_json" in the resulting url is the token. Copy this token.
+. Use the token to log in as: `localhost:8080/?<the token>`
+
+. Navigate to prod-preview and get a space ID you want to use from the url.
+. Use that spaceId to get to a space on your local instance: http://localhost:8080/plan/list?q=(space:<spaceId>%20$AND%20typegroup.name:Scenarios)&showTree=true
+
+Optionally, you can change the default prod-preview backend and use external web apps by setting the environment variables for the services, for example:
+
+* To use Fabric8 wit as the backend use the environment variable: FABRIC8_WIT_API_URL
+* To use Fabric8 Auth as the backend use the environment variable: FABRIC8_AUTH_API_URL
+
+== Documentation
+The following documentation is available in the *docs* directory:
+
+* link:docs/technology_stack.adoc[Technology Stack]: Lists the the technology stack used by Planner.
+* link:docs/testing.adoc[Testing]: Covers the tests you can run on Planner.
+*  link:docs/alternate_ways_to_run_planner.adoc[Alternate ways to run Planner]: Provides information about alternate methods to run Planner.
+*  link:docs/useful_scripts_and_tasks.adoc[Useful scripts and tasks]: Provides a list of useful npm scripts managed by `gulp` tasks.
+
+== Contributing
+
+All contributions are welcome, if you want to contribute to this project, ensure you follow the link:CONTRIBUTING.adoc[Contribution Guidelines].

@@ -1,0 +1,78 @@
+@import (reference) './../../../assets/stylesheets/_base';
+
+.inlineinput-container {
+  width: 100%;
+  .input-field {
+    width: ~'calc(100% - 30px)';
+    height: 27px;
+    min-height: 27px;
+    padding: 0 (@grid-gutter-width/3);
+    font-size: 18px;
+    line-height: 1.3;
+    background: transparent;
+    outline: none;
+    resize: none;
+    border: 1px solid;
+    border-color: @color-pf-black-400;
+    transition-property: border-color, background-color;
+    transition-duration: 300ms;
+    transition-timing-function: ease-in;
+    &:focus {
+      background-color: @color-pf-white;
+      border: 1px solid;
+      border-color: @color-pf-blue-400;
+      transition: border-color ease-in-out 300;
+    }
+  }
+  .action-btn {
+    min-width: 40px;
+    min-height: 27px;
+    padding: 0;
+    margin-left: (@grid-gutter-width/3); //10px
+    vertical-align: top;
+  }
+  .editor-icon-container {
+    display: inline-block;
+    margin-left: (@grid-gutter-width/3); //10px
+    vertical-align: top;
+    cursor: pointer;
+    .edit-icon {
+      opacity: .2;
+    }
+  }
+  .error-message {
+    color: @color-pf-red;
+  }
+  &:hover {
+    .input-field {
+      border: 1px solid;
+      border-color: @color-pf-blue-200;
+      transition: border ease-in-out 300;
+    }
+    .edit-icon {
+      opacity: 1;
+    }
+  }
+  .active {
+    width: ~'calc(100% - 110px)';
+    background-color: @color-pf-white;
+    border: 1px solid;
+    border-color: @color-pf-blue-400;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(0, 136, 206, .6); // lesshint-disable-line
+    transition-property: box-shadow, background-color;
+    transition-duration: 300;
+    transition-timing-function: ease-in-out, ease-in;
+  }
+  &.read-only {
+    &:hover {
+      .input-field {
+        border: 1px solid;
+        border-color: @color-pf-black-400;
+      }
+      .edit-icon {
+        opacity: .2;
+        cursor: none;
+      }
+    }
+  }
+}

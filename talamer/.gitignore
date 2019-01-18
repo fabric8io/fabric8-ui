@@ -1,8 +1,0 @@
-node_modules
-.DS_Store
-coverage
-dist
-build
-package-lock.json
-.cache-loader
-*.iml

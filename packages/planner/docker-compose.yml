@@ -1,0 +1,59 @@
+version: '3'
+
+services:
+  planner:
+    build: .
+    container_name: fabric8-planner-runtime
+    image: fabric8-planner-runtime
+    # command: npm run tests -- --unit
+    environment:
+      FABRIC8_WIT_API_URL: http://localhost:8080/api/
+      FABRIC8_SSO_API_URL: https://sso.prod-preview.openshift.io/
+      FABRIC8_REALM: fabric8-test
+    depends_on:
+      - core
+    networks:
+      - default
+    ports:
+      - "8088:8080"
+    volumes:
+      - ./runtime/dist:/dist
+  auth:
+    container_name: fabric8-planner-auth
+    image: docker.io/fabric8/fabric8-auth:latest
+    entrypoint: bin/auth
+    depends_on:
+      - db-auth
+    environment:
+      AUTH_WIT_URL: "http://localhost:8080"
+      AUTH_KEYCLOAK_REALM: "fabric8-test"
+      AUTH_DEVELOPER_MODE_ENABLED: "true"
+    network_mode: "host"
+    ports:
+      - "8089:8089"
+  core:
+    container_name: fabric8-planner-core
+    image: fabric8/fabric8-wit:latest
+    entrypoint: bin/wit
+    depends_on:
+      - auth
+    environment:
+      F8_DEVELOPER_MODE_ENABLED: "true"
+      F8_AUTH_URL: "http://localhost:8089"
+    network_mode: "host"
+    ports:
+      - "8080:8080"
+  db-auth:
+    container_name: fabric8-planner-db-auth
+    image: registry.centos.org/postgresql/postgresql:9.5
+    environment:
+      POSTGRESQL_ADMIN_PASSWORD: mysecretpassword
+    ports:
+      - "5433:5432"
+  db-data:
+    container_name: fabric8-planner-db-data
+    image: registry.centos.org/postgresql/postgresql:9.5
+    environment:
+      POSTGRESQL_ADMIN_PASSWORD: mysecretpassword
+    ports:
+      - "5432:5432"

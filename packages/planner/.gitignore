@@ -1,0 +1,63 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# lock files - for now
+# package-lock.json
+
+# compiled output
+/dist
+/watch
+/app/*.js
+/app/*.js.map
+/tmp
+/src/app/**/*.css
+/build
+/runtime/dll
+/runtime/dist
+/services/dist
+/runtime/src/tests/functionalTests/**/*.js
+/runtime/src/tests/functionalTests/**/*.js.map
+
+# dependencies
+/node_modules
+/bower_components
+/runtime/node_modules
+/services/node_modules
+/tests/node_modules
+/src/tests/node_modules
+/src/tests/dist
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+*.launch
+.settings/
+.vscode
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage/*
+/libpeerconnection.log
+npm-debug.log
+testem.log
+/typings
+functional_tests.log
+unit_tests.log
+/linters
+browser_logs.log
+npm-debug.log*
+
+# e2e
+/e2e/*.js
+/e2e/*.map
+
+#System Files
+.DS_Store
+Thumbs.db
+
+*.log
+
+
+package-lock.json
+runtime/package-lock.json

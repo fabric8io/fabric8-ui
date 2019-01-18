@@ -1,0 +1,34 @@
+<f8-select-dropdown
+  #dropdown
+  [toggleButtonRef]="toggleButtonRef"
+  [dropdownItem]="dropdownItem"
+  [headerText]="headerText"
+  [menuItems]="menuItems | async"
+  [showSearch]="true"
+  [disabled]="!allowUpdate"
+  [loading]="searching"
+  (onSelect)="onSelect($event)"
+  (onSearch)="onSearch($event)"
+  (onOpen)="onOpen($event)"
+  (onClose)="onClose($event)"
+>
+  <ng-template #toggleButtonRef>
+    <span
+      [class.toggle]="allowUpdate"
+      [class.active]="isOpen"
+      [class.disable]="!allowUpdate"
+      class="dropdown-toggle"
+    >
+      <span *ngFor="let item of selectedItems; let i = index">
+        <span> {{ item.value | truncate: toggleTruncate }} </span>
+        <span *ngIf="i === selectedItems.length - 2">, </span>
+      </span>
+      <span *ngIf="!selectedItems.length"> {{ noValueLabel }} </span>
+      <span [class.fa-angle-up]="isOpen" [class.fa-angle-down]="!isOpen" class="fa"></span>
+    </span>
+  </ng-template>
+  <ng-template #dropdownItem let-value="value" let-description="description">
+    <span [innerHTML]="value | truncate: itemTruncate | almSearchHighlight: searchValue"> </span>
+    <span class="item-desc margin-left-10">{{ description }}</span>
+  </ng-template>
+</f8-select-dropdown>

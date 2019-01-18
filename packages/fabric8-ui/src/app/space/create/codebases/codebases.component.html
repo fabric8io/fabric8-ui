@@ -1,0 +1,92 @@
+<pfng-empty-state
+  [config]="disconnectedStateConfig"
+  (onActionSelect)="connectToGithub($event)"
+  *ngIf="!gitHubConnected"
+></pfng-empty-state>
+<ng-container *ngIf="gitHubConnected">
+  <codebases-toolbar
+    (onFilterChange)="filterChange($event)"
+    (onSortChange)="sortChange($event)"
+    [resultsCount]="resultsCount"
+    (addToSpace)="showAddAppOverlay()"
+  ></codebases-toolbar>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <pfng-list
+          [actionHeadingTemplate]="actionHeadingTemplate"
+          [actionTemplate]="actionTemplate"
+          [config]="listConfig"
+          [items]="codebases"
+          [itemHeadingTemplate]="itemHeadingTemplate"
+          [itemTemplate]="itemTemplate"
+          [expandTemplate]="expandTemplate"
+          (onActionSelect)="showAddAppOverlay()"
+        >
+          <ng-template #itemHeadingTemplate let-item="item">
+            <f8-feature-toggle
+              featureName="Codebases.CveNotification"
+              [userLevel]="user"
+              [defaultLevel]="default"
+              class="feature-container"
+            ></f8-feature-toggle>
+            <ng-template #user>
+              <codebases-item-heading
+                [cheState]="cheState"
+                [cveNotify]="true"
+                class="codebase-item"
+              ></codebases-item-heading>
+            </ng-template>
+            <ng-template #default>
+              <codebases-item-heading
+                [cheState]="cheState"
+                [cveNotify]="false"
+                class="codebase-item"
+              ></codebases-item-heading>
+            </ng-template>
+          </ng-template>
+          <ng-template #itemTemplate let-item="item" let-index="index">
+            <f8-feature-toggle
+              featureName="Codebases.CveNotification"
+              [userLevel]="user"
+              [defaultLevel]="default"
+              class="feature-container"
+            ></f8-feature-toggle>
+            <ng-template #user>
+              <codebases-item
+                [cheState]="cheState"
+                [codebase]="item"
+                [index]="index"
+                [cveNotify]="true"
+                class="codebase-item"
+              ></codebases-item>
+            </ng-template>
+            <ng-template #default>
+              <codebases-item
+                [cheState]="cheState"
+                [codebase]="item"
+                [index]="index"
+                [cveNotify]="false"
+                class="codebase-item"
+              ></codebases-item>
+            </ng-template>
+          </ng-template>
+          <ng-template #actionHeadingTemplate let-item="item">
+            <!-- Extra margin for kebab -->
+            <span class="margin-right-5"></span>
+          </ng-template>
+          <ng-template #actionTemplate let-item="item" let-index="index" class="codebase-item">
+            <codebases-item-actions
+              [cheRunning]="cheState && cheState.running"
+              [codebase]="item"
+              [index]="index"
+            ></codebases-item-actions>
+          </ng-template>
+          <ng-template #expandTemplate let-item="item" let-index="index">
+            <codebases-item-details [codebase]="item"></codebases-item-details>
+          </ng-template>
+        </pfng-list>
+      </div>
+    </div>
+  </div>
+</ng-container>

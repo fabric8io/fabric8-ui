@@ -1,0 +1,9 @@
+<div class="f8-board-column">
+  <div class="f8-board-column__header">
+    <span class="badge">{{ itemCount ? itemCount : 0 }} </span>
+    <span class="f8-board-column__header-title">{{ columnName }}</span>
+  </div>
+  <div class="f8-board-column__wrapper">
+    <ng-container *ngTemplateOutlet="columnBody"></ng-container>
+  </div>
+</div>

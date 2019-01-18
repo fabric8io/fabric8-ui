@@ -1,0 +1,103 @@
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { DebugElement } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { By } from '@angular/platform-browser';
+
+import { Dialog } from './dialog';
+import { DialogComponent } from './dialog.component';
+
+describe('Dialog component - ', () => {
+  let comp: DialogComponent;
+  let fixture: ComponentFixture<DialogComponent>;
+  let el: DebugElement;
+  let dialog: Dialog;
+
+  beforeEach(() => {
+    dialog = {
+      title: 'Dialog Title',
+      message: 'Dialog Message',
+      actionButtons: [
+        { title: 'Yes', value: 1, default: false },
+        { title: 'No', value: 0, default: true },
+      ],
+    } as Dialog;
+  });
+
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      imports: [BrowserAnimationsModule, FormsModule],
+      declarations: [DialogComponent],
+    })
+      .compileComponents()
+      .then(() => {
+        fixture = TestBed.createComponent(DialogComponent);
+        comp = fixture.componentInstance;
+      });
+  }));
+
+  it('should not display dialog header if not provided', () => {
+    comp.dialog = dialog;
+    fixture.detectChanges();
+    el = fixture.debugElement.query(By.css('h4'));
+    comp.dialog.title = '';
+    fixture.detectChanges();
+    expect(el.nativeElement.textContent).toContain(comp.dialog.title);
+  });
+
+  it('should display dialog header when provided', () => {
+    comp.dialog = dialog;
+    fixture.detectChanges();
+    el = fixture.debugElement.query(By.css('h4'));
+    comp.dialog.title = 'This is a header';
+    fixture.detectChanges();
+    expect(el.nativeElement.textContent).toContain(comp.dialog.title);
+  });
+
+  it('should not display dialog message if not provided', () => {
+    comp.dialog = dialog;
+    fixture.detectChanges();
+    el = fixture.debugElement.query(By.css('#alm-dialog-message'));
+    comp.dialog.message = '';
+    fixture.detectChanges();
+    expect(el.nativeElement.textContent).toContain(comp.dialog.message);
+  });
+
+  it('should display dialog message when provided', () => {
+    comp.dialog = dialog;
+    fixture.detectChanges();
+    el = fixture.debugElement.query(By.css('#alm-dialog-message'));
+    comp.dialog.message = 'Dialog Message Test';
+    fixture.detectChanges();
+    expect(el.nativeElement.textContent).toContain(comp.dialog.message);
+  });
+
+  it('dialog will not display buttons if not provided', () => {
+    comp.dialog = dialog;
+    fixture.detectChanges();
+    el = fixture.debugElement.query(By.css('.modal-footer'));
+    comp.dialog.actionButtons = [];
+    fixture.detectChanges();
+    expect(el.children).toHaveLength(comp.dialog.actionButtons.length);
+  });
+
+  it('dialog will display as many buttons passed to it.', () => {
+    comp.dialog = dialog;
+    fixture.detectChanges();
+    el = fixture.debugElement.query(By.css('.modal-footer'));
+    comp.dialog.actionButtons = [{ title: 'Test Button', value: 1, default: false }];
+    fixture.detectChanges();
+    expect(el.children).toHaveLength(comp.dialog.actionButtons.length);
+  });
+
+  it('clicking a button will close the dialog.', (done: DoneFn) => {
+    comp.dialog = dialog;
+    fixture.detectChanges();
+    comp.btnClick(0);
+    setTimeout(() => {
+      expect(comp.modalFadeIn).toBeFalsy();
+      done();
+    }, 300); // 300ms takes to close the modal
+  });
+});

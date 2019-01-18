@@ -1,0 +1,77 @@
+<ul class="nav nav-tabs" *ngIf="editorActive">
+  <li [class.active]="viewType === 'markdown'">
+    <a (click)="onClickMarkdownTab()" class="tab-btn">Markdown</a>
+  </li>
+  <li [class.active]="viewType === 'preview'">
+    <a (click)="onClickPreviewTab()" class="tab-btn"> {{ rendering ? 'Loading..' : 'Preview' }} </a>
+  </li>
+</ul>
+<div class="editor-container">
+  <div
+    class="editor"
+    #previewArea
+    (click)="enableEditor($event)"
+    [class.active]="editorActive"
+    [class.show-less]="!showMore && !editorActive"
+  >
+    <div class="editor-icon-container">
+      <i *ngIf="editAllow" (click)="activeEditor()" class="pficon-edit edit-icon"></i>
+    </div>
+    <p
+      almEditable
+      #editorInput
+      *ngIf="viewType === 'markdown'"
+      [editable]="true"
+      class="editor-box editor-markdown"
+      (keyup)="editorKeyUp($event)"
+      [innerText]="rawText"
+    ></p>
+    <div
+      #editorBox
+      #previewArea
+      *ngIf="
+        viewType === 'preview' &&
+        (renderedText.length ||
+          (renderedText.changingThisBreaksApplicationSecurity &&
+            renderedText.changingThisBreaksApplicationSecurity.length))
+      "
+      class="editor-box editor-preview markdown-rendered"
+    >
+      <github-link-area
+        [content]="renderedText"
+        (onInputEvent)="onInputEvent($event)"
+      ></github-link-area>
+    </div>
+    <div
+      #editorBox
+      *ngIf="
+        viewType === 'preview' &&
+        !renderedText.length &&
+        (!renderedText.changingThisBreaksApplicationSecurity ||
+          !renderedText.changingThisBreaksApplicationSecurity.length)
+      "
+      class="editor-box editor-preview placeholder"
+    >
+      {{ placeholder }}
+    </div>
+  </div>
+</div>
+<div class="actions" *ngIf="!editorActive && enableShowMore">
+  <small class="pull-right clickable">
+    <a *ngIf="!showMore" (click)="lengthToggle(!showMore)">Show more</a>
+    <a *ngIf="showMore" (click)="lengthToggle(!showMore)">Show less</a>
+  </small>
+</div>
+<div class="actions" *ngIf="editorActive">
+  <small> <b>Markdown Supported</b> </small>
+  <button (click)="closeClick()" class="fl btn btn-default pull-right action-btn">
+    <i class="fa fa-close"></i>
+  </button>
+  <button
+    (click)="saveClick()"
+    class="fl btn btn-primary pull-right action-btn btn-save"
+    [disabled]="saving || (!allowEmptySave && fieldEmpty)"
+  >
+    <i class="fa fa-check"></i>
+  </button>
+</div>

@@ -1,0 +1,17 @@
+<div class="settings-nav" id="settings-title-nav" role="navigation">
+  <h3 class="settings-title-nav-text">User Settings</h3>
+</div>
+<div class="settings-nav" id="settings-options-nav" role="navigation">
+  <ul class="nav nav-tabs nav-tabs-pf">
+    <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <a [routerLink]="['/' + loggedInUserName + '/_settings/']"> Connected Services </a>
+    </li>
+    <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <a [routerLink]="['/' + loggedInUserName + '/_settings/feature-opt-in']"> Features Opt-in </a>
+    </li>
+    <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <a [routerLink]="['/' + loggedInUserName + '/_settings/resources']"> Resources </a>
+    </li>
+  </ul>
+</div>
+<router-outlet></router-outlet>

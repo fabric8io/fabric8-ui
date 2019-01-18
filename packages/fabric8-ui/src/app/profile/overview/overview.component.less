@@ -1,0 +1,131 @@
+@import (reference) '../../../assets/stylesheets/shared/osio.less';
+
+// tabs content area
+.overview-nav-tab-content { padding: 20px 0; }
+
+.edit-profile-img {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  color: @color-pf-black-300;
+  .pointer;
+}
+
+.edit-profile-name-icon {
+  margin-top: 25px;
+  color: @color-pf-black-500;
+  .pointer;
+}
+
+.profile-wrapper-email {
+  .pficon-edit {
+    color: @color-pf-black-500;
+    .pointer;
+  }
+}
+
+.profile-wrapper {
+  &-email,
+  &-url,
+  &-bio {
+    word-wrap: break-word;
+
+    /*
+     * Hyphens CSS property not currently supported by all browsers
+     * For more information & support, see:
+     * https://caniuse.com/#search=hyphens
+     */
+    -webkit-hyphens: auto; // Safari & Chrome
+    -ms-hyphens: auto; // IE and Edge
+    hyphens: auto; // Firefox
+    font-size: .9em;
+  }
+  &-name {
+    display: inline-block;
+    font-size: 1.6em;
+    margin: 0;
+  }
+  &-username {
+    display: inline-block;
+    opacity: .8;
+  }
+}
+
+.profile-img-none,
+.preview-img-none {
+  border-top: solid 2px;
+  border-top-color: @color-pf-black-300;
+  border-right: solid 1px;
+  border-right-color: @color-pf-black-300;
+  border-bottom: solid 1px;
+  border-bottom-color: @color-pf-black-300;
+  border-left: solid 2px;
+  border-left-color: @color-pf-black-300;
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wrap { word-wrap: break-word; }
+
+.profile-update-button {
+  color: @color-pf-black-300;
+  font-weight: 400;
+  white-space: normal;
+}
+
+.profile-overview-masthead {
+  background-color: @color-pf-black-900;
+  color: @color-pf-black-300;
+  padding: 50px 0;
+}
+
+.email-alert {
+  background-color: @color-pf-black-900;
+  margin-bottom: -35px;
+}
+
+.work-item-icon {
+  font-size: 1.2em;
+}
+
+.work-item-label {
+  font-size: .9em;
+  opacity: .8;
+}
+
+.line-break {
+  opacity: .2;
+}
+
+.profile-bio {
+  font-size: 1.1em;
+}
+
+.profile-overview-nav {
+  padding: 4px 0 0;
+  background-color: @color-pf-black-150;
+  border-bottom: 1px solid @color-pf-black-300;
+  .nav-tabs {
+    ul {
+      list-style-type: none;
+      padding-left: 25px;
+    }
+    li {
+      padding-right: 10px;
+      display: inline-block;
+    }
+    a {
+      border: none;
+      margin-bottom: 1px;
+      color: @color-pf-black;
+      text-decoration: none;
+    }
+    a:hover {
+      color: @color-pf-blue;
+    }
+  }
+}

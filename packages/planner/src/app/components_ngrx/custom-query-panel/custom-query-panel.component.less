@@ -1,0 +1,88 @@
+@import (reference) '../../../assets/stylesheets/_base';
+@import (reference) '../../../assets/stylesheets/shared/_utilities';
+
+:host {
+  .list-group {
+    display: block;
+    border-top-color: transparent;
+  }
+  .f8-cf {
+    display: block;
+    color: @color-pf-white;
+    background-color: @color-pf-black-900;
+    &__hdr {
+      display: block;
+      padding: 20px 15px;
+      border-bottom: 1px solid;
+      border-bottom-color: @color-pf-black;
+      border-left: 4px solid;
+      border-left-color: transparent;
+      line-height: 15px;
+      cursor: default; // as item is not clickable
+      &.nohover {
+        p {
+          font-size: 15px;
+          color: @color-pf-black-500;
+          line-height: 1;
+        }
+      }
+      &:not(.nohover):hover {
+        background: @color-pf-black-700;
+      }
+    }
+    &__list {
+      &-type {
+        outline: none;
+        padding: 10px;
+        padding-left: 45px;
+        border-left: 4px solid;
+        border-left-color: transparent;
+        &-link {
+          display: block;
+          font-size: 15px;
+          color: @color-pf-white;
+          line-height: 15px;
+          text-decoration: none;
+          outline: none;
+          &:hover {
+            color: @color-pf-blue;
+            text-decoration: none;
+            background: @color-pf-black-700;
+          }
+          &:visited,
+          &:focus {
+            text-decoration: none;
+            outline: none;
+          }
+        }
+        &:hover {
+          color: @color-pf-white;
+          background: @color-pf-black-700;
+        }
+        .fa {
+          padding: 0 5px;
+          font-size: 16px;
+          &:hover {
+            color: @color-pf-blue;
+          }
+        }
+      }
+      &:focus {
+        outline: none;
+      }
+    }
+    &--selected {
+      outline: none;
+      border-left-color: @color-pf-blue !important;
+      background-color: @color-pf-black-800;
+    }
+    .dropdown-kebab-pf {
+      .btn-link {
+        color: @color-pf-white;
+      }
+      .dropdown-menu-right {
+        right: -10px;
+      }
+    }
+  }
+}

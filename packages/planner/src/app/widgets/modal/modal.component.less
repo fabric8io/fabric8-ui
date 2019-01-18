@@ -1,0 +1,57 @@
+@import (reference) '../../../assets/stylesheets/_base';
+
+.field-required-icon {
+  color: @color-pf-red-200;
+}
+.f8-iteration-modal {
+  position: relative;
+  h4.modal-title,
+  label {
+    color: @color-pf-black-700;
+  }
+  &-list {
+    width: 100%;
+    max-height: 140px;
+    overflow-y: auto;
+    li {
+      list-style: none;
+      padding: 5px 15px;
+      &:hover {
+        background-color: @color-pf-black-300;
+        cursor: pointer;
+      }
+      &.selected {
+        background-color: @color-pf-black-300;
+      }
+    }
+  }
+}
+.f8-active-label {
+  vertical-align: top;
+}
+textarea[id='iteration-description'] {
+  resize: none;
+}
+
+//date-picker styless
+.datepicker-container {
+  display: block;
+  justify-content: space-between;
+  .date-container {
+    width: 49.6%;
+  }
+}
+.has-error {
+  .error-block {
+    display: block;
+  }
+}
+.error-block {
+  display: none;
+  .help-block {
+    color: @color-pf-red-200;
+  }
+}
+.space-error {
+  visibility: visible;
+}

@@ -1,0 +1,98 @@
+<!-- id -->
+
+<span *ngIf="col === 'id'" class="margin-0"> {{ row.number }} </span>
+
+<!-- Type -->
+
+<div *ngIf="(col === 'type' && row.typeObs | async) as type">
+  <span
+    class="color-grey margin-right-3 type-icon
+    {{ type?.icon }}"
+    title="{{ type?.name }}"
+  >
+  </span>
+  <span>{{ type?.name }}</span>
+</div>
+
+<!-- Title -->
+<div class="width-100" *ngIf="col === 'title'">
+  <div class="wi-detail-title">
+    <p
+      class="truncate pointer margin-0"
+      [class.bold]="row.bold"
+      [innerHTML]="row.title"
+      (click)="onPreview($event, row)"
+    ></p>
+  </div>
+  <div class="dib text-right wi-detail-icon">
+    <span
+      *ngIf="context === 'query'"
+      class="fa fa-angle-right margin-left-10 padding-v-5"
+      [class.bold]="row.hasChildren"
+      [class.pointer]="row.hasChildren"
+      [class.click-disable]="!row.hasChildren"
+      (click)="onExploration(row)"
+    ></span>
+    <a
+      class="fa fa-list-alt margin-left-5 padding-v-5 pointer"
+      placement="right"
+      tooltip="Open Detail View"
+      [routerLink]="context === 'list' ? ['detail', row.number] : ['../', 'detail', row.number]"
+    ></a>
+    <f8-delete-workitem
+      *ngIf="context === 'query'"
+      class="margin-left-10 padding-v-5"
+      [workItem]="row"
+      (onDelete)="onDelete.emit()"
+    >
+    </f8-delete-workitem>
+  </div>
+</div>
+
+<!-- Status -->
+<div class="f8-planner-cell__state" *ngIf="col === 'state'">
+  <span class="padding-right-5 padding-top-4" almIcon [iconType]="row.state"> </span>
+  <span class="f8-planner-cell__state-text"> {{ row.state }} </span>
+</div>
+
+<!-- Label -->
+
+<div *ngIf="col === 'label'">
+  <f8-label
+    [labels]="row?.labelsObs | async"
+    [truncateAfter]="4"
+    [allowDelete]="false"
+    (onLabelClick)="labelClick($event)"
+  >
+  </f8-label>
+</div>
+
+<!-- Iteration -->
+<span
+  id="table-iteration"
+  *ngIf="col === 'iteration'"
+  tooltip="{{
+    (row.iterationObs | async)?.parentPath === '/' ? '/' : '/' + (row.iterationObs | async)?.name
+  }}"
+  placement="left"
+>
+  {{
+    (row.iterationObs | async)?.parentPath === '/'
+      ? '/'
+      : '/' + ((row.iterationObs | async)?.name | truncate: 12)
+  }}
+</span>
+
+<!-- Creator -->
+<user-avatar
+  *ngIf="col === 'creator'"
+  [imgSrc]="(row.creatorObs | async)?.avatar | almAvatarSize: 25"
+  [imgTooltip]="(row.creatorObs | async)?.name"
+  [imgPlacement]="'left'"
+>
+</user-avatar>
+<!-- Assignee -->
+<div class="assignees-cell" *ngIf="col === 'assignees'">
+  <f8-assignee [showFullName]="false" [truncateAfter]="3" [assignees]="row.assigneesObs | async">
+  </f8-assignee>
+</div>

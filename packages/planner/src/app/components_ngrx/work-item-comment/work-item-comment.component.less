@@ -1,0 +1,79 @@
+@import (reference) '../../../assets/stylesheets/_base';
+
+.f8-comment {
+  &-content {
+    li {
+      text-align: center;
+      &.f8-toggle-caret {
+        display: inline-block;
+        width: 40px;
+        padding-top: 9px;
+        padding-bottom: 9px;
+        cursor: pointer;
+      }
+      a {
+        padding: 13px 15px;
+        border: 0;
+      }
+      &:nth-child(2) {
+        a {
+          margin-left: -13px;
+        }
+      }
+      .badge {
+        margin-top: -3px;
+      }// hack to align the badge
+      &.active {
+        .badge {
+          color: @color-pf-white;
+          background-color: @color-pf-blue-400;
+        }
+      }
+    }
+  }
+
+  &--input {
+    padding: 15px;
+    background-color: @color-pf-black-100;
+    div[id='wi-comment-add-comment'] {
+      /* Overrides pf's form-control style's height property */
+      /* The min-height is needed to avoid zero-height element */
+      /* The min-height is same as form-control's default height */
+      height: auto;
+      min-height: 26px;
+      margin-bottom: 0;
+      /* Helper class, should be moved out when almEditable
+       is extended to support placeholders */
+      &.placeholder {
+        color: @color-pf-black-300;
+        font-style: italic;
+      }
+    }
+  }
+
+  &__wrap {
+    float: left;
+    width: 100%;
+    padding: 15px;
+    border-bottom: 1px solid;
+    border-bottom-color: @color-pf-black-200;
+    .dropdown {
+      min-width: 10px;
+      margin-top: 0;
+      text-align: right;
+    }
+  }
+
+  &--editable {
+    height: auto;
+  }
+  &--noneditable {
+    height: auto;
+    word-break: break-word;
+    border-color: transparent;
+    box-shadow: none;
+    &:hover {
+      border-color: @color-pf-blue-200;
+    }
+  }
+}

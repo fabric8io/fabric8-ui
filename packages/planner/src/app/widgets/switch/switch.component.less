@@ -1,0 +1,56 @@
+@import (reference) '../../../assets/stylesheets/_base';
+
+.f8-switch {
+  position: relative;
+  display: inline-block;
+  width: 80px;
+  height: 28px;
+  border: 1px solid;
+  border-color: @color-pf-black-400;
+  input {
+    display: none;
+  }
+  &--slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    font-size: 12px;
+    background-color: @color-pf-white;
+    cursor: pointer;
+    transition: .4s;
+    &:before {
+      position: absolute;
+      width: 39px;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      background: @color-pf-black-100;
+      background-image: linear-gradient(to bottom, @color-pf-black-100 0, @color-pf-black-200 100%);// lesshint-disable-line
+      content: '';
+      box-shadow: 0 0 2px rgba(3, 3, 3, .4);
+      transition: .4s;
+    }
+  }
+  &__on {
+    display: inline-block;
+    margin-top: 3px;
+    margin-left: 8px;
+    color: @color-pf-white;
+  }
+  &__off {
+    display: inline-block;
+    margin-left: 20px;
+    color: @color-pf-black-900;
+  }
+  input:checked+ .f8-switch--slider {
+    background-color: @color-pf-blue;
+  }
+  input:focus+ .f8-switch--slider {
+    box-shadow: 0 0 1px @color-pf-blue;
+  }
+  input:checked+ .f8-switch--slider:before {
+    transform: translateX(100%);
+  }
+}

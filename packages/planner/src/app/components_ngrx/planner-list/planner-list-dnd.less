@@ -1,0 +1,28 @@
+@import (reference) '../../../assets/stylesheets/_base';
+
+.table {
+  &-dnd-container {
+    align-self: stretch;
+    display: flex;
+    opacity: 0;
+  }
+  &-dnd-header {
+    &:before {
+      background-image: linear-gradient(to bottom, @color-pf-blue-400 60%, @color-pf-white 0%);
+      background-position: left;
+      background-repeat: repeat-y;
+      background-size: 2px 5px;
+      border: 4px solid @color-pf-blue-400;
+      border-color: @color-pf-blue-500;
+      content: '';
+      height: 100%;
+      left: 0;
+      position: absolute;
+      top: 0;
+      width: 10px;
+    }
+    &:hover {
+      cursor: move;
+    }
+  }
+}

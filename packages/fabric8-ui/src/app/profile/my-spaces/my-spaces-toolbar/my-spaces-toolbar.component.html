@@ -1,0 +1,79 @@
+<!-- Toggle the entire view rather than just the search button, because toggling just the search button -->
+<!-- results in the lazy-loaded user level template's onclick binding not properly attaching to the parent scope -->
+<f8-feature-toggle
+  featureName="MySpaces.SearchSpaces"
+  [userLevel]="user"
+  [defaultLevel]="default"
+></f8-feature-toggle>
+<ng-template #user>
+  <div class="toolbar-header">
+    <pfng-toolbar
+      class="padding-top-10"
+      [config]="toolbarConfig"
+      [actionTemplate]="actionTemplate"
+      [viewTemplate]="toolbarTemplate"
+      (onFilterChange)="filterChange($event)"
+      (onSortChange)="sortChange($event)"
+    >
+      <ng-template #toolbarTemplate>
+        <span class="vertical-separator padding-right-10">
+          <button class="btn btn-default" type="button" (click)="searchSpaces($event)">
+            Find a Space to Join
+          </button>
+        </span>
+        <span class="with-cursor-pointer padding-left-10" (click)="createSpace($event)">
+          <span class="add-space-tooltip">
+            <i class="pficon pficon-add-circle-o margin-top-4"></i> Create Space
+          </span>
+        </span>
+      </ng-template>
+    </pfng-toolbar>
+  </div>
+</ng-template>
+<ng-template #default>
+  <div class="toolbar-header">
+    <pfng-toolbar
+      class="padding-top-10"
+      [config]="toolbarConfig"
+      [actionTemplate]="actionTemplate"
+      [viewTemplate]="toolbarTemplate"
+      (onFilterChange)="filterChange($event)"
+      (onSortChange)="sortChange($event)"
+    >
+      <ng-template #toolbarTemplate>
+        <span
+          class="with-cursor-pointer padding-left-10"
+          placement="top"
+          tooltip="Create Space"
+          (click)="createSpace($event)"
+        >
+          <span class="add-space-tooltip">
+            <i class="pficon pficon-add-circle-o margin-top-4"></i> Create Space
+          </span>
+        </span>
+      </ng-template>
+    </pfng-toolbar>
+  </div>
+</ng-template>
+
+<!-- toggle button implementation -->
+<ng-template #actionTemplate>
+  <div class="btn-group">
+    <button
+      class="btn btn-default btn-left"
+      [ngClass]="{ active: activeButton === SpacesType.MYSPACES }"
+      type="button"
+      (click)="showMySpaces()"
+    >
+      My Spaces
+    </button>
+    <button
+      class="btn btn-default btn-right"
+      [ngClass]="{ active: activeButton === SpacesType.SHAREDSPACES }"
+      type="button"
+      (click)="showSharedSpaces()"
+    >
+      Shared Spaces
+    </button>
+  </div>
+</ng-template>

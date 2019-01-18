@@ -1,0 +1,169 @@
+<f8-feature-toggle
+  featureName="Analyze.newHomeDashboard"
+  [userLevel]="user"
+  [defaultLevel]="default"
+></f8-feature-toggle>
+<ng-template #user>
+  <div class="create-work-item-widget card-pf f8-card-lg">
+    <div class="card-pf-heading-bg">
+      <div class="card-pf-heading f8-card-heading">
+        <h2 class="card-pf-title">
+          My Work Items
+          <span *ngIf="recentSpaces.length !== 0">
+            <select
+              class="col-xs-3 col-sm-6 form-control work-item-combobox"
+              [disabled]="recentSpaces.length === 0"
+              [(ngModel)]="currentSpaceId"
+              (ngModelChange)="fetchWorkItems()"
+            >
+              <option value="default">Select a space to work with...</option>
+              <option *ngFor="let space of recentSpaces" [value]="space.id">
+                {{ space.attributes.name }}
+              </option>
+            </select>
+          </span>
+        </h2>
+      </div>
+    </div>
+    <div class="card-pf-body f8-card-body">
+      <div *ngIf="workItems.length !== 0; then showWorkItems; else showBlankState"></div>
+      <ng-template #showBlankState>
+        <fabric8-loading-widget
+          message="Please wait while we load your work items"
+          *ngIf="loading === true"
+        ></fabric8-loading-widget>
+        <div class="f8-blank-slate-card" *ngIf="loading !== true">
+          <h3>Work items reflect the work to be done within a space</h3>
+          <p>
+            Once you create or join a space, work items that you create or are assigned to display
+            here.
+          </p>
+        </div>
+      </ng-template>
+      <ng-template #showWorkItems>
+        <div class="col-xs-12 f8-card-list">
+          <ul class="list-group list-view-pf list-view-pf-view list-view-pf-striped">
+            <li class="list-group-item" *ngFor="let workItem of (workItems | take: 6)">
+              <div class="list-view-pf-main-info">
+                <div class="list-view-pf-body">
+                  <div class="list-view-pf-description">
+                    <div class="list-group-item-text">
+                      <span
+                        almIcon
+                        [iconType]="workItem.attributes['system.state']"
+                        class="color-grey pull-left f8-list-group-item-icon"
+                      ></span>
+                      <span
+                        class="color-grey pull-left fa {{
+                          workItem.relationships?.baseType?.data?.attributes?.icon
+                        }} f8-list-group-item-icon"
+                      ></span>
+                      <span>{{ workItem.attributes['system.number'] }}</span>
+                      <span class="work-item-title" *ngIf="workItem.attributes">
+                        <a
+                          [routerLink]="[
+                            '/',
+                            currentSpace.relationalData.creator.attributes.username,
+                            currentSpace.attributes.name,
+                            'plan',
+                            'detail',
+                            workItem.attributes['system.number']
+                          ]"
+                          class="f8-list-group-item-link"
+                        >
+                          {{ workItem.attributes['system.title'] }}
+                        </a>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</ng-template>
+<ng-template #default>
+  <div class="create-work-item-widget card-pf f8-card">
+    <div class="card-pf-heading-bg">
+      <div class="card-pf-heading f8-card-heading">
+        <h2 class="card-pf-title">
+          My Work Items
+          <span *ngIf="recentSpaces.length !== 0">
+            <select
+              class="col-xs-3 col-sm-6 form-control work-item-combobox"
+              [disabled]="recentSpaces.length === 0"
+              [(ngModel)]="currentSpaceId"
+              (ngModelChange)="fetchWorkItems()"
+            >
+              <option value="default">Select a space to work with...</option>
+              <option *ngFor="let space of recentSpaces" [value]="space.id">
+                {{ space.attributes.name }}
+              </option>
+            </select>
+          </span>
+        </h2>
+      </div>
+    </div>
+    <div class="card-pf-body f8-card-body">
+      <div *ngIf="workItems.length !== 0; then showWorkItems; else showBlankState"></div>
+      <ng-template #showBlankState>
+        <fabric8-loading-widget
+          message="Please wait while we load your work items"
+          *ngIf="loading === true"
+        ></fabric8-loading-widget>
+        <div class="f8-blank-slate-card" *ngIf="loading !== true">
+          <h3>Work items reflect the work to be done within a space</h3>
+          <p>
+            Once you create or join a space, work items that you create or are assigned to display
+            here.
+          </p>
+        </div>
+      </ng-template>
+      <ng-template #showWorkItems>
+        <div class="col-xs-12 f8-card-list">
+          <ul class="list-group list-view-pf list-view-pf-view list-view-pf-striped">
+            <li class="list-group-item" *ngFor="let workItem of (workItems | take: 6)">
+              <div class="list-view-pf-main-info">
+                <div class="list-view-pf-body">
+                  <div class="list-view-pf-description">
+                    <div class="list-group-item-text">
+                      <span
+                        almIcon
+                        [iconType]="workItem.attributes['system.state']"
+                        class="color-grey pull-left f8-list-group-item-icon"
+                      ></span>
+                      <span
+                        class="color-grey pull-left fa {{
+                          workItem.relationships?.baseType?.data?.attributes?.icon
+                        }} f8-list-group-item-icon"
+                      ></span>
+                      <span>{{ workItem.attributes['system.number'] }}</span>
+                      <span class="work-item-title" *ngIf="workItem.attributes">
+                        <a
+                          [routerLink]="[
+                            '/',
+                            currentSpace.relationalData.creator.attributes.username,
+                            currentSpace.attributes.name,
+                            'plan',
+                            'detail',
+                            workItem.attributes['system.number']
+                          ]"
+                          class="f8-list-group-item-link"
+                        >
+                          {{ workItem.attributes['system.title'] }}
+                        </a>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</ng-template>

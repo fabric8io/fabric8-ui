@@ -1,0 +1,16 @@
+@import (reference) '../../../assets/stylesheets/_base';
+
+.li-dropdown-item {
+  padding: 1px 10px;
+  &.active {
+    background-color: @color-pf-blue-50;
+    border-color: @color-pf-blue-100;
+  }
+  &.disabled {
+    opacity: .3;
+  }
+  &:hover {
+    background-color: @color-pf-blue-50;
+    border-color: @color-pf-blue-100;
+  }
+}

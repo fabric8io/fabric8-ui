@@ -1,0 +1,46 @@
+<div class="f8-custom-card" (click)="cardClick(workItem, $event)" [attr.data-id]="workItem.id">
+  <pfng-card [config]="config" [headerTemplate]="cardHeader">
+    <ng-template #cardHeader>
+      <div class="f8-custom-card-header">
+        <div class="wi-type-icon-wrapper"><span class="{{ workItem.type?.icon }}"></span></div>
+        <div class="title-wrapper" (click)="titleClick(workItem, $event)">
+          <span>{{ workItem.number }}: </span>
+          <strong class="pointer" [innerHTML]="workItem.title"></strong>
+          <span class="creator"> - created by {{ (workItem.creatorObs | async).name }}</span>
+        </div>
+      </div>
+    </ng-template>
+    <div class="f8-custom-card-body">
+      <div
+        class="sprint-name truncate"
+        *ngIf="(workItem.iterationObs | async) as iteration"
+        [placement]="top"
+        [tooltip]="
+          iteration.resolvedParentPath === '/'
+            ? '/' + iteration.name
+            : iteration.resolvedParentPath + '/' + iteration.name
+        "
+      >
+        <span>{{ iteration.name }}</span>
+      </div>
+      <div class="assignee">
+        <f8-assignee
+          [showFullName]="false"
+          [truncateAfter]="3"
+          [overlapAvatar]="true"
+          [assignees]="workItem.assigneesObs | async"
+        >
+        </f8-assignee>
+      </div>
+    </div>
+    <div class="f8-custom-card-footer">
+      <f8-label
+        [labels]="workItem.labelsObs | async"
+        [truncateAfter]="4"
+        [allowDelete]="false"
+        [context]="'detail'"
+      >
+      </f8-label>
+    </div>
+  </pfng-card>
+</div>

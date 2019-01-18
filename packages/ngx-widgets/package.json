@@ -1,0 +1,58 @@
+{
+  "name": "ngx-widgets",
+  "version": "0.0.0",
+  "description": "A collection of Angular components and other useful things to be shared.",
+  "main": "src/app/index.ts",
+  "module": "src/app/index.ts",
+  "scripts": {
+    "lint:less": "stylelint 'src/**/*.less' --config .stylelintrc",
+    "lint:less:fix": "npm run lint:less -- --fix",
+    "lint:ts": "tslint -c tslint.json 'src/**/*.ts'",
+    "lint:ts:fix": "npm run lint:ts -- --fix",
+    "start": "osio-scripts start",
+    "test": "osio-scripts test --watchAll=false"
+  },
+  "license": "Apache-2.0",
+  "keywords": [
+    "angular",
+    "angular2",
+    "angular 2",
+    "angular4",
+    "angular 4",
+    "ng",
+    "ng2",
+    "ng4",
+    "login",
+    "ng-login",
+    "auth"
+  ],
+  "homepage": "https://github.com/fabric8-ui/ngx-widgets",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fabric8-ui/ngx-widgets.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fabric8-ui/ngx-widgets/issues"
+  },
+  "peerDependencies": {
+    "@angular/animations": "^7.0.4",
+    "@angular/common": "^7.0.4",
+    "@angular/core": "^7.0.4",
+    "@angular/forms": "^7.0.4",
+    "@angular/router": "^7.0.4",
+    "rxjs": "^6.3.3"
+  },
+  "dependencies": {
+    "@osio/scripts": "0.0.1",
+    "@types/markdown-it": "0.0.7",
+    "markdown-it": "8.4.2",
+    "moment": "2.23.0",
+    "patternfly-ng": "4.5.1"
+  },
+  "devDependencies": {
+    "codelyzer": "4.5.0",
+    "rxjs-tslint": "0.1.5",
+    "stylelint": "9.5.0",
+    "tslint": "5.11.0"
+  }
+}

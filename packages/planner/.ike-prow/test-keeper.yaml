@@ -1,0 +1,4 @@
+test_patterns:
+  - 'test/**/*.ts'
+  - 'tests/**/*.ts'
+combine_defaults: true

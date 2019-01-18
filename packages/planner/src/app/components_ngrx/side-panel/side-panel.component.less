@@ -1,0 +1,34 @@
+@import (reference) '../../../assets/stylesheets/_base';
+
+/**
+ * a.iteration-title utility class introduced to address #1874
+ * Use this class to disable default undelining of anchors on hover
+ */
+.f8-sidepanel__title {
+  float: left;
+  width: 100%;
+  padding: 20px 15px;
+  color: @color-pf-white;
+  background-color: @color-pf-black-900;
+  border-left: 4px solid;
+  border-left-color: transparent;
+  cursor: pointer;
+  .badge {
+    background-color: @color-pf-black;
+  }
+  &:hover {
+    color: @color-pf-white;
+    text-decoration: none;
+    background-color: @color-pf-black-700;
+  }
+  &:visited,
+  &:focus {
+    text-decoration: none;
+  }
+  &.backlog--selected {
+    color: @color-pf-white;
+    background-color: @color-pf-black-700;
+    border-left: 4px solid;
+    border-left-color: @color-pf-blue;
+  }
+}

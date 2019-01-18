@@ -1,0 +1,65 @@
+<f8-select-dropdown
+  #dropdown
+  [toggleButtonRef]="toggleButtonRef"
+  [dropdownItem]="dropdownItem"
+  [dropdownFooter]="dropdownFooter"
+  [headerText]="'Assign Label(s)'"
+  [menuItems]="labels"
+  [showSearch]="backup.length > 5"
+  (onSelect)="onSelect($event)"
+  (onSearch)="onSearch($event)"
+  (onOpen)="onOpen($event)"
+  (onClose)="onClose($event)"
+  id="labelSelector"
+>
+  <ng-template #toggleButtonRef>
+    <span *ngIf="allowUpdate" class="pointer add-label" (click)="closeAddLabel()">
+      <i class="pficon pficon-add-circle-o padding-right-5"></i> Assign Label(s)
+    </span>
+  </ng-template>
+  <ng-template #dropdownItem let-color="color" let-border="border" let-name="name">
+    <div class="palet" [ngStyle]="{ 'background-color': color, 'border-color': border }"></div>
+    <span [innerHTML]="name | almSearchHighlight: searchValue"></span>
+  </ng-template>
+  <ng-template #dropdownFooter>
+    <div [class.hide]="activeAddLabel" (click)="clickOnAddLabel()" class="create-label-button">
+      <span class="pficon pficon-add-circle-o"></span> Create new label
+    </div>
+    <div [class.hide]="!activeAddLabel || colorPickerActive" class="create-label">
+      <div
+        [ngStyle]="{
+          'background-color': newSelectedColor.color,
+          'border-color': newSelectedColor.border
+        }"
+        (click)="toggleColorPicker()"
+        class="palet"
+      ></div>
+      <input
+        (input)="onAddLabelInput($event.target.value)"
+        (keyup.enter)="createLabel(labelname.value)"
+        class="create-label-input"
+        #labelname
+      />
+      <button
+        class="action-btn btn btn-primary fa fa-check"
+        type="button"
+        [class.disabled]="createDisabled"
+        (click)="createLabel(labelname.value)"
+      ></button>
+      <button
+        class="action-btn btn pficon pficon-close"
+        type="button"
+        (click)="closeAddLabel()"
+      ></button>
+    </div>
+    <div class="color-picker" [class.hide]="activeAddLabel && !colorPickerActive">
+      <span
+        class="palet clickable margin-4"
+        *ngFor="let color of colors"
+        [ngStyle]="{ 'background-color': color.color, 'border-color': color.border }"
+        (click)="selectColor(color); toggleColorPicker()"
+      >
+      </span>
+    </div>
+  </ng-template>
+</f8-select-dropdown>

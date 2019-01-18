@@ -1,0 +1,43 @@
+@import (reference) '../../../assets/stylesheets/shared/osio.less';
+@icon-path: '../../../assets/stylesheets/shared/_icons.less';
+
+.f8-modal-lg {
+  width: 1500px;
+  max-width: calc(100% - 20px);
+}
+
+.f8-add-space-overlay {
+  .required {
+    color: @color-pf-red;
+  }
+  &-label {
+    font-weight: normal;
+  }
+  &__container {
+    padding: 30px 20px 10px;
+  }
+  &__tip {
+    margin-bottom: 40px;
+  }
+  &__right-section {
+    border-left: 3px solid @color-pf-black-200;
+    padding: 0 40px;
+  }
+  &__info-icon {
+    display: inline-block;
+    font-size: 22px;
+    color: @color-pf-blue-500;
+    width: 28px;
+    vertical-align: top;
+  }
+  &__info {
+    display: inline-block;
+    font-weight: 600;
+    max-width: calc(100% - 32px);
+  }
+  &__modal-footer {
+    border-top: 3px solid @color-pf-black-200;
+    margin-top: 0;
+    padding: 30px;
+  }
+}

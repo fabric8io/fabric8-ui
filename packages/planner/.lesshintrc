@@ -1,0 +1,132 @@
+{
+  "fileExtensions": [".less", ".css"],
+
+  "excludedFiles": ["./node_modules/**"],
+
+  "attributeQuotes": {
+    "enabled": true,
+    "severity": "error"
+  },
+  
+  "borderZero": {
+    "enabled": true,
+    "style": "zero",
+    "severity": "error"
+  },
+
+  "colorVariables": {
+    "enabled": true,
+    "severity": "error"
+  },
+
+  "decimalZero": {
+    "enabled": true,
+    "style": "none",
+    "severity": "error"
+  },
+
+  "duplicateProperty": {
+    "enabled": true,
+    "severity": "error"
+  },
+
+  "emptyRule": true, // If there are no options for a rule, you can simply enable it by setting it to true
+
+  "idSelector": {
+    "enabled": true,
+    "severity": "error"
+  },
+  
+  "importantRule": false, // To disable a rule completely, set it to false
+
+  "importPath": {
+    "enabled": false,
+    "filenameExtension": true,
+    "leadingUnderscore": true
+  },
+
+  "maxCharPerLine": {
+    "limit": 100,
+    "severity": "error"
+  },
+
+  "newlineAfterBlock": {
+    "enabled": false,
+    "severity": "error"
+  },
+
+  "propertyOrdering": {
+    "enabled": false
+  },
+
+  "qualifyingElement": {
+    "allowWithAttribute": true,
+    "allowWithClass": true,
+    "allowWithId": true
+  },
+
+  "singleLinePerProperty": {
+    "allowSingleLineRules": true
+  },
+
+  "spaceAfterPropertyColon": {
+    "enabled": true,
+    "style": "one_space", // Comments are allowed
+    "severity": "error"
+  },
+
+  "spaceAfterPropertyName": {
+    "style": "no_space",
+    "severity": "error"
+  },
+
+  "spaceAfterPropertyValue": {
+    "style": "no_space",
+    "severity": "error"
+  },
+  
+  "spaceAroundComma": {
+    "style": "after",
+    "severity": "error"
+  },
+
+  "spaceAroundOperator": {
+    "style": "none",
+    "severity": "error"
+  },
+
+  "spaceBeforeBrace": {
+    "style": "one_space",
+    "severity": "error"
+  },
+
+  "spaceBetweenParens": {
+    "style": "no_space",
+    "severity": "error"
+  },
+
+  "stringQuotes": {
+    "style": "single",
+    "severity": "error"
+  },
+
+  "trailingSemicolon": {
+    "enabled": true,
+    "severity": "error"
+  },
+
+  "trailingWhitespace": {
+    "enabled": true,
+    "severity": "error"
+  },
+
+  "universalSelector": {
+    "enabled": true,
+    "severity": "error"
+  },
+
+  "zeroUnit": {
+    "enabled": true,
+    "style": "no_unit"
+  }
+}

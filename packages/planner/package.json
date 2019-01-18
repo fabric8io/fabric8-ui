@@ -1,0 +1,77 @@
+{
+  "name": "fabric8-planner",
+  "version": "0.0.0",
+  "description": "A planner front-end for Fabric8.",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "scripts": {
+    "lint-check": "tslint -c tslint.json src/app/**/*.ts",
+    "test": "osio-scripts test --transformIgnorePatterns='node_modules/(?!@ngrx|ngx|fabric8|patternfly-ng|ng2|@osio)' --watchAll=false src/app/"
+  },
+  "license": "Apache-2.0",
+  "keywords": [
+    "angular",
+    "angular2",
+    "angular 2",
+    "angular4",
+    "angular 4",
+    "ng",
+    "ng2",
+    "ng4",
+    "planner",
+    "alm",
+    "fabric8",
+    "openshift",
+    "openshiftio"
+  ],
+  "homepage": "https://github.com/fabric8-ui/fabric8-planner",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fabric8-ui/fabric8-planner.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fabric8-ui/fabric8-planner/issues"
+  },
+  "dependencies": {
+    "@angular/cdk": "^6.4.7",
+    "@osio/scripts": "0.0.1",
+    "lodash": "^4.17.4",
+    "moment": "^2.18.1",
+    "mydatepicker": "^2.1.0",
+    "ng2-completer": "^1.6.3",
+    "ng2-dragula": "^1.5.0",
+    "ng2-truncate": "^1.3.11",
+    "ngx-bootstrap": "^3.0.1",
+    "ngx-modal": "^0.0.29",
+    "ngx-widgets": "0.0.0",
+    "patternfly-ng": "^3.10.3",
+    "rh-ngx-datatable": "12.1.0"
+  },
+  "peerDependencies": {
+    "@angular/animations": "^6.1.6",
+    "@angular/common": "^6.1.6",
+    "@angular/core": "^6.1.6",
+    "@angular/forms": "^6.1.6",
+    "@angular/http": "^6.1.6",
+    "@angular/platform-browser": "^6.1.6",
+    "@angular/platform-browser-dynamic": "^6.1.6",
+    "@angular/platform-server": "^6.1.6",
+    "@angular/router": "^6.1.6",
+    "@ngrx/effects": "^6.1.6",
+    "@ngrx/entity": "^6.1.6",
+    "@ngrx/store": "^6.1.6",
+    "@ngrx/store-devtools": "^6.1.6",
+    "ngx-base": "^2.3.0",
+    "ngx-fabric8-wit": "^6.20.2",
+    "ngx-feature-flag": "1.3.0",
+    "ngx-login-client": "1.4.5",
+    "rxjs": "6.2.2"
+  },
+  "devDependencies": {
+    "codelyzer": "4.5.0",
+    "jasmine-marbles": "0.4.1",
+    "rxjs-tslint": "0.1.5",
+    "stylelint": "9.5.0",
+    "tslint": "5.11.0"
+  }
+}

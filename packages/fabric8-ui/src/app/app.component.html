@@ -1,0 +1,28 @@
+<header><alm-app-header></alm-app-header></header>
+<pfng-toast-notification-list
+  [notifications]="notifications.current"
+  (onActionSelect)="handleAction($event)"
+>
+</pfng-toast-notification-list>
+
+<!-- Create new space modal -->
+<f8-add-space-overlay></f8-add-space-overlay>
+
+<!-- Create an application modal -->
+<f8-add-app-overlay></f8-add-app-overlay>
+
+<main>
+  <div>
+    <router-outlet name="action"></router-outlet>
+    <router-outlet></router-outlet>
+    <f8-feature-footer [show]="show" [featurePageConfig]="featureConfig"></f8-feature-footer>
+  </div>
+</main>
+
+<!-- Github connection warning modal -->
+<ng-template #connectToGithubModal>
+  <pfng-empty-state
+    [config]="disconnectedStateConfig"
+    (onActionSelect)="connectToGithub($event)"
+  ></pfng-empty-state>
+</ng-template>

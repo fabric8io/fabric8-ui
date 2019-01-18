@@ -1,0 +1,97 @@
+@import '_planner-osio';
+
+.f8-wi-container {
+  position: relative;
+  > main {
+    height: 100%;
+    .f8-sidepanel {
+      width: 100%;
+      height: 100%;
+      padding-bottom: 20px;
+      overflow-y: auto;
+      overflow-x: unset;
+      background-color: @color-pf-black-900;
+      &--toggle {
+        display: block;
+        padding: 5px;
+        border-top: 1px solid;
+        border-top-color: @color-pf-black;
+        border-bottom: 1px solid;
+        border-bottom-color: @color-pf-black;
+        &-icon {
+          padding: 11.5px 10px;
+          color: @color-pf-white;
+          border: 1px solid;
+          border-color: transparent;
+          cursor: pointer;
+          &:hover {
+            border: 1px solid;
+            border-color: @color-pf-black-700;
+          }
+        }
+      }
+    }
+    section {
+      //toolbar styles
+      header {
+        float: left;
+        width: 100%;
+        padding-top: 0;
+        padding-right: 20px;
+        padding-bottom: 0;
+        padding-left: 20px;
+        border-bottom: 1px solid;
+        border-bottom-color: @color-pf-black-300 !important;
+        .toolbar-pf {
+          border-color: transparent;
+          .toolbar-pf-actions {
+            border-color: transparent;
+            .form-group {
+              border-right: 0;
+              &:first {
+                border-left: 0;
+              }
+            }
+            .toolbar-pf-action-right {
+              .pficon-add-circle-o {
+                color: @color-pf-blue-400;
+              }
+            }
+          }
+          // ensure icons dont fold around inputs
+          .wi-input-filter-dropdown {
+            position: relative;
+            &-list {
+              top: 25px;
+              width: 100%;
+              padding: 2px;
+            }
+            > div {
+              position: relative;
+              //HACK:prevents caret icon from folding to a new line
+              input {
+                margin-right: -20px;
+              }
+              //HACK:positions the caret in right margin are of input
+              .caret::before {
+                z-index: 2;
+                display: inline-block;
+                width: 15px;
+                height: 15px;
+                line-height: 15px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+//overrides for patternfly-ng components
+.editor-container {
+  .editor-preview {
+    p {
+      word-wrap: break-word;
+    }
+  }
+}

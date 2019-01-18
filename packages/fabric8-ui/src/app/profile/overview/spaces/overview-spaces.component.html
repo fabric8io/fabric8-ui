@@ -1,0 +1,64 @@
+<div class="card-pf f8-card">
+  <div class="card-pf-heading-bg">
+    <div class="card-pf-heading f8-card-heading">
+      <h2 class="card-pf-title">
+        Spaces
+        <span id="spaces-badge" class="badge f8-card-badge">{{ mySpacesCount | async }}</span>
+      </h2>
+    </div>
+  </div>
+  <div class="card-pf-body f8-card-body">
+    <fabric8-loading-widget
+      message="Please wait while we load the spaces"
+      *ngIf="loading"
+    ></fabric8-loading-widget>
+    <div *ngIf="spaces.length > 0 && !loading; then showSpaces"></div>
+    <div *ngIf="spaces.length === 0 && !loading; then showBlankState"></div>
+    <ng-template #showBlankState>
+      <div class="f8-blank-slate-card">
+        <div class="f8-blank-slate-icon"><span class="pficon pficon-add-circle-o"></span></div>
+        <h3>Create a Space</h3>
+        <p>
+          Learn how to get started
+          <a
+            href="https://access.redhat.com/documentation/en-us/red_hat_openshift.io/1/html-single/user_guide"
+            target="_blank"
+            >in the documentation</a
+          >
+        </p>
+        <div class="blank-slate-pf-main-action">
+          <button class="btn btn-primary btn-lg" (click)="showAddSpaceOverlay()">
+            Create a Space
+          </button>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template #showSpaces>
+      <div class="no-vertical-scroll col-xs-12 f8-card-list">
+        <div class="spaces-list-scroll" almInfiniteScroll (fetchMore)="fetchMoreSpaces()">
+          <ul class="list-group list-view-pf list-view-pf-view list-view-pf-striped">
+            <li class="list-group-item" *ngFor="let space of spaces">
+              <div class="list-view-pf-main-info">
+                <div class="list-view-pf-body">
+                  <div class="list-view-pf-description">
+                    <div class="list-group-item-text">
+                      <a
+                        [routerLink]="[
+                          '/',
+                          space.relationalData.creator.attributes.username,
+                          space.attributes.name
+                        ]"
+                      >
+                        {{ space.attributes.name }}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>

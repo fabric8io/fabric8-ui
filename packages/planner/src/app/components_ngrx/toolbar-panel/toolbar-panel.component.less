@@ -1,0 +1,117 @@
+@import (reference) '../../../assets/stylesheets/_base';
+
+.toolbar-header {
+  padding-right: 20px;
+  padding-left: 20px;
+  border-bottom: 1px solid;
+  border-bottom-color: @color-pf-black-300;
+  /*
+    TODO: on the entry "WorkItem Type" of the filter dropdown, there is a
+    border on the right side of the key button missing. The border is actually there,
+    but gets overlayed with the right hand value dropdown. Having fewer text
+    in the button solves the problem. Setting margin to 0px also solves the problem,
+    but then there is a 1px gap in other value dropdowns.
+  */
+
+  .filter {
+    &-select {
+      border-bottom: 1px solid;
+      border-bottom-color: @color-pf-black-300;
+      box-shadow: none;
+      .btn {
+        /* buttons in the toolbar don't have box shadows */
+        box-shadow: none;
+        &-default {
+          font-size: 12px;
+        }
+      }
+      .avatar {
+        border-radius: 50%;
+      }
+      .dropdown-menu {
+        max-height: 230px;
+        overflow-y: auto;
+      }
+    }
+  }
+  .toolbar-actions {
+    /* left aligned action button area */
+    .board-type-dropdown {
+      width: 100%;
+    }
+  }
+  .toolbar-pf-action-right {
+    /* right aligned action button area */
+    .pficon-add-circle-o {
+      color: @color-pf-blue-400;
+    }
+  }
+  .currently-showing {
+    font-size: 12px;
+    margin-right: 10px;
+  }
+  .board-type-dropdown {
+    .dropdown-menu {
+      right: 0;
+    }
+  }
+  .toolbar-pf-results {
+    font-size: 13px; /* the active filters bar */
+    .list-inline {
+      /* the list of filter flags */
+      /* TODO: why is this set to -5px per default? */
+      margin-left: 0;
+    }
+  }
+}
+.checkbox-label {
+  font-size: 13px;
+  &.inactive {
+    opacity: .5;
+  }
+}
+
+.f8-filters {
+  float: left;
+  width: 100%;
+  padding: 10px 20px;
+  background-color: @color-pf-white;
+  &--active {
+    display: inline;
+    overflow: hidden;
+    border-left: 1px solid;
+    border-left-color: @color-pf-black-200;
+    .list-inline {
+      display: initial;
+      margin-left: 10px;
+      margin-bottom: 0;
+      margin-top: 0;
+      li {
+        display: inline-block;
+        padding-right: 5px;
+        padding-left: 5px;
+        list-style: none;
+      }
+    }
+    .save-filter-dropdown {
+      display: inline;
+      .dropdown-menu {
+        padding-left: 10px;
+        padding-right: 10px;
+        min-width: 300px;
+        &-right {
+          right: 0;
+        }
+        &-left {
+          left: -30px;
+        }
+        .save-filter-action {
+          margin-top: 10px;
+        }
+      }
+    }
+    .label {
+      font-size: 11px;
+    }
+  }
+}

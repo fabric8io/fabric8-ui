@@ -1,0 +1,24 @@
+{
+  "name": "stylelint-config-osio",
+  "version": "0.0.1",
+  "description": "OpenShift.io Style Lint rules and configs.",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [
+    "css",
+    "stylelint",
+    "stylelint-config"
+  ],
+  "license": "Apache-2.0",
+  "peerDependencies": {
+    "stylelint": "9.5.0",
+    "prettier": "1.15.3"
+  },
+  "dependencies": {
+    "merge": "1.2.1",
+    "stylelint-config-prettier": "4.0.0",
+    "stylelint-order": "1.0.0",
+    "stylelint-prettier": "1.0.3",
+    "stylelint-scss": "3.4.0"
+  }
+}

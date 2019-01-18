@@ -1,0 +1,32 @@
+<f8-select-dropdown
+  id="f8-add-assignee-dropdown"
+  #dropdown
+  [toggleButtonRef]="toggleButtonRef"
+  [dropdownItem]="dropdownItem"
+  [headerText]="'Add Assignee'"
+  [menuItems]="assignees"
+  [showSearch]="backup.length > 5"
+  (onSelect)="onSelect($event)"
+  (onSearch)="onSearch($event)"
+  (onOpen)="onOpen($event)"
+  (onClose)="onClose($event)"
+>
+  <ng-template #toggleButtonRef>
+    <span
+      *ngIf="editAllow"
+      class="pointer add-label"
+      id="f8-add-assignee"
+      (click)="closeAddAssignee()"
+    >
+      <i class="pficon pficon-add-circle-o padding-right-5"></i> Add Assignee
+    </span>
+  </ng-template>
+  <ng-template #dropdownItem let-name="name" let-src="src" let-stickontop="stickontop">
+    <user-avatar [imgSrc]="src | almAvatarSize: 25"> </user-avatar>
+    <span *ngIf="!stickontop" [innerHTML]="name | almSearchHighlight: searchValue"></span>
+    <strong>
+      <span *ngIf="stickontop" [innerHTML]="(name | almSearchHighlight: searchValue) + ' (me)'">
+      </span>
+    </strong>
+  </ng-template>
+</f8-select-dropdown>

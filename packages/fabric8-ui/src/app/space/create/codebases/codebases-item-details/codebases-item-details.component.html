@@ -1,0 +1,23 @@
+<div class="row">
+  <div class="col-md-9">
+    <dl class="dl-horizontal" *ngIf="isHtmlUrlInvalid()">
+      <dt>Git URL</dt>
+      <dd>Invalid URL</dd>
+    </dl>
+    <dl class="dl-horizontal" *ngIf="!isHtmlUrlInvalid()">
+      <dt>Git URL</dt>
+      <dd>
+        <a [href]="codebase.gitHubRepo?.htmlUrl || codebase.name" target="_blank">{{
+          gitUrl || codebase.name
+        }}</a>
+      </dd>
+      <dt>Latest Commit SHA1</dt>
+      <dd>{{ lastCommit || 'Unavailable' }}</dd>
+      <dt>Status</dt>
+      <dd *ngIf="codebase.gitHubRepo && lastCommit">{{ filesChanged }} total files changed</dd>
+      <dd *ngIf="!codebase.gitHubRepo">GitHub repository is not accessible</dd>
+      <dt>License</dt>
+      <dd>{{ license || 'Unavailable' }}</dd>
+    </dl>
+  </div>
+</div>

@@ -1,0 +1,29 @@
+<div class="blank-slate-pf">
+  <div class="rh-branding-logo">
+    <img
+      class="width-100"
+      src="../../../../assets/images/Logotype_RH_OpenShift-io_RGB_RedGray.png"
+    />
+  </div>
+  <div>
+    <div [ngSwitch]="status">
+      <img
+        *ngSwitchCase="'success'"
+        class="status-img success-img"
+        src="../../../../assets/images/trophy.png"
+      />
+      <img
+        *ngSwitchCase="'fail'"
+        class="status-img fail-img"
+        src="../../../../assets/images/neutralface.png"
+      />
+    </div>
+    <h1 class="primary-msg">{{ data?.statusMessage }}</h1>
+    <p class="secondary-msg">{{ data?.secondaryStatusMessage }}</p>
+  </div>
+  <div *ngIf="data.callToActionUrl || data.callToActionLabel" class="blank-slate-pf-main-action">
+    <a class="btn btn-primary btn-lg cta-button" [routerLink]="['/', data?.callToActionUrl]">
+      Continue to my {{ data?.callToActionLabel }}
+    </a>
+  </div>
+</div>

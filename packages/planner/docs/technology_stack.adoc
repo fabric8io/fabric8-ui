@@ -1,0 +1,49 @@
+= Technology stack used by Planner
+:icons:
+:toc: macro
+:toc-title:
+:toclevels: 1
+
+toc::[]
+
+== Overview
+The *Planner* is an *Angular* app built on top of *Node.js*. It can run as a standalone app, or be used as a library to be integrated into another app, like link:./fabric8-ui[Fabric8 UI].
+
+== Development runtime
+Planner uses:
+
+* `link:https://nodejs.org/en/download/[Node.js]` as the platform-runtime and builds on top of it
+* `npm` for resolving and distributing packages for the project.
+
+The projects keeps itself compatible with the latest stable releases of `Node.js` and `npm` however, `Node.js` = 8.3.0  release is recommended.
+
+== Development pipeline
+
+Following are the components or parts of the process followed in order to develop, build, test and deploy *Planner*. Most of these components are standard, with limited project specific customizations and configurations applied.
+
+Task runner::
+We use *Gulp* for running predefined tasks. These tasks include, compiling or pre-processing the LESS/TypeScript sources into CSS/JS, building the distributable artifacts, running dev-server in watch mode and general house keeping such as install, re-install, and cleanup.
+
+Build system::
+We use both *Gulp* and webpack for building the source. While *Gulp* takes care of the library builds, webpack is used for building the (minimal) `*_./runtime_*` to use the library, which makes *Planner* work as a standalone app. The build system works as intended for now, but can be expanded to use more sophisticated switches to build according to different needs such as dev, tests, and prod.
+
+Test framework::
+Our test stack is built with *Karma*, *Protractor* and *Google Chrome*. *Google Chrome* provides the browser engine to run the tests. *Protractor* interacts with it as a *WebDriverJS* wrapper and runs the tests according to *Karma's* configurations.
+
+Each `*_filename.ts_*` file is supposed to have unit tests along with them as a `*_filename.spec.ts_*` in the same parent directory. The functional tests reside inside `*_./runtime/tests/_*`. For more details about running the tests, see the link:./testing.adoc[Testing] section.
+
+//CI/CD::Doc to be added by Ibrahim, link to the doc to be added here.
+
+Release framework::
+We use semantic-release for versioning and publishing the *Planner* library to npm registry. It's fairly configuration less CLI task (`$ npm run semantic-release`) which takes the latest PR merges and commit messages into account. It generates a new version number, publishes to npm registry, and then generates the release tag on *GitHub* in one simple process.
+
+Deployment::
+*Planner* is a static library, and can be used or served with minimal static frontend runtime as a standalone app or with a full fledged Fabric8 UI.  Currently Planner is deployed as part of Fabric8 UI.
+
+== Application framework
+We use *`Angular 4`* to develop *Planner*. Main application code resides in `*_./src_*`, in which the `*_./src/app_*` contains all the application logic, subdivided into specific functional groups. For the minimalistic runtime added to make *Planner* work standalone, the source lies inside `*_./runtime/src/app_*` which is also an *`Angular 4`* app in itself.
+
+== Programming languages
+For development ease, we do not use HTML, CSS, JS as is, but use Angular Templates, Less and TypeScript instead. For UI elements and components, we use link:http://www.patternfly.org/[PatternFly v3].
+
+This requires us to pre-process and build the source-codes into a consumable package. This is automated, which accelerates the development process and eases code maintenance.

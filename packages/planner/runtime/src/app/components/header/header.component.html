@@ -1,0 +1,20 @@
+<osio-app-header
+  [systemContext]="systemContext"
+  [followLinks]="false"
+  [user]="loggedInUser"
+  [currentContext]="currentContext"
+  [recentContexts]="recentContexts"
+  [systemStatus]="systemStatus"
+  (onSelectRecentContext)="onSelectRecentContext($event)"
+  (onSelectViewAllSpaces)="onSelectViewAllSpaces($event)"
+  (onSelectAccountHome)="onSelectAccountHome($event)"
+  (onSelectCreateSpace)="onSelectCreateSpace($event)"
+  (onSelectSystemHealth)="onSelectSystemHealth($event)"
+  (onSelectMenuItem)="onSelectMenuItem($event)"
+  (onSelectUserProfile)="onSelectUserProfile($event)"
+  (onSelectLogout)="onSelectLogout($event)"
+  (onSelectLogin)="onSelectLogin($event)"
+  (onSelectAbout)="onSelectAbout($event)"
+  (onFollowedLink)="onFollowedLink($event)"
+>
+</osio-app-header>

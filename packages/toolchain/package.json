@@ -1,0 +1,39 @@
+{
+  "name": "fabric8-ui",
+  "version": "0.0.0",
+  "description": "CodeReady Toolchain UI application.",
+  "main": "src/index.ts",
+  "license": "Apache-2.0",
+  "scripts": {
+    "start": "osio-scripts start",
+    "analyze": "osio-scripts analyze",
+    "build": "CI=false STATIC_DIR=_static osio-scripts build",
+    "preprod": "./scripts/configBuildEnv.sh",
+    "prod": "osio-scripts prod",
+    "semantic-release-origin-master": "semantic-release --branch origin/master"
+  },
+  "peerDependencies": {
+    "react": ">= 16 < 17",
+    "react-dom": ">= 16 < 17",
+    "react-router": ">= 4.3.0 < 5",
+    "react-router-dom": ">= 4.3.0 < 5"
+  },
+  "dependencies": {
+    "@osio/scripts": "0.0.1",
+    "@osio/widgets": "0.0.1",
+    "@types/react-redux": "6.0.11",
+    "axios": "0.18.0",
+    "connected-react-router": "6.1.0",
+    "immer": "1.9.3",
+    "ngx-fabric8-ui": "0.0.0",
+    "react-redux": "6.0.0",
+    "redux": "4.0.1",
+    "redux-thunk": "2.3.0",
+    "reselect": "4.0.0",
+    "utility-types": "3.2.1"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "4.6.0",
+    "semantic-release": "15.12.0"
+  }
+}

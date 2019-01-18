@@ -1,0 +1,203 @@
+@import '../../../assets/stylesheets/_planner-layout';
+@import (reference) '../../../assets/stylesheets/_base';
+
+.f8-detail {
+  background-color: @color-pf-white;
+  &__header {
+    float: left;
+    width: 100%;
+    padding: (@grid-gutter-width/2);
+    background: @color-pf-black-200;
+    .dropdown-ul,
+    .dropdown {
+      min-width: 160px;
+      .dropdown-icon {
+        display: inline-block;
+        min-width: 15px;
+        margin-right: 7px;
+        text-align: left;
+      }
+      .dropdown-text {
+        text-align: left;
+      }
+    }
+    .created-by {
+      font-size: 12px;
+      color: @color-pf-black-500;
+    }
+  }
+  &__edit-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+  &__wi-title {
+    &--edit {
+      padding: 0 2px;
+      margin-right: 100px;
+      line-height: 1.3;
+      background: @color-pf-white;
+      border: 1px solid;
+      border-color: @color-pf-blue;
+    }
+  }
+  &__detail {
+    label {
+      padding-top: 0;
+      text-align: left;
+    }
+    &-wrap {
+      height: 100%;
+      padding-top: 10px;
+      overflow: auto;
+      &--right {
+        padding: 0;
+        border-left: 1px solid @color-pf-black-400;
+      }
+    }
+  }
+  &__labels {
+    .label-wrapper {
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+  }
+
+  &__assignee {
+    [noValueLabel='none'] {
+      color: @color-pf-blue-400;
+    }
+    .user-assign-icon {
+      &:extend(.not-assigned-user-icon);
+      margin-right: 10px;
+      color: @color-pf-black-500;
+      cursor: pointer;
+    }
+    .active {
+      padding: 5px;
+      color: @color-pf-black;
+      border-style: solid;
+    }
+    .detail-assignee-name {
+      .placeholder {
+        color: @color-pf-blue-400;
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+  }
+  &__content {
+    padding-right: 15px;
+    padding-left: 140px;
+  }
+  .close {
+    cursor: pointer;
+  }
+}
+
+.user-search {
+  position: relative;
+  .list-container {
+    position: absolute;
+    z-index: 10;
+    min-width: 200px;
+    margin-top: -5px;
+    background-color: @color-pf-white;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    border: 1px solid;
+    border-color: @color-pf-black-500;
+    border-radius: 1px;
+    .user-search-icon {
+      position: absolute;
+      height: inherit;
+      padding-left: 5px;
+      line-height: 30px;
+      color: @color-pf-black-500;
+    }
+    input {
+      width: 100%;
+      height: 30px;
+      padding-left: 20px;
+      border: 0;
+      border-bottom: 1px solid;
+      border-bottom-color: @color-pf-blue-400;
+      outline: none;
+      box-shadow: 0 0 6px @color-pf-blue-400;
+    }
+    .item-ul {
+      margin-bottom: 0;
+      list-style: none;
+      background: @color-pf-white;
+      .item-li {
+        float: left;
+        width: 100%;
+        padding: 5px;
+        cursor: pointer;
+        &:hover {
+          background-color: @color-pf-black-300;
+        }
+      }
+      .only-first-item {
+        span {
+          font-weight: 600;
+        }
+      }
+      .first-item {
+        border-bottom: 1px dashed;
+        border-bottom-color: @color-pf-black-500;
+        span {
+          font-weight: 600;
+        }
+      }
+      .selected {
+        background-color: @color-pf-black-300;
+      }
+      .action-li {
+        padding: 5px;
+        margin-left: -15px;
+        justify-content: space-between;
+        .action-item {
+          color: @color-pf-black-500;
+          cursor: pointer;
+        }
+      }
+    }
+    .user-list {
+      max-height: 150px;
+      overflow-y: scroll;
+      border-bottom: 1px solid;
+      border-bottom-color: @color-pf-black-500;
+      padding-left: 0;
+    }
+  }
+}
+
+.description-fields-wrap,
+.start-coding-wrap {
+  padding-right: 10px;
+  padding-left: 10px;
+  .detail-desc-wrap {
+    padding-left: 90px;
+  }
+  .control-label {
+    float: left;
+    padding-top: 0;
+    font-weight: 700;
+    text-align: left;
+  }
+  .start-coding {
+    padding-left: 90px;
+  }
+}
+
+// Sm
+@media (max-width: @screen-md-min) {
+  .f8-detail__detail {
+    overflow: auto;
+    &-wrap {
+      height: auto;
+      overflow: initial;
+    }
+  }
+}

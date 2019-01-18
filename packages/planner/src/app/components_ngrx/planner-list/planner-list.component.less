@@ -1,0 +1,124 @@
+@import (reference) '../../../assets/stylesheets/_base';
+@import '../../../assets/stylesheets/_planner-layout';
+@import '~rh-ngx-datatable/release/assets/icons.css';
+@import '~rh-ngx-datatable/release/themes/material.css';
+@import './ngx-datatables';
+@import './planner-list-dnd';
+
+.f8-wi-container {
+  .lock-overlay-list {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    width: 100%;
+    height: 100%;
+    background-color: fade(@color-pf-white, 70%);
+    pointer-events: auto;
+    cursor: default;
+    .spinner-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      text-align: center;
+      color: @color-pf-black;
+      transform: translate(-50%, -50%);
+      h2 {
+        margin-top: 0.5em;
+      }
+      .spinner {
+        &::before {
+          content: unset;
+        }
+        position: relative;
+        top: unset;
+        left: unset;
+      }
+    }
+  }
+  .f8-wi-list {
+    display: flex;
+    width: 100%;
+    background-color: @color-pf-white;
+    &-wrap {
+      position: relative;
+      width: 100%;
+      overflow-y: auto;
+      .f8-planner-list-title {
+        max-width: ~'calc(100% - 20px)';
+      }
+      //List entry tree view specific css
+      .tree-node-level-2 .list-pf-item {
+        padding-left: 20px;
+      }
+      .tree-node-level-3 .list-pf-item {
+        padding-left: 40px;
+      }
+    }
+    &__settings {
+      position: relative;
+      right: 5px;
+      float: right;
+      &-dropdown {
+        width: 100%;
+        min-width: 400px;
+        height: 200px;
+        background-color: @color-pf-black-150;
+        &::after {
+          border-bottom-color: @color-pf-black-150;
+        }
+        aside {
+          float: right;
+          width: ~'calc(45% - 30px)';
+          height: 100%;
+          padding-left: (@grid-gutter-width / 6);
+          padding-right: (@grid-gutter-width / 6);
+          &:first-child,
+          &:nth-child(3) {
+            width: 10%;
+            padding: 0 (@grid-gutter-width / 3);
+            span.fa {
+              width: 100%;
+              text-align: center;
+              padding: (@grid-gutter-width / 6) 0;
+              margin: (@grid-gutter-width / 6) 0;
+              font-size: @pf-icon-2x;
+            }
+            &:nth-child(3) {
+              margin-top: ((@grid-gutter-width / 3) * 5);
+            }
+          }
+        }
+      }
+      &-column {
+        float: left;
+        width: 100%;
+        height: ~'calc(e("100% - 30px"))';
+        padding: (@grid-gutter-width / 3);
+        list-style: none;
+        background-color: @color-pf-white;
+        border: 1px solid;
+        border-color: @color-pf-black-300;
+        overflow-y: scroll;
+        li {
+          width: 100%;
+        }
+      }
+      .fa {
+        font-size: 16px;
+      }
+    }
+    .card-pf {
+      border: 0;
+      box-shadow: none;
+      .card-pf-title {
+        .no-wi {
+          font-size: @pf-icon-4x;
+        }
+      }
+    }
+    &__quick-add-table {
+      position: absolute;
+    }
+  }
+}

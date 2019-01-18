@@ -1,0 +1,54 @@
+@import (reference) '../../../assets/stylesheets/_base';
+
+.add-label {
+  font-weight: 600;
+  color: @color-pf-blue-300;
+}
+
+.palet {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-right: 10px;
+  vertical-align: middle;
+  border: 1px solid;
+  border-color: @color-pf-black;
+  border-radius: 2px;
+  opacity: 1;
+}
+
+.create-label-button {
+  // This is fixed
+  // Never change this
+  // The footer gives you a height of 30px
+  // from the component
+  // If you wanna make it dynamic
+  // then contribute to the footer
+  // in the component first
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 30px;
+  color: @color-pf-blue-300;
+  cursor: pointer;
+}
+
+.create-label {
+  .create-label-input {
+    width: ~'calc(100% - 90px)';
+    height: 100%;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .action-btn {
+    min-width: 27px;
+    height: 27px;
+    vertical-align: middle;
+  }
+}
+
+.color-picker {
+  padding: 5px;
+  padding-bottom: 30px; // to hide the scroll bar
+  overflow: auto;
+  white-space: nowrap;
+}

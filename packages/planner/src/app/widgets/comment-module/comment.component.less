@@ -1,0 +1,37 @@
+@import (reference) '../../../assets/stylesheets/_base';
+
+.f8-comment {
+  &-body {
+    min-width: 0; //fix for having full wrapper width and overflowen content
+  }
+  &-author {
+    max-width: 100%;
+    min-width: 0;  //fix for having full wrapper width and overflowen content
+    padding-right: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    strong {
+      display: inline-block;
+      width: 100%;
+    }
+  }
+  &--create-time {
+    max-width: 100%;
+    margin-top: 5px;
+    margin-right: 5px;
+    line-height: 1.3;
+    color: @color-pf-black-400;
+  }
+}
+
+.reply-div-active {
+  padding-left: 25px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.reply-div {
+  padding-left: 25px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}

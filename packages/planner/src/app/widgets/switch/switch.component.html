@@ -1,0 +1,11 @@
+<label class="f8-switch">
+  <input
+    type="checkbox"
+    [checked]="isChecked"
+    [ngModel]="isChecked"
+    (ngModelChange)="toggleSwitch($event)"
+  />
+  <span class="f8-switch--slider">
+    <span class="f8-switch__on">ON</span> <span class="f8-switch__off">OFF</span>
+  </span>
+</label>

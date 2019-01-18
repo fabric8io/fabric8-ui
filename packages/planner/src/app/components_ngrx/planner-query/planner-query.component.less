@@ -1,0 +1,63 @@
+@import './../planner-list/planner-list.component.less';
+
+//query css
+.f8-query {
+  &__input-wrapper {
+    padding: 15px 15px 8px;
+    background: @color-pf-black-150;
+  }
+
+  &__input {
+    width: 100%;
+    padding: 5px;
+    font-size: 16px;
+    padding-right: 50px;
+  }
+
+  &__input-hint {
+    text-align: left;
+    color: @color-pf-black-700;
+  }
+
+  &__clear-button {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+  }
+
+  &__breadcrumbs {
+    padding: 10px 15px;
+  }
+
+  &__create-workitem {
+    display: inline;
+
+    &-menu {
+      right: 0 !important;
+      min-width: 400px;
+      min-height: 150px;
+    }
+
+    &-close {
+      float: right;
+      margin-right: 0 !important;
+    }
+  }
+}
+
+.f8-planner__container-class {
+  width: 300px;
+}
+
+.breadcrumbs:hover {
+  color: @color-pf-blue-500;
+  text-decoration: underline;
+}
+
+.current-query {
+  color: @color-pf-blue-500;
+}
+
+work-item-cell {
+  max-width: ~'calc(100% - 50px)';
+}

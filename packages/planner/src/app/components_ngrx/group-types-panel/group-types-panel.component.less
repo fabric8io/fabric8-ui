@@ -1,0 +1,44 @@
+@import (reference) '../../../assets/stylesheets/shared/_variables';
+
+:host {
+  .list-group {
+    display: block;
+    border-top-color: transparent;
+    &-item {
+      position: inherit;
+      padding: 0;
+      background-color: transparent;
+      border-color: @color-pf-black;
+    }
+  }
+  .f8-group-filter {
+    &__type {
+      display: block;
+      padding: 20px 15px;
+      font-size: 15px;
+      line-height: 15px;
+      color: @color-pf-white;
+      text-decoration: none;
+      border-left: 4px solid;
+      border-left-color: transparent;
+      &:hover {
+        color: @color-pf-white;
+        text-decoration: none;
+        background: @color-pf-black-700;
+      }
+      &:visited,
+      &:focus {
+        color: @color-pf-white;
+        text-decoration: none;
+      }
+    }
+    h3 {
+      padding: 20px;
+    }
+  }
+  .selected {
+    background-color: @color-pf-black-700;
+    border-left: 4px solid;
+    border-left-color: @color-pf-blue;
+  }
+}

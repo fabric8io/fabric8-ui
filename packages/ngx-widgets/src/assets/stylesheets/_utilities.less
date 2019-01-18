@@ -1,0 +1,50 @@
+@import (reference) 'patternfly/dist/less/dependencies/bootstrap/variables';
+@import (reference) 'ngx-widgets.less';
+
+.view-container {
+  position: relative;
+  >.view {
+    &:extend(.fill-container);
+    &.with-rows {
+      padding-left: @grid-gutter-width/2;
+      padding-right: @grid-gutter-width/2;
+    }
+    >main,
+     section,
+     aside {
+      // padding: @content-padding;
+      overflow: auto;
+    }
+    >.view-content {
+      position: relative;
+    }
+  }
+}
+.dropdown {
+  a {
+    color: @color-pf-white;
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+/* stylelint-disable */
+/* do not include these patterns due to required use of !important */
+.create-padding-x-standard-offset() {
+  .padding-standard-offset { padding: @grid-gutter-width/2 !important; }
+  .padding-top-standard-offset { padding-top: @grid-gutter-width/2 !important; }
+  .padding-left-standard-offset { padding-left: @grid-gutter-width/2 !important; }
+  .padding-right-standard-offset { padding-right: @grid-gutter-width/2 !important; }
+  .padding-bottom-standard-offset { padding-bottom: @grid-gutter-width/2 !important; }
+}
+.create-margin-x-standard-offset() {
+  .margin-standard-spacing { margin: @grid-gutter-width/2 !important; }
+  .margin-top-standard-offset { margin-top: @grid-gutter-width/2 !important; }
+  .margin-left-standard-offset { margin-left: @grid-gutter-width/2 !important; }
+  .margin-right-standard-offset { margin-right: @grid-gutter-width/2 !important; }
+  .margin-bottom-standard-offset { margin-bottom: @grid-gutter-width/2 !important; }
+}
+/* stylelint-enable */
+
+@include: create-margin-x-standard-offset();
+@include: create-padding-x-standard-offset();

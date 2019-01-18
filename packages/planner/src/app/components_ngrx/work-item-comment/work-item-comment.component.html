@@ -1,0 +1,47 @@
+<div class="f8-comment" id="wi-comment">
+  <ul class="f8-comment-content nav nav-tabs nav-tabs-pf" id="wi-comment-content" *ngIf="true">
+    <!-- Refactoring needed to toogle view -->
+    <li class="f8-toggle-caret" (click)="isCollapsedComments = !isCollapsedComments">
+      <i
+        class="fa fa-icon"
+        [ngClass]="{ 'fa-angle-right': isCollapsedComments, 'fa-angle-down': !isCollapsedComments }"
+      >
+      </i>
+    </li>
+    <li [class.active]="!isCollapsedComments" (click)="isCollapsedComments = !isCollapsedComments">
+      <a>
+        <span>Comments</span> <span class="badge" id="total_comments"> {{ comments.length }} </span>
+        <ng-template #loading>
+          <span class="spinner spinner-sm spinner-inline"></span>
+        </ng-template>
+      </a>
+    </li>
+  </ul>
+  <div [collapse]="isCollapsedComments">
+    <div class="f8-comment--input" *ngIf="loggedIn">
+      <f8-markdown
+        [editAllow]="loggedIn"
+        [rawText]="''"
+        [renderedText]="''"
+        [placeholder]="'Add a new comment...'"
+        [allowEmptySave]="false"
+        (onSaveClick)="createComment($event)"
+        (showPreview)="showPreview($event)"
+        (onClickOut)="$event ? commentMarkdown.closeClick() : ''"
+        #commentMarkdown
+      >
+      </f8-markdown>
+    </div>
+    <div>
+      <div class="f8-comment__wrap" *ngFor="let comment of comments; let counter = index">
+        <fabric8-comment
+          [comment]="comment"
+          (onShowPreview)="showPreview($event)"
+          (onCreateRequest)="createChildComment($event)"
+          (onUpdateRequest)="updateComment($event)"
+        >
+        </fabric8-comment>
+      </div>
+    </div>
+  </div>
+</div>

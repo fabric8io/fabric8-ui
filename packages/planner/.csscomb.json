@@ -1,0 +1,218 @@
+{
+  "always-semicolon": true,
+  "color-case": "lower",
+  "block-indent": 2,
+  "color-shorthand": true,
+  "element-case": "lower",
+  "eof-newline": true,
+  "exclude": ["src/assets/stylesheets/shared/_formulas.less"],
+  "leading-zero": false,
+  "quotes": "single",
+  "remove-empty-rulesets": true,
+  "space-before-colon": 0,
+  "space-after-colon": 1,
+  "space-before-combinator": 0,
+  "space-after-combinator": 1,
+  "space-between-declarations": "\n",
+  "space-before-opening-brace": 1,
+  "space-after-opening-brace": "\n",
+  "space-after-selector-delimiter": "\n",
+  "space-before-selector-delimiter": 0,
+  "space-before-closing-brace": "\n",
+  "strip-spaces": true,
+  "tab-size": 2,
+  "unitless-zero": true,
+  "verbose": true,
+  "csscomb-preset": 
+  [
+    [
+      "content",
+      "counter-increment",
+      "counter-reset",
+
+      "list-style",
+      "list-style-image",
+      "list-style-position",
+      "list-style-type",
+
+      "quotes"
+    ],
+    [
+      "display",
+      "overflow",
+      "visibility"
+    ],
+    [
+      "clip",
+      "position",
+      "z-index",
+
+      "top",
+      "right",
+      "bottom",
+      "left"
+    ],
+    [
+        "clear",
+        "float"
+    ],
+    [
+      "flex",
+      "flex-basis",
+      "flex-direction",
+      "flex-flow",
+      "flex-grow",
+      "flex-shrink",
+      "flex-wrap",
+
+      "align-content",
+      "align-items",
+      "align-self",
+      "justify-content",
+      "order"
+    ],
+    [
+      "box-sizing",
+
+      "width",
+      "max-width",
+      "min-width",
+
+      "height",
+      "max-height",
+      "min-height",
+
+      "margin",
+      "margin-top",
+      "margin-right",
+      "margin-bottom",
+      "margin-left",
+
+      "padding",
+      "padding-top",
+      "padding-right",
+      "padding-bottom",
+      "padding-left",
+
+      "border",
+      "border-collapse",
+      "border-top",
+      "border-right",
+      "border-bottom",
+      "border-left",
+      "border-color",
+      "border-image",
+      "border-top-color",
+      "border-right-color",
+      "border-bottom-color",
+      "border-left-color",
+      "border-spacing",
+      "border-style",
+      "border-top-style",
+      "border-right-style",
+      "border-bottom-style",
+      "border-left-style",
+      "border-width",
+      "border-top-width",
+      "border-right-width",
+      "border-bottom-width",
+      "border-left-width",
+      "border-radius",
+      "border-top-right-radius",
+      "border-bottom-right-radius",
+      "border-bottom-left-radius",
+      "border-top-left-radius",
+      "border-radius-top-right",
+      "border-radius-bottom-right",
+      "border-radius-bottom-left",
+      "border-radius-top-left"
+    ],
+    [
+      "background",
+      "background-attachment",
+      "background-color",
+      "background-image",
+      "background-position",
+      "background-repeat",
+      "background-size",
+      "box-shadow",
+      "object-fit",
+      "opacity",
+
+      "outline",
+      "outline-color",
+      "outline-offset",
+      "outline-style",
+      "outline-width"
+    ],
+    [
+      "color",
+      "font",
+      "font-family",
+      "font-size",
+      "font-weight",
+      "font-style",
+      "font-variant",
+      "font-size-adjust",
+      "font-stretch",
+      "font-effect",
+      "font-emphasize",
+      "font-emphasize-position",
+      "font-emphasize-style",
+      "font-smooth",
+      "hanging-punctuation",
+      "letter-spacing",
+      "line-height",
+      "text-align",
+      "text-decoration",
+      "text-indent",
+      "text-justify",
+      "text-overflow",
+      "text-shadow",
+      "text-stroke",
+      "text-transform",
+
+      "vertical-align",
+
+      "white-space",
+      "word-break",
+      "word-spacing"
+    ],
+    [
+      "animation",
+      "animation-delay",
+      "animation-direction",
+      "animation-duration",
+      "animation-iteration-count",
+      "animation-fill-mode",
+      "animation-name",
+      "animation-play-state",
+      "animation-timing-function"
+    ],
+    [
+      "backface-visibility",
+      "perspective",
+      "perspective-origin",
+
+      "transform",
+      "transform-origin",
+      "transform-style"
+    ],
+    [
+      "transition",
+      "transition-delay",
+      "transition-duration",
+      "transition-property",
+      "transition-timing-function"
+    ],
+    [
+      "will-change"
+    ],
+    [
+      "appearance",
+      "cursor",
+      "pointer-events",
+      "user-select"
+    ]
+  ]
+}

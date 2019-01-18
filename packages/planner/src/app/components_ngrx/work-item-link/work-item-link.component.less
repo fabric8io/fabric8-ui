@@ -1,0 +1,152 @@
+@import (reference) '../../../assets/stylesheets/_base';
+
+.f8-link {
+  // &-container { }
+  &__nav-list {
+    border-top: 1px solid;
+    border-top-color: @color-pf-black-200;
+    li {
+      &.f8-toggle-caret {
+        display: inline-block;
+        width: 40px;
+        padding-top: 9px;
+        padding-bottom: 9px;
+        text-align: center;
+        cursor: pointer;
+      }
+      a {
+        padding: 13px 15px;
+        border: 0;
+      }
+      &:nth-child(2) {
+        a {
+          margin-left: -13px;
+        }
+      }
+      .badge {
+        margin-top: -3px;
+      } // hack to align the badge
+      &.active {
+        .badge {
+          color: @color-pf-white;
+          background-color: @color-pf-blue-400;
+        }
+      }
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+  &__content {
+    background: @color-pf-white;
+    border-bottom: 1px solid;
+    border-bottom-color: @color-pf-black-200;
+    &-create-link {
+      padding-top: 50px;
+      padding-bottom: 50px;
+      text-align: center;
+      .add-circle-icon {
+        font-size: 50px;
+        color: @color-pf-black-500;
+      }
+      p {
+        margin-top: 15px;
+        font-size: 25px;
+      }
+    }
+    &-hdr {
+      padding: 0 ((@grid-gutter-width/3)*2);
+      padding-right: 0;
+      background-color: @color-pf-black-100;
+      > p {
+        padding: 12px ((@grid-gutter-width/3)*2);
+      }
+    }
+    &-editor {
+      display: inline-block;
+      padding-right: 0;
+      padding-top: (@grid-gutter-width/2);
+      padding-bottom: (@grid-gutter-width/2);
+      padding-left: ((@grid-gutter-width/3)*2);
+      background-color: @color-pf-black-100;
+      .type-selector {
+        display: inline-block;
+      }
+      .readonly {
+        background: @color-pf-white;
+      }
+      .selected-value {
+        color: @color-pf-black;
+      }
+      ul.dropdown-menu {
+        li {
+          a {
+            color: @color-pf-black-800;
+          }
+          &:hover,
+          &.active {
+            a,
+            a:focus,
+            a:hover {
+              text-decoration: none;
+              color: @color-pf-white;
+              background-color: @color-pf-blue-400;
+              border-color: @color-pf-blue-400;
+            }
+          }
+        }
+      }
+      button {
+        outline: 0;
+        cursor: pointer;
+      }
+    }
+  }
+  &__create-btn {
+    padding-right: 10px;
+    padding-left: 10px;
+    margin: 30px auto 0;
+  }
+
+  &__list {
+    padding: 15px 0 15px 20px;
+    &-header {
+      margin: 0;
+      font-weight: 700;
+    }
+    ul {
+      list-style: none;
+    }
+    &-type-header {
+      font-weight: 700;
+      color: @color-pf-black-600;
+    }
+    &-item {
+      padding: 2px 20px;
+      padding-right: ((@grid-gutter-width/3)*2);
+      -webkit-transition: background-color 1s; /* For Safari 3.1 to 6.0 */
+      transition: background-color 1s;
+      cursor: pointer;
+      &:hover {
+        background-color: @color-pf-black-200;
+      }
+      &-title {
+        display: inline-block;
+        max-width: 95%;
+        &:extend(.truncate);
+      }
+      a {
+        color: @color-pf-black-700;
+        &:hover {
+          color: @color-pf-blue;
+        }
+      }
+    }
+  }
+}
+
+.nav-spinner {
+  height: 15px;
+  width: 15px;
+  margin-left: 6px;
+}

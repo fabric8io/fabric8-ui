@@ -1,0 +1,36 @@
+@import (reference) '../../../assets/stylesheets/_base';
+
+.f8-event {
+  &__wrap {
+    float: left;
+    width: 100%;
+    padding: 15px;
+    border-bottom: 1px solid;
+    border-bottom-color: @color-pf-black-200;
+    &:nth-child(even) {
+      background-color: @color-pf-black-100;
+    }
+  }
+  &-body {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  &-author {
+    max-width: 100%;
+    min-width: 0;  //fix for having full wrapper width and overflowen content
+    padding-right: 10px;
+    display: contents;
+    margin-top: 5px;
+    margin-bottom: 0;
+  }
+  &--create-time {
+    margin-left: 5px;
+    color: @color-pf-black-400;
+    cursor: pointer;
+  }
+}
+.audit-trail__label {
+  display: contents;
+}

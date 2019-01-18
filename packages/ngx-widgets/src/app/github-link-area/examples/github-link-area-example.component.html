@@ -1,0 +1,40 @@
+<div class="padding-15">
+  <div class="row padding-bottom-15">
+    <div class="col-xs-12">
+      <h4>GitHubLink Component Example</h4>
+      <hr />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="form-group">
+        <github-link-area
+          [content]="content"
+          (onInputEvent)="inputEvent($event)"
+        ></github-link-area>
+      </div>
+    </div>
+  </div>
+  <div class="row padding-bottom-15 padding-top-15">
+    <div class="col-xs-12">
+      <h4>Component Options</h4>
+      <hr />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12 sample-form">
+      <form class="form-horizontal">
+        <div class="form-group">
+          <label class="control-label" for="gh-link-area-content">Content: </label><br />
+          <textarea
+            id="gh-link-area-content"
+            name="content"
+            rows="10"
+            cols="100"
+            [(ngModel)]="content"
+          ></textarea>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

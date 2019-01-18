@@ -1,0 +1,28 @@
+<div class="pipeline">
+  <div class="pipeline-stage no-stages" *ngIf="pipelineStages.length === 0; else piplineAvailable">
+    <div id="pipeine-stage-name-no-stages" class="pipeline-stage-name">No stages have started.</div>
+  </div>
+  <ng-template #piplineAvailable>
+    <ng-container *ngFor="let stage of pipelineStages">
+      <div class="pipeline-stage" [ngClass]="{ 'pipeline-stage-min': stage.currentStage !== true }">
+        <div class="pipeline-stage-column">
+          <div
+            id="pipeine-stage-name"
+            class="pipeline-stage-name {{ build.statusPhase }}"
+            title="stage status: {{ stage.status }}"
+            *ngIf="stage.currentStage === true"
+          >
+            {{ stage.name }}
+          </div>
+          <fabric8-applications-pipeline
+            [stage]="stage"
+            [showLine]="stage.currentStage === true"
+          ></fabric8-applications-pipeline>
+          <div class="pipeline-current-stage" *ngIf="stage.currentStage === true">
+            Current Stage
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </ng-template>
+</div>

@@ -1,0 +1,106 @@
+@import (reference) './../../../assets/stylesheets/_base';
+
+.select-dropdown-container {
+  .select-dropdown {
+    top: 26px;
+    left: 0;
+    width: 270px;
+    max-height: max-content;
+    padding-top: 0;
+    padding-bottom: 0;
+    overflow: hidden;
+    &-header {
+      height: 30px;
+      padding: 2px;
+      padding-left: 5px;
+      font-weight: bold;
+      line-height: 26px;
+      background-color: @color-pf-black-200;
+      .close-pointer {
+        margin-right: 4px;
+        line-height: 26px;
+        cursor: pointer;
+      }
+    }
+    &-footer {
+      background-color: @color-pf-black-200;
+      height: 50px;
+      padding: 10px;
+    }
+    &-search {
+      position: relative;
+      height: 50px;
+      padding: 10px;
+      &-input {
+        width: 100%;
+        height: 100%;
+        padding: 0 30px 0 10px;
+        outline: none;
+        border: 1px solid;
+        border-color: @color-pf-black-400;
+        border-radius: 2px;
+        &:focus {
+          border-color: @color-pf-blue-400;
+          outline: 0;
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(0, 136, 206, .6); // lesshint-disable-line
+        }
+      }
+      .in-input-icon {
+        position: absolute;
+        top: 17px;
+        right: 20px;
+        font-size: 15px;
+        font-weight: 900;
+        color: @color-pf-black-300;
+      }
+    }
+    .select-dropdown-menu {
+      max-height: 240px;
+      padding-left: 0;
+      margin: 0;
+      list-style: none;
+      overflow: auto;
+      .item-li-disabled {
+        position: relative;
+        padding-top: 2px;
+        padding-right: 10px;
+        padding-bottom: 2px;
+        padding-left: 10px;
+        line-height: 26px;
+        border-width: 1px 0;
+        border-style: solid;
+        border-color: transparent;
+      }
+      .item-li {
+        position: relative;
+        padding-top: 2px;
+        padding-right: 10px;
+        padding-bottom: 2px;
+        padding-left: 10px;
+        line-height: 26px;
+        cursor: pointer;
+        border-width: 1px 0;
+        border-style: solid;
+        border-color: transparent;
+        .tick {
+          float: right;
+          padding-top: 5px;
+        }
+        &:hover {
+          background-color: @color-pf-blue-50;
+          border-color: @color-pf-blue-100;
+          transition: background-color ease-in .1s;
+        }
+        &.item-selected {
+          color: @color-pf-white;
+          background-color: @color-pf-blue-400;
+          border-color: @color-pf-blue-400;
+          transition: background-color ease-in .1s;
+        }
+        .dynamic-item {
+          overflow: hidden;
+        }
+      }
+    }
+  }
+}

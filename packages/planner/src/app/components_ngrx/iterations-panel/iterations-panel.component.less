@@ -1,0 +1,58 @@
+@import (reference) '../../../assets/stylesheets/_base';
+@import (reference) '../../../assets/stylesheets/shared/_utilities';
+
+.f8-itr {
+  color: @color-pf-white;
+  background-color: @color-pf-black-900;
+  &-hdr {
+    display: block;
+    padding: 20px 15px;
+    border-left: 4px solid;
+    border-left-color: transparent;
+    line-height: 15px;
+    cursor: default; // as item is not clickable
+    &.nohover {
+      p {
+        color: @color-pf-black-500;
+        font-size: 15px;
+        line-height: 1;
+      }
+    }
+    &:not(.nohover):hover {
+      background: @color-pf-black-700;
+    }
+  }
+  &__container {
+    padding: 0;
+    list-style: none;
+    li {
+      padding-top: 5px;
+      padding-right: 15px;
+      padding-left: 40px;
+      padding-bottom: 5px;
+      &:first-child {
+        border-top: 1px solid;
+        border-top-color: @color-pf-black;
+      }
+      a {
+        color: @color-pf-white;
+        &:hover {
+          text-decoration: none;
+        }
+      }
+    }
+    .fa {
+      width: 15px;
+    }
+    &:focus {
+      outline: none;
+    }
+  }
+  &__list {
+    border-top: 1px solid;
+    border-top-color: @color-pf-black;
+  }
+    .tooltip-inner {
+      max-width: 75px;
+    }
+}

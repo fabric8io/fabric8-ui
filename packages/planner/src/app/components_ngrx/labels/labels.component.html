@@ -1,0 +1,61 @@
+<div class="label-wrapper">
+  <span
+    *ngFor="let label of (_labels | slice: 0:truncateAfter)"
+    class="label"
+    [ngStyle]="{
+      'background-color': label.backgroundColor,
+      color: label.textColor
+    }"
+  >
+    <span *ngIf="context != 'detail'">
+      <a [routerLink]="[]" [queryParams]="constructQueryExpression(label.id)">
+        <span class="label-name pointer"> {{ label.name }} </span>
+      </a>
+      <span class="close-icon-wrapper padding-left-5" *ngIf="allowDelete">
+        <i class="pficon-close pointer" (click)="removeLabel(label, $event)"></i>
+      </span>
+    </span>
+    <span *ngIf="context == 'detail'">
+      <span class="label-name"> {{ label.name }} </span>
+      <span class="close-icon-wrapper padding-left-5" *ngIf="allowDelete">
+        <i class="pficon-close pointer" (click)="removeLabel(label, $event)"></i>
+      </span>
+    </span>
+  </span>
+  <span
+    *ngIf="truncateAfter !== undefined && _labels.length > 4"
+    dropdown
+    class="label dropdown"
+    placement="right"
+  >
+    <span dropdownToggle (click)="moreClick($event)" class="dib dropdown-toggle pointer">
+      {{ _labels.length - truncateAfter }}+
+    </span>
+    <ul *dropdownMenu class="dropdown-menu label-dropdown dropdown-menu-right">
+      <li *ngFor="let label of (_labels | slice: truncateAfter)">
+        <span
+          class="label"
+          [ngStyle]="{
+            'background-color': label.backgroundColor,
+            color: label.textColor
+          }"
+        >
+          <span *ngIf="context != 'detail'">
+            <a [routerLink]="[]" [queryParams]="constructQueryExpression(label.id)">
+              <span class="label-name pointer"> {{ label.name }} </span>
+            </a>
+            <span class="close-icon-wrapper" *ngIf="allowDelete">
+              <i class="pficon-close pointer" (click)="removeLabel(label, $event)"></i>
+            </span>
+          </span>
+          <span *ngIf="context == 'detail'">
+            <span class="label-name"> {{ label.name }} </span>
+            <span class="close-icon-wrapper padding-left-5" *ngIf="allowDelete">
+              <i class="pficon-close pointer" (click)="removeLabel(label, $event)"></i>
+            </span>
+          </span>
+        </span>
+      </li>
+    </ul>
+  </span>
+</div>

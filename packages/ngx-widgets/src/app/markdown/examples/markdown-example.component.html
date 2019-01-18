@@ -1,0 +1,78 @@
+<div class="padding-15 container">
+  <div class="row padding-bottom-15">
+    <div class="col-xs-12">
+      <a routerLink="/home" routerLinkActive="active">Home</a> &gt; Markdown Editor
+    </div>
+  </div>
+
+  <label> Simple use case </label>
+  <div class="row">
+    <div class="col-xs-12">
+      <f8-markdown
+        [rawText]="rawText"
+        [renderedText]="renderedText | safe: 'html'"
+        (onSaveClick)="onSaveOrPreview($event)"
+        (showPreview)="onSaveOrPreview($event)"
+        (onCloseClick)="closeClicked()"
+      >
+      </f8-markdown>
+    </div>
+  </div>
+
+  <label> Field with restricted empty field save </label>
+  <div class="row">
+    <div class="col-xs-12">
+      <f8-markdown
+        [rawText]="''"
+        [renderedText]="''"
+        [placeholder]="'This is placeholder text'"
+        [allowEmptySave]="false"
+        (onSaveClick)="onSaveOrPreview($event)"
+        (showPreview)="onSaveOrPreview($event)"
+      >
+      </f8-markdown>
+    </div>
+  </div>
+
+  <label> Field with placeholder </label>
+  <div class="row">
+    <div class="col-xs-12">
+      <f8-markdown
+        [rawText]="''"
+        [renderedText]="''"
+        [placeholder]="'This is placeholder text'"
+        (onSaveClick)="onSaveOrPreview($event)"
+        (showPreview)="onSaveOrPreview($event)"
+      >
+      </f8-markdown>
+    </div>
+  </div>
+
+  <label> Edit is not allowed </label>
+  <div class="row">
+    <div class="col-xs-10">
+      <f8-markdown
+        [rawText]="rawText"
+        [editAllow]="allowEdit"
+        [renderedText]="renderedTextNoEdit"
+        (onSaveClick)="onSaveOrPreview($event)"
+        (showPreview)="onSaveOrPreview($event)"
+      >
+      </f8-markdown>
+    </div>
+    <div class="col-xs-2"><button (click)="allowEdit = !allowEdit">Allow edit</button></div>
+  </div>
+
+  <label> Undefined value </label>
+  <div class="row">
+    <div class="col-xs-12">
+      <f8-markdown
+        [rawText]="undefined"
+        [renderedText]="undefined"
+        (onSaveClick)="onSaveOrPreviewUndefined($event)"
+        (showPreview)="onSaveOrPreviewUndefined($event)"
+      >
+      </f8-markdown>
+    </div>
+  </div>
+</div>
