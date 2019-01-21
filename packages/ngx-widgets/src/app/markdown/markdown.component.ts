@@ -326,8 +326,6 @@ export class MarkdownComponent implements OnChanges, OnInit, AfterViewChecked {
 
   closeClick() {
     // Restore saved previous data
-    this.rawText = this.previousRawText;
-    this.renderedText = this.previousRenderedText;
     this.deactivateEditor();
     this.onCloseClick.emit();
   }
