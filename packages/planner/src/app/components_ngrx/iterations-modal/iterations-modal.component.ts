@@ -277,7 +277,7 @@ export class FabPlannerIterationModalComponent implements OnInit, OnDestroy, OnC
     // Format 2016-11-29T23:18:14Z
     if (event.jsdate !== null) {
       this.startDate = { date: event.date };
-      this.iteration.startAt = moment(event.jsdate).format('YYYY-MM-DD') + 'T12:00:00Z';
+      this.iteration.startAt = moment(event.jsdate).format('YYYY-MM-DD') + 'T00:00:00Z';
     } else {
       this.startDate = '';
       this.iteration.startAt = '';
@@ -302,7 +302,7 @@ export class FabPlannerIterationModalComponent implements OnInit, OnDestroy, OnC
     // event properties are: event.date, event.jsdate, event.formatted and event.epoc
     if (event.jsdate !== null) {
       this.endDate = { date: event.date };
-      this.iteration.endAt = moment(event.jsdate).format('YYYY-MM-DD') + 'T12:00:00Z';
+      this.iteration.endAt = moment(event.jsdate).format('YYYY-MM-DD') + 'T23:59:59Z';
     } else {
       this.endDate = '';
       this.iteration.endAt = '';
