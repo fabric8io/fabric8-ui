@@ -17,13 +17,18 @@ type Props = StateProps & WithContextProps;
 // abstract unwanted functionality in `widgets`
 const noop = () => {};
 
-const Navigation: React.SFC<Props> = ({ authUsername, username, spacenamePath }: Props) => {
+const Navigation: React.SFC<Props> = ({
+  authUsername,
+  username,
+  spacename,
+  spacenamePath,
+}: Props) => {
   const userSegment = username || authUsername;
   const userSpacePath = userSegment ? `/${userSegment}/${spacenamePath}` : null;
   return (
     <Nav onSelect={noop} onToggle={noop} aria-label="Main navigation">
       <NavList>
-        <NavRoute path={userSpacePath || ''} exact>
+        <NavRoute path={username && spacename ? userSpacePath : '/_home'} exact>
           Overview
         </NavRoute>
         {userSpacePath && (
@@ -51,7 +56,7 @@ const Navigation: React.SFC<Props> = ({ authUsername, username, spacenamePath }:
           </>
         )}
         {authUsername && (
-          <NavRoute path={`/${authUsername}/_spaces`} exact>
+          <NavRoute path={`/${userSegment}/_spaces`} exact>
             Spaces
           </NavRoute>
         )}

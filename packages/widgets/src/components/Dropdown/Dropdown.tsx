@@ -6,6 +6,7 @@ import {
   DropdownDirection,
 } from '@patternfly/react-core';
 import { OneOf } from '../../typeUtils';
+import './Dropdown.scss';
 
 export { DropdownDirection, DropdownPosition } from '@patternfly/react-core';
 

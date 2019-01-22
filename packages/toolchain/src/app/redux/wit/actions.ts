@@ -1,7 +1,13 @@
-import { getCurrentUserSpacesUrl, getCurrentUserUrl, getFeaturesUrl } from '../../api/api-urls';
+import {
+  getCurrentUserSpacesUrl,
+  getCurrentUserUrl,
+  getFeaturesUrl,
+  getNamedSpacesUrl,
+} from '../../api/api-urls';
 import { fetchCollection, fetchEntity } from '../jsonapi/actions';
 import { getCollectionEntityRefs } from '../jsonapi/selectors';
 import { ThunkAction } from '../utils';
+import { getSpaceById } from './selectors';
 
 export function fetchCurrentUserSpaces(): ThunkAction {
   return async function(dispatch, getState) {
@@ -12,6 +18,12 @@ export function fetchCurrentUserSpaces(): ThunkAction {
     if (refs) {
       await Promise.all(refs.map((ref) => dispatch(fetchEntity('spaces', ref.id))));
     }
+  };
+}
+
+export function fetchUserSpacesByUsername(username: string): ThunkAction {
+  return async function(dispatch) {
+    await dispatch(fetchCollection(getNamedSpacesUrl(username)));
   };
 }
 
@@ -30,5 +42,21 @@ export function fetchUserById(id: string): ThunkAction {
 export function fetchFeatures(): ThunkAction {
   return async function(dispatch) {
     await dispatch(fetchCollection(getFeaturesUrl()));
+  };
+}
+
+export function fetchSpaceById(id: string): ThunkAction {
+  return async function(dispatch) {
+    await dispatch(fetchEntity('spaces', id));
+  };
+}
+
+export function fetchSpaceOwner(id: string): ThunkAction {
+  return async function(dispatch, getState) {
+    await dispatch(fetchSpaceById(id));
+    const space = getSpaceById(getState(), id);
+    if (space) {
+      await dispatch(fetchUserById(space.relationships['owned-by'].data.id));
+    }
   };
 }
