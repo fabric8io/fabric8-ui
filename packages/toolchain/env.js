@@ -43,8 +43,8 @@ function getProductionEnv() {
 function getDevelopmentEnv() {
   const {
     FABRIC8_FORGE_API_URL = 'https://forge.api.prod-preview.openshift.io',
-    FABRIC8_FEATURE_TOGGLES_API_URL,
     FABRIC8_WIT_API_URL = 'https://prod-preview.openshift.io/api/',
+    FABRIC8_FEATURE_TOGGLES_API_URL = FABRIC8_WIT_API_URL,
     FABRIC8_REALM,
     FABRIC8_SSO_API_URL = 'https://sso.prod-preview.openshift.io/',
     FABRIC8_AUTH_API_URL = 'https://auth.prod-preview.openshift.io/api/',
