@@ -14,7 +14,6 @@ import { ContextService } from '../../shared/context.service';
 import { SpaceNamespaceService } from '../../shared/runtime-console/space-namespace.service';
 import { SpaceTemplateService } from '../../shared/space-template.service';
 import { SpacesService } from '../../shared/spaces.service';
-import { DeploymentApiService } from '../create/deployments/services/deployment-api.service';
 import { AddAppOverlayComponent } from './add-app-overlay.component';
 
 export class BroadcasterTestProvider {
@@ -82,9 +81,7 @@ describe('AddAppOverlayComponent', () => {
       },
     ]),
   );
-
-  let mockApplications: string[] = ['app-apr-10-2018-4-25', 'app-may-11-2018', 'app-may-14-1-04'];
-
+  
   let mockContext: any;
 
   let mockProfile: Profile = {
@@ -188,7 +185,6 @@ describe('AddAppOverlayComponent', () => {
       imports: [FormsModule, ModalModule.forRoot(), PopoverModule.forRoot()],
       declarations: [AddAppOverlayComponent],
       providers: [
-        { provide: DeploymentApiService, useValue: mockDeploymentApiService },
         { provide: DependencyCheckService, useValue: mockDependencyCheckService },
         PopoverConfig,
         { provide: Broadcaster, useValue: new BroadcasterTestProvider() },
@@ -216,15 +212,6 @@ describe('AddAppOverlayComponent', () => {
       expect(component.applications).toEqual([]);
     });
 
-    it('should retieve applications if the current space is defined', () => {
-      mockContext.space.id = 'mock-space-id';
-      fixture = TestBed.createComponent(AddAppOverlayComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-      expect(mockDeploymentApiService.getApplications).toHaveBeenCalledTimes(1);
-      expect(mockDeploymentApiService.getApplications).toHaveBeenCalledWith('mock-space-id');
-      expect(component.applications).toEqual(mockApplications);
-    });
   });
 
   describe('component', () => {
@@ -246,18 +233,6 @@ describe('AddAppOverlayComponent', () => {
 
     it('continue button is disabled on load', () => {
       expect(btnElem.hasAttribute('disabled')).toBeTruthy();
-    });
-
-    it('application is not available', () => {
-      component.projectName = 'app-may-11-2018';
-      component.validateProjectName();
-      expect(component.isProjectNameAvailable).toBeFalsy();
-    });
-
-    it('application is available', () => {
-      component.projectName = 'app-may-11-2018-1';
-      component.validateProjectName();
-      expect(component.isProjectNameAvailable).toBeTruthy();
     });
 
     it('application is not valid', () => {

@@ -18,10 +18,6 @@ import { User, UserService } from 'ngx-login-client';
 import { empty as observableEmpty, Subscription } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { ContextService } from '../../shared/context.service';
-// import {
-//   Application,
-//   DeploymentApiService,
-// } from '../create/deployments/services/deployment-api.service';
 
 export type appModal = {
   show: boolean;
@@ -56,7 +52,6 @@ export class AddAppOverlayComponent implements OnInit, OnDestroy {
     public broadcaster: Broadcaster,
     private userService: UserService,
     private router: Router,
-   // private deploymentApiService: DeploymentApiService,
   ) {
     this.loggedInUser = this.userService.currentLoggedInUser;
     this.subscriptions.push(
@@ -73,7 +68,6 @@ export class AddAppOverlayComponent implements OnInit, OnDestroy {
               if (space) {
                 this.currentSpace = space;
                 return observableEmpty();
-              //   return this.deploymentApiService.getApplications(space.id);
               } else {
                 return observableEmpty();
               }

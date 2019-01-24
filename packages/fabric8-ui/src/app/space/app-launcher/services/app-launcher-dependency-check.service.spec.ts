@@ -3,22 +3,11 @@ import { Context } from 'ngx-fabric8-wit';
 import { DependencyCheck } from 'ngx-launcher';
 import { Observable, of as observableOf } from 'rxjs';
 import { ContextService } from '../../../shared/context.service';
-import { DeploymentApiService } from '../../create/deployments/services/deployment-api.service';
 import { AppLauncherDependencyCheckService } from './app-launcher-dependency-check.service';
 
 let mockDeploymentApiService: any = {
   getApplications(): Observable<any[]> {
-    return observableOf([
-      {
-        attributes: { name: 'app-apr-10-2018-4-25' },
-      },
-      {
-        attributes: { name: 'app-may-11-2018' },
-      },
-      {
-        attributes: { name: 'app-may-14-1-04' },
-      },
-    ]);
+    return observableOf([]);
   },
 };
 
@@ -27,7 +16,6 @@ function initTestBed() {
     providers: [
       AppLauncherDependencyCheckService,
       { provide: ContextService, useClass: mockContextService },
-      { provide: DeploymentApiService, useValue: mockDeploymentApiService },
     ],
   });
 }
