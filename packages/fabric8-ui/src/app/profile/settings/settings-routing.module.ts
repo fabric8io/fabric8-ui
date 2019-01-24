@@ -15,10 +15,6 @@ const routes: Routes = [
         path: 'feature-opt-in',
         loadChildren: './feature-opt-in/feature-opt-in.module#FeatureOptInModule',
       },
-      {
-        path: 'resources',
-        loadChildren: './resources/resources.module#ResourcesModule',
-      },
     ],
   },
 ];

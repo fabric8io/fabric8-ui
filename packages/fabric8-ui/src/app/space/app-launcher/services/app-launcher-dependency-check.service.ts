@@ -3,16 +3,12 @@ import { Context } from 'ngx-fabric8-wit';
 import { DependencyCheck, DependencyCheckService } from 'ngx-launcher';
 import { Observable, of as observableOf } from 'rxjs';
 import { ContextService } from '../../../shared/context.service';
-import {
-  Application,
-  DeploymentApiService,
-} from '../../create/deployments/services/deployment-api.service';
+import { of } from 'rxjs';
 
 @Injectable()
 export class AppLauncherDependencyCheckService implements DependencyCheckService {
   private context: Context;
   constructor(
-    private deploymentApiService: DeploymentApiService,
     private contextService: ContextService,
   ) {
     this.contextService.current.subscribe((context) => (this.context = context));
@@ -39,9 +35,7 @@ export class AppLauncherDependencyCheckService implements DependencyCheckService
    *
    * @returns Observable
    */
-  getApplicationsInASpace(): Observable<Application[]> {
-    return this.deploymentApiService.getApplications(
-      this.context.space ? this.context.space.id : '',
-    );
+  getApplicationsInASpace(): Observable<any[]> {
+    return of([])
   }
 }

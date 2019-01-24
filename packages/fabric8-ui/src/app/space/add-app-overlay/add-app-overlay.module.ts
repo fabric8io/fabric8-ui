@@ -7,7 +7,7 @@ import { Fabric8WitModule } from 'ngx-fabric8-wit';
 import { DependencyCheckService } from 'ngx-launcher';
 import { AppLauncherDependencyCheckService } from '../app-launcher/services/app-launcher-dependency-check.service';
 import { CodebasesService } from '../create/codebases/services/codebases.service';
-import { DeploymentApiService } from '../create/deployments/services/deployment-api.service';
+//import { DeploymentApiService } from '../create/deployments/services/deployment-api.service';
 import { AutofocusModule } from 'ngx-widgets';
 import { AddAppOverlayComponent } from './add-app-overlay.component';
 
@@ -25,7 +25,7 @@ import { AddAppOverlayComponent } from './add-app-overlay.component';
   providers: [
     CodebasesService,
     { provide: DependencyCheckService, useClass: AppLauncherDependencyCheckService },
-    DeploymentApiService,
+   // DeploymentApiService,
   ],
 })
 export class AddAppOverlayModule {}
