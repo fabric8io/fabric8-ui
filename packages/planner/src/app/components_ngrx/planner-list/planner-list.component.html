@@ -2,7 +2,7 @@
   featureName="Planner"
   [userLevel]="planner"
   [showFeatureOptIn]="true"
-></f8-feature-toggle>
+  ></f8-feature-toggle>
 
 <ng-template #planner>
   <div class="container-fluid f8-wi-container" #containerHeight>
@@ -20,7 +20,7 @@
         (sidePanelStateChange)="togglePanelState($event)"
         [sidePanelContent]="sidePanel"
         [sectionContent]="sectionPanel"
-      >
+        >
       </alm-planner-layout>
       <work-item-preview-panel #quickPreview> </work-item-preview-panel>
     </main>
@@ -43,7 +43,7 @@
           (click)="togglePanel()"
           tooltip="{{ sidePanelOpen ? 'Hide Panel' : 'Show Panel' }}"
           placement="right"
-        >
+          >
         </span>
       </a>
       <side-panel [sidePanelOpen]="sidePanelOpen"> </side-panel>
@@ -56,7 +56,7 @@
         context="listview"
         [loggedInUser]="loggedInUser"
         [dropdownPlacement]="sidePanelOpen ? 'right' : 'left'"
-      >
+        >
       </toolbar-panel>
     </div>
 
@@ -66,18 +66,19 @@
         [columns]="columns"
         (onMovetoDisplay)="moveToDisplay($event)"
         (onMovetoAvailable)="moveToAvailable($event)"
-      ></table-config>
+        ></table-config>
       <div
         class="f8-wi-list__quick-add padding-right-10 margin-right-10"
         id="workItemList_up_quickAdd"
         *ngIf="loggedIn && !!quickAddWorkItemTypes.length"
-      >
+        >
         <alm-work-item-quick-add
+          [addDisabled]="isCollaborator"
           [wilistview]="'wi-table-view-top'"
           [workItemTypes]="quickAddWorkItemTypes"
           [selectedType]="quickAddWorkItemTypes[0]"
           [selectedIteration]="selectedIterationSource | async"
-        >
+          >
         </alm-work-item-quick-add>
       </div>
     </div>
@@ -108,14 +109,14 @@
           (scroll)="onScroll($event)"
           (reorder)="handleReorder($event)"
           (treeAction)="onTreeAction($event)"
-        >
+          >
           <!-- First Column - quick Add - row detail -->
           <ngx-datatable-row-detail [rowHeight]="50" #myDetailRow>
             <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
               <div
-                class="f8-wi-list__quick-add-table width-100 pull-left"
-                id="workItemList_quickAdd_inline"
-                #quickaddHeight
+              class="f8-wi-list__quick-add-table width-100 pull-left"
+              id="workItemList_quickAdd_inline"
+              #quickaddHeight
               >
                 <alm-work-item-quick-add
                   *ngIf="(row?.typeObs | async) as type"
@@ -126,7 +127,7 @@
                   [parentWorkItemId]="row.id"
                   [parentWorkItemIterationId]="row.iterationId"
                   (onStartCreateWI)="onCreateStart($event)"
-                >
+                  >
                 </alm-work-item-quick-add>
               </div>
             </ng-template>
@@ -141,7 +142,7 @@
               [sortable]="false"
               [cellClass]="'cell-class'"
               [frozenLeft]="false"
-            >
+              >
               <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
                 <span class="table-dnd-container"> <span class="table-dnd-header"></span> </span>
                 <a
@@ -154,7 +155,7 @@
                   [class.pficon-close]="expanded"
                   [class.disabled]="!!!type?.childTypes || !loggedIn"
                   (click)="toggleExpandRow(row, !!type?.childTypes?.length)"
-                >
+                  >
                 </a>
               </ng-template>
             </ngx-datatable-column>
@@ -169,7 +170,7 @@
               [sortable]="c.name === 'Title'"
               [cellClass]="'cell-class'"
               [headerClass]="'header-cell'"
-            >
+              >
               <ng-template ngx-datatable-cell-tree-expander *ngIf="c.name === 'Title'">
                 <i class="fa fa-angle-right tree-icon"></i>
               </ng-template>
@@ -193,7 +194,7 @@
                   (onQuickPreview)="onPreview($event)"
                   [class.f8-wi__table-config]="c.prop == 'label' || c.prop == 'assignees'"
                   [class.f8-planner-list-title]="c.prop == 'title'"
-                >
+                  >
                 </work-item-cell>
               </ng-template>
             </ngx-datatable-column>
@@ -208,7 +209,7 @@
               [sortable]="false"
               [cellClass]="'cell-class'"
               [frozenLeft]="false"
-            >
+              >
               <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
                 <span class="table-dnd-container"> <span class="table-dnd-header"></span> </span>
                 <a
@@ -216,7 +217,7 @@
                   placement="right"
                   tooltip="Add Child Work Item"
                   href="javascript:void(0)"
-                >
+                  >
                 </a>
               </ng-template>
             </ngx-datatable-column>
@@ -229,7 +230,7 @@
               [sortable]="c.name === 'Title'"
               [cellClass]="'cell-class'"
               [headerClass]="'header-cell'"
-            >
+              >
               <ng-template let-row="row" ngx-datatable-cell-template>
                 <work-item-cell
                   [row]="row"
@@ -237,7 +238,7 @@
                   (onQuickPreview)="onPreview($event)"
                   [class.f8-wi__table-config]="c.prop === 'label' || c.prop === 'assignees'"
                   [class.f8-planner-list-title]="c.prop === 'title'"
-                >
+                  >
                 </work-item-cell>
               </ng-template>
             </ngx-datatable-column>
@@ -246,7 +247,7 @@
         <pfng-empty-state
           *ngIf="!workItems?.length && !uiLockedList"
           [config]="emptyStateConfig"
-        ></pfng-empty-state>
+          ></pfng-empty-state>
 
         <div class="lock-overlay-list" *ngIf="uiLockedList">
           <div class="spinner-container">

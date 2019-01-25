@@ -3,9 +3,9 @@
   <!-- Active iteration -->
   <div class="f8-itr-hdr nohover">
     <div class="f8-itr__add" [class.show]="sidePanelOpen" [class.hide]="!sidePanelOpen">
-      <a
-        *ngIf="loggedIn && editEnabled"
-        class="text-right pointer"
+      <button
+        [disabled]="editEnabled"
+        class="btn btn-link"
         (click)="modal.openCreateUpdateModal('create', null, $event)"
       >
         <i
@@ -14,7 +14,7 @@
           placement="bottom"
           tooltip="Add an Iteration"
         ></i>
-      </a>
+      </button>
     </div>
     <span
       class="dib fa fa-repeat margin-right-15

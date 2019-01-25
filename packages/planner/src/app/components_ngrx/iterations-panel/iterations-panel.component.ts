@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { filter, tap } from 'rxjs/operators';
+import { filter, tap, map } from 'rxjs/operators';
 
 import { Broadcaster, Logger, Notifications } from 'ngx-base';
 import { AuthenticationService } from 'ngx-login-client';
@@ -20,6 +20,7 @@ import { AND, EQUAL } from '../../services/query-keys';
 import { WorkItemService } from '../../services/work-item.service';
 import { FabPlannerIterationModalComponent } from '../iterations-modal/iterations-modal.component';
 import { FilterService } from './../../services/filter.service';
+import { PermissionService } from 'ngx-login-client';
 
 // ngrx stuff
 import { select, Store } from '@ngrx/store';
@@ -76,35 +77,38 @@ export class IterationComponent implements OnInit, OnDestroy, OnChanges {
     private workItemService: WorkItemService,
     private store: Store<AppState>,
     private iterationQuery: IterationQuery,
+    private permissionService: PermissionService,
   ) {}
 
   ngOnInit(): void {
     this.listenToEvents();
     this.loggedIn = this.auth.isLoggedIn();
     this.editEnabled = true;
-    this.spaceSubscription = this.store
-      .pipe(
-        select('planner'),
-        select('space'),
-      )
-      .subscribe((space) => {
-        if (space) {
-          console.log('[IterationComponent] New Space selected: ' + space.attributes.name);
-          console.log('collection is ', this.collection);
-          this.spaceId = space.id;
-          this.editEnabled = true;
-        } else {
-          console.log('[IterationComponent] Space deselected.');
-          this.editEnabled = false;
-        }
-      });
+    this.eventListeners.push(
+      this.store
+        .pipe(
+          select('planner'),
+          select('space'),
+        )
+        .subscribe((space) => {
+          if (space) {
+            this.spaceId = space.id;
+            this.editEnabled = true;
+          } else {
+            this.editEnabled = false;
+          }
+        }),
+      this.permissionService
+        .hasScope(this.spaceId, 'contribute')
+        .pipe(map((item) => !item))
+        .subscribe((item) => (this.editEnabled = item)),
+    );
   }
 
   ngOnChanges() {}
 
   ngOnDestroy() {
     // prevent memory leak when component is destroyed
-    this.spaceSubscription.unsubscribe();
     this.eventListeners.forEach((subscriber) => subscriber.unsubscribe());
   }
 

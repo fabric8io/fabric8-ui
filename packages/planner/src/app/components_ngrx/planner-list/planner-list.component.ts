@@ -11,10 +11,10 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { cloneDeep, sortBy } from 'lodash';
-import { AuthenticationService } from 'ngx-login-client';
+import { AuthenticationService, PermissionService } from 'ngx-login-client';
 import { EmptyStateConfig } from 'patternfly-ng/empty-state';
 import { combineLatest, Observable } from 'rxjs';
-import { filter, switchMap, take, tap } from 'rxjs/operators';
+import { filter, switchMap, take, tap, map } from 'rxjs/operators';
 import { WorkItemTypeQuery, WorkItemTypeUI } from '../../models/work-item-type';
 import { AND, EQUAL, NOT_EQUAL } from '../../services/query-keys';
 import { IterationQuery, IterationUI } from './../../models/iteration.model';
@@ -74,6 +74,7 @@ export class PlannerListComponent implements OnInit, OnDestroy, AfterViewChecked
   private eventListeners: any[] = [];
   private detailExpandedRows: any = [];
   private showTree: boolean = false;
+  public isCollaborator: Observable<boolean>;
   private hdrHeight: number = 0;
   private toolbarHt: number = 0;
   private quickaddHt: number = 0;
@@ -103,6 +104,7 @@ export class PlannerListComponent implements OnInit, OnDestroy, AfterViewChecked
     private groupTypeQuery: GroupTypeQuery,
     private workItemTypeQuery: WorkItemTypeQuery,
     private spaceQuery: SpaceQuery,
+    private permissionService: PermissionService,
   ) {}
 
   ngOnInit() {
@@ -116,11 +118,16 @@ export class PlannerListComponent implements OnInit, OnDestroy, AfterViewChecked
     this.eventListeners.push(
       this.spaceSource
         .pipe(
-          tap(() => {
+          tap((item) => {
             this.store.dispatch(new CollaboratorActions.Get());
             this.store.dispatch(new AreaActions.Get());
             this.uiLockedSidebar = true;
             this.uiLockedList = true;
+            if (item.id) {
+              this.isCollaborator = this.permissionService
+                .hasScope(item.id, 'contribute')
+                .pipe(map((item) => !item));
+            }
           }),
           switchMap((s) => {
             return combineLatest(
