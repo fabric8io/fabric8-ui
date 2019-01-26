@@ -6,7 +6,6 @@
     "dot-notation": "off",
     "eqeqeq": "off",
     "guard-for-in": "off",
-    "import/order": "off",
     "global-require": "off",
     "lines-between-class-members": "off",
     "new-cap": "off",

@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { User, UserService } from 'ngx-login-client';
 import { first } from 'rxjs/operators';
-import { UserSpacesService } from '../../shared/user-spaces.service';
 import { Subscription } from 'rxjs';
+import { UserSpacesService } from '../../shared/user-spaces.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

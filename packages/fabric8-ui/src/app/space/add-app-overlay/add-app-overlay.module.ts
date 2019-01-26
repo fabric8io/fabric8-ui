@@ -5,9 +5,9 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { Fabric8WitModule } from 'ngx-fabric8-wit';
 import { DependencyCheckService } from 'ngx-launcher';
+import { AutofocusModule } from 'ngx-widgets';
 import { AppLauncherDependencyCheckService } from '../app-launcher/services/app-launcher-dependency-check.service';
 import { CodebasesService } from '../create/codebases/services/codebases.service';
-import { AutofocusModule } from 'ngx-widgets';
 import { AddAppOverlayComponent } from './add-app-overlay.component';
 
 @NgModule({

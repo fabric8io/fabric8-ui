@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { User, UserService, AuthenticationService } from 'ngx-login-client';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ProviderService } from '../shared/account/provider.service';
 import { Subscription } from 'rxjs';
+import { ProviderService } from '../shared/account/provider.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

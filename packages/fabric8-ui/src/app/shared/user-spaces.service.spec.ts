@@ -9,13 +9,13 @@ import { cloneDeep } from 'lodash';
 import { first } from 'rxjs/operators';
 
 import { createMock } from 'testing/mock';
-import { spaceMock } from './context.service.mock';
 
 import { Logger } from 'ngx-base';
 import { Space, SpaceService, WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
 
 import { of } from 'rxjs';
+import { spaceMock } from './context.service.mock';
 import { SpaceInformation, UserSpacesResponse, UserSpacesService } from './user-spaces.service';
 
 describe('UserSpacesService', () => {

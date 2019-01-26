@@ -4,12 +4,12 @@ import { Broadcaster } from 'ngx-base';
 import { UserService, AuthenticationService, User } from 'ngx-login-client';
 import { createMock } from 'testing/mock';
 import { initContext, TestContext } from 'testing/test-context';
+import { ActivatedRoute, Router } from '@angular/router';
+import { of, ConnectableObservable } from 'rxjs';
 import { LoginService } from '../shared/login.service';
 import { HomeComponent } from './home.component';
-import { ActivatedRoute, Router } from '@angular/router';
 import { ProviderService } from '../shared/account/provider.service';
 import { ExtProfile } from './../getting-started/services/getting-started.service';
-import { of, ConnectableObservable } from 'rxjs';
 
 @Component({
   template: '<alm-home></alm-home>',

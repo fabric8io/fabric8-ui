@@ -1,4 +1,3 @@
-import { FABRIC8_BUILD_TOOL_DETECTOR_API_URL } from './../../../shared/runtime-console/fabric8-ui-build-tool-detector-api';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable, Inject } from '@angular/core';
 import { GitHubDetails, GitProviderService, HelperService, BuildTool } from 'ngx-launcher';
@@ -6,8 +5,9 @@ import { AuthenticationService } from 'ngx-login-client';
 import { EMPTY, Observable, of, throwError } from 'rxjs';
 import { catchError, map, mergeMap, tap } from 'rxjs/operators';
 
-import { ProviderService } from '../../../shared/account/provider.service';
 import { cloneDeep } from 'lodash';
+import { ProviderService } from '../../../shared/account/provider.service';
+import { FABRIC8_BUILD_TOOL_DETECTOR_API_URL } from './../../../shared/runtime-console/fabric8-ui-build-tool-detector-api';
 
 @Injectable()
 export class AppLauncherGitproviderService implements GitProviderService {

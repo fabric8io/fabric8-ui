@@ -21,6 +21,24 @@ import { ActionModule } from 'patternfly-ng/action';
 import { EmptyStateModule } from 'patternfly-ng/empty-state';
 import { NotificationService, ToastNotificationListModule } from 'patternfly-ng/notification';
 import { StaticInjector } from 'ngx-launcher';
+
+// About Modal
+import { TooltipModule } from 'ngx-bootstrap';
+import { FeatureTogglesService } from 'ngx-feature-flag';
+import { FeatureFlagResolver, EnableFeatureService } from 'ngx-feature-flag';
+import { FeatureFooterModule } from './feature-flag/notification-footer/feature-footer.module';
+import { FeatureAcknowledgementService } from './feature-flag/service/feature-acknowledgement.service';
+import { GettingStartedService } from './getting-started/services/getting-started.service';
+import { AboutModalModule } from './layout/about-modal/about-modal.module';
+import { RavenExceptionHandler } from './shared/exception.handler';
+import { HttpInterceptorProviders } from './shared/interceptors/index';
+import { RequestCache } from './shared/request-cache.service';
+import { togglesApiUrlProvider } from './shared/toggles.api.provider';
+
+//Header
+import { HeaderComponent } from './layout/header/header.component';
+import { MenusService } from './layout/header/menus.service';
+
 import {
   // Base functionality for the runtime console
   KubernetesRestangularModule,
@@ -41,11 +59,6 @@ import { ENV_PROVIDERS } from './environment';
 import { AppComponent } from './app.component';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { AppState, InternalStateType } from './app.service';
-
-// Header
-import { FeatureFlagResolver, EnableFeatureService } from 'ngx-feature-flag';
-import { HeaderComponent } from './layout/header/header.component';
-import { MenusService } from './layout/header/menus.service';
 
 // Shared Services
 import { AboutService } from './shared/about.service';
@@ -87,18 +100,6 @@ import { ProfileService } from './profile/profile.service';
 // App launcher
 import { AddAppOverlayModule } from './space/add-app-overlay/add-app-overlay.module';
 import { AddSpaceOverlayModule } from './space/add-space-overlay/add-space-overlay.module';
-
-// About Modal
-import { TooltipModule } from 'ngx-bootstrap';
-import { FeatureTogglesService } from 'ngx-feature-flag';
-import { FeatureFooterModule } from './feature-flag/notification-footer/feature-footer.module';
-import { FeatureAcknowledgementService } from './feature-flag/service/feature-acknowledgement.service';
-import { GettingStartedService } from './getting-started/services/getting-started.service';
-import { AboutModalModule } from './layout/about-modal/about-modal.module';
-import { RavenExceptionHandler } from './shared/exception.handler';
-import { HttpInterceptorProviders } from './shared/interceptors/index';
-import { RequestCache } from './shared/request-cache.service';
-import { togglesApiUrlProvider } from './shared/toggles.api.provider';
 
 /**
  * Import application wide styles
