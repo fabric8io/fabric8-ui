@@ -35,19 +35,33 @@ import { GitHubService } from './services/github.service';
 })
 export class CodebasesComponent implements OnDestroy, OnInit {
   allCodebases: Codebase[];
+
   appliedFilters: Filter[];
+
   chePollSubscription: Subscription;
+
   chePollTimer: Observable<any>;
+
   cheState: Che;
+
   codebases: Codebase[] = [];
+
   context: Context;
+
   currentSortField: SortField;
+
   emptyStateConfig: EmptyStateConfig;
+
   isAscendingSort: boolean = true;
+
   listConfig: ListConfig;
+
   resultsCount: number = 0;
+
   subscriptions: Subscription[] = [];
+
   gitHubConnected: boolean;
+
   disconnectedStateConfig: EmptyStateConfig;
 
   constructor(

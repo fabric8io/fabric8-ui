@@ -2,6 +2,7 @@ import { KubernetesResource } from './kubernetesresource.model';
 
 export class KubernetesSpecResource extends KubernetesResource {
   spec: any;
+
   status: any;
 
   updateResource(resource) {

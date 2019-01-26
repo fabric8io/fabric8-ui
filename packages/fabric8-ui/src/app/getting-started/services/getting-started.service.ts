@@ -22,14 +22,18 @@ export class ExtUser extends User {
 
 export class ExtProfile extends Profile {
   contextInformation: any;
+
   registrationCompleted: boolean;
+
   featureLevel: string;
 }
 
 @Injectable()
 export class GettingStartedService implements OnDestroy {
   private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
   protected subscriptions: Subscription[] = [];
+
   private usersUrl: string;
 
   constructor(

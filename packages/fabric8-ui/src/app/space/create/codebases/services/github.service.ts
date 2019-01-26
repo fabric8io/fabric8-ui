@@ -25,6 +25,7 @@ export class GitHubService {
   });
 
   private readonly cache: Map<string, Observable<any>>;
+
   private readonly gitHubUrl: string;
 
   constructor(private authService: AuthenticationService, private http: HttpClient) {

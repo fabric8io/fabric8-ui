@@ -3,6 +3,7 @@ import { Route, Routes } from './route.model';
 
 export class Service extends KubernetesSpecResource {
   exposeUrl: string;
+
   private _route: Route;
 
   updateValuesFromResource() {

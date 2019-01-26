@@ -7,7 +7,9 @@ import { Operation, ResourceOperation } from './resource-operation';
  */
 export class Poller<L> {
   protected subscription: Subscription;
+
   protected pollPeriod = 3000;
+
   protected resourceCache = {};
 
   constructor(

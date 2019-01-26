@@ -38,6 +38,7 @@ import { createReplicaSetViews, ReplicaSetViews } from '../view/replicaset.view'
  */
 export class AbstractWatchComponent implements OnDestroy {
   public subjectCache: Map<string, Subject<any[]>> = new Map<string, Subject<any[]>>();
+
   private watchCache: Map<string, Watcher<any>> = new Map<string, Watcher<any>>();
 
   ngOnDestroy(): void {
@@ -288,7 +289,9 @@ export class AbstractWatchComponent implements OnDestroy {
  */
 export class CachingSubject<T> extends Subject<T> {
   private _value: T;
+
   private _hasValue = false;
+
   private _subscription: Subscription;
 
   constructor(protected observable: Observable<T>) {

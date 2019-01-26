@@ -22,14 +22,21 @@ export type spaceModal = {
 })
 export class AddSpaceOverlayComponent implements OnInit {
   @ViewChild('addSpaceOverlayNameInput') spaceNameInput: ElementRef;
+
   @ViewChild('modalAddSpaceOverlay') modalAddSpaceOverlay: ModalDirective;
+
   @ViewChild('spaceForm') spaceForm: NgForm;
 
   spaceName: string;
+
   spaceDescription: string;
+
   subscriptions: Subscription[] = [];
+
   canSubmit: Boolean = true;
+
   private addAppFlow: string;
+
   isModalShown: boolean = false;
 
   constructor(

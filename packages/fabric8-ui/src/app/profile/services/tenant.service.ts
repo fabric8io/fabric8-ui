@@ -9,6 +9,7 @@ import { catchError, map } from 'rxjs/operators';
 @Injectable()
 export class TenantService {
   private headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
+
   private tenantUrl: string;
 
   constructor(

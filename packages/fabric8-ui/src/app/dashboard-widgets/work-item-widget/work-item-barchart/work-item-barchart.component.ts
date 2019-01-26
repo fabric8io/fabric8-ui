@@ -12,10 +12,13 @@ import { WorkItemBarchartData } from './work-item-barchart-data';
 })
 export class WorkItemBarchartComponent extends ChartBase implements DoCheck, OnInit {
   @Input() chartData: WorkItemBarchartData;
+
   @Input() config: WorkItemBarchartConfig;
 
   private defaultConfig: WorkItemBarchartConfig;
+
   private prevChartData: WorkItemBarchartData;
+
   private prevConfig: WorkItemBarchartConfig;
 
   constructor() {

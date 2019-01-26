@@ -14,6 +14,7 @@ import { ApplicationsStackReportComponent } from '../applications-stack-report/a
 
 export class BuildInput {
   build: Build;
+
   stage: PipelineStage;
 }
 
@@ -30,10 +31,13 @@ export class ApplicationsListItemComponent implements DoCheck, OnInit {
   @ViewChild(InputActionDialog) inputActionDialog: InputActionDialog;
 
   contextPath: Observable<string>;
+
   expanded: boolean = false;
 
   private _applicationUrl: string;
+
   private _pipelineStages: PipelineStage[];
+
   private _promoteBuildInput: BuildInput;
 
   constructor(private context: Contexts) {

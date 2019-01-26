@@ -30,18 +30,24 @@ export enum AreaCreationStatus {
 })
 export class CreateAreaDialogComponent implements OnInit {
   @Input() host: ModalDirective;
+
   @Input() parentId: string;
+
   @Input() areas: Area[];
+
   @Output() onAdded = new EventEmitter<Area>();
+
   @ViewChild('areaForm') areaForm: NgForm;
 
   @ViewChild('rawInputField') rawInputField: ElementRef;
+
   @ViewChild('inputModel') inputModel: NgModel;
 
   // Declare the enum for usage in the template
   AreaCreationStatus: typeof AreaCreationStatus = AreaCreationStatus;
 
   name: string;
+
   private _areaCreationStatus: AreaCreationStatus;
 
   constructor(private areaService: AreaService) {}

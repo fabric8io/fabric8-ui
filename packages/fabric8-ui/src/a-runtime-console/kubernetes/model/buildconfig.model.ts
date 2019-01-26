@@ -8,22 +8,30 @@ export const defaultBuildIconStyle = 'pficon-build';
 
 export class BuildConfig extends KubernetesSpecResource {
   gitUrl: string;
+
   type: string;
+
   lastVersion: number;
 
   jenkinsJobUrl: string;
+
   editPipelineUrl: string;
+
   openInCheUrl: string;
 
   lastBuildPath: string;
+
   lastBuildName: string;
 
   // last build related data
   statusPhase: string;
+
   duration: number;
+
   iconStyle: string;
 
   private _builds: Array<Build> = new Array<Build>();
+
   interestingBuilds: Array<Build> = new Array<Build>();
 
   private _lastBuild: Build;
@@ -307,5 +315,6 @@ export function appInfos(buildConfigs: BuildConfigs): Map<string, EnvironmentApp
  */
 export class EnvironmentApps {
   apps: Map<string, AppInfo> = new Map<string, AppInfo>();
+
   name: string;
 }

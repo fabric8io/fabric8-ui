@@ -22,15 +22,21 @@ import { PipelinesService } from '../../space/create/pipelines/services/pipeline
 })
 export class PipelinesWidgetComponent implements OnInit, OnDestroy {
   @Input() userOwnsSpace: boolean;
+
   @Output() addToSpace = new EventEmitter();
 
   private subscriptions: Subscription[] = [];
 
   contextPath: string;
+
   buildConfigs: BuildConfigs;
+
   private loggedInUser: User;
+
   private ctx: Context;
+
   buildConfigsCount: number = 0;
+
   loading: boolean = true;
 
   constructor(

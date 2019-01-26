@@ -76,6 +76,7 @@ export const currentContext: Context = {
 
 export class ContextsMock {
   current: Observable<Context>;
+
   constructor() {
     this.current = observableOf(currentContext);
   }

@@ -19,12 +19,15 @@ import {PipelinesService} from "../../shared/runtime-console/pipelines.service";
 
 export class BroadcasterTestProvider {
   private _eventBus: Subject<any>;
+
   constructor() {
     this._eventBus = new Subject<any>();
   }
+
   broadcast(key: any, data?: any) {
     this._eventBus.next({ key, data });
   }
+
   on<T>(key: any): Observable<T> {
     return this._eventBus.asObservable().pipe(
       filter((event) => event.key === key),

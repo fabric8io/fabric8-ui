@@ -15,6 +15,7 @@ export class BuildStageViewComponent implements OnDestroy {
   @ViewChild(InputActionDialog) inputActionDialog: InputActionDialog;
 
   displayStages: PipelineStage[] = [];
+
   private _timerSubscription: Subscription;
 
   constructor() {

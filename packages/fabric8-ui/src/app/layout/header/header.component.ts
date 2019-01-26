@@ -22,6 +22,7 @@ interface MenuHiddenCallback {
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   imgLoaded: boolean = false;
+
   isIn: boolean = false; // store state
 
   toggleState() {
@@ -61,11 +62,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ]);
 
   recent: Context[];
+
   appLauncherEnabled: boolean = false;
+
   loggedInUser: User;
+
   private _context: Context;
+
   private _defaultContext: Context;
+
   private plannerFollowQueryParams: Object = {};
+
   private eventListeners: any[] = [];
 
   constructor(

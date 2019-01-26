@@ -2,10 +2,13 @@
 
 export class Link {
   id: string;
+
   type: string;
+
   attributes: {
     version: Number;
   };
+
   relationships: {
     // "link_type": LinkType
     link_type: {

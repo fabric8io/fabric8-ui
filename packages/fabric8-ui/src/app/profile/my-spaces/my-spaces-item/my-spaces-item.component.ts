@@ -14,7 +14,9 @@ import { MySpacesItemService } from './my-spaces-item.service';
 })
 export class MySpacesItemComponent implements OnInit {
   @Input() space: Space;
+
   collaboratorCount: Observable<string>;
+
   workItemCount: Observable<string>;
 
   constructor(private readonly svc: MySpacesItemService) {}

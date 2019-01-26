@@ -16,18 +16,27 @@ import { SpaceNamespaceService } from '../../shared/runtime-console/space-namesp
 })
 export class EditSpaceDescriptionWidgetComponent implements OnInit, OnDestroy {
   @Input() userOwnsSpace: boolean;
+
   @Input() userIsSpaceAdmin: boolean;
+
   space: Space;
+
   spaceOwner: Observable<string>;
+
   collaborators: User[] = [];
+
   filteredCollaborators: User[] = [];
+
   collaboratorCount: number = 0;
 
   private subscriptions: Subscription[] = [];
+
   private _descriptionUpdater: Subject<string> = new Subject();
 
   private loggedInUser: User;
+
   @ViewChild('description') description: any;
+
   @ViewChild('modalAdd') modalAdd: ModalDirective;
 
   private isEditing: boolean = false;

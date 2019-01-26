@@ -16,6 +16,7 @@ import { ContextService } from '../../shared/context.service';
 })
 export class OverviewComponent implements OnDestroy, OnInit {
   user: User;
+
   viewingOwnAccount: boolean;
 
   private readonly subscriptions: Subscription[] = [];

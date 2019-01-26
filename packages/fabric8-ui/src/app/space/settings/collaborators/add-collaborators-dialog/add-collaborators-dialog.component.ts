@@ -16,13 +16,17 @@ import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operato
 })
 export class AddCollaboratorsDialogComponent implements OnInit {
   @Input() host: ModalDirective;
+
   @Input() spaceId: string;
 
   @Output() onAdded = new EventEmitter<User[]>();
 
   collaborators: User[] = [];
+
   selectedCollaborators: User[];
+
   loading: Boolean = false;
+
   searchTerm = new Subject<string>();
 
   constructor(private userService: UserService, private collaboratorService: CollaboratorService) {}

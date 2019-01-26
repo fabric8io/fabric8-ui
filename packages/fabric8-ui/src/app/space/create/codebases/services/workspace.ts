@@ -1,11 +1,14 @@
 export class Workspace {
   attributes: WorkspaceAttributes;
+
   links?: WorkspaceOpenLinks;
+
   type: string;
 }
 
 export class WorkspaceAttributes {
   description?: string;
+
   name?: string;
 }
 

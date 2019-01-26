@@ -11,9 +11,13 @@ import { ProviderService } from '../shared/account/provider.service';
 })
 export class HomeComponent implements OnInit {
   loggedInUser: User;
+
   openShiftLinked: boolean = false;
+
   subscriptions: Subscription[] = [];
+
   errorConnecting: boolean = false;
+
   loading: boolean = true;
 
   constructor(

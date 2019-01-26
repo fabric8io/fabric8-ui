@@ -22,17 +22,23 @@ import { ToolbarConfig } from 'patternfly-ng/toolbar';
 })
 export class AreasToolbarComponent implements OnChanges, OnInit {
   @Input() resultsCount: number = 0;
+
   @Input() userOwnsSpace: boolean;
 
   @Output('onAddArea') onAddArea = new EventEmitter();
+
   @Output('onFilterChange') onFilterChange = new EventEmitter();
+
   @Output('onSortChange') onSortChange = new EventEmitter();
 
   @ViewChild('addAreasTemplate') addAreasTemplate: TemplateRef<any>;
 
   filterConfig: FilterConfig;
+
   isAscendingSort: boolean = true;
+
   sortConfig: SortConfig;
+
   toolbarConfig: ToolbarConfig;
 
   constructor() {}

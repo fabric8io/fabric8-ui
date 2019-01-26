@@ -34,8 +34,12 @@ export function buildClosedWorkItemQuery(filterService: FilterService) {
 
 export class WorkItemsData {
   workItems: WorkItem[];
+
   nextLink: string;
+
   totalCount?: number | null;
+
   included?: WorkItem[] | null;
+
   ancestorIDs?: Array<string>;
 }

@@ -18,12 +18,17 @@ import { WorkspacesService } from '../services/workspaces.service';
 })
 export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
   @Input() cheRunning: boolean;
+
   @Input() codebase: Codebase;
+
   @Input() index: number = -1;
+
   @ViewChild(ModalDirective) modal: ModalDirective;
 
   subscriptions: Subscription[] = [];
+
   workspaceBusy: boolean = false;
+
   dialog: Dialog;
 
   constructor(

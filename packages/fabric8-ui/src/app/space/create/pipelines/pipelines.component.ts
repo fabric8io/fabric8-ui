@@ -23,20 +23,29 @@ export type QueryJson = {
 })
 export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
   toolbarConfig: ToolbarConfig;
+
   consoleAvailable: boolean = false;
+
   openshiftConsoleUrl: string;
 
   private _context: Context;
+
   private _filteredPipelines: BuildConfig[] = [];
+
   private _allPipelines: BuildConfig[] = [];
+
   private _appliedFilters: Filter[] = [];
+
   private _ascending: boolean = true;
+
   private _currentSortField: SortField = {
     id: 'application',
     title: 'Application',
     sortType: 'alpha',
   } as SortField;
+
   private space: Space;
+
   private subscriptions: Subscription[] = [];
 
   constructor(

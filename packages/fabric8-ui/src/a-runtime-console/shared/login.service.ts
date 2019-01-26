@@ -8,8 +8,11 @@ import { AuthenticationService } from 'ngx-login-client';
 @Injectable()
 export class LoginService {
   static readonly REDIRECT_URL_KEY = 'redirectUrl';
+
   static readonly DEFAULT_URL = '/home';
+
   static readonly LOGIN_URL = '/';
+
   // URLs that the redirect should ignore
   static readonly BANNED_REDIRECT_URLS = ['/', '/public'];
 

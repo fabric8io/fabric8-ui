@@ -17,15 +17,25 @@ import { openShiftBrowseResourceUrl } from './helpers';
 
 export class KubernetesResource implements BaseEntity {
   id: string;
+
   name: string;
+
   version: string;
+
   namespace: string;
+
   description: string;
+
   icon: string;
+
   labels: Map<string, string> = new Map<string, string>();
+
   annotations: Map<string, string> = new Map<string, string>();
+
   resource: any;
+
   creationTimestamp: any;
+
   openShiftConsoleUrl: string;
 
   public setResource(resource) {

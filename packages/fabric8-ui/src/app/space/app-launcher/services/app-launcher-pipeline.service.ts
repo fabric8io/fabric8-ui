@@ -9,8 +9,11 @@ import { catchError, map } from 'rxjs/operators';
 export class AppLauncherPipelineService implements PipelineService {
   // TODO: remove the hardcodes
   private headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
+
   private END_POINT: string = '';
+
   private API_BASE: string = 'services/jenkins/pipelines';
+
   private ORIGIN: string = '';
 
   constructor(

@@ -13,7 +13,9 @@ import { UserSpacesService } from '../../shared/user-spaces.service';
 })
 export class HomeDashboardComponent implements OnInit {
   loggedInUser: User;
+
   spacesCount: number = -1;
+
   subscriptions: Subscription[] = [];
 
   constructor(

@@ -10,6 +10,7 @@ import { Che } from './che';
 @Injectable()
 export class CheService {
   private readonly headers;
+
   private readonly workspacesUrl: string;
 
   constructor(

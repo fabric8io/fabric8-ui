@@ -9,6 +9,7 @@ export class NotificationsService implements Notifications {
   static readonly MAX_TOAST_NOTIFICATIONS = 8;
 
   actionSubject = new Subject<any>();
+
   private _actionObserver = this.actionSubject
     .asObservable()
     .pipe(map((val) => val as NotificationAction));

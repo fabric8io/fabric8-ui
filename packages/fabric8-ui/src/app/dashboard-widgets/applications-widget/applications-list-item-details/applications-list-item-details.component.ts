@@ -17,6 +17,7 @@ export class ApplicationsListItemDetailsComponent implements DoCheck, OnInit {
   @Input() build: Build;
 
   private _pipelineStages: ExtPipelineStage[];
+
   private prevStatusPhase: string;
 
   constructor() {}

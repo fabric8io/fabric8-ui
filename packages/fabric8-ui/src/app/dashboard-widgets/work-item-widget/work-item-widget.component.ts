@@ -17,21 +17,33 @@ import { WorkItemBarchartData } from './work-item-barchart/work-item-barchart-da
 })
 export class WorkItemWidgetComponent implements OnInit {
   @Input() userOwnsSpace: boolean;
+
   private _myWorkItems: ConnectableObservable<WorkItem[]>;
+
   private subscriptions: Subscription[] = [];
+
   myWorkItemsCount: number;
+
   myWorkItemsResolved: number = 0;
+
   myWorkItemsInProgress: number = 0;
+
   myWorkItemsOpen: number = 0;
+
   contextPath: string;
+
   loading: boolean;
 
   LABEL_RESOLVED: string = 'Resolved';
+
   LABEL_IN_PROGRESS: string = 'In Progress';
+
   LABEL_OPEN: string = 'Open';
 
   STATE_RESOLVED: string = 'resolved';
+
   STATE_IN_PROGRESS: string = 'in progress';
+
   STATE_OPEN: string = 'open';
 
   chartConfig: WorkItemBarchartConfig = {

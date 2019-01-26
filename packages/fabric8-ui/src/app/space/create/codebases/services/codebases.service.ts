@@ -9,6 +9,7 @@ import { Codebase } from './codebase';
 
 class Payload<T> {
   data: T;
+
   links: any;
 
   constructor(t: T) {
@@ -19,8 +20,11 @@ class Payload<T> {
 @Injectable()
 export class CodebasesService {
   private readonly headers: HttpHeaders;
+
   private readonly codebasesUrl: string;
+
   private readonly spacesUrl: string;
+
   private nextLink: string = null;
 
   constructor(

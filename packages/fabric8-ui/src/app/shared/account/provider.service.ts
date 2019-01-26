@@ -10,7 +10,9 @@ import { Link } from './link';
 @Injectable()
 export class ProviderService {
   private loginUrl: string;
+
   private linkUrl: string;
+
   private headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
 
   constructor(

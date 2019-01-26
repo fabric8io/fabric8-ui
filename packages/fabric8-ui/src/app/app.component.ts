@@ -32,9 +32,13 @@ import { NotificationsService } from './shared/notifications.service';
 })
 export class AppComponent {
   public featureConfig: FeatureFlagConfig;
+
   public disconnectedStateConfig: EmptyStateConfig;
+
   private lastPageToTryGitHub: string;
+
   private show: boolean;
+
   protected subscriptions: Subscription[] = [];
 
   @ViewChild('connectToGithubModal') connectToGithubModal: TemplateRef<any>;

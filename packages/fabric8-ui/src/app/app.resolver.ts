@@ -5,6 +5,7 @@ import { of as observableOf } from 'rxjs';
 @Injectable()
 export class DataResolver implements Resolve<any> {
   constructor() {}
+
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     return observableOf({ res: 'I am data' });
   }

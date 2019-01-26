@@ -10,12 +10,17 @@ import { Che } from '../services/che';
 })
 export class CodebasesItemHeadingComponent implements OnInit {
   @Input() cheState: Che;
+
   @Input() cveNotify: boolean;
 
   cheErrorMessage: string = 'Your Workspaces failed to load';
+
   cheRunningMessage: string = 'Your Workspaces have loaded successfully';
+
   cheStartingMessage: string = 'Your Workspaces are loading...';
+
   cheFinishedMultiTenantMigrationMessage: string = 'Migration has finished!';
+
   chePerformingMultiTenantMigrationMessage: string =
     'Migrating workspaces to the new version of Che...';
 

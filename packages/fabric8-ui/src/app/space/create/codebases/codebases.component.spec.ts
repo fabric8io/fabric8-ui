@@ -40,7 +40,9 @@ import { GitHubService } from './services/github.service';
 })
 class FakeCodebasesToolbar {
   @Output('onFilterChange') onFilterChange = new EventEmitter();
+
   @Output('onSortChange') onSortChange = new EventEmitter();
+
   @Input() resultsCount: number;
 }
 
@@ -50,6 +52,7 @@ class FakeCodebasesToolbar {
 })
 class FakeCodebasesItemHeading {
   @Input() cheState: Che;
+
   @Input() cveNotify: boolean;
 }
 
@@ -59,8 +62,11 @@ class FakeCodebasesItemHeading {
 })
 class FakeCodebasesItem {
   @Input() cheState: Che;
+
   @Input() codebase: Codebase;
+
   @Input() index: number;
+
   @Input() cveNotify: boolean;
 }
 
@@ -70,7 +76,9 @@ class FakeCodebasesItem {
 })
 class FakeCodebasesItemActions {
   @Input() cheRunning: boolean;
+
   @Input() codebase: Codebase;
+
   @Input() index: number = -1;
 }
 

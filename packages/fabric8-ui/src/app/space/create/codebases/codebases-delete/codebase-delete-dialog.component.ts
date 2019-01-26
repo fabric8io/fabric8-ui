@@ -18,7 +18,9 @@ import { Codebase } from '../services/codebase';
 })
 export class CodebaseDeleteDialogComponent implements OnInit, OnDestroy {
   @Input() codebase: Codebase;
+
   @Input() host: ModalDirective;
+
   @Output() onDelete = new EventEmitter<Codebase>();
 
   constructor() {}

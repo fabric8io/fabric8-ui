@@ -8,23 +8,41 @@ import { NotificationsService } from '../../../app/shared/notifications.service'
 
 export class OAuthConfig {
   public authorizeUri: string;
+
   public clientId: string;
+
   public logoutUri: string;
+
   public issuer: string;
+
   public apiServer: string;
+
   public proxyApiServer: string;
+
   public apiServerProtocol: string;
+
   public wsApiServerProtocol: string;
+
   public apiServerBasePath: string;
+
   public wsApiServerBasePath: string;
+
   public wsApiServer: string;
+
   public scope: string;
+
   public loaded: boolean;
+
   public openshiftConsoleUrl: string;
+
   public witApiUrl: string;
+
   public ssoApiUrl: string;
+
   public forgeApiUrl: string;
+
   public recommenderApiUrl: string;
+
   public buildToolDetectorApiUrl: string;
 
   constructor(data: any) {

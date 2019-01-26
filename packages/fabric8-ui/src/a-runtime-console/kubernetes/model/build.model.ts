@@ -17,19 +17,27 @@ export function sortedKeys(map: Map<String, any>): string[] {
 
 export class Build extends KubernetesSpecResource {
   statusPhase: string;
+
   duration: number;
+
   iconStyle: string;
+
   buildNumber: string;
+
   buildNumberInt: number = 0;
+
   buildConfigName: string;
 
   jenkinsBuildURL: string;
+
   logURL: string;
 
   repositoryInformation: any;
 
   private _pipelineStages: Array<PipelineStage>;
+
   private _serviceUrls: Array<ServiceUrl> = new Array<ServiceUrl>();
+
   private _serviceEnvironmentsMap: Map<string, ServiceEnvironments> = new Map<
     string,
     ServiceEnvironments
@@ -269,12 +277,17 @@ export class Builds extends Array<Build> {}
 
 export class PendingInputAction {
   id: string;
+
   proceedText: string;
+
   message: string;
+
   inputs: any[];
 
   proceedUrl: string;
+
   abortUrl: string;
+
   redirectApprovalUrl: string;
 }
 

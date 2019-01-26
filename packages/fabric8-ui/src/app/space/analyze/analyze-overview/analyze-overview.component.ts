@@ -13,10 +13,15 @@ import { Subscription } from 'rxjs';
 })
 export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription = new Subscription();
+
   private loggedInUser: User;
+
   context: Context;
+
   private space: Space;
+
   private _userOwnsSpace: boolean = false;
+
   private _userIsSpaceAdmin: boolean = false;
 
   constructor(

@@ -40,6 +40,7 @@ export const resourceMenus = [
 })
 export class ResourceHeaderComponent implements OnInit {
   menus: MenuItem[];
+
   current: MenuItem;
 
   constructor(public router: Router, parentLinkFactory: ParentLinkFactory) {

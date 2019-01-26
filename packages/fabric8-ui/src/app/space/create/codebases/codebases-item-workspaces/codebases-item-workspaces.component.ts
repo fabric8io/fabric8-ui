@@ -17,6 +17,7 @@ import { WorkspacesService } from '../services/workspaces.service';
 
 export class WorkspaceCreatedEvent {
   codebase: Codebase;
+
   workspaceName: string;
 }
 
@@ -28,15 +29,23 @@ export class WorkspaceCreatedEvent {
 })
 export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
   @Input() codebase: Codebase;
+
   @Input() index: number = -1;
 
   subscriptions: Subscription[] = [];
+
   workspaceBusy: boolean = false;
+
   workspaceSelected: boolean = false;
+
   workspaceUrl: string = 'default';
+
   workspaces: Workspace[];
+
   workspacesAvailable: boolean = false;
+
   workspacePollSubscription: Subscription;
+
   workspacePollTimer: Observable<any>;
 
   constructor(

@@ -30,42 +30,63 @@ import { TenantService } from '../services/tenant.service';
 })
 export class TenantComponent implements AfterViewInit, OnInit {
   @ViewChild('_templatesRepoBlob') templatesRepoBlobElement: HTMLElement;
+
   @ViewChild('_templatesRepo') templatesRepoElement: ElementRef;
+
   @ViewChild('_templatesRepoDir') templatesRepoDirElement: HTMLElement;
+
   @ViewChild('_boosterGitRef') boosterGitRefElement: HTMLElement;
+
   @ViewChild('_boosterGitRepo') boosterGitRepoElement: HTMLElement;
 
   @ViewChild('tenantForm') profileForm: NgForm;
 
   templatesRepoBlob: string;
+
   templatesRepo: string;
+
   templatesRepoDir: string;
+
   updateTenant: boolean = true;
 
   boosterGitRef: string;
+
   boosterGitRepo: string;
 
   context: Context;
 
   templatesRepoBlobInvalid: boolean = false;
+
   templatesRepoInvalid: boolean = false;
+
   templatesRepoDirInvalid: boolean = false;
 
   boosterGitRefInvalid: boolean = false;
+
   boosterGitRepoInvalid: boolean = false;
 
   loadedFormEmpty: boolean;
 
   gitHubLinked: boolean = false;
+
   imageUrl: string;
+
   loggedInUser: User;
+
   fullName: string;
+
   openShiftLinked: boolean = false;
+
   registrationCompleted: boolean = true;
+
   subscriptions: Subscription[] = [];
+
   token: string;
+
   username: string;
+
   url: string;
+
   private modifiedFromRequestParam: boolean = false;
 
   constructor(

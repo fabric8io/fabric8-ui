@@ -12,16 +12,21 @@ import { PipelinesService } from '../../shared/runtime-console/pipelines.service
 })
 export class AnalyticalReportWidgetComponent implements OnInit {
   buildConfigs: Observable<BuildConfigs>;
+
   buildConfigsCount: number;
 
   currentPipeline: string;
+
   currentPipelineBuilds: Array<Build>;
+
   loading: boolean = true;
+
   pipelines: BuildConfigs;
 
   stackUrl: string;
 
   currentBuild: Build;
+
   stackAnalysisInformation: any = {
     recommendationsLimit: 7,
     showLoader: false,

@@ -11,10 +11,13 @@ import { first, map } from 'rxjs/operators';
 })
 export class RecentSpacesWidget implements OnInit {
   @Input() cardSizeClass: string;
+
   @Input() cardBodySizeClass: string;
 
   readonly userHasSpaces: Subject<boolean> = new ReplaySubject<boolean>(1);
+
   readonly recentSpaces: Observable<Space[]>;
+
   loading: boolean = false;
 
   constructor(

@@ -24,14 +24,19 @@ export enum ViewState {
 })
 export class MySpacesSearchSpacesDialog implements OnDestroy, OnInit {
   @ViewChild('modal') private readonly host: ModalDirective;
+
   @ViewChild('searchField') private readonly searchField: ElementRef;
 
   readonly spaces: Subject<Space[]> = new BehaviorSubject<Space[]>([]);
+
   readonly totalCount: Subject<number> = new BehaviorSubject<number>(0);
+
   readonly viewState: Subject<ViewState> = new BehaviorSubject<ViewState>(ViewState.INIT);
+
   searchTerm: string = '';
 
   private readonly subscriptions: Subscription[] = [];
+
   private pageSize: number = 20;
 
   constructor(private readonly spaceService: SpaceService) {}

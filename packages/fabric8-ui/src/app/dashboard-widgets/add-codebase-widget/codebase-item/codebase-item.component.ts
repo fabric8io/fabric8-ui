@@ -13,6 +13,7 @@ import { GitHubService } from '../../../space/create/codebases/services/github.s
 })
 export class CodebaseItemComponent implements OnInit {
   @Input() codebase: Codebase;
+
   lastUpdated: Observable<string>;
 
   constructor(private readonly githubService: GitHubService) {}

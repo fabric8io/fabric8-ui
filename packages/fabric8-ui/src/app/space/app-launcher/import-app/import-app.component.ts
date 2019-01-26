@@ -15,6 +15,7 @@ type QueryJson = {
 })
 export class ImportAppComponent implements OnDestroy, OnInit {
   subscriptions: Subscription[] = [];
+
   projectName: string;
 
   constructor(

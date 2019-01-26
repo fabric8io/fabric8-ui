@@ -18,10 +18,13 @@ export class SpaceInformation {
   attributes: {
     name: string;
   };
+
   id: string;
+
   links: {
     self: string;
   };
+
   type: string;
 }
 

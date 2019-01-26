@@ -6,10 +6,15 @@ import { Fabric8UIConfig } from '../shared/config/fabric8-ui-config';
 @Injectable()
 export class BrandingService {
   private isFabric8: boolean;
+
   private _logo: string;
+
   private _backgroundClass: string;
+
   private _description: string;
+
   private _name: string;
+
   private _moreInfoLink: string;
 
   constructor(private fabric8UIConfig: Fabric8UIConfig) {

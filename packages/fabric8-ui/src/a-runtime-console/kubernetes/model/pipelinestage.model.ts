@@ -3,15 +3,25 @@ import { pathJoin } from './utils';
 
 export class PipelineStage {
   id: string;
+
   name: string;
+
   status: string;
+
   jenkinsInputURL: string;
+
   startTimeMillis: number;
+
   durationMillis: number;
+
   pauseDurationMillis: number;
+
   stageFlowNodes: any[];
+
   serviceUrlMap: Map<String, String>;
+
   serviceUrl: string;
+
   environmentName: string;
 
   constructor(data, public build: Build) {

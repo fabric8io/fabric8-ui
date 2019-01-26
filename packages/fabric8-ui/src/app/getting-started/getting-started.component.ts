@@ -13,9 +13,13 @@ import { ProviderService } from '../shared/account/provider.service';
 })
 export class GettingStartedComponent implements OnDestroy, OnInit {
   loggedInUser: User;
+
   openShiftLinked: boolean = false;
+
   subscriptions: Subscription[] = [];
+
   username: string;
+
   errorConnecting: boolean = false;
 
   constructor(

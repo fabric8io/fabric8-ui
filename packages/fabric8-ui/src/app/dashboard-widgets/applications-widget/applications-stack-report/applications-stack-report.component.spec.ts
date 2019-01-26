@@ -11,8 +11,11 @@ import { ApplicationsStackReportComponent } from './applications-stack-report.co
 })
 class FakeStackDetailsComponent {
   @Input() buildNumber: number;
+
   @Input() appName: string;
+
   @Input() repoInfo: any;
+
   @Input() stack: boolean;
 }
 

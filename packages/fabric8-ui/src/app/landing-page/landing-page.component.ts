@@ -14,6 +14,7 @@ import { LoginService } from '../shared/login.service';
 })
 export class LandingPageComponent implements OnInit {
   isLoggedIn: boolean = false;
+
   constructor(
     private broadcaster: Broadcaster,
     private loginService: LoginService,

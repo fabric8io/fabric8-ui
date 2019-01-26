@@ -7,7 +7,6 @@
     "eqeqeq": "off",
     "guard-for-in": "off",
     "global-require": "off",
-    "lines-between-class-members": "off",
     "new-cap": "off",
     "no-array-constructor": "off",
     "no-bitwise": "off",

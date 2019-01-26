@@ -34,8 +34,11 @@ export interface UserServiceNamespace {
 @Injectable()
 export class PipelinesService {
   private readonly headers: HttpHeaders;
+
   private readonly apiUrl: string;
+
   private loggedIn: boolean = false;
+
   private openshiftConsoleUrl: Observable<string>;
 
   constructor(

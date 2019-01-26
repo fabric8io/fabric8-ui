@@ -7,6 +7,7 @@ import { first } from 'rxjs/operators';
 @Injectable()
 export class AuthUserResolve implements Resolve<any> {
   constructor(private userService: UserService) {}
+
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot,

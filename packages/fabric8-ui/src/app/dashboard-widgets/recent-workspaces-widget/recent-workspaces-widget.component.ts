@@ -19,16 +19,27 @@ export class ExtCodebase extends Codebase {
 // Adds an extra codebases property
 export class ExtSpace implements Space {
   codebases: ExtCodebase[];
+
   name: string;
+
   path: String;
+
   privateSpace?: boolean;
+
   teams: Team[];
+
   defaultTeam: Team;
+
   id: string;
+
   attributes: SpaceAttributes;
+
   type: string;
+
   links: SpaceLink;
+
   relationships: SpaceRelationships;
+
   relationalData?: RelationalData;
 }
 
@@ -40,11 +51,18 @@ export class ExtSpace implements Space {
 })
 export class RecentWorkspacesWidgetComponent implements OnDestroy, OnInit {
   codebases: Codebase[] = [];
+
   contextPath: Observable<string>;
-  limit: number = 5; // the number of workspaces to display
+
+  limit: number = 5;
+
+  // the number of workspaces to display
   loading: boolean = false;
+
   recent: ExtSpace[];
+
   subscriptions: Subscription[] = [];
+
   _workspaces: Workspace[] = [];
 
   constructor(

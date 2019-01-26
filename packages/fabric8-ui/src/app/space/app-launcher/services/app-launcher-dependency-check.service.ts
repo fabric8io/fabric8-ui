@@ -2,20 +2,19 @@ import { Injectable, Injector } from '@angular/core';
 import { Context } from 'ngx-fabric8-wit';
 import { DependencyCheck, DependencyCheckService } from 'ngx-launcher';
 import { Observable, of as observableOf } from 'rxjs';
-import { ContextService } from '../../../shared/context.service';
 import { of } from 'rxjs';
-import { PipelinesService } from "../../../shared/runtime-console/pipelines.service";
-import { BuildConfig } from "../../../../a-runtime-console";
-import {map} from "rxjs/operators";
+import { map } from 'rxjs/operators';
+import { ContextService } from '../../../shared/context.service';
+import { PipelinesService } from '../../../shared/runtime-console/pipelines.service';
+import { BuildConfig } from '../../../../a-runtime-console';
 
 @Injectable()
 export class AppLauncherDependencyCheckService implements DependencyCheckService {
   private context: Context;
+
   private pipelinesService: PipelinesService;
-  constructor(
-    private contextService: ContextService,
-    private injector: Injector,
-  ) {
+
+  constructor(private contextService: ContextService, private injector: Injector) {
     this.contextService.current.subscribe((context) => (this.context = context));
   }
 
@@ -44,10 +43,12 @@ export class AppLauncherDependencyCheckService implements DependencyCheckService
     if (!this.pipelinesService) {
       this.pipelinesService = this.injector.get(PipelinesService);
     }
-    return this.pipelinesService.current.pipe(map((buildConfigs: BuildConfig[]) => {
-      if (buildConfigs) {
-        return buildConfigs.map((bc) =>  ({ attributes: {name: bc.name}}));
-      }
-    }))
+    return this.pipelinesService.current.pipe(
+      map((buildConfigs: BuildConfig[]) => {
+        if (buildConfigs) {
+          return buildConfigs.map((bc) => ({ attributes: { name: bc.name } }));
+        }
+      }),
+    );
   }
 }

@@ -8,5 +8,6 @@ import { RedirectStatusData } from '../../../models/redirect-data';
 })
 export class StatusComponent {
   @Input() status: 'success' | 'fail';
+
   @Input() data: RedirectStatusData;
 }

@@ -17,7 +17,9 @@ import { AreasToolbarComponent } from './areas-toolbar.component';
 })
 class HostComponent {
   public resultsCount = 0;
+
   public filterChange($event: FilterEvent) {}
+
   public sortChange($event: SortEvent) {}
 }
 
@@ -27,8 +29,11 @@ class HostComponent {
 })
 class FakePfngToolbarComponent {
   @Input() config: any;
+
   @Input() viewTemplate: any;
+
   @Output() onFilterChange = new EventEmitter<FilterEvent>();
+
   @Output() onSortChange = new EventEmitter<SortEvent>();
 }
 

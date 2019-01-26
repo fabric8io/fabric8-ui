@@ -35,25 +35,45 @@ import { SpacesType } from './my-spaces-toolbar/my-spaces-toolbar.component';
 })
 export class MySpacesComponent implements OnDestroy, OnInit {
   listConfig: ListConfig;
+
   resultsCount: number = 0;
 
   @ViewChild(MySpacesSearchSpacesDialog) private searchSpacesDialog: MySpacesSearchSpacesDialog;
 
   private readonly pageName = 'myspaces';
-  private _spaces: Space[] = []; // current selection of mySpaces | sharedSpaces
-  private displayedSpaces: Space[] = []; // spaces visible in the UI after filters & sorting
-  private mySpaces: Space[] = []; // spaces owned by the user
-  private sharedSpaces: Space[] = []; // spaces where the user is a collaborator
+
+  private _spaces: Space[] = [];
+
+  // current selection of mySpaces | sharedSpaces
+  private displayedSpaces: Space[] = [];
+
+  // spaces visible in the UI after filters & sorting
+  private mySpaces: Space[] = [];
+
+  // spaces owned by the user
+  private sharedSpaces: Space[] = [];
+
+  // spaces where the user is a collaborator
   private appliedFilters: Filter[];
+
   private spacesCount: Observable<number>;
+
   private context: Context;
+
   private currentSortField: SortField;
+
   private mySpacesEmptyStateConfig: EmptyStateConfig;
+
   private sharedSpacesEmptyStateConfig: EmptyStateConfig;
+
   private isAscendingSort: boolean = true;
+
   private loggedInUser: User;
+
   private modalRef: BsModalRef;
+
   private spaceToDelete: Space;
+
   private subscriptions: Subscription[] = [];
 
   constructor(

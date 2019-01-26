@@ -20,7 +20,9 @@ import { BuildConfigStore } from '../../../store/buildconfig.store';
 })
 export class PipelinesHistoryPage implements OnInit {
   private readonly pipelines: Observable<BuildConfigs>;
+
   private readonly pipeline: Observable<BuildConfig>;
+
   private readonly loading: Observable<boolean>;
 
   constructor(

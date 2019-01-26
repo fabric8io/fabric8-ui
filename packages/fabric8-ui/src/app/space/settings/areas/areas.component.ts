@@ -33,23 +33,39 @@ export interface Node {
 })
 export class AreasComponent implements OnInit, OnDestroy {
   @ViewChild(CreateAreaDialogComponent) createAreaDialog: CreateAreaDialogComponent;
+
   @ViewChild(ModalDirective) modal: ModalDirective;
 
-  allAreas: ExtArea[]; // flat array obtained directly from API
-  filteredAreas: ExtArea[]; // flat array filtered and sorted
+  allAreas: ExtArea[];
+
+  // flat array obtained directly from API
+  filteredAreas: ExtArea[];
+
+  // flat array filtered and sorted
   treeAreas: ExtArea[]; // transformed flat array into tree list
 
   actionConfig: ActionConfig;
+
   appliedFilters: Filter[];
+
   context: Context;
+
   currentSortField: SortField;
+
   defaultArea: string;
+
   emptyStateConfig: EmptyStateConfig;
+
   isAscendingSort: boolean = true;
+
   selectedAreaId: string;
+
   subscriptions: Subscription = new Subscription();
+
   resultsCount: number = 0;
+
   treeListConfig: TreeListConfig;
+
   userOwnsSpace: boolean;
 
   constructor(

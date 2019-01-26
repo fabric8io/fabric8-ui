@@ -17,16 +17,25 @@ export class ConnectedAccountsComponent implements OnDestroy, OnInit {
   context: Context;
 
   gitHubLinked: boolean = false;
+
   gitHubUserName: string;
+
   gitHubError: string;
+
   openShiftLinked: boolean = false;
+
   openShiftUserName: string;
+
   openShiftError: string;
 
   userName: string;
+
   contextUserName: string;
+
   cluster: string;
+
   consoleUrl: string;
+
   clusterName: string;
 
   private readonly subscriptions: Subscription[] = [];

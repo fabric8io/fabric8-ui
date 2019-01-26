@@ -14,9 +14,13 @@ import { Subscription } from 'rxjs';
 })
 export class SpacesComponent implements OnDestroy, OnInit {
   context: Context;
+
   loggedInUser: User;
+
   subscriptions: Subscription[] = [];
+
   spaces: Space[] = [];
+
   loading: boolean = false;
 
   private pageSize: number = 20;

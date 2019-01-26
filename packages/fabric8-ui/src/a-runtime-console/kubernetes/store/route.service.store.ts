@@ -8,6 +8,7 @@ import { ServiceStore } from './service.store';
 @Injectable()
 export class RouteServiceStore {
   public readonly list: Observable<Services>;
+
   public readonly loading: Observable<boolean>;
 
   constructor(public serviceStore: ServiceStore, public routeStore: RouteStore) {

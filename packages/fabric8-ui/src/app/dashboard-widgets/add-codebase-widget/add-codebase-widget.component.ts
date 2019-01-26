@@ -21,12 +21,17 @@ import { CodebasesService } from '../../space/create/codebases/services/codebase
 })
 export class AddCodebaseWidgetComponent implements OnInit, OnDestroy {
   codebases: Codebase[] = [];
+
   context: Context;
+
   contextPath: string;
+
   loading: boolean = true;
+
   subscriptions: Subscription[] = [];
 
   @Input() userOwnsSpace: boolean;
+
   @Output() addToSpace = new EventEmitter();
 
   constructor(

@@ -25,10 +25,13 @@ import {
 })
 export class CreateWorkItemWidgetComponent implements OnInit {
   @Input() userOwnsSpace: boolean;
+
   @Input() loggedInUser: User;
+
   @Input() currentSpace: Space;
 
   private _myWorkItems: Observable<WorkItem[]>;
+
   contextPath: Observable<string>;
 
   constructor(

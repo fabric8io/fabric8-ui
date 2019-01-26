@@ -9,8 +9,11 @@ import { FeatureTogglesService } from 'ngx-feature-flag';
 @Injectable()
 export class AppLauncherMissionRuntimeService extends MissionRuntimeService {
   private headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
+
   private END_POINT: string = '';
+
   private API_BASE: string = 'booster-catalog/';
+
   private ORIGIN: string = '';
 
   constructor(

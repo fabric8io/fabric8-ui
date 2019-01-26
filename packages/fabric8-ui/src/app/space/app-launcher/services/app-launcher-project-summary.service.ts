@@ -12,9 +12,13 @@ export class AppLauncherProjectSummaryService implements ProjectSummaryService {
     'Content-Type': 'application/x-www-form-urlencoded',
     'X-Git-Provider': 'GitHub',
   });
+
   private END_POINT: string = '';
+
   private API_BASE_CREATE: string = 'osio/launch';
+
   private API_BASE_IMPORT: string = 'osio/import';
+
   private ORIGIN: string = '';
 
   constructor(

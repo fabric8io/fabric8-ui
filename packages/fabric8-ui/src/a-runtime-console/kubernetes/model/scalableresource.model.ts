@@ -2,9 +2,13 @@ import { KubernetesSpecResource } from './kuberentesspecresource.model';
 
 export class ScalableResource extends KubernetesSpecResource {
   replicas: number;
+
   availableReplicas: number;
+
   unavailableReplicas: number;
+
   updatedReplicas: number;
+
   statusReplicas: number;
 
   /**

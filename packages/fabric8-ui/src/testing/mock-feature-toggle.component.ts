@@ -8,6 +8,8 @@ import { Component, Input, TemplateRef } from '@angular/core';
 })
 export class MockFeatureToggleComponent {
   @Input() featureName: string;
+
   @Input() userLevel: TemplateRef<any>;
+
   @Input() defaultLevel: TemplateRef<any>;
 }

@@ -16,7 +16,9 @@ import { ReplicationControllerStore } from './replicationcontroller.store';
 @Injectable()
 export class CompositeReplicaSetStore {
   public list: Observable<ReplicaSets>;
+
   public resource: Observable<ReplicaSet>;
+
   public loading: Observable<boolean>;
 
   constructor(

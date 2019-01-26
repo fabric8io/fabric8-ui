@@ -24,14 +24,19 @@ export class CodebasesToolbarComponent implements OnChanges, OnInit {
   @Input() resultsCount: number = 0;
 
   @Output('onFilterChange') onFilterChange = new EventEmitter();
+
   @Output('onSortChange') onSortChange = new EventEmitter();
+
   @Output() addToSpace = new EventEmitter();
 
   @ViewChild('addCodebaseTemplate') addCodebaseTemplate: TemplateRef<any>;
 
   filterConfig: FilterConfig;
+
   isAscendingSort: boolean = true;
+
   sortConfig: SortConfig;
+
   toolbarConfig: ToolbarConfig;
 
   constructor() {}

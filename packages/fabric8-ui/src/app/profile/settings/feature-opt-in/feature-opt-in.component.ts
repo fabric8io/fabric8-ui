@@ -31,7 +31,9 @@ export class FeatureOptInComponent implements OnInit {
   @ViewChild(ListComponent) listComponent: ListComponent;
 
   featureLevel: string;
+
   listConfig: ListConfig;
+
   state: boolean;
 
   private items: FeatureLevel[];

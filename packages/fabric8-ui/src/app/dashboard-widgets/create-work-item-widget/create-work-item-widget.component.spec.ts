@@ -29,10 +29,12 @@ import { CreateWorkItemWidgetComponent } from './create-work-item-widget.compone
 })
 class HostComponent {
   userOwnsSpace: boolean;
+
   space: Space = {
     attributes: {},
     id: 'some-space-id',
   } as Space;
+
   loggedInUser: User = {
     id: 'fakeId',
     type: 'fakeType',

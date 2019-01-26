@@ -23,17 +23,25 @@ import { Subscription } from 'rxjs';
 })
 export class FeatureFooterComponent implements OnInit, OnDestroy, OnChanges {
   @Input() featurePageConfig: FeatureFlagConfig;
+
   @Input() show: boolean;
+
   @ViewChild(TooltipDirective) tooltip: TooltipDirective;
 
   private userSubscription: Subscription;
+
   userLevel: string = 'released';
+
   noFeaturesInBeta: boolean = true;
+
   noFeaturesInExperimental: boolean = true;
+
   noFeaturesInInternal: boolean = true;
 
   betaFeatureText = '';
+
   experimentalFeatureText = '';
+
   internalFeatureText = '';
 
   constructor(private _eref: ElementRef) {}

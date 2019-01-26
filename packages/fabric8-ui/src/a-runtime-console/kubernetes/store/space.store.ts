@@ -21,8 +21,11 @@ const fabric8SpacesName = 'fabric8-spaces';
 
 class SpaceConfigWatcher {
   protected spaceConfigSubject: BehaviorSubject<SpaceConfig> = new BehaviorSubject(null);
+
   protected spaceConfig: SpaceConfig;
+
   protected subscription: Subscription;
+
   public notified: boolean;
 
   constructor(
@@ -77,12 +80,17 @@ class SpaceConfigWatcher {
 @Injectable()
 export class SpaceStore {
   public list: Observable<Spaces>;
+
   public resource: Observable<Space>;
+
   private _idSubject: BehaviorSubject<string> = new BehaviorSubject('');
+
   protected _loading: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   private spaceConfigWatchers: Map<String, SpaceConfigWatcher>;
+
   private spaceConfigs: Map<String, SpaceConfig>;
+
   protected spaceConfigsSubject: BehaviorSubject<Map<String, SpaceConfig>>;
 
   constructor(

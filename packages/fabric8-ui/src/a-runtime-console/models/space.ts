@@ -16,7 +16,10 @@ export interface DevSpace {
 
 export class SpaceAttributes {
   name: string;
+
   'updated-at': string;
+
   'created-at': string;
+
   version: number;
 }

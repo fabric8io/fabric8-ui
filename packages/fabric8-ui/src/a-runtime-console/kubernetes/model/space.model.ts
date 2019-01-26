@@ -31,10 +31,15 @@ export class LabelSpace implements Entity {
 
 export class Space {
   id: string;
+
   name: string;
+
   environments: Environment[] = [];
+
   labelSpaces: LabelSpace[] = [];
+
   jenkinsNamespace: Namespace;
+
   cheNamespace: Namespace;
 
   /**

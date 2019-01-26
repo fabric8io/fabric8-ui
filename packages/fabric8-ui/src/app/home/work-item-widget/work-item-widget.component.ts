@@ -14,12 +14,19 @@ import { filterOutClosedItems, WorkItemsData } from '../../shared/workitem-utils
 })
 export class WorkItemWidgetComponent implements OnDestroy, OnInit {
   currentSpace: Space;
+
   currentSpaceId: string = 'default';
+
   loading: boolean = false;
+
   loggedInUser: User;
+
   recentSpaces: Space[] = [];
+
   recentSpaceIndex: number = 0;
+
   subscriptions: Subscription[] = [];
+
   workItems: WorkItem[] = [];
 
   constructor(

@@ -15,13 +15,17 @@ import { pathJoin } from '../../../model/utils';
 })
 export class InputActionDialog implements OnDestroy {
   build: Build = new Build();
+
   stage: PipelineStage = null;
+
   inputAction: PendingInputAction = new PendingInputAction();
 
   @ViewChild('inputModal') modal: any;
 
   private _jenkinsSubscription: Subscription;
+
   private _jenkinsTimerSubscription: Subscription;
+
   private jenkinsStatus: any;
 
   constructor(

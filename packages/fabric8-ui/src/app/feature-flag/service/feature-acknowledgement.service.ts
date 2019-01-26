@@ -18,7 +18,9 @@ import {
 @Injectable()
 export class FeatureAcknowledgementService extends GettingStartedService implements OnDestroy {
   protected subscriptions: Subscription[] = [];
+
   showIconChanged = new EventEmitter();
+
   constructor(
     protected auth: AuthenticationService,
     protected http: HttpClient,

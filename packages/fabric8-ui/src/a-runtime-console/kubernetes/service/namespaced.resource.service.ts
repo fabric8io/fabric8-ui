@@ -11,7 +11,9 @@ export abstract class NamespacedResourceService<
   L extends Array<T>
 > extends KubernetesService<T, L> {
   private namespaceSubscription: Subscription;
+
   private _namespace: string;
+
   protected _serviceUrl: string;
 
   constructor(

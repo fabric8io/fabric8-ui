@@ -23,6 +23,7 @@ export class ApplicationsStackReportComponent implements DoCheck, OnInit {
   @ViewChild('stackReport') stackReport: ElementRef;
 
   private _pipelineStages: PipelineStage[];
+
   private prevStatusPhase: string;
 
   constructor() {}

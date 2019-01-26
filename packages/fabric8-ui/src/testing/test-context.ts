@@ -31,9 +31,13 @@ import { By } from '@angular/platform-browser';
 
 export class TestContext<T, H> {
   fixture: ComponentFixture<H>;
+
   hostComponent: H;
+
   tested: DebugElement;
+
   testedDirective: T;
+
   testedElement: any;
 
   detectChanges() {

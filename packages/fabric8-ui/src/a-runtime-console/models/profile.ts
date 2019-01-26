@@ -2,9 +2,13 @@
 
 export class Profile {
   fullName: string;
+
   imageURL: string;
+
   bio?: string;
+
   username?: string;
+
   url?: string;
   // emails?: string[];
   // primaryEmail?: string;

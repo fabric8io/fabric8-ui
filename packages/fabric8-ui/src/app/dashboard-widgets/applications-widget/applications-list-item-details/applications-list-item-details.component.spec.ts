@@ -12,6 +12,7 @@ import { ApplicationsListItemDetailsComponent } from './applications-list-item-d
 })
 class FakeApplicationsPipelineComponent {
   @Input() stage: PipelineStage;
+
   @Input() showLine: boolean;
 }
 

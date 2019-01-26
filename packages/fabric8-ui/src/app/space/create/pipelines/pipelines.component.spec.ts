@@ -22,6 +22,7 @@ import { PipelinesService } from './services/pipelines.service';
 })
 class FakePipelinesListComponent {
   @Input() loading: boolean;
+
   @Input() pipelines: BuildConfig[];
 }
 

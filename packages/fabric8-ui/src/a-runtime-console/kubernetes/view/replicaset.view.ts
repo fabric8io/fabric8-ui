@@ -3,17 +3,29 @@ import { Service, Services } from '../model/service.model';
 
 export class ReplicaSetView {
   public readonly replicaset: ReplicaSet;
+
   public readonly service: Service;
+
   public readonly id: string;
+
   public readonly name: string;
+
   public readonly icon: string;
+
   public readonly description: string;
+
   public readonly exposeUrl: string;
+
   public readonly replicas: number;
+
   public readonly availableReplicas: number;
+
   public readonly labels: Map<string, string>;
+
   public readonly images: Array<String>;
+
   public readonly annotations: Map<string, string>;
+
   public readonly creationTimestamp: any;
 
   constructor(replicaset: ReplicaSet, service: Service) {

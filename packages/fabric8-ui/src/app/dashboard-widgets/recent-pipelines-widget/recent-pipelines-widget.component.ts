@@ -14,8 +14,11 @@ import { PipelinesService } from '../../space/create/pipelines/services/pipeline
 })
 export class RecentPipelinesWidgetComponent implements OnInit, OnDestroy {
   contextPath: string;
+
   buildConfigs: BuildConfigs;
+
   buildConfigsCount: number;
+
   loading: boolean = false;
 
   private subscriptions: Subscription[] = [];

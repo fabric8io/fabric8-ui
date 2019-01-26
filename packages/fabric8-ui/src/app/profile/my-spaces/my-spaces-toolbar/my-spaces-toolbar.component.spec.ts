@@ -17,7 +17,9 @@ import { MySpacesToolbarComponent } from './my-spaces-toolbar.component';
 })
 class TestHostComponent {
   public resultsCount: number = 0;
+
   public filterChange(event: FilterEvent): void {}
+
   public sortChange(event: SortEvent): void {}
 }
 
@@ -27,9 +29,13 @@ class TestHostComponent {
 })
 class FakePfngToolbarComponent {
   @Input() config: any;
+
   @Input() actionTemplate: any;
+
   @Input() viewTemplate: any;
+
   @Output() onFilterChange = new EventEmitter<FilterEvent>();
+
   @Output() onSortChange = new EventEmitter<SortEvent>();
 }
 

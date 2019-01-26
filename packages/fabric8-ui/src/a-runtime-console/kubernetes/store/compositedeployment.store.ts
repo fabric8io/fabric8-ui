@@ -13,7 +13,9 @@ import { DeploymentConfigStore } from './deploymentconfig.store';
 @Injectable()
 export class CompositeDeploymentStore {
   public list: Observable<Deployments>;
+
   public resource: Observable<Deployment>;
+
   public loading: Observable<boolean>;
 
   constructor(

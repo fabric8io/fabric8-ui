@@ -10,6 +10,7 @@ import { RecentData, RecentUtils } from './recent-utils';
 @Injectable()
 export class SpacesService extends RecentUtils<Space> implements Spaces {
   private _current: Observable<Space>;
+
   private subscriptions: Subscription[] = [];
 
   constructor(

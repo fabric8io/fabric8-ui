@@ -17,18 +17,31 @@ import { TenantService } from '../services/tenant.service';
 })
 export class CleanupComponent implements OnInit, OnDestroy {
   spaces: Space[] = [];
+
   contextSubscription: Subscription;
+
   userName: string;
+
   contextUserName: string;
+
   tenantResult: string;
+
   listConfig: ListConfig;
+
   showNotification: boolean = true;
+
   notificationClass: string;
+
   notificationIcon: string;
+
   notificationText: string;
+
   notificationTitle: string;
+
   tenantIcon: string;
+
   tenantError: string;
+
   tenantErrorExpanded: boolean = false;
 
   cleanupStatus: string = 'notstarted';
@@ -74,6 +87,7 @@ export class CleanupComponent implements OnInit, OnDestroy {
   confirmErase(): void {
     this.confirmCleanup.open();
   }
+
   confirm(): void {
     this.confirmCleanup.close();
     this.tenantError = '';

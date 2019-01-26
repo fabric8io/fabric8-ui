@@ -16,6 +16,7 @@ import { BuildConfigStore } from '../../../store/buildconfig.store';
 })
 export class PipelinesListPage implements OnInit {
   private readonly pipelines: Observable<BuildConfigs>;
+
   private readonly loading: Observable<boolean>;
 
   constructor(

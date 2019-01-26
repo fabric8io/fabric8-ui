@@ -45,10 +45,15 @@ interface RawContext {
 @Injectable()
 export class ContextService extends RecentUtils<Context> implements Contexts {
   readonly RESERVED_WORDS: string[] = [];
+
   private _current: Subject<Context> = new ReplaySubject<Context>(1);
+
   private _default: ConnectableObservable<Context>;
+
   private _currentUser: string;
+
   private _currentContextUser: string;
+
   private subscriptions: Subscription[] = [];
 
   constructor(

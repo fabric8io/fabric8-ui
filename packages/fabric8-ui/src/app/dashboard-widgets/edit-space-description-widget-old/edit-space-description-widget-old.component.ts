@@ -20,6 +20,7 @@ export class EditSpaceDescriptionWidgetOldComponent implements OnInit {
   private _descriptionUpdater: Subject<string> = new Subject();
 
   private loggedInUser: User;
+
   @ViewChild('description') description: any;
 
   private isEditing: boolean = false;

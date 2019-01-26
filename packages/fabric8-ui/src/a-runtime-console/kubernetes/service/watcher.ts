@@ -8,11 +8,17 @@ import { PollerFactory } from './poller-factory.service';
 
 export class Watcher<L> {
   protected ws: $WebSocket;
+
   protected serviceUrl: String;
+
   protected _dataStream: BehaviorSubject<any> = new BehaviorSubject(null);
+
   protected subscription: Subscription;
+
   protected retries = 0;
+
   protected connectTime = new Date().getTime();
+
   protected poller: Poller<L>;
 
   constructor(

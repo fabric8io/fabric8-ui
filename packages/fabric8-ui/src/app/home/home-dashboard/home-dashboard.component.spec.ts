@@ -30,6 +30,7 @@ class MockEmptyState {}
 })
 class MockRecentSpaces {
   @Input() cardSizeClass: string;
+
   @Input() cardBodySizeClass: string;
 }
 

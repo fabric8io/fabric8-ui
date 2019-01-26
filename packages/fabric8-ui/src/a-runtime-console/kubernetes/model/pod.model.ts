@@ -2,6 +2,7 @@ import { KubernetesSpecResource } from './kuberentesspecresource.model';
 
 export class Pod extends KubernetesSpecResource {
   public images: Array<string>;
+
   public phase: string;
 
   public setResource(resource) {

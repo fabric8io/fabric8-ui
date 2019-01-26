@@ -11,12 +11,16 @@ import { HttpClient } from '@angular/common/http';
 @Injectable()
 export class LoginService {
   static readonly REDIRECT_URL_KEY = 'redirectUrl';
+
   static readonly DEFAULT_URL = '/_home';
+
   // URLs that the redirect should ignore
   static readonly BANNED_REDIRECT_URLS = ['/'];
+
   static readonly LOGIN_URL = '/';
 
   private window: Window;
+
   private authUrl: string; // URL to web api
 
   public openShiftToken: string;

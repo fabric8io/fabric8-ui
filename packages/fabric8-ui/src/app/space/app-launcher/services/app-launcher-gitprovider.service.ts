@@ -12,8 +12,11 @@ import { FABRIC8_BUILD_TOOL_DETECTOR_API_URL } from './../../../shared/runtime-c
 @Injectable()
 export class AppLauncherGitproviderService implements GitProviderService {
   private END_POINT: string = '';
+
   private API_BASE: string = 'services/git/';
+
   private PROVIDER: string = 'GitHub';
+
   private headers: HttpHeaders = new HttpHeaders({
     'Content-Type': 'application/json',
     'X-App': 'osio',
@@ -21,6 +24,7 @@ export class AppLauncherGitproviderService implements GitProviderService {
   });
 
   private gitHubUserLogin: string;
+
   private repositories: object = {};
 
   constructor(

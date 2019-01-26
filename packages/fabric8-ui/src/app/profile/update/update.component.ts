@@ -37,34 +37,54 @@ export class UpdateComponent implements OnInit, OnDestroy {
 
   @ViewChild('profileForm')
   profileForm: NgForm;
+
   @ViewChild('advancedForm')
   advancedForm: NgForm;
 
   authGitHub: boolean = false;
+
   authOpenShift: boolean = false;
+
   bio: string;
+
   company: string;
+
   companyInvalid: boolean = false;
+
   context: Context;
+
   email: string;
+
   emailPrivate: boolean = true;
+
   emailVerified: boolean;
+
   emailInvalid: boolean = false;
+
   imageUrl: string;
+
   imageUrlInvalid: boolean = false;
 
   fullName: string;
+
   fullNameInvalid: boolean = false;
 
   subscriptions: Subscription[] = [];
+
   token: string;
+
   tokenPanelOpen: boolean = false;
+
   updateTenantStatus: TenantUpdateStatus = TenantUpdateStatus.NoAction;
+
   username: string;
 
   url: string;
+
   urlInvalid: boolean = false;
+
   selectedTab: number = 1;
+
   bioInvalid: boolean = false;
 
   constructor(

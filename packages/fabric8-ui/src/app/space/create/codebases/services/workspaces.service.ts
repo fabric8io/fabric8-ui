@@ -14,6 +14,7 @@ interface WorkspacesResponse {
 @Injectable()
 export class WorkspacesService {
   private readonly headers: HttpHeaders;
+
   private readonly workspacesUrl: string;
 
   constructor(

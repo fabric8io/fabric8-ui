@@ -4,18 +4,31 @@ import { Service, Services } from '../model/service.model';
 
 export class DeploymentView {
   public readonly deployment: Deployment;
+
   public readonly service: Service;
+
   public readonly id: string;
+
   public readonly name: string;
+
   public readonly namespace: string;
+
   public readonly version: string;
+
   public readonly icon: string;
+
   public readonly description: string;
+
   public readonly exposeUrl: string;
+
   public readonly replicas: number;
+
   public readonly statusReplicas: number;
+
   public readonly availableReplicas: number;
+
   public readonly unavailableReplicas: number;
+
   public readonly updatedReplicas: number;
 
   /**
@@ -32,9 +45,13 @@ export class DeploymentView {
    * If there are no running, starting or terminating pods
    */
   public readonly emptyReplicas: boolean;
+
   public readonly labels: Map<string, string>;
+
   public readonly images: Array<String>;
+
   public readonly annotations: Map<string, string>;
+
   public readonly creationTimestamp: any;
 
   constructor(deployment: Deployment, service: Service) {

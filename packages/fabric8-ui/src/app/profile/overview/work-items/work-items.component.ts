@@ -16,11 +16,17 @@ import { filterOutClosedItems, WorkItemsData } from '../../../shared/workitem-ut
 })
 export class WorkItemsComponent implements OnDestroy, OnInit {
   context: Context;
+
   currentSpace: Space;
+
   currentSpaceId: string = 'default';
+
   subscriptions: Subscription[] = [];
+
   spaces: Space[] = [];
+
   workItems: WorkItem[] = [];
+
   viewingOwnAccount: Boolean;
 
   constructor(

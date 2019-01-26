@@ -23,6 +23,7 @@ export class ProfileService {
   private headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
 
   private profileUrl: string;
+
   private _profile: ConnectableObservable<ExtProfile>;
 
   constructor(

@@ -17,7 +17,9 @@ export class DevNamespaceScope implements INamespaceScope {
   public namespace: Observable<string>;
 
   private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
   protected userServicesUrl: string;
+
   private currentNamespaceValue: string;
 
   constructor(

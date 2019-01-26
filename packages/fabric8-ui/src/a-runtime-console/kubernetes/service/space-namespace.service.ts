@@ -9,6 +9,7 @@ import { SpaceNamespace } from '../model/space-namespace';
 @Injectable()
 export class SpaceNamespaceService implements SpaceNamespace {
   private _namespaceSpaceSubject = new BehaviorSubject('');
+
   private _labelSpaceSubject = new BehaviorSubject('');
 
   get namespaceSpace(): Observable<string> {

@@ -2,8 +2,11 @@ import { User } from './user';
 
 export class Comment {
   id: string;
+
   type: string;
+
   attributes: CommentAttributes;
+
   relationships: {
     'created-by': {
       data: {
@@ -12,11 +15,13 @@ export class Comment {
       };
     };
   };
+
   relationalData?: RelationalData;
 }
 
 export class CommentAttributes {
   body: string;
+
   'created-at': string;
 }
 

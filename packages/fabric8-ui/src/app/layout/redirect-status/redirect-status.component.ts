@@ -30,6 +30,7 @@ export class RedirectStatusComponent implements OnInit {
   ]);
 
   redirectStatus: string;
+
   redirectData: RedirectStatusData;
 
   constructor(private route: ActivatedRoute) {}

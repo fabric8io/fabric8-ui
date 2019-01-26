@@ -23,15 +23,21 @@ import { PipelinesService } from '../../shared/runtime-console/pipelines.service
 })
 export class ApplicationsWidgetComponent implements OnDestroy, OnInit {
   @Input() userOwnsSpace: boolean;
+
   @Output() addToSpace = new EventEmitter();
 
   contextPath: Observable<string>;
+
   currentSpace: Space;
+
   loading: boolean = true;
+
   loggedInUser: User;
 
   buildConfigs: BuildConfig[];
+
   runBuildConfigs: BuildConfig[] = [];
+
   stageBuildConfigs: BuildConfig[] = [];
 
   private subscriptions: Subscription[] = [];

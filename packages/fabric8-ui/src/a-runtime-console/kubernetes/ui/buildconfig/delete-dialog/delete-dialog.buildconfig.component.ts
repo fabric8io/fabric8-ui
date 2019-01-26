@@ -10,6 +10,7 @@ import { BuildConfigStore } from '../../../store/buildconfig.store';
 })
 export class BuildConfigDeleteDialog {
   buildconfig: BuildConfig = new BuildConfig();
+
   modal: any;
 
   constructor(
