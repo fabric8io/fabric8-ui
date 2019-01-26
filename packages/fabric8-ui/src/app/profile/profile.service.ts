@@ -37,9 +37,7 @@ export class ProfileService {
     }
     this.profileUrl = apiUrl + 'users';
     this._profile = this.userService.loggedInUser.pipe(
-      skipWhile((user) => {
-        return !user || !user.attributes;
-      }),
+      skipWhile((user) => !user || !user.attributes),
       map((user) => cloneDeep(user) as ExtUser),
       tap((user) => {
         if (user.attributes) {

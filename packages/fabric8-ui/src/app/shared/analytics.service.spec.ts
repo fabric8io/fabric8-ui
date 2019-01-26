@@ -31,9 +31,7 @@ describe('Analytic Service:', () => {
       'message',
     ]);
     mockBroadcaster = createMock(Broadcaster);
-    mockBroadcaster.on.and.returnValue(() => {
-      return new Subject<BroadcastEvent>();
-    });
+    mockBroadcaster.on.and.returnValue(() => new Subject<BroadcastEvent>());
 
     TestBed.configureTestingModule({
       providers: [

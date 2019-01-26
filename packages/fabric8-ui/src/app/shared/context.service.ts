@@ -194,9 +194,8 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
             // If it's a space that's been requested then load the space creator as the owner
             return this.loadSpace(val.user, val.space).pipe(
               map(
-                (space: Space): RawContext => {
-                  return { user: space.relationalData.creator, space: space } as RawContext;
-                },
+                (space: Space): RawContext =>
+                  ({ user: space.relationalData.creator, space: space } as RawContext),
               ),
               catchError(
                 (err: string): Observable<RawContext> => {
@@ -210,11 +209,7 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
           } else {
             // Otherwise, load the user and use that as the owner
             return this.loadUser(val.user).pipe(
-              map(
-                (user: User): RawContext => {
-                  return { user: user, space: null } as RawContext;
-                },
-              ),
+              map((user: User): RawContext => ({ user: user, space: null } as RawContext)),
               catchError(
                 (err: string): Observable<RawContext> => {
                   console.log(
@@ -231,21 +226,16 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
       ),
       // Get the list of features enabled for this given user to know whether we should display feature menu.
       switchMap(
-        (val: RawContext): Observable<RawContext> => {
-          return this.toggleService.getAllFeaturesEnabledByLevel().pipe(
+        (val: RawContext): Observable<RawContext> =>
+          this.toggleService.getAllFeaturesEnabledByLevel().pipe(
             map(
               (features: Feature[]): RawContext => {
                 val.user.features = features;
                 return val;
               },
             ),
-            catchError(
-              (): Observable<RawContext> => {
-                return of(val);
-              },
-            ),
-          );
-        },
+            catchError((): Observable<RawContext> => of(val)),
+          ),
       ),
       // Use a map to convert from a navigation url to a context
       map((val: RawContext) => this.buildContext(val)),
@@ -407,9 +397,8 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
                         },
                       ),
                       map(
-                        (val: Context | User): Context => {
-                          return this.buildContext({ user: val } as RawContext);
-                        },
+                        (val: Context | User): Context =>
+                          this.buildContext({ user: val } as RawContext),
                       ),
                     );
                   }
@@ -417,10 +406,9 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
               ),
             ).pipe(
               map(
-                (contexts: Context[]): Context[] => {
+                (contexts: Context[]): Context[] =>
                   // remove null context values resulting from getSpaceById throwing an error
-                  return contexts.filter((context: Context): boolean => context !== null);
-                },
+                  contexts.filter((context: Context): boolean => context !== null),
               ),
             );
           } else {

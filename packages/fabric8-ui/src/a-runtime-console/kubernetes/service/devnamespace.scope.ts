@@ -41,9 +41,7 @@ export class DevNamespaceScope implements INamespaceScope {
         }
         return namespace;
       }),
-      catchError((error: HttpErrorResponse) => {
-        return this.handleError(error);
-      }),
+      catchError((error: HttpErrorResponse) => this.handleError(error)),
     );
   }
 

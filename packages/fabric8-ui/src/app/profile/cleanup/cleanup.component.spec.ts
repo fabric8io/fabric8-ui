@@ -18,10 +18,7 @@ describe('CleanupComponent', () => {
   ]);
 
   let mockContexts: any = jasmine.createSpy('Contexts');
-  let mockSpaceService: any = jasmine.createSpyObj('SpaceService', [
-    'delete',
-    'getSpacesByUser',
-  ]);
+  let mockSpaceService: any = jasmine.createSpyObj('SpaceService', ['delete', 'getSpacesByUser']);
   let mockTenantService: any = jasmine.createSpyObj('TenantService', [
     'cleanupTenant',
     'updateTenant',

@@ -94,18 +94,16 @@ export class SpacesService extends RecentUtils<Space> implements Spaces {
           if (profile.store.recentSpaces && profile.store.recentSpaces.length > 0) {
             return forkJoin(
               (profile.store.recentSpaces as string[]).map(
-                (id: string): Observable<Space> => {
+                (id: string): Observable<Space> =>
                   // if getSpaceById() throws an error, forkJoin will not complete and loadRecent will not return
-                  return this.spaceService
+                  this.spaceService
                     .getSpaceById(id)
-                    .pipe(catchError((): Observable<Space> => observableOf(null)));
-                },
+                    .pipe(catchError((): Observable<Space> => observableOf(null))),
               ),
             ).pipe(
               map(
-                (spaces: Space[]): Space[] => {
-                  return spaces.filter((space: Space): boolean => space !== null);
-                },
+                (spaces: Space[]): Space[] =>
+                  spaces.filter((space: Space): boolean => space !== null),
               ),
             );
           } else {

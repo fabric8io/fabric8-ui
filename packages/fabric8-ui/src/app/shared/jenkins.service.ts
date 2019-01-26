@@ -24,11 +24,9 @@ export class JenkinsService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: 'Bearer ' + token }),
     };
-    return this.http.post(url, null, httpOptions).pipe(
-      catchError((err: HttpErrorResponse) => {
-        return this.handleError(err);
-      }),
-    );
+    return this.http
+      .post(url, null, httpOptions)
+      .pipe(catchError((err: HttpErrorResponse) => this.handleError(err)));
   }
 
   private handleError(error: HttpErrorResponse) {

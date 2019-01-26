@@ -9,13 +9,13 @@ class RecentImpl extends RecentUtils<string> {
   }
 }
 
-const MockProfileService = jest.fn<ProfileService>().mockImplementation(() => {
-  return { silentSave: jest.fn().mockReturnValue(EMPTY) };
-});
+const MockProfileService = jest
+  .fn<ProfileService>()
+  .mockImplementation(() => ({ silentSave: jest.fn().mockReturnValue(EMPTY) }));
 
-const MockErrorHandler = jest.fn<ErrorHandler>().mockImplementation(() => {
-  return { handleError: jest.fn() };
-});
+const MockErrorHandler = jest
+  .fn<ErrorHandler>()
+  .mockImplementation(() => ({ handleError: jest.fn() }));
 
 describe('recent-utils', () => {
   let errorHandlerMock: ErrorHandler;

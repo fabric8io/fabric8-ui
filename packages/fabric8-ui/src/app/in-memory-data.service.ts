@@ -29,40 +29,38 @@ export class InMemoryDataService implements InMemoryDbService {
       },
     ];
 
-    let workitems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map((n) => {
-      return {
-        attributes: {
-          'system.created_at': null,
-          'system.description': 'Some Description ' + n,
-          'system.remote_item_id': null,
-          'system.state': 'new',
-          'system.title': 'Some Title ' + n,
-          version: 1,
-        },
-        id: '' + n,
-        relationships: {
-          assignees: {},
-          baseType: {
-            data: {
-              id: 'system.userstory',
-              type: 'workitemtypes',
-            },
-          },
-          creator: {
-            data: {
-              id: identities[1].id,
-              type: 'identities',
-            },
-          },
-          comments: {
-            links: {
-              self: '',
-            },
+    let workitems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map((n) => ({
+      attributes: {
+        'system.created_at': null,
+        'system.description': 'Some Description ' + n,
+        'system.remote_item_id': null,
+        'system.state': 'new',
+        'system.title': 'Some Title ' + n,
+        version: 1,
+      },
+      id: '' + n,
+      relationships: {
+        assignees: {},
+        baseType: {
+          data: {
+            id: 'system.userstory',
+            type: 'workitemtypes',
           },
         },
-        type: 'workitems',
-      };
-    });
+        creator: {
+          data: {
+            id: identities[1].id,
+            type: 'identities',
+          },
+        },
+        comments: {
+          links: {
+            self: '',
+          },
+        },
+      },
+      type: 'workitems',
+    }));
 
     let loginStatus = {
       status: 200,

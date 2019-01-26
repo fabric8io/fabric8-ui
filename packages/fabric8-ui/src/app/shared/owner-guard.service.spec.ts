@@ -11,9 +11,7 @@ describe('OwnerGuard', () => {
     const FAKE_URL = 'fakeUrl';
     let ownerGuard: OwnerGuard;
     let mockAuthService = {
-      isLoggedIn: () => {
-        return false;
-      },
+      isLoggedIn: () => false,
     };
     let mockContext = {};
     let mockLoginService = { redirectToLogin: () => {} };
@@ -51,9 +49,7 @@ describe('OwnerGuard', () => {
   describe('should handle logged in users', () => {
     let ownerGuard: OwnerGuard;
     let mockAuthService = {
-      isLoggedIn: () => {
-        return true;
-      },
+      isLoggedIn: () => true,
     };
     let mockLoginService = { redirectToLogin: () => {} };
     let mockRoute = {} as ActivatedRouteSnapshot;

@@ -53,24 +53,22 @@ describe('RecentSpacesWidget', () => {
       },
       {
         provide: Spaces,
-        useFactory: (): Spaces => {
-          return {
+        useFactory: (): Spaces =>
+          ({
             recent: new Subject<Space[]>(),
             current: observableThrowError('unimplemented'),
-          } as Spaces;
-        },
+          } as Spaces),
       },
       {
         provide: UserService,
-        useFactory: (): UserService => {
-          return {
+        useFactory: (): UserService =>
+          ({
             currentLoggedInUser: {
               attributes: {
                 username: 'fooUser',
               },
             } as User,
-          } as UserService;
-        },
+          } as UserService),
       },
       {
         provide: SpaceService,

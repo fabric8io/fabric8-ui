@@ -1,12 +1,11 @@
 import { FilterService, WorkItem } from 'fabric8-planner';
 
 export function filterOutClosedItems(items) {
-  return items.filter((item) => {
-    // filter out items which has state closed or done or removed
-    return (
-      ['removed', 'closed', 'done'].indexOf(item.attributes['system.state'].toLowerCase()) === -1
-    );
-  });
+  return items.filter(
+    (item) =>
+      // filter out items which has state closed or done or removed
+      ['removed', 'closed', 'done'].indexOf(item.attributes['system.state'].toLowerCase()) === -1,
+  );
 }
 
 export function buildAssigneeQuery(filterService: FilterService, userId) {

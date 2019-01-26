@@ -1,6 +1,5 @@
 {
   "rules": {
-    "arrow-body-style": "off",
     "camelcase": "off",
     "consistent-return": "off",
     "default-case": "off",

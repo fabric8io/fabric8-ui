@@ -76,9 +76,9 @@ export class WorkItemWidgetComponent implements OnInit {
   private updateWorkItems(): void {
     this.loading = true;
     this._myWorkItems = this.spacesService.current.pipe(
-      switchMap((space) => {
-        return this.workItemService.getWorkItems(100000, { expression: { space: `${space.id}` } });
-      }),
+      switchMap((space) =>
+        this.workItemService.getWorkItems(100000, { expression: { space: `${space.id}` } }),
+      ),
       tap(
         (val: WorkItemsData): void => {
           if (val.totalCount) {

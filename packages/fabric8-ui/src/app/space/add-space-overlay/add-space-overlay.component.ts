@@ -94,13 +94,13 @@ export class AddSpaceOverlayComponent implements OnInit {
       this.spaceService
         .create(space)
         .pipe(
-          switchMap((createdSpace) => {
-            return this.spaceNamespaceService.updateConfigMap(observableOf(createdSpace)).pipe(
+          switchMap((createdSpace) =>
+            this.spaceNamespaceService.updateConfigMap(observableOf(createdSpace)).pipe(
               map(() => createdSpace),
               // Ignore any errors coming out here, we've logged and notified them earlier
               catchError((err) => observableOf(createdSpace)),
-            );
-          }),
+            ),
+          ),
         )
         .subscribe(
           (createdSpace) => {

@@ -54,11 +54,9 @@ export class AppLauncherGitproviderService implements GitProviderService {
    */
   private getGitHubUserData(): Observable<any> {
     let url = this.END_POINT + this.API_BASE + 'user';
-    return this.http.get(url, { headers: this.headers }).pipe(
-      catchError((error: HttpErrorResponse) => {
-        return throwError(error);
-      }),
-    );
+    return this.http
+      .get(url, { headers: this.headers })
+      .pipe(catchError((error: HttpErrorResponse) => throwError(error)));
   }
 
   /**
@@ -69,11 +67,9 @@ export class AppLauncherGitproviderService implements GitProviderService {
    */
   getUserOrgs(userName: string): Observable<any> {
     let url = this.END_POINT + this.API_BASE + 'organizations';
-    return this.http.get(url, { headers: this.headers }).pipe(
-      catchError((error: HttpErrorResponse) => {
-        return throwError(error);
-      }),
-    );
+    return this.http
+      .get(url, { headers: this.headers })
+      .pipe(catchError((error: HttpErrorResponse) => throwError(error)));
   }
 
   /**
@@ -127,9 +123,7 @@ export class AppLauncherGitproviderService implements GitProviderService {
   isGitHubRepo(org: string, repoName: string): Observable<boolean> {
     const fullName = org ? `${org}/${repoName}` : repoName;
     return this.getRepositories(org).pipe(
-      map((repositories) => {
-        return repositories.indexOf(fullName) !== -1;
-      }),
+      map((repositories) => repositories.indexOf(fullName) !== -1),
     );
   }
 
@@ -150,11 +144,9 @@ export class AppLauncherGitproviderService implements GitProviderService {
     headers = headers.delete('X-App');
     headers = headers.delete('x-git-provider');
     let url = this.constructApiUrl(this.detectorApiUrl, 'api/detect/build/' + repoUrl);
-    return this.http.get<BuildTool>(url, { headers: headers }).pipe(
-      catchError((error: HttpErrorResponse) => {
-        return throwError(error);
-      }),
-    );
+    return this.http
+      .get<BuildTool>(url, { headers: headers })
+      .pipe(catchError((error: HttpErrorResponse) => throwError(error)));
   }
 
   /**
@@ -180,9 +172,7 @@ export class AppLauncherGitproviderService implements GitProviderService {
     return this.http.get<string[]>(this.createUrl(org), { headers: this.headers }).pipe(
       map((json) => (json ? (json as string[]) : [])),
       tap((repositories) => (this.repositories[org] = repositories)),
-      catchError((error: HttpErrorResponse) => {
-        return throwError(error);
-      }),
+      catchError((error: HttpErrorResponse) => throwError(error)),
     );
   }
 

@@ -30,9 +30,7 @@ export class TenantService {
   getTenant(): Observable<any> {
     return this.http.get(this.tenantUrl, { headers: this.headers }).pipe(
       map((res: any) => res.data),
-      catchError((error: HttpErrorResponse) => {
-        return this.handleError(error);
-      }),
+      catchError((error: HttpErrorResponse) => this.handleError(error)),
     );
   }
 
@@ -48,11 +46,7 @@ export class TenantService {
         observe: 'response',
         responseType: 'text',
       })
-      .pipe(
-        catchError((error: HttpErrorResponse) => {
-          return this.handleError(error);
-        }),
-      );
+      .pipe(catchError((error: HttpErrorResponse) => this.handleError(error)));
   }
 
   /**
@@ -61,9 +55,7 @@ export class TenantService {
    */
   cleanupTenant(): Observable<any> {
     return this.http.delete(this.tenantUrl, { headers: this.headers, responseType: 'text' }).pipe(
-      catchError((error: HttpErrorResponse) => {
-        return this.handleError(error);
-      }),
+      catchError((error: HttpErrorResponse) => this.handleError(error)),
       map(() => null),
     );
   }

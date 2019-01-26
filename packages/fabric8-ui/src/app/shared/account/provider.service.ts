@@ -121,9 +121,7 @@ export class ProviderService {
         map((resp: Link) => {
           this.redirectToAuth(resp.redirect_location);
         }),
-        catchError((err: HttpErrorResponse) => {
-          return this.handleError(err);
-        }),
+        catchError((err: HttpErrorResponse) => this.handleError(err)),
       )
       .subscribe();
   }

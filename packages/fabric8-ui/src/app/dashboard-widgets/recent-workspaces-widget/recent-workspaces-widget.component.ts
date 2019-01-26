@@ -116,17 +116,15 @@ export class RecentWorkspacesWidgetComponent implements OnDestroy, OnInit {
           return observableOf([]);
         }
         return observableForkJoin(
-          codebases.map((codebase: ExtCodebase) => {
-            return this.workspacesService.getWorkspaces(codebase.id).pipe(
+          codebases.map((codebase: ExtCodebase) =>
+            this.workspacesService.getWorkspaces(codebase.id).pipe(
               map((workspaces) => {
                 codebase.workspaces = workspaces;
                 return codebase;
               }),
-              catchError((error) => {
-                return observableOf([]);
-              }),
-            );
-          }),
+              catchError((error) => observableOf([])),
+            ),
+          ),
         );
       }),
     );
@@ -152,9 +150,7 @@ export class RecentWorkspacesWidgetComponent implements OnDestroy, OnInit {
                 space.codebases = codebases;
                 return space;
               }),
-              catchError((error) => {
-                return observableOf([]);
-              }),
+              catchError((error) => observableOf([])),
               tap(() => {
                 this.loading = false;
               }),

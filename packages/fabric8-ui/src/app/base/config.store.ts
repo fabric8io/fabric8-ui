@@ -19,12 +19,13 @@ export class ConfigStore {
       return this._cache.get(name);
     } else {
       let res = this.http.get(`/_config/${name}.config.json`).pipe(
-        map((resp) => {
-          return {
-            val: resp as any,
-            loading: false,
-          } as ValWrapper<T>;
-        }),
+        map(
+          (resp) =>
+            ({
+              val: resp as any,
+              loading: false,
+            } as ValWrapper<T>),
+        ),
         publishReplay(1),
       ) as ConnectableObservable<ValWrapper<T>>;
       this._cache.set(name, res);

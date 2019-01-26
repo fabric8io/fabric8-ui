@@ -362,10 +362,10 @@ export class CodebasesComponent implements OnDestroy, OnInit {
                   codebase.gitHubRepo.pushedAt = gitHubRepoDetails.pushed_at;
                   return codebase;
                 }),
-                catchError((err) => {
+                catchError((err) =>
                   // this.handleError(err, NotificationType.WARNING);
-                  return observableOf(codebase);
-                }),
+                  observableOf(codebase),
+                ),
                 first(),
               );
             } else {

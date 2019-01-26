@@ -39,9 +39,7 @@ describe('AddAppOverlayComponent', () => {
 
   let mockRouter: any = jasmine.createSpyObj('Router', ['navigate']);
   let mockSpaceTemplateService: any = {
-    getSpaceTemplates: () => {
-      return observableOf(mockSpaceTemplates);
-    },
+    getSpaceTemplates: () => observableOf(mockSpaceTemplates),
   };
   let mockSpaceService: any = jasmine.createSpyObj('SpaceService', ['create']);
   let mockNotifications: any = jasmine.createSpyObj('Notifications', ['message']);

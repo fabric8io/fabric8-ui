@@ -161,9 +161,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
 
   addCollaboratorsToParent(addedUsers: User[]) {
     addedUsers.forEach((user) => {
-      let matchingUser = find(this.collaborators, (existing) => {
-        return existing.id === user.id;
-      });
+      let matchingUser = find(this.collaborators, (existing) => existing.id === user.id);
       if (!matchingUser) {
         this.collaborators.push(user);
       }

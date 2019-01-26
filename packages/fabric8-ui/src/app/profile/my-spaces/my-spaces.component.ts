@@ -198,12 +198,7 @@ export class MySpacesComponent implements OnDestroy, OnInit {
   // Events
 
   handlePinChange($event: any): void {
-    let index: any = findIndex(
-      this.displayedSpaces,
-      (obj: Space): boolean => {
-        return obj.id === $event.id;
-      },
-    );
+    let index: any = findIndex(this.displayedSpaces, (obj: Space): boolean => obj.id === $event.id);
     if (index > -1) {
       let space: any = this.displayedSpaces[index];
       space.showPin = space.showPin === undefined ? true : !space.showPin;
@@ -273,12 +268,7 @@ export class MySpacesComponent implements OnDestroy, OnInit {
       let space = this.spaceToDelete;
       this.spaceService.delete(space).subscribe(
         (): void => {
-          let index: any = findIndex(
-            this._spaces,
-            (obj: Space): boolean => {
-              return obj.id === space.id;
-            },
-          );
+          let index: any = findIndex(this._spaces, (obj: Space): boolean => obj.id === space.id);
           if (has(this._spaces[index], 'showPin')) {
             this.savePins();
           }

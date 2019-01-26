@@ -23,9 +23,7 @@ import { AppModule } from './app/index';
 export function main(): Promise<any> {
   return platformBrowserDynamic()
     .bootstrapModule(AppModule, { preserveWhitespaces: true })
-    .then((ngModuleRef: any) => {
-      return process.env.HMR ? hmrModule(ngModuleRef, module) : ngModuleRef;
-    })
+    .then((ngModuleRef: any) => (process.env.HMR ? hmrModule(ngModuleRef, module) : ngModuleRef))
     .then(decorateModuleRef)
     .catch((err) => console.error(err));
 }
