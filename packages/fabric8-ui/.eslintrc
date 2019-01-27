@@ -12,7 +12,6 @@
     "no-bitwise": "off",
     "no-console": "off",
     "no-continue": "off",
-    "no-empty": "off",
     "no-extra-boolean-cast": "off",
     "no-lonely-if": "off",
     "no-loop-func": "off",
