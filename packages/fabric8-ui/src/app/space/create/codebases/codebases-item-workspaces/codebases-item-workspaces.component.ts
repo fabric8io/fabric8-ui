@@ -112,16 +112,15 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
                   }
                 }),
               );
-            } else {
-              this.workspaceBusy = false;
-              this.workspacesAvailable = false;
-              // display error message
-              this.notifications.message({
-                message: `OpenShift Online cluster is currently out of capacity, workspace cannot be started.`,
-                type: NotificationType.DANGER,
-              } as Notification);
-              return EMPTY;
             }
+            this.workspaceBusy = false;
+            this.workspacesAvailable = false;
+            // display error message
+            this.notifications.message({
+              message: `OpenShift Online cluster is currently out of capacity, workspace cannot be started.`,
+              type: NotificationType.DANGER,
+            } as Notification);
+            return EMPTY;
           }),
         )
         .subscribe(
@@ -164,16 +163,15 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
                   }
                 }),
               );
-            } else {
-              workspaceWindow.close();
-              this.workspaceBusy = false;
-              // display error message
-              this.notifications.message({
-                message: `OpenShift Online cluster is currently out of capacity, workspace cannot be started.`,
-                type: NotificationType.DANGER,
-              } as Notification);
-              return EMPTY;
             }
+            workspaceWindow.close();
+            this.workspaceBusy = false;
+            // display error message
+            this.notifications.message({
+              message: `OpenShift Online cluster is currently out of capacity, workspace cannot be started.`,
+              type: NotificationType.DANGER,
+            } as Notification);
+            return EMPTY;
           }),
         )
         .subscribe(

@@ -266,9 +266,8 @@ export class TenantComponent implements AfterViewInit, OnInit {
     if (answer) {
       this.modifiedFromRequestParam = true;
       return answer;
-    } else {
-      return defaultValue;
     }
+    return defaultValue;
   }
 
   /**

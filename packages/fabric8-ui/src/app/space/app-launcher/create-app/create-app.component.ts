@@ -85,12 +85,11 @@ export class CreateAppComponent implements OnDestroy, OnInit {
                   window.open(workSpaceLinks.links.open, '_blank');
                 }),
               );
-            } else {
-              this.notifications.message({
-                message: `Che cluster is full`,
-                type: NotificationType.WARNING,
-              });
             }
+            this.notifications.message({
+              message: `Che cluster is full`,
+              type: NotificationType.WARNING,
+            });
           }),
         )
         .subscribe(),

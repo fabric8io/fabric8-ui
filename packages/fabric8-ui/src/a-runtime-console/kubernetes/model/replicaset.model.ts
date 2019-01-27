@@ -52,7 +52,6 @@ export function combineReplicaSet(
     return replicationController && replicationController.resource
       ? replicationController
       : replicaset;
-  } else {
-    return replicationController;
   }
+  return replicationController;
 }

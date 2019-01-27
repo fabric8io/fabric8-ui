@@ -38,9 +38,8 @@ export abstract class KubernetesResourceStore<
       item.setResource(resource);
       // lets add the Restangular crack
       return this.service.restangularize(item);
-    } else {
-      return null;
     }
+    return null;
   }
 
   update(obj: T): Observable<T> {

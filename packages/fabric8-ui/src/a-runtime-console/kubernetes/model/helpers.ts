@@ -80,7 +80,8 @@ export function openShiftBrowseResourceUrl(
         pipelineName,
         name,
       );
-    } else if (kinds === 'spaces' || kinds === 'projects') {
+    }
+    if (kinds === 'spaces' || kinds === 'projects') {
       if (name) {
         return pathJoin(openShiftConsoleUrl, '/project/', name, '/overview');
       }

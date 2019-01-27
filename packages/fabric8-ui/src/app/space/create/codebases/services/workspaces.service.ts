@@ -70,9 +70,8 @@ export class WorkspacesService {
                 (error: HttpErrorResponse): Observable<Workspace[]> => this.handleError(error),
               ),
             );
-          } else {
-            return this.handleError(error);
           }
+          return this.handleError(error);
         },
       ),
     );

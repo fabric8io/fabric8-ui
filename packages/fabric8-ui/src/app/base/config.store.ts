@@ -17,21 +17,20 @@ export class ConfigStore {
   get<T>(name: string, load?: LoadCallback<T>): Observable<ValWrapper<T>> {
     if (this._cache.has(name)) {
       return this._cache.get(name);
-    } else {
-      let res = this.http.get(`/_config/${name}.config.json`).pipe(
-        map(
-          (resp) =>
-            ({
-              val: resp as any,
-              loading: false,
-            } as ValWrapper<T>),
-        ),
-        publishReplay(1),
-      ) as ConnectableObservable<ValWrapper<T>>;
-      this._cache.set(name, res);
-      res.connect();
-      return res;
     }
+    let res = this.http.get(`/_config/${name}.config.json`).pipe(
+      map(
+        (resp) =>
+          ({
+            val: resp as any,
+            loading: false,
+          } as ValWrapper<T>),
+      ),
+      publishReplay(1),
+    ) as ConnectableObservable<ValWrapper<T>>;
+    this._cache.set(name, res);
+    res.connect();
+    return res;
   }
 
   clear() {

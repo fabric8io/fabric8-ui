@@ -40,11 +40,11 @@ describe('AddCodebaseWidgetComponent', () => {
       (key: string): Observable<Codebase> => {
         if (key === 'codebaseAdded') {
           return codebaseAddedSubject;
-        } else if (key === 'codebaseDeleted') {
-          return codebaseDeletedSubject;
-        } else {
-          throw new Error(`Unknown broadcast key ${key}`);
         }
+        if (key === 'codebaseDeleted') {
+          return codebaseDeletedSubject;
+        }
+        throw new Error(`Unknown broadcast key ${key}`);
       },
     );
 

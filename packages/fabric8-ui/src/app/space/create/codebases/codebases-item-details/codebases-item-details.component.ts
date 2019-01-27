@@ -106,8 +106,7 @@ export class CodebasesItemDetailsComponent implements OnDestroy, OnInit {
   private isHtmlUrlInvalid(): boolean {
     if (this.codebase.attributes.type === 'git') {
       return this.isGitHubHtmlUrlInvalid();
-    } else {
-      false;
     }
+    false;
   }
 }

@@ -90,9 +90,8 @@ export abstract class NamespacedResourceService<
     let id = obj.name;
     if (id) {
       return this.restangularService.one(url, id).remove();
-    } else {
-      return super.delete(obj);
     }
+    return super.delete(obj);
   }
 
   protected urlForObject(obj: T, namespace: string = '') {

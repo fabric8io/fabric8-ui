@@ -28,9 +28,8 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     if (!this.auth.isLoggedIn()) {
       this.login.redirectToLogin(state.url);
       return of(false);
-    } else {
-      return this.fabric8RuntimeConsoleService.loadingOpenShiftToken();
     }
+    return this.fabric8RuntimeConsoleService.loadingOpenShiftToken();
   }
 
   canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {

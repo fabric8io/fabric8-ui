@@ -26,10 +26,9 @@ export class OwnerGuard implements CanActivate, CanActivateChild {
       let isViewingOwnContext =
         state.root.firstChild.params['entity'] === this.contextService.currentUser;
       return isViewingOwnContext;
-    } else {
-      this.loginService.redirectToLogin(state.url);
-      return false;
     }
+    this.loginService.redirectToLogin(state.url);
+    return false;
   }
 
   canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {

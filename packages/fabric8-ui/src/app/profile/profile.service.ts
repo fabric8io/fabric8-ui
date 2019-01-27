@@ -105,9 +105,8 @@ export class ProfileService {
           //this.current.imageURL
         ) {
           return true;
-        } else {
-          return false;
         }
+        return false;
       }),
     );
   }

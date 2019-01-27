@@ -107,9 +107,8 @@ export class SpacesService extends RecentUtils<Space> implements Spaces {
                   spaces.filter((space: Space): boolean => space !== null),
               ),
             );
-          } else {
-            return observableOf([]);
           }
+          return observableOf([]);
         },
       ),
     );

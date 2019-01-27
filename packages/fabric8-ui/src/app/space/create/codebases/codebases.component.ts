@@ -382,9 +382,8 @@ export class CodebasesComponent implements OnDestroy, OnInit {
                 ),
                 first(),
               );
-            } else {
-              this.handleError(`Invalid URL: ${codebase.attributes.url}`, NotificationType.WARNING);
             }
+            this.handleError(`Invalid URL: ${codebase.attributes.url}`, NotificationType.WARNING);
           }),
         );
       }),

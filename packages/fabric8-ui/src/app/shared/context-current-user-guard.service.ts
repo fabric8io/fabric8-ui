@@ -51,10 +51,9 @@ export class ContextCurrentUserGuard implements Resolve<any> {
       map((val) => {
         if (val) {
           return true;
-        } else {
-          this.router.navigateByUrl(this._lastRoute);
-          return false;
         }
+        this.router.navigateByUrl(this._lastRoute);
+        return false;
       }),
       first(),
     );

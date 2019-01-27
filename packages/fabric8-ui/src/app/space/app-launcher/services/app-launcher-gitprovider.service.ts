@@ -105,14 +105,12 @@ export class AppLauncherGitproviderService implements GitProviderService {
                   repositoryList: this.repositories[''],
                 } as GitHubDetails;
                 return of(gitHubDetails);
-              } else {
-                return EMPTY;
               }
+              return EMPTY;
             }),
           );
-        } else {
-          return EMPTY;
         }
+        return EMPTY;
       }),
     );
   }

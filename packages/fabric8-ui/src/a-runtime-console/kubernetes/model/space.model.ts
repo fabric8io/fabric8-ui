@@ -144,7 +144,8 @@ export class Space {
     answer.sort((a: Environment, b: Environment) => {
       if (a.order < b.order) {
         return -1;
-      } else if (a.order > b.order) {
+      }
+      if (a.order > b.order) {
         return 1;
       }
       if (a.name < b.name) {
@@ -183,7 +184,8 @@ export class Space {
     answer.sort((a: LabelSpace, b: LabelSpace) => {
       if (a.order < b.order) {
         return -1;
-      } else if (a.order > b.order) {
+      }
+      if (a.order > b.order) {
         return 1;
       }
       if (a.label < b.label) {

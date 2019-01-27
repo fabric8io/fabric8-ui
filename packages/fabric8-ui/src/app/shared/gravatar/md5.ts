@@ -18,12 +18,10 @@ export function md5(s) {
     if (I | d) {
       if (x & 1073741824) {
         return x ^ 3221225472 ^ F ^ H;
-      } else {
-        return x ^ 1073741824 ^ F ^ H;
       }
-    } else {
-      return x ^ F ^ H;
+      return x ^ 1073741824 ^ F ^ H;
     }
+    return x ^ F ^ H;
   }
   function r(d, F, k) {
     return (d & F) | (~d & k);

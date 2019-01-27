@@ -83,21 +83,20 @@ export class GitHubService {
     const url: string = `${this.gitHubUrl}/repos/${fullName}/commits/${sha}`;
     if (this.cache.has(url)) {
       return this.cache.get(url);
-    } else {
-      const res: Observable<GitHubRepoCommit> = this.getHeaders().pipe(
-        switchMap(
-          (headers: HttpHeaders): Observable<GitHubRepoCommit> =>
-            this.http.get<GitHubRepoCommit>(url, { headers }),
-        ),
-        publishReplay(1),
-        refCount(),
-        catchError(
-          (error: HttpErrorResponse): Observable<GitHubRepoCommit> => this.handleError(error),
-        ),
-      );
-      this.cache.set(url, res);
-      return res;
     }
+    const res: Observable<GitHubRepoCommit> = this.getHeaders().pipe(
+      switchMap(
+        (headers: HttpHeaders): Observable<GitHubRepoCommit> =>
+          this.http.get<GitHubRepoCommit>(url, { headers }),
+      ),
+      publishReplay(1),
+      refCount(),
+      catchError(
+        (error: HttpErrorResponse): Observable<GitHubRepoCommit> => this.handleError(error),
+      ),
+    );
+    this.cache.set(url, res);
+    return res;
   }
 
   /**
@@ -110,21 +109,20 @@ export class GitHubService {
     const url: string = `${this.gitHubUrl}/repos/${fullName}`;
     if (this.cache.has(url)) {
       return this.cache.get(url);
-    } else {
-      const res: Observable<GitHubRepoDetails> = this.getHeaders().pipe(
-        switchMap(
-          (headers: HttpHeaders): Observable<GitHubRepoDetails> =>
-            this.http.get<GitHubRepoDetails>(url, { headers }),
-        ),
-        publishReplay(1),
-        refCount(),
-        catchError(
-          (error: HttpErrorResponse): Observable<GitHubRepoDetails> => this.handleError(error),
-        ),
-      );
-      this.cache.set(url, res);
-      return res;
     }
+    const res: Observable<GitHubRepoDetails> = this.getHeaders().pipe(
+      switchMap(
+        (headers: HttpHeaders): Observable<GitHubRepoDetails> =>
+          this.http.get<GitHubRepoDetails>(url, { headers }),
+      ),
+      publishReplay(1),
+      refCount(),
+      catchError(
+        (error: HttpErrorResponse): Observable<GitHubRepoDetails> => this.handleError(error),
+      ),
+    );
+    this.cache.set(url, res);
+    return res;
   }
 
   /**
@@ -149,21 +147,20 @@ export class GitHubService {
     const url: string = `${this.gitHubUrl}/repos/${fullName}/git/refs/heads/master`;
     if (this.cache.has(url)) {
       return this.cache.get(url);
-    } else {
-      const res: Observable<GitHubRepoLastCommit> = this.getHeaders().pipe(
-        switchMap(
-          (headers: HttpHeaders): Observable<GitHubRepoLastCommit> =>
-            this.http.get<GitHubRepoLastCommit>(url, { headers }),
-        ),
-        publishReplay(1),
-        refCount(),
-        catchError(
-          (error: HttpErrorResponse): Observable<GitHubRepoLastCommit> => this.handleError(error),
-        ),
-      );
-      this.cache.set(url, res);
-      return res;
     }
+    const res: Observable<GitHubRepoLastCommit> = this.getHeaders().pipe(
+      switchMap(
+        (headers: HttpHeaders): Observable<GitHubRepoLastCommit> =>
+          this.http.get<GitHubRepoLastCommit>(url, { headers }),
+      ),
+      publishReplay(1),
+      refCount(),
+      catchError(
+        (error: HttpErrorResponse): Observable<GitHubRepoLastCommit> => this.handleError(error),
+      ),
+    );
+    this.cache.set(url, res);
+    return res;
   }
 
   /**
@@ -176,21 +173,20 @@ export class GitHubService {
     const url: string = `${this.gitHubUrl}/repos/${fullName}/license`;
     if (this.cache.has(url)) {
       return this.cache.get(url);
-    } else {
-      const res: Observable<GitHubRepoLicense> = this.getHeaders().pipe(
-        switchMap(
-          (headers: HttpHeaders): Observable<GitHubRepoLicense> =>
-            this.http.get<GitHubRepoLicense>(url, { headers }),
-        ),
-        publishReplay(1),
-        refCount(),
-        catchError(
-          (error: HttpErrorResponse): Observable<GitHubRepoLicense> => this.handleError(error),
-        ),
-      );
-      this.cache.set(url, res);
-      return res;
     }
+    const res: Observable<GitHubRepoLicense> = this.getHeaders().pipe(
+      switchMap(
+        (headers: HttpHeaders): Observable<GitHubRepoLicense> =>
+          this.http.get<GitHubRepoLicense>(url, { headers }),
+      ),
+      publishReplay(1),
+      refCount(),
+      catchError(
+        (error: HttpErrorResponse): Observable<GitHubRepoLicense> => this.handleError(error),
+      ),
+    );
+    this.cache.set(url, res);
+    return res;
   }
 
   /**
@@ -214,19 +210,18 @@ export class GitHubService {
     const url: string = `${this.gitHubUrl}/users/${userName}/repos`;
     if (this.cache.has(url)) {
       return this.cache.get(url);
-    } else {
-      const res: Observable<GitHubRepo[]> = this.getHeaders().pipe(
-        switchMap(
-          (headers: HttpHeaders): Observable<GitHubRepo[]> =>
-            this.http.get<GitHubRepo[]>(url, { headers }),
-        ),
-        publishReplay(1),
-        refCount(),
-        catchError((error: HttpErrorResponse): Observable<GitHubRepo[]> => this.handleError(error)),
-      );
-      this.cache.set(url, res);
-      return res;
     }
+    const res: Observable<GitHubRepo[]> = this.getHeaders().pipe(
+      switchMap(
+        (headers: HttpHeaders): Observable<GitHubRepo[]> =>
+          this.http.get<GitHubRepo[]>(url, { headers }),
+      ),
+      publishReplay(1),
+      refCount(),
+      catchError((error: HttpErrorResponse): Observable<GitHubRepo[]> => this.handleError(error)),
+    );
+    this.cache.set(url, res);
+    return res;
   }
 
   /**
@@ -238,19 +233,18 @@ export class GitHubService {
     const url: string = `${this.gitHubUrl}/user`;
     if (this.cache.has(url)) {
       return this.cache.get(url);
-    } else {
-      const res: Observable<GitHubUser> = this.getHeaders().pipe(
-        switchMap(
-          (headers: HttpHeaders): Observable<GitHubUser> =>
-            this.http.get<GitHubUser>(url, { headers }),
-        ),
-        publishReplay(1),
-        refCount(),
-        catchError((error: HttpErrorResponse): Observable<GitHubUser> => this.handleError(error)),
-      );
-      this.cache.set(url, res);
-      return res;
     }
+    const res: Observable<GitHubUser> = this.getHeaders().pipe(
+      switchMap(
+        (headers: HttpHeaders): Observable<GitHubUser> =>
+          this.http.get<GitHubUser>(url, { headers }),
+      ),
+      publishReplay(1),
+      refCount(),
+      catchError((error: HttpErrorResponse): Observable<GitHubUser> => this.handleError(error)),
+    );
+    this.cache.set(url, res);
+    return res;
   }
 
   // Private

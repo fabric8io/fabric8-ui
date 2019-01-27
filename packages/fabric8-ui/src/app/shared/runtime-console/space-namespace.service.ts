@@ -126,9 +126,8 @@ export class SpaceNamespaceService {
         }
         if (val.configMap) {
           return this.configMapService.update(cm);
-        } else {
-          return this.configMapService.create(cm, cm.namespace);
         }
+        return this.configMapService.create(cm, cm.namespace);
       }),
     );
   }

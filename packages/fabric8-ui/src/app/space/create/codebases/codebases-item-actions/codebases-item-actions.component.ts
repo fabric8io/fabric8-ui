@@ -86,15 +86,14 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
                   }
                 }),
               );
-            } else {
-              // display error message
-              this.workspaceBusy = false;
-              this.notifications.message({
-                message: `OpenShift Online cluster is currently out of capacity, workspace cannot be started.`,
-                type: NotificationType.DANGER,
-              } as Notification);
-              return EMPTY;
             }
+            // display error message
+            this.workspaceBusy = false;
+            this.notifications.message({
+              message: `OpenShift Online cluster is currently out of capacity, workspace cannot be started.`,
+              type: NotificationType.DANGER,
+            } as Notification);
+            return EMPTY;
           }),
         )
         .subscribe(

@@ -32,7 +32,8 @@ export abstract class RecentUtils<T> {
     if (index === 0) {
       // continue only if changed is new, or requires a move within recent
       return { recent: recent, isSaveRequired: false };
-    } else if (index > 0) {
+    }
+    if (index > 0) {
       // if changed exists in recent, move it to the front
       recent.splice(index, 1);
       recent.unshift(changed);

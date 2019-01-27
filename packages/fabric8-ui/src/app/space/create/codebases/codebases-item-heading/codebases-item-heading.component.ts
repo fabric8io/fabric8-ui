@@ -39,12 +39,10 @@ export class CodebasesItemHeadingComponent implements OnInit {
         return this.cheState.running
           ? this.cheFinishedMultiTenantMigrationMessage
           : this.chePerformingMultiTenantMigrationMessage;
-      } else {
-        return this.cheState.running ? this.cheRunningMessage : this.cheStartingMessage;
       }
-    } else {
-      return this.cheErrorMessage;
+      return this.cheState.running ? this.cheRunningMessage : this.cheStartingMessage;
     }
+    return this.cheErrorMessage;
   }
 
   /**
@@ -55,8 +53,7 @@ export class CodebasesItemHeadingComponent implements OnInit {
   getNotificationType(): string {
     if (this.cheState !== undefined) {
       return this.cheState.running ? NotificationType.SUCCESS : NotificationType.INFO;
-    } else {
-      return NotificationType.DANGER;
     }
+    return NotificationType.DANGER;
   }
 }

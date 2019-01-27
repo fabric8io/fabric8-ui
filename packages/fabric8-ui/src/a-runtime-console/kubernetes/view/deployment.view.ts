@@ -140,9 +140,8 @@ export function combineDeployment(
 ): Deployment {
   if (deployment && deployment.resource) {
     return deploymentConfig && deploymentConfig.resource ? deploymentConfig : deployment;
-  } else {
-    return deploymentConfig;
   }
+  return deploymentConfig;
 }
 
 export function createDeploymentViews(

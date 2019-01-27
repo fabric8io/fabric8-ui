@@ -101,9 +101,8 @@ export class CodebasesService {
   getMoreCodebases(): Observable<Codebase[]> {
     if (this.nextLink) {
       return this.getCodebasesDelegate(this.nextLink);
-    } else {
-      return observableThrowError('No more codebases found');
     }
+    return observableThrowError('No more codebases found');
   }
 
   /**
@@ -190,9 +189,8 @@ export class CodebasesService {
   private getName(codebase: Codebase): string {
     if (codebase.attributes.type === 'git') {
       return codebase.attributes.url.replace('.git', '').replace('git@github.com:', '');
-    } else {
-      return codebase.attributes.url;
     }
+    return codebase.attributes.url;
   }
 
   private getUrl(codebase: Codebase): string {
@@ -201,8 +199,7 @@ export class CodebasesService {
         .replace('.git', '')
         .replace(':', '/')
         .replace('git@', 'https://');
-    } else {
-      return codebase.attributes.url;
     }
+    return codebase.attributes.url;
   }
 }

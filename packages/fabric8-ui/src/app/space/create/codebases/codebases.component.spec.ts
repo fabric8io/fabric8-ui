@@ -161,18 +161,19 @@ describe('CodebasesComponent', () => {
           details.created_at = '2011-04-07T10:12:58Z';
           details.pushed_at = '2011-04-07T10:12:58Z';
           return observableOf(details);
-        } else if (url === 'https://github.com/bar-org/bar-project.git') {
+        }
+        if (url === 'https://github.com/bar-org/bar-project.git') {
           const details: GitHubRepoDetails = new GitHubRepoDetails();
           details.html_url = 'https://github.com/bar-org/bar-project/html';
           details.full_name = 'Foo Project';
           details.created_at = '2010-04-07T10:10:58Z';
           details.pushed_at = '2010-04-07T10:10:58Z';
           return observableOf(details);
-        } else if (url === 'https://github.com/foo-org/bar-project.git') {
-          return observableThrowError(new Error('404 error'));
-        } else {
-          throw new Error('Unexpected codebase URL');
         }
+        if (url === 'https://github.com/foo-org/bar-project.git') {
+          return observableThrowError(new Error('404 error'));
+        }
+        throw new Error('Unexpected codebase URL');
       },
     );
 

@@ -88,7 +88,8 @@ function promptOsioUrl(currentValue) {
   // if custom, ask for input
   if (choice === 0) {
     return readlineSync.question(`Enter a custom test URL: `);
-  } else if (choice !== -1) {
+  }
+  if (choice !== -1) {
     return testUrls[Object.keys(testUrls)[choice]];
   }
   return currentValue;

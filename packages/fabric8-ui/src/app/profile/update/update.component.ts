@@ -312,9 +312,8 @@ export class UpdateComponent implements OnInit, OnDestroy {
     const urlRegex: RegExp = /^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(\:\d+)?(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/;
     if (this.url !== undefined && this.url.trim().length > 0) {
       return urlRegex.test(this.url.trim());
-    } else {
-      return true;
     }
+    return true;
   }
 
   private setUserProperties(user: User): void {
