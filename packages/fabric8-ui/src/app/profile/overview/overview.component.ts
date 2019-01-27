@@ -33,7 +33,7 @@ export class OverviewComponent implements OnDestroy, OnInit {
       this.contextService.current.pipe(map((context: Context): User => context.user)).subscribe(
         (user: User): void => {
           this.viewingOwnAccount = this.contextService.viewingOwnContext();
-          if (!!user.attributes) {
+          if (user.attributes) {
             this.user = user;
           }
         },
