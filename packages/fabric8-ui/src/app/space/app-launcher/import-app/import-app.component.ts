@@ -25,6 +25,7 @@ export class ImportAppComponent implements OnDestroy, OnInit {
   ) {}
 
   ngOnDestroy(): void {
+    this.projectile.resetState();
     this.subscriptions.forEach((sub) => {
       sub.unsubscribe();
     });
