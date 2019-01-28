@@ -4,12 +4,17 @@
   "description": "CodeReady Toolchain UI application.",
   "main": "src/index.ts",
   "license": "Apache-2.0",
+  "files": [
+    "build"
+  ],
   "scripts": {
     "start": "osio-scripts start",
     "analyze": "osio-scripts analyze",
     "build": "CI=false STATIC_DIR=_static osio-scripts build",
     "preprod": "./scripts/configBuildEnv.sh",
     "prod": "osio-scripts prod",
+    "test": "osio-scripts test --watchAll=false",
+    "test:debug": "osio-scripts test:debug --watchAll=false",
     "semantic-release-origin-master": "semantic-release --branch origin/master"
   },
   "peerDependencies": {
@@ -33,7 +38,9 @@
     "utility-types": "3.2.1"
   },
   "devDependencies": {
+    "@types/redux-mock-store": "1.0.0",
     "copy-webpack-plugin": "4.6.0",
+    "redux-mock-store": "1.5.3",
     "semantic-release": "15.12.0"
   }
 }

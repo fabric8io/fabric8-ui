@@ -17,6 +17,6 @@ export const getEntityUrl = (type: string, id: string) => {
     case 'spaces':
       return getSpaceByIdUrl(id);
     default:
-      throw new Error(`Url requested for unsupported entity type ${type}.`);
+      throw new Error(`Url requested for unsupported entity type '${type}'.`);
   }
 };

@@ -9,10 +9,10 @@ import { getEntityUrl } from '../../api/api-urls';
 
 // Actions
 
-const requestEntity = (type: string, id: string) =>
+export const requestEntity = (type: string, id: string) =>
   createAction(JsonapiActionTypes.REQUEST_ENTITY, { type, id });
 
-const receivedEntity = (
+export const receivedEntity = (
   type: string,
   id: string,
   dataDocument: DataDocument,
@@ -25,7 +25,7 @@ const receivedEntity = (
     receivedAt,
   });
 
-const receivedEntityError = (
+export const receivedEntityError = (
   type: string,
   id: string,
   error: ErrorObject,
@@ -38,13 +38,13 @@ const receivedEntityError = (
     receivedAt,
   });
 
-const invalidateEntity = (type: string, id: string) =>
+export const invalidateEntity = (type: string, id: string) =>
   createAction(JsonapiActionTypes.INVALIDATE_ENTITY, { type, id });
 
-const requestCollection = (url: string) =>
+export const requestCollection = (url: string) =>
   createAction(JsonapiActionTypes.REQUEST_COLLECTION, { url });
 
-const receivedCollection = (
+export const receivedCollection = (
   url: string,
   dataDocument: DataDocument,
   receivedAt: number = Date.now(),
@@ -55,7 +55,7 @@ const receivedCollection = (
     receivedAt,
   });
 
-const receivedCollectionError = (
+export const receivedCollectionError = (
   url: string,
   error: ErrorObject,
   receivedAt: number = Date.now(),
@@ -66,13 +66,13 @@ const receivedCollectionError = (
     receivedAt,
   });
 
-const invalidateCollection = (url: string) =>
+export const invalidateCollection = (url: string) =>
   createAction(JsonapiActionTypes.INVALIDATE_COLLECTION, { url });
 
-const requestNextCollection = (url: string) =>
+export const requestNextCollection = (url: string) =>
   createAction(JsonapiActionTypes.REQUEST_NEXT_COLLECTION, { url });
 
-const receivedNextCollection = (
+export const receivedNextCollection = (
   url: string,
   dataDocument: DataDocument,
   receivedAt: number = Date.now(),
@@ -83,10 +83,10 @@ const receivedNextCollection = (
     receivedAt,
   });
 
-// const requestPrevCollection = (url: string) =>
+// export const requestPrevCollection = (url: string) =>
 //   createAction(JsonapiActionTypes.REQUEST_PREV_COLLECTION, { url });
 
-// const receivedPrevCollection = (dataDocument: DataDocuments, receivedAt: number = Date.now()) =>
+// export const receivedPrevCollection = (dataDocument: DataDocuments, receivedAt: number = Date.now()) =>
 //   createAction(JsonapiActionTypes.RECEIVED_PREV_COLLECTION, {
 //     dataDocument,
 //     receivedAt,
@@ -179,9 +179,13 @@ export function fetchNextCollection(url: string): ThunkResult {
     if (collection && collection.pageInfo.hasNextPage && !collection.pageInfo.isFetchingNextPage) {
       dispatch(requestNextCollection(url));
 
-      const result = await fetchDocumentApi(collection.pageInfo.nextPage);
-
-      dispatch(receivedNextCollection(url, result));
+      try {
+        const result = await fetchDocumentApi(collection.pageInfo.nextPage);
+        dispatch(receivedNextCollection(url, result));
+      } catch (e) {
+        const jsonApiError = e as JsonApiError;
+        dispatch(receivedCollectionError(url, jsonApiError.error));
+      }
     }
   };
 }
@@ -193,9 +197,13 @@ export function fetchNextCollection(url: string): ThunkResult {
 //     if (collection && collection.pageInfo.hasPrevPage && !collection.pageInfo.isFetchingPrevPage) {
 //       dispatch(requestPrevCollection(url));
 
-//       const result = await fetchByUrlApi(collection.pageInfo.prevPage);
-
-//       dispatch(receivedPrevCollection(result));
+//       try {
+//         const result = await fetchDocumentApi(collection.pageInfo.prevPage);
+//         dispatch(receivedPrevCollection(url, result));
+//       } catch (e) {
+//         const jsonApiError = e as JsonApiError;
+//         dispatch(receivedCollectionError(url, jsonApiError.error));
+//       }
 //     }
 //   };
 // }

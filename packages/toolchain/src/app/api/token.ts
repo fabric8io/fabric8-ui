@@ -3,16 +3,16 @@ export interface TokenInfo {
   access_token: string;
 
   // eslint-disable-next-line camelcase
-  expires_in: number;
+  expires_in?: number;
 
   // eslint-disable-next-line camelcase
-  refresh_expires_in: number;
+  refresh_expires_in?: number;
 
   // eslint-disable-next-line camelcase
-  refresh_token: string;
+  refresh_token?: string;
 
   // eslint-disable-next-line camelcase
-  token_type: string;
+  token_type?: string;
 }
 
 export interface JwtToken {
@@ -47,9 +47,13 @@ export function parseTokenInfoFromQuery(search: string): TokenInfo | undefined {
     }
   });
   if (tokenStr) {
-    const tokenInfo = JSON.parse(tokenStr) as TokenInfo;
-    processTokenInfo(tokenInfo);
-    return tokenInfo;
+    try {
+      const tokenInfo = JSON.parse(tokenStr) as TokenInfo;
+      processTokenInfo(tokenInfo);
+      return tokenInfo;
+    } catch (e) {
+      // ignore
+    }
   }
   return undefined;
 }
