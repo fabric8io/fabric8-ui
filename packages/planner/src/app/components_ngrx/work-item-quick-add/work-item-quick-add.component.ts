@@ -49,6 +49,7 @@ export class WorkItemQuickAddComponent
   @Input() selectedType: WorkItemTypeUI = null;
   @Input() selectedIteration: IterationUI = null;
   @Input() wilistview: string = 'wi-list-view';
+  @Input() addDisabled: Observable<boolean>;
 
   @Output() readonly onStartCreateWI: EventEmitter<any> = new EventEmitter();
 
@@ -56,7 +57,6 @@ export class WorkItemQuickAddComponent
   workItem: WorkItemService;
   validTitle: boolean = false;
   linkObject: object;
-  addDisabled: Observable<boolean> = this.permissionQuery.isAllowedToAdd();
   workItemTitle = new FormControl('');
 
   // Board view specific

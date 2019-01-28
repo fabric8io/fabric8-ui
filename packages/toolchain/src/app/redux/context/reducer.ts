@@ -14,7 +14,7 @@ interface MatchParams {
   subPath: string;
 }
 
-function getContext(currentState: ContextState, pathname: string): ContextState {
+function getContext(pathname: string): ContextState {
   let matchResult = matchPath<MatchParams>(pathname, {
     path: `/:username([^_][^/]+)/:spacename([^_][^/]+|${NO_SPACE_PATH})/:subPath(.*)?`,
     exact: false,
@@ -34,7 +34,11 @@ function getContext(currentState: ContextState, pathname: string): ContextState 
     matchResult && matchResult.params.spacename !== NO_SPACE_PATH
       ? matchResult.params.spacename
       : undefined;
-  const subPath = matchResult ? matchResult.params.subPath : pathname;
+  const subPath = matchResult
+    ? matchResult.params.subPath
+      ? `/${matchResult.params.subPath}`
+      : undefined
+    : pathname;
   const spacenamePath = spacename || NO_SPACE_PATH;
 
   return {
@@ -51,10 +55,7 @@ export const contextReducer = (
 ): ContextState => {
   switch (action.type) {
     case LOCATION_CHANGE:
-      return {
-        ...state,
-        ...getContext(state, action.payload.location.pathname),
-      };
+      return getContext(action.payload.location.pathname);
     default:
       return state;
   }

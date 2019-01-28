@@ -60,7 +60,7 @@ export class SpaceDropdownPageSection extends React.Component<Props> {
             <DropdownItemRoute
               key="_all"
               // if there is no subPath we must go to the root
-              href={subPath ? `/${username}/${NO_SPACE_PATH}/${subPath}` : ''}
+              href={subPath ? `/${username}/${NO_SPACE_PATH}${subPath}` : ''}
             >
               {ALL_SPACES}
             </DropdownItemRoute>

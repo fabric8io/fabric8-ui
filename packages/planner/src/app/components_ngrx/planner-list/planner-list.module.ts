@@ -49,6 +49,7 @@ import { ErrorHandler } from '../../effects/work-item-utils';
 import { FilterColumnModule } from '../../pipes/column-filter.module';
 import { TableConfigModule } from './../table-config/table-config.module';
 import { FeatureFlagModule } from 'ngx-feature-flag';
+import { PermissionService } from 'ngx-login-client';
 
 let providers = [
   WorkItemService,
@@ -75,6 +76,7 @@ let providers = [
   WorkItemTypeQuery,
   SpaceQuery,
   ErrorHandler,
+  PermissionService,
 ];
 
 @NgModule({

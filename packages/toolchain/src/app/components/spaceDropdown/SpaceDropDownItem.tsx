@@ -38,7 +38,7 @@ class SpaceDropdownItem extends React.Component<Props> {
     if (this.props.loaded) {
       const { ownername, spacename, subPath } = this.props;
       return (
-        <DropdownItemRoute href={`/${ownername}/${spacename}${subPath ? `/${subPath}` : ''}`}>
+        <DropdownItemRoute href={`/${ownername}/${spacename}${subPath || ''}`}>
           {spacename}
         </DropdownItemRoute>
       );
