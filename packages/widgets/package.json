@@ -1,7 +1,7 @@
 {
-  "name": "@osio/widgets",
+  "name": "@talamer/widgets",
   "version": "0.0.1",
-  "description": "CodeReady Toolchain common components.",
+  "description": "CodeReady Toolchain common react components.",
   "license": "Apache-2.0",
   "main": "src/index.ts",
   "module": "src/index.ts",
@@ -21,7 +21,7 @@
     "patternfly-react": "2.28.2"
   },
   "devDependencies": {
-    "@osio/scripts": "0.0.1",
+    "@talamer/scripts": "0.0.1",
     "react-docgen-typescript": "^1.12.2",
     "react-styleguidist": "9.0.0-beta4",
     "webpack-merge": "4.0.0"

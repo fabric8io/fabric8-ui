@@ -1,10 +1,10 @@
 {
-  "name": "@osio/scripts",
+  "name": "@talamer/scripts",
   "version": "0.0.1",
   "description": "OpenShift.io scripts.",
   "license": "Apache-2.0",
   "bin": {
-    "osio-scripts": "./bin/osio-scripts.js"
+    "talamer-scripts": "./bin/talamer-scripts.js"
   },
   "peerDependencies": {
     "typescript": "^3.0.0"

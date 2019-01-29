@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Nav, NavList } from '@osio/widgets';
+import { Nav, NavList } from '@talamer/widgets';
 import NavRoute from './NavRoute';
 import { AppState } from '../../redux/appState';
 import withContext, { WithContextProps } from '../../hoc/withContext';

@@ -11,7 +11,7 @@ module.exports = function() {
               transform(content) {
                 return content
                   .toString('utf-8')
-                  .replace(/{{ .Env.([a-zA-Z0-9_-]*) }}/g, (match, p1) => process.env[p1]);
+                  .replace(/{{ .Env.([a-zA-Z0-9_-]*) }}/g, (match, p1) => process.env[p1] || '');
               },
             },
           ]),

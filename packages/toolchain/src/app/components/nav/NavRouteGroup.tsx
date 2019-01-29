@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { RouteComponentProps, withRouter, matchPath } from 'react-router';
-import { NavExpandable } from '@osio/widgets';
+import { NavExpandable } from '@talamer/widgets';
 
 export type NavRouteGroupProps = {
   children?: ReactNode;

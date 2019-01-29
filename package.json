@@ -56,7 +56,7 @@
     "@angular/platform-server": "7.0.4",
     "@angular/router": "7.0.4",
     "@angular/upgrade": "7.0.4",
-    "@osio/scripts": "file:./packages/scripts",
+    "@talamer/scripts": "file:./packages/scripts",
     "@types/lodash-es": "4.17.1",
     "@types/react": "16.4.18",
     "@types/react-dom": "16.0.9",

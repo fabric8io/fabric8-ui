@@ -1,3 +1,3 @@
-require('@osio/scripts/config/jest/jasmine.shim');
+require('@talamer/scripts/config/jest/jasmine.shim');
 
-require('@osio/scripts/config/jest/setup.angular');
+require('@talamer/scripts/config/jest/setup.angular');

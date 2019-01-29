@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { asyncComponent } from '@osio/widgets';
+import { asyncComponent } from '@talamer/widgets';
 import { ConnectedRouter } from 'connected-react-router';
 import { Provider } from 'react-redux';
 import { createBrowserHistory } from 'history';
