@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dropdown, DropdownItem, DropdownPosition } from '@osio/widgets';
+import { Dropdown, DropdownItem, DropdownPosition } from '@talamer/widgets';
 import brand from '../../../brand';
 import ProductAboutModal from './ProductAboutModal';
 

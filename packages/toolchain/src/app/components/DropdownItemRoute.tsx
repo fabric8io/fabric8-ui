@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { DropdownItem } from '@osio/widgets';
+import { DropdownItem } from '@talamer/widgets';
 
 export type HeaderItemProps = RouteComponentProps<any> & {
   children: ReactNode;

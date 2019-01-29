@@ -1,5 +1,5 @@
 import React from 'react';
-import { Toolbar } from '@osio/widgets';
+import { Toolbar } from '@talamer/widgets';
 import HeaderMenuHelp from './HeaderMenuHelp';
 import HeaderMenuUser from './HeaderMenuUser';
 

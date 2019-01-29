@@ -11,8 +11,8 @@
     "build"
   ],
   "scripts": {
-    "analyze": "osio-scripts analyze",
-    "build": "CI=false STATIC_DIR=_static osio-scripts build",
+    "analyze": "talamer-scripts analyze",
+    "build": "CI=false STATIC_DIR=_static talamer-scripts build",
     "e2e": "gulp e2e",
     "e2e:clean": "gulp e2eClean",
     "e2e:last": "gulp e2eStart",
@@ -20,12 +20,12 @@
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "postinstall": "node ./scripts/postinstall.js",
     "preprod": "./scripts/configBuildEnv.sh",
-    "prod": "osio-scripts prod",
-    "start": "STATIC_DIR=_static osio-scripts start",
+    "prod": "talamer-scripts prod",
+    "start": "STATIC_DIR=_static talamer-scripts start",
     "start:prod": "npm run prod",
     "stylelint": "stylelint '**/*.less'; exit 0",
-    "test": "osio-scripts test --transformIgnorePatterns='node_modules/(?!@ngrx|ngx|fabric8|patternfly-ng|ng2|@osio)' --watchAll=false",
-    "test:debug": "osio-scripts test:debug --transformIgnorePatterns='node_modules/(?!@ngrx|ngx|fabric8|patternfly-ng|ng2|@osio)' --watchAll=false ",
+    "test": "talamer-scripts test --transformIgnorePatterns='node_modules/(?!@ngrx|ngx|fabric8|patternfly-ng|ng2|@osio)' --watchAll=false",
+    "test:debug": "talamer-scripts test:debug --transformIgnorePatterns='node_modules/(?!@ngrx|ngx|fabric8|patternfly-ng|ng2|@osio)' --watchAll=false ",
     "test:e2e": "npm run e2e"
   },
   "dependencies": {
@@ -36,7 +36,7 @@
     "@ngrx/entity": "6.1.2",
     "@ngrx/store": "6.1.2",
     "@ngrx/store-devtools": "6.1.2",
-    "@osio/scripts": "0.0.1",
+    "@talamer/scripts": "0.0.1",
     "@thisissoon/angular-inviewport": "4.0.0",
     "@types/c3": "0.6.2",
     "@types/jasmine": "3.3.0",

@@ -3,7 +3,7 @@ Based on [@patternfly/react-core#PageSection](http://patternfly-react.surge.sh/p
 A `PageSection` is a child of `Page`.
 
 ```jsx
-import { Page, PageSectionVariants } from '@osio/widgets';
+import { Page, PageSectionVariants } from '@talamer/widgets';
 
 <div style={{ height: 200, position: 'relative', display: 'flex', flexDirection: 'column' }}>
   <Page>

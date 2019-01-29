@@ -1,5 +1,5 @@
 import React from 'react';
-import { PageSection } from '@osio/widgets';
+import { PageSection } from '@talamer/widgets';
 import { Route, Switch } from 'react-router';
 import Fabric8UiPage from '../pages/Fabric8UiPage';
 import SpaceDropdownPageSection from '../SpaceDropdownPageSection';

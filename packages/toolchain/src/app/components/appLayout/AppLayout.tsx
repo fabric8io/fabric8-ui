@@ -7,7 +7,7 @@ import {
   PageHeader,
   PageSidebar,
   backgroundFilterImage,
-} from '@osio/widgets';
+} from '@talamer/widgets';
 import { global_breakpoint_md as breakpointMd } from '@patternfly/react-tokens';
 import PageContent from './PageContent';
 import brand from '../../../brand';

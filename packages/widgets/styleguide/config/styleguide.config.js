@@ -1,6 +1,6 @@
 const path = require('path');
 const merge = require('webpack-merge');
-const config = require('@osio/scripts/config/webpack/webpack.config.dev');
+const config = require('@talamer/scripts/config/webpack/webpack.config.dev');
 const fs = require('fs');
 
 const packageName = require('../../package.json').name;

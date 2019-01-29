@@ -8,13 +8,13 @@
     "build"
   ],
   "scripts": {
-    "start": "osio-scripts start",
-    "analyze": "osio-scripts analyze",
-    "build": "CI=false STATIC_DIR=_static osio-scripts build",
+    "start": "talamer-scripts start",
+    "analyze": "talamer-scripts analyze",
+    "build": "CI=false STATIC_DIR=_static talamer-scripts build",
     "preprod": "./scripts/configBuildEnv.sh",
-    "prod": "osio-scripts prod",
-    "test": "osio-scripts test --watchAll=false",
-    "test:debug": "osio-scripts test:debug --watchAll=false",
+    "prod": "talamer-scripts prod",
+    "test": "talamer-scripts test --watchAll=false",
+    "test:debug": "talamer-scripts test:debug --watchAll=false",
     "semantic-release-origin-master": "semantic-release --branch origin/master"
   },
   "peerDependencies": {
@@ -24,8 +24,8 @@
     "react-router-dom": ">= 4.3.0 < 5"
   },
   "dependencies": {
-    "@osio/scripts": "0.0.1",
-    "@osio/widgets": "0.0.1",
+    "@talamer/scripts": "0.0.1",
+    "@talamer/widgets": "0.0.1",
     "@types/react-redux": "6.0.11",
     "axios": "0.18.0",
     "connected-react-router": "6.1.0",
