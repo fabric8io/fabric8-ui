@@ -120,13 +120,11 @@ export class MarkdownComponent implements OnChanges, OnInit, AfterViewChecked {
       Object.keys(changes).indexOf('inpRenderedText') > -1 &&
       typeof this.inpRenderedText === 'undefined'
     ) {
-      console.warn('Markdown component change :: renderedText is passed undefined');
       this.renderedText = '';
     } else {
       this.renderedText = this.inpRenderedText;
     }
     if (Object.keys(changes).indexOf('inpRawText') > -1 && typeof this.inpRawText === 'undefined') {
-      console.warn('Markdown component change :: rawText is passed undefined');
       this.rawText = '';
     } else {
       this.rawText = this.inpRawText;
@@ -135,11 +133,9 @@ export class MarkdownComponent implements OnChanges, OnInit, AfterViewChecked {
 
   ngOnInit() {
     if (typeof this.renderedText === 'undefined') {
-      console.warn('Markdown component init :: renderedText is passed undefined');
       this.renderedText = '';
     }
     if (typeof this.rawText === 'undefined') {
-      console.warn('Markdown component init :: rawText is passed undefined');
       this.rawText = '';
     }
   }
@@ -158,11 +154,6 @@ export class MarkdownComponent implements OnChanges, OnInit, AfterViewChecked {
   }
 
   onInputEvent(event: any) {
-    console.log(
-      `In-Markup Markdown input Event detected for input type: ${
-        event.type
-      } with extraData ${JSON.stringify(event.extraData)}`,
-    );
     // we only support this interaction on checkboxes for now.
     // the mechanic is generic, add other controls below. In case,
     // you need to also add support for them in github-link-area as well.
@@ -220,9 +211,9 @@ export class MarkdownComponent implements OnChanges, OnInit, AfterViewChecked {
 
   onClickPreviewTab() {
     if (this.viewType === 'markdown') {
-      if (this.rawText !== this.editorInput.nativeElement.innerText.trim()) {
+      if (this.rawText !== this.editorInput.nativeElement.value.trim()) {
         // Emit raw text to get preview
-        this.rawText = this.editorInput.nativeElement.innerText.trim();
+        this.rawText = this.editorInput.nativeElement.value.trim();
         this.showPreview.emit({
           rawText: this.rawText,
           callBack: (t: string, m: string) => this.renderPreview(t, m),
@@ -299,11 +290,11 @@ export class MarkdownComponent implements OnChanges, OnInit, AfterViewChecked {
     if (this.allowEmptySave || (!this.fieldEmpty && !this.allowEmptySave)) {
       if (
         this.viewType === 'markdown' &&
-        this.previousRawText !== this.editorInput.nativeElement.innerText.trim()
+        this.previousRawText !== this.editorInput.nativeElement.value.trim()
       ) {
         this.saving = true;
         this.onSaveClick.emit({
-          rawText: this.editorInput.nativeElement.innerText.trim(),
+          rawText: this.editorInput.nativeElement.value.trim(),
           callBack: (t: string, m: string) => this.saveUpdate(t, m),
         });
       } else if (this.viewType === 'preview' && this.previousRawText !== this.rawText) {
@@ -335,13 +326,11 @@ export class MarkdownComponent implements OnChanges, OnInit, AfterViewChecked {
   renderPreview(rawText: string, renderedText: string) {
     this.rendering = false;
     if (typeof rawText === 'undefined') {
-      console.warn('Markdown component preview callback :: rawText is passed undefined');
       this.rawText = '';
     } else {
       this.rawText = rawText;
     }
     if (typeof renderedText === 'undefined') {
-      console.warn('Markdown component preview callback :: renderedText is passed undefined');
       this.renderedText = '';
     } else {
       this.renderedText = renderedText;
@@ -352,13 +341,11 @@ export class MarkdownComponent implements OnChanges, OnInit, AfterViewChecked {
   saveUpdate(rawText: string, renderedText: any) {
     this.saving = false;
     if (typeof rawText === 'undefined') {
-      console.warn('Markdown component save callback :: rawText is passed undefined');
       this.rawText = '';
     } else {
       this.rawText = rawText;
     }
     if (typeof renderedText === 'undefined') {
-      console.warn('Markdown component save callback :: renderedText is passed undefined');
       this.renderedText = '';
     } else {
       this.renderedText = renderedText;
