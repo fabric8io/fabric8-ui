@@ -1,0 +1,130 @@
+<f8-feature-toggle
+  featureName="Analyze.WorkItemOverviewCard"
+  [userLevel]="user"
+></f8-feature-toggle>
+<ng-template #user>
+  <div id="spacehome-workitems-card" class="space-settings-widget card-pf f8-small-card">
+    <div class="card-pf-heading f8-card-heading"><h2 class="card-pf-title">Space settings</h2></div>
+    <div class="card-pf-body f8-small-card-body">
+      <div class="">
+        <p>{{ UserEmail }} ({{ UserName }})</p>
+        <ul class="f8-space-settings-data-links">
+          <li>
+            <span class="pficon pficon-info pficon-users fa-sm"> </span>
+            {{ collaboratorCount }} Collaborators |
+            <a class="add-collaborators-link" (click)="launchAddCollaborators()">
+              <span class="pficon pficon-add-circle-o fa-lg"></span> Add Collaborators
+            </a>
+          </li>
+          <li></li>
+          <li><span class="fa fa-life-saver fa-sm"></span> {{ areaCount }} Areas</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card-pf-footer space-description-footer">
+      <div class=" f8-space-masthead-description">
+        <!-- There must be no spaces here, otherwise we end up with random whitespace in the editable-->
+        <div *ngIf="userOwnsSpace; else userDoesNotOwnSpaceDescription" class="form-group">
+          <textarea
+            row="1"
+            placeholder="Description goes here"
+            class="space-description form-control"
+            *ngIf="isEditing && isEditable()"
+            (keyup.enter)="onUpdateDescription(description.value)"
+            (keydown.enter)="preventDef($event)"
+            #spaceDescription
+            >{{ space?.attributes.description }}</textarea
+          >
+          <div class="f8-space-masthead-description-edit-buttons" *ngIf="isEditing">
+            <button
+              id="_btn_cancel_description"
+              class="pull-right btn btn-default edit-space-description-btn"
+              (click)="stopEditingDescription()"
+            >
+              Cancel
+            </button>
+            <!--Save icon-->
+            <button
+              id="workItemTitle_btn_save_description"
+              class="pull-right btn btn-primary edit-space-description-btn "
+              (click)="saveDescription()"
+            >
+              Save
+            </button>
+          </div>
+          <p
+            *ngIf="!isEditing || !isEditable()"
+            (click)="startEditingDescription()"
+            class="f8-space-masthead-description-body edit-space-description-pencil truncate-multiline"
+          >
+            <span *ngIf="SpaceDescription.length; else enterDescription">
+              {{ SpaceDescription }}
+            </span>
+            <ng-template #enterDescription>
+              <span style="font-style: italic;color:grey">Enter a description</span>
+            </ng-template>
+          </p>
+        </div>
+        <ng-template #userDoesNotOwnSpaceDescription>
+          <p class="truncate-multiline">
+            <span *ngIf="SpaceDescription.length; else noDescription">
+              {{ SpaceDescription }}
+            </span>
+            <ng-template #noDescription>
+              <span style="font-style: italic;color:grey">No description available</span>
+            </ng-template>
+          </p>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<div class="modal fade" bsModal #modalAdd="bs-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <add-collaborators-dialog
+        #addCollabDialog
+        [host]="modalAdd"
+        [spaceId]="space.id"
+        (onAdded)="refreshCollaboratorCount(); addCollaboratorsToParent($event)"
+      ></add-collaborators-dialog>
+    </div>
+  </div>
+</div>
+
+<ng-template #popoverContent>
+  <div class="popover-list-wrapper no-vertical-scroll">
+    <div
+      almInfiniteScroll
+      class="collaborator-list-scroll"
+      (initItems)="popoverInit($event.pageSize)"
+      (fetchMore)="fetchMoreCollaborators()"
+    >
+      <div class="collaborator-item" *ngFor="let item of filteredCollaborators">
+        <span class="collaborator-avatar">
+          <img
+            *ngIf="
+              item.attributes.imageURL !== undefined && item.attributes.imageURL.length !== 0;
+              else defaultImageUrl
+            "
+            [src]="item.attributes.imageURL"
+            class="icon-user"
+            width="24px"
+            height="24px"
+          />
+          <ng-template #defaultImageUrl>
+            <img
+              src="../../../assets/images/profile-user.png"
+              class="icon-user"
+              width="24px"
+              height="24px"
+            />
+          </ng-template>
+        </span>
+        <span class="collaborator-name" [title]="item.attributes.username">
+          {{ item.attributes.fullName }}
+        </span>
+      </div>
+    </div>
+  </div>
+</ng-template>

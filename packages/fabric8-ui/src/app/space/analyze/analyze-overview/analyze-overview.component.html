@@ -5,32 +5,50 @@
 ></f8-feature-toggle>
 <ng-template #newDashboard>
   <div id="analyze-overview-dashboard" class="container-fluid analyze-overview-wrapper">
-    <div class="row f8-dashboard-masthead">
-      <div class="col-sm-10">
-        <fabric8-edit-space-description-widget
-          [userOwnsSpace]="userOwnsSpace"
-          [userIsSpaceAdmin]="userIsSpaceAdmin"
-        ></fabric8-edit-space-description-widget>
-      </div>
-      <div class="col-sm-2">
-        <div *ngIf="userOwnsSpace">
-          <button
-            *ngIf="this.authentication.isLoggedIn()"
-            id="user-level-analyze-overview-dashboard-create-space-button"
-            class="btn btn-primary btn-lg f8-dashboard-masthead-create-application pull-right"
-            (click)="showAddAppOverlay()"
-          >
-            Create an Application
-          </button>
+    <f8-feature-toggle
+      featureName="NewNavigation"
+      [userLevel]="hideBanner"
+      [defaultLevel]="showBanner"
+    ></f8-feature-toggle>
+    <ng-template #hideBanner></ng-template>
+    <ng-template #showBanner>
+      <div class="row f8-dashboard-masthead">
+        <div class="col-sm-10">
+          <fabric8-edit-space-description-widget
+            [userOwnsSpace]="userOwnsSpace"
+            [userIsSpaceAdmin]="userIsSpaceAdmin"
+          ></fabric8-edit-space-description-widget>
+        </div>
+        <div class="col-sm-2">
+          <div *ngIf="userOwnsSpace">
+            <button
+              *ngIf="this.authentication.isLoggedIn()"
+              id="user-level-analyze-overview-dashboard-create-space-button"
+              class="btn btn-primary btn-lg f8-dashboard-masthead-create-application pull-right"
+              (click)="showAddAppOverlay()"
+            >
+              Create an Application
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </ng-template>
     <div class="cards-pf">
       <div class="row row-cards-pf">
-        <div class="col-xs-12 col-md-4">
-          <fabric8-work-item-widget [userOwnsSpace]="userOwnsSpace"></fabric8-work-item-widget>
+        <div class="col-md-4">
+          <div class="col-md-12 no-padding">
+            <fabric8-space-settings-widget
+              [userOwnsSpace]="userOwnsSpace"
+              [space]="space"
+              [userIsSpaceAdmin]="userIsSpaceAdmin"
+              [user]="loggedInUser"
+            ></fabric8-space-settings-widget>
+          </div>
+          <div class="col-md-12 no-padding">
+            <fabric8-work-item-widget [userOwnsSpace]="userOwnsSpace"></fabric8-work-item-widget>
+          </div>
         </div>
-        <div class="col-xs-12 col-md-8">
+        <div class="col-md-8">
           <fabric8-applications-widget
             [userOwnsSpace]="userOwnsSpace"
             (addToSpace)="showAddAppOverlay()"
