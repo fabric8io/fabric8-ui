@@ -53,6 +53,7 @@ npm-debug.log
 /public/dist/
 /packages/*/build/
 /packages/*/dist/
+/packages/*/package-lock.json
 /dist/**
 /.awcache
 .webpack.json

@@ -21,6 +21,7 @@ import { FabPlannerIterationModalComponent } from '../iterations-modal/iteration
 import { SwitchModule } from './../../widgets/switch/switch.module';
 import { IterationComponent } from './iterations-panel.component';
 import { AutofocusModule } from 'ngx-widgets';
+import { PermissionService } from 'ngx-login-client';
 
 // ngrx stuff
 import { StoreModule } from '@ngrx/store';
@@ -64,6 +65,6 @@ import { initialUIState } from './../../states/iteration.state';
     IterationTreeComponent,
   ],
   exports: [IterationComponent],
-  providers: [BsDropdownConfig, IterationService, TooltipConfig, IterationQuery],
+  providers: [BsDropdownConfig, IterationService, TooltipConfig, IterationQuery, PermissionService],
 })
 export class IterationModule {}

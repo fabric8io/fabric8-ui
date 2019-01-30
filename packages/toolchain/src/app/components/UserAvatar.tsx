@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar } from '@osio/widgets';
+import { Avatar } from '@talamer/widgets';
 
 export interface UserAvatarProps {
   name?: string;

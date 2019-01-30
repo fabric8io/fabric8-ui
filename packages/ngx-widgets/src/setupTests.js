@@ -1,4 +1,4 @@
-require('@osio/scripts/config/jest/jasmine.shim');
+require('@talamer/scripts/config/jest/jasmine.shim');
 
 /**
  * ISSUE: https://github.com/thymikee/jest-preset-angular/issues/170
@@ -23,4 +23,4 @@ if (document.body.style['animation-play-state'] === undefined && CSSStyleDeclara
   CSSStyleDeclaration.prototype.animationPlayState = '';
 }
 
-require('@osio/scripts/config/jest/setup.angular');
+require('@talamer/scripts/config/jest/setup.angular');

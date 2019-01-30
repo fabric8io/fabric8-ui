@@ -9,8 +9,8 @@
     "lint:less:fix": "npm run lint:less -- --fix",
     "lint:ts": "tslint -c tslint.json 'src/**/*.ts'",
     "lint:ts:fix": "npm run lint:ts -- --fix",
-    "start": "osio-scripts start",
-    "test": "osio-scripts test --watchAll=false"
+    "start": "talamer-scripts start",
+    "test": "talamer-scripts test --watchAll=false"
   },
   "license": "Apache-2.0",
   "keywords": [
@@ -43,7 +43,7 @@
     "rxjs": "^6.3.3"
   },
   "dependencies": {
-    "@osio/scripts": "0.0.1",
+    "@talamer/scripts": "0.0.1",
     "@types/markdown-it": "0.0.7",
     "markdown-it": "8.4.2",
     "moment": "2.23.0",

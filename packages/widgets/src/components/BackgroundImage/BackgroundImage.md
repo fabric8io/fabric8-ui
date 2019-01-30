@@ -14,7 +14,7 @@ const BackgroundImageSrc = {
 ```
 
 ```jsx
-import { BackgroundImageSrc, backgroundFilterImage } from '@osio/widgets';
+import { BackgroundImageSrc, backgroundFilterImage } from '@talamer/widgets';
 const images = {
   [BackgroundImageSrc.lg]: './images/pfbg_1200.jpg',
   [BackgroundImageSrc.sm]: './images/pfbg_768.jpg',

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { asyncComponent } from '@osio/widgets';
+import { asyncComponent } from '@talamer/widgets';
 import { ConnectedRouter } from 'connected-react-router';
+import { Provider } from 'react-redux';
 import { createBrowserHistory } from 'history';
-import { createStoreProvider } from './redux/store';
+import { configureStore } from './redux/store';
 import FeatureFlagGuard from './components/FeatureFlagGuard';
 import Authentication from './components/Authentication';
 
@@ -15,19 +16,19 @@ const AsyncAngularFabric8UI = asyncComponent({
 });
 
 const history = createBrowserHistory();
-const StoreProvider = createStoreProvider(history);
+const store = configureStore(history);
 
 export default class App extends Component {
   render() {
     return (
-      <StoreProvider>
+      <Provider store={store}>
         <ConnectedRouter history={history}>
           <FeatureFlagGuard featureId="NewNavigation" fallback={<AsyncAngularFabric8UI />}>
             <Authentication />
             <AsyncAppLayout />
           </FeatureFlagGuard>
         </ConnectedRouter>
-      </StoreProvider>
+      </Provider>
     );
   }
 }

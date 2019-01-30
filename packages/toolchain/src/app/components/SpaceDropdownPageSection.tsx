@@ -1,5 +1,5 @@
 import React from 'react';
-import { PageSection, PageSectionVariants, Dropdown } from '@osio/widgets';
+import { PageSection, PageSectionVariants, Dropdown } from '@talamer/widgets';
 import { connect } from 'react-redux';
 import DropdownItemRoute from './DropdownItemRoute';
 import { AppState } from '../redux/appState';
@@ -60,7 +60,7 @@ export class SpaceDropdownPageSection extends React.Component<Props> {
             <DropdownItemRoute
               key="_all"
               // if there is no subPath we must go to the root
-              href={subPath ? `/${username}/${NO_SPACE_PATH}/${subPath}` : ''}
+              href={subPath ? `/${username}/${NO_SPACE_PATH}${subPath}` : ''}
             >
               {ALL_SPACES}
             </DropdownItemRoute>
