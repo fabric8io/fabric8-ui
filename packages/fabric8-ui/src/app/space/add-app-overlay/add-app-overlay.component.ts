@@ -1,8 +1,7 @@
 import {
   Component,
   ElementRef,
-  HostListener,
-  Input,
+  Injector,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -15,11 +14,10 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Context, Space } from 'ngx-fabric8-wit';
 import { DependencyCheckService } from 'ngx-launcher';
 import { User, UserService } from 'ngx-login-client';
-import { empty as observableEmpty, Subscription } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 import { ContextService } from '../../shared/context.service';
-import { PipelinesService } from "../../shared/runtime-console/pipelines.service";
-import { BuildConfig } from "../../../a-runtime-console";
+import { PipelinesService } from '../../shared/runtime-console/pipelines.service';
+import { BuildConfig } from '../../../a-runtime-console';
 
 export type appModal = {
   show: boolean;
@@ -48,13 +46,15 @@ export class AddAppOverlayComponent implements OnInit, OnDestroy {
   navigationInProgress: boolean = false;
   isModalShown: boolean = false;
 
+  private pipelinesService: PipelinesService;
+
   constructor(
     private contextService: ContextService,
     private dependencyCheckService: DependencyCheckService,
     public broadcaster: Broadcaster,
     private userService: UserService,
     private router: Router,
-    private pipelinesService: PipelinesService
+    private injector: Injector,
   ) {
     this.loggedInUser = this.userService.currentLoggedInUser;
     this.subscriptions.push(
@@ -64,24 +64,9 @@ export class AddAppOverlayComponent implements OnInit, OnDestroy {
     );
     if (this.contextService && this.contextService.current) {
       this.subscriptions.push(
-        this.contextService.current
-          .pipe(
-            map((ctx: Context) => ctx.space),
-            switchMap((space) => {
-              if (space) {
-                this.currentSpace = space;
-                return this.pipelinesService.current
-              } else {
-                return observableEmpty();
-              }
-            }),
-          )
-          .subscribe((buildConfigs: BuildConfig[]) => {
-            if (buildConfigs) {
-              let applicationNames = buildConfigs.map(bc => bc.name);
-                  this.applications = applicationNames;
-            }
-          }),
+        this.contextService.current.subscribe((ctx: Context) => {
+          this.currentSpace = ctx.space;
+        }),
       );
     }
   }
@@ -91,14 +76,14 @@ export class AddAppOverlayComponent implements OnInit, OnDestroy {
       this.broadcaster.on('showAddAppOverlay').subscribe((arg: appModal | boolean) => {
         if (typeof arg === 'boolean') {
           if (arg) {
-            this.modalAddAppOverlay.show();
+            this.showModal();
           } else {
             this.modalAddAppOverlay.hide();
           }
         } else if (typeof arg === 'object') {
           if (arg.show) {
             this.selectedFlow = arg.selectedFlow;
-            this.modalAddAppOverlay.show();
+            this.showModal();
           } else {
             this.modalAddAppOverlay.show();
           }
@@ -111,6 +96,22 @@ export class AddAppOverlayComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => {
       sub.unsubscribe();
     });
+  }
+
+  showModal(): void {
+    if (!this.pipelinesService) {
+      this.pipelinesService = this.injector.get(PipelinesService);
+      this.subscriptions.push(
+        this.pipelinesService.current.subscribe((buildConfigs: BuildConfig[]) => {
+          if (buildConfigs) {
+            this.applications = buildConfigs.map((bc) => bc.name);
+          }
+          this.modalAddAppOverlay.show();
+        }),
+      );
+    } else {
+      this.modalAddAppOverlay.show();
+    }
   }
 
   /**
