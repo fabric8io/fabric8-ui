@@ -6,11 +6,11 @@ import { ContextService } from '../../../shared/context.service';
 import { of } from 'rxjs';
 import { PipelinesService } from "../../../shared/runtime-console/pipelines.service";
 import { BuildConfig } from "../../../../a-runtime-console";
+import {map} from "rxjs/operators";
 
 @Injectable()
 export class AppLauncherDependencyCheckService implements DependencyCheckService {
   private context: Context;
-  private applications = [];
   private pipelinesService: PipelinesService;
   constructor(
     private contextService: ContextService,
@@ -43,12 +43,11 @@ export class AppLauncherDependencyCheckService implements DependencyCheckService
   getApplicationsInASpace(): Observable<any[]> {
     if (!this.pipelinesService) {
       this.pipelinesService = this.injector.get(PipelinesService);
-      this.pipelinesService.current.subscribe((buildConfigs: BuildConfig[]) => {
-          if (buildConfigs) {
-            this.applications = buildConfigs.map((bc) =>  ({ attributes: {name: bc.name}}));
-          }
-        });
     }
-    return of(this.applications);
+    return this.pipelinesService.current.pipe(map((buildConfigs: BuildConfig[]) => {
+      if (buildConfigs) {
+        return buildConfigs.map((bc) =>  ({ attributes: {name: bc.name}}));
+      }
+    }))
   }
 }
