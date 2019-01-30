@@ -205,19 +205,12 @@ describe('AddAppOverlayComponent', () => {
   });
 
   describe('#constructor', () => {
-    it('should not have applications if the current space is not defined', () => {
+    it('should not have applications if when the component is created', () => {
       mockContext.space = null;
       fixture = TestBed.createComponent(AddAppOverlayComponent);
       component = fixture.componentInstance;
       fixture.detectChanges();
       expect(component.applications).toEqual([]);
-    });
-    it('should retieve applications if the current space is defined', () => {
-      mockContext.space.id = 'mock-space-id';
-      fixture = TestBed.createComponent(AddAppOverlayComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-      expect(component.applications).toEqual(["app-apr-10-2018-4-25", "app-may-11-2018", "app-may-14-1-04"]);
     });
   });
 
@@ -243,24 +236,28 @@ describe('AddAppOverlayComponent', () => {
     });
 
     it('application is not valid', () => {
+      component.showModal();
       component.projectName = '#app-may-11-2018-1';
       component.validateProjectName();
       expect(component.isProjectNameValid).toBeFalsy();
     });
 
     it('application is not available', () => {
+      component.showModal();
       component.projectName = 'app-may-11-2018';
       component.validateProjectName();
       expect(component.isProjectNameAvailable).toBeFalsy();
     });
   
     it('application is available', () => {
+      component.showModal();
       component.projectName = 'app-may-11-2018-1';
       component.validateProjectName();
       expect(component.isProjectNameAvailable).toBeTruthy();
     });
 
     it('application is valid', () => {
+      component.showModal();
       component.projectName = 'app-may-11-2018-1';
       component.validateProjectName();
       expect(component.isProjectNameValid).toBeTruthy();

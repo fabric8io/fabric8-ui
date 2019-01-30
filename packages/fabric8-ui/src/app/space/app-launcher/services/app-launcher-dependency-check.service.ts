@@ -1,15 +1,20 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { Context } from 'ngx-fabric8-wit';
 import { DependencyCheck, DependencyCheckService } from 'ngx-launcher';
 import { Observable, of as observableOf } from 'rxjs';
 import { ContextService } from '../../../shared/context.service';
 import { of } from 'rxjs';
+import { PipelinesService } from "../../../shared/runtime-console/pipelines.service";
+import { BuildConfig } from "../../../../a-runtime-console";
 
 @Injectable()
 export class AppLauncherDependencyCheckService implements DependencyCheckService {
   private context: Context;
+  private applications = [];
+  private pipelinesService: PipelinesService;
   constructor(
     private contextService: ContextService,
+    private injector: Injector,
   ) {
     this.contextService.current.subscribe((context) => (this.context = context));
   }
@@ -36,6 +41,14 @@ export class AppLauncherDependencyCheckService implements DependencyCheckService
    * @returns Observable
    */
   getApplicationsInASpace(): Observable<any[]> {
-    return of([])
+    if (!this.pipelinesService) {
+      this.pipelinesService = this.injector.get(PipelinesService);
+      this.pipelinesService.current.subscribe((buildConfigs: BuildConfig[]) => {
+          if (buildConfigs) {
+            this.applications = buildConfigs.map((bc) =>  ({ attributes: {name: bc.name}}));
+          }
+        });
+    }
+    return of(this.applications);
   }
 }

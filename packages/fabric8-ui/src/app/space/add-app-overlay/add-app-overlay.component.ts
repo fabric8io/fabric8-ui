@@ -106,12 +106,10 @@ export class AddAppOverlayComponent implements OnInit, OnDestroy {
           if (buildConfigs) {
             this.applications = buildConfigs.map((bc) => bc.name);
           }
-          this.modalAddAppOverlay.show();
         }),
       );
-    } else {
-      this.modalAddAppOverlay.show();
     }
+    this.modalAddAppOverlay.show();
   }
 
   /**
