@@ -39,21 +39,23 @@ class MockCodebasesItemWorkspacesComponent {
 describe('AddCodebaseWidget CodebaseItemComponent', () => {
   let gitHubService: jasmine.SpyObj<GitHubService>;
 
-  beforeEach(function(): void {
-    gitHubService = createMock(GitHubService);
-    gitHubService.getRepoDetailsByUrl.and.returnValue(new Subject<GitHubRepoDetails>());
-    TestBed.overrideProvider(GitHubService, { useValue: gitHubService });
-  });
+  beforeEach(
+    (): void => {
+      gitHubService = createMock(GitHubService);
+      gitHubService.getRepoDetailsByUrl.and.returnValue(new Subject<GitHubRepoDetails>());
+      TestBed.overrideProvider(GitHubService, { useValue: gitHubService });
+    },
+  );
 
   const testContext = initContext(CodebaseItemComponent, HostComponent, {
     declarations: [MockCodebasesItemWorkspacesComponent, MockFeatureToggleComponent],
   });
 
-  it('should receive provided Codebase', function(): void {
+  it('should receive provided Codebase', (): void => {
     expect(testContext.testedDirective.codebase).toBe(testContext.hostComponent.codebase);
   });
 
-  it('should provide codebase to child codebases-item-workspaces component', function(): void {
+  it('should provide codebase to child codebases-item-workspaces component', (): void => {
     const child: MockCodebasesItemWorkspacesComponent = testContext.tested.query(
       By.directive(MockCodebasesItemWorkspacesComponent),
     ).componentInstance;
@@ -61,7 +63,7 @@ describe('AddCodebaseWidget CodebaseItemComponent', () => {
   });
 
   describe('lastUpdated', () => {
-    it('should emit the pushed_at property of the GitHubRepoDetails', function(done: DoneFn): void {
+    it('should emit the pushed_at property of the GitHubRepoDetails', (done: DoneFn): void => {
       const pushed_at: string = '2018-09-07T20:15:52.465Z';
       testContext.testedDirective.lastUpdated.pipe(first()).subscribe(
         (lastUpdated: string): void => {
@@ -72,7 +74,7 @@ describe('AddCodebaseWidget CodebaseItemComponent', () => {
       gitHubService.getRepoDetailsByUrl().next({ pushed_at });
     });
 
-    it('should emit empty string if pushed_at is an invalid date string', function(done: DoneFn): void {
+    it('should emit empty string if pushed_at is an invalid date string', (done: DoneFn): void => {
       const pushed_at: string = 'invalid date';
       testContext.testedDirective.lastUpdated.pipe(first()).subscribe(
         (lastUpdated: string): void => {
@@ -83,7 +85,7 @@ describe('AddCodebaseWidget CodebaseItemComponent', () => {
       gitHubService.getRepoDetailsByUrl().next({ pushed_at });
     });
 
-    it('should emit empty string if pushed_at is undefined', function(done: DoneFn): void {
+    it('should emit empty string if pushed_at is undefined', (done: DoneFn): void => {
       const pushed_at: string = undefined;
       testContext.testedDirective.lastUpdated.pipe(first()).subscribe(
         (lastUpdated: string): void => {
@@ -94,7 +96,7 @@ describe('AddCodebaseWidget CodebaseItemComponent', () => {
       gitHubService.getRepoDetailsByUrl().next({ pushed_at });
     });
 
-    it('should emit empty string if request produces an error', function(done: DoneFn): void {
+    it('should emit empty string if request produces an error', (done: DoneFn): void => {
       testContext.testedDirective.lastUpdated.pipe(first()).subscribe(
         (lastUpdated: string): void => {
           expect(lastUpdated).toEqual('');

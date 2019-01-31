@@ -44,7 +44,7 @@ describe('MySpacesToolbarComponent', () => {
     declarations: [FakePfngToolbarComponent, MockFeatureToggleComponent],
   });
 
-  it('should update filterConfig resultsCount', function() {
+  it('should update filterConfig resultsCount', () => {
     const initialCount: number = 0;
     expect(testContext.testedDirective.filterConfig.resultsCount).toBe(initialCount);
 
@@ -55,13 +55,13 @@ describe('MySpacesToolbarComponent', () => {
     expect(testContext.testedDirective.filterConfig.resultsCount).toBe(nextCount);
   });
 
-  it('should emit filterChange event', function() {
+  it('should emit filterChange event', () => {
     spyOn(testContext.hostComponent, 'filterChange');
     testContext.testedDirective.filterChange({});
     expect(testContext.hostComponent.filterChange).toHaveBeenCalledWith({});
   });
 
-  it('should emit sortChange event', function() {
+  it('should emit sortChange event', () => {
     spyOn(testContext.hostComponent, 'sortChange');
     testContext.testedDirective.sortChange({
       field: {

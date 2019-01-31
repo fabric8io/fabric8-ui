@@ -89,7 +89,7 @@ export class LoginService {
   public login() {
     const query = this.window.location.search.substr(1);
     const result: any = {};
-    query.split('&').forEach(function(part) {
+    query.split('&').forEach((part) => {
       const item: any = part.split('=');
       result[item[0]] = decodeURIComponent(item[1]);
     });

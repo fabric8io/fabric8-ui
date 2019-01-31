@@ -84,7 +84,7 @@ describe('HeaderComponent', () => {
     component = fixture.debugElement.componentInstance;
   });
 
-  it('should return default context when in _home state', function(done: DoneFn) {
+  it('should return default context when in _home state', (done: DoneFn) => {
     testRouter.navigate(['_home']).then(
       (status: boolean): void => {
         expect(status).toBeTruthy();
@@ -94,7 +94,7 @@ describe('HeaderComponent', () => {
     );
   });
 
-  it('should return default context when in _featureflag state', function(done: DoneFn) {
+  it('should return default context when in _featureflag state', (done: DoneFn) => {
     testRouter.navigate(['_featureflag']).then(
       (status: boolean): void => {
         expect(status).toBeTruthy();
@@ -104,7 +104,7 @@ describe('HeaderComponent', () => {
     );
   });
 
-  it('should return current context when in non-home valid state', function(done: DoneFn) {
+  it('should return current context when in non-home valid state', (done: DoneFn) => {
     testRouter.navigate(['_other']).then(
       (status: boolean): void => {
         expect(status).toBeTruthy();
@@ -115,7 +115,7 @@ describe('HeaderComponent', () => {
   });
 
   describe('_error state handling', () => {
-    it('should return no context when directly visiting _error', function(done: DoneFn) {
+    it('should return no context when directly visiting _error', (done: DoneFn) => {
       testRouter.navigate(['_error']).then(
         (status: boolean): void => {
           expect(status).toBeTruthy();
@@ -125,7 +125,7 @@ describe('HeaderComponent', () => {
       );
     });
 
-    it('should return no context when redirected to _error', function(done: DoneFn) {
+    it('should return no context when redirected to _error', (done: DoneFn) => {
       testRouter.navigateByUrl('/nonexistent/app/path').then(
         (status: boolean): void => {
           expect(status).toBeTruthy();

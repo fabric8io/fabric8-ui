@@ -16,39 +16,41 @@ describe('WorkspacesService', () => {
   let service: WorkspacesService;
   let controller: HttpTestingController;
 
-  beforeEach(function(): void {
-    TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [
-        WorkspacesService,
-        {
-          provide: WIT_API_URL,
-          useValue: 'https://example.com/api/',
-        },
-        {
-          provide: AuthenticationService,
-          useFactory: (): jasmine.SpyObj<AuthenticationService> => {
-            const svc: jasmine.SpyObj<AuthenticationService> = createMock(AuthenticationService);
-            svc.getToken.and.returnValue('mock-auth-token');
-            return svc;
+  beforeEach(
+    (): void => {
+      TestBed.configureTestingModule({
+        imports: [HttpClientTestingModule],
+        providers: [
+          WorkspacesService,
+          {
+            provide: WIT_API_URL,
+            useValue: 'https://example.com/api/',
           },
-        },
-        {
-          provide: Logger,
-          useFactory: (): jasmine.SpyObj<Logger> => createMock(Logger),
-        },
-      ],
-    });
-    service = TestBed.get(WorkspacesService);
-    controller = TestBed.get(HttpTestingController);
-  });
+          {
+            provide: AuthenticationService,
+            useFactory: (): jasmine.SpyObj<AuthenticationService> => {
+              const svc: jasmine.SpyObj<AuthenticationService> = createMock(AuthenticationService);
+              svc.getToken.and.returnValue('mock-auth-token');
+              return svc;
+            },
+          },
+          {
+            provide: Logger,
+            useFactory: (): jasmine.SpyObj<Logger> => createMock(Logger),
+          },
+        ],
+      });
+      service = TestBed.get(WorkspacesService);
+      controller = TestBed.get(HttpTestingController);
+    },
+  );
 
-  it('should be instantiable', function(): void {
+  it('should be instantiable', (): void => {
     expect(service).toBeDefined();
   });
 
   describe('#createWorkspace', () => {
-    it('should send Authorization header', function(done: DoneFn): void {
+    it('should send Authorization header', (done: DoneFn): void => {
       service
         .createWorkspace('mockId')
         .pipe(first())
@@ -65,7 +67,7 @@ describe('WorkspacesService', () => {
       req.flush({});
     });
 
-    it('should send POST request', function(done: DoneFn): void {
+    it('should send POST request', (done: DoneFn): void => {
       service
         .createWorkspace('mockId')
         .pipe(first())
@@ -82,7 +84,7 @@ describe('WorkspacesService', () => {
       req.flush({});
     });
 
-    it('should return correct data', function(done: DoneFn): void {
+    it('should return correct data', (done: DoneFn): void => {
       const expectedResponse: WorkspaceLinks = {
         links: {
           open: 'https://example.com/workspaces/1',
@@ -105,7 +107,7 @@ describe('WorkspacesService', () => {
   });
 
   describe('#getWorkspaces', () => {
-    it('should send Authorization header', function(done: DoneFn): void {
+    it('should send Authorization header', (done: DoneFn): void => {
       service
         .getWorkspaces('mockId')
         .pipe(first())
@@ -122,7 +124,7 @@ describe('WorkspacesService', () => {
       req.flush({});
     });
 
-    it('should send GET request', function(done: DoneFn): void {
+    it('should send GET request', (done: DoneFn): void => {
       service
         .getWorkspaces('mockId')
         .pipe(first())
@@ -139,7 +141,7 @@ describe('WorkspacesService', () => {
       req.flush({});
     });
 
-    it('should return correct data', function(done: DoneFn): void {
+    it('should return correct data', (done: DoneFn): void => {
       const expectedResponse: Workspace[] = [
         {
           type: 'workspace',
@@ -166,7 +168,7 @@ describe('WorkspacesService', () => {
   });
 
   describe('#openWorkspace', () => {
-    it('should send Authorization header', function(done: DoneFn): void {
+    it('should send Authorization header', (done: DoneFn): void => {
       service
         .openWorkspace('https://example.com/workspaces/1')
         .pipe(first())
@@ -181,7 +183,7 @@ describe('WorkspacesService', () => {
       req.flush({});
     });
 
-    it('should send POST request', function(done: DoneFn): void {
+    it('should send POST request', (done: DoneFn): void => {
       service
         .openWorkspace('https://example.com/workspaces/1')
         .pipe(first())
@@ -196,7 +198,7 @@ describe('WorkspacesService', () => {
       req.flush({});
     });
 
-    it('should return correct data', function(done: DoneFn): void {
+    it('should return correct data', (done: DoneFn): void => {
       const expectedResponse: WorkspaceLinks = {
         links: {
           open: 'https://example.com/workspaces/1',

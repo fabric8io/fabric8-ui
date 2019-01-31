@@ -203,7 +203,7 @@ describe('ApplicatonsListComponent', () => {
   );
 
   describe('Applications list with build configs', () => {
-    it('Build configs should be set', function() {
+    it('Build configs should be set', () => {
       expect(testContext.testedDirective.buildConfigs as any[]).toContain(buildConfig1);
       expect(testContext.testedDirective.buildConfigs as any[]).toContain(buildConfig2);
       expect(testContext.testedDirective.buildConfigs as any[]).toContain(buildConfig3);

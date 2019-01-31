@@ -30,14 +30,14 @@ describe('CreateAreaDialogComponent', () => {
   });
 
   describe('#validateAreaName', () => {
-    it('should reset the current error state when called', function() {
+    it('should reset the current error state when called', () => {
       spyOn(testContext.testedDirective, 'resetErrors');
       testContext.testedDirective.name = 'mock-name';
       testContext.testedDirective.validateAreaName();
       expect(testContext.testedDirective.resetErrors).toHaveBeenCalled();
     });
 
-    it('should not set an error state if the name is valid', function() {
+    it('should not set an error state if the name is valid', () => {
       spyOn(testContext.testedDirective, 'handleError');
       testContext.testedDirective.host = jasmine.createSpyObj('ModalDirective', ['hide']);
       testContext.testedDirective.name = 'mock-name';
@@ -47,7 +47,7 @@ describe('CreateAreaDialogComponent', () => {
       expect(testContext.testedDirective.handleError).toHaveBeenCalledTimes(0);
     });
 
-    it('should set the areaCreationStatus to EMPTY_NAME_FAILURE if the name is an empty string', function() {
+    it('should set the areaCreationStatus to EMPTY_NAME_FAILURE if the name is an empty string', () => {
       testContext.testedDirective.name = ' ';
       testContext.testedDirective.validateAreaName();
       expect(testContext.testedDirective.areaCreationStatus).toEqual(
@@ -55,7 +55,7 @@ describe('CreateAreaDialogComponent', () => {
       );
     });
 
-    it('should set the areaCreationStatus to EXCEED_LENGTH_FAILURE if the name is longer than 63 chars', function() {
+    it('should set the areaCreationStatus to EXCEED_LENGTH_FAILURE if the name is longer than 63 chars', () => {
       testContext.testedDirective.name =
         'thisisanareanamethatisprettylongitsactuallymorethan63characters!';
       testContext.testedDirective.validateAreaName();
@@ -66,7 +66,7 @@ describe('CreateAreaDialogComponent', () => {
   });
 
   describe('#handleError', () => {
-    it('should set the areaCreationStatus to UNIQUE_VALIDATION_FAILURE if a 409 error is recorded', function() {
+    it('should set the areaCreationStatus to UNIQUE_VALIDATION_FAILURE if a 409 error is recorded', () => {
       const error: any = {
         errors: [
           {
@@ -80,7 +80,7 @@ describe('CreateAreaDialogComponent', () => {
       );
     });
 
-    it('should set the areaCreationStatus to OK if there are no errors', function() {
+    it('should set the areaCreationStatus to OK if there are no errors', () => {
       const error: any = {
         errors: [],
       };

@@ -70,11 +70,11 @@ describe('CollaboratorsComponent', () => {
     schemas: [NO_ERRORS_SCHEMA],
   });
 
-  it('should be instantiable', function(): void {
+  it('should be instantiable', (): void => {
     expect(testContext.testedDirective).toBeTruthy();
   });
 
-  it('should assign context', function(done: DoneFn): void {
+  it('should assign context', (done: DoneFn): void => {
     TestBed.get(ContextService).current.subscribe(
       (context: Context): void => {
         expect(testContext.testedDirective.context).toEqual(context);
@@ -83,7 +83,7 @@ describe('CollaboratorsComponent', () => {
     );
   });
 
-  it('should get all admin users when context change', function(done: DoneFn): void {
+  it('should get all admin users when context change', (done: DoneFn): void => {
     TestBed.get(ContextService).current.subscribe(
       (context: Context): void => {
         expect(testContext.testedDirective.context).toEqual(context);
@@ -93,26 +93,26 @@ describe('CollaboratorsComponent', () => {
     );
   });
 
-  it('should handle assigning admin role to a user', function(): void {
+  it('should handle assigning admin role to a user', (): void => {
     testContext.testedDirective.adminCollaborators = [];
     testContext.testedDirective.assignUserRole('some-user-1', 'admin');
     expect(testContext.testedDirective.adminCollaborators).toEqual(['some-user-1']);
   });
 
-  it('should handle assigning contributor role to a user', function(): void {
+  it('should handle assigning contributor role to a user', (): void => {
     testContext.testedDirective.adminCollaborators = [];
     testContext.testedDirective.assignUserRole('some-user-1', 'contributor');
     expect(testContext.testedDirective.adminCollaborators).toEqual([]);
   });
 
-  it('should handle assigning contributor role to admin user', function(): void {
+  it('should handle assigning contributor role to admin user', (): void => {
     testContext.testedDirective.adminCollaborators = ['some-user-1'];
     testContext.testedDirective.assignUserRole('some-user-1', 'contributor');
     expect(testContext.testedDirective.adminCollaborators).toEqual([]);
   });
 
   describe('#initCollaborators', () => {
-    it('should retrieve, sort, and set initial list of collaborators', function(): void {
+    it('should retrieve, sort, and set initial list of collaborators', (): void => {
       const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(
         CollaboratorService,
       );
@@ -161,7 +161,7 @@ describe('CollaboratorsComponent', () => {
       ] as any[]);
     });
 
-    it('should handle errors', function() {
+    it('should handle errors', () => {
       const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(
         CollaboratorService,
       );
@@ -183,7 +183,7 @@ describe('CollaboratorsComponent', () => {
   });
 
   describe('#fetchMoreCollaborators', () => {
-    it('should add and sort additional collaborators', function() {
+    it('should add and sort additional collaborators', () => {
       const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(
         CollaboratorService,
       );
@@ -245,7 +245,7 @@ describe('CollaboratorsComponent', () => {
       ] as any[]);
     });
 
-    it('should handle errors', function() {
+    it('should handle errors', () => {
       const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(
         CollaboratorService,
       );
@@ -267,7 +267,7 @@ describe('CollaboratorsComponent', () => {
   });
 
   describe('#addCollaboratorsToParent', () => {
-    it('should add and sort new collaborators', function() {
+    it('should add and sort new collaborators', () => {
       expect(testContext.testedDirective.collaborators).toEqual([]);
 
       testContext.testedDirective.collaborators = [
@@ -318,7 +318,7 @@ describe('CollaboratorsComponent', () => {
   });
 
   describe('removeUser', () => {
-    it('should send remove request to service', function() {
+    it('should send remove request to service', () => {
       const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(
         CollaboratorService,
       );
@@ -342,7 +342,7 @@ describe('CollaboratorsComponent', () => {
       expect(collaboratorService.removeCollaborator).toHaveBeenCalledWith('fake-space-id', '1');
     });
 
-    it('should handle errors', function() {
+    it('should handle errors', () => {
       const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(
         CollaboratorService,
       );

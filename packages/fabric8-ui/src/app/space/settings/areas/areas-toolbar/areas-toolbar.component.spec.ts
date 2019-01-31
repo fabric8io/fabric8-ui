@@ -44,7 +44,7 @@ describe('AreasToolbarComponent', () => {
     imports: [RouterTestingModule],
   });
 
-  it('should update filterConfig resultsCount', function() {
+  it('should update filterConfig resultsCount', () => {
     const initialCount = 0;
     expect(testContext.testedDirective.filterConfig.resultsCount).toBe(initialCount);
 

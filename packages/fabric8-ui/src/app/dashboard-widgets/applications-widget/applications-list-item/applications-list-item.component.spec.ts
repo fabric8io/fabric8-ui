@@ -133,33 +133,33 @@ describe('ApplicationsListItemComponent', () => {
   );
 
   describe('Applications list item with build config', () => {
-    it('Build config should be set', function() {
+    it('Build config should be set', () => {
       expect(testContext.testedDirective.buildConfig as any).toEqual(buildConfig);
     });
 
-    it('Expand toggle should be called', function() {
+    it('Expand toggle should be called', () => {
       expect(testContext.testedDirective.expanded).toBeFalsy();
       testContext.testedDirective.toggleExpanded();
       expect(testContext.testedDirective.expanded).toBeTruthy();
     });
 
-    it('Should set service URL', function() {
+    it('Should set service URL', () => {
       expect(testContext.testedDirective.applicationUrl).toEqual('https://example.com/app1.git');
     });
 
-    it('Pipeline should be available', function() {
+    it('Pipeline should be available', () => {
       expect(testContext.testedDirective.pipelineAvailable).toBeTruthy();
     });
 
-    it('Should set build number', function() {
+    it('Should set build number', () => {
       expect(testContext.testedDirective.promoteBuildInput.build.buildNumber).toEqual('1');
     });
 
-    it('Should set stage name', function() {
+    it('Should set stage name', () => {
       expect(testContext.testedDirective.promoteBuildInput.stage.name).toEqual('Rollout to Run');
     });
 
-    it('Should call proceed', function() {
+    it('Should call proceed', () => {
       const mockInputActionDialog: any = jasmine.createSpyObj('InputActionDialog', ['proceed']);
 
       testContext.testedDirective.inputActionDialog = mockInputActionDialog;

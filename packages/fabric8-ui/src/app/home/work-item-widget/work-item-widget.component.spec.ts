@@ -146,58 +146,58 @@ describe('Home: WorkItemWidgetComponent', () => {
     schemas: [NO_ERRORS_SCHEMA],
   });
 
-  it('Should show blank state if there are no workitems', function() {
+  it('Should show blank state if there are no workitems', () => {
     testContext.testedDirective.workItems.length = 0;
     testContext.detectChanges();
     expect(testContext.fixture.debugElement.query(By.css('.f8-blank-slate-card'))).not.toBeNull();
   });
 
-  it('Should have logged in user', function() {
+  it('Should have logged in user', () => {
     expect(testContext.testedDirective.loggedInUser).not.toBeNull();
   });
 
-  it('Should have recent space', function() {
+  it('Should have recent space', () => {
     expect(testContext.testedDirective.recentSpaces.length).toBe(1);
     expect(testContext.testedDirective.recentSpaces[0].name).toBe('space1');
   });
 
-  it('Should have select element', function() {
+  it('Should have select element', () => {
     const select = testContext.fixture.debugElement.query(By.css('.work-item-combobox'));
     expect(select).not.toBeNull();
   });
 
-  it('Should have select element options', function() {
+  it('Should have select element options', () => {
     const options = testContext.fixture.debugElement.queryAll(By.css('.work-item-combobox option'));
     expect(options.length).toBe(2);
   });
 
-  it('should have set the index after sifting through spaces', function() {
+  it('should have set the index after sifting through spaces', () => {
     expect(testContext.testedDirective.recentSpaceIndex).toBe(-1);
   });
 
-  it('should set relational data to an empty obj if it does not exist prior', function() {
+  it('should set relational data to an empty obj if it does not exist prior', () => {
     expect(fakeWorkItem1.relationalData).toBeDefined();
     expect(fakeWorkItem1.relationalData).toEqual({});
   });
 
-  it('should not overwrite pre-existing relational data', function() {
+  it('should not overwrite pre-existing relational data', () => {
     expect(fakeWorkItem2.relationalData).toEqual({ parent: fakeWorkItem3 });
   });
 
   describe('#fetchWorkItems', () => {
-    it('should fetch the correct work items', function() {
+    it('should fetch the correct work items', () => {
       testContext.testedDirective.workItems.length = 0;
       testContext.testedDirective.fetchWorkItems();
       expect(testContext.testedDirective.workItems).toEqual(fakeWorkItems);
     });
 
-    it('should update the recentSpaceIndex when it filters through all the work items', function() {
+    it('should update the recentSpaceIndex when it filters through all the work items', () => {
       testContext.testedDirective.workItems.length = 0;
       testContext.testedDirective.fetchWorkItems();
       expect(testContext.testedDirective.recentSpaceIndex).toBe(-1);
     });
 
-    it('should not fetch closed workitems', function() {
+    it('should not fetch closed workitems', () => {
       fakeWorkItem1.attributes['system.state'] = 'closed';
       testContext.testedDirective.fetchWorkItems();
       expect(testContext.testedDirective.workItems).toEqual(fakeWorkItems.slice(1));

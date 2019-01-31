@@ -109,21 +109,21 @@ describe('CreateWorkItemWidgetComponent', () => {
       schemas: [NO_ERRORS_SCHEMA],
     });
 
-    it('Should show blank state if there are no workitems', function() {
+    it('Should show blank state if there are no workitems', () => {
       testContext.testedDirective.myWorkItems = observableOf([]);
       testContext.detectChanges();
       expect(testContext.fixture.debugElement.query(By.css('.f8-blank-slate-card'))).not.toBeNull();
     });
 
-    it('Should have logged in user', function() {
+    it('Should have logged in user', () => {
       expect(testContext.testedDirective.loggedInUser).not.toBeNull();
     });
 
-    it('Should have current space', function() {
+    it('Should have current space', () => {
       expect(testContext.testedDirective.currentSpace).not.toBeNull();
     });
 
-    it('should enable buttons if the user owns the space', function() {
+    it('should enable buttons if the user owns the space', () => {
       testContext.hostComponent.userOwnsSpace = true;
       testContext.detectChanges();
       expect(
@@ -134,7 +134,7 @@ describe('CreateWorkItemWidgetComponent', () => {
       ).not.toBeNull();
     });
 
-    it('should disable buttons if the user does not own the space', function() {
+    it('should disable buttons if the user does not own the space', () => {
       testContext.hostComponent.userOwnsSpace = false;
       testContext.detectChanges();
 

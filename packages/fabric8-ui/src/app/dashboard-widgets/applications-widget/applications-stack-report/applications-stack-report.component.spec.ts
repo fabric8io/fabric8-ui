@@ -97,15 +97,15 @@ describe('ApplicationsStackReportComponent', () => {
   );
 
   describe('Applications stack report with build', () => {
-    it('Build should be set', function() {
+    it('Build should be set', () => {
       expect(testContext.testedDirective.build as any).toEqual(build);
     });
 
-    it('Pipelines should be set', function() {
+    it('Pipelines should be set', () => {
       expect(testContext.testedDirective.pipelineStages as any[]).toEqual(build.pipelineStages);
     });
 
-    it('Should call showStackReport', function() {
+    it('Should call showStackReport', () => {
       const mockElement = document.createElement('a');
       spyOn(testContext.testedDirective.stackReport.nativeElement, 'querySelector').and.returnValue(
         mockElement,

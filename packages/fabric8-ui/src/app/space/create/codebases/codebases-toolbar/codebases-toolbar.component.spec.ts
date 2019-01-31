@@ -43,7 +43,7 @@ describe('CodebasesToolbarComponent', () => {
     imports: [RouterTestingModule],
   });
 
-  it('should update filterConfig resultsCount', function() {
+  it('should update filterConfig resultsCount', () => {
     const initialCount = 0;
     expect(testContext.testedDirective.filterConfig.resultsCount).toBe(initialCount);
 
@@ -54,13 +54,13 @@ describe('CodebasesToolbarComponent', () => {
     expect(testContext.testedDirective.filterConfig.resultsCount).toBe(nextCount);
   });
 
-  it('should emit filterChange event', function() {
+  it('should emit filterChange event', () => {
     spyOn(testContext.hostComponent, 'filterChange');
     testContext.testedDirective.filterChange({});
     expect(testContext.hostComponent.filterChange).toHaveBeenCalledWith({});
   });
 
-  it('should emit sortChange event', function() {
+  it('should emit sortChange event', () => {
     spyOn(testContext.hostComponent, 'sortChange');
     testContext.testedDirective.sortChange({
       field: {

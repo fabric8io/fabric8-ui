@@ -37,11 +37,11 @@ describe('AddCollaboratorsDialog', () => {
     },
   );
 
-  it('should be instantiable', function() {
+  it('should be instantiable', () => {
     expect(testContext.testedDirective).toBeTruthy();
   });
 
-  it('should reset state on add', function() {
+  it('should reset state on add', () => {
     const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(
       CollaboratorService,
     );
@@ -64,7 +64,7 @@ describe('AddCollaboratorsDialog', () => {
     expect(testContext.testedDirective.selectedCollaborators).toEqual([]);
   });
 
-  it('should reset state on cancel', function() {
+  it('should reset state on cancel', () => {
     expect(testContext.testedDirective.host.hide).not.toHaveBeenCalled();
     testContext.testedDirective.collaborators = [
       { id: 'foo-user' } as User,

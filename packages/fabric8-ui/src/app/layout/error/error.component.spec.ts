@@ -39,7 +39,7 @@ describe('ErrorComponent', () => {
     schemas: [NO_ERRORS_SCHEMA],
   });
 
-  it('should replace location state if a failed route is available', function() {
+  it('should replace location state if a failed route is available', () => {
     const location: Location = TestBed.get(Location);
     const errorService: ErrorService = TestBed.get(ErrorService);
     expect(location.replaceState).not.toHaveBeenCalled();
@@ -47,7 +47,7 @@ describe('ErrorComponent', () => {
     expect(location.replaceState).toHaveBeenCalledWith('/foo/path');
   });
 
-  it('should not replace location state if failed route is unavailable', function() {
+  it('should not replace location state if failed route is unavailable', () => {
     const location: Location = TestBed.get(Location);
     const errorService: ErrorService = TestBed.get(ErrorService);
     expect(location.replaceState).not.toHaveBeenCalled();

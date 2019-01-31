@@ -40,7 +40,7 @@ describe('AnalyzeOverviewComponent', () => {
     schemas: [NO_ERRORS_SCHEMA],
   });
 
-  it('should call to check the user space', function() {
+  it('should call to check the user space', () => {
     spyOn(testContext.testedDirective, 'checkSpaceOwner');
 
     fakeUserObs.next({
@@ -63,31 +63,31 @@ describe('AnalyzeOverviewComponent', () => {
     expect(testContext.testedDirective.checkSpaceOwner).toHaveBeenCalled();
   });
 
-  it('should disable the button if user service unavailable', function() {
+  it('should disable the button if user service unavailable', () => {
     fakeUserObs.next(null as User);
     testContext.detectChanges();
 
     expect(testContext.testedDirective.checkSpaceOwner()).toBe(false);
   });
 
-  it('should disable the button if context service unavailable', function() {
+  it('should disable the button if context service unavailable', () => {
     testContext.detectChanges();
     expect(testContext.testedDirective.checkSpaceOwner()).toBe(false);
   });
 
-  it('should disable the button if both services are unavailable', function() {
+  it('should disable the button if both services are unavailable', () => {
     fakeUserObs.next(null as User);
     testContext.detectChanges();
 
     expect(testContext.testedDirective.checkSpaceOwner()).toBe(false);
   });
 
-  it('should recognize that the user is not admin of the space', function() {
+  it('should recognize that the user is not admin of the space', () => {
     testContext.detectChanges();
     expect(testContext.testedDirective.userIsSpaceAdmin).toBe(false);
   });
 
-  it('should recognize that the user owns the space', function() {
+  it('should recognize that the user owns the space', () => {
     fakeUserObs.next({
       id: 'loggedInUser',
     } as User);
@@ -109,7 +109,7 @@ describe('AnalyzeOverviewComponent', () => {
     expect(testContext.testedDirective.checkSpaceOwner()).toBe(true);
   });
 
-  it('should recognize that the user does not own the space', function() {
+  it('should recognize that the user does not own the space', () => {
     fakeUserObs.next({
       id: 'loggedInUser',
     } as User);
@@ -131,7 +131,7 @@ describe('AnalyzeOverviewComponent', () => {
     expect(testContext.testedDirective.checkSpaceOwner()).toBe(false);
   });
 
-  it('should show the Create an Application button if the user owns the space', function() {
+  it('should show the Create an Application button if the user owns the space', () => {
     fakeUserObs.next({
       id: 'loggedInUser',
     } as User);
@@ -157,7 +157,7 @@ describe('AnalyzeOverviewComponent', () => {
     ).not.toBeNull();
   });
 
-  it('should hide the Create an Application button if the user does not own the space', function() {
+  it('should hide the Create an Application button if the user does not own the space', () => {
     fakeUserObs.next({
       id: 'loggedInUser',
     } as User);

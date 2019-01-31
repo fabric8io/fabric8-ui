@@ -92,7 +92,7 @@ describe('FeatureOptInComponent', () => {
     ],
   });
 
-  it('should sort feature per level', function() {
+  it('should sort feature per level', () => {
     const features = [
       {
         attributes: {
@@ -132,7 +132,7 @@ describe('FeatureOptInComponent', () => {
   });
 
   describe('updateProfile', () => {
-    it('should call GettingStartedService#update and send a notification', function() {
+    it('should call GettingStartedService#update and send a notification', () => {
       const gettingStartedService: jasmine.SpyObj<GettingStartedService> = TestBed.get(
         GettingStartedService,
       );
@@ -146,7 +146,7 @@ describe('FeatureOptInComponent', () => {
       expect(notifications.message).toHaveBeenCalled();
     });
 
-    it('should update the feature level', function() {
+    it('should update the feature level', () => {
       const gettingStartedService: jasmine.SpyObj<GettingStartedService> = TestBed.get(
         GettingStartedService,
       );
@@ -171,7 +171,7 @@ describe('FeatureOptInComponent', () => {
       );
     });
 
-    it('should cancel events deselecting a feature level', function() {
+    it('should cancel events deselecting a feature level', () => {
       const gettingStartedService: jasmine.SpyObj<GettingStartedService> = TestBed.get(
         GettingStartedService,
       );

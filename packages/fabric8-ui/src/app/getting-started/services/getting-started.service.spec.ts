@@ -16,40 +16,42 @@ describe('GettingStartedService', () => {
   let service: GettingStartedService;
   let controller: HttpTestingController;
 
-  beforeEach(function(): void {
-    TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [
-        GettingStartedService,
-        {
-          provide: AuthenticationService,
-          useFactory: (): jasmine.SpyObj<AuthenticationService> => {
-            const svc: jasmine.SpyObj<AuthenticationService> = createMock(AuthenticationService);
-            svc.getToken.and.returnValue('mock-auth-token');
-            return svc;
+  beforeEach(
+    (): void => {
+      TestBed.configureTestingModule({
+        imports: [HttpClientTestingModule],
+        providers: [
+          GettingStartedService,
+          {
+            provide: AuthenticationService,
+            useFactory: (): jasmine.SpyObj<AuthenticationService> => {
+              const svc: jasmine.SpyObj<AuthenticationService> = createMock(AuthenticationService);
+              svc.getToken.and.returnValue('mock-auth-token');
+              return svc;
+            },
           },
-        },
-        {
-          provide: UserService,
-          useFactory: (): jasmine.SpyObj<UserService> => createMock(UserService),
-        },
-        {
-          provide: Logger,
-          useFactory: (): jasmine.SpyObj<Logger> => createMock(Logger),
-        },
-        { provide: WIT_API_URL, useValue: 'https://example.com/api/' },
-      ],
-    });
-    service = TestBed.get(GettingStartedService);
-    controller = TestBed.get(HttpTestingController);
-  });
+          {
+            provide: UserService,
+            useFactory: (): jasmine.SpyObj<UserService> => createMock(UserService),
+          },
+          {
+            provide: Logger,
+            useFactory: (): jasmine.SpyObj<Logger> => createMock(Logger),
+          },
+          { provide: WIT_API_URL, useValue: 'https://example.com/api/' },
+        ],
+      });
+      service = TestBed.get(GettingStartedService);
+      controller = TestBed.get(HttpTestingController);
+    },
+  );
 
-  it('should be instantiable', function(): void {
+  it('should be instantiable', (): void => {
     expect(service).toBeDefined();
   });
 
   describe('#createTransientProfile', () => {
-    it('should return transient profile', function(): void {
+    it('should return transient profile', (): void => {
       const userData: ExtUser = {
         attributes: {
           username: 'example-user',
@@ -62,7 +64,7 @@ describe('GettingStartedService', () => {
       expect(service.createTransientProfile()).toEqual(userData.attributes);
     });
 
-    it('should populate empty contextInformation', function(): void {
+    it('should populate empty contextInformation', (): void => {
       const userData: ExtUser = {
         attributes: {
           username: 'example-user',
@@ -75,19 +77,21 @@ describe('GettingStartedService', () => {
       } as ExtProfile);
     });
 
-    it('should return an empty object if no user is logged in', function(): void {
+    it('should return an empty object if no user is logged in', (): void => {
       TestBed.get(UserService).loggedInUser = observableNever();
       expect(service.createTransientProfile()).toEqual({} as ExtProfile);
     });
   });
 
   describe('HTTP Tests', () => {
-    afterEach(function(): void {
-      controller.verify();
-    });
+    afterEach(
+      (): void => {
+        controller.verify();
+      },
+    );
 
     describe('#getExtProfile', () => {
-      it('should send a GET', function(done: DoneFn): void {
+      it('should send a GET', (done: DoneFn): void => {
         service
           .getExtProfile('123')
           .pipe(first())
@@ -101,7 +105,7 @@ describe('GettingStartedService', () => {
         req.flush({});
       });
 
-      it('should send correct headers', function(done: DoneFn): void {
+      it('should send correct headers', (done: DoneFn): void => {
         service
           .getExtProfile('123')
           .pipe(first())
@@ -115,7 +119,7 @@ describe('GettingStartedService', () => {
         req.flush({});
       });
 
-      it('should return expected data', function(done: DoneFn): void {
+      it('should return expected data', (done: DoneFn): void => {
         const data: ExtUser = {
           attributes: {
             username: 'example-user',
@@ -133,7 +137,7 @@ describe('GettingStartedService', () => {
         controller.expectOne('https://example.com/api/users/123').flush({ data });
       });
 
-      it('should propagate errors', function(done: DoneFn): void {
+      it('should propagate errors', (done: DoneFn): void => {
         TestBed.get(Logger).error.and.stub();
         service
           .getExtProfile('123')
@@ -157,7 +161,7 @@ describe('GettingStartedService', () => {
     });
 
     describe('#getUpdate', () => {
-      it('should send a PATCH', function(done: DoneFn): void {
+      it('should send a PATCH', (done: DoneFn): void => {
         service
           .update({} as ExtProfile)
           .pipe(first())
@@ -171,7 +175,7 @@ describe('GettingStartedService', () => {
         req.flush({});
       });
 
-      it('should send correct headers', function(done: DoneFn): void {
+      it('should send correct headers', (done: DoneFn): void => {
         service
           .update({} as ExtProfile)
           .pipe(first())
@@ -185,7 +189,7 @@ describe('GettingStartedService', () => {
         req.flush({});
       });
 
-      it('should send correct payload', function(done: DoneFn): void {
+      it('should send correct payload', (done: DoneFn): void => {
         const attributes: ExtProfile = { username: 'updated-username' } as ExtProfile;
         service
           .update(attributes)
@@ -207,7 +211,7 @@ describe('GettingStartedService', () => {
         req.flush({});
       });
 
-      it('should return expected data', function(done: DoneFn): void {
+      it('should return expected data', (done: DoneFn): void => {
         const data: ExtUser = {
           attributes: {
             username: 'example-user',
@@ -225,7 +229,7 @@ describe('GettingStartedService', () => {
         controller.expectOne('https://example.com/api/users').flush({ data });
       });
 
-      it('should propagate errors', function(done: DoneFn): void {
+      it('should propagate errors', (done: DoneFn): void => {
         TestBed.get(Logger).error.and.stub();
         service
           .update({} as ExtProfile)

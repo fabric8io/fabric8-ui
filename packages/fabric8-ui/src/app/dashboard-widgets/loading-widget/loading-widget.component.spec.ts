@@ -20,12 +20,12 @@ describe('LoadingWidgetComponent', () => {
   });
 
   describe('Loading widget', () => {
-    it('Should have message', function() {
+    it('Should have message', () => {
       testContext.detectChanges();
       expect(testContext.testedDirective.message).toEqual('test1');
     });
 
-    it('Should have message title', function() {
+    it('Should have message title', () => {
       testContext.detectChanges();
       expect(testContext.testedDirective.title).toEqual('test2');
     });

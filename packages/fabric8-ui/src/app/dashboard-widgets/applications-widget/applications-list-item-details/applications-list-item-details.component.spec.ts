@@ -94,22 +94,22 @@ describe('ApplicationsListItemDetailsComponent', () => {
   );
 
   describe('Applications list item details with build', () => {
-    it('Build should be set', function() {
+    it('Build should be set', () => {
       expect(testContext.testedDirective.build as any).toEqual(build);
     });
 
-    it('Pipeline stages should be trimmed', function() {
+    it('Pipeline stages should be trimmed', () => {
       const stages = testContext.testedDirective.pipelineStages as any[];
       expect(stages.length).toBe(2);
     });
 
-    it('Pipeline stages should be set', function() {
+    it('Pipeline stages should be set', () => {
       const stages = testContext.testedDirective.pipelineStages as any[];
       expect(stages[0].name).toEqual('Approve');
       expect(stages[1].name).toEqual('Rollout to Run');
     });
 
-    it('Current stage should be set', function() {
+    it('Current stage should be set', () => {
       const stages = testContext.testedDirective.pipelineStages as any[];
       expect(stages[1].currentStage).toBeTruthy();
     });

@@ -214,7 +214,7 @@ describe('CodebasesComponent', () => {
   });
 
   describe('GitHub repo details', () => {
-    it('should handle Codebases where GitHub repo no longer exists', function() {
+    it('should handle Codebases where GitHub repo no longer exists', () => {
       broadcastSubject.next();
       codebasesSubject.next([
         {
@@ -265,7 +265,7 @@ describe('CodebasesComponent', () => {
       codebasesSubject.complete();
     });
 
-    it('should filter codebases by name', function() {
+    it('should filter codebases by name', () => {
       expect(testContext.testedDirective.allCodebases.length).toEqual(2);
       expect(testContext.testedDirective.codebases[0].name).toBe('alpha');
       expect(testContext.testedDirective.codebases[1].name).toBe('beta');
@@ -305,7 +305,7 @@ describe('CodebasesComponent', () => {
       codebasesSubject.complete();
     });
 
-    it('should sort codebases by name', function() {
+    it('should sort codebases by name', () => {
       expect(testContext.testedDirective.allCodebases.length).toEqual(2);
       expect(testContext.testedDirective.codebases[0].name).toBe('alpha');
       expect(testContext.testedDirective.codebases[1].name).toBe('beta');
@@ -320,7 +320,7 @@ describe('CodebasesComponent', () => {
       expect(testContext.testedDirective.codebases[1].name).toBe('alpha');
     });
 
-    it('should sort codebases by repository created at', function() {
+    it('should sort codebases by repository created at', () => {
       expect(testContext.testedDirective.allCodebases.length).toEqual(2);
       expect(testContext.testedDirective.codebases[0].name).toBe('alpha');
       expect(testContext.testedDirective.codebases[1].name).toBe('beta');
@@ -336,7 +336,7 @@ describe('CodebasesComponent', () => {
       expect(testContext.testedDirective.codebases[1].name).toBe('alpha');
     });
 
-    it('should sort codebases by repository pushed at', function() {
+    it('should sort codebases by repository pushed at', () => {
       expect(testContext.testedDirective.allCodebases.length).toEqual(2);
       expect(testContext.testedDirective.codebases[0].name).toBe('alpha');
       expect(testContext.testedDirective.codebases[1].name).toBe('beta');

@@ -17,39 +17,41 @@ describe('CheService', () => {
   let service: CheService;
   let controller: HttpTestingController;
 
-  beforeEach(function(): void {
-    TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [
-        CheService,
-        {
-          provide: WIT_API_URL,
-          useValue: 'https://example.com/api/',
-        },
-        {
-          provide: Logger,
-          useFactory: (): jasmine.SpyObj<Logger> => createMock(Logger),
-        },
-        {
-          provide: AuthenticationService,
-          useFactory: (): jasmine.SpyObj<AuthenticationService> => {
-            const svc: jasmine.SpyObj<AuthenticationService> = createMock(AuthenticationService);
-            svc.getToken.and.returnValue('mock-auth-token');
-            return svc;
+  beforeEach(
+    (): void => {
+      TestBed.configureTestingModule({
+        imports: [HttpClientTestingModule],
+        providers: [
+          CheService,
+          {
+            provide: WIT_API_URL,
+            useValue: 'https://example.com/api/',
           },
-        },
-      ],
-    });
-    service = TestBed.get(CheService);
-    controller = TestBed.get(HttpTestingController);
-  });
+          {
+            provide: Logger,
+            useFactory: (): jasmine.SpyObj<Logger> => createMock(Logger),
+          },
+          {
+            provide: AuthenticationService,
+            useFactory: (): jasmine.SpyObj<AuthenticationService> => {
+              const svc: jasmine.SpyObj<AuthenticationService> = createMock(AuthenticationService);
+              svc.getToken.and.returnValue('mock-auth-token');
+              return svc;
+            },
+          },
+        ],
+      });
+      service = TestBed.get(CheService);
+      controller = TestBed.get(HttpTestingController);
+    },
+  );
 
-  it('should be instantiable', function(): void {
+  it('should be instantiable', (): void => {
     expect(service).toBeDefined();
   });
 
   describe('#getState', () => {
-    it('should send an Authorization header', function(done: DoneFn): void {
+    it('should send an Authorization header', (done: DoneFn): void => {
       service
         .getState()
         .pipe(first())
@@ -64,7 +66,7 @@ describe('CheService', () => {
       req.flush({});
     });
 
-    it('should send a GET', function(done: DoneFn): void {
+    it('should send a GET', (done: DoneFn): void => {
       service
         .getState()
         .pipe(first())
@@ -79,7 +81,7 @@ describe('CheService', () => {
       req.flush({});
     });
 
-    it('should return correct data', function(done: DoneFn): void {
+    it('should return correct data', (done: DoneFn): void => {
       const che: Che = {
         clusterFull: false,
         multiTenant: false,
@@ -98,7 +100,7 @@ describe('CheService', () => {
       controller.expectOne('https://example.com/api/codebases/che/state').flush(che);
     });
 
-    it('should handle errors', function(done: DoneFn): void {
+    it('should handle errors', (done: DoneFn): void => {
       TestBed.get(Logger).error.and.stub();
       service.getState().subscribe(
         () => done.fail('should have received an error'),
@@ -120,7 +122,7 @@ describe('CheService', () => {
   });
 
   describe('#start', () => {
-    it('should send an Authorization header', function(done: DoneFn): void {
+    it('should send an Authorization header', (done: DoneFn): void => {
       service
         .start()
         .pipe(first())
@@ -135,7 +137,7 @@ describe('CheService', () => {
       req.flush({});
     });
 
-    it('should send a PATCH', function(done: DoneFn): void {
+    it('should send a PATCH', (done: DoneFn): void => {
       service
         .start()
         .pipe(first())
@@ -150,7 +152,7 @@ describe('CheService', () => {
       req.flush({});
     });
 
-    it('should return correct data', function(done: DoneFn): void {
+    it('should return correct data', (done: DoneFn): void => {
       const che: Che = {
         clusterFull: false,
         multiTenant: false,
@@ -169,7 +171,7 @@ describe('CheService', () => {
       controller.expectOne('https://example.com/api/codebases/che/start').flush(che);
     });
 
-    it('should handle errors', function(done: DoneFn): void {
+    it('should handle errors', (done: DoneFn): void => {
       TestBed.get(Logger).error.and.stub();
       service.start().subscribe(
         () => done.fail('should have received an error'),

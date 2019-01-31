@@ -75,7 +75,7 @@ describe('PipelinesWidgetComponent', () => {
     schemas: [NO_ERRORS_SCHEMA],
   });
 
-  it('should enable button if the user owns the space', function() {
+  it('should enable button if the user owns the space', () => {
     testContext.testedDirective.userOwnsSpace = true;
     testContext.testedDirective.loading = false;
     testContext.detectChanges();
@@ -85,7 +85,7 @@ describe('PipelinesWidgetComponent', () => {
     ).not.toBeNull();
   });
 
-  it('should disable button if the user does not own the space', function() {
+  it('should disable button if the user does not own the space', () => {
     testContext.testedDirective.userOwnsSpace = false;
     testContext.detectChanges();
 
@@ -94,7 +94,7 @@ describe('PipelinesWidgetComponent', () => {
     ).toBeNull();
   });
 
-  it('should not show the add button if the user does not own the space', function() {
+  it('should not show the add button if the user does not own the space', () => {
     testContext.testedDirective.userOwnsSpace = false;
     testContext.detectChanges();
     expect(
@@ -102,7 +102,7 @@ describe('PipelinesWidgetComponent', () => {
     ).toBeNull();
   });
 
-  it('should show the add button if the user owns the space', function() {
+  it('should show the add button if the user owns the space', () => {
     testContext.testedDirective.userOwnsSpace = true;
     testContext.testedDirective.loading = false;
     testContext.detectChanges();

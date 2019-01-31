@@ -36,12 +36,12 @@ describe('MySpacesSearchSpacesDialogSpaceItemComponent', () => {
     },
   );
 
-  it('should be instantiable', function(): void {
+  it('should be instantiable', (): void => {
     expect(testContext.testedDirective).toBeDefined();
   });
 
   describe('invalid (missing) creator avatar URL', () => {
-    it('should load default image', function(): void {
+    it('should load default image', (): void => {
       const imgElement: DebugElement = testContext.tested.query(By.css('img'));
       // within test harness the src attribute is undefined (rather than set to a specific URL),
       // probably due to Webpack processing of the component template and image loader
@@ -52,14 +52,16 @@ describe('MySpacesSearchSpacesDialogSpaceItemComponent', () => {
   });
 
   describe('valid creator avatar URL', () => {
-    beforeEach(function(): void {
-      // would actually be a remote URL, but for testing purposes, we will use a relative path to an existing asset to avoid 404s
-      testContext.testedDirective.space.relationalData.creator.attributes.imageURL =
-        '../../../../../assets/images/icon-stack-nodejs.png';
-      testContext.detectChanges();
-    });
+    beforeEach(
+      (): void => {
+        // would actually be a remote URL, but for testing purposes, we will use a relative path to an existing asset to avoid 404s
+        testContext.testedDirective.space.relationalData.creator.attributes.imageURL =
+          '../../../../../assets/images/icon-stack-nodejs.png';
+        testContext.detectChanges();
+      },
+    );
 
-    it('should load specified image', function(): void {
+    it('should load specified image', (): void => {
       const imgElement: DebugElement = testContext.tested.query(By.css('img'));
       expect(imgElement.properties['src']).toEqual(
         testContext.testedDirective.space.relationalData.creator.attributes.imageURL,

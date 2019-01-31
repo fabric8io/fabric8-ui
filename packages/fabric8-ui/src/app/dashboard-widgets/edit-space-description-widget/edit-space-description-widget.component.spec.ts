@@ -114,42 +114,42 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
   });
 
   describe('Component', () => {
-    it("should display the space's creator in the masthead", function() {
+    it("should display the space's creator in the masthead", () => {
       const el: DebugElement = testContext.fixture.debugElement.query(
         By.css('.f8-space-masthead-owner'),
       );
       expect(el.nativeElement.textContent.trim()).toEqual(mockUsers[0].attributes.username);
     });
 
-    it('should display the number of collaborators in the masthead', function() {
+    it('should display the number of collaborators in the masthead', () => {
       const el: DebugElement = testContext.fixture.debugElement.query(
         By.css('.f8-space-masthead-space-info'),
       );
       expect(el.nativeElement.textContent.trim()).toContain(mockUsers.length);
     });
 
-    it('should have a link to add collaborators if the user owns the space', function() {
+    it('should have a link to add collaborators if the user owns the space', () => {
       testContext.testedDirective.userOwnsSpace = true;
       testContext.fixture.detectChanges();
       const link: DebugElement = testContext.fixture.debugElement.query(By.css('a'));
       expect(link).toBeDefined();
     });
 
-    it('should have a link to add collaborators if the user is admin of the space', function() {
+    it('should have a link to add collaborators if the user is admin of the space', () => {
       testContext.testedDirective.userIsSpaceAdmin = true;
       testContext.fixture.detectChanges();
       const link: DebugElement = testContext.fixture.debugElement.query(By.css('a'));
       expect(link).toBeDefined();
     });
 
-    it("should not have a link to add collaborators if the user doesn't own the space", function() {
+    it("should not have a link to add collaborators if the user doesn't own the space", () => {
       testContext.testedDirective.userOwnsSpace = false;
       testContext.fixture.detectChanges();
       const link: DebugElement = testContext.fixture.debugElement.query(By.css('a'));
       expect(link).toBeNull();
     });
 
-    it('should filter collaborators on search term change', function() {
+    it('should filter collaborators on search term change', () => {
       testContext.testedDirective.popoverInit(10);
       expect(testContext.testedDirective.filteredCollaborators).toEqual(mockUsers);
 
@@ -170,7 +170,7 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
   });
 
   describe('#saveDescription', () => {
-    it('should be called when the save button is clicked', function() {
+    it('should be called when the save button is clicked', () => {
       spyOn(testContext.testedDirective, 'isEditable').and.returnValue(observableOf(true));
       spyOn(testContext.testedDirective, 'saveDescription');
       testContext.testedDirective.userOwnsSpace = true;
@@ -185,7 +185,7 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
   });
 
   describe('#onUpdateDescription', () => {
-    xit('should be called when the enter key is pressed', function() {
+    xit('should be called when the enter key is pressed', () => {
       const mockedSpaceService = TestBed.get(SpaceService);
       mockedSpaceService.update.and.returnValue(
         observableOf({
@@ -206,7 +206,7 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
   });
 
   describe('#addCollaboratorsToParent', () => {
-    it('should add new collaborators', function() {
+    it('should add new collaborators', () => {
       expect(testContext.testedDirective.collaborators).toEqual([]);
 
       const newUsers: User[] = [

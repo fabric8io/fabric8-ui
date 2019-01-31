@@ -18,7 +18,7 @@ class ApiLocatorServiceTest extends BaseApiLocatorService {
   }
 }
 
-describe('API Locator Service', function() {
+describe('API Locator Service', () => {
   const base = function() {
     return window.location.hostname + ':' + window.location.port;
   };
@@ -26,7 +26,7 @@ describe('API Locator Service', function() {
     return 'http://' + base;
   };
 
-  it('Add prefix to configured service URL', function() {
+  it('Add prefix to configured service URL', () => {
     const loc = new ApiLocatorServiceTest(
       new Fabric8UIConfig(),
       new Map([['random_test', 'api']]),
@@ -35,7 +35,7 @@ describe('API Locator Service', function() {
     expect(loc.get('random_test')).toMatch(url('api.' + base()));
   });
 
-  it('Add suffix to configured service URL', function() {
+  it('Add suffix to configured service URL', () => {
     const loc = new ApiLocatorServiceTest(
       new Fabric8UIConfig(),
       new Map(),
@@ -44,7 +44,7 @@ describe('API Locator Service', function() {
     expect(loc.get('random_test')).toMatch(url(base() + '/api'));
   });
 
-  it('Add prefix and suffix to configured service URL', function() {
+  it('Add prefix and suffix to configured service URL', () => {
     const loc = new ApiLocatorServiceTest(
       new Fabric8UIConfig(),
       new Map([['random_test', 'api']]),
@@ -53,12 +53,12 @@ describe('API Locator Service', function() {
     expect(loc.get('random_test')).toMatch(url('api.' + base() + '/api'));
   });
 
-  it('Do not change non configured service URL', function() {
+  it('Do not change non configured service URL', () => {
     const loc = new ApiLocatorServiceTest(new Fabric8UIConfig(), new Map(), new Map());
     expect(loc.get('random_test')).toMatch(url(base()));
   });
 
-  it('Ensure APILocatorService is injectable', function() {
+  it('Ensure APILocatorService is injectable', () => {
     TestBed.configureTestingModule({
       declarations: [TestAPILocatorServiceComponent],
       providers: [ApiLocatorService, Fabric8UIConfig, ProviderService],

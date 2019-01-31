@@ -53,7 +53,7 @@ export function initContext<T, H>(
 ): TestContext<T, H> {
   const context = new TestContext<T, H>();
 
-  beforeEach(async(function() {
+  beforeEach(async(() => {
     const declarations = [testedType, hostType];
     if (moduleMetadata && moduleMetadata.declarations) {
       declarations.push(...moduleMetadata.declarations);
@@ -63,7 +63,7 @@ export function initContext<T, H>(
       .compileComponents();
   }));
 
-  beforeEach(function() {
+  beforeEach(() => {
     context.fixture = TestBed.createComponent(hostType);
     context.hostComponent = context.fixture.componentInstance;
     const testedDebugElement = context.fixture.debugElement.query(By.directive(testedType));
@@ -86,7 +86,7 @@ export function initContext<T, H>(
     context.fixture.detectChanges();
   });
 
-  afterEach(function() {
+  afterEach(() => {
     if (context.fixture) {
       context.fixture.destroy();
       context.fixture.nativeElement.remove();

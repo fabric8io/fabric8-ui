@@ -131,7 +131,7 @@ describe('PipelinesComponent', () => {
       );
     });
 
-    it('should set OpenShift Console URL', function() {
+    it('should set OpenShift Console URL', () => {
       expect(testContext.testedDirective.consoleAvailable).toBeTruthy();
       expect(testContext.testedDirective.openshiftConsoleUrl).toEqual(
         'http://example.com/browse/openshift',
@@ -144,13 +144,13 @@ describe('PipelinesComponent', () => {
       pipelinesService.getOpenshiftConsoleUrl.and.returnValue(observableOf(''));
     });
 
-    it('should hide OpenShift Console URL', function() {
+    it('should hide OpenShift Console URL', () => {
       expect(testContext.testedDirective.consoleAvailable).toBeFalsy();
       expect(testContext.testedDirective.openshiftConsoleUrl).toEqual('');
     });
   });
 
-  it('should only display pipelines within the current space', function() {
+  it('should only display pipelines within the current space', () => {
     expect(testContext.testedDirective.pipelines as any[]).toContainEqual({
       id: 'app',
       name: 'app',
@@ -186,7 +186,7 @@ describe('PipelinesComponent', () => {
   });
 
   describe('filtering', () => {
-    it('should filter by application', function() {
+    it('should filter by application', () => {
       testContext.testedDirective.filterChange({
         appliedFilters: [
           {
@@ -213,7 +213,7 @@ describe('PipelinesComponent', () => {
       expect(testContext.testedDirective.toolbarConfig.filterConfig.resultsCount).toEqual(1);
     });
 
-    it('should filter by codebase', function() {
+    it('should filter by codebase', () => {
       testContext.testedDirective.filterChange({
         appliedFilters: [
           {
@@ -240,7 +240,7 @@ describe('PipelinesComponent', () => {
       expect(testContext.testedDirective.toolbarConfig.filterConfig.resultsCount).toEqual(1);
     });
 
-    it('should display all pipelines in space when filters cleared', function() {
+    it('should display all pipelines in space when filters cleared', () => {
       testContext.testedDirective.filterChange({
         appliedFilters: [
           {
@@ -297,7 +297,7 @@ describe('PipelinesComponent', () => {
   });
 
   describe('sorting', () => {
-    it('should sort by application descending', function() {
+    it('should sort by application descending', () => {
       testContext.testedDirective.sortChange({
         field: {
           id: 'application',
@@ -334,7 +334,7 @@ describe('PipelinesComponent', () => {
       ]);
     });
 
-    it('should sort by application ascending', function() {
+    it('should sort by application ascending', () => {
       testContext.testedDirective.sortChange({
         field: {
           id: 'application',
@@ -371,7 +371,7 @@ describe('PipelinesComponent', () => {
       ]);
     });
 
-    it('should sort by codebase descending', function() {
+    it('should sort by codebase descending', () => {
       testContext.testedDirective.sortChange({
         field: {
           id: 'codebase',
@@ -408,7 +408,7 @@ describe('PipelinesComponent', () => {
       ]);
     });
 
-    it('should sort by codebase ascending', function() {
+    it('should sort by codebase ascending', () => {
       testContext.testedDirective.sortChange({
         field: {
           id: 'codebase',
@@ -445,7 +445,7 @@ describe('PipelinesComponent', () => {
       ]);
     });
 
-    it('should sort after filters change', function() {
+    it('should sort after filters change', () => {
       testContext.testedDirective.sortChange({
         field: {
           id: 'application',
@@ -576,7 +576,7 @@ describe('PipelinesComponent', () => {
     });
   });
 
-  it('should trigger showAddAppOverlay on click', function(done: DoneFn) {
+  it('should trigger showAddAppOverlay on click', (done: DoneFn) => {
     // given
     spyOn(testContext.testedDirective, 'showAddAppOverlay');
     testContext.fixture.nativeElement.querySelector('.openshift-links .dropdown-toggle').click();
@@ -589,7 +589,7 @@ describe('PipelinesComponent', () => {
     });
   });
 
-  it('should add queryParams to URL on filter change', function(done) {
+  it('should add queryParams to URL on filter change', (done) => {
     spyOn(testContext.testedDirective, 'addQueryParams');
     testContext.testedDirective.filterChange({
       appliedFilters: [

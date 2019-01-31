@@ -39,15 +39,15 @@ describe('LandingPageComponent', () => {
     },
   );
 
-  it('should use the auth service to check if the user is logged in', function() {
+  it('should use the auth service to check if the user is logged in', () => {
     expect(TestBed.get(AuthenticationService).isLoggedIn).toHaveBeenCalled();
   });
 
-  it('should use the login service to redirect if the user is logged in', function() {
+  it('should use the login service to redirect if the user is logged in', () => {
     expect(TestBed.get(LoginService).redirectAfterLogin).toHaveBeenCalled();
   });
 
-  it('should broadcast and redirect upon login', function() {
+  it('should broadcast and redirect upon login', () => {
     testContext.testedDirective.login();
     expect(TestBed.get(Broadcaster).broadcast).toHaveBeenCalledWith('login');
     expect(TestBed.get(LoginService).redirectToAuth).toHaveBeenCalled();

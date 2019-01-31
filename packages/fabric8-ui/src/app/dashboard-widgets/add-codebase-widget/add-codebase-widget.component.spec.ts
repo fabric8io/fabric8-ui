@@ -71,19 +71,19 @@ describe('AddCodebaseWidgetComponent', () => {
     schemas: [NO_ERRORS_SCHEMA],
   });
 
-  it('should be instantiable', function() {
+  it('should be instantiable', () => {
     expect(testContext.testedDirective).toBeTruthy();
   });
 
-  it('should listen for codebaseAdded events', function() {
+  it('should listen for codebaseAdded events', () => {
     expect(mockBroadcaster.on).toHaveBeenCalledWith('codebaseAdded');
   });
 
-  it('should listen for codebaseDeleted events', function() {
+  it('should listen for codebaseDeleted events', () => {
     expect(mockBroadcaster.on).toHaveBeenCalledWith('codebaseDeleted');
   });
 
-  it('should enable buttons if the user owns the space', function() {
+  it('should enable buttons if the user owns the space', () => {
     testContext.testedDirective.userOwnsSpace = true;
     testContext.testedDirective.loading = false;
     testContext.detectChanges();
@@ -96,7 +96,7 @@ describe('AddCodebaseWidgetComponent', () => {
     ).not.toBeNull();
   });
 
-  it('should disable buttons if the user does not own the space', function() {
+  it('should disable buttons if the user does not own the space', () => {
     testContext.testedDirective.userOwnsSpace = false;
     testContext.testedDirective.loading = false;
     testContext.detectChanges();
@@ -107,7 +107,7 @@ describe('AddCodebaseWidgetComponent', () => {
     expect(testContext.fixture.debugElement.query(By.css('#test-add-codebase-button'))).toBeNull();
   });
 
-  it('should listen for context space changes', function() {
+  it('should listen for context space changes', () => {
     expect(testContext.testedDirective.context).toBeUndefined();
     expect(testContext.testedDirective.contextPath).toBeUndefined();
 
@@ -132,7 +132,7 @@ describe('AddCodebaseWidgetComponent', () => {
     expect(testContext.testedDirective.contextPath).toEqual(contextB.path);
   });
 
-  it('should add Codebase when codebaseAdded event observed', function() {
+  it('should add Codebase when codebaseAdded event observed', () => {
     expect(testContext.testedDirective.codebases).toEqual([]);
 
     const codebaseA: Codebase = {
@@ -156,7 +156,7 @@ describe('AddCodebaseWidgetComponent', () => {
     expect(testContext.testedDirective.codebases).toEqual([codebaseB, codebaseA]);
   });
 
-  it('should remove Codebase when codebaseRemoved event observed', function() {
+  it('should remove Codebase when codebaseRemoved event observed', () => {
     expect(testContext.testedDirective.codebases).toEqual([]);
 
     const codebaseA: Codebase = {
@@ -183,7 +183,7 @@ describe('AddCodebaseWidgetComponent', () => {
     expect(testContext.testedDirective.codebases).toEqual([codebaseB]);
   });
 
-  it('should load Codebases from service when current context changes and contains a space', function() {
+  it('should load Codebases from service when current context changes and contains a space', () => {
     const context: Context = {
       path: 'context-path',
       space: {

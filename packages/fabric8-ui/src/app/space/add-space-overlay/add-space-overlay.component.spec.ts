@@ -246,9 +246,7 @@ describe('AddSpaceOverlayComponent', () => {
       component.spaceDescription = 'DescriptionA';
       component.addAppFlow = 'importapp';
 
-      mockSpaceNamespaceService.updateConfigMap.and.callFake(function() {
-        return observableOf({});
-      });
+      mockSpaceNamespaceService.updateConfigMap.and.callFake(() => observableOf({}));
 
       let createSpaceArgument: any;
       mockSpaceService.create.and.callFake(function() {

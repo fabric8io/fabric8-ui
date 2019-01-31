@@ -91,16 +91,16 @@ describe('LandingPageComponent', () => {
     },
   );
 
-  it('should create home component', function() {
+  it('should create home component', () => {
     expect(testHomeContext).toBeDefined();
   });
 
-  it('should have a defined user after login', function() {
+  it('should have a defined user after login', () => {
     const homeComponent: HomeComponent = testHomeContext.testedDirective;
     expect(homeComponent.loggedInUser).toBeDefined();
   });
 
-  it('should stop loading after resolving', function() {
+  it('should stop loading after resolving', () => {
     const homeComponent: HomeComponent = testHomeContext.testedDirective;
     expect(homeComponent.loading).toBeFalsy();
   });
