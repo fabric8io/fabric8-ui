@@ -172,8 +172,7 @@ export class AddAppOverlayComponent implements OnInit, OnDestroy {
     if (this.projectName) {
       this.projectName = this.projectName.toLowerCase();
       this.isProjectNameValid = this.isValidProjectName(this.projectName);
-      this.isProjectNameAvailable =
-        this.applications.indexOf(this.projectName) === -1 ? true : false;
+      this.isProjectNameAvailable = this.applications.indexOf(this.projectName) === -1;
     }
   }
 

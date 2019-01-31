@@ -22,8 +22,6 @@
     "no-throw-literal": "off",
     "no-underscore-dangle": "off",
     "no-useless-escape": "off",
-    "no-undef": "off",
-    "no-unneeded-ternary": "off",
     "object-shorthand": "off",
     "one-var": "off",
     "operator-assignment": "off",

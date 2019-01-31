@@ -8,6 +8,6 @@ export class AbstractViewWrapperComponent implements OnInit {
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
-    this.showToolbar = activedRouteDataEntry(this.route, 'hide-toolbar') ? false : true;
+    this.showToolbar = !activedRouteDataEntry(this.route, 'hide-toolbar');
   }
 }

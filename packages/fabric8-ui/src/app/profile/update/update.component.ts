@@ -268,7 +268,7 @@ export class UpdateComponent implements OnInit, OnDestroy {
   }
 
   validateBio(charsRemaining: number) {
-    this.bioInvalid = charsRemaining < 0 ? true : false;
+    this.bioInvalid = charsRemaining < 0;
   }
 
   private getTransientProfile(): ExtProfile {

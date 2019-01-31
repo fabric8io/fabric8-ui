@@ -49,7 +49,7 @@ export class OAuthConfig {
     let config = data || {};
     let oauth = config.oauth || {};
 
-    this.loaded = data ? true : false;
+    this.loaded = !!data;
     this.apiServer = config.api_server || '';
     this.proxyApiServer = config.proxy_api_server || '';
     this.apiServerProtocol = config.api_server_protocol;

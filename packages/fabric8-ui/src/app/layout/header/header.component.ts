@@ -28,7 +28,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   toggleState() {
     // click handler
     let bool: boolean = this.isIn;
-    this.isIn = bool === false ? true : false;
+    this.isIn = bool === false;
   }
 
   menuCallbacks: Map<String, MenuHiddenCallback> = new Map<String, MenuHiddenCallback>([
