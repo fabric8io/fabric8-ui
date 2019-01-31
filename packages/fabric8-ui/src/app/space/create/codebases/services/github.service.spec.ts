@@ -352,7 +352,7 @@ describe('Github: GitHubService', () => {
       .flush(expectedGitHubRepoLicense);
   });
 
-  //////
+  // ////
 
   it('Get GitHub repos associated with given user name', (done: DoneFn) => {
     const repos: GitHubRepo[] = [expectedGitHubRepo];

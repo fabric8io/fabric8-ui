@@ -25,7 +25,6 @@
     "prefer-destructuring": "off",
     "prefer-rest-params": "off",
     "radix": "off",
-    "spaced-comment": "off",
     "vars-on-top": "off",
     "yoda": "off",
 

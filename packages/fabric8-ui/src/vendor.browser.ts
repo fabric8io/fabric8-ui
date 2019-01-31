@@ -20,7 +20,7 @@ import '@angularclass/hmr';
 // RxJS
 import 'ngx-bootstrap';
 import 'rxjs';
-//import 'ng2-dnd';
+// import 'ng2-dnd';
 //
 
 // import PatternFly CSS

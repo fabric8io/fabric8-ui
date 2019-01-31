@@ -14,7 +14,7 @@ import { createMock } from 'testing/mock';
 import { NotificationsService } from '../../../../shared/notifications.service';
 import { PipelinesService } from '../../../../shared/runtime-console/pipelines.service';
 
-//Avoid naming collision
+// Avoid naming collision
 import { PipelinesService as ActualPipelinesService } from './pipelines.service';
 
 describe('Pipelines Service', () => {

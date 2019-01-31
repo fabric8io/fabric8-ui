@@ -122,7 +122,7 @@ export abstract class NamespacedResourceService<
   protected createServiceUrl(urlPrefix: string, namespace: string, urlSuffix: string): string {
     if (namespace) {
       const url = pathJoin(urlPrefix, namespace, urlSuffix);
-      //console.log("setting url to: " + url);
+      // console.log("setting url to: " + url);
       return url;
     }
     return '';

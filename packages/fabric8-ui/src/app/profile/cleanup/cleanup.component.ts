@@ -136,7 +136,7 @@ export class CleanupComponent implements OnInit, OnDestroy {
 
     observableArray.push(tenantServiceCleanup);
 
-    //join all space delete observables and wait for completion before running tenant cleanup
+    // join all space delete observables and wait for completion before running tenant cleanup
     forkJoin(...observableArray).subscribe(
       (result) => {
         if (!tenantCleanError) {

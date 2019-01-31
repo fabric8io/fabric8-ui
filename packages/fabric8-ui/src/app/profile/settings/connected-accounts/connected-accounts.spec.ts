@@ -49,7 +49,7 @@ describe('Connected Accounts Component', () => {
     beforeAll(
       (): void => {
         authMock.gitHubToken = empty();
-        //authMock.openShiftToken = of('oso-token');
+        // authMock.openShiftToken = of('oso-token');
         authMock.isOpenShiftConnected.and.returnValue(of(true));
         contextsMock.current = of(ctx);
         userServiceMock.loggedInUser = empty();
@@ -93,7 +93,7 @@ describe('Connected Accounts Component', () => {
     beforeAll(
       (): void => {
         authMock.gitHubToken = of('gh-test-user');
-        //authMock.openShiftToken = of('oso-token');
+        // authMock.openShiftToken = of('oso-token');
         authMock.isOpenShiftConnected.and.returnValue(of(true));
         contextsMock.current = of(ctx);
         userServiceMock.loggedInUser = empty();

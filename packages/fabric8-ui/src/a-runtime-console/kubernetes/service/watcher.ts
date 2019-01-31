@@ -155,7 +155,7 @@ export class Watcher<L> {
         this.serviceUrl = serviceUrl;
         if (serviceUrl) {
           const url = baseUrl + serviceUrl + this.query;
-          //console.log('Websocket using URL: ' + url);
+          // console.log('Websocket using URL: ' + url);
           this.ws = new $WebSocket(url);
           this.connectTime = new Date().getTime();
 
@@ -170,7 +170,7 @@ export class Watcher<L> {
             (err) => {
               console.log(`WebSocket error on ${serviceUrl}`, err);
               // lets not send the websocket error as we will downgrade to polling
-              //this._dataStream.error(err);
+              // this._dataStream.error(err);
               this.onWebSocketError();
             },
             () => {
@@ -187,7 +187,7 @@ export class Watcher<L> {
   }
 
   protected onWebSocketError() {
-    //if (this.retries < 3 && this.connectTime && (new Date().getTime() - this.connectTime) > 5000) {
+    // if (this.retries < 3 && this.connectTime && (new Date().getTime() - this.connectTime) > 5000) {
     if (this.retries < 3) {
       this.retries = this.retries + 1;
       this.recreate();

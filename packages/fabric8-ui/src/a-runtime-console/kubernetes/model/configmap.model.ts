@@ -1,5 +1,5 @@
 import { KubernetesResource } from './kubernetesresource.model';
-//import { FunktionKindAnnotation } from "../service/kubernetes.restangular";
+// import { FunktionKindAnnotation } from "../service/kubernetes.restangular";
 
 export class ConfigMap extends KubernetesResource {
   data: Map<string, string>;

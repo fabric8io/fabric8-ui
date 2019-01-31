@@ -1,10 +1,10 @@
 import { md5 } from './md5';
 
 export function gravatar(email: string, options: any = {}): string {
-  //check to make sure you gave us something
+  // check to make sure you gave us something
   const params: Array<string> = [];
 
-  //set some defaults, just in case
+  // set some defaults, just in case
   options = {
     size: options.size || '100',
     rating: options.rating || 'g',
@@ -12,15 +12,15 @@ export function gravatar(email: string, options: any = {}): string {
     backup: options.backup || '',
   };
 
-  //setup the email address
+  // setup the email address
   email = email.trim().toLowerCase();
 
-  //determine which base to use
+  // determine which base to use
   const base = options.secure
     ? 'https://secure.gravatar.com/avatar/'
     : 'http://www.gravatar.com/avatar/';
 
-  //add the params
+  // add the params
   if (options.rating) {
     params.push(`r=${options.rating}`);
   }
@@ -30,6 +30,6 @@ export function gravatar(email: string, options: any = {}): string {
   if (options.size) {
     params.push(`s=${options.size}`);
   }
-  //now throw it all together
+  // now throw it all together
   return `${base}${md5(email)}?${params.join('&')}`;
 }

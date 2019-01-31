@@ -62,7 +62,7 @@ export class OAuthConfig {
     this.issuer = oauth.oauth_issuer || '';
     this.scope = oauth.oauth_scope || 'user:full';
     this.logoutUri = oauth.logout_uri || '';
-    //this.openshiftConsoleUrl = config.openshift_console_url || '';
+    // this.openshiftConsoleUrl = config.openshift_console_url || '';
     this.witApiUrl = config.wit_api_url || '';
     this.ssoApiUrl = config.sso_api_url || '';
     this.forgeApiUrl = config.forge_api_url || '';
@@ -77,7 +77,7 @@ export class OAuthConfig {
         url = url.substring(0, idx);
       }
       this.issuer = url;
-      //console.log("Defaulted the issuer URL to: " + this.issuer);
+      // console.log("Defaulted the issuer URL to: " + this.issuer);
     }
   }
 }

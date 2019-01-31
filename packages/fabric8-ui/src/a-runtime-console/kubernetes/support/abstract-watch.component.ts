@@ -134,7 +134,7 @@ export class AbstractWatchComponent implements OnDestroy {
     const key = `${namespace}/${type.name}`;
     return this.getOrCreateSubject(key, () =>
       observableCombineLatest(
-        //this.getOrCreateList(service, namespace, type),
+        // this.getOrCreateList(service, namespace, type),
         service.list(namespace),
         // We just emit an empty item if the watch fails
         this.getOrCreateWatch(service, namespace, type).dataStream.pipe(

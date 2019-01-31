@@ -35,7 +35,7 @@ import { HttpInterceptorProviders } from './shared/interceptors/index';
 import { RequestCache } from './shared/request-cache.service';
 import { togglesApiUrlProvider } from './shared/toggles.api.provider';
 
-//Header
+// Header
 import { HeaderComponent } from './layout/header/header.component';
 import { MenusService } from './layout/header/menus.service';
 

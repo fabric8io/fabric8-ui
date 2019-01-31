@@ -102,7 +102,7 @@ export class ProfileService {
           current.email &&
           current.username
           // TODO Add imageURL
-          //this.current.imageURL
+          // this.current.imageURL
         ) {
           return true;
         }

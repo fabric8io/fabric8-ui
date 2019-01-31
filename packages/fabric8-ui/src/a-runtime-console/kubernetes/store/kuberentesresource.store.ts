@@ -185,7 +185,7 @@ export abstract class KubernetesResourceStore<
           if (isNewerResource(resource, item.resource)) {
             item.setResource(resource);
           }
-          //console.log("Updated item " + n);
+          // console.log("Updated item " + n);
           return array;
         }
       }
@@ -196,7 +196,7 @@ export abstract class KubernetesResourceStore<
       // lets add the Restangular crack
       item = this.service.restangularize(item);
       array.push(item);
-      //console.log("Added new item " + n);
+      // console.log("Added new item " + n);
       return array;
     }
     return null;

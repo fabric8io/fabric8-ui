@@ -139,7 +139,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
         headingRow: true,
         multiSelect: false,
         selectItems: false,
-        //selectionMatchProp: 'name',
+        // selectionMatchProp: 'name',
         showCheckbox: false,
         useExpandItems: true,
         useHeading: true,

@@ -93,10 +93,10 @@ export function KubernetesRestangularFactory(
         }
       }
     }
-    //console.log("using Restangular base URL " + baseUrl);
+    // console.log("using Restangular base URL " + baseUrl);
     RestangularConfigurer.setBaseUrl(baseUrl);
 
-    //RestangularConfigurer.addResponseInterceptor(function (data, operation, what, url, response, deferred) {
+    // RestangularConfigurer.addResponseInterceptor(function (data, operation, what, url, response, deferred) {
     RestangularConfigurer.addResponseInterceptor((data, operation) => {
       let kind = data ? data.kind : null;
       if (operation === 'getList') {
@@ -157,10 +157,10 @@ export function KubernetesRestangularFactory(
         if (oauthConfig.apiServerBasePath) {
           baseUrl += oauthConfig.apiServerBasePath;
         }
-        //console.log("==========  using Restangular base URL " + baseUrl);
+        // console.log("==========  using Restangular base URL " + baseUrl);
         RestangularConfigurer.setBaseUrl(baseUrl);
 
-        //console.log("===== setting kubernetes token: " + (token ? "token" : "no token") + " for " + url);
+        // console.log("===== setting kubernetes token: " + (token ? "token" : "no token") + " for " + url);
         headers['Authorization'] = `Bearer ${onLogin.token}`;
         return {
           params,

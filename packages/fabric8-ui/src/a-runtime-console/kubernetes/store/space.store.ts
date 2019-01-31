@@ -132,7 +132,7 @@ export class SpaceStore {
           if (name) {
             let springConfigWatcher = this.spaceConfigWatchers[name];
             if (!springConfigWatcher) {
-              //console.log("watching configmaps in namespace " + name);
+              // console.log("watching configmaps in namespace " + name);
               const watcher = configMapService.watchNamepace(name, {
                 labelSelector: 'provider=fabric8',
               });
