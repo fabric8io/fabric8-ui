@@ -8,6 +8,8 @@ export class ResourceOperation {
   constructor(public operation: Operation, public resource: any) {}
 }
 
+const serviceUrl = this.service.serviceUrl;
+
 export function messageEventToResourceOperation(msg): ResourceOperation {
   if (msg instanceof ResourceOperation) {
     return msg as ResourceOperation;
@@ -29,11 +31,7 @@ export function messageEventToResourceOperation(msg): ResourceOperation {
             case 'DELETED':
               return new ResourceOperation(Operation.DELETED, resource);
             default:
-              console.log(
-                `Unknown WebSocket event type ${type} for ${resource} on ${
-                  this.service.serviceUrl
-                }`,
-              );
+              console.log(`Unknown WebSocket event type ${type} for ${resource} on ${serviceUrl}`);
           }
         }
       }

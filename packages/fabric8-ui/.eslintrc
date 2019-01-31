@@ -27,8 +27,6 @@
     "radix": "off",
     "vars-on-top": "off",
 
-    "react/no-this-in-sfc": "off",
-
     "jest/lowercase-name": "off",
     "jest/no-disabled-tests": "off",
     "jest/no-identical-title": "off",
