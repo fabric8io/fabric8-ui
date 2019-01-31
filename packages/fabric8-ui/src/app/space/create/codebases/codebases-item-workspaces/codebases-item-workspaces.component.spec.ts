@@ -14,8 +14,10 @@ describe('Codebases Item Details Component', () => {
   let cheServiceMock: any;
   let workspacesServiceMock: any;
   let notificationMock: any;
-  let fixture, comp;
-  let expectedWorkspace, expectedWorkspaces;
+  let fixture;
+  let comp;
+  let expectedWorkspace;
+  let expectedWorkspaces;
 
   beforeEach(() => {
     broadcasterMock = jasmine.createSpyObj('Broadcaster', ['on']);

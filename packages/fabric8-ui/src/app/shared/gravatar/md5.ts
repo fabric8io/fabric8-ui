@@ -6,7 +6,11 @@ export function md5(s) {
     return (k << d) | (k >>> (32 - d));
   }
   function K(G, k) {
-    let I, d, F, H, x;
+    let I;
+    let d;
+    let F;
+    let H;
+    let x;
     F = G & 2147483648;
     H = k & 2147483648;
     I = G & 1073741824;
@@ -74,10 +78,13 @@ export function md5(s) {
     return aa;
   }
   function B(x) {
-    let k = '',
-      F = '',
-      G,
-      d;
+    let k = '';
+
+    let F = '';
+
+    let G;
+
+    let d;
     for (d = 0; d <= 3; d++) {
       G = (x >>> (d * 8)) & 255;
       F = '0' + G.toString(16);
@@ -104,23 +111,43 @@ export function md5(s) {
     return d;
   }
   let C = Array();
-  let P, h, E, v, g, Y, X, W, V;
-  let S = 7,
-    Q = 12,
-    N = 17,
-    M = 22;
-  let A = 5,
-    z = 9,
-    y = 14,
-    w = 20;
-  let o = 4,
-    m = 11,
-    l = 16,
-    j = 23;
-  let U = 6,
-    T = 10,
-    R = 15,
-    O = 21;
+  let P;
+  let h;
+  let E;
+  let v;
+  let g;
+  let Y;
+  let X;
+  let W;
+  let V;
+  let S = 7;
+
+  let Q = 12;
+
+  let N = 17;
+
+  let M = 22;
+  let A = 5;
+
+  let z = 9;
+
+  let y = 14;
+
+  let w = 20;
+  let o = 4;
+
+  let m = 11;
+
+  let l = 16;
+
+  let j = 23;
+  let U = 6;
+
+  let T = 10;
+
+  let R = 15;
+
+  let O = 21;
   s = J(s);
   C = e(s);
   Y = 1732584193;

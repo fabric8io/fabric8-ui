@@ -10,7 +10,8 @@ import { CodebasesItemComponent } from './codebases-item.component';
 
 describe('Codebases Item Component', () => {
   let broadcasterMock: any;
-  let fixture, codebase;
+  let fixture;
+  let codebase;
   let mockNotifications: any;
   let mockCodebasesService: any;
 

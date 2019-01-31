@@ -12,8 +12,9 @@ function extractParams(from) {
 }
 
 describe('gravatar', function() {
-  let email = 'me@me.com',
-    confirmed_md5 = 'f620f4647fb816073c9152a284245e64';
+  let email = 'me@me.com';
+
+  let confirmed_md5 = 'f620f4647fb816073c9152a284245e64';
 
   it('Should let me call gravatar function', function() {
     expect(gravatar).toBeDefined();
