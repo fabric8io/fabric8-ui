@@ -36,7 +36,7 @@ export class ProfileService {
     if (this.auth.getToken() != null) {
       this.headers = this.headers.set('Authorization', `Bearer ${this.auth.getToken()}`);
     }
-    this.profileUrl = apiUrl + 'users';
+    this.profileUrl = `${apiUrl}users`;
     this._profile = this.userService.loggedInUser.pipe(
       skipWhile((user) => !user || !user.attributes),
       map((user) => cloneDeep(user) as ExtUser),

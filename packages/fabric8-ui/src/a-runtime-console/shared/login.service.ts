@@ -28,7 +28,7 @@ export class LoginService {
     private broadcaster: Broadcaster,
     private authService: AuthenticationService,
   ) {
-    this.authUrl = apiUrl + 'login/authorize';
+    this.authUrl = `${apiUrl}login/authorize`;
     this.broadcaster.on('authenticationError').subscribe(() => {
       this.authService.logout();
       this.redirectToLogin(this.router.url);

@@ -10,7 +10,7 @@ export class NewForgeConfig extends Config {
     const settings = { backend_url: 'TO_BE_DEFINED' };
 
     if (apiUrl) {
-      settings['backend_url'] = Location.stripTrailingSlash(apiUrl) + '/api/';
+      settings['backend_url'] = `${Location.stripTrailingSlash(apiUrl)}/api/`;
     }
 
     settings['origin'] = 'osio';

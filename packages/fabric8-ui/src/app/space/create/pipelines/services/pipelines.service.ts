@@ -57,7 +57,7 @@ export class PipelinesService {
       this.loggedIn = true;
     }
     this.headers = headers;
-    this.apiUrl = witUrl + 'user/services';
+    this.apiUrl = `${witUrl}user/services`;
   }
 
   getCurrentPipelines(): Observable<BuildConfig[]> {
@@ -96,12 +96,9 @@ export class PipelinesService {
                   namespace.type === 'user' &&
                   namespace['cluster-console-url']
                 ) {
-                  return (
-                    namespace['cluster-console-url'] +
-                    'project/' +
-                    namespace.name +
-                    '/browse/pipelines'
-                  );
+                  return `${namespace['cluster-console-url']}project/${
+                    namespace.name
+                  }/browse/pipelines`;
                 }
               }
               return '';

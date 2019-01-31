@@ -60,7 +60,7 @@ export function openShiftBrowseResourceUrl(
         kinds =
           resourceKindToOpenShiftConsoleCollectionName[kind] || resourceKindToCollectionName[kind];
         if (!kinds) {
-          console.log('Could not find collection name for kind: ' + kind);
+          console.log(`Could not find collection name for kind: ${kind}`);
           kinds = kind.toLowerCase();
           if (!kinds.endsWith('s')) {
             kinds += 's';

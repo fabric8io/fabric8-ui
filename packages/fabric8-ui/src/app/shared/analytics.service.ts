@@ -79,11 +79,9 @@ export class AnalyticService {
           const e = document.createElement('script');
           e.type = 'text/javascript';
           e.async = !0;
-          e.src =
-            ('https:' === document.location.protocol ? 'https://' : 'http://') +
-            'cdn.segment.com/analytics.js/v1/' +
-            t +
-            '/analytics.min.js';
+          e.src = `${
+            'https:' === document.location.protocol ? 'https://' : 'http://'
+          }cdn.segment.com/analytics.js/v1/${t}/analytics.min.js`;
           const n = document.getElementsByTagName('script');
           if (n && n instanceof Array && n[0] && n[0].parentNode) {
             n[0].parentNode.insertBefore(e, n[0]);

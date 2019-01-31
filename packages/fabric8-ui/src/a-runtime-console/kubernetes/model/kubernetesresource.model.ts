@@ -124,7 +124,7 @@ export class KubernetesResource implements BaseEntity {
   isFabric8Icon(url, name) {
     if (url && (url.startsWith('img/icons/') || url.startsWith('/img/icons/'))) {
       return (
-        url.endsWith(name + '.svg') || url.endsWith(name + '.png') || url.endsWith(name + '.jpg')
+        url.endsWith(`${name}.svg`) || url.endsWith(`${name}.png`) || url.endsWith(`${name}.jpg`)
       );
     }
     return false;

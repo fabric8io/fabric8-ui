@@ -244,7 +244,7 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
           }
         },
         (error) => {
-          console.log('Failed to retrieve workspaces for codebase ID: ' + this.codebase.id);
+          console.log(`Failed to retrieve workspaces for codebase ID: ${this.codebase.id}`);
         },
       ),
     );

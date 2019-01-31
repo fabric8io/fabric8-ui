@@ -131,7 +131,7 @@ export class AbstractWatchComponent implements OnDestroy {
     namespace: string,
     type: { new (): T },
   ): Observable<L> {
-    const key = namespace + '/' + type.name;
+    const key = `${namespace}/${type.name}`;
     return this.getOrCreateSubject(key, () =>
       observableCombineLatest(
         //this.getOrCreateList(service, namespace, type),
@@ -163,7 +163,7 @@ export class AbstractWatchComponent implements OnDestroy {
     namespace: string,
     type: { new (): T },
   ): Watcher<L> {
-    const key = namespace + '/' + type.name;
+    const key = `${namespace}/${type.name}`;
     let answer = this.watchCache[key];
     if (!answer) {
       answer = service.watchNamepace(namespace);
@@ -195,14 +195,9 @@ export class AbstractWatchComponent implements OnDestroy {
           return createNewArrayToForceRefresh(this.deleteItemFromArray(array, resource));
         default:
           console.log(
-            'Unknown resource option ' +
-              operation +
-              ' for ' +
-              resource +
-              ' on ' +
-              service.serviceUrl +
-              '/' +
-              namespace,
+            `Unknown resource option ${operation} for ${resource} on ${
+              service.serviceUrl
+            }/${namespace}`,
           );
       }
     }

@@ -20,10 +20,10 @@ class ApiLocatorServiceTest extends BaseApiLocatorService {
 
 describe('API Locator Service', () => {
   const base = function() {
-    return window.location.hostname + ':' + window.location.port;
+    return `${window.location.hostname}:${window.location.port}`;
   };
   const url = function(base: string) {
-    return 'http://' + base;
+    return `http://${base}`;
   };
 
   it('Add prefix to configured service URL', () => {
@@ -32,7 +32,7 @@ describe('API Locator Service', () => {
       new Map([['random_test', 'api']]),
       new Map(),
     );
-    expect(loc.get('random_test')).toMatch(url('api.' + base()));
+    expect(loc.get('random_test')).toMatch(url(`api.${base()}`));
   });
 
   it('Add suffix to configured service URL', () => {
@@ -41,7 +41,7 @@ describe('API Locator Service', () => {
       new Map(),
       new Map([['random_test', 'api']]),
     );
-    expect(loc.get('random_test')).toMatch(url(base() + '/api'));
+    expect(loc.get('random_test')).toMatch(url(`${base()}/api`));
   });
 
   it('Add prefix and suffix to configured service URL', () => {
@@ -50,7 +50,7 @@ describe('API Locator Service', () => {
       new Map([['random_test', 'api']]),
       new Map([['random_test', 'api']]),
     );
-    expect(loc.get('random_test')).toMatch(url('api.' + base() + '/api'));
+    expect(loc.get('random_test')).toMatch(url(`api.${base()}/api`));
   });
 
   it('Do not change non configured service URL', () => {

@@ -41,7 +41,7 @@ export class BuildConfigService extends NamespacedResourceService<BuildConfig, B
     const namespace = buildConfig.namespace;
     const body = { kind: 'BuildRequest', apiVersion: 'v1', metadata: { name } };
     const url = this.serviceUrlForNamespace(namespace);
-    return this.restangularService.one(url, name + '/instantiate').customPOST(body);
+    return this.restangularService.one(url, `${name}/instantiate`).customPOST(body);
   }
 
   protected createServiceUrl(urlPrefix: string, namespace: string, urlSuffix: string): string {

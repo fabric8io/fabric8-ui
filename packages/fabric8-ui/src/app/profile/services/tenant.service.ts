@@ -21,7 +21,7 @@ export class TenantService {
     if (this.auth.getToken() != undefined) {
       this.headers = this.headers.set('Authorization', `Bearer ${this.auth.getToken()}`);
     }
-    this.tenantUrl = apiUrl + 'user/services';
+    this.tenantUrl = `${apiUrl}user/services`;
   }
 
   /**

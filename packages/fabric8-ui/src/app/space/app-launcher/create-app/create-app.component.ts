@@ -63,7 +63,7 @@ export class CreateAppComponent implements OnDestroy, OnInit {
 
   addQuery(): QueryJson {
     this.projectName = this.projectile.sharedState.state.projectName;
-    const query = '{"application":["' + this.projectName + '"]}';
+    const query = `{"application":["${this.projectName}"]}`;
     return {
       q: query,
     };

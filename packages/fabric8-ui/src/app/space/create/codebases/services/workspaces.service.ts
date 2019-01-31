@@ -25,10 +25,10 @@ export class WorkspacesService {
   ) {
     let headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
     if (this.auth.getToken() != undefined) {
-      headers = headers.set('Authorization', 'Bearer ' + this.auth.getToken());
+      headers = headers.set('Authorization', `Bearer ${this.auth.getToken()}`);
     }
     this.headers = headers;
-    this.workspacesUrl = apiUrl + 'codebases';
+    this.workspacesUrl = `${apiUrl}codebases`;
   }
 
   /**

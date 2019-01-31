@@ -227,7 +227,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           if (!foundPath) {
             // lets check if the URL matches part of the path
             for (const o of subMenus) {
-              if (!foundPath && decodeURIComponent(url).startsWith(o.fullPath + '/')) {
+              if (!foundPath && decodeURIComponent(url).startsWith(`${o.fullPath}/`)) {
                 foundPath = true;
                 o.active = true;
                 n.active = true;
@@ -243,7 +243,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
             // routes that can't be correctly matched based on the url should use the parent path
             for (const o of subMenus) {
               const parentPath = decodeURIComponent(
-                '/' + this.router.routerState.snapshot.root.firstChild.url.join('/'),
+                `/${this.router.routerState.snapshot.root.firstChild.url.join('/')}`,
               );
               if (!foundPath && o.fullPath === parentPath) {
                 foundPath = true;

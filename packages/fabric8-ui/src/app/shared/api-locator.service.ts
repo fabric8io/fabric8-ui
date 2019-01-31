@@ -98,16 +98,16 @@ export class BaseApiLocatorService {
     }
     let url = domainname;
     if (window.location.port) {
-      url += ':' + window.location.port;
+      url += `:${window.location.port}`;
     }
     url += '/';
     if (this.apiPrefixes.has(key)) {
-      url = this.apiPrefixes.get(key) + '.' + url;
+      url = `${this.apiPrefixes.get(key)}.${url}`;
     }
     if (this.apiPaths.has(key)) {
       url += this.apiPaths.get(key);
     }
-    url = window.location.protocol + '//' + url;
+    url = `${window.location.protocol}//${url}`;
     return url;
   }
 }

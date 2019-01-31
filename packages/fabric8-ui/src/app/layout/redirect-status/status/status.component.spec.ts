@@ -65,7 +65,7 @@ describe('StatusComponent', () => {
       '../../../../assets/images/trophy.png',
     );
 
-    expect(ctaEl.nativeElement.getAttribute('href')).toEqual('/' + successData.callToActionUrl);
+    expect(ctaEl.nativeElement.getAttribute('href')).toEqual(`/${successData.callToActionUrl}`);
   }));
 
   it('should have fail image, msg and cta_link set', async(() => {
@@ -80,6 +80,6 @@ describe('StatusComponent', () => {
       '../../../../assets/images/neutralface.png',
     );
 
-    expect(ctaEl.nativeElement.getAttribute('href')).toEqual('/' + failData.callToActionUrl);
+    expect(ctaEl.nativeElement.getAttribute('href')).toEqual(`/${failData.callToActionUrl}`);
   }));
 });

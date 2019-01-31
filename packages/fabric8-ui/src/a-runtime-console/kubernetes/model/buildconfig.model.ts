@@ -177,8 +177,8 @@ export class BuildConfig extends KubernetesSpecResource {
     const type = strategy.type || '';
 
     this.lastVersion = status.lastVersion || 0;
-    this.lastBuildName = this.lastVersion ? this.name + '-' + this.lastVersion : '';
-    this.lastBuildPath = this.lastBuildName ? this.name + '/builds/' + this.lastBuildName : '';
+    this.lastBuildName = this.lastVersion ? `${this.name}-${this.lastVersion}` : '';
+    this.lastBuildPath = this.lastBuildName ? `${this.name}/builds/${this.lastBuildName}` : '';
     this.iconStyle = defaultBuildIconStyle;
 
     this.type = type;

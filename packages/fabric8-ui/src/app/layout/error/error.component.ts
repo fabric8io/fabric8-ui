@@ -36,7 +36,7 @@ export class ErrorComponent implements OnDestroy {
         this.userService.loggedInUser.subscribe(
           (user: User): void => {
             if (user.id) {
-              this.spaceLink = '/' + user.attributes.username + '/_spaces';
+              this.spaceLink = `/${user.attributes.username}/_spaces`;
             }
           },
         ),

@@ -66,7 +66,7 @@ export class Watcher<L> {
   }
 
   get info(): string {
-    return 'watch for ' + this.pathFn() + (this.queryParams ? ' query:  ' + this.queryParams : '');
+    return `watch for ${this.pathFn()}${this.queryParams ? ` query:  ${this.queryParams}` : ''}`;
   }
 
   close() {
@@ -106,9 +106,9 @@ export class Watcher<L> {
     let query = '';
     for (const k in params) {
       const sep = query ? '&' : '';
-      query += sep + k + '=' + encodeURIComponent(params[k]);
+      query += `${sep + k}=${encodeURIComponent(params[k])}`;
     }
-    return query ? '?' + query : '';
+    return query ? `?${query}` : '';
   }
 
   protected lazyCreateWebSocket() {
@@ -141,7 +141,7 @@ export class Watcher<L> {
           if (hostname) {
             baseUrl = webSocketProtocol + hostname;
             if (port) {
-              baseUrl += ':' + port;
+              baseUrl += `:${port}`;
             }
           }
         }
@@ -168,7 +168,7 @@ export class Watcher<L> {
               this._dataStream.next(msg);
             },
             (err) => {
-              console.log('WebSocket error on ' + serviceUrl, err);
+              console.log(`WebSocket error on ${serviceUrl}`, err);
               // lets not send the websocket error as we will downgrade to polling
               //this._dataStream.error(err);
               this.onWebSocketError();
@@ -193,11 +193,7 @@ export class Watcher<L> {
       this.recreate();
     } else {
       console.log(
-        'WebSocket for ' +
-          this.pathFn() +
-          ' error, retry #' +
-          this.retries +
-          ' so switching to polling mode',
+        `WebSocket for ${this.pathFn()} error, retry #${this.retries} so switching to polling mode`,
       );
       this.closeWebSocket();
       this.lazyCreatePoller();

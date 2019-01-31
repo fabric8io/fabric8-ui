@@ -70,7 +70,7 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
   connectAccounts(): void {
     this.providerService.linkOpenShift(
       this.loggedInUser.attributes.cluster,
-      window.location.origin + '/_gettingstarted?wait=true',
+      `${window.location.origin}/_gettingstarted?wait=true`,
     );
   }
 

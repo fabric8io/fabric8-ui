@@ -84,7 +84,7 @@ export class ResourceHeaderComponent implements OnInit {
           }
         });
         if (!this.current) {
-          console.log('Could not find menu for resource kind: ' + path);
+          console.log(`Could not find menu for resource kind: ${path}`);
         }
       }
     }

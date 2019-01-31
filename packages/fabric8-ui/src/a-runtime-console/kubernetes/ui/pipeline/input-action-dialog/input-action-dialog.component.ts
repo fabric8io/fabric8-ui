@@ -65,7 +65,7 @@ export class InputActionDialog implements OnDestroy {
       // lets replace URL which doesn't seem to work right ;)
       const postfix = '/wfapi/inputSubmit?inputId=Proceed';
       if (url.endsWith(postfix)) {
-        url = url.substring(0, url.length - postfix.length) + '/input/Proceed/proceedEmpty';
+        url = `${url.substring(0, url.length - postfix.length)}/input/Proceed/proceedEmpty`;
       }
 
       const jenkinsNamespace = this.build.jenkinsNamespace;
@@ -77,7 +77,7 @@ export class InputActionDialog implements OnDestroy {
       } else {
         url = pathJoin(forgeUrl, '/api/openshift/services/jenkins/', jenkinsNamespace, url);
         const headers = new HttpHeaders({
-          Authorization: 'Bearer ' + this.authService.getToken(),
+          Authorization: `Bearer ${this.authService.getToken()}`,
           'X-App': 'OSIO',
         });
         const body = null;

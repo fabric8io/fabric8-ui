@@ -82,7 +82,7 @@ export function md5(s) {
     let d;
     for (d = 0; d <= 3; d++) {
       G = (x >>> (d * 8)) & 255;
-      F = '0' + G.toString(16);
+      F = `0${G.toString(16)}`;
       k += F.substr(F.length - 2, 2);
     }
     return k;

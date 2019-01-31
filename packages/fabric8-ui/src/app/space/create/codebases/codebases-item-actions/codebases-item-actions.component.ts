@@ -139,7 +139,7 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
         (error: any) => {
           this.modal.hide();
           this.handleError(
-            'Failed to deleteCodebase codebase ' + this.codebase.name,
+            `Failed to deleteCodebase codebase ${this.codebase.name}`,
             NotificationType.DANGER,
           );
         },

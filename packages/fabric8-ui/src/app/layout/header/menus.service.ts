@@ -167,7 +167,7 @@ export class MenusService {
       if (p.startsWith('/')) {
         res = p;
       } else {
-        res = res + '/' + p;
+        res = `${res}/${p}`;
       }
       res = res.replace(/\/*$/, '');
     }

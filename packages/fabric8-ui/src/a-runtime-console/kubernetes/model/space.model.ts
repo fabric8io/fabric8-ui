@@ -64,9 +64,9 @@ export class Space {
         const nsName = ns.name;
         map[nsName] = ns;
 
-        if (nsName === this.name + '-jenkins') {
+        if (nsName === `${this.name}-jenkins`) {
           this.jenkinsNamespace = ns;
-        } else if (nsName === this.name + '-che') {
+        } else if (nsName === `${this.name}-che`) {
           this.cheNamespace = ns;
         }
       });
@@ -136,9 +136,7 @@ export class Space {
         }
       });
     } else {
-      console.log(
-        'No data for ConfigMap ' + configMap.name + ' in namespace ' + configMap.namespace,
-      );
+      console.log(`No data for ConfigMap ${configMap.name} in namespace ${configMap.namespace}`);
     }
 
     answer.sort((a: Environment, b: Environment) => {
@@ -177,9 +175,7 @@ export class Space {
         }
       });
     } else {
-      console.log(
-        'No data for ConfigMap ' + configMap.name + ' in namespace ' + configMap.namespace,
-      );
+      console.log(`No data for ConfigMap ${configMap.name} in namespace ${configMap.namespace}`);
     }
     answer.sort((a: LabelSpace, b: LabelSpace) => {
       if (a.order < b.order) {

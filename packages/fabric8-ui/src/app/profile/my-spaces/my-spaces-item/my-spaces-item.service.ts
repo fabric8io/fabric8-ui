@@ -58,7 +58,7 @@ export class MySpacesItemService {
   }
 
   getWorkItemCount(space: Space): Observable<number> {
-    const workItemUrl: string = this.apiUrl + 'search';
+    const workItemUrl: string = `${this.apiUrl}search`;
     const queryUrl: string = `${workItemUrl}?${workItemsQueryString(space)}`;
     return this.http.get<WorkItemsResponse>(queryUrl, { headers: this.headers }).pipe(
       map((resp: WorkItemsResponse): number => resp.meta.totalCount),

@@ -70,7 +70,7 @@ export class AppComponent {
       'This is',
       this.about.buildVersion,
       '(Build',
-      '#' + this.about.buildNumber,
+      `#${this.about.buildNumber}`,
       'and was built on',
       this.about.buildTimestamp,
       ')',

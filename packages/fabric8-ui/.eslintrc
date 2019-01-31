@@ -24,7 +24,6 @@
     "no-useless-escape": "off",
     "prefer-destructuring": "off",
     "prefer-rest-params": "off",
-    "prefer-template": "off",
     "radix": "off",
     "spaced-comment": "off",
     "vars-on-top": "off",

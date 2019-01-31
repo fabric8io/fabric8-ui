@@ -109,7 +109,7 @@ export class CreateAreaDialogComponent implements OnInit {
     if (parentPath === '') {
       return item.name;
     }
-    return parentPath + '/' + item.name;
+    return `${parentPath}/${item.name}`;
   }
 
   cancel() {

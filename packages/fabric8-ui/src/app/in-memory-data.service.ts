@@ -32,13 +32,13 @@ export class InMemoryDataService implements InMemoryDbService {
     const workitems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map((n) => ({
       attributes: {
         'system.created_at': null,
-        'system.description': 'Some Description ' + n,
+        'system.description': `Some Description ${n}`,
         'system.remote_item_id': null,
         'system.state': 'new',
-        'system.title': 'Some Title ' + n,
+        'system.title': `Some Title ${n}`,
         version: 1,
       },
-      id: '' + n,
+      id: `${n}`,
       relationships: {
         assignees: {},
         baseType: {

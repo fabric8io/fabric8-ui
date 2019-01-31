@@ -11,7 +11,7 @@ export class SpaceTemplateService {
 
   getSpaceTemplates(): Observable<ProcessTemplate[]> {
     return this.http
-      .get(this.apiUrl + 'spacetemplates')
+      .get(`${this.apiUrl}spacetemplates`)
       .pipe(map((d) => d['data'] as ProcessTemplate[]));
   }
 }

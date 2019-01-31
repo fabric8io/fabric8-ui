@@ -122,7 +122,7 @@ describe('ImportAppComponent', () => {
   it('should add query params', async(() => {
     component.projectName = 'app-1';
     fixture.detectChanges();
-    const query = { q: '{"application":["' + component.projectName + '"]}' };
+    const query = { q: `{"application":["${component.projectName}"]}` };
     expect(component.addQuery()).toEqual(query);
   }));
 });

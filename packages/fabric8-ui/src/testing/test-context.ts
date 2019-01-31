@@ -69,11 +69,9 @@ export function initContext<T, H>(
     const testedDebugElement = context.fixture.debugElement.query(By.directive(testedType));
     if (!testedDebugElement) {
       throw new Error(
-        'Unable to find component under test of type ' +
-          testedType.name +
-          '. Please check your ' +
-          hostType.name +
-          ' in the failing test',
+        `Unable to find component under test of type ${testedType.name}. Please check your ${
+          hostType.name
+        } in the failing test`,
       );
     }
     context.tested = testedDebugElement;

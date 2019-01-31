@@ -53,7 +53,7 @@ export abstract class AbstractStore<
         this._loading.next(false);
       },
       (error) => {
-        console.log('Error retrieving ' + plural(this.kind) + ': ' + error);
+        console.log(`Error retrieving ${plural(this.kind)}: ${error}`);
         this._loading.next(false);
       },
     );
@@ -69,7 +69,7 @@ export abstract class AbstractStore<
         this._loading.next(false);
       },
       (error) => {
-        console.log('Error retrieving ' + this.kind + ': ' + error);
+        console.log(`Error retrieving ${this.kind}: ${error}`);
         this._loading.next(false);
       },
     );

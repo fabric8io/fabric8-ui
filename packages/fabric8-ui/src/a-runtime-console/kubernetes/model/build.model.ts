@@ -68,10 +68,10 @@ export class Build extends KubernetesSpecResource {
                 this._serviceEnvironmentsMap[envKey] = se;
               }
             } catch (e) {
-              console.log('annotation on build ' + this.name + ' could not parse YAML: ' + e);
+              console.log(`annotation on build ${this.name} could not parse YAML: ${e}`);
             }
           } else {
-            console.log('annotation on build ' + this.name + ' has no envKey for ' + key);
+            console.log(`annotation on build ${this.name} has no envKey for ${key}`);
           }
         }
       }
@@ -92,7 +92,7 @@ export class Build extends KubernetesSpecResource {
               if (url) {
                 serviceUrls.push(new ServiceUrl(envName, serviceKey, url));
               } else {
-                console.log('build ' + this.name + ' does not have a URL for ' + serviceKey);
+                console.log(`build ${this.name} does not have a URL for ${serviceKey}`);
               }
             }
           }
@@ -245,7 +245,7 @@ export class ServiceUrl {
   label: string;
 
   constructor(public environmentName: string, public name: string, public url: string) {
-    this.label = environmentName ? environmentName + ': ' + name : name;
+    this.label = environmentName ? `${environmentName}: ${name}` : name;
   }
 }
 

@@ -30,12 +30,9 @@ export function messageEventToResourceOperation(msg): ResourceOperation {
               return new ResourceOperation(Operation.DELETED, resource);
             default:
               console.log(
-                'Unknown WebSocket event type ' +
-                  type +
-                  ' for ' +
-                  resource +
-                  ' on ' +
-                  this.service.serviceUrl,
+                `Unknown WebSocket event type ${type} for ${resource} on ${
+                  this.service.serviceUrl
+                }`,
               );
           }
         }

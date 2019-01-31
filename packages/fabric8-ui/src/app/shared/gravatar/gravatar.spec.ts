@@ -21,9 +21,7 @@ describe('gravatar', () => {
   });
 
   it('Should calculate the md5 correctly and setup sensible defaults', () => {
-    expect(gravatar(email)).toEqual(
-      'http://www.gravatar.com/avatar/' + confirmed_md5 + '?r=g&s=100',
-    );
+    expect(gravatar(email)).toEqual(`http://www.gravatar.com/avatar/${confirmed_md5}?r=g&s=100`);
   });
 
   it('Should standardize the email addresses', () => {

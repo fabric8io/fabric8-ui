@@ -48,7 +48,7 @@ export class HomeComponent implements OnInit {
           // first time through and user isn't connected - automatically connect accounts
           this.providerService.linkOpenShift(
             this.loggedInUser.attributes.cluster,
-            window.location.origin + '/_home?wait=true',
+            `${window.location.origin}/_home?wait=true`,
           );
         } else if (!isConnected && wait) {
           // second time through - do not try again if wait is on URL and the user is still not connected

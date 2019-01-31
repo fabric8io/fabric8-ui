@@ -57,7 +57,7 @@ export class AppLauncherGitproviderService implements GitProviderService {
    * @returns {Observable<any>}
    */
   private getGitHubUserData(): Observable<any> {
-    const url = this.END_POINT + this.API_BASE + 'user';
+    const url = `${this.END_POINT + this.API_BASE}user`;
     return this.http
       .get(url, { headers: this.headers })
       .pipe(catchError((error: HttpErrorResponse) => throwError(error)));
@@ -70,7 +70,7 @@ export class AppLauncherGitproviderService implements GitProviderService {
    * @returns {Observable<any>}
    */
   getUserOrgs(userName: string): Observable<any> {
-    const url = this.END_POINT + this.API_BASE + 'organizations';
+    const url = `${this.END_POINT + this.API_BASE}organizations`;
     return this.http
       .get(url, { headers: this.headers })
       .pipe(catchError((error: HttpErrorResponse) => throwError(error)));
@@ -145,7 +145,7 @@ export class AppLauncherGitproviderService implements GitProviderService {
     let headers = cloneDeep(this.headers);
     headers = headers.delete('X-App');
     headers = headers.delete('x-git-provider');
-    const url = this.constructApiUrl(this.detectorApiUrl, 'api/detect/build/' + repoUrl);
+    const url = this.constructApiUrl(this.detectorApiUrl, `api/detect/build/${repoUrl}`);
     return this.http
       .get<BuildTool>(url, { headers })
       .pipe(catchError((error: HttpErrorResponse) => throwError(error)));
@@ -157,7 +157,7 @@ export class AppLauncherGitproviderService implements GitProviderService {
    * @param endPoint: string endpoint of the api Url
    */
   constructApiUrl(apiUrl: string, endPoint: string): string {
-    let url = apiUrl + '/' + endPoint;
+    let url = `${apiUrl}/${endPoint}`;
     if (apiUrl[apiUrl.length - 1] === '/') {
       url = apiUrl + endPoint;
     }
@@ -184,7 +184,7 @@ export class AppLauncherGitproviderService implements GitProviderService {
   }
 
   private createUrl(org: string): string {
-    const url = this.END_POINT + this.API_BASE + 'repositories';
+    const url = `${this.END_POINT + this.API_BASE}repositories`;
     return `${url}?organization=${org}`;
   }
 }

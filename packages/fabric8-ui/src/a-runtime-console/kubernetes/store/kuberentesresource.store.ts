@@ -87,7 +87,7 @@ export abstract class KubernetesResourceStore<
         }
       },
       (error) => {
-        console.log('Error retrieving list ' + plural(this.kind) + ': ' + error);
+        console.log(`Error retrieving list ${plural(this.kind)}: ${error}`);
         this._loading.next(false);
       },
     );
@@ -102,7 +102,7 @@ export abstract class KubernetesResourceStore<
         this._loading.next(false);
       },
       (error) => {
-        console.log('Error watching websockets on ' + plural(this.kind) + ': ' + error);
+        console.log(`Error watching websockets on ${plural(this.kind)}: ${error}`);
       },
     );
 
@@ -112,7 +112,7 @@ export abstract class KubernetesResourceStore<
         this._loading.next(false);
       },
       (error) => {
-        console.log('Error on joined stream ' + plural(this.kind) + ': ' + error);
+        console.log(`Error on joined stream ${plural(this.kind)}: ${error}`);
       },
     );
   }
@@ -143,12 +143,7 @@ export abstract class KubernetesResourceStore<
           return this.deleteItemFromArray(array, resource);
         default:
           console.log(
-            'Unknown resource option ' +
-              operation +
-              ' for ' +
-              resource +
-              ' on ' +
-              this.service.serviceUrl,
+            `Unknown resource option ${operation} for ${resource} on ${this.service.serviceUrl}`,
           );
       }
     }

@@ -68,7 +68,7 @@ function convertToKubernetesResource(resource) {
     case 'Service':
       return new Service().setResource(resource);
     default:
-      console.log('Unknown resource kind ' + kind);
+      console.log(`Unknown resource kind ${kind}`);
       return new KubernetesResource().setResource(resource);
   }
 }
@@ -87,9 +87,9 @@ export function KubernetesRestangularFactory(
       const hostname = location.hostname;
       const port = location.port;
       if (hostname) {
-        baseUrl = 'http://' + hostname;
+        baseUrl = `http://${hostname}`;
         if (port) {
-          baseUrl += ':' + port;
+          baseUrl += `:${port}`;
         }
       }
     }
@@ -134,7 +134,7 @@ export function KubernetesRestangularFactory(
           baseUrl = oauthConfig.proxyApiServer || oauthConfig.apiServer || '';
           if (baseUrl) {
             const protocol = oauthConfig.apiServerProtocol || 'https';
-            baseUrl = protocol + '://' + baseUrl;
+            baseUrl = `${protocol}://${baseUrl}`;
           }
         } else {
           console.log('No oauth config!');
@@ -147,9 +147,9 @@ export function KubernetesRestangularFactory(
             const port = location.port;
             if (hostname) {
               const protocol = oauthConfig.apiServerProtocol || 'https';
-              baseUrl = protocol + '://' + hostname;
+              baseUrl = `${protocol}://${hostname}`;
               if (port) {
-                baseUrl += ':' + port;
+                baseUrl += `:${port}`;
               }
             }
           }
@@ -161,7 +161,7 @@ export function KubernetesRestangularFactory(
         RestangularConfigurer.setBaseUrl(baseUrl);
 
         //console.log("===== setting kubernetes token: " + (token ? "token" : "no token") + " for " + url);
-        headers['Authorization'] = 'Bearer ' + onLogin.token;
+        headers['Authorization'] = `Bearer ${onLogin.token}`;
         return {
           params,
           headers,
