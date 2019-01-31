@@ -73,7 +73,7 @@ export class WorkItemBarchartComponent extends ChartBase implements DoCheck, OnI
     this.defaultConfig.legend = { show: false };
     this.defaultConfig.data = {
       type: 'bar',
-      order: function(data1, data2) {
+      order(data1, data2) {
         return 1;
       },
     };

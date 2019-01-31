@@ -24,7 +24,7 @@ export class ProfileResolver implements Resolve<Context> {
           return this.contextService
             .changeContext(
               of({
-                url: url,
+                url,
                 user: userName.attributes.username,
                 space: null,
               } as Navigation),

@@ -189,7 +189,7 @@ export class RecentWorkspacesWidgetComponent implements OnDestroy, OnInit {
   private handleError(error: string, type: NotificationType): void {
     this.notifications.message({
       message: error,
-      type: type,
+      type,
     } as Notification);
   }
 

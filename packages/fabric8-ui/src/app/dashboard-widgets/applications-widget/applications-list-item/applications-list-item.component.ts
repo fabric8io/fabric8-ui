@@ -156,8 +156,8 @@ export class ApplicationsListItemComponent implements DoCheck, OnInit {
           let stage = build.pipelineStages[k];
           if (stage.jenkinsInputURL !== undefined) {
             this._promoteBuildInput = {
-              build: build,
-              stage: stage,
+              build,
+              stage,
             };
             return;
           }

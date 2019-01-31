@@ -147,7 +147,7 @@ export class AppLauncherGitproviderService implements GitProviderService {
     headers = headers.delete('x-git-provider');
     let url = this.constructApiUrl(this.detectorApiUrl, 'api/detect/build/' + repoUrl);
     return this.http
-      .get<BuildTool>(url, { headers: headers })
+      .get<BuildTool>(url, { headers })
       .pipe(catchError((error: HttpErrorResponse) => throwError(error)));
   }
 

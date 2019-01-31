@@ -408,7 +408,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
   private handleError(error: string, type: NotificationType) {
     this.notifications.message({
       message: error,
-      type: type,
+      type,
     } as Notification);
   }
 }

@@ -343,7 +343,7 @@ export class UpdateComponent implements OnInit, OnDestroy {
   private handleError(error: string, type: NotificationType) {
     this.notifications.message({
       message: error,
-      type: type,
+      type,
     } as Notification);
   }
 }

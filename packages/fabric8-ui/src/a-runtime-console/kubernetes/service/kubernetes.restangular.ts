@@ -163,9 +163,9 @@ export function KubernetesRestangularFactory(
         //console.log("===== setting kubernetes token: " + (token ? "token" : "no token") + " for " + url);
         headers['Authorization'] = 'Bearer ' + onLogin.token;
         return {
-          params: params,
-          headers: headers,
-          element: element,
+          params,
+          headers,
+          element,
         };
       },
     );

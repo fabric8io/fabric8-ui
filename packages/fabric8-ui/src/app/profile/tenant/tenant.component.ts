@@ -352,7 +352,7 @@ export class TenantComponent implements AfterViewInit, OnInit {
   private handleError(error: string, type: NotificationType) {
     this.notifications.message({
       message: error,
-      type: type,
+      type,
     } as Notification);
   }
 

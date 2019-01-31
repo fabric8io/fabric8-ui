@@ -71,7 +71,7 @@ export class CodebasesItemComponent implements OnDestroy, OnInit {
   private ShowSubscriptionStatus(msg: string, type: NotificationType) {
     this.notifications.message({
       message: msg,
-      type: type,
+      type,
     } as Notification);
   }
 }

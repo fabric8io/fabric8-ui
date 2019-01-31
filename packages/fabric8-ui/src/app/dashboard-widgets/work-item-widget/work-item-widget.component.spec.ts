@@ -143,7 +143,7 @@ describe('Dashboard: WorkItemWidgetComponent', () => {
             );
             mockWorkItemService.getWorkItems.and.returnValue(
               observableOf({
-                workItems: workItems,
+                workItems,
               } as WorkItemsData),
             );
             return mockWorkItemService;

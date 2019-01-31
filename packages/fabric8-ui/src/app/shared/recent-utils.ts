@@ -31,7 +31,7 @@ export abstract class RecentUtils<T> {
     let index: number = recent.findIndex((t: T) => compareFn(t, changed));
     if (index === 0) {
       // continue only if changed is new, or requires a move within recent
-      return { recent: recent, isSaveRequired: false };
+      return { recent, isSaveRequired: false };
     }
     if (index > 0) {
       // if changed exists in recent, move it to the front
@@ -45,7 +45,7 @@ export abstract class RecentUtils<T> {
         recent.pop();
       }
     }
-    return { recent: recent, isSaveRequired: true };
+    return { recent, isSaveRequired: true };
   }
 
   onBroadcastDeleted<K>(
@@ -55,10 +55,10 @@ export abstract class RecentUtils<T> {
   ): RecentData<T> {
     let index: number = recent.findIndex((t: T) => compareFn(t, deleted));
     if (index === -1) {
-      return { recent: recent, isSaveRequired: false };
+      return { recent, isSaveRequired: false };
     }
     recent.splice(index, 1);
-    return { recent: recent, isSaveRequired: true };
+    return { recent, isSaveRequired: true };
   }
 
   saveProfile(patch: ExtProfile): void {

@@ -198,7 +198,7 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
             return this.loadSpace(val.user, val.space).pipe(
               map(
                 (space: Space): RawContext =>
-                  ({ user: space.relationalData.creator, space: space } as RawContext),
+                  ({ user: space.relationalData.creator, space } as RawContext),
               ),
               catchError(
                 (err: string): Observable<RawContext> => {
@@ -212,7 +212,7 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
           }
           // Otherwise, load the user and use that as the owner
           return this.loadUser(val.user).pipe(
-            map((user: User): RawContext => ({ user: user, space: null } as RawContext)),
+            map((user: User): RawContext => ({ user, space: null } as RawContext)),
             catchError(
               (err: string): Observable<RawContext> => {
                 console.log(

@@ -40,9 +40,7 @@ export class SpaceNamespaceService {
     ).pipe(
       switchMap((namespace) =>
         this.configMapService.list(namespace).pipe(
-          map(
-            (configMaps) => ({ namespace: namespace, configMaps: configMaps } as ConfigMapWrapper),
-          ),
+          map((configMaps) => ({ namespace, configMaps } as ConfigMapWrapper)),
           catchError((err: HttpErrorResponse, caught) => {
             if (err.status === 403) {
               let errDetail;

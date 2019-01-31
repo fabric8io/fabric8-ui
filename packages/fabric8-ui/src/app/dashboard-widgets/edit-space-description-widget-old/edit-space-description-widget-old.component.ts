@@ -46,7 +46,7 @@ export class EditSpaceDescriptionWidgetOldComponent implements OnInit {
         map((description) => {
           let patch = {
             attributes: {
-              description: description,
+              description,
               name: this.space ? this.space.attributes.name : '',
               version: this.space ? this.space.attributes.version : '',
             },

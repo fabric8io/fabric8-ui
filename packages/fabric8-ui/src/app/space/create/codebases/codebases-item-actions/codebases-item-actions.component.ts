@@ -133,7 +133,7 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
         (codebase: Codebase) => {
           this.modal.hide();
           this.broadcaster.broadcast('codebaseDeleted', {
-            codebase: codebase,
+            codebase,
           });
         },
         (error: any) => {
@@ -165,7 +165,7 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
   private handleError(error: string, type: NotificationType) {
     this.notifications.message({
       message: error,
-      type: type,
+      type,
     } as Notification);
   }
 }
