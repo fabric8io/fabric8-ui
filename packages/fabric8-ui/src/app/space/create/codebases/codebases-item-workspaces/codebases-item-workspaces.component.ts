@@ -96,7 +96,7 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
                 map((workspaceLinks) => {
                   this.workspaceBusy = false;
                   if (workspaceLinks != undefined) {
-                    let name = this.getWorkspaceName(workspaceLinks.links.open);
+                    const name = this.getWorkspaceName(workspaceLinks.links.open);
                     this.notifications.message({
                       message: `Workspace created!`,
                       type: NotificationType.SUCCESS,
@@ -146,7 +146,7 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
    * Opens Eclipse Che workspace in a new tab
    */
   openWorkspace(): void {
-    let workspaceWindow = this.windowService.open('about:blank', '_blank');
+    const workspaceWindow = this.windowService.open('about:blank', '_blank');
     this.workspaceBusy = true;
     this.subscriptions.push(
       this.cheService
@@ -205,7 +205,7 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
    * @returns {string} The workspace name (e.g., quydcbib)
    */
   getWorkspaceName(url: string): string {
-    let index = url.lastIndexOf('/') + 1;
+    const index = url.lastIndexOf('/') + 1;
     return url.substring(index, url.length);
   }
 

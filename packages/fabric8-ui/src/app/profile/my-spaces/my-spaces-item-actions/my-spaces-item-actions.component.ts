@@ -41,7 +41,7 @@ export class MySpacesItemActionsComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    let showPin: boolean = has(this.space, 'showPin') ? (this.space as any).showPin : false;
+    const showPin: boolean = has(this.space, 'showPin') ? (this.space as any).showPin : false;
 
     this.actionConfig = {
       moreActions: [

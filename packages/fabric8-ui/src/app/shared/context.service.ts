@@ -189,7 +189,7 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
   }
 
   changeContext(navigation: Observable<Navigation>): Observable<Context> {
-    let res = navigation.pipe(
+    const res = navigation.pipe(
       // Fetch the objects from the REST API
       switchMap(
         (val: Navigation): Observable<RawContext | Context> => {
@@ -359,7 +359,7 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
       if (arg.startsWith('_')) {
         return true;
       }
-      for (let r of this.RESERVED_WORDS) {
+      for (const r of this.RESERVED_WORDS) {
         if (arg === r) {
           return true;
         }
@@ -420,7 +420,7 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
 
   private saveRecentContexts(recent: Context[]): void {
     this._recent.next(recent);
-    let patch = {
+    const patch = {
       store: {
         recentContexts: recent.map(
           (ctx) =>

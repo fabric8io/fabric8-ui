@@ -37,7 +37,7 @@ export class BuildConfig extends KubernetesSpecResource {
   private _lastBuild: Build;
 
   get serviceUrls(): Array<ServiceUrl> {
-    let last = this.lastBuild;
+    const last = this.lastBuild;
     return last ? last.serviceUrls : new Array<ServiceUrl>();
   }
 
@@ -62,13 +62,13 @@ export class BuildConfig extends KubernetesSpecResource {
    * and the last build
    */
   private onBuildsUpdated() {
-    let answer = this.interestingBuilds;
+    const answer = this.interestingBuilds;
     answer.splice(0, answer.length);
 
-    let builds = this.builds;
-    let lastVersionName = this.lastBuildName;
+    const builds = this.builds;
+    const lastVersionName = this.lastBuildName;
     if (lastVersionName) {
-      for (let build of builds) {
+      for (const build of builds) {
         if (lastVersionName === build.name) {
           this._lastBuild = build;
         }
@@ -81,12 +81,12 @@ export class BuildConfig extends KubernetesSpecResource {
       }
     }
 
-    for (let build of builds) {
+    for (const build of builds) {
       if ('Running' === build.statusPhase) {
         answer.push(build);
       }
     }
-    let build = this.lastBuild;
+    const build = this.lastBuild;
     if (!answer.length && build) {
       answer.push(build);
     }
@@ -103,9 +103,9 @@ export class BuildConfig extends KubernetesSpecResource {
   get interestingBuildsAverageDuration(): number {
     let answer = 0;
     let count = 0;
-    let builds = this.interestingBuilds;
-    for (let build of builds) {
-      let duration = build.duration;
+    const builds = this.interestingBuilds;
+    for (const build of builds) {
+      const duration = build.duration;
       if (duration) {
         answer += duration;
         count++;
@@ -121,23 +121,23 @@ export class BuildConfig extends KubernetesSpecResource {
    * Returns the Jenkins test report URL of the last build if it is available
    */
   get jenkinsTestReportUrl(): string {
-    let build = this.lastBuild;
+    const build = this.lastBuild;
     return build ? build.jenkinsTestReportUrl : '';
   }
 
   get serviceEnvironmentMap(): Map<string, ServiceEnvironments> {
-    let build = this.lastBuild;
+    const build = this.lastBuild;
     if (!build) {
       return new Map<string, ServiceEnvironments>();
     }
     const answer = build.serviceEnvironmentMap;
-    let builds = this.builds;
+    const builds = this.builds;
     if (builds.length && builds.length > 1) {
-      let previousBuild = builds[1];
-      let map = previousBuild.serviceEnvironmentMap;
+      const previousBuild = builds[1];
+      const map = previousBuild.serviceEnvironmentMap;
       if (map) {
-        for (let key in map) {
-          let value = map[key];
+        for (const key in map) {
+          const value = map[key];
           if (!answer[key]) {
             answer[key] = value;
           }
@@ -151,13 +151,13 @@ export class BuildConfig extends KubernetesSpecResource {
    * Returns a map indexed by the environment key of the app information
    */
   get environmentApp(): Map<string, AppInfo> {
-    let map = this.serviceEnvironmentMap;
-    let answer = new Map<string, AppInfo>();
-    let name = this.name;
+    const map = this.serviceEnvironmentMap;
+    const answer = new Map<string, AppInfo>();
+    const name = this.name;
     if (map && name) {
-      for (let environmentKey in map) {
-        let value = map[environmentKey];
-        let appInfo = value.toAppInfo(name);
+      for (const environmentKey in map) {
+        const value = map[environmentKey];
+        const appInfo = value.toAppInfo(name);
         if (appInfo) {
           answer[environmentKey] = appInfo;
         }
@@ -169,12 +169,12 @@ export class BuildConfig extends KubernetesSpecResource {
   updateValuesFromResource() {
     super.updateValuesFromResource();
 
-    let spec = this.spec || {};
-    let status = this.status || {};
-    let source = spec.source || {};
-    let git = source.git || {};
-    let strategy = spec.strategy || {};
-    let type = strategy.type || '';
+    const spec = this.spec || {};
+    const status = this.status || {};
+    const source = spec.source || {};
+    const git = source.git || {};
+    const strategy = spec.strategy || {};
+    const type = strategy.type || '';
 
     this.lastVersion = status.lastVersion || 0;
     this.lastBuildName = this.lastVersion ? this.name + '-' + this.lastVersion : '';
@@ -190,11 +190,11 @@ export class BuildConfig extends KubernetesSpecResource {
     this.jenkinsJobUrl = this.annotations['fabric8.link.jenkins.job/url'] || '';
     this.onBuildsUpdated();
 
-    let name = this.name;
-    let namespace = this.namespace;
-    let oauthConfig = currentOAuthConfig();
+    const name = this.name;
+    const namespace = this.namespace;
+    const oauthConfig = currentOAuthConfig();
     if (oauthConfig) {
-      let openShiftConsoleUrl = oauthConfig.openshiftConsoleUrl;
+      const openShiftConsoleUrl = oauthConfig.openshiftConsoleUrl;
       if (openShiftConsoleUrl && namespace && name) {
         this.editPipelineUrl = pathJoin(
           openShiftConsoleUrl,
@@ -221,10 +221,10 @@ export class BuildConfig extends KubernetesSpecResource {
 export class BuildConfigs extends Array<BuildConfig> {}
 
 export function findBuildConfigByID(buildConfigs: BuildConfigs, params: Params): BuildConfig {
-  let id = params['id'];
+  const id = params['id'];
   if (id) {
     if (buildConfigs) {
-      for (let buildConfig of buildConfigs) {
+      for (const buildConfig of buildConfigs) {
         if (id === buildConfig.name) {
           return buildConfig;
         }
@@ -238,12 +238,12 @@ export function combineBuildConfigAndBuilds(
   buildConfigs: BuildConfigs,
   builds: Builds,
 ): BuildConfigs {
-  let map = {};
-  let bcBuilds = {};
+  const map = {};
+  const bcBuilds = {};
   if (builds) {
     builds.forEach((s) => {
       map[s.name] = s;
-      let bcName = s.buildConfigName;
+      const bcName = s.buildConfigName;
       if (bcName) {
         let list = bcBuilds[bcName];
         if (!list) {
@@ -265,9 +265,9 @@ export function combineBuildConfigAndBuilds(
           }
         }
 */
-      let name = bc.name;
+      const name = bc.name;
       if (name) {
-        let list = bcBuilds[name];
+        const list = bcBuilds[name];
         if (list) {
           bc.builds = list;
         }
@@ -278,7 +278,7 @@ export function combineBuildConfigAndBuilds(
 }
 
 export function filterPipelines(buildConfigs: BuildConfigs): BuildConfigs {
-  let answer = new BuildConfigs();
+  const answer = new BuildConfigs();
   buildConfigs.forEach((bc) => {
     if (bc.isPipeline) {
       answer.push(bc);
@@ -291,11 +291,11 @@ export function filterPipelines(buildConfigs: BuildConfigs): BuildConfigs {
  * returns a map of all the environments with the apps in each environment
  */
 export function appInfos(buildConfigs: BuildConfigs): Map<string, EnvironmentApps> {
-  let answer = new Map<string, EnvironmentApps>();
+  const answer = new Map<string, EnvironmentApps>();
   buildConfigs.forEach((bc) => {
-    let appEnv = bc.environmentApp;
-    for (let environmentKey in appEnv) {
-      let app = appEnv[environmentKey];
+    const appEnv = bc.environmentApp;
+    for (const environmentKey in appEnv) {
+      const app = appEnv[environmentKey];
       let env = answer[environmentKey];
       if (!env) {
         env = new EnvironmentApps();

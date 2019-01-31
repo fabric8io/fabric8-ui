@@ -22,7 +22,7 @@ export const KUBERNETES_RESTANGULAR = new InjectionToken<string>('KubernetesRest
 
 function convertToKubernetesResource(resource) {
   // TODO would be nice to make this bit more modular so we could register other kinds of resource more easily
-  let kind = resource.kind;
+  const kind = resource.kind;
   if (!kind) {
     return resource;
   }
@@ -82,10 +82,10 @@ export function KubernetesRestangularFactory(
   const config = restangular.withConfig((RestangularConfigurer) => {
     // TODO setting the baseUrl to empty string doesn't seem to work so lets use the absolute URL of the app
     let baseUrl = '';
-    let location = window.location;
+    const location = window.location;
     if (location) {
-      let hostname = location.hostname;
-      let port = location.port;
+      const hostname = location.hostname;
+      const port = location.port;
       if (hostname) {
         baseUrl = 'http://' + hostname;
         if (port) {
@@ -108,7 +108,7 @@ export function KubernetesRestangularFactory(
             // TODO lets assume for now its a 'BuildConfig' from jenkinsshift
             kind = 'BuildConfig';
           }
-          let resourceApiVersion = (data.metadata || {}).apiVersion;
+          const resourceApiVersion = (data.metadata || {}).apiVersion;
           return (data.items || []).map((object) => {
             // ensure each item has a kind and api version
             if (!object.apiVersion) {
@@ -129,11 +129,11 @@ export function KubernetesRestangularFactory(
     RestangularConfigurer.addFullRequestInterceptor(
       (element, operation, path, url, headers, params) => {
         let baseUrl = '';
-        let oauthConfig = currentOAuthConfig();
+        const oauthConfig = currentOAuthConfig();
         if (oauthConfig) {
           baseUrl = oauthConfig.proxyApiServer || oauthConfig.apiServer || '';
           if (baseUrl) {
-            let protocol = oauthConfig.apiServerProtocol || 'https';
+            const protocol = oauthConfig.apiServerProtocol || 'https';
             baseUrl = protocol + '://' + baseUrl;
           }
         } else {
@@ -141,12 +141,12 @@ export function KubernetesRestangularFactory(
         }
         // TODO setting the baseUrl to empty string doesn't seem to work so lets use the absolute URL of the app
         if (!baseUrl) {
-          let location = window.location;
+          const location = window.location;
           if (location) {
-            let hostname = location.hostname;
-            let port = location.port;
+            const hostname = location.hostname;
+            const port = location.port;
             if (hostname) {
-              let protocol = oauthConfig.apiServerProtocol || 'https';
+              const protocol = oauthConfig.apiServerProtocol || 'https';
               baseUrl = protocol + '://' + hostname;
               if (port) {
                 baseUrl += ':' + port;

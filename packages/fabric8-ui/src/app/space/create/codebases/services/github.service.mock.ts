@@ -193,7 +193,7 @@ const owner = {
   type: 'Organization',
   site_admin: false,
 };
-export let expectedGitHubRepoDetails = cloneDeep(expectedGitHubRepo);
+export const expectedGitHubRepoDetails = cloneDeep(expectedGitHubRepo);
 (expectedGitHubRepoDetails as GitHubRepoDetails).parent = expectedGitHubRepo;
 (expectedGitHubRepoDetails as GitHubRepoDetails).source = expectedGitHubRepo;
 (expectedGitHubRepoDetails as GitHubRepoDetails).organization = owner;

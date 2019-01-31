@@ -24,10 +24,10 @@ describe('Progress: AppLauncherProjectProgressService', () => {
   beforeEach(() => {
     initTestBed();
     appLauncherProjectProgressService = TestBed.get(AppLauncherProjectProgressService);
-    let fakeWebSocket = () => {
-      let socket = new WebSocket('wss://url');
-      let msgEvntInit: MessageEventInit = { data: 'socket data message' };
-      let event = new MessageEvent('worker', msgEvntInit);
+    const fakeWebSocket = () => {
+      const socket = new WebSocket('wss://url');
+      const msgEvntInit: MessageEventInit = { data: 'socket data message' };
+      const event = new MessageEvent('worker', msgEvntInit);
       spyOn(socket, 'onmessage').and.returnValue(event);
       return socket;
     };
@@ -35,7 +35,7 @@ describe('Progress: AppLauncherProjectProgressService', () => {
   });
 
   it('Get progress messages', () => {
-    let socket = appLauncherProjectProgressService.getProgress('wss://url');
+    const socket = appLauncherProjectProgressService.getProgress('wss://url');
     socket.onmessage = (event: MessageEvent) => {
       expect(event.data).toEqual('socket data message');
     };

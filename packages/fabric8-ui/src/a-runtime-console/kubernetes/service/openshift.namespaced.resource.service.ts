@@ -37,7 +37,7 @@ export abstract class OpenShiftNamespacedResourceService<
 
   watch(queryParams: any = null): Watcher<L> {
     // lets return a watcher with no URL to avoid websockets
-    let listFactory = () => this.list(queryParams);
+    const listFactory = () => this.list(queryParams);
     return this.watcherFactory.newInstance(() => null, queryParams, listFactory);
   }
 

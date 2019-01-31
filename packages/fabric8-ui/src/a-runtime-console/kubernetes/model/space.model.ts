@@ -58,7 +58,7 @@ export class Space {
       this.firstEnvironmentNamespace = this.name;
     }
 
-    let map = new Map<string, Namespace>();
+    const map = new Map<string, Namespace>();
     if (namespaces) {
       namespaces.forEach((ns) => {
         const nsName = ns.name;
@@ -73,8 +73,8 @@ export class Space {
     }
 
     if (spaceConfig) {
-      let environmentsConfigMap = spaceConfig.environmentsConfigMap;
-      let spacesConfigMap = spaceConfig.spacesConfigMap;
+      const environmentsConfigMap = spaceConfig.environmentsConfigMap;
+      const spacesConfigMap = spaceConfig.spacesConfigMap;
       if (environmentsConfigMap) {
         this.environments = this.loadEnvironments(environmentsConfigMap, map);
         if (this.environments.length) {
@@ -91,9 +91,9 @@ export class Space {
    * Returns the environment which contains the given key such as 'jenkins' or 'stage' or null if none can be found
    */
   findEnvironment(key: string): Environment {
-    let environments = this.environments;
+    const environments = this.environments;
     if (environments) {
-      for (let env of environments) {
+      for (const env of environments) {
         if (env.key === key) {
           return env;
         }
@@ -106,22 +106,22 @@ export class Space {
     configMap: ConfigMap,
     namespaceMap: Map<string, Namespace>,
   ): Environment[] {
-    let answer = [];
-    let data = configMap.data;
+    const answer = [];
+    const data = configMap.data;
     if (data) {
       Object.keys(data).forEach((key) => {
-        let yaml = data[key];
+        const yaml = data[key];
         if (yaml) {
-          let config = jsyaml.safeLoad(yaml);
-          let namespaceName = config['namespace'];
+          const config = jsyaml.safeLoad(yaml);
+          const namespaceName = config['namespace'];
           if (namespaceName) {
-            let ns = namespaceMap[namespaceName];
+            const ns = namespaceMap[namespaceName];
             if (ns) {
               let order = config.order;
               if (order === undefined) {
                 order = 1000;
               }
-              let env = new Environment(
+              const env = new Environment(
                 key,
                 config.name || key,
                 namespaceName,
@@ -160,15 +160,15 @@ export class Space {
   }
 
   private loadLabelSpaces(configMap: ConfigMap) {
-    let answer = [];
-    let data = configMap.data;
+    const answer = [];
+    const data = configMap.data;
     if (data) {
       Object.keys(data).forEach((key) => {
-        let yaml = data[key];
+        const yaml = data[key];
         if (yaml) {
-          let config = jsyaml.safeLoad(yaml);
-          let label = config['name'] || '';
-          let description = config['description'] || '';
+          const config = jsyaml.safeLoad(yaml);
+          const label = config['name'] || '';
+          const description = config['description'] || '';
           let order = config.order;
           if (order === undefined) {
             order = 1000;
@@ -245,12 +245,12 @@ export function createEmptySpace(): Space {
 }
 
 export function asSpaces(spaces: Space[]): Spaces {
-  let answer = new Spaces();
+  const answer = new Spaces();
   if (spaces) {
-    let nsNameToEnvMap = new Map<string, Environment>();
-    for (let space of spaces) {
+    const nsNameToEnvMap = new Map<string, Environment>();
+    for (const space of spaces) {
       if (space && space.environments) {
-        for (let env of space.environments) {
+        for (const env of space.environments) {
           if (!nsNameToEnvMap[env.namespaceName]) {
             nsNameToEnvMap[env.namespaceName] = env;
             answer.environments.push(env);
@@ -258,10 +258,10 @@ export function asSpaces(spaces: Space[]): Spaces {
         }
       }
     }
-    for (let space of spaces) {
+    for (const space of spaces) {
       if (space) {
-        let nsName = space.name;
-        let environments = space.environments || [];
+        const nsName = space.name;
+        const environments = space.environments || [];
         if (!nsNameToEnvMap[nsName] || environments.length) {
           // this is a top level space not an environment
           if (isSecretsNamespace(space.namespace)) {

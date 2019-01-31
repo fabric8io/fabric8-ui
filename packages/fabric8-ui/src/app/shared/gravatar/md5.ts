@@ -6,16 +6,11 @@ export function md5(s) {
     return (k << d) | (k >>> (32 - d));
   }
   function K(G, k) {
-    let I;
-    let d;
-    let F;
-    let H;
-    let x;
-    F = G & 2147483648;
-    H = k & 2147483648;
-    I = G & 1073741824;
-    d = k & 1073741824;
-    x = (G & 1073741823) + (k & 1073741823);
+    const F = G & 2147483648;
+    const H = k & 2147483648;
+    const I = G & 1073741824;
+    const d = k & 1073741824;
+    const x = (G & 1073741823) + (k & 1073741823);
     if (I & d) {
       return x ^ 2147483648 ^ F ^ H;
     }
@@ -57,11 +52,11 @@ export function md5(s) {
   }
   function e(G) {
     let Z;
-    let F = G.length;
-    let x = F + 8;
-    let k = (x - (x % 64)) / 64;
-    let I = (k + 1) * 16;
-    let aa = Array(I - 1);
+    const F = G.length;
+    const x = F + 8;
+    const k = (x - (x % 64)) / 64;
+    const I = (k + 1) * 16;
+    const aa = Array(I - 1);
     let d = 0;
     let H = 0;
     while (H < F) {
@@ -96,7 +91,7 @@ export function md5(s) {
     k = k.replace(/rn/g, 'n');
     let d = '';
     for (let F = 0; F < k.length; F++) {
-      let x = k.charCodeAt(F);
+      const x = k.charCodeAt(F);
       if (x < 128) {
         d += String.fromCharCode(x);
       } else if (x > 127 && x < 2048) {
@@ -120,34 +115,34 @@ export function md5(s) {
   let X;
   let W;
   let V;
-  let S = 7;
+  const S = 7;
 
-  let Q = 12;
+  const Q = 12;
 
-  let N = 17;
+  const N = 17;
 
-  let M = 22;
-  let A = 5;
+  const M = 22;
+  const A = 5;
 
-  let z = 9;
+  const z = 9;
 
-  let y = 14;
+  const y = 14;
 
-  let w = 20;
-  let o = 4;
+  const w = 20;
+  const o = 4;
 
-  let m = 11;
+  const m = 11;
 
-  let l = 16;
+  const l = 16;
 
-  let j = 23;
-  let U = 6;
+  const j = 23;
+  const U = 6;
 
-  let T = 10;
+  const T = 10;
 
-  let R = 15;
+  const R = 15;
 
-  let O = 21;
+  const O = 21;
   s = J(s);
   C = e(s);
   Y = 1732584193;
@@ -228,6 +223,6 @@ export function md5(s) {
     W = K(W, v);
     V = K(V, g);
   }
-  let i = B(Y) + B(X) + B(W) + B(V);
+  const i = B(Y) + B(X) + B(W) + B(V);
   return i.toLowerCase();
 }

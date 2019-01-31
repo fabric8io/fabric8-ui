@@ -29,7 +29,7 @@ describe('ApplicationsStackReportComponent', () => {
 
   let contexts: Contexts;
 
-  let build = {
+  const build = {
     buildNumber: '1',
     firstPendingInputAction: {
       proceedUrl: 'https://example.com/app1.git',
@@ -62,7 +62,7 @@ describe('ApplicationsStackReportComponent', () => {
     statusPhase: 'Complete',
   };
 
-  let mockRouterEvent: any = {
+  const mockRouterEvent: any = {
     id: 1,
     url: 'mock-url',
   };
@@ -106,7 +106,7 @@ describe('ApplicationsStackReportComponent', () => {
     });
 
     it('Should call showStackReport', function() {
-      let mockElement = document.createElement('a');
+      const mockElement = document.createElement('a');
       spyOn(testContext.testedDirective.stackReport.nativeElement, 'querySelector').and.returnValue(
         mockElement,
       );

@@ -5,7 +5,7 @@ import { DevNamespaceScope, TestDevNamespaceScope } from './kubernetes/service/d
 import { LoginService } from './shared/login.service';
 import { OnLogin } from './shared/onlogin.service';
 
-let userServiceMock: any = jasmine.createSpy('UserService');
+const userServiceMock: any = jasmine.createSpy('UserService');
 userServiceMock.currentLoggedInUser = {
   attributes: {
     username: 'username',

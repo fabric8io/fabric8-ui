@@ -18,8 +18,8 @@ class HostComponent {}
 describe('AnalyzeOverviewComponent', () => {
   type TestingContext = TestContext<AnalyzeOverviewComponent, HostComponent>;
 
-  let ctxSubj: Subject<Context> = new Subject<Context>();
-  let fakeUserObs: Subject<User> = new Subject<User>();
+  const ctxSubj: Subject<Context> = new Subject<Context>();
+  const fakeUserObs: Subject<User> = new Subject<User>();
 
   const testContext: TestingContext = initContext(AnalyzeOverviewComponent, HostComponent, {
     declarations: [MockFeatureToggleComponent],

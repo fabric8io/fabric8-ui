@@ -107,7 +107,7 @@ export class ApplicationsWidgetComponent implements OnDestroy, OnInit {
   // Note: The serviceUrls, environmentMap, and serviceEnvironmentMap properties of BuildConfig each provide an
   // environment name. Unfortunately, these properties are not always populated as expected -- may be a fluke?
   private filterBuildConfigs(deploymentEnv: string = 'Run'): BuildConfig[] {
-    let result: BuildConfig[] = [];
+    const result: BuildConfig[] = [];
     if (!isEmpty(this.buildConfigs)) {
       for (let i = 0; i < this.buildConfigs.length; i++) {
         const buildConfig = this.buildConfigs[i];

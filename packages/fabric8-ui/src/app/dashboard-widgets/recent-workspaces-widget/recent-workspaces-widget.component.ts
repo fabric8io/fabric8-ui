@@ -105,7 +105,7 @@ export class RecentWorkspacesWidgetComponent implements OnDestroy, OnInit {
    * Open given workspace in Che editor
    */
   openWorkspace(workspace: Workspace): void {
-    let workspaceWindow = this.windowService.open('about:blank', '_blank');
+    const workspaceWindow = this.windowService.open('about:blank', '_blank');
     this.subscriptions.push(
       this.workspacesService.openWorkspace(workspace.links.open).subscribe(
         (workspaceLinks) => {
@@ -155,7 +155,7 @@ export class RecentWorkspacesWidgetComponent implements OnDestroy, OnInit {
     if (this.spaces.recent === undefined) {
       return observableOf([]);
     }
-    let recentSpaces = this.spaces.recent.pipe(
+    const recentSpaces = this.spaces.recent.pipe(
       switchMap((val) => {
         if (val.length === 0) {
           return observableOf([]);
@@ -199,12 +199,12 @@ export class RecentWorkspacesWidgetComponent implements OnDestroy, OnInit {
   private initWorkspaces(): void {
     this._workspaces = [];
     for (let c = 0; c < this.recent.length; c++) {
-      let space = this.recent[c];
+      const space = this.recent[c];
       if (space.codebases === undefined) {
         continue;
       }
       for (let i = 0; i < space.codebases.length; i++) {
-        let codebase = space.codebases[i];
+        const codebase = space.codebases[i];
         if (!codebase.workspaces) {
           // This could be null
           continue;

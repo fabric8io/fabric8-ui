@@ -6,15 +6,15 @@ describe('Utilities:', () => {
 
   it('Merge value id dupicate key', () => {
     // given
-    let array1 = [
+    const array1 = [
       { name: 'name1', description: 'description1' },
       { name: 'name2', description: 'description2' },
     ];
-    let array2 = [
+    const array2 = [
       { name: 'name1', description: 'description1' },
       { name: 'name3', description: 'description3' },
     ];
-    let mergedArray = [
+    const mergedArray = [
       { name: 'name1', description: 'description1' },
       { name: 'name2', description: 'description2' },
       { name: 'name3', description: 'description3' },
@@ -27,15 +27,15 @@ describe('Utilities:', () => {
 
   it('Add values for new items', () => {
     // given
-    let array1 = [
+    const array1 = [
       { name: 'name1', description: 'description1' },
       { name: 'name2', description: 'description2' },
     ];
-    let array2 = [
+    const array2 = [
       { name: 'name3', description: 'description3' },
       { name: 'name4', description: 'description4' },
     ];
-    let mergedArray = [
+    const mergedArray = [
       { name: 'name1', description: 'description1' },
       { name: 'name2', description: 'description2' },
       { name: 'name3', description: 'description3' },
@@ -49,18 +49,18 @@ describe('Utilities:', () => {
 
   it('Clones a string', () => {
     // given
-    let s = 'abcd';
+    const s = 'abcd';
     // when
-    let s2 = clone(s);
+    const s2 = clone(s);
     // then
     expect(s2).toEqual(s);
   });
 
   it('Clones an object', () => {
     // given
-    let s = { abcd: 'abcd', efgh: 'efgh' };
+    const s = { abcd: 'abcd', efgh: 'efgh' };
     // when
-    let s2 = clone(s);
+    const s2 = clone(s);
     // then
     expect(s2).toEqual(s);
   });

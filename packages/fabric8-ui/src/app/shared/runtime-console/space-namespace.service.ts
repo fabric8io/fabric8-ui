@@ -59,7 +59,7 @@ export class SpaceNamespaceService {
         ),
       ),
       map((val) => {
-        for (let configMap of val.configMaps) {
+        for (const configMap of val.configMaps) {
           if (configMap.labels['kind'] === 'spaces' && configMap.labels['provider'] === 'fabric8') {
             val.configMap = configMap;
           }
@@ -67,9 +67,9 @@ export class SpaceNamespaceService {
         return val as ConfigMapWrapper;
       }),
       tap((val) => {
-        let res: Map<string, any[]> = new Map();
+        const res: Map<string, any[]> = new Map();
         if (val.configMap) {
-          for (let c in val.configMap) {
+          for (const c in val.configMap) {
             if (val.configMap.data.hasOwnProperty(c)) {
               res.set(c, yaml.safeLoad(val.configMap.data[c]));
             }
@@ -115,8 +115,8 @@ export class SpaceNamespaceService {
           cm.name = 'fabric8-spaces';
           cm.namespace = val.namespace;
         }
-        let i = 0;
-        for (let d in val.data) {
+        const i = 0;
+        for (const d in val.data) {
           if (val.data.hasOwnProperty(d)) {
             val.data[d]['order'] = i;
             cm.data[d] = yaml.safeDump(val.data[d]);

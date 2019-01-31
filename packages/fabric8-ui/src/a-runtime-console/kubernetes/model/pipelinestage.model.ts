@@ -25,7 +25,7 @@ export class PipelineStage {
   environmentName: string;
 
   constructor(data, public build: Build) {
-    let obj = data || {};
+    const obj = data || {};
     this.id = obj.id || '';
     this.name = obj.name || '';
     this.status = obj.status || '';
@@ -34,26 +34,26 @@ export class PipelineStage {
     this.pauseDurationMillis = obj.pauseDurationMillis || 0;
     this.stageFlowNodes = obj.stageFlowNodes || [];
 
-    let jenkinsBuildURL = build.jenkinsBuildURL;
+    const jenkinsBuildURL = build.jenkinsBuildURL;
     if (jenkinsBuildURL && this.status === 'PAUSED_PENDING_INPUT') {
       this.jenkinsInputURL = pathJoin(jenkinsBuildURL, '/input');
     }
 
-    let serviceEnvironmentMap = build.serviceEnvironmentMap;
+    const serviceEnvironmentMap = build.serviceEnvironmentMap;
     let name = this.name;
     if (name) {
-      let idx = name.lastIndexOf(' ');
+      const idx = name.lastIndexOf(' ');
       if (idx >= 0) {
         name = name.substring(idx + 1);
       }
       if (name) {
-        for (let key in serviceEnvironmentMap) {
-          let se = serviceEnvironmentMap[key];
+        for (const key in serviceEnvironmentMap) {
+          const se = serviceEnvironmentMap[key];
           if (name === se.environmentName) {
             this.environmentName = name;
-            let urlMap = se.serviceUrls;
+            const urlMap = se.serviceUrls;
             this.serviceUrlMap = urlMap;
-            let serviceUrlKeys: string[] = Object.keys(urlMap);
+            const serviceUrlKeys: string[] = Object.keys(urlMap);
             if (serviceUrlKeys && serviceUrlKeys[0]) {
               this.serviceUrl = urlMap[serviceUrlKeys[0]];
             } else {

@@ -61,7 +61,7 @@ describe('WorkItemsComponent', () => {
       {
         provide: Contexts,
         useFactory: () => {
-          let mockContexts: any = createMock(Contexts);
+          const mockContexts: any = createMock(Contexts);
           mockContexts.current = of(mockContext) as Observable<Context>;
           return mockContexts;
         },
@@ -69,7 +69,7 @@ describe('WorkItemsComponent', () => {
       {
         provide: Spaces,
         useFactory: () => {
-          let mockSpacesService: any = createMock(Spaces);
+          const mockSpacesService: any = createMock(Spaces);
           mockSpacesService.recent = of(mockRecentSpaces) as Observable<Space[]>;
           return mockSpacesService;
         },
@@ -77,7 +77,7 @@ describe('WorkItemsComponent', () => {
       {
         provide: FilterService,
         useFactory: () => {
-          let filterServiceMock = jasmine.createSpyObj('FilterService', [
+          const filterServiceMock = jasmine.createSpyObj('FilterService', [
             'queryBuilder',
             'queryJoiner',
           ]);
@@ -87,7 +87,7 @@ describe('WorkItemsComponent', () => {
       {
         provide: SpaceService,
         useFactory: () => {
-          let mockSpaceService: jasmine.SpyObj<SpaceService> = createMock(SpaceService);
+          const mockSpaceService: jasmine.SpyObj<SpaceService> = createMock(SpaceService);
           mockSpaceService.getSpacesByUser.and.returnValue(of(mockSpaces) as Observable<Space[]>);
           return mockSpaceService;
         },
@@ -95,7 +95,7 @@ describe('WorkItemsComponent', () => {
       {
         provide: WorkItemService,
         useFactory: () => {
-          let mockWorkItemService: jasmine.SpyObj<WorkItemService> = createMock(WorkItemService);
+          const mockWorkItemService: jasmine.SpyObj<WorkItemService> = createMock(WorkItemService);
           mockWorkItemService.getWorkItems.and.returnValue(of({ workItems: [] }) as Observable<
             WorkItemsData
           >);
@@ -108,7 +108,7 @@ describe('WorkItemsComponent', () => {
       {
         provide: ContextService,
         useFactory: () => {
-          let mockContextService: jasmine.SpyObj<ContextService> = createMock(ContextService);
+          const mockContextService: jasmine.SpyObj<ContextService> = createMock(ContextService);
           mockContextService.viewingOwnContext.and.returnValue(true);
           return mockContextService;
         },
@@ -120,13 +120,13 @@ describe('WorkItemsComponent', () => {
 
   describe('Combobox', () => {
     it('should exist when > 0 spaces', function() {
-      let el: DebugElement = testContext.fixture.debugElement.query(By.css('.work-item-dropdown'))
+      const el: DebugElement = testContext.fixture.debugElement.query(By.css('.work-item-dropdown'))
         .nativeElement;
       expect(el).toBeDefined();
     });
 
     it("should contain all the user's spaces and recent spaces", function() {
-      let de: DebugElement[] = testContext.fixture.debugElement.queryAll(By.css('option'));
+      const de: DebugElement[] = testContext.fixture.debugElement.queryAll(By.css('option'));
       // Spaces duplicated in both user and recent should only exist once
       // default 'Select a space ..' message + 13 mock user spaces + 1 mock recent space +  = 15 options
       expect(de.length).toEqual(15);
@@ -138,13 +138,13 @@ describe('WorkItemsComponent', () => {
     });
 
     it('should limit the select size to 10 on a mousedown event', function() {
-      let select = testContext.fixture.debugElement.query(By.css('select'));
+      const select = testContext.fixture.debugElement.query(By.css('select'));
       expect(select.attributes['size']).toBeDefined();
       expect(select.attributes['onmousedown']).toContain('this.size=10');
     });
 
     it('should reset the select options size to 0 on change and blur', function() {
-      let select = testContext.fixture.debugElement.query(By.css('select'));
+      const select = testContext.fixture.debugElement.query(By.css('select'));
       expect(select.attributes['onchange']).toEqual('this.size=0;');
       expect(select.attributes['onblur']).toEqual('this.size=0;');
     });

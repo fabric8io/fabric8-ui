@@ -16,20 +16,22 @@ describe('UpdateComponent', () => {
   let fixture: ComponentFixture<UpdateComponent>;
   let component: DebugNode['componentInstance'];
 
-  let mockAuthenticationService: any = jasmine.createSpyObj('AuthenticationService', ['getToken']);
-  let mockCopyService: any = jasmine.createSpyObj('CopyService', ['copy']);
-  let mockGettingStartedService: any = jasmine.createSpyObj('GettingStartedService', [
+  const mockAuthenticationService: any = jasmine.createSpyObj('AuthenticationService', [
+    'getToken',
+  ]);
+  const mockCopyService: any = jasmine.createSpyObj('CopyService', ['copy']);
+  const mockGettingStartedService: any = jasmine.createSpyObj('GettingStartedService', [
     'createTransientProfile',
     'update',
     'ngOnDestroy',
   ]);
-  let mockContexts: any = jasmine.createSpy('Contexts');
-  let mockGitHubService: any = jasmine.createSpyObj('GitHubService', ['getUser']);
-  let mockNotifications: any = jasmine.createSpyObj('Notifications', ['message']);
-  let mockRouter: any = jasmine.createSpyObj('Router', ['navigate']);
-  let mockTenantService: any = jasmine.createSpyObj('TenantService', ['updateTenant']);
-  let mockUserService: any = jasmine.createSpy('UserService');
-  let mockLogger: any = jasmine.createSpy('Logger');
+  const mockContexts: any = jasmine.createSpy('Contexts');
+  const mockGitHubService: any = jasmine.createSpyObj('GitHubService', ['getUser']);
+  const mockNotifications: any = jasmine.createSpyObj('Notifications', ['message']);
+  const mockRouter: any = jasmine.createSpyObj('Router', ['navigate']);
+  const mockTenantService: any = jasmine.createSpyObj('TenantService', ['updateTenant']);
+  const mockUserService: any = jasmine.createSpy('UserService');
+  const mockLogger: any = jasmine.createSpy('Logger');
 
   mockAuthenticationService.gitHubToken = of('gh-test-user');
   mockContexts.current = of({
@@ -74,26 +76,26 @@ describe('UpdateComponent', () => {
       component.profileForm.dirty = true;
       component.advancedForm = jasmine.createSpy('advancedForm');
       component.advancedForm.dirty = false;
-      let result: boolean = component.isUpdateProfileDisabled;
+      const result: boolean = component.isUpdateProfileDisabled;
       expect(result).toBeFalsy();
     });
 
     it('should be true if bio is invalid is invalid', () => {
       component.bioInvalid = true;
-      let result: boolean = component.isUpdateProfileDisabled;
+      const result: boolean = component.isUpdateProfileDisabled;
       expect(result).toBeTruthy();
     });
 
     it('should be true if at least one of the urls is invalid', () => {
       component.emailInvalid = true;
-      let result: boolean = component.isUpdateProfileDisabled;
+      const result: boolean = component.isUpdateProfileDisabled;
       expect(result).toBeTruthy();
     });
   });
 
   describe('#copyTokenToClipboard', () => {
     it('should show a success message if token was copied', () => {
-      let message = {
+      const message = {
         message: 'Token copied!',
         type: NotificationType.SUCCESS,
       };
@@ -103,7 +105,7 @@ describe('UpdateComponent', () => {
     });
 
     it('should show an danger message if there was an error', () => {
-      let message = {
+      const message = {
         message: 'Failed to copy token',
         type: NotificationType.DANGER,
       };
@@ -125,7 +127,7 @@ describe('UpdateComponent', () => {
     });
 
     it('should show an error message if no image is found', () => {
-      let message = {
+      const message = {
         message: 'No image found',
         type: NotificationType.INFO,
       };
@@ -135,7 +137,7 @@ describe('UpdateComponent', () => {
     });
 
     it('should show a warning message if unable to link the image', () => {
-      let message = {
+      const message = {
         message: 'Unable to link image',
         type: NotificationType.WARNING,
       };
@@ -154,7 +156,7 @@ describe('UpdateComponent', () => {
 
   describe('#resetPasswordUrl', () => {
     it('should open a window to reset the password', () => {
-      let url: string = 'https://developers.redhat.com/auth/realms/rhd/account/password';
+      const url: string = 'https://developers.redhat.com/auth/realms/rhd/account/password';
       spyOn(window, 'open');
       component.resetPasswordUrl();
       expect(window.open).toHaveBeenCalledWith(url);
@@ -171,7 +173,7 @@ describe('UpdateComponent', () => {
 
   describe('#updateProfile', () => {
     // Mock initial profile data from GettingStartedService
-    let mockUser: User = {
+    const mockUser: User = {
       attributes: {
         bio: 'old-bio',
         company: 'old-company',
@@ -187,7 +189,7 @@ describe('UpdateComponent', () => {
     };
 
     it('should update the profile with the expected information', () => {
-      let message = {
+      const message = {
         message: 'Profile updated!',
         type: NotificationType.SUCCESS,
       };
@@ -206,7 +208,7 @@ describe('UpdateComponent', () => {
     });
 
     it('should show an error 409 status if the e-mail provided already exists', () => {
-      let message = {
+      const message = {
         message: 'Email already exists',
         type: NotificationType.DANGER,
       };
@@ -217,7 +219,7 @@ describe('UpdateComponent', () => {
     });
 
     it('should show an error if the profile has failed to update', () => {
-      let message = {
+      const message = {
         message: 'Failed to update profile',
         type: NotificationType.DANGER,
       };
@@ -230,7 +232,7 @@ describe('UpdateComponent', () => {
 
   describe('#updateTenant', () => {
     it('should update the tenant if successful', () => {
-      let message = {
+      const message = {
         message: 'Profile updated!',
         type: NotificationType.SUCCESS,
       };
@@ -241,7 +243,7 @@ describe('UpdateComponent', () => {
     });
 
     it('should show an error if the tenant has failed to update', () => {
-      let message = {
+      const message = {
         message: 'Error updating tenant',
         type: NotificationType.DANGER,
       };
@@ -252,7 +254,7 @@ describe('UpdateComponent', () => {
     });
 
     it('should show an error if the tenant has suffered an unexpected error when updating', () => {
-      let message = {
+      const message = {
         message: 'Unexpected error updating tenant',
         type: NotificationType.DANGER,
       };
@@ -272,7 +274,12 @@ describe('UpdateComponent', () => {
 
   describe('#validateUrl', () => {
     it('should verify not-a-real-url to be an invalid url', () => {
-      let urls: string[] = ['not-a-real-url', 'http://', '.com', 'htt:/not-a-real-url.some-thing.'];
+      const urls: string[] = [
+        'not-a-real-url',
+        'http://',
+        '.com',
+        'htt:/not-a-real-url.some-thing.',
+      ];
       urls.forEach((url) => {
         component.url = url;
         component.validateUrl();
@@ -281,7 +288,7 @@ describe('UpdateComponent', () => {
     });
 
     it('should verify https://fabric8.io/ to be a valid url', () => {
-      let url: string = 'https://fabric8.io/';
+      const url: string = 'https://fabric8.io/';
       component.url = url;
       component.validateUrl();
       expect(component.urlInvalid).toBeFalsy();
@@ -291,45 +298,45 @@ describe('UpdateComponent', () => {
   describe('#isEmailValid', () => {
     // Test strings for e-mails borrowed from https://en.wikipedia.org/wiki/Email_address#Examples
     it('should verify prettyandsimple@example.com to be a valid address', () => {
-      let validAddress: string = 'prettyandsimple@example.com';
-      let result = component.isEmailValid(validAddress);
+      const validAddress: string = 'prettyandsimple@example.com';
+      const result = component.isEmailValid(validAddress);
       expect(result).toBeTruthy();
     });
 
     it('should verify very.common@example.com to be a valid address', () => {
-      let validAddress: string = 'very.common@example.com';
-      let result = component.isEmailValid(validAddress);
+      const validAddress: string = 'very.common@example.com';
+      const result = component.isEmailValid(validAddress);
       expect(result).toBeTruthy();
     });
 
     it('should verify "very.(),:;<>[]".VERY."very@\\ "very".unusual"@strange.example.com to be a valid address', () => {
-      let validAddress: string =
+      const validAddress: string =
         '"very.(),:;<>[]".VERY."very@\\ "very".unusual"@strange.example.com';
-      let result = component.isEmailValid(validAddress);
+      const result = component.isEmailValid(validAddress);
       expect(result).toBeTruthy();
     });
 
     it('should verify an empty string to be an invalid address', () => {
-      let validAddress: string = '';
-      let result = component.isEmailValid(validAddress);
+      const validAddress: string = '';
+      const result = component.isEmailValid(validAddress);
       expect(result).toBeFalsy();
     });
 
     it('should verify name@ to be an invalid address', () => {
-      let validAddress: string = 'name@';
-      let result = component.isEmailValid(validAddress);
+      const validAddress: string = 'name@';
+      const result = component.isEmailValid(validAddress);
       expect(result).toBeFalsy();
     });
 
     it('should verify @ to be an invalid address', () => {
-      let validAddress: string = '@';
-      let result = component.isEmailValid(validAddress);
+      const validAddress: string = '@';
+      const result = component.isEmailValid(validAddress);
       expect(result).toBeFalsy();
     });
 
     it('should verify A@b@c@example.com to be an invalid address', () => {
-      let validAddress: string = 'A@b@c@example.com';
-      let result = component.isEmailValid(validAddress);
+      const validAddress: string = 'A@b@c@example.com';
+      const result = component.isEmailValid(validAddress);
       expect(result).toBeFalsy();
     });
   });

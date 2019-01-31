@@ -12,13 +12,13 @@ describe('PipelinesFullHistoryPage', () => {
   let fixture: ComponentFixture<PipelinesFullHistoryPage>;
 
   beforeEach(async(() => {
-    let mockBuildConfigStore: any = jasmine.createSpy('BuildConfigStore');
+    const mockBuildConfigStore: any = jasmine.createSpy('BuildConfigStore');
     mockBuildConfigStore.loading = observableOf(true);
     mockBuildConfigStore.list = observableEmpty();
-    let mockBuildStore: any = jasmine.createSpy('BuildStore');
+    const mockBuildStore: any = jasmine.createSpy('BuildStore');
     mockBuildStore.loading = observableOf(true);
     mockBuildStore.list = observableEmpty();
-    let mockAPIsStore: any = jasmine.createSpyObj('APIsStore', ['load']);
+    const mockAPIsStore: any = jasmine.createSpyObj('APIsStore', ['load']);
     mockAPIsStore.loading = observableEmpty();
 
     TestBed.configureTestingModule({

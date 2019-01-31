@@ -88,7 +88,7 @@ export class CreateAreaDialogComponent implements OnInit {
   }
 
   createArea() {
-    let area = {} as Area;
+    const area = {} as Area;
     area.attributes = new AreaAttributes();
     area.attributes.name = this.name.trim();
     area.type = 'areas';
@@ -105,7 +105,7 @@ export class CreateAreaDialogComponent implements OnInit {
 
   itemPath(item: AreaAttributes) {
     // remove slash from start of string
-    let parentPath = item.parent_path_resolved.slice(1, item.parent_path_resolved.length);
+    const parentPath = item.parent_path_resolved.slice(1, item.parent_path_resolved.length);
     if (parentPath === '') {
       return item.name;
     }

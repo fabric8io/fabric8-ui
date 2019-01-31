@@ -1,11 +1,11 @@
 export function formatJson(obj: any, indent: number = 0): string {
   let t = '';
   let s: string = '   ';
-  let ar = {
+  const ar = {
     start: ' [ ',
     end: ' ] ',
   };
-  let ob = {
+  const ob = {
     start: ' { ',
     end: ' } ',
   };
@@ -14,15 +14,15 @@ export function formatJson(obj: any, indent: number = 0): string {
 
   if (Array.isArray(obj)) {
     let count = 0;
-    for (let item of obj) {
+    for (const item of obj) {
       count++;
       t = `${t}${s}\n${s}${ob.start}${formatJson(item, indent + 1)}\n${s}${ob.end}${
         count < obj.length ? ',' : ''
       }`;
     }
   } else {
-    for (let p of Object.getOwnPropertyNames(obj)) {
-      let tmp = obj[p];
+    for (const p of Object.getOwnPropertyNames(obj)) {
+      const tmp = obj[p];
       if (Array.isArray(tmp)) {
         t = `${t}\n${s}<span class="property-name" >${p}</span>${ar.start}${formatJson(
           tmp,
@@ -60,8 +60,8 @@ export function getPropertyValue<T>(obj1: T, dataToRetrieve: string) {
 }
 
 export function mergeArraysDistinctByKey<T>(destination: T[], origin: T[], key: string) {
-  for (let itemToAddOrReplace of origin) {
-    let requestFieldIndex = destination.findIndex(
+  for (const itemToAddOrReplace of origin) {
+    const requestFieldIndex = destination.findIndex(
       (f) => getPropertyValue(f, key) === getPropertyValue(itemToAddOrReplace, key),
     );
     if (requestFieldIndex != -1) {

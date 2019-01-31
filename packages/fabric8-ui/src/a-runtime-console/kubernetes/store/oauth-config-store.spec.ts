@@ -28,7 +28,7 @@ describe('OauthConfigStore', () => {
   let mockErrorHandler: jasmine.SpyObj<ErrorHandler>;
   let mockNotificationsService: jasmine.SpyObj<NotificationsService>;
 
-  let user: User = {
+  const user: User = {
     attributes: {
       fullName: 'mock',
       imageURL: 'mock',
@@ -39,9 +39,9 @@ describe('OauthConfigStore', () => {
     type: 'mock',
   };
 
-  let data = {};
+  const data = {};
 
-  let subscriptions: Subscription[] = [];
+  const subscriptions: Subscription[] = [];
 
   beforeEach(() => {
     mockLogger = jasmine.createSpyObj<Logger>('Logger', ['error']);

@@ -43,7 +43,7 @@ describe('ApplicationsWidgetComponent', () => {
   let contexts: Contexts;
   let pipelinesService: { current: Observable<BuildConfig[]> };
 
-  let fakeUser: Observable<User> = observableOf({
+  const fakeUser: Observable<User> = observableOf({
     id: 'fakeId',
     type: 'fakeType',
     attributes: {
@@ -53,7 +53,7 @@ describe('ApplicationsWidgetComponent', () => {
     },
   } as User);
 
-  let buildConfig1 = {
+  const buildConfig1 = {
     id: 'app1',
     name: 'app1',
     gitUrl: 'https://example.com/app1.git',
@@ -97,7 +97,7 @@ describe('ApplicationsWidgetComponent', () => {
     ],
   };
 
-  let buildConfig2 = {
+  const buildConfig2 = {
     id: 'app2',
     name: 'app2',
     gitUrl: 'https://example.com/app2.git',
@@ -147,7 +147,7 @@ describe('ApplicationsWidgetComponent', () => {
     ],
   };
 
-  let buildConfig3 = {
+  const buildConfig3 = {
     id: 'app3',
     name: 'app3',
     gitUrl: 'https://example.com/app3.git',
@@ -202,7 +202,7 @@ describe('ApplicationsWidgetComponent', () => {
     ],
   };
 
-  let ctxSubj: Subject<Context> = new Subject<Context>();
+  const ctxSubj: Subject<Context> = new Subject<Context>();
 
   beforeEach(() => {
     contexts = {
@@ -238,12 +238,12 @@ describe('ApplicationsWidgetComponent', () => {
       {
         provide: Router,
         useFactory: (): jasmine.SpyObj<Router> => {
-          let mockRouterEvent: any = {
+          const mockRouterEvent: any = {
             id: 1,
             url: 'mock-url',
           };
 
-          let mockRouter = jasmine.createSpyObj('Router', [
+          const mockRouter = jasmine.createSpyObj('Router', [
             'createUrlTree',
             'navigate',
             'serializeUrl',
@@ -256,7 +256,7 @@ describe('ApplicationsWidgetComponent', () => {
       {
         provide: UserService,
         useFactory: () => {
-          let userService = createMock(UserService);
+          const userService = createMock(UserService);
           userService.getUser.and.returnValue(fakeUser);
           userService.loggedInUser = fakeUser.pipe(publish()) as ConnectableObservable<User> &
             jasmine.Spy;

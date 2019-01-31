@@ -79,7 +79,7 @@ describe('LandingPageComponent', () => {
         {
           provide: AuthenticationService,
           useFactory: () => {
-            let mockAuthenticationService = createMock(AuthenticationService);
+            const mockAuthenticationService = createMock(AuthenticationService);
             mockAuthenticationService.isLoggedIn.and.returnValue(true);
             mockAuthenticationService.isOpenShiftConnected.and.returnValue(of(true));
 

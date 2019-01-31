@@ -13,13 +13,13 @@ export function messageEventToResourceOperation(msg): ResourceOperation {
     return msg as ResourceOperation;
   }
   if (msg instanceof MessageEvent) {
-    let me = msg as MessageEvent;
-    let data = me.data;
+    const me = msg as MessageEvent;
+    const data = me.data;
     if (data) {
-      let json = JSON.parse(data);
+      const json = JSON.parse(data);
       if (json) {
-        let type = json.type;
-        let resource = json.object;
+        const type = json.type;
+        const resource = json.object;
         if (type && resource) {
           switch (type) {
             case 'ADDED':

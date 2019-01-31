@@ -46,7 +46,7 @@ export abstract class AbstractStore<
   loadAll(): Observable<L> {
     this._loadId = null;
     this._loading.next(true);
-    let listObserver = this.service.list(this.listQueryParams());
+    const listObserver = this.service.list(this.listQueryParams());
     listObserver.subscribe(
       (list) => {
         this._list.next(list);
@@ -76,7 +76,7 @@ export abstract class AbstractStore<
   }
 
   reload() {
-    let id = this._loadId;
+    const id = this._loadId;
     if (id) {
       this.load(id);
     } else {

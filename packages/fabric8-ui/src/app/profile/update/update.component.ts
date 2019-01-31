@@ -126,7 +126,7 @@ export class UpdateComponent implements OnInit, OnDestroy {
   }
 
   copyTokenToClipboard(): void {
-    let result = this.copyService.copy(this.token);
+    const result = this.copyService.copy(this.token);
     if (result) {
       this.notifications.message({
         message: `Token copied!`,
@@ -178,7 +178,7 @@ export class UpdateComponent implements OnInit, OnDestroy {
   }
 
   updateProfile(): void {
-    let profile = this.getTransientProfile();
+    const profile = this.getTransientProfile();
     if (!profile.contextInformation) {
       profile.contextInformation = {};
     }
@@ -272,7 +272,7 @@ export class UpdateComponent implements OnInit, OnDestroy {
   }
 
   private getTransientProfile(): ExtProfile {
-    let profile = this.gettingStartedService.createTransientProfile();
+    const profile = this.gettingStartedService.createTransientProfile();
     // Delete extra information that make the update fails if present
     delete profile.username;
     if (profile) {

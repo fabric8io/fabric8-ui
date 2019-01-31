@@ -2,7 +2,7 @@ import { InMemoryDbService } from 'angular-in-memory-web-api';
 
 export class InMemoryDataService implements InMemoryDbService {
   createDb() {
-    let identities = [
+    const identities = [
       {
         attributes: {
           fullName: 'Harry Potter',
@@ -29,7 +29,7 @@ export class InMemoryDataService implements InMemoryDbService {
       },
     ];
 
-    let workitems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map((n) => ({
+    const workitems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map((n) => ({
       attributes: {
         'system.created_at': null,
         'system.description': 'Some Description ' + n,
@@ -62,12 +62,12 @@ export class InMemoryDataService implements InMemoryDbService {
       type: 'workitems',
     }));
 
-    let loginStatus = {
+    const loginStatus = {
       status: 200,
       responseText: 'Good Job',
     };
 
-    let workitemtypes = [
+    const workitemtypes = [
       {
         fields: {
           'system.assignee': {
@@ -334,7 +334,7 @@ export class InMemoryDataService implements InMemoryDbService {
       },
     ];
 
-    let user = {
+    const user = {
       attributes: {
         fullName: 'Draco Malfoy',
         imageURL:
@@ -343,7 +343,7 @@ export class InMemoryDataService implements InMemoryDbService {
       id: '498c69a9-bb6f-464b-b89c-a1976ed46301',
     };
 
-    let linkCategories = {
+    const linkCategories = {
       data: {
         attributes: {
           description:
@@ -356,7 +356,7 @@ export class InMemoryDataService implements InMemoryDbService {
       },
     };
 
-    let workitemlinktypes = [
+    const workitemlinktypes = [
       {
         id: '4f8d8e8c-ab1c-4396-b725-105aa69a789c',
         type: 'workitemlinktypes',
@@ -425,7 +425,7 @@ export class InMemoryDataService implements InMemoryDbService {
       },
     ];
 
-    let workitemlinks = [
+    const workitemlinks = [
       {
         attributes: {
           version: 0,

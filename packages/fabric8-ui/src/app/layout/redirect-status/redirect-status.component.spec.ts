@@ -38,7 +38,7 @@ describe('Redirect Status Component', () => {
   });
 
   it('should verify redirect status and error message is set through activated route', async(() => {
-    let comp = fixture.componentInstance;
+    const comp = fixture.componentInstance;
     fixture.detectChanges();
     fixture.whenStable().then(() => {
       expect(comp.redirectStatus).toBe('fail');

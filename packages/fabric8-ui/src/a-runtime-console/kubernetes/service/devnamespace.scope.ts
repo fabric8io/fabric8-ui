@@ -37,7 +37,7 @@ export class DevNamespaceScope implements INamespaceScope {
     this.namespace = this.http.get(this.userServicesUrl, { headers: this.headers }).pipe(
       shareReplay(),
       map((resp: HttpResponse<any>) => {
-        let namespace = this.extractUserNamespace(resp);
+        const namespace = this.extractUserNamespace(resp);
         if (namespace) {
           this.currentNamespaceValue = namespace;
         }
@@ -58,15 +58,15 @@ export class DevNamespaceScope implements INamespaceScope {
 
   private extractUserNamespace(json: any): string {
     if (json) {
-      let data = json['data'];
+      const data = json['data'];
       if (data) {
-        let attributes = data['attributes'];
+        const attributes = data['attributes'];
         if (attributes) {
-          let namespaces = attributes['namespaces'];
+          const namespaces = attributes['namespaces'];
           if (namespaces) {
-            for (let namespace of namespaces) {
-              let name = namespace['name'];
-              let type = namespace['type'];
+            for (const namespace of namespaces) {
+              const name = namespace['name'];
+              const type = namespace['type'];
               if (name && type && type === 'user') {
                 return name;
               }

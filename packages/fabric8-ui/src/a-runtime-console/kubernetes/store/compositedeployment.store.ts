@@ -40,7 +40,7 @@ export class CompositeDeploymentStore {
     // lets wait until we've loaded the APIS before trying to load the DeploymentConfigs
     this.apiStore.loading.pipe(distinctUntilChanged()).subscribe((flag) => {
       if (!flag) {
-        let openshift = this.apiStore.isOpenShift();
+        const openshift = this.apiStore.isOpenShift();
         if (openshift) {
           this.deploymentConfigsStore.loadAll();
         }
@@ -55,7 +55,7 @@ export class CompositeDeploymentStore {
     // lets wait until we've loaded the APIS before trying to load the DeploymentConfigs
     this.apiStore.loading.pipe(distinctUntilChanged()).subscribe((flag) => {
       if (!flag) {
-        let openshift = this.apiStore.isOpenShift();
+        const openshift = this.apiStore.isOpenShift();
         if (openshift) {
           this.deploymentConfigsStore.load(id);
         }

@@ -10,10 +10,10 @@ describe('GettingStartedComponent', () => {
   let fixture: ComponentFixture<GettingStartedComponent>;
   let component: DebugNode['componentInstance'];
 
-  let mockRouter: any = jasmine.createSpy('Router');
-  let mockProvider: any = jasmine.createSpyObj('ProviderService', ['linkOpenShift']);
-  let mockUserService: any = jasmine.createSpy('UserService');
-  let mockAuthenticationService: any = jasmine.createSpyObj('AuthenticationService', [
+  const mockRouter: any = jasmine.createSpy('Router');
+  const mockProvider: any = jasmine.createSpyObj('ProviderService', ['linkOpenShift']);
+  const mockUserService: any = jasmine.createSpy('UserService');
+  const mockAuthenticationService: any = jasmine.createSpyObj('AuthenticationService', [
     'isOpenShiftConnected',
   ]);
 
@@ -23,7 +23,7 @@ describe('GettingStartedComponent', () => {
     },
   };
 
-  let mockActivatedRoute = {
+  const mockActivatedRoute = {
     snapshot: {
       queryParams: {},
     },

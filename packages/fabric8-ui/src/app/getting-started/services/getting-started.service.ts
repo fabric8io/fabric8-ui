@@ -83,7 +83,7 @@ export class GettingStartedService implements OnDestroy {
    * @returns {Observable<ExtUser>}
    */
   getExtProfile(id: string): Observable<ExtUser> {
-    let url = `${this.usersUrl}/${id}`;
+    const url = `${this.usersUrl}/${id}`;
     return this.http.get<ExtUserResponse>(url, { headers: this.headers }).pipe(
       map((response: ExtUserResponse): ExtUser => response.data),
       catchError((error: HttpErrorResponse): Observable<ExtUser> => this.handleError(error)),

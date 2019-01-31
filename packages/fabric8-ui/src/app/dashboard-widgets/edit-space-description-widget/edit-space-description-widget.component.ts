@@ -74,7 +74,7 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit, OnDestroy {
         .pipe(
           debounceTime(1000),
           map((description) => {
-            let patch = {
+            const patch = {
               attributes: {
                 description,
                 name: this.space ? this.space.attributes.name : '',

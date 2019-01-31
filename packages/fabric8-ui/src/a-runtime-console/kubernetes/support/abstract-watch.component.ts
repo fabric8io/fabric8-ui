@@ -42,15 +42,15 @@ export class AbstractWatchComponent implements OnDestroy {
   private watchCache: Map<string, Watcher<any>> = new Map<string, Watcher<any>>();
 
   ngOnDestroy(): void {
-    for (let key in this.subjectCache) {
-      let subject = this.subjectCache[key];
+    for (const key in this.subjectCache) {
+      const subject = this.subjectCache[key];
       if (subject) {
         subject.unsubscribe();
       }
     }
     this.subjectCache.clear();
-    for (let key in this.watchCache) {
-      let watch = this.watchCache[key];
+    for (const key in this.watchCache) {
+      const watch = this.watchCache[key];
       if (watch) {
         watch.close();
       }
@@ -91,12 +91,12 @@ export class AbstractWatchComponent implements OnDestroy {
   ): Observable<DeploymentViews> {
     const servicesObservable = this.listAndWatchServices(namespace, serviceService, routeService);
 
-    let deployments = this.listAndWatchCombinedDeployments(
+    const deployments = this.listAndWatchCombinedDeployments(
       namespace,
       deploymentService,
       deploymentConfigService,
     );
-    let runtimeDeployments = observableCombineLatest(
+    const runtimeDeployments = observableCombineLatest(
       deployments,
       servicesObservable,
       createDeploymentViews,
@@ -113,12 +113,16 @@ export class AbstractWatchComponent implements OnDestroy {
   ): Observable<ReplicaSetViews> {
     const servicesObservable = this.listAndWatchServices(namespace, serviceService, routeService);
 
-    let replicas = observableCombineLatest(
+    const replicas = observableCombineLatest(
       this.listAndWatch(replicaSetService, namespace, ReplicaSet),
       this.listAndWatch(replicationControllerService, namespace, ReplicationController),
       combineReplicaSets,
     );
-    let replicaViews = observableCombineLatest(replicas, servicesObservable, createReplicaSetViews);
+    const replicaViews = observableCombineLatest(
+      replicas,
+      servicesObservable,
+      createReplicaSetViews,
+    );
     return replicaViews;
   }
 
@@ -127,7 +131,7 @@ export class AbstractWatchComponent implements OnDestroy {
     namespace: string,
     type: { new (): T },
   ): Observable<L> {
-    let key = namespace + '/' + type.name;
+    const key = namespace + '/' + type.name;
     return this.getOrCreateSubject(key, () =>
       observableCombineLatest(
         //this.getOrCreateList(service, namespace, type),
@@ -147,7 +151,7 @@ export class AbstractWatchComponent implements OnDestroy {
   ): Observable<L> {
     let answer = this.subjectCache[key];
     if (!answer) {
-      let observable = createObserverFn();
+      const observable = createObserverFn();
       answer = new CachingSubject(observable);
       this.subjectCache[key] = answer;
     }
@@ -159,7 +163,7 @@ export class AbstractWatchComponent implements OnDestroy {
     namespace: string,
     type: { new (): T },
   ): Watcher<L> {
-    let key = namespace + '/' + type.name;
+    const key = namespace + '/' + type.name;
     let answer = this.watchCache[key];
     if (!answer) {
       answer = service.watchNamepace(namespace);
@@ -178,10 +182,10 @@ export class AbstractWatchComponent implements OnDestroy {
     objType: { new (): T },
     namespace: string,
   ): L {
-    let resourceOperation = messageEventToResourceOperation(msg);
+    const resourceOperation = messageEventToResourceOperation(msg);
     if (resourceOperation) {
-      let operation = resourceOperation.operation;
-      let resource = resourceOperation.resource;
+      const operation = resourceOperation.operation;
+      const resource = resourceOperation.resource;
       switch (operation) {
         case Operation.ADDED:
           return createNewArrayToForceRefresh(this.upsertItem(array, resource, service, objType));
@@ -236,11 +240,11 @@ export class AbstractWatchComponent implements OnDestroy {
     service: NamespacedResourceService<T, L>,
     type: { new (): T },
   ): L {
-    let n = this.nameOfResource(resource);
+    const n = this.nameOfResource(resource);
     if (array && n) {
       for (let i = 0; i < array.length; i++) {
-        let item = array[i];
-        let name = item.name;
+        const item = array[i];
+        const name = item.name;
         if (name && name === n) {
           item.setResource(resource);
           return array;
@@ -261,11 +265,11 @@ export class AbstractWatchComponent implements OnDestroy {
     array: L,
     resource: any,
   ): L {
-    let n = this.nameOfResource(resource);
+    const n = this.nameOfResource(resource);
     if (array && n) {
       for (let i = 0; i < array.length; i++) {
-        let item = array[i];
-        let name = item.name;
+        const item = array[i];
+        const name = item.name;
         if (name && name === n) {
           array.splice(i, 1);
         }
@@ -275,8 +279,8 @@ export class AbstractWatchComponent implements OnDestroy {
   }
 
   nameOfResource(resource: any) {
-    let obj = resource || {};
-    let metadata = obj.metadata || {};
+    const obj = resource || {};
+    const metadata = obj.metadata || {};
     return obj.name || metadata.name || '';
   }
 }

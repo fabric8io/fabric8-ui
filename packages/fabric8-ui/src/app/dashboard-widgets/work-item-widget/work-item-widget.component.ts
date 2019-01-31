@@ -104,7 +104,7 @@ export class WorkItemWidgetComponent implements OnInit {
       tap((workItems) => {
         this.loading = false;
         workItems.forEach((workItem) => {
-          let state = workItem.attributes['system.state'];
+          const state = workItem.attributes['system.state'];
           if (state !== undefined) {
             if (this.isStateEqual(state, this.STATE_OPEN)) {
               this.myWorkItemsOpen++;

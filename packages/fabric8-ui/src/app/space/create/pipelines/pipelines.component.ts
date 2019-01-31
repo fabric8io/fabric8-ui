@@ -216,7 +216,7 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   addQueryParams() {
-    let urlFilter: object = {};
+    const urlFilter: object = {};
     this._appliedFilters.forEach((f: Filter) => {
       if (f.field.id === 'codebase') {
         if (urlFilter['codebase'] === undefined) {
@@ -244,10 +244,10 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscriptions.push(
       this.route.queryParams.subscribe((query: Params) => {
         if (query.hasOwnProperty('q')) {
-          let queryJson: QueryJson = JSON.parse(query.q);
-          let application: string[] = queryJson.application;
-          let codebase: string[] = queryJson.codebase;
-          let appliedFilter: Filter[] = [];
+          const queryJson: QueryJson = JSON.parse(query.q);
+          const application: string[] = queryJson.application;
+          const codebase: string[] = queryJson.codebase;
+          const appliedFilter: Filter[] = [];
           if (application !== undefined) {
             application.forEach((app: string) => {
               appliedFilter.push({

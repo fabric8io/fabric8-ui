@@ -1,9 +1,9 @@
 import { RECOMMENDER_API_URL } from '../space/analyze/stack/recommender-api';
 import { ApiLocatorService } from './api-locator.service';
 
-let recommenderApiUrlFactory = (api: ApiLocatorService) => api.recommenderApiUrl;
+const recommenderApiUrlFactory = (api: ApiLocatorService) => api.recommenderApiUrl;
 
-export let recommenderApiUrlProvider = {
+export const recommenderApiUrlProvider = {
   provide: RECOMMENDER_API_URL,
   useFactory: recommenderApiUrlFactory,
   deps: [ApiLocatorService],

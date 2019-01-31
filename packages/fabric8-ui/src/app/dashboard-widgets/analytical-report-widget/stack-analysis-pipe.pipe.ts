@@ -16,7 +16,7 @@ export class StackAnalysisPipe implements PipeTransform {
     return items.filter((item) => {
       let returnStatement: boolean = false;
       if (item && item.interestingBuilds && item.interestingBuilds.length > 0) {
-        for (let build of item.interestingBuilds) {
+        for (const build of item.interestingBuilds) {
           if (build.annotations['fabric8.io/bayesian.analysisUrl']) {
             returnStatement = true;
             break;

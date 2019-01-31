@@ -92,11 +92,11 @@ describe('RecentSpacesWidget', () => {
   });
 
   it('should display the loading widget while waiting for the recent spaces', function(): void {
-    let mockSpacesService: any = TestBed.get(Spaces);
+    const mockSpacesService: any = TestBed.get(Spaces);
     mockSpacesService.recent = observableNever();
-    let spaceList: DebugElement = testContext.fixture.debugElement.query(By.css('spaceList'));
-    let emptyList: DebugElement = testContext.fixture.debugElement.query(By.css('emptyList'));
-    let loading: DebugElement = testContext.fixture.debugElement.query(
+    const spaceList: DebugElement = testContext.fixture.debugElement.query(By.css('spaceList'));
+    const emptyList: DebugElement = testContext.fixture.debugElement.query(By.css('emptyList'));
+    const loading: DebugElement = testContext.fixture.debugElement.query(
       By.css('fabric8-loading-widget'),
     );
     expect(spaceList).toBeNull();

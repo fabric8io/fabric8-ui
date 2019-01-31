@@ -11,7 +11,7 @@ import { AreaCreationStatus, CreateAreaDialogComponent } from './create-area-dia
 class HostComponent {}
 
 describe('CreateAreaDialogComponent', () => {
-  let mockAreaService: jasmine.SpyObj<AreaService> = jasmine.createSpyObj('AreaService', [
+  const mockAreaService: jasmine.SpyObj<AreaService> = jasmine.createSpyObj('AreaService', [
     'create',
   ]);
   mockAreaService.create.and.returnValue(
@@ -67,7 +67,7 @@ describe('CreateAreaDialogComponent', () => {
 
   describe('#handleError', () => {
     it('should set the areaCreationStatus to UNIQUE_VALIDATION_FAILURE if a 409 error is recorded', function() {
-      let error: any = {
+      const error: any = {
         errors: [
           {
             status: '409',
@@ -81,7 +81,7 @@ describe('CreateAreaDialogComponent', () => {
     });
 
     it('should set the areaCreationStatus to OK if there are no errors', function() {
-      let error: any = {
+      const error: any = {
         errors: [],
       };
       testContext.testedDirective.handleError(error);

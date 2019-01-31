@@ -228,7 +228,7 @@ export class AreasComponent implements OnInit, OnDestroy {
   private buildTree(elements: ExtArea[], tree = []): ExtArea[] {
     elements.forEach((element) => {
       if (element.relationships.parent === undefined) {
-        let children = this.getNestedChildren(elements, element);
+        const children = this.getNestedChildren(elements, element);
         if (children.length > 0) {
           element.children = children;
         }
@@ -239,13 +239,13 @@ export class AreasComponent implements OnInit, OnDestroy {
   }
 
   private getNestedChildren(elements: ExtArea[], parent: Area): ExtArea[] {
-    let areas = [];
+    const areas = [];
     elements.forEach((element) => {
       if (
         element.relationships.parent !== undefined &&
         element.relationships.parent.data.id === parent.id
       ) {
-        let children = this.getNestedChildren(elements, element);
+        const children = this.getNestedChildren(elements, element);
         if (children.length > 0) {
           element.children = children;
         }
@@ -262,7 +262,7 @@ export class AreasComponent implements OnInit, OnDestroy {
     elements.forEach((element) => {
       element.children = undefined;
       if (element.relationships.parent !== undefined) {
-        let area = this.getClosestAncestor(
+        const area = this.getClosestAncestor(
           elements,
           this.getArea(element.relationships.parent.data.id),
         );

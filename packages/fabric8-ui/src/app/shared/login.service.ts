@@ -87,10 +87,10 @@ export class LoginService {
   }
 
   public login() {
-    let query = this.window.location.search.substr(1);
-    let result: any = {};
+    const query = this.window.location.search.substr(1);
+    const result: any = {};
     query.split('&').forEach(function(part) {
-      let item: any = part.split('=');
+      const item: any = part.split('=');
       result[item[0]] = decodeURIComponent(item[1]);
     });
 
@@ -137,7 +137,7 @@ export class LoginService {
   }
 
   private get _redirectUrl(): string {
-    let res = this.localStorage.get<string>(LoginService.REDIRECT_URL_KEY);
+    const res = this.localStorage.get<string>(LoginService.REDIRECT_URL_KEY);
     this.localStorage.remove(LoginService.REDIRECT_URL_KEY);
     return res;
   }

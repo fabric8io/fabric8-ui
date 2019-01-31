@@ -46,10 +46,10 @@ export class ResourceHeaderComponent implements OnInit {
   constructor(public router: Router, parentLinkFactory: ParentLinkFactory) {
     this.menus = resourceMenus;
 
-    let urlPrefix = parentLinkFactory.parentLink;
+    const urlPrefix = parentLinkFactory.parentLink;
     this.menus.forEach((menu) => {
       if (!menu.fullPath) {
-        let path = menu.path;
+        const path = menu.path;
         menu.fullPath = urlPrefix + path;
       }
     });
@@ -71,12 +71,12 @@ export class ResourceHeaderComponent implements OnInit {
   }
 
   onNavigate(event: NavigationEnd): void {
-    let url = event.url;
-    let menus = this.menus;
+    const url = event.url;
+    const menus = this.menus;
     if (url && menus) {
-      let paths = url.split('/');
+      const paths = url.split('/');
       if (paths && paths.length) {
-        let path = paths[paths.length - 1];
+        const path = paths[paths.length - 1];
         this.current = null;
         menus.forEach((menu) => {
           if (path === menu.path) {

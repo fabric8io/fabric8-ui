@@ -101,7 +101,7 @@ describe('MenuService service: it', () => {
 
   it('should return a fullMenu if none of the feature are disabled', () => {
     // given
-    let myContext = cloneDeep(context1);
+    const myContext = cloneDeep(context1);
     myContext.type = ContextTypes.BUILTIN.get('space');
     myContext.user['features'] = featuresEnabled;
     // when
@@ -112,9 +112,9 @@ describe('MenuService service: it', () => {
 
   it('should return a filtered menu if some features (part of main menu) are disabled', () => {
     // given
-    let myContext = cloneDeep(context1);
+    const myContext = cloneDeep(context1);
     myContext.type = ContextTypes.BUILTIN.get('space');
-    let featuresPlannerDisabled = cloneDeep(featuresEnabled);
+    const featuresPlannerDisabled = cloneDeep(featuresEnabled);
     featuresPlannerDisabled[0].attributes.enabled = false;
     myContext.user['features'] = featuresPlannerDisabled;
     // when
@@ -125,18 +125,18 @@ describe('MenuService service: it', () => {
 
   it('should return a filtered sub-menu if some features (part of submenu) are disabled', () => {
     // given
-    let myContext = cloneDeep(context1);
+    const myContext = cloneDeep(context1);
     myContext.type = ContextTypes.BUILTIN.get('space');
-    let featuresEnvironmentsDisabled = cloneDeep(featuresEnabled);
+    const featuresEnvironmentsDisabled = cloneDeep(featuresEnabled);
     featuresEnvironmentsDisabled[1].attributes.enabled = false;
     myContext.user['features'] = featuresEnvironmentsDisabled;
     // when
-    let res = menusService.attach(myContext);
+    const res = menusService.attach(myContext);
     // then
     expect(myContext.type['menus'].length).toEqual(fullMenu.length);
 
-    let menus = myContext.type['menus'];
-    let createMenu = menus[3];
+    const menus = myContext.type['menus'];
+    const createMenu = menus[3];
     expect(createMenu.menus.length).toEqual(2);
     expect(createMenu.menus.filter((subMenu) => subMenu.name == 'Codebases').length == 1);
     expect(createMenu.menus.filter((subMenu) => subMenu.name == 'Pipelines').length == 1);
@@ -144,18 +144,18 @@ describe('MenuService service: it', () => {
 
   it('should return a filtered sub-menu if some features are internal and user in non internal', () => {
     // given
-    let myContext = cloneDeep(context1);
+    const myContext = cloneDeep(context1);
     myContext.type = ContextTypes.BUILTIN.get('space');
-    let featuresEnvironmentsDisabled = cloneDeep(featuresEnabled);
+    const featuresEnvironmentsDisabled = cloneDeep(featuresEnabled);
     featuresEnvironmentsDisabled[1].attributes['enablement-level'] = null;
     myContext.user['features'] = featuresEnvironmentsDisabled;
     // when
-    let res = menusService.attach(myContext);
+    const res = menusService.attach(myContext);
     // then
     expect(myContext.type['menus'].length).toEqual(fullMenu.length);
 
-    let menus = myContext.type['menus'];
-    let createMenu = menus[3];
+    const menus = myContext.type['menus'];
+    const createMenu = menus[3];
     expect(createMenu.menus.length).toEqual(2);
     expect(createMenu.menus.filter((subMenu) => subMenu.name == 'Codebases').length == 1);
     expect(createMenu.menus.filter((subMenu) => subMenu.name == 'Pipelines').length == 1);

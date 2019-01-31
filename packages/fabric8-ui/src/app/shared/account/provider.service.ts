@@ -35,7 +35,7 @@ export class ProviderService {
    * @param redirect URL to be redirected to after successful account linking
    */
   linkAll(cluster: string, redirect: string): void {
-    let redirectToGithubLinkURL =
+    const redirectToGithubLinkURL =
       window.location.origin +
       '/_gettingstarted?wait=true&link=' +
       encodeURIComponent('https://github.com');
@@ -54,7 +54,7 @@ export class ProviderService {
   }
 
   disconnectGitHub(): Observable<any> {
-    let tokenUrl = this.apiUrl + 'token?for=https://github.com';
+    const tokenUrl = this.apiUrl + 'token?for=https://github.com';
     return this.http.delete(tokenUrl, { headers: this.headers }).pipe(
       map(() => {
         this.auth.clearGitHubToken();
@@ -63,22 +63,22 @@ export class ProviderService {
   }
 
   getGitHubStatus(): Observable<any> {
-    let tokenUrl = this.apiUrl + 'token?force_pull=true&for=https://github.com';
+    const tokenUrl = this.apiUrl + 'token?force_pull=true&for=https://github.com';
     return this.http.get(tokenUrl, { headers: this.headers });
   }
 
   getOpenShiftStatus(cluster: string): Observable<any> {
-    let tokenUrl = this.apiUrl + 'token?force_pull=true&for=' + cluster;
+    const tokenUrl = this.apiUrl + 'token?force_pull=true&for=' + cluster;
     return this.http.get(tokenUrl, { headers: this.headers });
   }
 
   disconnectOpenShift(cluster: string): Observable<any> {
-    let tokenUrl = this.apiUrl + 'token?for=' + cluster;
+    const tokenUrl = this.apiUrl + 'token?for=' + cluster;
     return this.http.delete(tokenUrl, { headers: this.headers });
   }
 
   getLegacyLinkingUrl(provider: string, redirect: string): string {
-    let parsedToken = jwt_decode(this.auth.getToken());
+    const parsedToken = jwt_decode(this.auth.getToken());
     let url =
       this.loginUrl +
       '/session?' +
@@ -95,7 +95,7 @@ export class ProviderService {
   }
 
   getLinkingURL(provider: string, redirect: string): string {
-    let linkURL = this.linkUrl + '?for=' + provider + '&redirect=' + encodeURIComponent(redirect);
+    const linkURL = this.linkUrl + '?for=' + provider + '&redirect=' + encodeURIComponent(redirect);
     return linkURL;
   }
 
@@ -116,7 +116,7 @@ export class ProviderService {
    * @param redirect URL to be redirected to after successful account linking
    */
   link(provider: string, redirect: string): void {
-    let linkURL = this.linkUrl + '?for=' + provider + '&redirect=' + encodeURIComponent(redirect);
+    const linkURL = this.linkUrl + '?for=' + provider + '&redirect=' + encodeURIComponent(redirect);
     this.http
       .get(linkURL, { headers: this.headers })
       .pipe(

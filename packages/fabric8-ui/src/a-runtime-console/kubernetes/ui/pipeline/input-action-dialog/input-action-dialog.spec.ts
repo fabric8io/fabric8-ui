@@ -18,9 +18,9 @@ describe('InputActionDialog', () => {
   let fakeAuthService: any;
   let element: HTMLElement;
 
-  let mockJenkinsService = {
+  const mockJenkinsService = {
     getJenkinsStatus(): Observable<any> {
-      let jenkinsStatus = observableOf([
+      const jenkinsStatus = observableOf([
         {
           data: { state: 'idled' },
         } as any,

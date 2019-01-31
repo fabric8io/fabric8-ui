@@ -24,7 +24,7 @@ class HostComponent {}
 describe('Home: WorkItemWidgetComponent', () => {
   type TestingContext = TestContext<WorkItemWidgetComponent, HostComponent>;
 
-  let fakeUser: Observable<User> = observableOf({
+  const fakeUser: Observable<User> = observableOf({
     id: 'fakeId',
     type: 'fakeType',
     attributes: {
@@ -34,7 +34,7 @@ describe('Home: WorkItemWidgetComponent', () => {
     },
   } as User);
 
-  let fakeWorkItem: WorkItem = {
+  const fakeWorkItem: WorkItem = {
     attributes: {
       'system.number': 1,
       'system.state': 'new',
@@ -50,11 +50,11 @@ describe('Home: WorkItemWidgetComponent', () => {
     type: 'workitems',
   };
 
-  let fakeWorkItem1 = cloneDeep(fakeWorkItem);
-  let fakeWorkItem2 = cloneDeep(fakeWorkItem);
-  let fakeWorkItem3 = cloneDeep(fakeWorkItem);
-  let fakeWorkItem4 = cloneDeep(fakeWorkItem);
-  let fakeWorkItem5 = cloneDeep(fakeWorkItem);
+  const fakeWorkItem1 = cloneDeep(fakeWorkItem);
+  const fakeWorkItem2 = cloneDeep(fakeWorkItem);
+  const fakeWorkItem3 = cloneDeep(fakeWorkItem);
+  const fakeWorkItem4 = cloneDeep(fakeWorkItem);
+  const fakeWorkItem5 = cloneDeep(fakeWorkItem);
 
   fakeWorkItem1.attributes['system.state'] = 'open';
   fakeWorkItem2.attributes['system.state'] = 'open';
@@ -63,7 +63,7 @@ describe('Home: WorkItemWidgetComponent', () => {
   fakeWorkItem4.attributes['system.state'] = 'resolved';
   fakeWorkItem5.attributes['system.state'] = 'new';
 
-  let fakeWorkItems: WorkItem[] = [
+  const fakeWorkItems: WorkItem[] = [
     fakeWorkItem1,
     fakeWorkItem2,
     fakeWorkItem3,
@@ -71,7 +71,7 @@ describe('Home: WorkItemWidgetComponent', () => {
     fakeWorkItem5,
   ];
 
-  let fakeWorkItemsObs: Observable<WorkItemsData> = observableOf({
+  const fakeWorkItemsObs: Observable<WorkItemsData> = observableOf({
     workItems: fakeWorkItems,
   } as WorkItemsData);
 
@@ -89,7 +89,7 @@ describe('Home: WorkItemWidgetComponent', () => {
       {
         provide: UserService,
         useFactory: () => {
-          let userService = createMock(UserService);
+          const userService = createMock(UserService);
           userService.getUser.and.returnValue(fakeUser);
           userService.loggedInUser = fakeUser as ConnectableObservable<User> & jasmine.Spy;
           return userService;
@@ -98,7 +98,7 @@ describe('Home: WorkItemWidgetComponent', () => {
       {
         provide: WorkItemService,
         useFactory: () => {
-          let workItemServiceMock = createMock(WorkItemService);
+          const workItemServiceMock = createMock(WorkItemService);
 
           workItemServiceMock.buildUserIdMap.and.stub();
           workItemServiceMock.resolveType.and.stub();
@@ -112,11 +112,11 @@ describe('Home: WorkItemWidgetComponent', () => {
       {
         provide: Router,
         useFactory: (): jasmine.SpyObj<Router> => {
-          let mockRouterEvent: any = {
+          const mockRouterEvent: any = {
             id: 1,
             url: 'mock-url',
           };
-          let mockRouter = jasmine.createSpyObj('Router', [
+          const mockRouter = jasmine.createSpyObj('Router', [
             'createUrlTree',
             'navigate',
             'serializeUrl',
@@ -135,7 +135,7 @@ describe('Home: WorkItemWidgetComponent', () => {
       {
         provide: FilterService,
         useFactory: () => {
-          let filterServiceMock = jasmine.createSpyObj('FilterService', [
+          const filterServiceMock = jasmine.createSpyObj('FilterService', [
             'queryBuilder',
             'queryJoiner',
           ]);
@@ -162,12 +162,12 @@ describe('Home: WorkItemWidgetComponent', () => {
   });
 
   it('Should have select element', function() {
-    let select = testContext.fixture.debugElement.query(By.css('.work-item-combobox'));
+    const select = testContext.fixture.debugElement.query(By.css('.work-item-combobox'));
     expect(select).not.toBeNull();
   });
 
   it('Should have select element options', function() {
-    let options = testContext.fixture.debugElement.queryAll(By.css('.work-item-combobox option'));
+    const options = testContext.fixture.debugElement.queryAll(By.css('.work-item-combobox option'));
     expect(options.length).toBe(2);
   });
 

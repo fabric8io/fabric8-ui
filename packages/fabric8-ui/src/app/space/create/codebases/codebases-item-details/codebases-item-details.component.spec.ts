@@ -45,7 +45,7 @@ describe('Codebases Item Details Component', () => {
 
   it('Init component with valid gitHubRepo', async(() => {
     // given
-    let comp = fixture.componentInstance;
+    const comp = fixture.componentInstance;
     comp.codebase = {
       id: '6f5b6738-170e-490e-b3bb-d10f56b587c8',
       attributes: {
@@ -92,7 +92,7 @@ describe('Codebases Item Details Component', () => {
 
   it('Init component without valid gitHubRepo', async(() => {
     // given
-    let comp = fixture.componentInstance;
+    const comp = fixture.componentInstance;
     comp.codebase = {
       id: '6f5b6738-170e-490e-b3bb-d10f56b587c8',
       attributes: {

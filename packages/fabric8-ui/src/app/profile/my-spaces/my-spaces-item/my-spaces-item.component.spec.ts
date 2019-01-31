@@ -66,12 +66,12 @@ describe('My Spaces Item Component', () => {
   });
 
   it('Init component succesfully', async(() => {
-    let comp = fixture.componentInstance;
-    let debug = fixture.debugElement;
+    const comp = fixture.componentInstance;
+    const debug = fixture.debugElement;
     comp.space = space;
     TestBed.get(MySpacesItemService).getCollaboratorCount.and.returnValue(never());
     fixture.detectChanges();
-    let element = debug.queryAll(By.css('.list-pf-title'));
+    const element = debug.queryAll(By.css('.list-pf-title'));
     fixture.whenStable().then(() => {
       expect(element.length).toEqual(1);
     });

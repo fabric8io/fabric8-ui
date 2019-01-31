@@ -34,7 +34,7 @@ export class AppLauncherPipelineService implements PipelineService {
   }
 
   getPipelines(): Observable<Pipeline[]> {
-    let runtimeEndPoint: string = this.END_POINT + this.API_BASE;
+    const runtimeEndPoint: string = this.END_POINT + this.API_BASE;
     return this.http
       .get<Pipeline[]>(runtimeEndPoint, { headers: this.headers })
       .pipe(catchError(this.handleError));

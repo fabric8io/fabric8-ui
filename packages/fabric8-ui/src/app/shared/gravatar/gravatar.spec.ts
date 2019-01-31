@@ -4,17 +4,17 @@ function extractParams(from) {
   const params: object = {};
   from = from.split('?').pop();
   from = from.split('&');
-  for (let i in from) {
-    let t = from[i].split('=');
+  for (const i in from) {
+    const t = from[i].split('=');
     params[t[0]] = t[1];
   }
   return params;
 }
 
 describe('gravatar', function() {
-  let email = 'me@me.com';
+  const email = 'me@me.com';
 
-  let confirmed_md5 = 'f620f4647fb816073c9152a284245e64';
+  const confirmed_md5 = 'f620f4647fb816073c9152a284245e64';
 
   it('Should let me call gravatar function', function() {
     expect(gravatar).toBeDefined();

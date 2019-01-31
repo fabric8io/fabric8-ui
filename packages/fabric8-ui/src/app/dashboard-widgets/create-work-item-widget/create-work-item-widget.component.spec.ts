@@ -64,7 +64,7 @@ describe('CreateWorkItemWidgetComponent', () => {
         {
           provide: WorkItemService,
           useFactory: (): WorkItemService => {
-            let workItemServiceMock = jasmine.createSpyObj('WorkItemService', [
+            const workItemServiceMock = jasmine.createSpyObj('WorkItemService', [
               'resolveType',
               'resolveAreaForWorkItem',
               'getWorkItems',
@@ -80,7 +80,7 @@ describe('CreateWorkItemWidgetComponent', () => {
         {
           provide: FilterService,
           useFactory: (): FilterService => {
-            let filterServiceMock: jasmine.SpyObj<FilterService> = jasmine.createSpyObj(
+            const filterServiceMock: jasmine.SpyObj<FilterService> = jasmine.createSpyObj(
               'FilterService',
               ['queryBuilder', 'queryJoiner'],
             );
@@ -90,12 +90,12 @@ describe('CreateWorkItemWidgetComponent', () => {
         {
           provide: Router,
           useFactory: (): jasmine.SpyObj<Router> => {
-            let mockRouterEvent: any = {
+            const mockRouterEvent: any = {
               id: 1,
               url: 'mock-url',
             };
 
-            let mockRouter = jasmine.createSpyObj('Router', [
+            const mockRouter = jasmine.createSpyObj('Router', [
               'createUrlTree',
               'navigate',
               'serializeUrl',
@@ -148,7 +148,7 @@ describe('CreateWorkItemWidgetComponent', () => {
   });
 
   describe('Should test with WorkItems', () => {
-    let fakeWorkItem: WorkItem = {
+    const fakeWorkItem: WorkItem = {
       attributes: {
         'system.number': 1,
         'system.state': 'new',
@@ -164,15 +164,15 @@ describe('CreateWorkItemWidgetComponent', () => {
       type: 'workitems',
     };
 
-    let fakeWorkItem1 = cloneDeep(fakeWorkItem);
-    let fakeWorkItem2 = cloneDeep(fakeWorkItem);
+    const fakeWorkItem1 = cloneDeep(fakeWorkItem);
+    const fakeWorkItem2 = cloneDeep(fakeWorkItem);
 
     fakeWorkItem1.attributes['system.state'] = 'open';
     fakeWorkItem2.attributes['system.state'] = 'open';
 
-    let fakeWorkItems: WorkItem[] = [fakeWorkItem1, fakeWorkItem2];
+    const fakeWorkItems: WorkItem[] = [fakeWorkItem1, fakeWorkItem2];
 
-    let fakeWorkItemsObs: Observable<WorkItemsData> = observableOf({
+    const fakeWorkItemsObs: Observable<WorkItemsData> = observableOf({
       workItems: fakeWorkItems,
     } as WorkItemsData);
 
@@ -192,7 +192,7 @@ describe('CreateWorkItemWidgetComponent', () => {
         {
           provide: WorkItemService,
           useFactory: (): WorkItemService => {
-            let workItemServiceMock = jasmine.createSpyObj('WorkItemService', [
+            const workItemServiceMock = jasmine.createSpyObj('WorkItemService', [
               'resolveType',
               'resolveAreaForWorkItem',
               'getWorkItems',
@@ -208,7 +208,7 @@ describe('CreateWorkItemWidgetComponent', () => {
         {
           provide: FilterService,
           useFactory: (): FilterService => {
-            let filterServiceMock: jasmine.SpyObj<FilterService> = jasmine.createSpyObj(
+            const filterServiceMock: jasmine.SpyObj<FilterService> = jasmine.createSpyObj(
               'FilterService',
               ['queryBuilder', 'queryJoiner'],
             );
@@ -218,12 +218,12 @@ describe('CreateWorkItemWidgetComponent', () => {
         {
           provide: Router,
           useFactory: (): jasmine.SpyObj<Router> => {
-            let mockRouterEvent: any = {
+            const mockRouterEvent: any = {
               id: 1,
               url: 'mock-url',
             };
 
-            let mockRouter = jasmine.createSpyObj('Router', [
+            const mockRouter = jasmine.createSpyObj('Router', [
               'createUrlTree',
               'navigate',
               'serializeUrl',

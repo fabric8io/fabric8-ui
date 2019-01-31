@@ -118,7 +118,7 @@ describe('Codebases Item Details Component', () => {
 
   it('Create Workspace with capacity full', () => {
     // given
-    let comp = fixture.componentInstance;
+    const comp = fixture.componentInstance;
     cheServiceMock.getState.and.returnValue(
       observableOf({ clusterFull: true, multiTenant: true, running: true }),
     );

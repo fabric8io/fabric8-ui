@@ -76,7 +76,7 @@ export class MenusService {
   }
 
   public isFeatureEnabled(feature: string, features: Feature[]): boolean {
-    for (let f of features) {
+    for (const f of features) {
       if (f.id === feature) {
         return f.attributes.enabled;
       }
@@ -85,7 +85,7 @@ export class MenusService {
   }
 
   public isFeatureUserEnabled(feature: string, features: Feature[]): boolean {
-    for (let f of features) {
+    for (const f of features) {
       if (f.id === feature) {
         return f.attributes['user-enabled'];
       }
@@ -95,7 +95,7 @@ export class MenusService {
 
   // if a user is non-internal, she should not see internal feature in menu (feature is unapplicable)
   public isFeatureNonApplicable(feature: string, features: Feature[]): boolean {
-    for (let f of features) {
+    for (const f of features) {
       if (f.id === feature && !f.attributes['enablement-level']) {
         return true;
       }
@@ -106,15 +106,15 @@ export class MenusService {
   public attach(context: Context) {
     if (!(context.type instanceof MenuedContextType || (context.type as MenuedContextType).menus)) {
       // Take a copy of the context to attach menus to (not sure we need to do this)
-      let res = cloneDeep(context.type) as MenuedContextType;
+      const res = cloneDeep(context.type) as MenuedContextType;
       // Take a copy of the menus and attach them
       res.menus = cloneDeep(this.menus.get(context.type));
       if (!res.menus) {
         console.log('Failed to attach menus to', context.type);
         return;
       }
-      let menuToDelete = [];
-      for (let menu of res.menus) {
+      const menuToDelete = [];
+      for (const menu of res.menus) {
         if (
           (menu['feature'] &&
             context.user['features'] &&
@@ -127,8 +127,8 @@ export class MenusService {
         } else {
           menu.fullPath = this.buildPath(context.path, menu.path);
           if (menu.menus) {
-            let subMenuToDelete = [];
-            for (let subMenu of menu.menus) {
+            const subMenuToDelete = [];
+            for (const subMenu of menu.menus) {
               if (
                 (subMenu['feature'] &&
                   context.user['features'] &&
@@ -163,7 +163,7 @@ export class MenusService {
 
   private buildPath(...args: string[]): string {
     let res = '';
-    for (let p of args) {
+    for (const p of args) {
       if (p.startsWith('/')) {
         res = p;
       } else {

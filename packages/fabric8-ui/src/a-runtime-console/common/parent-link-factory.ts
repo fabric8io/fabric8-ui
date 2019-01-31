@@ -12,7 +12,7 @@ export class ParentLinkFactory {
   constructor(router: Router) {
     let urlPrefix = router.url;
     if (urlPrefix) {
-      let idx = urlPrefix.lastIndexOf('/');
+      const idx = urlPrefix.lastIndexOf('/');
       if (idx > 0) {
         urlPrefix = urlPrefix.substring(0, idx + 1);
       } else {

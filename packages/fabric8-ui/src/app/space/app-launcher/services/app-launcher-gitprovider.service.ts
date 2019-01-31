@@ -57,7 +57,7 @@ export class AppLauncherGitproviderService implements GitProviderService {
    * @returns {Observable<any>}
    */
   private getGitHubUserData(): Observable<any> {
-    let url = this.END_POINT + this.API_BASE + 'user';
+    const url = this.END_POINT + this.API_BASE + 'user';
     return this.http
       .get(url, { headers: this.headers })
       .pipe(catchError((error: HttpErrorResponse) => throwError(error)));
@@ -70,7 +70,7 @@ export class AppLauncherGitproviderService implements GitProviderService {
    * @returns {Observable<any>}
    */
   getUserOrgs(userName: string): Observable<any> {
-    let url = this.END_POINT + this.API_BASE + 'organizations';
+    const url = this.END_POINT + this.API_BASE + 'organizations';
     return this.http
       .get(url, { headers: this.headers })
       .pipe(catchError((error: HttpErrorResponse) => throwError(error)));
@@ -86,7 +86,7 @@ export class AppLauncherGitproviderService implements GitProviderService {
       mergeMap((user) => {
         if (user && user.login) {
           this.gitHubUserLogin = user.login;
-          let orgs: { [name: string]: string } = {};
+          const orgs: { [name: string]: string } = {};
           return this.getUserOrgs(user.login).pipe(
             mergeMap((orgsArr) => {
               if (orgsArr && orgsArr.length >= 0) {
@@ -97,7 +97,7 @@ export class AppLauncherGitproviderService implements GitProviderService {
                   orgs[orgsArr[i]] = orgsArr[i];
                 }
                 orgs[user.login] = undefined;
-                let gitHubDetails = {
+                const gitHubDetails = {
                   authenticated: true,
                   avatar: user.avatarUrl,
                   login: user.login,
@@ -145,7 +145,7 @@ export class AppLauncherGitproviderService implements GitProviderService {
     let headers = cloneDeep(this.headers);
     headers = headers.delete('X-App');
     headers = headers.delete('x-git-provider');
-    let url = this.constructApiUrl(this.detectorApiUrl, 'api/detect/build/' + repoUrl);
+    const url = this.constructApiUrl(this.detectorApiUrl, 'api/detect/build/' + repoUrl);
     return this.http
       .get<BuildTool>(url, { headers })
       .pipe(catchError((error: HttpErrorResponse) => throwError(error)));

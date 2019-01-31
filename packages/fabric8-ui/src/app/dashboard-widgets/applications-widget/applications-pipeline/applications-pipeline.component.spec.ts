@@ -15,7 +15,7 @@ describe('ApplicationsPipelineComponent', () => {
 
   let contexts: Contexts;
 
-  let pipelineStage = {
+  const pipelineStage = {
     jenkinsInputURL: 'https://example.com/app1.git',
     name: 'Build Release',
     status: 'SUCCESS',

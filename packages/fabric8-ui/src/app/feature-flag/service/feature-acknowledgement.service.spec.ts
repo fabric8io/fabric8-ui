@@ -10,7 +10,7 @@ import { loggedInUser } from '../../shared/context.service.mock';
 import { FeatureAcknowledgementService } from './feature-acknowledgement.service';
 
 describe('FeatureAcknowledgement service:', () => {
-  let extUser: ExtUser = loggedInUser as ExtUser;
+  const extUser: ExtUser = loggedInUser as ExtUser;
   let featureAckService: FeatureAcknowledgementService;
   let mockLog: any;
   let mockAuthService: any;

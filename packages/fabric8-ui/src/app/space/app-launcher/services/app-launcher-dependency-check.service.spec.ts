@@ -5,7 +5,7 @@ import { Observable, of as observableOf } from 'rxjs';
 import { ContextService } from '../../../shared/context.service';
 import { AppLauncherDependencyCheckService } from './app-launcher-dependency-check.service';
 
-let mockDeploymentApiService: any = {
+const mockDeploymentApiService: any = {
   getApplications(): Observable<any[]> {
     return observableOf([]);
   },
@@ -20,7 +20,7 @@ function initTestBed() {
   });
 }
 
-let mockContext = {
+const mockContext = {
   name: 'my-space-apr24-4-43',
   path: '/user/my-space-apr24-4-43',
   space: {
@@ -43,7 +43,7 @@ class mockContextService {
 
 describe('Service: AppLauncherDependencyCheckService', () => {
   let service: AppLauncherDependencyCheckService;
-  let dependencyCheck = {
+  const dependencyCheck = {
     mavenArtifact: 'booster-mission-runtime',
     groupId: 'io.openshift.booster',
     projectName: '',

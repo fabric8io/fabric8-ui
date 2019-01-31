@@ -42,16 +42,16 @@ export class ReplicaSetView {
       this.exposeUrl = service.exposeUrl;
     }
     this.images = new Array<String>();
-    let spec = replicaset.spec;
+    const spec = replicaset.spec;
     if (spec) {
-      let template = spec.template;
+      const template = spec.template;
       if (template) {
-        let podSpec = template.spec;
+        const podSpec = template.spec;
         if (podSpec) {
-          let containers = podSpec.containers;
+          const containers = podSpec.containers;
           if (containers) {
             containers.forEach((c) => {
-              let image = c.image;
+              const image = c.image;
               if (image) {
                 this.images.push(image);
               }
@@ -62,7 +62,7 @@ export class ReplicaSetView {
     }
     this.replicas = 0;
     this.availableReplicas = 0;
-    let status = replicaset.status;
+    const status = replicaset.status;
     if (status) {
       this.replicas = status.replicas || 0;
       this.availableReplicas = status.availableReplicas || 0;
@@ -76,7 +76,7 @@ export function createReplicaSetViews(
   replicasets: ReplicaSets,
   services: Services,
 ): ReplicaSetViews {
-  let map = {};
+  const map = {};
   services.forEach((s) => (map[s.name] = s));
   return replicasets.map((d) => new ReplicaSetView(d, map[d.name]));
 }

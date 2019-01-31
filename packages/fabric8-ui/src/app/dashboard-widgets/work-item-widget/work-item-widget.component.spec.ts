@@ -62,7 +62,7 @@ describe('Dashboard: WorkItemWidgetComponent', () => {
     } as WorkItem;
 
     let mockSpacesService: any = jasmine.createSpyObj('SpacesService', ['addRecent', 'current']);
-    let mockSubject: any = jasmine.createSpy('Subject');
+    const mockSubject: any = jasmine.createSpy('Subject');
 
     workItem1 = cloneDeep(workItem);
     workItem1.attributes['system.state'] = 'open';
@@ -158,27 +158,27 @@ describe('Dashboard: WorkItemWidgetComponent', () => {
   });
 
   it('Should output open count', () => {
-    let element: DebugElement = fixture.debugElement.query(By.css('#open'));
+    const element: DebugElement = fixture.debugElement.query(By.css('#open'));
     expect(element.nativeElement.textContent.trim().slice(0, '2'.length)).toBe('2');
   });
 
   it('Should output resolved count', () => {
-    let element: DebugElement = fixture.debugElement.query(By.css('#resolved'));
+    const element: DebugElement = fixture.debugElement.query(By.css('#resolved'));
     expect(element.nativeElement.textContent.trim().slice(0, '2'.length)).toBe('1');
   });
 
   it('Should output in progress count', () => {
-    let element: DebugElement = fixture.debugElement.query(By.css('#in-progress'));
+    const element: DebugElement = fixture.debugElement.query(By.css('#in-progress'));
     expect(element.nativeElement.textContent.trim().slice(0, '1'.length)).toBe('1');
   });
 
   it('Should output total count', () => {
-    let element: DebugElement = fixture.debugElement.query(By.css('#total'));
+    const element: DebugElement = fixture.debugElement.query(By.css('#total'));
     expect(element.nativeElement.textContent.trim().slice(0, '5'.length)).toBe('5');
   });
 
   it('Should output a bar chart', () => {
-    let elements: DebugElement[] = fixture.debugElement.queryAll(
+    const elements: DebugElement[] = fixture.debugElement.queryAll(
       By.css('fabric8-work-item-barchart div'),
     );
     expect(elements.length).toBe(1);
@@ -299,7 +299,7 @@ describe('Dashboard: WorkItemWidgetComponent', () => {
     });
 
     it('should increment the work item type counters accordingly', () => {
-      let expectedCount: number = workItems.length;
+      const expectedCount: number = workItems.length;
       let expectedOpen: number = 0;
       let expectedInProgress: number = 0;
       let expectedResolved: number = 0;

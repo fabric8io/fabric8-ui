@@ -39,7 +39,7 @@ export abstract class NamespacedResourceService<
    */
   watchNamepace(namespace: string, queryParams: any = null) {
     if (namespace) {
-      let listFactory = () => this.list(namespace, queryParams);
+      const listFactory = () => this.list(namespace, queryParams);
       return this.watcherFactory.newInstance(
         () => this.serviceUrlForNamespace(namespace),
         queryParams,
@@ -62,12 +62,12 @@ export abstract class NamespacedResourceService<
   }
 
   get(id: string, namespace: string = null): Observable<T> {
-    let url = namespace ? this.serviceUrlForNamespace(namespace) : this.serviceUrl;
+    const url = namespace ? this.serviceUrlForNamespace(namespace) : this.serviceUrl;
     return this.restangularService.one(url, id).get();
   }
 
   list(namespace: string = null, queryParams: any = null): Observable<L> {
-    let url = namespace ? this.serviceUrlForNamespace(namespace) : this.serviceUrl;
+    const url = namespace ? this.serviceUrlForNamespace(namespace) : this.serviceUrl;
     if (!url) {
       return observableEmpty();
     }
@@ -75,8 +75,8 @@ export abstract class NamespacedResourceService<
   }
 
   create(obj: T, namespace: string = null): Observable<T> {
-    let url = this.urlForObject(obj, namespace);
-    let resource = obj.resource || {};
+    const url = this.urlForObject(obj, namespace);
+    const resource = obj.resource || {};
     if (!resource.kind) {
       resource.kind = obj.defaultKind();
     }
@@ -86,8 +86,8 @@ export abstract class NamespacedResourceService<
   }
 
   delete(obj: T): any {
-    let url = this.urlForObject(obj);
-    let id = obj.name;
+    const url = this.urlForObject(obj);
+    const id = obj.name;
     if (id) {
       return this.restangularService.one(url, id).remove();
     }
@@ -98,7 +98,7 @@ export abstract class NamespacedResourceService<
     if (!namespace) {
       namespace = obj.namespace;
     }
-    let url = namespace ? this.serviceUrlForNamespace(namespace) : this.serviceUrl;
+    const url = namespace ? this.serviceUrlForNamespace(namespace) : this.serviceUrl;
     return url;
   }
 
@@ -121,7 +121,7 @@ export abstract class NamespacedResourceService<
 
   protected createServiceUrl(urlPrefix: string, namespace: string, urlSuffix: string): string {
     if (namespace) {
-      let url = pathJoin(urlPrefix, namespace, urlSuffix);
+      const url = pathJoin(urlPrefix, namespace, urlSuffix);
       //console.log("setting url to: " + url);
       return url;
     }

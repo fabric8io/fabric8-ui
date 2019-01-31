@@ -31,7 +31,7 @@ describe('Codebases Item Heading Component', () => {
   });
 
   it('Che starting message', async(() => {
-    let comp = fixture.componentInstance;
+    const comp = fixture.componentInstance;
     comp.cheState = { running: false } as Che;
     fixture.detectChanges();
 
@@ -39,7 +39,7 @@ describe('Codebases Item Heading Component', () => {
   }));
 
   it('Che running message', async(() => {
-    let comp = fixture.componentInstance;
+    const comp = fixture.componentInstance;
     comp.cheState = { running: true } as Che;
     fixture.detectChanges();
 
@@ -47,7 +47,7 @@ describe('Codebases Item Heading Component', () => {
   }));
 
   it('Che performing multi-tenant migration message', async(() => {
-    let comp = fixture.componentInstance;
+    const comp = fixture.componentInstance;
     comp.cheState = { running: false, multiTenant: true } as Che;
     fixture.detectChanges();
 
@@ -55,7 +55,7 @@ describe('Codebases Item Heading Component', () => {
   }));
 
   it('Che finished multi-tenant migration message', async(() => {
-    let comp = fixture.componentInstance;
+    const comp = fixture.componentInstance;
     comp.cheState = { running: true, multiTenant: true } as Che;
     fixture.detectChanges();
 
@@ -63,20 +63,20 @@ describe('Codebases Item Heading Component', () => {
   }));
 
   it('Show Security alert in heading', async(() => {
-    let comp = fixture.componentInstance;
+    const comp = fixture.componentInstance;
     comp.cveNotify = true;
     fixture.detectChanges();
 
-    let cveElementTag = element.querySelector('.security-alert-heading');
+    const cveElementTag = element.querySelector('.security-alert-heading');
     expect(cveElementTag).toBeDefined();
   }));
 
   it('Should not show Security alert in heading', async(() => {
-    let comp = fixture.componentInstance;
+    const comp = fixture.componentInstance;
     comp.cveNotify = false;
     fixture.detectChanges();
 
-    let cveElementTag = element.querySelector('.security-alert-heading');
+    const cveElementTag = element.querySelector('.security-alert-heading');
     expect(cveElementTag).toBeNull();
   }));
 });

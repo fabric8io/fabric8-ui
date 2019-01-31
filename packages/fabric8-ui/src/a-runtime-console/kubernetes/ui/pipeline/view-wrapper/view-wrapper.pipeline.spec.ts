@@ -11,7 +11,7 @@ describe('PipelineViewWrapperComponent', () => {
   let fixture: ComponentFixture<PipelineViewWrapperComponent>;
 
   beforeEach(async(() => {
-    let mockBuildConfigStore: any = jasmine.createSpy('BuildConfigService');
+    const mockBuildConfigStore: any = jasmine.createSpy('BuildConfigService');
     mockBuildConfigStore.resource = observableOf({});
     TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([])],

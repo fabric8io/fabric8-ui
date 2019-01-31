@@ -49,7 +49,7 @@ describe('WorkItemBarchartComponent', () => {
   });
 
   it('should not show axis by default', () => {
-    let elements = fixture.debugElement.queryAll(By.css('#testChart'));
+    const elements = fixture.debugElement.queryAll(By.css('#testChart'));
     expect(elements.length).toBe(1);
 
     expect(comp.config.axis.x.show).toBe(false);
@@ -119,7 +119,7 @@ describe('WorkItemBarchartComponent', () => {
 
   it('should allow using a tooltip function', () => {
     let tooltipCalled = false;
-    let tooltip = {
+    const tooltip = {
       contents: (d: any) => {
         tooltipCalled = true;
       },
@@ -128,7 +128,7 @@ describe('WorkItemBarchartComponent', () => {
     chartConfig.tooltip = tooltip;
     fixture.detectChanges();
 
-    let dataPoint = [{ value: 0, name: 'used' }, 0];
+    const dataPoint = [{ value: 0, name: 'used' }, 0];
     chartConfig.tooltip.contents(dataPoint); // TODO - c3 should invoke tooltip
     expect(tooltipCalled).toBe(true);
   });

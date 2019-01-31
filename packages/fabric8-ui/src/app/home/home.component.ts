@@ -39,11 +39,11 @@ export class HomeComponent implements OnInit {
 
   linkOpenshiftAccounts() {
     this.loading = true;
-    let connectionSub = this.auth
+    const connectionSub = this.auth
       .isOpenShiftConnected(this.loggedInUser.attributes.cluster)
       .subscribe((isConnected) => {
         this.openShiftLinked = isConnected;
-        let wait = this.route.snapshot.queryParams['wait'];
+        const wait = this.route.snapshot.queryParams['wait'];
         if (!isConnected && !wait) {
           // first time through and user isn't connected - automatically connect accounts
           this.providerService.linkOpenShift(

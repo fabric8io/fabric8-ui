@@ -139,11 +139,11 @@ export class AppComponent {
           }
 
           if (event['featureFlagConfig'] || featureFlagsInTree) {
-            let featureFlagConfig =
+            const featureFlagConfig =
               (event['featureFlagConfig'] as FeatureFlagConfig) || featureFlagsInTree;
             this.featureConfig = featureFlagConfig;
           }
-          let title = event['title']
+          const title = event['title']
             ? `${event['title']} - ${this.brandingService.name}`
             : this.brandingService.name;
           this.titleService.setTitle(title);

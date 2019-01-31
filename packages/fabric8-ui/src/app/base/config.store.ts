@@ -18,7 +18,7 @@ export class ConfigStore {
     if (this._cache.has(name)) {
       return this._cache.get(name);
     }
-    let res = this.http.get(`/_config/${name}.config.json`).pipe(
+    const res = this.http.get(`/_config/${name}.config.json`).pipe(
       map(
         (resp) =>
           ({

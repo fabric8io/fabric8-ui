@@ -48,7 +48,7 @@ export class ApplicationsStackReportComponent implements DoCheck, OnInit {
    * Open the stack report module from fabric8-stack-analysis-ui
    */
   showStackReport(): void {
-    let el = this.stackReport.nativeElement.querySelector('a.stack-reports-btn');
+    const el = this.stackReport.nativeElement.querySelector('a.stack-reports-btn');
     if (el !== undefined) {
       el.click();
     }

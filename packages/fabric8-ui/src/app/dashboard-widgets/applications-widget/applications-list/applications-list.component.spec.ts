@@ -24,7 +24,7 @@ describe('ApplicatonsListComponent', () => {
 
   let contexts: Contexts;
 
-  let buildConfig1 = {
+  const buildConfig1 = {
     id: 'app1',
     name: 'app1',
     gitUrl: 'https://example.com/app1.git',
@@ -79,7 +79,7 @@ describe('ApplicatonsListComponent', () => {
     ],
   };
 
-  let buildConfig2 = {
+  const buildConfig2 = {
     id: 'app2',
     name: 'app2',
     gitUrl: 'https://example.com/app2.git',
@@ -118,7 +118,7 @@ describe('ApplicatonsListComponent', () => {
     ],
   };
 
-  let buildConfig3 = {
+  const buildConfig3 = {
     id: 'app3',
     name: 'app3',
     gitUrl: 'https://example.com/app3.git',

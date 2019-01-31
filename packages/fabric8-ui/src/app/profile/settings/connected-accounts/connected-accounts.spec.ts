@@ -36,14 +36,14 @@ describe('Connected Accounts Component', () => {
     },
   };
 
-  let contextsMock: any = jasmine.createSpy('Contexts');
-  let authMock: any = jasmine.createSpyObj('AuthenticationService', ['isOpenShiftConnected']);
-  let providersMock: any = jasmine.createSpyObj('ProviderService', [
+  const contextsMock: any = jasmine.createSpy('Contexts');
+  const authMock: any = jasmine.createSpyObj('AuthenticationService', ['isOpenShiftConnected']);
+  const providersMock: any = jasmine.createSpyObj('ProviderService', [
     'getGitHubStatus',
     'getOpenShiftStatus',
   ]);
-  let userServiceMock: any = jasmine.createSpy('UserService');
-  let tenantSeriveMock: any = jasmine.createSpyObj('TenantService', ['getTenant']);
+  const userServiceMock: any = jasmine.createSpy('UserService');
+  const tenantSeriveMock: any = jasmine.createSpyObj('TenantService', ['getTenant']);
 
   describe('User has only OpenShift account connected', (): void => {
     beforeAll(

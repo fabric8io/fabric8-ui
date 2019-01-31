@@ -19,7 +19,7 @@ export class OSIOMocks {
   }
 
   public createSpace(): Space {
-    let mockUser = this.createUser();
+    const mockUser = this.createUser();
     return {
       name: 'mock-space',
       path: 'mock-path',
@@ -55,4 +55,4 @@ export class OSIOMocks {
   }
 }
 
-export let osioMocks: OSIOMocks = new OSIOMocks();
+export const osioMocks: OSIOMocks = new OSIOMocks();

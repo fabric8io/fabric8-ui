@@ -13,20 +13,22 @@ describe('CleanupComponent', () => {
   let fixture: ComponentFixture<CleanupComponent>;
   let component: DebugNode['componentInstance'];
 
-  let mockBroadcaster: jasmine.SpyObj<Broadcaster> = jasmine.createSpyObj('Broadcaster', [
+  const mockBroadcaster: jasmine.SpyObj<Broadcaster> = jasmine.createSpyObj('Broadcaster', [
     'broadcast',
   ]);
 
-  let mockContexts: any = jasmine.createSpy('Contexts');
-  let mockSpaceService: any = jasmine.createSpyObj('SpaceService', ['delete', 'getSpacesByUser']);
-  let mockTenantService: any = jasmine.createSpyObj('TenantService', [
+  const mockContexts: any = jasmine.createSpy('Contexts');
+  const mockSpaceService: any = jasmine.createSpyObj('SpaceService', ['delete', 'getSpacesByUser']);
+  const mockTenantService: any = jasmine.createSpyObj('TenantService', [
     'cleanupTenant',
     'updateTenant',
   ]);
-  let mockRouter: any = jasmine.createSpyObj('Router', ['navigate']);
-  let mockLogger: any = jasmine.createSpy('Logger');
-  let mockAuthenticationService: any = jasmine.createSpyObj('AuthenticationService', ['getToken']);
-  let mockUserService: any = jasmine.createSpy('UserService');
+  const mockRouter: any = jasmine.createSpyObj('Router', ['navigate']);
+  const mockLogger: any = jasmine.createSpy('Logger');
+  const mockAuthenticationService: any = jasmine.createSpyObj('AuthenticationService', [
+    'getToken',
+  ]);
+  const mockUserService: any = jasmine.createSpy('UserService');
   let mockSpace: any;
 
   beforeEach(() => {
@@ -165,14 +167,14 @@ describe('CleanupComponent', () => {
     it('should return true if the two usernames match', () => {
       component.contextUserName = 'foo';
       component.userName = 'foo';
-      let result: boolean = component.userNameMatches();
+      const result: boolean = component.userNameMatches();
       expect(result).toBeTruthy();
     });
 
     it('should return false if the two usernames are different', () => {
       component.contextUserName = 'foo';
       component.userName = 'bar';
-      let result: boolean = component.userNameMatches();
+      const result: boolean = component.userNameMatches();
       expect(result).toBeFalsy();
     });
   });

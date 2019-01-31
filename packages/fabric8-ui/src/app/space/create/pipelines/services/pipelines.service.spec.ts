@@ -24,7 +24,7 @@ describe('Pipelines Service', () => {
   let mockNotificationsService: jasmine.SpyObj<NotificationsService>;
   let svc: ActualPipelinesService;
 
-  let mockRuntimePipelinesService = {
+  const mockRuntimePipelinesService = {
     get current() {
       return '';
     },

@@ -15,7 +15,7 @@ import { SpaceNamespaceService } from '../../shared/runtime-console/space-namesp
 import { SpaceTemplateService } from '../../shared/space-template.service';
 import { SpacesService } from '../../shared/spaces.service';
 import { AddAppOverlayComponent } from './add-app-overlay.component';
-import {PipelinesService} from "../../shared/runtime-console/pipelines.service";
+import { PipelinesService } from '../../shared/runtime-console/pipelines.service';
 
 export class BroadcasterTestProvider {
   private _eventBus: Subject<any>;
@@ -40,18 +40,18 @@ describe('AddAppOverlayComponent', () => {
   let component: AddAppOverlayComponent;
   let fixture: ComponentFixture<AddAppOverlayComponent>;
 
-  let mockRouter: any = jasmine.createSpyObj('Router', ['navigate']);
-  let mockSpaceTemplateService: any = {
+  const mockRouter: any = jasmine.createSpyObj('Router', ['navigate']);
+  const mockSpaceTemplateService: any = {
     getSpaceTemplates: () => observableOf(mockSpaceTemplates),
   };
-  let mockSpaceService: any = jasmine.createSpyObj('SpaceService', ['create']);
-  let mockNotifications: any = jasmine.createSpyObj('Notifications', ['message']);
-  let mockUserService: any = jasmine.createSpyObj('UserService', ['getUser']);
-  let mockSpaceNamespaceService: any = jasmine.createSpy('SpaceNamespaceService');
-  let mockSpacesService: any = jasmine.createSpy('SpacesService');
-  let mockLogger: any = jasmine.createSpyObj('Logger', ['error']);
-  let mockErrorHandler: any = jasmine.createSpyObj('ErrorHandler', ['handleError']);
-  let mockDependencyCheckService: any = {
+  const mockSpaceService: any = jasmine.createSpyObj('SpaceService', ['create']);
+  const mockNotifications: any = jasmine.createSpyObj('Notifications', ['message']);
+  const mockUserService: any = jasmine.createSpyObj('UserService', ['getUser']);
+  const mockSpaceNamespaceService: any = jasmine.createSpy('SpaceNamespaceService');
+  const mockSpacesService: any = jasmine.createSpy('SpacesService');
+  const mockLogger: any = jasmine.createSpyObj('Logger', ['error']);
+  const mockErrorHandler: any = jasmine.createSpyObj('ErrorHandler', ['handleError']);
+  const mockDependencyCheckService: any = {
     getDependencyCheck(): Observable<any> {
       return observableOf({
         mavenArtifact: 'd4-345',
@@ -69,16 +69,17 @@ describe('AddAppOverlayComponent', () => {
   };
 
   const mockApplicationNames = [
-      {
-        name: 'app-apr-10-2018-4-25',
-      },
-      {
-        name: 'app-may-11-2018',
-      },
-      {
-        name: 'app-may-14-1-04',
-      },
-    ];
+    {
+      name: 'app-apr-10-2018-4-25',
+    },
+    {
+      name: 'app-may-11-2018',
+    },
+    {
+      name: 'app-may-14-1-04',
+    },
+  ];
+
   class MockPipelinesService {
     get current(): Observable<any> {
       return observableOf(mockApplicationNames);
@@ -86,19 +87,19 @@ describe('AddAppOverlayComponent', () => {
   }
   let mockContext: any;
 
-  let mockProfile: Profile = {
+  const mockProfile: Profile = {
     fullName: 'mock-fullName',
     imageURL: 'mock-imageURL',
     username: 'mock-username',
   };
 
-  let mockUser: User = {
+  const mockUser: User = {
     id: 'mock-id',
     attributes: mockProfile,
     type: 'mock-type',
   };
 
-  let mockSpace: Space = {
+  const mockSpace: Space = {
     name: 'mock-space',
     path: 'mock-path',
     teams: [{ name: 'mock-name', members: [mockUser] }],
@@ -249,7 +250,7 @@ describe('AddAppOverlayComponent', () => {
       component.validateProjectName();
       expect(component.isProjectNameAvailable).toBeFalsy();
     });
-  
+
     it('application is available', () => {
       component.showModal();
       component.projectName = 'app-may-11-2018-1';
@@ -265,54 +266,56 @@ describe('AddAppOverlayComponent', () => {
     });
 
     it('validate Project Name to be truthy', () => {
-      let valProjectName = component.isValidProjectName('app-apr-10');
+      const valProjectName = component.isValidProjectName('app-apr-10');
       expect(valProjectName).toBeTruthy();
     });
 
     it('validate Project Name with underscore to be falsy', () => {
-      let valProjectName = component.isValidProjectName('app-apr_10');
+      const valProjectName = component.isValidProjectName('app-apr_10');
       expect(valProjectName).toBeFalsy();
     });
 
     it('validate Project Name to be falsy', () => {
-      let valProjectName = component.isValidProjectName('#app-test-1');
+      const valProjectName = component.isValidProjectName('#app-test-1');
       expect(valProjectName).toBeFalsy();
     });
 
     it('validate Project Name to be falsy', () => {
-      let valProjectName = component.isValidProjectName('appTest-1');
+      const valProjectName = component.isValidProjectName('appTest-1');
       expect(valProjectName).toBeFalsy();
     });
 
     it('validate Project Name to be falsy as length is not satisfied', () => {
-      let valProjectName = component.isValidProjectName('ap');
+      const valProjectName = component.isValidProjectName('ap');
       expect(valProjectName).toBeFalsy();
     });
 
     it('validate Project Name to be falsy as length is not satisfied', () => {
-      let valProjectName = component.isValidProjectName(
+      const valProjectName = component.isValidProjectName(
         '12345678901234567890123456789012345678901',
       );
       expect(valProjectName).toBeFalsy();
     });
 
     it('validate Project Name to be truthy as length is satisfied', () => {
-      let valProjectName = component.isValidProjectName('a123456789012345678901234567890123456789');
+      const valProjectName = component.isValidProjectName(
+        'a123456789012345678901234567890123456789',
+      );
       expect(valProjectName).toBeTruthy();
     });
 
     it('should return false if the project name has continous hyphens (-)', () => {
-      let valProjectName = component.isValidProjectName('app-name--name');
+      const valProjectName = component.isValidProjectName('app-name--name');
       expect(valProjectName).toBeFalsy();
     });
 
     it('should not allow project name with spaces', () => {
-      let valProjectName = component.isValidProjectName('app-name name');
+      const valProjectName = component.isValidProjectName('app-name name');
       expect(valProjectName).toBeFalsy();
     });
 
     it('should not allow project name starting with a number', () => {
-      let valProjectName = component.isValidProjectName('1app-namename');
+      const valProjectName = component.isValidProjectName('1app-namename');
       expect(valProjectName).toBeFalsy();
     });
 

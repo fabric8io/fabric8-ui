@@ -8,7 +8,7 @@ export class Entry {
  * Creates an array of entries from the given map
  */
 export function createEntryArray(labels: Map<string, string>): Array<Entry> {
-  let entries = new Array<Entry>();
+  const entries = new Array<Entry>();
   if (labels) {
     Object.keys(labels).forEach((k) => entries.push(new Entry(k, labels[k])));
   }
@@ -18,7 +18,7 @@ export function createEntryArray(labels: Map<string, string>): Array<Entry> {
 @Pipe({ name: 'entries' })
 export class EntriesPipe implements PipeTransform {
   transform(value: any): Object[] {
-    let entries = [];
+    const entries = [];
     if (value) {
       Object.keys(value).forEach((k) => entries.push(new Entry(k, value[k])));
     }

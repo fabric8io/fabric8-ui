@@ -40,17 +40,17 @@ describe('MySpacesComponent', (): void => {
   let spaceMock2: Space;
   let spaceMock3: Space;
 
-  let mockFilter1: Filter = {
+  const mockFilter1: Filter = {
     field: { id: 'name' },
     value: 'space',
   };
 
-  let mockFilter2: Filter = {
+  const mockFilter2: Filter = {
     field: { id: 'name' },
     value: '2',
   };
 
-  let mockFilter3: Filter = {
+  const mockFilter3: Filter = {
     field: { id: 'not-name' },
     value: 'zzz',
   };
@@ -292,7 +292,7 @@ describe('MySpacesComponent', (): void => {
   describe('#matchesFilters', (): void => {
     it('should delegate to the matchesFilter method for each filter', (): void => {
       const component: MySpacesComponent = testContext.testedDirective;
-      let mockFilters: Filter[] = [mockFilter1, mockFilter2];
+      const mockFilters: Filter[] = [mockFilter1, mockFilter2];
       spyOn(component, 'matchesFilter');
       component.matchesFilters(spaceMock1, mockFilters);
       expect(component.matchesFilter).toHaveBeenCalledTimes(2);
@@ -300,14 +300,14 @@ describe('MySpacesComponent', (): void => {
 
     it('should return true if all of the filters are satisfied', () => {
       const component: MySpacesComponent = testContext.testedDirective;
-      let mockFilters: Filter[] = [mockFilter1, mockFilter3];
+      const mockFilters: Filter[] = [mockFilter1, mockFilter3];
       const result: boolean = component.matchesFilters(spaceMock2, mockFilters);
       expect(result).toBe(true);
     });
 
     it('should return false if at least one of the filters results in zero matches', (): void => {
       const component: MySpacesComponent = testContext.testedDirective;
-      let mockFilters: Filter[] = [mockFilter1, mockFilter2, mockFilter3];
+      const mockFilters: Filter[] = [mockFilter1, mockFilter2, mockFilter3];
       const result: boolean = component.matchesFilters(spaceMock1, mockFilters);
       expect(result).toBe(false);
     });
@@ -453,7 +453,7 @@ describe('MySpacesComponent', (): void => {
 
     it('should simply return 0 if currentSortField is undefined', (): void => {
       const component: MySpacesComponent = testContext.testedDirective;
-      let mockSortEvent: SortEvent = {
+      const mockSortEvent: SortEvent = {
         field: {} as SortField,
         isAscending: false,
       };

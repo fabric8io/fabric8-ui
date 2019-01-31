@@ -49,7 +49,7 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
       {
         provide: Spaces,
         useFactory: () => {
-          let mockSpaces: jasmine.SpyObj<Spaces> = createMock(Spaces);
+          const mockSpaces: jasmine.SpyObj<Spaces> = createMock(Spaces);
           mockSpaces.current = observableOf(mockSpace) as Observable<Space> & jasmine.Spy;
           return mockSpaces;
         },
@@ -57,14 +57,14 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
       {
         provide: Contexts,
         useFactory: () => {
-          let mockContexts: jasmine.SpyObj<Contexts> = createMock(Contexts);
+          const mockContexts: jasmine.SpyObj<Contexts> = createMock(Contexts);
           return mockContexts;
         },
       },
       {
         provide: UserService,
         useFactory: () => {
-          let mockUserService: jasmine.SpyObj<UserService> = createMock(UserService);
+          const mockUserService: jasmine.SpyObj<UserService> = createMock(UserService);
           mockUserService.loggedInUser = observableOf(mockUsers[0]) as ConnectableObservable<User> &
             jasmine.Spy;
           mockUserService.getUserByUserId.and.returnValue(observableOf(mockUsers[0]) as Observable<
@@ -76,21 +76,21 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
       {
         provide: Broadcaster,
         useFactory: () => {
-          let mockBroadcaster: jasmine.SpyObj<Broadcaster> = createMock(Broadcaster);
+          const mockBroadcaster: jasmine.SpyObj<Broadcaster> = createMock(Broadcaster);
           return mockBroadcaster;
         },
       },
       {
         provide: SpaceService,
         useFactory: () => {
-          let mockSpaceService: jasmine.SpyObj<SpaceService> = createMock(SpaceService);
+          const mockSpaceService: jasmine.SpyObj<SpaceService> = createMock(SpaceService);
           return mockSpaceService;
         },
       },
       {
         provide: SpaceNamespaceService,
         useFactory: () => {
-          let mockSpaceNamespaceService: jasmine.SpyObj<SpaceNamespaceService> = createMock(
+          const mockSpaceNamespaceService: jasmine.SpyObj<SpaceNamespaceService> = createMock(
             SpaceNamespaceService,
           );
           return mockSpaceNamespaceService;
@@ -99,7 +99,7 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
       {
         provide: CollaboratorService,
         useFactory: () => {
-          let mockCollaboratorService: jasmine.SpyObj<CollaboratorService> = createMock(
+          const mockCollaboratorService: jasmine.SpyObj<CollaboratorService> = createMock(
             CollaboratorService,
           );
           mockCollaboratorService.getInitialBySpaceId.and.returnValue(observableOf(
@@ -115,14 +115,14 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
 
   describe('Component', () => {
     it("should display the space's creator in the masthead", function() {
-      let el: DebugElement = testContext.fixture.debugElement.query(
+      const el: DebugElement = testContext.fixture.debugElement.query(
         By.css('.f8-space-masthead-owner'),
       );
       expect(el.nativeElement.textContent.trim()).toEqual(mockUsers[0].attributes.username);
     });
 
     it('should display the number of collaborators in the masthead', function() {
-      let el: DebugElement = testContext.fixture.debugElement.query(
+      const el: DebugElement = testContext.fixture.debugElement.query(
         By.css('.f8-space-masthead-space-info'),
       );
       expect(el.nativeElement.textContent.trim()).toContain(mockUsers.length);
@@ -131,21 +131,21 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
     it('should have a link to add collaborators if the user owns the space', function() {
       testContext.testedDirective.userOwnsSpace = true;
       testContext.fixture.detectChanges();
-      let link: DebugElement = testContext.fixture.debugElement.query(By.css('a'));
+      const link: DebugElement = testContext.fixture.debugElement.query(By.css('a'));
       expect(link).toBeDefined();
     });
 
     it('should have a link to add collaborators if the user is admin of the space', function() {
       testContext.testedDirective.userIsSpaceAdmin = true;
       testContext.fixture.detectChanges();
-      let link: DebugElement = testContext.fixture.debugElement.query(By.css('a'));
+      const link: DebugElement = testContext.fixture.debugElement.query(By.css('a'));
       expect(link).toBeDefined();
     });
 
     it("should not have a link to add collaborators if the user doesn't own the space", function() {
       testContext.testedDirective.userOwnsSpace = false;
       testContext.fixture.detectChanges();
-      let link: DebugElement = testContext.fixture.debugElement.query(By.css('a'));
+      const link: DebugElement = testContext.fixture.debugElement.query(By.css('a'));
       expect(link).toBeNull();
     });
 
@@ -176,7 +176,7 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
       testContext.testedDirective.userOwnsSpace = true;
       testContext.testedDirective.startEditingDescription();
       testContext.fixture.detectChanges();
-      let button: DebugElement = testContext.fixture.debugElement.query(
+      const button: DebugElement = testContext.fixture.debugElement.query(
         By.css('#workItemTitle_btn_save_description'),
       );
       button.nativeElement.click();
@@ -199,7 +199,7 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
       testContext.testedDirective.userOwnsSpace = true;
       testContext.testedDirective.startEditingDescription();
       testContext.fixture.detectChanges();
-      let textarea: DebugElement = testContext.fixture.debugElement.query(By.css('textarea'));
+      const textarea: DebugElement = testContext.fixture.debugElement.query(By.css('textarea'));
       textarea.triggerEventHandler('keyup.enter', {});
       expect(testContext.testedDirective.onUpdateDescription).toHaveBeenCalled();
     });

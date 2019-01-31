@@ -69,7 +69,7 @@ describe('Codebases Item Actions Component', () => {
 
   it('Create Workspace successfully', async(() => {
     // given
-    let comp = fixture.componentInstance;
+    const comp = fixture.componentInstance;
     comp.codebase = { id: '6f5b6738-170e-490e-b3bb-d10f56b587c8' };
     const workspaceLinks = {
       links: {
@@ -92,7 +92,7 @@ describe('Codebases Item Actions Component', () => {
 
   it('Create Workspace in error', async(() => {
     // given
-    let comp = fixture.componentInstance;
+    const comp = fixture.componentInstance;
     comp.codebase = { id: '6f5b6738-170e-490e-b3bb-d10f56b587c8' };
     workspacesServiceMock.createWorkspace.and.returnValue(observableThrowError('ERROR'));
     const notificationAction = { name: 'ERROR' };
@@ -108,7 +108,7 @@ describe('Codebases Item Actions Component', () => {
 
   it('Create Workspace with capacity full', async(() => {
     // given
-    let comp = fixture.componentInstance;
+    const comp = fixture.componentInstance;
     cheServiceMock.getState.and.returnValue(
       observableOf({ clusterFull: true, multiTenant: true, running: true }),
     );
@@ -124,7 +124,7 @@ describe('Codebases Item Actions Component', () => {
 
   it('Delete codebase successfully', async(() => {
     // given
-    let comp = fixture.componentInstance;
+    const comp = fixture.componentInstance;
     comp.codebase = { id: '6f5b6738-170e-490e-b3bb-d10f56b587c8' };
     comp.deleteCodebaseDialog = dialogMock;
     codebasesServiceMock.deleteCodebase.and.returnValue(observableOf(comp.codebase));
@@ -139,7 +139,7 @@ describe('Codebases Item Actions Component', () => {
 
   it('Delete codebase error', async(() => {
     // given
-    let comp = fixture.componentInstance;
+    const comp = fixture.componentInstance;
     comp.codebase = { id: '6f5b6738-170e-490e-b3bb-d10f56b587c8' };
     comp.deleteCodebaseDialog = dialogMock;
     codebasesServiceMock.deleteCodebase.and.returnValue(observableThrowError('ERROR'));

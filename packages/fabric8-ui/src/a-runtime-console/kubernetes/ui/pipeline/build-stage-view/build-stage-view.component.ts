@@ -54,7 +54,7 @@ export class BuildStageViewComponent implements OnDestroy {
     if (!build) {
       return;
     }
-    let inputAction: PendingInputAction = build.firstPendingInputAction;
+    const inputAction: PendingInputAction = build.firstPendingInputAction;
     if (isValidInputAction(inputAction) && build.jenkinsNamespace) {
       this.inputActionDialog.build = build;
       this.inputActionDialog.inputAction = inputAction;
@@ -62,7 +62,7 @@ export class BuildStageViewComponent implements OnDestroy {
       this.inputActionDialog.open();
     } else {
       // if no PendingInputAction JSON or jenkins namespace on the Build then lets just open the URL: stage.jenkinsInputURL
-      let url = stage.jenkinsInputURL;
+      const url = stage.jenkinsInputURL;
       if (url) {
         window.location.href = url;
       }

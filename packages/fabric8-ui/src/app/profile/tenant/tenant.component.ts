@@ -182,7 +182,7 @@ export class TenantComponent implements AfterViewInit, OnInit {
    * Update user profile
    */
   updateProfile(): void {
-    let profile = this.getTransientProfile();
+    const profile = this.getTransientProfile();
     let contextInformation = profile.contextInformation;
     if (!contextInformation) {
       contextInformation = {};
@@ -262,7 +262,7 @@ export class TenantComponent implements AfterViewInit, OnInit {
   }
 
   private defaultRequestParam(paramName: string, defaultValue: string): string {
-    let answer = this.getRequestParam(paramName);
+    const answer = this.getRequestParam(paramName);
     if (answer) {
       this.modifiedFromRequestParam = true;
       return answer;
@@ -277,7 +277,7 @@ export class TenantComponent implements AfterViewInit, OnInit {
    * @returns {any} The request parameter value or null
    */
   private getRequestParam(name: string): string {
-    let param = new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)').exec(
+    const param = new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)').exec(
       window.location.search,
     );
     if (param != undefined) {
@@ -292,7 +292,7 @@ export class TenantComponent implements AfterViewInit, OnInit {
    * @returns {ExtProfile} The updated transient profile
    */
   private getTransientProfile(): ExtProfile {
-    let profile = this.gettingStartedService.createTransientProfile();
+    const profile = this.gettingStartedService.createTransientProfile();
     delete profile.username;
     return profile;
   }
@@ -314,13 +314,13 @@ export class TenantComponent implements AfterViewInit, OnInit {
       user.attributes['contextInformation'] = contextInformation;
     }
 
-    let boosterCatalog = contextInformation['boosterCatalog'];
+    const boosterCatalog = contextInformation['boosterCatalog'];
     if (boosterCatalog) {
       this.boosterGitRef = boosterCatalog['gitRef'] || '';
       this.boosterGitRepo = boosterCatalog['gitRepo'] || '';
     }
 
-    let tenantConfig = contextInformation['tenantConfig'];
+    const tenantConfig = contextInformation['tenantConfig'];
     if (tenantConfig) {
       this.templatesRepoBlob = tenantConfig['templatesRepoBlob'] || '';
       this.templatesRepo = tenantConfig['templatesRepo'] || '';

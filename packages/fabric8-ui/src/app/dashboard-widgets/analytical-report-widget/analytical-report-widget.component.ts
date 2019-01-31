@@ -41,7 +41,9 @@ export class AnalyticalReportWidgetComponent implements OnInit {
   }
 
   ngOnInit() {
-    let bcs = this.pipelinesService.current.pipe(publish()) as ConnectableObservable<BuildConfig[]>;
+    const bcs = this.pipelinesService.current.pipe(publish()) as ConnectableObservable<
+      BuildConfig[]
+    >;
     this.buildConfigs = bcs;
 
     this.buildConfigs.subscribe((data) => {
@@ -66,7 +68,7 @@ export class AnalyticalReportWidgetComponent implements OnInit {
     return buildConfs.filter((item) => {
       let returnStatement: boolean = false;
       if (item && item.interestingBuilds && item.interestingBuilds.length > 0) {
-        for (let build of item.interestingBuilds) {
+        for (const build of item.interestingBuilds) {
           if (build.annotations['fabric8.io/bayesian.analysisUrl']) {
             returnStatement = true;
             break;
@@ -78,10 +80,10 @@ export class AnalyticalReportWidgetComponent implements OnInit {
   }
 
   selectedPipeline(): void {
-    let pipeline: BuildConfig = this.pipelines.find((val) => val.id === this.currentPipeline);
+    const pipeline: BuildConfig = this.pipelines.find((val) => val.id === this.currentPipeline);
     this.currentPipelineBuilds = pipeline.interestingBuilds;
     this.currentBuild = null;
-    for (let build of this.currentPipelineBuilds) {
+    for (const build of this.currentPipelineBuilds) {
       if (build.annotations['fabric8.io/bayesian.analysisUrl']) {
         this.currentBuild = build;
         break;
@@ -99,7 +101,7 @@ export class AnalyticalReportWidgetComponent implements OnInit {
   }
 
   selectedBuild(): void {
-    let build: Build = this.currentBuild;
+    const build: Build = this.currentBuild;
     this.showLoader();
     this.stackUrl = '';
     if (build) {

@@ -47,7 +47,7 @@ function getParameter(route: ActivatedRoute, router: Router, name: string) {
 }
 
 function findRouteParameter(router: Router, name: string) {
-  let params = findRouteParameters(router);
+  const params = findRouteParameters(router);
   if (params) {
     return params[name];
   }

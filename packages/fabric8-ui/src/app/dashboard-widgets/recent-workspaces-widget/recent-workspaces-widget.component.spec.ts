@@ -101,25 +101,25 @@ describe('RecentWorkspacesWidgetComponent', () => {
   });
 
   it('Should output a workspace link', () => {
-    let workspaces = fixture.debugElement.queryAll(By.css('.list-group-item-text a'));
+    const workspaces = fixture.debugElement.queryAll(By.css('.list-group-item-text a'));
     expect(workspaces.length).toBe(1);
   });
 
   it('Should open workspace', async(() => {
-    let workspaces = fixture.debugElement.queryAll(By.css('.list-group-item-text a'));
+    const workspaces = fixture.debugElement.queryAll(By.css('.list-group-item-text a'));
     workspaces[0].triggerEventHandler('click', new CustomEvent('click'));
     fixture.detectChanges();
     expect(mockWindowService.open).toHaveBeenCalled();
   }));
 
   it('Should not show loading by default', async(() => {
-    let loading = fixture.debugElement.query(By.css('.f8-loading'));
+    const loading = fixture.debugElement.query(By.css('.f8-loading'));
     expect(loading).toBeNull();
   }));
 
   it('Should not show loading if an error occurs with WorkspacesService', async(() => {
     mockWorkspacesService.getWorkspaces.and.returnValue(observableThrowError('workspaces error'));
-    let loading = fixture.debugElement.query(By.css('.f8-loading'));
+    const loading = fixture.debugElement.query(By.css('.f8-loading'));
     expect(loading).toBeNull();
   }));
 });

@@ -20,8 +20,8 @@ describe('Runtime Console Pipelines Service', () => {
         {
           provide: Contexts,
           useFactory: (): jasmine.SpyObj<Contexts> => {
-            let mock: jasmine.SpyObj<Contexts> = jasmine.createSpyObj('Contexts', ['current']);
-            let mockContext = {
+            const mock: jasmine.SpyObj<Contexts> = jasmine.createSpyObj('Contexts', ['current']);
+            const mockContext = {
               path: '/user/spOne',
             } as Context;
             mock.current.and.returnValue(mockContext);
@@ -31,10 +31,11 @@ describe('Runtime Console Pipelines Service', () => {
         {
           provide: BuildConfigStore,
           useFactory: (): jasmine.SpyObj<BuildConfigStore> => {
-            let mock: jasmine.SpyObj<BuildConfigStore> = jasmine.createSpyObj('BuildConfigStore', [
-              'loadAll',
-            ]);
-            let items = [
+            const mock: jasmine.SpyObj<BuildConfigStore> = jasmine.createSpyObj(
+              'BuildConfigStore',
+              ['loadAll'],
+            );
+            const items = [
               // The BuildConfig system contains a bug breaking type assertions
               // so there are no types in these mock items.
               {
@@ -86,8 +87,10 @@ describe('Runtime Console Pipelines Service', () => {
         {
           provide: BuildStore,
           useFactory: (): jasmine.SpyObj<BuildStore> => {
-            let mock: jasmine.SpyObj<BuildStore> = jasmine.createSpyObj('BuildStore', ['loadAll']);
-            let items: Builds = [
+            const mock: jasmine.SpyObj<BuildStore> = jasmine.createSpyObj('BuildStore', [
+              'loadAll',
+            ]);
+            const items: Builds = [
               {
                 name: 'bOne',
                 buildConfigName: 'bcOne',
@@ -105,7 +108,7 @@ describe('Runtime Console Pipelines Service', () => {
         {
           provide: Fabric8RuntimeConsoleService,
           useFactory: (): jasmine.SpyObj<Fabric8RuntimeConsoleService> => {
-            let mock: jasmine.SpyObj<Fabric8RuntimeConsoleService> = jasmine.createSpyObj(
+            const mock: jasmine.SpyObj<Fabric8RuntimeConsoleService> = jasmine.createSpyObj(
               'Fabric8RuntimeConsoleService',
               ['loading'],
             );

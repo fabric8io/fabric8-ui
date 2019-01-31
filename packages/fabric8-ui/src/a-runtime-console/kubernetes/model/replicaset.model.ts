@@ -16,15 +16,15 @@ export function combineReplicaSets(
   replicasets: ReplicaSets,
   replicationControllers: ReplicationControllers,
 ): ReplicaSets {
-  let map = {};
+  const map = {};
   if (replicationControllers) {
     replicationControllers.forEach((s) => (map[s.name] = s));
   }
   if (replicasets) {
     replicasets.forEach((s) => (map[s.name] = s));
   }
-  let answer = new ReplicaSets();
-  for (let key in map) {
+  const answer = new ReplicaSets();
+  for (const key in map) {
     answer.push(map[key]);
   }
 

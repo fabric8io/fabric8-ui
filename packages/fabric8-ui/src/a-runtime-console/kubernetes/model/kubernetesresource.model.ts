@@ -66,8 +66,8 @@ export class KubernetesResource implements BaseEntity {
   }
 
   updateValuesFromResource() {
-    let resource = this.resource || {};
-    let metadata = resource.metadata || {};
+    const resource = this.resource || {};
+    const metadata = resource.metadata || {};
     this.name = metadata.name || '';
     this.namespace = metadata.namespace || '';
     this.id = this.name;
@@ -77,10 +77,10 @@ export class KubernetesResource implements BaseEntity {
     this.version = this.labels['version'] || '';
 
     // for Replicas we need to also look in the spec.template.metadata.annotations
-    let spec = resource.spec || {};
-    let template = spec.template || {};
-    let templateMetadata = template.metadata || {};
-    let templateAnnotations = templateMetadata.annotations || new Map<string, string>();
+    const spec = resource.spec || {};
+    const template = spec.template || {};
+    const templateMetadata = template.metadata || {};
+    const templateAnnotations = templateMetadata.annotations || new Map<string, string>();
 
     this.icon =
       this.annotations['fabric8.io/iconUrl'] ||

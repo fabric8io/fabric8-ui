@@ -38,7 +38,7 @@ describe('TenantService', () => {
 
   describe('#getTenant', () => {
     it('should make a HTTP GET request', (done: DoneFn) => {
-      let mockResponse = 'mock-response';
+      const mockResponse = 'mock-response';
 
       service.getTenant().subscribe(
         (resp: any) => {
@@ -76,7 +76,7 @@ describe('TenantService', () => {
 
   describe('#updateTenant', () => {
     it('should make a HTTP PATCH request', (done: DoneFn) => {
-      let mockResponse = 'mock-response';
+      const mockResponse = 'mock-response';
 
       service.updateTenant().subscribe(
         (resp: HttpResponse<any>) => {

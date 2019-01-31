@@ -6,22 +6,22 @@ import { KUBERNETES_RESTANGULAR } from '../service/kubernetes.restangular';
 /**
  * Lets keep around the singleton results to avoid doing too many requests for this static data
  */
-let _latestAPIs: APIs = null;
+const _latestAPIs: APIs = null;
 
-let _currentAPIs: BehaviorSubject<APIs> = new BehaviorSubject(_latestAPIs);
-let _loadingAPIs: BehaviorSubject<boolean> = new BehaviorSubject(true);
+const _currentAPIs: BehaviorSubject<APIs> = new BehaviorSubject(_latestAPIs);
+const _loadingAPIs: BehaviorSubject<boolean> = new BehaviorSubject(true);
 
 // TODO lets default to OpenShift as a hack ;)
-let _defaultIsOpenShift = true;
+const _defaultIsOpenShift = true;
 
 export class APIs {
   constructor(public isOpenShift: boolean) {}
 }
 
 export function isOpenShift(): boolean {
-  let config = window['Fabric8UIEnv'];
+  const config = window['Fabric8UIEnv'];
   if (config) {
-    let flag = config['kubernetesMode'];
+    const flag = config['kubernetesMode'];
     if (flag === 'true') {
       return false;
     }
@@ -55,7 +55,7 @@ export class APIsStore {
    * @return {boolean} true if this cluster is using openshift
    */
   isOpenShift(): boolean {
-    let apis = _latestAPIs;
+    const apis = _latestAPIs;
     if (!apis) {
       console.log('WARNING: invoked the isOpenShift() method before the APIsStore has loaded!');
       return true;

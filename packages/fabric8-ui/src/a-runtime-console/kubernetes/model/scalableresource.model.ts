@@ -39,7 +39,7 @@ export class ScalableResource extends KubernetesSpecResource {
     this.unavailableReplicas = 0;
     this.updatedReplicas = 0;
     this.statusReplicas = 0;
-    let status = this.status;
+    const status = this.status;
     if (status) {
       this.availableReplicas = status.availableReplicas || 0;
       this.unavailableReplicas = status.unavailableReplicas || 0;

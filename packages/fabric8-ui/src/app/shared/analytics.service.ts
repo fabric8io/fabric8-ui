@@ -39,7 +39,7 @@ export class AnalyticService {
 
   public initialize(apiWriteKey: string) {
     // THIS CODE IS DIRECTLY PASTED FROM SEGMENT
-    let analytics = (window.analytics = window.analytics || []);
+    const analytics = (window.analytics = window.analytics || []);
     if (!analytics.initialize) {
       if (analytics.invoked) {
         window.console && console.error && console.error('Segment snippet included twice.');
@@ -65,18 +65,18 @@ export class AnalyticService {
         ];
         analytics.factory = function(t) {
           return function() {
-            let e = Array.prototype.slice.call(arguments);
+            const e = Array.prototype.slice.call(arguments);
             e.unshift(t);
             analytics.push(e);
             return analytics;
           };
         };
         for (let t = 0; t < analytics.methods.length; t++) {
-          let e = analytics.methods[t];
+          const e = analytics.methods[t];
           analytics[e] = analytics.factory(e);
         }
         analytics.load = function(t) {
-          let e = document.createElement('script');
+          const e = document.createElement('script');
           e.type = 'text/javascript';
           e.async = !0;
           e.src =
@@ -84,7 +84,7 @@ export class AnalyticService {
             'cdn.segment.com/analytics.js/v1/' +
             t +
             '/analytics.min.js';
-          let n = document.getElementsByTagName('script');
+          const n = document.getElementsByTagName('script');
           if (n && n instanceof Array && n[0] && n[0].parentNode) {
             n[0].parentNode.insertBefore(e, n[0]);
           }
@@ -178,7 +178,7 @@ export class AnalyticService {
   }
 
   private identifyUser(user: any): any {
-    let traits = {
+    const traits = {
       avatar: user.attributes.imageURL,
       email: user.attributes.email,
       username: user.attributes.username,

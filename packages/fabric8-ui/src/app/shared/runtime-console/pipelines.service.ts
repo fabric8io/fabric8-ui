@@ -56,12 +56,12 @@ function combineBuildConfigAndBuildsAndFilterOnSpace(
   builds: Builds,
   context: Context,
 ): BuildConfigs {
-  let pipelines = combineBuildConfigAndBuilds(buildConfigs, builds);
+  const pipelines = combineBuildConfigAndBuilds(buildConfigs, builds);
   let spaceId = '';
   if (context) {
     // Hack to acquire spaceId from browser path
     // If paths change, this could break
-    let paths = context.path.split('/');
+    const paths = context.path.split('/');
     if (paths[paths.length - 1]) {
       spaceId = paths[paths.length - 1];
     }
@@ -69,9 +69,9 @@ function combineBuildConfigAndBuildsAndFilterOnSpace(
   if (!spaceId) {
     return pipelines;
   }
-  let answer = new BuildConfigs();
+  const answer = new BuildConfigs();
   pipelines.forEach((bc) => {
-    let bcSpace = bc.labels['space'];
+    const bcSpace = bc.labels['space'];
     if (bcSpace === spaceId) {
       answer.push(bc);
     }
@@ -80,8 +80,8 @@ function combineBuildConfigAndBuildsAndFilterOnSpace(
 }
 
 function filterByMostRecent(buildConfigs: BuildConfigs, builds: Builds): BuildConfigs {
-  let pipelines = combineBuildConfigAndBuilds(buildConfigs, builds);
-  let sortedPipelines = orderBy(
+  const pipelines = combineBuildConfigAndBuilds(buildConfigs, builds);
+  const sortedPipelines = orderBy(
     pipelines,
     (pipeline) => {
       if (pipeline && pipeline.lastBuild) {
@@ -92,7 +92,7 @@ function filterByMostRecent(buildConfigs: BuildConfigs, builds: Builds): BuildCo
     ['desc'],
   );
 
-  let answer = new BuildConfigs();
+  const answer = new BuildConfigs();
   sortedPipelines.forEach((bc) => {
     if (bc.labels['space']) {
       answer.push(bc);

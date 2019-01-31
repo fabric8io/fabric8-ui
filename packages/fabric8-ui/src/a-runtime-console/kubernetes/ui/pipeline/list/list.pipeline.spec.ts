@@ -9,7 +9,7 @@ import { PipelinesListComponent } from './list.pipeline.component';
 describe('PipelinesListComponent', () => {
   let component: PipelinesListComponent;
   let fixture: ComponentFixture<PipelinesListComponent>;
-  let mockBuildConfigService: any = jasmine.createSpy('BuildConfigService');
+  const mockBuildConfigService: any = jasmine.createSpy('BuildConfigService');
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({

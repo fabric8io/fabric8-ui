@@ -31,7 +31,7 @@ describe('ApplicationsListItemComponent', () => {
 
   let contexts: Contexts;
 
-  let buildConfig = {
+  const buildConfig = {
     id: 'app1',
     name: 'app1',
     gitUrl: 'https://example.com/app1.git',
@@ -86,14 +86,16 @@ describe('ApplicationsListItemComponent', () => {
     ],
   };
 
-  let mockRouterEvent: any = {
+  const mockRouterEvent: any = {
     id: 1,
     url: 'mock-url',
   };
 
-  let mockActivatedRoute: any = jasmine.createSpy('ActivatedRoute');
-  let mockLocationStrategy: any = jasmine.createSpyObj('LocationStrategy', ['prepareExternalUrl']);
-  let mockRouter = jasmine.createSpyObj('Router', ['createUrlTree', 'navigate', 'serializeUrl']);
+  const mockActivatedRoute: any = jasmine.createSpy('ActivatedRoute');
+  const mockLocationStrategy: any = jasmine.createSpyObj('LocationStrategy', [
+    'prepareExternalUrl',
+  ]);
+  const mockRouter = jasmine.createSpyObj('Router', ['createUrlTree', 'navigate', 'serializeUrl']);
 
   beforeEach(() => {
     contexts = {
@@ -158,7 +160,7 @@ describe('ApplicationsListItemComponent', () => {
     });
 
     it('Should call proceed', function() {
-      let mockInputActionDialog: any = jasmine.createSpyObj('InputActionDialog', ['proceed']);
+      const mockInputActionDialog: any = jasmine.createSpyObj('InputActionDialog', ['proceed']);
 
       testContext.testedDirective.inputActionDialog = mockInputActionDialog;
       testContext.testedDirective.promoteBuild();

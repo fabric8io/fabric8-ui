@@ -93,7 +93,7 @@ export class CleanupComponent implements OnInit, OnDestroy {
     this.tenantError = '';
     this.cleanupStatus = 'running';
     this.showNotification = false;
-    let observableArray: Observable<any>[] = [];
+    const observableArray: Observable<any>[] = [];
     let tenantCleanError: boolean = false;
     let spaceDeleteError: boolean = false;
 
@@ -104,7 +104,7 @@ export class CleanupComponent implements OnInit, OnDestroy {
       if (!space['erased']) {
         space['progress'] = 'Erasing space';
         space['statusIcon'] = 'spinner spinner-lg';
-        let spaceObservable = this.spaceService.delete(space, true).pipe(
+        const spaceObservable = this.spaceService.delete(space, true).pipe(
           map(() => {
             space['erased'] = true;
             space['progress'] = 'Space successfully erased';
@@ -124,7 +124,7 @@ export class CleanupComponent implements OnInit, OnDestroy {
     });
 
     this.tenantResult = 'Cleaning up tenant';
-    let tenantServiceCleanup = this.tenantService.cleanupTenant().pipe(
+    const tenantServiceCleanup = this.tenantService.cleanupTenant().pipe(
       catchError((error) => {
         tenantCleanError = true;
         this.tenantResult = 'Tenant cleanup failed';

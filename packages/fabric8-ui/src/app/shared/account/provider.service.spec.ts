@@ -43,7 +43,7 @@ describe('Service: Provider Service', () => {
   });
 
   it('should get legacy linking url', () => {
-    let val = service.getLegacyLinkingUrl('openshift-v3', 'testredirect');
+    const val = service.getLegacyLinkingUrl('openshift-v3', 'testredirect');
     expect(val).toEqual(
       'http://example.com/api/link/session?clientSession=TESTSESSION&sessionState=TESTSESSIONSTATE&redirect=testredirect&provider=openshift-v3',
     );

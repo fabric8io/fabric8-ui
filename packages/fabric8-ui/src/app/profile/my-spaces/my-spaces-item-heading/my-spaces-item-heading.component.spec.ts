@@ -19,10 +19,10 @@ describe('My Spaces Item Heading Component', () => {
   });
 
   it('Init component succesfully', async(() => {
-    let comp = fixture.componentInstance;
-    let debug = fixture.debugElement;
+    const comp = fixture.componentInstance;
+    const debug = fixture.debugElement;
     fixture.detectChanges();
-    let element = debug.queryAll(By.css('.list-pf-title'));
+    const element = debug.queryAll(By.css('.list-pf-title'));
     fixture.whenStable().then(() => {
       expect(element.length).toEqual(1);
     });

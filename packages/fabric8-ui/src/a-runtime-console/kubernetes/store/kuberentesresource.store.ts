@@ -8,8 +8,8 @@ import { messageEventToResourceOperation, Operation } from '../service/resource-
 import { Watcher } from '../service/watcher';
 
 function nameOfResource(resource: any): string {
-  let obj = resource || {};
-  let metadata = obj.metadata || {};
+  const obj = resource || {};
+  const metadata = obj.metadata || {};
   return metadata.name || '';
 }
 
@@ -34,7 +34,7 @@ export abstract class KubernetesResourceStore<
    */
   instantiate(resource: any): T {
     if (resource) {
-      let item = new this.type();
+      const item = new this.type();
       item.setResource(resource);
       // lets add the Restangular crack
       return this.service.restangularize(item);
@@ -62,19 +62,19 @@ export abstract class KubernetesResourceStore<
   protected doLoadAll() {
     this._loadId = null;
     this._loading.next(true);
-    let listObserver = this.service.list(this.listQueryParams());
+    const listObserver = this.service.list(this.listQueryParams());
     if (this.watcher) {
       // TODO should we recreate as the URL can have changed?
       this.watcher.recreateIfChanged();
     } else {
       this.watcher = this.service.watch();
     }
-    let dataStream = this.watcher.dataStream;
+    const dataStream = this.watcher.dataStream;
 
     let latestList = this.initialList;
     let latestMsg = null;
 
-    let subject = new BehaviorSubject(latestList);
+    const subject = new BehaviorSubject(latestList);
 
     // lets not use Observable.combineLatest() so that we have more control over error handling
     // as we wanna just ignore websocket errors really
@@ -129,11 +129,11 @@ export abstract class KubernetesResourceStore<
    * Lets combine the web socket events with the latest list
    */
   protected combineListAndWatchEvent(array: L, msg: any): L {
-    let resourceOperation = messageEventToResourceOperation(msg);
+    const resourceOperation = messageEventToResourceOperation(msg);
     if (resourceOperation) {
       // lets process the added /updated / removed
-      let operation = resourceOperation.operation;
-      let resource = resourceOperation.resource;
+      const operation = resourceOperation.operation;
+      const resource = resourceOperation.resource;
       switch (operation) {
         case Operation.ADDED:
           return this.upsertItem(array, resource);
@@ -182,10 +182,10 @@ export abstract class KubernetesResourceStore<
   }
 
   protected upsertItem(array: L, resource: any): L {
-    let n = nameOfResource(resource);
+    const n = nameOfResource(resource);
     if (array && n) {
-      for (let item of array) {
-        let name = item.name;
+      for (const item of array) {
+        const name = item.name;
         if (name && name === n) {
           if (isNewerResource(resource, item.resource)) {
             item.setResource(resource);
@@ -208,11 +208,11 @@ export abstract class KubernetesResourceStore<
   }
 
   protected deleteItemFromArray(array: L, resource: any): L {
-    let n = nameOfResource(resource);
+    const n = nameOfResource(resource);
     if (array && n) {
       for (let i = 0; i < array.length; i++) {
-        let item = array[i];
-        let name = item.name;
+        const item = array[i];
+        const name = item.name;
         if (name && name === n) {
           array.splice(i, 1);
           return array;

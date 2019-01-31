@@ -75,7 +75,7 @@ export class WorkItemsComponent implements OnDestroy, OnInit {
   }
 
   private attemptSelectSpace(spaceToSelect: Space) {
-    let space: Space = this.spaces.find((s: Space) => s.id == spaceToSelect.id);
+    const space: Space = this.spaces.find((s: Space) => s.id == spaceToSelect.id);
     if (space !== undefined) {
       this.currentSpace = space;
       this.currentSpaceId = this.currentSpace.id;

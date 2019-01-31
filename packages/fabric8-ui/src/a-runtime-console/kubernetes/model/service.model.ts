@@ -18,10 +18,10 @@ export class Service extends KubernetesSpecResource {
   set route(value: Route) {
     this._route = value;
     if (value) {
-      let spec = value.spec || {};
-      let host = spec.host;
+      const spec = value.spec || {};
+      const host = spec.host;
       if (host) {
-        let protcol = spec.tls ? 'https://' : 'http://';
+        const protcol = spec.tls ? 'https://' : 'http://';
         this.exposeUrl = protcol + host;
       }
     }
@@ -35,13 +35,13 @@ export class Service extends KubernetesSpecResource {
 export class Services extends Array<Service> {}
 
 export function enrichServiceWithRoute(services: Services, routes: Routes): Services {
-  let map = {};
+  const map = {};
   if (routes) {
     routes.forEach((s) => (map[s.name] = s));
   }
   if (services) {
     services.forEach((s) => {
-      let route = map[s.name];
+      const route = map[s.name];
       if (route) {
         s.route = route;
       }

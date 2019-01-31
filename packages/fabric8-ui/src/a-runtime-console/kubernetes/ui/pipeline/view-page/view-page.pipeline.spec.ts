@@ -11,7 +11,7 @@ describe('PipelineViewPage', () => {
   let fixture: ComponentFixture<PipelineViewPage>;
 
   beforeEach(async(() => {
-    let mockBuildConfigStore: any = jasmine.createSpy('BuildConfigService');
+    const mockBuildConfigStore: any = jasmine.createSpy('BuildConfigService');
     mockBuildConfigStore.load = () => {};
     TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([]), MomentModule],

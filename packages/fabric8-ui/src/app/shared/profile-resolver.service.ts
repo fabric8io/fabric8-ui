@@ -20,7 +20,7 @@ export class ProfileResolver implements Resolve<Context> {
     return this.userService.loggedInUser
       .pipe(
         switchMap((userName) => {
-          let url = state.url.replace(/_profile/, userName.attributes.username);
+          const url = state.url.replace(/_profile/, userName.attributes.username);
           return this.contextService
             .changeContext(
               of({

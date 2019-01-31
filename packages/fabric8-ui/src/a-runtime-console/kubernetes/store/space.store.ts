@@ -39,16 +39,16 @@ class SpaceConfigWatcher {
   }
 
   protected onMessageEvent(msg) {
-    let resourceOperation = messageEventToResourceOperation(msg);
+    const resourceOperation = messageEventToResourceOperation(msg);
     if (resourceOperation) {
       if (resourceOperation.operation == Operation.DELETED) {
         this.spaceConfig['action'] === 'delete';
         this.notify(this.spaceConfig);
       } else {
-        let resource = resourceOperation.resource;
-        let configMap = this.configMapStore.instantiate(resource);
+        const resource = resourceOperation.resource;
+        const configMap = this.configMapStore.instantiate(resource);
         if (configMap) {
-          let old = this.spaceConfig;
+          const old = this.spaceConfig;
           let environmentsConfigMap: ConfigMap = old ? old.environmentsConfigMap : null;
           let spacesConfigMap: ConfigMap = old ? old.spacesConfigMap : null;
 
@@ -99,7 +99,7 @@ export class SpaceStore {
     configMapStore: ConfigMapStore,
     private onLogin: OnLogin,
   ) {
-    let namespacesList = this.namespaceStore.list;
+    const namespacesList = this.namespaceStore.list;
 
     this.spaceConfigWatchers = new Map<String, SpaceConfigWatcher>();
     this.spaceConfigs = new Map<String, SpaceConfig>();
@@ -111,7 +111,7 @@ export class SpaceStore {
 
     this.resource = this.list.pipe(
       combineLatest(this._idSubject.asObservable(), (spaces, id) => {
-        for (let space of spaces) {
+        for (const space of spaces) {
           if (space.name === id) {
             return space;
           }
@@ -123,17 +123,17 @@ export class SpaceStore {
     // lets make sure we've always got an up to date map of configmaps
     namespacesList.subscribe((namespaces) => {
       if (namespaces) {
-        for (let namespace of namespaces) {
+        for (const namespace of namespaces) {
           if (isSecretsNamespace(namespace) || isSystemNamespace(namespace)) {
             // we don't need to watch these!
             continue;
           }
-          let name = namespace.name;
+          const name = namespace.name;
           if (name) {
             let springConfigWatcher = this.spaceConfigWatchers[name];
             if (!springConfigWatcher) {
               //console.log("watching configmaps in namespace " + name);
-              let watcher = configMapService.watchNamepace(name, {
+              const watcher = configMapService.watchNamepace(name, {
                 labelSelector: 'provider=fabric8',
               });
               springConfigWatcher = new SpaceConfigWatcher(configMapStore, watcher, (spaceConfig) =>
@@ -150,14 +150,14 @@ export class SpaceStore {
                   if (cms && cms.length) {
                     let environmentsConfigMap: ConfigMap = null;
                     let spacesConfigMap: ConfigMap = null;
-                    for (let c of cms) {
+                    for (const c of cms) {
                       if (c.name === fabric8EnvironmentsName) {
                         environmentsConfigMap = c;
                       } else if (c.name === fabric8SpacesName) {
                         spacesConfigMap = c;
                       }
                     }
-                    let namespace =
+                    const namespace =
                       (environmentsConfigMap ? environmentsConfigMap.namespace : null) ||
                       (spacesConfigMap ? spacesConfigMap.namespace : null);
                     if (namespace) {
@@ -180,13 +180,13 @@ export class SpaceStore {
     namespaces: Namespaces,
     spaceConfigs: Map<String, SpaceConfig>,
   ): Spaces {
-    let spaces = [];
+    const spaces = [];
     if (namespaces) {
-      for (let namespace of namespaces) {
-        let name = namespace.name;
+      for (const namespace of namespaces) {
+        const name = namespace.name;
         if (name) {
-          let spaceConfig = spaceConfigs.get(name);
-          let space = new Space(namespace, namespaces, spaceConfig);
+          const spaceConfig = spaceConfigs.get(name);
+          const space = new Space(namespace, namespaces, spaceConfig);
           spaces.push(space);
         }
       }
@@ -195,7 +195,7 @@ export class SpaceStore {
   }
 
   protected spaceConfigUpdated(spaceConfig: SpaceConfig) {
-    let name = spaceConfig.namespace;
+    const name = spaceConfig.namespace;
     if (spaceConfig['action'] === 'delete') {
       this.spaceConfigs.delete(name);
     } else {

@@ -9,14 +9,14 @@ import { SpacesComponent } from './overview-spaces.component';
 describe('SpacesComponent', () => {
   let fixture: ComponentFixture<SpacesComponent>;
   let component: DebugNode['componentInstance'];
-  let mockContexts: any = jasmine.createSpy('Contexts');
-  let mockLogger: any = jasmine.createSpyObj('Logger', ['error']);
-  let mockSpaceService: any = jasmine.createSpyObj('SpaceService', [
+  const mockContexts: any = jasmine.createSpy('Contexts');
+  const mockLogger: any = jasmine.createSpyObj('Logger', ['error']);
+  const mockSpaceService: any = jasmine.createSpyObj('SpaceService', [
     'getSpacesByUser',
     'getMoreSpacesByUser',
   ]);
-  let mockBroadcaster: any = jasmine.createSpyObj('Broadcaster', ['broadcast', 'on']);
-  let mockErrorHandler: jasmine.SpyObj<ErrorHandler> = createMock(ErrorHandler);
+  const mockBroadcaster: any = jasmine.createSpyObj('Broadcaster', ['broadcast', 'on']);
+  const mockErrorHandler: jasmine.SpyObj<ErrorHandler> = createMock(ErrorHandler);
   let mockContext: any;
 
   beforeEach(() => {

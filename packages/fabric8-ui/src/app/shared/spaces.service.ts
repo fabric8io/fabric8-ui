@@ -116,7 +116,7 @@ export class SpacesService extends RecentUtils<Space> implements Spaces {
 
   private saveRecentSpaces(recentSpaces: Space[]): void {
     this._recent.next(recentSpaces);
-    let patch: ExtProfile = {
+    const patch: ExtProfile = {
       store: {
         recentSpaces: (recentSpaces as Space[]).map((val: Space): string => val.id),
       },

@@ -92,7 +92,7 @@ export class AddSpaceOverlayComponent implements OnInit {
     }
 
     this.canSubmit = false;
-    let space = this.createTransientSpace();
+    const space = this.createTransientSpace();
     space.attributes.name = this.spaceName;
     space.attributes.description = this.spaceDescription;
     space.relationships['owned-by'].data.id = this.userService.currentLoggedInUser.id;
@@ -159,7 +159,7 @@ export class AddSpaceOverlayComponent implements OnInit {
   }
 
   private createTransientSpace(): Space {
-    let space = {} as Space;
+    const space = {} as Space;
     space.name = '';
     space.path = '';
     space.attributes = new SpaceAttributes();

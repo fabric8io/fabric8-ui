@@ -47,7 +47,7 @@ export class Watcher<L> {
       this.poller.recreate();
       return;
     }
-    let serviceUrl = this.pathFn();
+    const serviceUrl = this.pathFn();
     if (serviceUrl !== this.serviceUrl) {
       this.recreate();
     }
@@ -71,7 +71,7 @@ export class Watcher<L> {
 
   close() {
     if (this.poller) {
-      let poller = this.poller;
+      const poller = this.poller;
       this.poller = null;
       poller.close();
     }
@@ -82,7 +82,7 @@ export class Watcher<L> {
   }
 
   protected closeWebSocket() {
-    let ws = this.ws;
+    const ws = this.ws;
     if (ws) {
       this.ws = null;
       ws.close();
@@ -93,10 +93,10 @@ export class Watcher<L> {
    * Returns the query string appended to the websocket URL
    */
   protected get query(): String {
-    let queryParams = this.queryParams;
-    let params = {};
+    const queryParams = this.queryParams;
+    const params = {};
     if (queryParams) {
-      for (let k in queryParams) {
+      for (const k in queryParams) {
         params[k] = queryParams[k];
       }
     }
@@ -104,8 +104,8 @@ export class Watcher<L> {
     params['access_token'] = this.onLogin.token;
 
     let query = '';
-    for (let k in params) {
-      let sep = query ? '&' : '';
+    for (const k in params) {
+      const sep = query ? '&' : '';
       query += sep + k + '=' + encodeURIComponent(params[k]);
     }
     return query ? '?' + query : '';
@@ -117,7 +117,7 @@ export class Watcher<L> {
     }
     if (!this.ws) {
       const authConfig = currentOAuthConfig();
-      let wsApiServer = authConfig.wsApiServer;
+      const wsApiServer = authConfig.wsApiServer;
       let baseUrl = '';
       let webSocketProtocol = authConfig.wsApiServerProtocol;
       if (!webSocketProtocol) {
@@ -134,10 +134,10 @@ export class Watcher<L> {
       if (wsApiServer) {
         baseUrl = webSocketProtocol + wsApiServer;
       } else {
-        let location = window.location;
+        const location = window.location;
         if (location) {
-          let hostname = location.hostname;
-          let port = location.port;
+          const hostname = location.hostname;
+          const port = location.port;
           if (hostname) {
             baseUrl = webSocketProtocol + hostname;
             if (port) {
@@ -146,15 +146,15 @@ export class Watcher<L> {
           }
         }
       }
-      let wsApiServerBasePath = authConfig.wsApiServerBasePath;
+      const wsApiServerBasePath = authConfig.wsApiServerBasePath;
       if (wsApiServerBasePath && baseUrl) {
         baseUrl = pathJoin(baseUrl, wsApiServerBasePath);
       }
       if (baseUrl) {
-        let serviceUrl = this.pathFn();
+        const serviceUrl = this.pathFn();
         this.serviceUrl = serviceUrl;
         if (serviceUrl) {
-          let url = baseUrl + serviceUrl + this.query;
+          const url = baseUrl + serviceUrl + this.query;
           //console.log('Websocket using URL: ' + url);
           this.ws = new $WebSocket(url);
           this.connectTime = new Date().getTime();
@@ -218,7 +218,7 @@ export class Watcher<L> {
 
 function validMessage(msg): boolean {
   if (msg != undefined) {
-    for (let key of msg) {
+    for (const key of msg) {
       return true;
     }
   }

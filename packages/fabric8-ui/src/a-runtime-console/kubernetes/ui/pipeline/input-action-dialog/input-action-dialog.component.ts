@@ -40,7 +40,7 @@ export class InputActionDialog implements OnDestroy {
   }
 
   get messageLines(): string[] {
-    let msg = this.inputAction.message || '';
+    const msg = this.inputAction.message || '';
     return msg.split('\n');
   }
 
@@ -68,8 +68,8 @@ export class InputActionDialog implements OnDestroy {
         url = url.substring(0, url.length - postfix.length) + '/input/Proceed/proceedEmpty';
       }
 
-      let jenkinsNamespace = this.build.jenkinsNamespace;
-      let forgeUrl = this.forgeApiUrl;
+      const jenkinsNamespace = this.build.jenkinsNamespace;
+      const forgeUrl = this.forgeApiUrl;
       if (!forgeUrl) {
         console.log('Warning no $FABRIC8_FORGE_API_URL environment variable!');
       } else if (!jenkinsNamespace) {
@@ -80,7 +80,7 @@ export class InputActionDialog implements OnDestroy {
           Authorization: 'Bearer ' + this.authService.getToken(),
           'X-App': 'OSIO',
         });
-        let body = null;
+        const body = null;
         this.http.post(url, body, { headers }).subscribe(() => {});
       }
     }

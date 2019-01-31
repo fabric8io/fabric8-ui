@@ -129,11 +129,11 @@ describe('My Spaces Item Actions Component', () => {
   });
 
   it('Init component succesfully', async(() => {
-    let comp = fixture.componentInstance;
-    let debug = fixture.debugElement;
+    const comp = fixture.componentInstance;
+    const debug = fixture.debugElement;
     comp.space = space;
     fixture.detectChanges();
-    let element = debug.queryAll(By.css('.list-pf-actions'));
+    const element = debug.queryAll(By.css('.list-pf-actions'));
     fixture.whenStable().then(() => {
       expect(element.length).toEqual(1);
     });

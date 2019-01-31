@@ -11,7 +11,7 @@ export class BootstrapService {
   ) {}
 
   public bootstrap(): Promise<any> {
-    let oauthLoading = this.oauthConfig.loading.pipe(first((val) => val === false)).toPromise();
+    const oauthLoading = this.oauthConfig.loading.pipe(first((val) => val === false)).toPromise();
     return oauthLoading;
   }
 }

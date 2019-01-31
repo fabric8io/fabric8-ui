@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-let formatConsole: boolean = true;
+const formatConsole: boolean = true;
 
 export interface ILogEntry {
   message: string;
@@ -43,8 +43,8 @@ export class LoggerFactory {
   };
 
   constructor() {
-    let fmt = formatConsole === true ? '%c' : '';
-    let msg = `${fmt}${this.constructor.name} ${fmt}New instance ...`;
+    const fmt = formatConsole === true ? '%c' : '';
+    const msg = `${fmt}${this.constructor.name} ${fmt}New instance ...`;
     if (fmt.length > 0) {
       console.log(msg, this.styles.origin, this.styles.message);
     } else {
@@ -53,7 +53,7 @@ export class LoggerFactory {
   }
 
   createLoggerDelegate(origin: string, instance: number = 0): ILoggerDelegate {
-    let me = this;
+    const me = this;
 
     function addLogEntry(entry: ILogEntry, ...args) {
       let method = 'log';
@@ -66,10 +66,10 @@ export class LoggerFactory {
       if (entry.info === true) {
         method = 'info';
       }
-      let fmt = formatConsole === true ? '%c' : '';
-      let msg = `${fmt}${origin}${fmt} ${instance} ${fmt}${entry.message || ''}`;
-      let functionArgs = args.filter((a) => typeof a === 'function');
-      let otherArgs = args.filter((a) => typeof a !== 'function');
+      const fmt = formatConsole === true ? '%c' : '';
+      const msg = `${fmt}${origin}${fmt} ${instance} ${fmt}${entry.message || ''}`;
+      const functionArgs = args.filter((a) => typeof a === 'function');
+      const otherArgs = args.filter((a) => typeof a !== 'function');
       let newArgs = [msg, ...otherArgs];
       if (fmt.length > 0) {
         newArgs = [msg, me.styles.origin, me.styles.instance, me.styles.message, ...otherArgs];
@@ -82,7 +82,7 @@ export class LoggerFactory {
     }
 
     function loggerDelegate(options: string | ILogEntry, ...args) {
-      let entry = { message: '' };
+      const entry = { message: '' };
       if (typeof options === 'string') {
         entry.message = options || '';
       } else {

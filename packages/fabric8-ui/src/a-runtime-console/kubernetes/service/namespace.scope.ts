@@ -48,9 +48,9 @@ export class NamespaceScope implements INamespaceScope {
   }
 
   protected findParamsFor(route, key): any {
-    let children = route.children;
-    for (let child of children) {
-      let params = child.params;
+    const children = route.children;
+    for (const child of children) {
+      const params = child.params;
       if (params) {
         let answer = params[key];
         if (!answer) {

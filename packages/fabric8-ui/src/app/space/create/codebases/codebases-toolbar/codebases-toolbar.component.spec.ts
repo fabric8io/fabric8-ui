@@ -44,10 +44,10 @@ describe('CodebasesToolbarComponent', () => {
   });
 
   it('should update filterConfig resultsCount', function() {
-    let initialCount = 0;
+    const initialCount = 0;
     expect(testContext.testedDirective.filterConfig.resultsCount).toBe(initialCount);
 
-    let nextCount = 5;
+    const nextCount = 5;
     testContext.hostComponent.resultsCount = nextCount;
     testContext.detectChanges();
 

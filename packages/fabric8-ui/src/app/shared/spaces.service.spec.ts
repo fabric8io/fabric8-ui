@@ -118,7 +118,7 @@ describe('SpacesService', () => {
   describe('#get current', () => {
     it('should return the space from contexts.current', (done: DoneFn) => {
       const spacesService: SpacesService = TestBed.get(SpacesService);
-      let result: Observable<Space> = spacesService.current;
+      const result: Observable<Space> = spacesService.current;
       result.subscribe((r: Space) => {
         expect(r).toEqual(mockSpace);
         done();
@@ -130,7 +130,7 @@ describe('SpacesService', () => {
     it('should return the spaces from the profileService.store', (done: DoneFn) => {
       mockProfile.store.recentSpaces = [mockSpace];
       const spacesService: SpacesService = TestBed.get(SpacesService);
-      let result: Observable<Space[]> = spacesService.recent;
+      const result: Observable<Space[]> = spacesService.recent;
       result.subscribe((r: Space[]) => {
         expect(r).toEqual([mockSpace] as Space[]);
         done();
@@ -144,7 +144,7 @@ describe('SpacesService', () => {
       broadcaster.on.and.returnValue(observableNever());
       delete mockProfile.store.recentSpaces;
       const spacesService: SpacesService = TestBed.get(SpacesService);
-      let result: Observable<Space[]> = spacesService.recent;
+      const result: Observable<Space[]> = spacesService.recent;
       result.subscribe((r: Space[]) => {
         expect(r).toEqual([] as Space[]);
         done();
@@ -160,7 +160,7 @@ describe('SpacesService', () => {
       mockProfile.store.recentSpaces = [mockSpace];
 
       const spacesService: SpacesService = TestBed.get(SpacesService);
-      let result: Observable<Space[]> = spacesService.recent;
+      const result: Observable<Space[]> = spacesService.recent;
       result.subscribe((r: Space[]) => {
         expect(r).toEqual([] as Space[]);
         done();
@@ -172,7 +172,7 @@ describe('SpacesService', () => {
       broadcaster.on.and.returnValue(observableNever());
       mockProfile.store.recentSpaces = [];
       const spacesService: SpacesService = TestBed.get(SpacesService);
-      let result: Observable<Space[]> = spacesService.recent;
+      const result: Observable<Space[]> = spacesService.recent;
       result.subscribe((r: Space[]) => {
         expect(r).toEqual([] as Space[]);
         done();
@@ -204,7 +204,7 @@ describe('SpacesService', () => {
     });
 
     it('should silentSave after a spaceChanged has been broadcasted with a new space', () => {
-      let mockSpace2: Space = cloneDeep(mockSpace);
+      const mockSpace2: Space = cloneDeep(mockSpace);
       mockSpace2.id = 'mock-space-id-2';
       const profileService: any = TestBed.get(ProfileService);
       mockProfile.store.recentSpaces = [mockSpace];
@@ -222,7 +222,7 @@ describe('SpacesService', () => {
           }
         },
       );
-      let expectedPatch = {
+      const expectedPatch = {
         store: {
           recentSpaces: [mockSpace2.id, mockSpace.id],
         },
@@ -234,7 +234,7 @@ describe('SpacesService', () => {
     });
 
     it('should log an error if silentSave failed', () => {
-      let mockSpace2: Space = cloneDeep(mockSpace);
+      const mockSpace2: Space = cloneDeep(mockSpace);
       mockSpace2.id = 'mock-space-id-2';
       const profileService: jasmine.SpyObj<ProfileService> = TestBed.get(ProfileService);
       mockProfile.store.recentSpaces = [mockSpace];
@@ -253,7 +253,7 @@ describe('SpacesService', () => {
           }
         },
       );
-      let expectedPatch = {
+      const expectedPatch = {
         store: {
           recentSpaces: [mockSpace2.id, mockSpace.id],
         },
@@ -266,8 +266,8 @@ describe('SpacesService', () => {
   });
 
   describe('#initRecent - spaceChanged', () => {
-    let mockSpaces: Space[] = [];
-    let mockSpacesObs: Observable<Space>[] = [];
+    const mockSpaces: Space[] = [];
+    const mockSpacesObs: Observable<Space>[] = [];
     const mockSpace8: Space = {
       name: 'mock-space-name-8',
       path: 'mock-space-path-8' as String,
@@ -280,7 +280,7 @@ describe('SpacesService', () => {
 
     beforeEach(() => {
       for (let i: number = 0; i < 8; i++) {
-        let space = {
+        const space = {
           name: `mock-space-name-${i}`,
           path: `mock-space-path-${i}` as String,
           id: `mock-space-id-${i}`,
@@ -298,7 +298,7 @@ describe('SpacesService', () => {
       const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
       let i: number = 0;
       spaceService.getSpaceById.and.callFake(() => {
-        let spaceObs: Observable<Space> = mockSpacesObs[i];
+        const spaceObs: Observable<Space> = mockSpacesObs[i];
         i++;
         return spaceObs;
       });
@@ -331,7 +331,7 @@ describe('SpacesService', () => {
       const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
       let i: number = 0;
       spaceService.getSpaceById.and.callFake(() => {
-        let spaceObs: Observable<Space> = mockSpacesObs[i];
+        const spaceObs: Observable<Space> = mockSpacesObs[i];
         i++;
         return spaceObs;
       });
@@ -364,7 +364,7 @@ describe('SpacesService', () => {
       const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
       let i: number = 0;
       spaceService.getSpaceById.and.callFake(() => {
-        let spaceObs: Observable<Space> = mockSpacesObs[i];
+        const spaceObs: Observable<Space> = mockSpacesObs[i];
         i++;
         return spaceObs;
       });
@@ -413,7 +413,7 @@ describe('SpacesService', () => {
       );
       mockProfile.store.recentSpaces = [mockSpace];
       const spacesService: SpacesService = TestBed.get(SpacesService);
-      let result: Observable<Space[]> = spacesService.recent;
+      const result: Observable<Space[]> = spacesService.recent;
       expect(profileService.silentSave).toHaveBeenCalledTimes(1);
       result.subscribe((r: Space[]) => {
         expect(r).toEqual([] as Space[]);
@@ -448,7 +448,7 @@ describe('SpacesService', () => {
       );
       mockProfile.store.recentSpaces = [mockSpace];
       const spacesService: SpacesService = TestBed.get(SpacesService);
-      let result: Observable<Space[]> = spacesService.recent;
+      const result: Observable<Space[]> = spacesService.recent;
       expect(profileService.silentSave).toHaveBeenCalledTimes(0);
       result.subscribe((r: Space[]) => {
         expect(r).toEqual([mockSpace] as Space[]);

@@ -25,7 +25,7 @@ export class HomeDashboardComponent implements OnInit {
 
   ngOnInit() {
     this.loggedInUser = this.userService.currentLoggedInUser;
-    let userSpaceCount = this.userSpacesService
+    const userSpaceCount = this.userSpacesService
       .getInvolvedSpacesCount()
       .pipe(first())
       .subscribe(

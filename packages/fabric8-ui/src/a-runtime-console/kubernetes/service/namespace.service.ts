@@ -6,8 +6,8 @@ import { KUBERNETES_RESTANGULAR } from './kubernetes.restangular';
 import { KubernetesService } from './kubernetes.service';
 import { WatcherFactory } from './watcher-factory.service';
 
-let namespacesUrl = '/api/v1/namespaces';
-let projectsUrl = '/oapi/v1/projects';
+const namespacesUrl = '/api/v1/namespaces';
+const projectsUrl = '/oapi/v1/projects';
 
 function namespaceOrProjectsUrl() {
   if (isOpenShift()) {

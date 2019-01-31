@@ -82,7 +82,7 @@ export class WorkItemBarchartComponent extends ChartBase implements DoCheck, OnI
   }
 
   protected getChartData(): any {
-    let data: any = {};
+    const data: any = {};
 
     if (this.chartData && this.chartData.dataAvailable !== false && this.chartData.yData) {
       data.colors = this.chartData.colors;

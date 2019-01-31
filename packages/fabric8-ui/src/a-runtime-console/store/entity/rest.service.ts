@@ -30,12 +30,12 @@ export abstract class RESTService<T extends BaseEntity, L extends Array<T>> {
    * so that the REST APIs appear on it
    */
   restangularize(item: T): T {
-    let restangularService = this.restangularService;
-    let parent = restangularService.parentResource;
-    let route = restangularService.route;
-    let fromServer = restangularService.fromServer;
-    let collection = restangularService.restangularCollection;
-    let reqParams = restangularService.reqParams;
+    const restangularService = this.restangularService;
+    const parent = restangularService.parentResource;
+    const route = restangularService.route;
+    const fromServer = restangularService.fromServer;
+    const collection = restangularService.restangularCollection;
+    const reqParams = restangularService.reqParams;
     return this.restangularService.restangularizeElement(
       parent,
       item,

@@ -17,7 +17,7 @@ export abstract class KubernetesService<
    * @param queryParams
    */
   watch(queryParams: any = null) {
-    let poller = () => this.list(queryParams);
+    const poller = () => this.list(queryParams);
     return this.watcherFactory.newInstance(() => this.serviceUrl, queryParams, poller);
   }
 
@@ -26,7 +26,7 @@ export abstract class KubernetesService<
   }
 
   create(obj: T): Observable<T> {
-    let resource = obj.resource || {};
+    const resource = obj.resource || {};
     if (!resource.kind) {
       resource.kind = obj.defaultKind();
     }
@@ -36,18 +36,18 @@ export abstract class KubernetesService<
   }
 
   update(obj: T): Observable<T> {
-    let resource = obj.resource;
+    const resource = obj.resource;
     obj.updateResource(resource);
     return this.updateResource(obj, resource);
   }
 
   updateResource(obj: T, resource: any) {
-    let resty: any = obj;
+    const resty: any = obj;
     return resty.customPUT(resource);
   }
 
   delete(obj: T): any {
-    let resty: any = obj;
+    const resty: any = obj;
     return resty.customDELETE();
   }
 

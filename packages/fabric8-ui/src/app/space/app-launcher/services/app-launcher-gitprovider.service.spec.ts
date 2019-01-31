@@ -17,19 +17,19 @@ import { FABRIC8_BUILD_TOOL_DETECTOR_API_URL } from '../../../shared/runtime-con
 describe('Service: AppLauncherGitproviderService', () => {
   let service: AppLauncherGitproviderService;
   let controller: HttpTestingController;
-  let user = {
+  const user = {
     login: 'some-user',
     avatarUrl: 'avatar-url',
   };
-  let gitHubDetails = {
+  const gitHubDetails = {
     authenticated: true,
     avatar: 'avatar-url',
     login: 'some-user',
     organizations: { 'fabric8-ui': 'fabric8-ui', 'some-user': undefined },
   } as GitHubDetails;
-  let orgs = { 'fabric8-ui': 'fabric8-ui' };
-  let repos = ['fabric8-ui', 'fabric-uxd'];
-  let detectedTool = { 'build-tool-type': 'nodejs' };
+  const orgs = { 'fabric8-ui': 'fabric8-ui' };
+  const repos = ['fabric8-ui', 'fabric-uxd'];
+  const detectedTool = { 'build-tool-type': 'nodejs' };
 
   beforeEach(() => {
     const mockProviderService = jasmine.createSpy('ProviderService');

@@ -28,7 +28,7 @@ export abstract class RecentUtils<T> {
     recent: T[],
     compareFn: ((a: T, b: T) => boolean) = this.compareElements,
   ): RecentData<T> {
-    let index: number = recent.findIndex((t: T) => compareFn(t, changed));
+    const index: number = recent.findIndex((t: T) => compareFn(t, changed));
     if (index === 0) {
       // continue only if changed is new, or requires a move within recent
       return { recent, isSaveRequired: false };
@@ -53,7 +53,7 @@ export abstract class RecentUtils<T> {
     recent: T[],
     compareFn: ((a: T, b: K) => boolean) = this.compareElements,
   ): RecentData<T> {
-    let index: number = recent.findIndex((t: T) => compareFn(t, deleted));
+    const index: number = recent.findIndex((t: T) => compareFn(t, deleted));
     if (index === -1) {
       return { recent, isSaveRequired: false };
     }

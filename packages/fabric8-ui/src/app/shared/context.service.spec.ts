@@ -136,7 +136,7 @@ describe('Context Service:', () => {
     context3.space.attributes = {} as SpaceAttributes;
     context3.space.attributes.name = 'space3';
 
-    let recent: Context[] = [context1, context2];
+    const recent: Context[] = [context1, context2];
     (profile as ExtProfile).store.recentContexts = recent;
 
     const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
@@ -169,7 +169,7 @@ describe('Context Service:', () => {
 
   it('URL change to a new space (already in recent), recent space list get updated successfully', (done: DoneFn) => {
     // given
-    let recent: Context[] = [context1, context2];
+    const recent: Context[] = [context1, context2];
     (profile as ExtProfile).store.recentContexts = recent;
 
     const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
@@ -202,7 +202,7 @@ describe('Context Service:', () => {
 
   it('Space - which belong to recent list - has been deleted, recent space list get updated removing it', () => {
     // given
-    let recent: Context[] = [context1, context2];
+    const recent: Context[] = [context1, context2];
     (profile as ExtProfile).store.recentContexts = recent;
 
     const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
@@ -244,7 +244,7 @@ describe('Context Service:', () => {
     context3.space.attributes = {} as SpaceAttributes;
     context3.space.attributes.name = 'space3';
 
-    let recent: Context[] = [context1, context2];
+    const recent: Context[] = [context1, context2];
     (profile as ExtProfile).store.recentContexts = recent;
 
     // when
@@ -360,7 +360,7 @@ describe('Context Service:', () => {
       broadcaster.on.and.returnValue(observableNever());
       delete (profile as ExtProfile).store.recentContexts;
       const contextService: ContextService = TestBed.get(ContextService);
-      let result: Observable<Context[]> = contextService.recent;
+      const result: Observable<Context[]> = contextService.recent;
       result.subscribe(
         (r: Context[]): void => {
           expect(r).toEqual([] as Context[]);
@@ -378,7 +378,7 @@ describe('Context Service:', () => {
       (profile as ExtProfile).store.recentContexts = [context1];
 
       const contextService: ContextService = TestBed.get(ContextService);
-      let result: Observable<Context[]> = contextService.recent;
+      const result: Observable<Context[]> = contextService.recent;
       result.subscribe(
         (r: Context[]): void => {
           expect(r).toEqual([] as Context[]);
@@ -392,7 +392,7 @@ describe('Context Service:', () => {
       broadcaster.on.and.returnValue(observableNever());
       (profile as ExtProfile).store.recentContexts = [];
       const contextService: ContextService = TestBed.get(ContextService);
-      let result: Observable<Context[]> = contextService.recent;
+      const result: Observable<Context[]> = contextService.recent;
       result.subscribe((r: Context[]) => {
         expect(r).toEqual([] as Context[]);
         done();

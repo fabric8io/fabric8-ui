@@ -84,10 +84,10 @@ export class UserSpacesService {
       zip(this.getInvolvedSpaces()),
       map(
         ([ownedSpaces, involvedSpaces]: [Space[], SpaceInformation[]]): string[] => {
-          let involvedSpaceIds: string[] = involvedSpaces.map(
+          const involvedSpaceIds: string[] = involvedSpaces.map(
             (space: SpaceInformation): string => space.id,
           );
-          let ownedSpaceIds: string[] = ownedSpaces.map((space: Space): string => space.id);
+          const ownedSpaceIds: string[] = ownedSpaces.map((space: Space): string => space.id);
           return involvedSpaceIds.filter((id: string) => ownedSpaceIds.indexOf(id) < 0);
         },
       ),

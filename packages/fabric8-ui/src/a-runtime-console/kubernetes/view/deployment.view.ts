@@ -69,16 +69,16 @@ export class DeploymentView {
       this.exposeUrl = service.exposeUrl;
     }
     this.images = new Array<String>();
-    let spec = deployment.spec;
+    const spec = deployment.spec;
     if (spec) {
-      let template = spec.template;
+      const template = spec.template;
       if (template) {
-        let podSpec = template.spec;
+        const podSpec = template.spec;
         if (podSpec) {
-          let containers = podSpec.containers;
+          const containers = podSpec.containers;
           if (containers) {
             containers.forEach((c) => {
-              let image = c.image;
+              const image = c.image;
               if (image) {
                 this.images.push(image);
               }
@@ -113,16 +113,16 @@ export function combineDeployments(
   deployments: Deployments,
   deploymentConfigs: DeploymentConfigs,
 ): Deployments {
-  let map = {};
+  const map = {};
   if (deployments) {
     deployments.forEach((s) => (map[s.name] = s));
   }
 
-  let answer = new Deployments();
+  const answer = new Deployments();
   deployments.forEach((d) => answer.push(d));
   if (deploymentConfigs) {
     deploymentConfigs.forEach((dc) => {
-      let name = dc.name;
+      const name = dc.name;
       if (name && !map[name]) {
         answer.push(dc);
       }
@@ -148,7 +148,7 @@ export function createDeploymentViews(
   deployments: Deployments,
   services: Services,
 ): DeploymentViews {
-  let map = {};
+  const map = {};
   services.forEach((s) => (map[s.name] = s));
   return deployments.map((d) => new DeploymentView(d, map[d.name]));
 }

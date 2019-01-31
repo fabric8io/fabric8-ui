@@ -51,7 +51,7 @@ export function openShiftBrowseResourceUrl(
     if (!kinds) {
       let kind = resource.defaultKind();
       if (!kind || kind === 'Unknown') {
-        let k8sResource = resource.resource;
+        const k8sResource = resource.resource;
         if (k8sResource) {
           kind = k8sResource.kind;
         }
@@ -97,9 +97,9 @@ export function openShiftBrowseResourceUrl(
  */
 export function activedRouteDataEntry(route: ActivatedRoute, key: string) {
   if (route) {
-    let data = route.snapshot.data;
+    const data = route.snapshot.data;
     if (data) {
-      let answer = data[key];
+      const answer = data[key];
       if (answer != undefined) {
         return answer;
       }
@@ -116,7 +116,7 @@ export function findParameter(route: ActivatedRoute, name: string): string {
   if (route) {
     let snapshot = route.snapshot;
     while (snapshot) {
-      let answer = snapshot.params[name];
+      const answer = snapshot.params[name];
       if (answer) {
         return answer;
       }

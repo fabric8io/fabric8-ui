@@ -15,20 +15,22 @@ import { TenantComponent } from './tenant.component';
 describe('TenantComponent', () => {
   let fixture: ComponentFixture<TenantComponent>;
   let component: DebugNode['componentInstance'];
-  let mockAuthenticationService: any = jasmine.createSpyObj('AuthenticationService', ['getToken']);
-  let mockGettingStartedService: any = jasmine.createSpyObj('GettingStartedService', [
+  const mockAuthenticationService: any = jasmine.createSpyObj('AuthenticationService', [
+    'getToken',
+  ]);
+  const mockGettingStartedService: any = jasmine.createSpyObj('GettingStartedService', [
     'createTransientProfile',
     'update',
     'ngOnDestroy',
   ]);
-  let mockContexts: any = jasmine.createSpy('Contexts');
-  let mockNotifications: any = jasmine.createSpyObj('Notifications', ['message']);
-  let mockRouter: any = jasmine.createSpyObj('Router', ['navigate']);
-  let mockTenantService: any = jasmine.createSpyObj('TenantService', ['updateTenant']);
-  let mockUserService: any = jasmine.createSpy('UserService');
-  let mockLogger: any = jasmine.createSpy('Logger');
-  let mockProviderService: any = jasmine.createSpy('ProviderService');
-  let mockGitHubService: any = jasmine.createSpy('GitHubService');
+  const mockContexts: any = jasmine.createSpy('Contexts');
+  const mockNotifications: any = jasmine.createSpyObj('Notifications', ['message']);
+  const mockRouter: any = jasmine.createSpyObj('Router', ['navigate']);
+  const mockTenantService: any = jasmine.createSpyObj('TenantService', ['updateTenant']);
+  const mockUserService: any = jasmine.createSpy('UserService');
+  const mockLogger: any = jasmine.createSpy('Logger');
+  const mockProviderService: any = jasmine.createSpy('ProviderService');
+  const mockGitHubService: any = jasmine.createSpy('GitHubService');
 
   mockAuthenticationService.gitHubToken = of('gh-test-user');
   mockContexts.current = of({
@@ -67,27 +69,27 @@ describe('TenantComponent', () => {
   describe('#isUpdateProfileDisabled', () => {
     it('should be false if being modified', () => {
       component.modifiedFromRequestParam = true;
-      let result: boolean = component.isUpdateProfileDisabled;
+      const result: boolean = component.isUpdateProfileDisabled;
       expect(result).toBeFalsy();
     });
 
     it('should be false if not modified and all fields are valid', () => {
       component.modifiedFromRequestParam = false;
-      let result: boolean = component.isUpdateProfileDisabled;
+      const result: boolean = component.isUpdateProfileDisabled;
       expect(result).toBeFalsy();
     });
 
     it('should be true if only template repo and template repo dir fields are modified', () => {
       this.templatesRepoDirBlob = 'path/to/dir';
       this.templatesRepoDirBlob = 'https://github.com/fabric8-services/fabric8-tenant';
-      let result: boolean = component.isUpdateProfileDisabled;
+      const result: boolean = component.isUpdateProfileDisabled;
       expect(result).toBeFalsy();
     });
 
     it('should be true if not modified and at least one of the template repo fields is invalid', () => {
       component.modifiedFromRequestParam = false;
       component.templatesRepoInvalid = true;
-      let result: boolean = component.isUpdateProfileDisabled;
+      const result: boolean = component.isUpdateProfileDisabled;
       expect(result).toBeTruthy();
     });
   });
@@ -101,8 +103,8 @@ describe('TenantComponent', () => {
 
   describe('#setElementFocus', () => {
     it('should focus the provided element', () => {
-      let mockEvent = jasmine.createSpy('MouseEvent');
-      let mockElement = document.createElement('mock-element');
+      const mockEvent = jasmine.createSpy('MouseEvent');
+      const mockElement = document.createElement('mock-element');
       spyOn(mockElement, 'focus');
       component.setElementFocus(mockEvent, mockElement);
       expect(mockElement.focus).toHaveBeenCalled();
@@ -121,7 +123,7 @@ describe('TenantComponent', () => {
 
   describe('#updateProfile', () => {
     it('should update the tenant if successful', () => {
-      let message = {
+      const message = {
         message: 'Tenant Updated!',
         type: NotificationType.SUCCESS,
       };
@@ -133,7 +135,7 @@ describe('TenantComponent', () => {
     });
 
     it('should show an error if the tenant has failed to update', () => {
-      let message = {
+      const message = {
         message: 'Failed to update tenant',
         type: NotificationType.DANGER,
       };
@@ -145,7 +147,7 @@ describe('TenantComponent', () => {
     });
 
     it('should handle an error 409 status if the e-mail provided already exists', () => {
-      let message = {
+      const message = {
         message: 'Email already exists',
         type: NotificationType.DANGER,
       };
@@ -156,7 +158,7 @@ describe('TenantComponent', () => {
     });
 
     it('should show an error if the profile has failed to update', () => {
-      let message = {
+      const message = {
         message: 'Failed to update profile',
         type: NotificationType.DANGER,
       };

@@ -2,7 +2,6 @@ import { md5 } from './md5';
 
 export function gravatar(email: string, options: any = {}): string {
   //check to make sure you gave us something
-  let base: string;
   const params: Array<string> = [];
 
   //set some defaults, just in case
@@ -17,7 +16,9 @@ export function gravatar(email: string, options: any = {}): string {
   email = email.trim().toLowerCase();
 
   //determine which base to use
-  base = options.secure ? 'https://secure.gravatar.com/avatar/' : 'http://www.gravatar.com/avatar/';
+  const base = options.secure
+    ? 'https://secure.gravatar.com/avatar/'
+    : 'http://www.gravatar.com/avatar/';
 
   //add the params
   if (options.rating) {

@@ -15,7 +15,7 @@ export class CopyService {
    */
   copy(value: string): boolean {
     let result = false;
-    let textarea = this.dom.createElement('textarea');
+    const textarea = this.dom.createElement('textarea');
 
     textarea.style.height = '0px';
     textarea.style.left = '-100px';

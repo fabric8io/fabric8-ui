@@ -26,10 +26,10 @@ describe('AboutModalComponent', () => {
   let el: HTMLElement;
   let des: DebugElement[];
   let component: DebugNode['componentInstance'];
-  let mockRenderer: any = jasmine.createSpy('Renderer2');
+  const mockRenderer: any = jasmine.createSpy('Renderer2');
 
   beforeEach(() => {
-    let aboutServiceStub = new aboutServiceMock();
+    const aboutServiceStub = new aboutServiceMock();
     TestBed.configureTestingModule({
       imports: [FormsModule, ModalModule.forRoot()],
       declarations: [AboutModalComponent],

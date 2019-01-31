@@ -233,12 +233,12 @@ export class CodebasesComponent implements OnDestroy, OnInit {
     if (this.currentSortField.id === 'name') {
       compValue = codebase1.name.localeCompare(codebase2.name);
     } else if (this.currentSortField.id === 'createdAt') {
-      let date1 = new Date(codebase1.gitHubRepo.createdAt); // 2011-04-07T10:12:58Z
-      let date2 = new Date(codebase2.gitHubRepo.createdAt);
+      const date1 = new Date(codebase1.gitHubRepo.createdAt); // 2011-04-07T10:12:58Z
+      const date2 = new Date(codebase2.gitHubRepo.createdAt);
       compValue = date1 > date2 ? 1 : -1;
     } else if (this.currentSortField.id === 'pushedAt') {
-      let date1 = new Date(codebase1.gitHubRepo.pushedAt);
-      let date2 = new Date(codebase2.gitHubRepo.pushedAt);
+      const date1 = new Date(codebase1.gitHubRepo.pushedAt);
+      const date2 = new Date(codebase2.gitHubRepo.pushedAt);
       compValue = date1 > date2 ? 1 : -1;
     }
     if (!this.isAscendingSort && compValue) {

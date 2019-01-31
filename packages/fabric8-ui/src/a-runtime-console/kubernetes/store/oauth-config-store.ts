@@ -46,8 +46,8 @@ export class OAuthConfig {
   public buildToolDetectorApiUrl: string;
 
   constructor(data: any) {
-    let config = data || {};
-    let oauth = config.oauth || {};
+    const config = data || {};
+    const oauth = config.oauth || {};
 
     this.loaded = !!data;
     this.apiServer = config.api_server || '';
@@ -72,7 +72,7 @@ export class OAuthConfig {
     if (!this.issuer && this.authorizeUri) {
       // lets default the issuer from the authorize Uri
       let url = this.authorizeUri;
-      let idx = url.indexOf('/', 9);
+      const idx = url.indexOf('/', 9);
       if (idx > 0) {
         url = url.substring(0, idx);
       }
@@ -87,8 +87,8 @@ export class OAuthConfig {
  */
 let _latestOAuthConfig: OAuthConfig = new OAuthConfig(null);
 
-let _currentOAuthConfig: BehaviorSubject<OAuthConfig> = new BehaviorSubject(_latestOAuthConfig);
-let _loadingOAuthConfig: BehaviorSubject<boolean> = new BehaviorSubject(true);
+const _currentOAuthConfig: BehaviorSubject<OAuthConfig> = new BehaviorSubject(_latestOAuthConfig);
+const _loadingOAuthConfig: BehaviorSubject<boolean> = new BehaviorSubject(true);
 
 export function currentOAuthConfig() {
   return _latestOAuthConfig;
@@ -122,7 +122,7 @@ export class OAuthConfigStore {
    * @return {boolean} true if this cluster is using openshift
    */
   get config(): OAuthConfig {
-    let answer = _latestOAuthConfig;
+    const answer = _latestOAuthConfig;
     if (!answer) {
       console.log(
         'WARNING: invoked the isOpenShift() method before the OAuthConfigStore has loaded!',
@@ -132,7 +132,7 @@ export class OAuthConfigStore {
   }
 
   private load() {
-    let configUri = '/_config/oauth.json';
+    const configUri = '/_config/oauth.json';
     this.http
       .get(configUri)
       .pipe(
@@ -150,9 +150,9 @@ export class OAuthConfigStore {
         }),
       )
       .subscribe((res: HttpResponse<any>) => {
-        let data = res;
-        for (let key in data) {
-          let value = data[key];
+        const data = res;
+        for (const key in data) {
+          const value = data[key];
           if (value === 'undefined') {
             data[key] = '';
           }
@@ -168,7 +168,7 @@ export class OAuthConfigStore {
           .pipe(first((user: User) => user.attributes != null && user.attributes.cluster != null))
           .subscribe(
             (user: User) => {
-              let cluster = user.attributes.cluster;
+              const cluster = user.attributes.cluster;
               _latestOAuthConfig.openshiftConsoleUrl =
                 cluster.replace('api', 'console') + 'console';
               _currentOAuthConfig.next(_latestOAuthConfig);

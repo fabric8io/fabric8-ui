@@ -67,7 +67,7 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
                 map((workspaceLinks) => {
                   this.workspaceBusy = false;
                   if (workspaceLinks != undefined) {
-                    let name = this.getWorkspaceName(workspaceLinks.links.open);
+                    const name = this.getWorkspaceName(workspaceLinks.links.open);
                     this.notifications.message({
                       message: `Workspace created!`,
                       type: NotificationType.SUCCESS,
@@ -158,7 +158,7 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
    * @returns {string} The workspace name (e.g., quydcbib)
    */
   private getWorkspaceName(url: string): string {
-    let index = url.lastIndexOf('/') + 1;
+    const index = url.lastIndexOf('/') + 1;
     return url.substring(index, url.length);
   }
 

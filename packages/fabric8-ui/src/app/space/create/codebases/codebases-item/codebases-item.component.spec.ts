@@ -78,12 +78,12 @@ describe('Codebases Item Component', () => {
 
   it('Init component successfully', async(() => {
     // given
-    let comp = fixture.componentInstance;
-    let debug = fixture.debugElement;
+    const comp = fixture.componentInstance;
+    const debug = fixture.debugElement;
     comp.codebase = codebase;
     broadcasterMock.on.and.returnValue(observableOf({ running: true }));
     fixture.detectChanges();
-    let spanDisplayedInformation = debug.queryAll(By.css('.list-pf-title'));
+    const spanDisplayedInformation = debug.queryAll(By.css('.list-pf-title'));
     fixture.whenStable().then(() => {
       expect(spanDisplayedInformation.length).toEqual(1);
     });
