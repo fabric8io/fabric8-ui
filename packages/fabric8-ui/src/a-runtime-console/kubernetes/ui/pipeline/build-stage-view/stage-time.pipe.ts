@@ -9,7 +9,7 @@ export class StageTimePipe implements PipeTransform {
       if (seconds < 0) {
         seconds = 0;
       }
-      for (; seconds >= 60; seconds = seconds - 60) {
+      for (; seconds >= 60; seconds -= 60) {
         minutes++;
       }
       let res = '';

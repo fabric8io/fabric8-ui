@@ -22,7 +22,6 @@
     "no-throw-literal": "off",
     "no-underscore-dangle": "off",
     "no-useless-escape": "off",
-    "operator-assignment": "off",
     "prefer-const": "off",
     "prefer-arrow-callback": "off",
     "prefer-destructuring": "off",

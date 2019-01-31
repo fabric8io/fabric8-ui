@@ -129,7 +129,7 @@ export class Watcher<L> {
         webSocketProtocol = 'wss';
       }
       if (webSocketProtocol.indexOf(":'") < 0) {
-        webSocketProtocol = webSocketProtocol + '://';
+        webSocketProtocol += '://';
       }
       if (wsApiServer) {
         baseUrl = webSocketProtocol + wsApiServer;

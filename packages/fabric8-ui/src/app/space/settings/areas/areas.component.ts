@@ -211,7 +211,7 @@ export class AreasComponent implements OnInit, OnDestroy {
       compValue = area1.attributes.name.localeCompare(area2.attributes.name);
     }
     if (!this.isAscendingSort) {
-      compValue = compValue * -1;
+      compValue *= -1;
     }
     return compValue;
   }

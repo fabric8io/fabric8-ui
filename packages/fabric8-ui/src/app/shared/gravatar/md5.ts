@@ -67,12 +67,12 @@ export function md5(s) {
     while (H < F) {
       Z = (H - (H % 4)) / 4;
       d = (H % 4) * 8;
-      aa[Z] = aa[Z] | (G.charCodeAt(H) << d);
+      aa[Z] |= G.charCodeAt(H) << d;
       H++;
     }
     Z = (H - (H % 4)) / 4;
     d = (H % 4) * 8;
-    aa[Z] = aa[Z] | (128 << d);
+    aa[Z] |= 128 << d;
     aa[I - 2] = F << 3;
     aa[I - 1] = F >>> 29;
     return aa;
@@ -88,7 +88,7 @@ export function md5(s) {
     for (d = 0; d <= 3; d++) {
       G = (x >>> (d * 8)) & 255;
       F = '0' + G.toString(16);
-      k = k + F.substr(F.length - 2, 2);
+      k += F.substr(F.length - 2, 2);
     }
     return k;
   }

@@ -208,7 +208,7 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
         }
 
         if (!this._ascending) {
-          res = res * -1;
+          res *= -1;
         }
         return res;
       },

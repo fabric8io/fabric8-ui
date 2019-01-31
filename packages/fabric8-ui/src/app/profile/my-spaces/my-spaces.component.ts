@@ -323,7 +323,7 @@ export class MySpacesComponent implements OnDestroy, OnInit {
       compValue = space1.attributes.name.localeCompare(space2.attributes.name);
     }
     if (!this.isAscendingSort && compValue) {
-      compValue = compValue * -1;
+      compValue *= -1;
     }
     return compValue;
   }

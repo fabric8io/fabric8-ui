@@ -242,7 +242,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
       compValue = date1 > date2 ? 1 : -1;
     }
     if (!this.isAscendingSort && compValue) {
-      compValue = compValue * -1;
+      compValue *= -1;
     }
     return compValue;
   }
