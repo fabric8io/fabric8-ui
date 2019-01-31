@@ -24,8 +24,7 @@ import { StaticInjector } from 'ngx-launcher';
 
 // About Modal
 import { TooltipModule } from 'ngx-bootstrap';
-import { FeatureTogglesService } from 'ngx-feature-flag';
-import { FeatureFlagResolver, EnableFeatureService } from 'ngx-feature-flag';
+import { EnableFeatureService, FeatureFlagResolver, FeatureTogglesService } from 'ngx-feature-flag';
 import { FeatureFooterModule } from './feature-flag/notification-footer/feature-footer.module';
 import { FeatureAcknowledgementService } from './feature-flag/service/feature-acknowledgement.service';
 import { GettingStartedService } from './getting-started/services/getting-started.service';

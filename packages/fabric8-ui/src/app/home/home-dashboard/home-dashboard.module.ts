@@ -8,7 +8,7 @@ import { FeatureFlagModule } from 'ngx-feature-flag';
 import { LoadingWidgetModule } from '../../dashboard-widgets/loading-widget/loading-widget.module';
 import { RecentPipelinesWidgetModule } from '../../dashboard-widgets/recent-pipelines-widget/recent-pipelines-widget.module';
 import { RecentWorkspacesWidgetModule } from '../../dashboard-widgets/recent-workspaces-widget/recent-workspaces-widget.module';
-import { EmptyStateModule } from '.././empty-state/empty-state.module';
+import { EmptyStateModule } from '../empty-state/empty-state.module';
 import { HomeRoutingModule } from '../home-routing.module';
 import { HomeDashboardComponent } from './home-dashboard.component';
 import { RecentSpacesWidgetModule } from '../recent-spaces-widget/recent-spaces-widget.module';

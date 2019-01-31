@@ -7,7 +7,7 @@ import { catchError, map, mergeMap, tap } from 'rxjs/operators';
 
 import { cloneDeep } from 'lodash';
 import { ProviderService } from '../../../shared/account/provider.service';
-import { FABRIC8_BUILD_TOOL_DETECTOR_API_URL } from './../../../shared/runtime-console/fabric8-ui-build-tool-detector-api';
+import { FABRIC8_BUILD_TOOL_DETECTOR_API_URL } from '../../../shared/runtime-console/fabric8-ui-build-tool-detector-api';
 
 @Injectable()
 export class AppLauncherGitproviderService implements GitProviderService {

@@ -1,5 +1,4 @@
-import { mergeArraysDistinctByKey } from './utilities';
-import { clone } from './utilities';
+import { clone, mergeArraysDistinctByKey } from './utilities';
 
 describe('Utilities:', () => {
   beforeEach(() => {});

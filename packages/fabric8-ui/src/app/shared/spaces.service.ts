@@ -1,5 +1,4 @@
-import { ErrorHandler } from '@angular/core';
-import { Injectable } from '@angular/core';
+import { ErrorHandler, Injectable } from '@angular/core';
 import { Broadcaster } from 'ngx-base';
 import { Contexts, Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
 import { forkJoin, merge, Observable, of as observableOf, Subscription } from 'rxjs';

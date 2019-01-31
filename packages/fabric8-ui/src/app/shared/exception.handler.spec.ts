@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { UserService } from 'ngx-login-client';
 import * as Raven from 'raven-js';
-import { Environment } from './environment';
 import * as environment from './environment';
 import { RavenExceptionHandler } from './exception.handler';
 
@@ -42,27 +41,27 @@ describe('Raven exception handler', () => {
 
   it('Environment.development does not invoke Raven', () => {
     spyOn(console, 'error').and.callFake(() => {});
-    getEnvironmentSpy.and.returnValue(Environment.development);
+    getEnvironmentSpy.and.returnValue(environment.Environment.development);
     handler.handleError('testing Environment.development (not a real error)');
     expect(captureExceptionSpy).not.toHaveBeenCalled();
   });
 
   it('Environment.prDeploy does not invoke Raven', () => {
     spyOn(console, 'error').and.callFake(() => {});
-    getEnvironmentSpy.and.returnValue(Environment.prDeploy);
+    getEnvironmentSpy.and.returnValue(environment.Environment.prDeploy);
     handler.handleError('testing Environment.prDeploy (not a real error)');
     expect(captureExceptionSpy).not.toHaveBeenCalled();
   });
 
   it('Environment.production does invoke Raven', () => {
     spyOn(console, 'error').and.callFake(() => {});
-    getEnvironmentSpy.and.returnValue(Environment.production);
+    getEnvironmentSpy.and.returnValue(environment.Environment.production);
     handler.handleError('testing Environment.production (not a real error)');
     expect(captureExceptionSpy).toHaveBeenCalled();
   });
 
   it('Environment.prodPreview does invoke Raven', () => {
-    getEnvironmentSpy.and.returnValue(Environment.prodPreview);
+    getEnvironmentSpy.and.returnValue(environment.Environment.prodPreview);
     handler.handleError('testing Environment.prodPreview');
     expect(captureExceptionSpy).toHaveBeenCalled();
   });
@@ -70,7 +69,7 @@ describe('Raven exception handler', () => {
   describe('raven error handling', () => {
     beforeEach(() => {
       // default environment to Environment.production
-      getEnvironmentSpy.and.returnValue(Environment.production);
+      getEnvironmentSpy.and.returnValue(environment.Environment.production);
     });
 
     it('setUserContext from UserService.currentLoggedInUser', () => {

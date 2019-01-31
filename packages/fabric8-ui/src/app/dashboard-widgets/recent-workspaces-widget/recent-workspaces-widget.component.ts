@@ -1,7 +1,14 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Notification, Notifications, NotificationType } from 'ngx-base';
-import { Space, Spaces, Team } from 'ngx-fabric8-wit';
-import { RelationalData, SpaceAttributes, SpaceLink, SpaceRelationships } from 'ngx-fabric8-wit';
+import {
+  Space,
+  Spaces,
+  SpaceAttributes,
+  SpaceLink,
+  SpaceRelationships,
+  RelationalData,
+  Team,
+} from 'ngx-fabric8-wit';
 import { forkJoin as observableForkJoin, Observable, of as observableOf, Subscription } from 'rxjs';
 import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { ContextService } from '../../shared/context.service';

@@ -9,7 +9,7 @@ import { of, ConnectableObservable } from 'rxjs';
 import { LoginService } from '../shared/login.service';
 import { HomeComponent } from './home.component';
 import { ProviderService } from '../shared/account/provider.service';
-import { ExtProfile } from './../getting-started/services/getting-started.service';
+import { ExtProfile } from '../getting-started/services/getting-started.service';
 
 @Component({
   template: '<alm-home></alm-home>',

@@ -1,7 +1,6 @@
 import { Component, ErrorHandler, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Broadcaster, Logger } from 'ngx-base';
-import { Context, Contexts } from 'ngx-fabric8-wit';
-import { Space, SpaceService } from 'ngx-fabric8-wit';
+import { Context, Contexts, Space, SpaceService } from 'ngx-fabric8-wit';
 import { User } from 'ngx-login-client';
 import { Subscription } from 'rxjs';
 

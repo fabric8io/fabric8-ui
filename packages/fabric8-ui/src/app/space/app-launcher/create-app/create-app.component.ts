@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Broadcaster } from 'ngx-base';
-import { Notifications, NotificationType } from 'ngx-base';
+import { Broadcaster, Notifications, NotificationType } from 'ngx-base';
 import { DependencyCheck, Projectile } from 'ngx-launcher';
 import { Subscription } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';

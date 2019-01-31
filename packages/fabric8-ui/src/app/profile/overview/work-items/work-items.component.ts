@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { FilterService, WorkItem, WorkItemService } from 'fabric8-planner';
 import { uniqBy } from 'lodash';
-import { Context, Contexts } from 'ngx-fabric8-wit';
-import { Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
+import { Context, Contexts, Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ContextService } from '../../../shared/context.service';

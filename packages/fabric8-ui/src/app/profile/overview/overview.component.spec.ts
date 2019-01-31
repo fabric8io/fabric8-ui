@@ -1,7 +1,6 @@
 import { Location } from '@angular/common';
 import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
-import { fakeAsync, tick } from '@angular/core/testing';
-import { TestBed } from '@angular/core/testing';
+import { fakeAsync, tick, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Notifications } from 'ngx-base';
 import { Context } from 'ngx-fabric8-wit';

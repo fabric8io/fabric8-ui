@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { TooltipModule } from 'ngx-bootstrap';
 import { Contexts } from 'ngx-fabric8-wit';
-import { AuthenticationService } from 'ngx-login-client';
-import { UserService } from 'ngx-login-client';
+import { AuthenticationService, UserService } from 'ngx-login-client';
 import { empty, of, throwError } from 'rxjs';
 import { initContext } from 'testing/test-context';
 import { ProviderService } from '../../../shared/account/provider.service';

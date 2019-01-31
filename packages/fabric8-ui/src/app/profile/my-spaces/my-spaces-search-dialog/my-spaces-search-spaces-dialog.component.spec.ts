@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { async, fakeAsync, tick } from '@angular/core/testing';
-import { TestBed } from '@angular/core/testing';
+import { async, fakeAsync, tick, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { Space, SpaceService } from 'ngx-fabric8-wit';
