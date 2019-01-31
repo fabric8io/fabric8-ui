@@ -16,7 +16,7 @@ export function messageEventToResourceOperation(msg): ResourceOperation {
     let me = msg as MessageEvent;
     let data = me.data;
     if (data) {
-      var json = JSON.parse(data);
+      let json = JSON.parse(data);
       if (json) {
         let type = json.type;
         let resource = json.object;

@@ -10,9 +10,9 @@ export class ParentLinkFactory {
   parentLink: string;
 
   constructor(router: Router) {
-    var urlPrefix = router.url;
+    let urlPrefix = router.url;
     if (urlPrefix) {
-      var idx = urlPrefix.lastIndexOf('/');
+      let idx = urlPrefix.lastIndexOf('/');
       if (idx > 0) {
         urlPrefix = urlPrefix.substring(0, idx + 1);
       } else {

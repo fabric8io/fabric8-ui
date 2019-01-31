@@ -6,7 +6,7 @@ import { KUBERNETES_RESTANGULAR } from '../service/kubernetes.restangular';
 /**
  * Lets keep around the singleton results to avoid doing too many requests for this static data
  */
-var _latestAPIs: APIs = null;
+let _latestAPIs: APIs = null;
 
 let _currentAPIs: BehaviorSubject<APIs> = new BehaviorSubject(_latestAPIs);
 let _loadingAPIs: BehaviorSubject<boolean> = new BehaviorSubject(true);

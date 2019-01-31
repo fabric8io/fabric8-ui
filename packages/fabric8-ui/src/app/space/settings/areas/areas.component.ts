@@ -206,7 +206,7 @@ export class AreasComponent implements OnInit, OnDestroy {
   // Sort
 
   compare(area1: Area, area2: Area): number {
-    var compValue = 0;
+    let compValue = 0;
     if (this.currentSortField === undefined || this.currentSortField.id === 'area') {
       compValue = area1.attributes.name.localeCompare(area2.attributes.name);
     }

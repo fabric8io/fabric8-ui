@@ -71,10 +71,10 @@ export abstract class KubernetesResourceStore<
     }
     let dataStream = this.watcher.dataStream;
 
-    var latestList = this.initialList;
-    var latestMsg = null;
+    let latestList = this.initialList;
+    let latestMsg = null;
 
-    var subject = new BehaviorSubject(latestList);
+    let subject = new BehaviorSubject(latestList);
 
     // lets not use Observable.combineLatest() so that we have more control over error handling
     // as we wanna just ignore websocket errors really
@@ -185,7 +185,7 @@ export abstract class KubernetesResourceStore<
     let n = nameOfResource(resource);
     if (array && n) {
       for (let item of array) {
-        var name = item.name;
+        let name = item.name;
         if (name && name === n) {
           if (isNewerResource(resource, item.resource)) {
             item.setResource(resource);
@@ -210,9 +210,9 @@ export abstract class KubernetesResourceStore<
   protected deleteItemFromArray(array: L, resource: any): L {
     let n = nameOfResource(resource);
     if (array && n) {
-      for (var i = 0; i < array.length; i++) {
+      for (let i = 0; i < array.length; i++) {
         let item = array[i];
-        var name = item.name;
+        let name = item.name;
         if (name && name === n) {
           array.splice(i, 1);
           return array;

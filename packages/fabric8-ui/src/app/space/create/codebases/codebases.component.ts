@@ -222,7 +222,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
   // Sort
 
   compare(codebase1: Codebase, codebase2: Codebase): number {
-    var compValue = 0;
+    let compValue = 0;
 
     // this is necessary because the first item in the codebases array
     // is an empty object that is needed to create the headers of the table

@@ -6,7 +6,7 @@ export class Pod extends KubernetesSpecResource {
   public phase: string;
 
   public setResource(resource) {
-    var answer = super.setResource(resource);
+    let answer = super.setResource(resource);
     this.images = new Array<string>();
     let spec = this.spec;
     if (spec) {

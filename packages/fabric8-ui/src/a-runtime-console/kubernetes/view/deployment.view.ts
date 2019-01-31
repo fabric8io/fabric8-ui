@@ -118,11 +118,11 @@ export function combineDeployments(
     deployments.forEach((s) => (map[s.name] = s));
   }
 
-  var answer = new Deployments();
+  let answer = new Deployments();
   deployments.forEach((d) => answer.push(d));
   if (deploymentConfigs) {
     deploymentConfigs.forEach((dc) => {
-      var name = dc.name;
+      let name = dc.name;
       if (name && !map[name]) {
         answer.push(dc);
       }

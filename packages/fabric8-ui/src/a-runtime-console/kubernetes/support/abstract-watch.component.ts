@@ -240,7 +240,7 @@ export class AbstractWatchComponent implements OnDestroy {
     if (array && n) {
       for (let i = 0; i < array.length; i++) {
         let item = array[i];
-        var name = item.name;
+        let name = item.name;
         if (name && name === n) {
           item.setResource(resource);
           return array;
@@ -263,9 +263,9 @@ export class AbstractWatchComponent implements OnDestroy {
   ): L {
     let n = this.nameOfResource(resource);
     if (array && n) {
-      for (var i = 0; i < array.length; i++) {
+      for (let i = 0; i < array.length; i++) {
         let item = array[i];
-        var name = item.name;
+        let name = item.name;
         if (name && name === n) {
           array.splice(i, 1);
         }

@@ -3,7 +3,7 @@ import { OAuthConfig } from '../store/oauth-config-store';
 import { KubernetesResource } from './kubernetesresource.model';
 import { pathJoin } from './utils';
 
-export var resourceKindToCollectionName = {
+export const resourceKindToCollectionName = {
   Deployment: 'deployments',
   DeploymentConfig: 'deploymentconfigs',
   Build: 'builds',
@@ -19,7 +19,7 @@ export var resourceKindToCollectionName = {
   Service: 'services',
 };
 
-export var resourceKindToOpenShiftConsoleCollectionName = {
+export const resourceKindToOpenShiftConsoleCollectionName = {
   BuildConfig: 'pipelines',
   DeploymentConfig: 'dc',
   ReplicationController: 'rc',
@@ -114,7 +114,7 @@ export function activedRouteDataEntry(route: ActivatedRoute, key: string) {
 
 export function findParameter(route: ActivatedRoute, name: string): string {
   if (route) {
-    var snapshot = route.snapshot;
+    let snapshot = route.snapshot;
     while (snapshot) {
       let answer = snapshot.params[name];
       if (answer) {

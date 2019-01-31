@@ -65,18 +65,18 @@ export class AnalyticService {
         ];
         analytics.factory = function(t) {
           return function() {
-            var e = Array.prototype.slice.call(arguments);
+            let e = Array.prototype.slice.call(arguments);
             e.unshift(t);
             analytics.push(e);
             return analytics;
           };
         };
-        for (var t = 0; t < analytics.methods.length; t++) {
-          var e = analytics.methods[t];
+        for (let t = 0; t < analytics.methods.length; t++) {
+          let e = analytics.methods[t];
           analytics[e] = analytics.factory(e);
         }
         analytics.load = function(t) {
-          var e = document.createElement('script');
+          let e = document.createElement('script');
           e.type = 'text/javascript';
           e.async = !0;
           e.src =
@@ -84,7 +84,7 @@ export class AnalyticService {
             'cdn.segment.com/analytics.js/v1/' +
             t +
             '/analytics.min.js';
-          var n = document.getElementsByTagName('script');
+          let n = document.getElementsByTagName('script');
           if (n && n instanceof Array && n[0] && n[0].parentNode) {
             n[0].parentNode.insertBefore(e, n[0]);
           }

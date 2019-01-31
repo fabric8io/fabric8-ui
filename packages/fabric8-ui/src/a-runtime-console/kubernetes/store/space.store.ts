@@ -49,8 +49,8 @@ class SpaceConfigWatcher {
         let configMap = this.configMapStore.instantiate(resource);
         if (configMap) {
           let old = this.spaceConfig;
-          var environmentsConfigMap: ConfigMap = old ? old.environmentsConfigMap : null;
-          var spacesConfigMap: ConfigMap = old ? old.spacesConfigMap : null;
+          let environmentsConfigMap: ConfigMap = old ? old.environmentsConfigMap : null;
+          let spacesConfigMap: ConfigMap = old ? old.spacesConfigMap : null;
 
           if (configMap.name === fabric8EnvironmentsName) {
             environmentsConfigMap = configMap;
@@ -128,9 +128,9 @@ export class SpaceStore {
             // we don't need to watch these!
             continue;
           }
-          var name = namespace.name;
+          let name = namespace.name;
           if (name) {
-            var springConfigWatcher = this.spaceConfigWatchers[name];
+            let springConfigWatcher = this.spaceConfigWatchers[name];
             if (!springConfigWatcher) {
               //console.log("watching configmaps in namespace " + name);
               let watcher = configMapService.watchNamepace(name, {
@@ -148,8 +148,8 @@ export class SpaceStore {
                 .pipe(take(1))
                 .subscribe((cms) => {
                   if (cms && cms.length) {
-                    var environmentsConfigMap: ConfigMap = null;
-                    var spacesConfigMap: ConfigMap = null;
+                    let environmentsConfigMap: ConfigMap = null;
+                    let spacesConfigMap: ConfigMap = null;
                     for (let c of cms) {
                       if (c.name === fabric8EnvironmentsName) {
                         environmentsConfigMap = c;
@@ -180,7 +180,7 @@ export class SpaceStore {
     namespaces: Namespaces,
     spaceConfigs: Map<String, SpaceConfig>,
   ): Spaces {
-    var spaces = [];
+    let spaces = [];
     if (namespaces) {
       for (let namespace of namespaces) {
         let name = namespace.name;
@@ -207,7 +207,7 @@ export class SpaceStore {
 
   protected checkIfLoaded() {
     // if we have loaded all environments lets mark the store as loaded
-    var loaded = true;
+    let loaded = true;
     this.spaceConfigWatchers.forEach((environmentWatcher) => {
       if (!environmentWatcher.notified) {
         loaded = false;

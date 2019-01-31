@@ -25,7 +25,7 @@ export class PipelineStage {
   environmentName: string;
 
   constructor(data, public build: Build) {
-    var obj = data || {};
+    let obj = data || {};
     this.id = obj.id || '';
     this.name = obj.name || '';
     this.status = obj.status || '';

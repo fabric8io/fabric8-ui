@@ -4,8 +4,8 @@
  * @return {string} the paths combined together
  */
 export function pathJoin(...paths: string[]): string {
-  var tmp = [];
-  var length = paths.length - 1;
+  let tmp = [];
+  let length = paths.length - 1;
   paths.forEach((path, index) => {
     if (isBlank(path)) {
       return;
@@ -24,7 +24,7 @@ export function pathJoin(...paths: string[]): string {
       tmp.push(path);
     }
   });
-  var rc = tmp.join('/');
+  let rc = tmp.join('/');
   return rc;
 }
 

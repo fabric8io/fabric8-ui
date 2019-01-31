@@ -189,7 +189,7 @@ export class TenantComponent implements AfterViewInit, OnInit {
       profile.contextInformation = contextInformation;
     }
 
-    var boosterCatalog = contextInformation['boosterCatalog'];
+    let boosterCatalog = contextInformation['boosterCatalog'];
     if (!boosterCatalog) {
       boosterCatalog = {};
       contextInformation['boosterCatalog'] = boosterCatalog;
@@ -197,7 +197,7 @@ export class TenantComponent implements AfterViewInit, OnInit {
     boosterCatalog['gitRef'] = this.boosterGitRef;
     boosterCatalog['gitRepo'] = this.boosterGitRepo;
 
-    var tenantConfig = contextInformation['tenantConfig'];
+    let tenantConfig = contextInformation['tenantConfig'];
     if (!tenantConfig) {
       tenantConfig = {};
       contextInformation['tenantConfig'] = tenantConfig;
@@ -308,7 +308,7 @@ export class TenantComponent implements AfterViewInit, OnInit {
       return;
     }
 
-    var contextInformation = user.attributes['contextInformation'];
+    let contextInformation = user.attributes['contextInformation'];
     if (!contextInformation) {
       contextInformation = {};
       user.attributes['contextInformation'] = contextInformation;
@@ -339,7 +339,7 @@ export class TenantComponent implements AfterViewInit, OnInit {
    * @returns {boolean}
    */
   private isUrlValid(url: string): boolean {
-    var trimmed = '';
+    let trimmed = '';
     if (url) {
       trimmed = url.trim();
     }

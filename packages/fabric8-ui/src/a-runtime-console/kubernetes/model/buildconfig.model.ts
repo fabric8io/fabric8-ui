@@ -101,9 +101,9 @@ export class BuildConfig extends KubernetesSpecResource {
   }
 
   get interestingBuildsAverageDuration(): number {
-    var answer = 0;
-    var count = 0;
-    var builds = this.interestingBuilds;
+    let answer = 0;
+    let count = 0;
+    let builds = this.interestingBuilds;
     for (let build of builds) {
       let duration = build.duration;
       if (duration) {
@@ -182,7 +182,7 @@ export class BuildConfig extends KubernetesSpecResource {
     this.iconStyle = defaultBuildIconStyle;
 
     this.type = type;
-    var gitUrl = this.annotations['fabric8.io/git-clone-url'];
+    let gitUrl = this.annotations['fabric8.io/git-clone-url'];
     if (!gitUrl) {
       gitUrl = git.uri || '';
     }
@@ -278,7 +278,7 @@ export function combineBuildConfigAndBuilds(
 }
 
 export function filterPipelines(buildConfigs: BuildConfigs): BuildConfigs {
-  var answer = new BuildConfigs();
+  let answer = new BuildConfigs();
   buildConfigs.forEach((bc) => {
     if (bc.isPipeline) {
       answer.push(bc);

@@ -106,7 +106,7 @@ export class Build extends KubernetesSpecResource {
    * Returns the latest pipeline stage that is associated with a running service URL
    */
   get lastPipelineStageWithService(): PipelineStage {
-    var answer: PipelineStage = null;
+    let answer: PipelineStage = null;
     for (let stage of this.pipelineStages) {
       if (stage.serviceUrl) {
         answer = stage;
@@ -119,15 +119,15 @@ export class Build extends KubernetesSpecResource {
     if (!this._pipelineStages) {
       this._pipelineStages = new Array<PipelineStage>();
       // lets parse the annotation from Jenkins sync plugin
-      var json = this.annotations['openshift.io/jenkins-status-json'];
+      let json = this.annotations['openshift.io/jenkins-status-json'];
       if (json) {
         try {
-          var obj = JSON.parse(json);
+          let obj = JSON.parse(json);
           if (obj != undefined) {
-            var stages = obj.stages;
+            let stages = obj.stages;
             if (stages && stages.length) {
               stages.forEach((stage) => {
-                var pipelineStage = new PipelineStage(stage, this);
+                let pipelineStage = new PipelineStage(stage, this);
                 if (pipelineStage.name) {
                   this._pipelineStages.push(pipelineStage);
                 }
@@ -149,10 +149,10 @@ export class Build extends KubernetesSpecResource {
 
   get pendingInputActions(): PendingInputAction[] {
     let answer: PendingInputAction[] = [];
-    var json = this.annotations['openshift.io/jenkins-pending-input-actions-json'];
+    let json = this.annotations['openshift.io/jenkins-pending-input-actions-json'];
     if (json) {
       try {
-        var obj = JSON.parse(json);
+        let obj = JSON.parse(json);
         if (obj != undefined) {
           if (obj && obj.length) {
             obj.forEach((input) => {

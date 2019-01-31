@@ -24,7 +24,7 @@ export function combineReplicaSets(
     replicasets.forEach((s) => (map[s.name] = s));
   }
   let answer = new ReplicaSets();
-  for (var key in map) {
+  for (let key in map) {
     answer.push(map[key]);
   }
 

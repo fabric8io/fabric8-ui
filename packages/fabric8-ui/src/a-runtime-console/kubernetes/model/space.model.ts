@@ -107,7 +107,7 @@ export class Space {
     namespaceMap: Map<string, Namespace>,
   ): Environment[] {
     let answer = [];
-    var data = configMap.data;
+    let data = configMap.data;
     if (data) {
       Object.keys(data).forEach((key) => {
         let yaml = data[key];
@@ -117,7 +117,7 @@ export class Space {
           if (namespaceName) {
             let ns = namespaceMap[namespaceName];
             if (ns) {
-              var order = config.order;
+              let order = config.order;
               if (order === undefined) {
                 order = 1000;
               }
@@ -161,7 +161,7 @@ export class Space {
 
   private loadLabelSpaces(configMap: ConfigMap) {
     let answer = [];
-    var data = configMap.data;
+    let data = configMap.data;
     if (data) {
       Object.keys(data).forEach((key) => {
         let yaml = data[key];
@@ -169,7 +169,7 @@ export class Space {
           let config = jsyaml.safeLoad(yaml);
           let label = config['name'] || '';
           let description = config['description'] || '';
-          var order = config.order;
+          let order = config.order;
           if (order === undefined) {
             order = 1000;
           }
@@ -245,9 +245,9 @@ export function createEmptySpace(): Space {
 }
 
 export function asSpaces(spaces: Space[]): Spaces {
-  var answer = new Spaces();
+  let answer = new Spaces();
   if (spaces) {
-    var nsNameToEnvMap = new Map<string, Environment>();
+    let nsNameToEnvMap = new Map<string, Environment>();
     for (let space of spaces) {
       if (space && space.environments) {
         for (let env of space.environments) {

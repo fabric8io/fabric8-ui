@@ -46,8 +46,8 @@ export class OAuthConfig {
   public buildToolDetectorApiUrl: string;
 
   constructor(data: any) {
-    var config = data || {};
-    var oauth = config.oauth || {};
+    let config = data || {};
+    let oauth = config.oauth || {};
 
     this.loaded = data ? true : false;
     this.apiServer = config.api_server || '';
@@ -71,8 +71,8 @@ export class OAuthConfig {
 
     if (!this.issuer && this.authorizeUri) {
       // lets default the issuer from the authorize Uri
-      var url = this.authorizeUri;
-      var idx = url.indexOf('/', 9);
+      let url = this.authorizeUri;
+      let idx = url.indexOf('/', 9);
       if (idx > 0) {
         url = url.substring(0, idx);
       }
@@ -85,7 +85,7 @@ export class OAuthConfig {
 /**
  * Lets keep around the singleton results to avoid doing too many requests for this static data
  */
-var _latestOAuthConfig: OAuthConfig = new OAuthConfig(null);
+let _latestOAuthConfig: OAuthConfig = new OAuthConfig(null);
 
 let _currentOAuthConfig: BehaviorSubject<OAuthConfig> = new BehaviorSubject(_latestOAuthConfig);
 let _loadingOAuthConfig: BehaviorSubject<boolean> = new BehaviorSubject(true);
