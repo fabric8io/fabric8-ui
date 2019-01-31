@@ -92,15 +92,13 @@ export function md5(s) {
       var x = k.charCodeAt(F);
       if (x < 128) {
         d += String.fromCharCode(x);
+      } else if (x > 127 && x < 2048) {
+        d += String.fromCharCode((x >> 6) | 192);
+        d += String.fromCharCode((x & 63) | 128);
       } else {
-        if (x > 127 && x < 2048) {
-          d += String.fromCharCode((x >> 6) | 192);
-          d += String.fromCharCode((x & 63) | 128);
-        } else {
-          d += String.fromCharCode((x >> 12) | 224);
-          d += String.fromCharCode(((x >> 6) & 63) | 128);
-          d += String.fromCharCode((x & 63) | 128);
-        }
+        d += String.fromCharCode((x >> 12) | 224);
+        d += String.fromCharCode(((x >> 6) & 63) | 128);
+        d += String.fromCharCode((x & 63) | 128);
       }
     }
     return d;

@@ -85,10 +85,8 @@ export function openShiftBrowseResourceUrl(
       if (name) {
         return pathJoin(openShiftConsoleUrl, '/project/', name, '/overview');
       }
-    } else {
-      if (resource && openShiftConsoleUrl && namespace && name) {
-        return pathJoin(openShiftConsoleUrl, '/project/', namespace, '/browse', kinds, name);
-      }
+    } else if (resource && openShiftConsoleUrl && namespace && name) {
+      return pathJoin(openShiftConsoleUrl, '/project/', namespace, '/browse', kinds, name);
     }
   }
   return '';

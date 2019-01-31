@@ -86,10 +86,8 @@ export class Poller<L> {
             let old = resourceCache[name];
             if (old == undefined) {
               operation = new ResourceOperation(Operation.ADDED, resource);
-            } else {
-              if (isNewerResource(resource, old)) {
-                operation = new ResourceOperation(Operation.MODIFIED, resource);
-              }
+            } else if (isNewerResource(resource, old)) {
+              operation = new ResourceOperation(Operation.MODIFIED, resource);
             }
             this._dataStream.next(operation);
           }
