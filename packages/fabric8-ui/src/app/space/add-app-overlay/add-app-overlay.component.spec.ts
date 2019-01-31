@@ -162,7 +162,7 @@ describe('AddAppOverlayComponent', () => {
     },
   ] as ProcessTemplate[];
 
-  class mockContextService {
+  class MockContextService {
     get current(): Observable<Context> {
       return observableOf(mockContext);
     }
@@ -199,7 +199,7 @@ describe('AddAppOverlayComponent', () => {
         { provide: UserService, useValue: mockUserService },
         { provide: SpaceNamespaceService, useValue: mockSpaceNamespaceService },
         { provide: SpacesService, useValue: mockSpacesService },
-        { provide: ContextService, useClass: mockContextService },
+        { provide: ContextService, useClass: MockContextService },
         { provide: Logger, useValue: mockLogger },
         { provide: ErrorHandler, useValue: mockErrorHandler },
       ],

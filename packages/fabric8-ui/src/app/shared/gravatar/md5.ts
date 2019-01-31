@@ -105,7 +105,7 @@ export function md5(s) {
     }
     return d;
   }
-  let C = Array();
+  let C = [];
   let P;
   let h;
   let E;

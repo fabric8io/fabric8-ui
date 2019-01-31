@@ -20,7 +20,7 @@ describe('Service: AppLauncherProjectSummaryService', () => {
   let controller: HttpTestingController;
   const projectile = new Projectile<any>();
 
-  class mockContextService {
+  class MockContextService {
     get current(): Observable<Context> {
       return observableOf(context1);
     }
@@ -42,7 +42,7 @@ describe('Service: AppLauncherProjectSummaryService', () => {
         AuthHelperService,
         { provide: HelperService, useValue: mockHelperService },
         { provide: AuthenticationService, useValue: mockAuthenticationService },
-        { provide: ContextService, useClass: mockContextService },
+        { provide: ContextService, useClass: MockContextService },
         { provide: Config, useClass: NewForgeConfig },
         { provide: FABRIC8_FORGE_API_URL, useValue: 'http://example.com' },
         { provide: AUTH_API_URL, useValue: 'http://auth.example.com' },

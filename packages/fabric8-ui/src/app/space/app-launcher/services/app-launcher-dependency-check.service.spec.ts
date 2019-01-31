@@ -15,7 +15,7 @@ function initTestBed() {
   TestBed.configureTestingModule({
     providers: [
       AppLauncherDependencyCheckService,
-      { provide: ContextService, useClass: mockContextService },
+      { provide: ContextService, useClass: MockContextService },
     ],
   });
 }
@@ -35,7 +35,7 @@ const mockContext = {
   },
 } as Context;
 
-class mockContextService {
+class MockContextService {
   get current(): Observable<Context> {
     return observableOf(mockContext);
   }

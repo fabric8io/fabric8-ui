@@ -37,10 +37,6 @@
 
     "promise/catch-or-return": "off",
 
-    "typescript/class-name-casing": "off",
-    "typescript/member-delimiter-style": "off",
-    "typescript/member-ordering": "off",
-    "typescript/no-array-constructor": "off",
-    "typescript/no-inferrable-types": "off"
+    "typescript/member-ordering": "off"
   }
 }
