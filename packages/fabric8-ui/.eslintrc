@@ -26,7 +26,6 @@
     "prefer-rest-params": "off",
     "radix": "off",
     "vars-on-top": "off",
-    "yoda": "off",
 
     "import/extensions": "off",
     "import/newline-after-import": "off",

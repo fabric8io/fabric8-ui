@@ -82,7 +82,7 @@ export class BuildConfig extends KubernetesSpecResource {
     }
 
     for (const build of builds) {
-      if ('Running' === build.statusPhase) {
+      if (build.statusPhase === 'Running') {
         answer.push(build);
       }
     }
@@ -97,7 +97,7 @@ export class BuildConfig extends KubernetesSpecResource {
   }
 
   get isPipeline(): boolean {
-    return 'JenkinsPipeline' === this.type;
+    return this.type === 'JenkinsPipeline';
   }
 
   get interestingBuildsAverageDuration(): number {
