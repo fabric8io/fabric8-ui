@@ -68,7 +68,7 @@ export class DeploymentView {
     if (service) {
       this.exposeUrl = service.exposeUrl;
     }
-    this.images = new Array<String>();
+    this.images = [];
     const spec = deployment.spec;
     if (spec) {
       const template = spec.template;

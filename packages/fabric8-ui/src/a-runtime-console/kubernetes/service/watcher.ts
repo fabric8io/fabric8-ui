@@ -97,7 +97,9 @@ export class Watcher<L> {
     const params = {};
     if (queryParams) {
       for (const k in queryParams) {
-        params[k] = queryParams[k];
+        if (k && queryParams[k]) {
+          params[k] = queryParams[k];
+        }
       }
     }
     params['watch'] = true;
@@ -105,8 +107,10 @@ export class Watcher<L> {
 
     let query = '';
     for (const k in params) {
-      const sep = query ? '&' : '';
-      query += `${sep + k}=${encodeURIComponent(params[k])}`;
+      if (k && params[k]) {
+        const sep = query ? '&' : '';
+        query += `${sep + k}=${encodeURIComponent(params[k])}`;
+      }
     }
     return query ? `?${query}` : '';
   }

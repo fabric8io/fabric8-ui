@@ -314,6 +314,7 @@ describe('Dashboard: WorkItemWidgetComponent', () => {
           case 'resolved':
             expectedResolved++;
             break;
+          default:
         }
       });
       expect(expectedCount).toEqual(component.myWorkItemsCount);

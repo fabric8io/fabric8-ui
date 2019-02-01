@@ -124,50 +124,50 @@ export class SpaceStore {
     namespacesList.subscribe((namespaces) => {
       if (namespaces) {
         for (const namespace of namespaces) {
-          if (isSecretsNamespace(namespace) || isSystemNamespace(namespace)) {
-            // we don't need to watch these!
-            continue;
-          }
-          const name = namespace.name;
-          if (name) {
-            let springConfigWatcher = this.spaceConfigWatchers[name];
-            if (!springConfigWatcher) {
-              // console.log("watching configmaps in namespace " + name);
-              const watcher = configMapService.watchNamepace(name, {
-                labelSelector: 'provider=fabric8',
-              });
-              springConfigWatcher = new SpaceConfigWatcher(configMapStore, watcher, (spaceConfig) =>
-                this.spaceConfigUpdated(spaceConfig),
-              );
-
-              // lets load the initial value
-              configMapService
-                .list(name, {
+          if (!(isSecretsNamespace(namespace) || isSystemNamespace(namespace))) {
+            const name = namespace.name;
+            if (name) {
+              let springConfigWatcher = this.spaceConfigWatchers[name];
+              if (!springConfigWatcher) {
+                // console.log("watching configmaps in namespace " + name);
+                const watcher = configMapService.watchNamepace(name, {
                   labelSelector: 'provider=fabric8',
-                })
-                .pipe(take(1))
-                .subscribe((cms) => {
-                  if (cms && cms.length) {
-                    let environmentsConfigMap: ConfigMap = null;
-                    let spacesConfigMap: ConfigMap = null;
-                    for (const c of cms) {
-                      if (c.name === fabric8EnvironmentsName) {
-                        environmentsConfigMap = c;
-                      } else if (c.name === fabric8SpacesName) {
-                        spacesConfigMap = c;
+                });
+                springConfigWatcher = new SpaceConfigWatcher(
+                  configMapStore,
+                  watcher,
+                  (spaceConfig) => this.spaceConfigUpdated(spaceConfig),
+                );
+
+                // lets load the initial value
+                configMapService
+                  .list(name, {
+                    labelSelector: 'provider=fabric8',
+                  })
+                  .pipe(take(1))
+                  .subscribe((cms) => {
+                    if (cms && cms.length) {
+                      let environmentsConfigMap: ConfigMap = null;
+                      let spacesConfigMap: ConfigMap = null;
+                      for (const c of cms) {
+                        if (c.name === fabric8EnvironmentsName) {
+                          environmentsConfigMap = c;
+                        } else if (c.name === fabric8SpacesName) {
+                          spacesConfigMap = c;
+                        }
+                      }
+                      const namespace =
+                        (environmentsConfigMap ? environmentsConfigMap.namespace : null) ||
+                        (spacesConfigMap ? spacesConfigMap.namespace : null);
+                      if (namespace) {
+                        springConfigWatcher.notify(
+                          new SpaceConfig(namespace, environmentsConfigMap, spacesConfigMap),
+                        );
                       }
                     }
-                    const namespace =
-                      (environmentsConfigMap ? environmentsConfigMap.namespace : null) ||
-                      (spacesConfigMap ? spacesConfigMap.namespace : null);
-                    if (namespace) {
-                      springConfigWatcher.notify(
-                        new SpaceConfig(namespace, environmentsConfigMap, spacesConfigMap),
-                      );
-                    }
-                  }
-                });
-              this.spaceConfigWatchers[name] = springConfigWatcher;
+                  });
+                this.spaceConfigWatchers[name] = springConfigWatcher;
+              }
             }
           }
         }

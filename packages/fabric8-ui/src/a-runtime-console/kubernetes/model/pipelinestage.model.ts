@@ -48,16 +48,18 @@ export class PipelineStage {
       }
       if (name) {
         for (const key in serviceEnvironmentMap) {
-          const se = serviceEnvironmentMap[key];
-          if (name === se.environmentName) {
-            this.environmentName = name;
-            const urlMap = se.serviceUrls;
-            this.serviceUrlMap = urlMap;
-            const serviceUrlKeys: string[] = Object.keys(urlMap);
-            if (serviceUrlKeys && serviceUrlKeys[0]) {
-              this.serviceUrl = urlMap[serviceUrlKeys[0]];
-            } else {
-              this.serviceUrl = '';
+          if (key && serviceEnvironmentMap[key]) {
+            const se = serviceEnvironmentMap[key];
+            if (name === se.environmentName) {
+              this.environmentName = name;
+              const urlMap = se.serviceUrls;
+              this.serviceUrlMap = urlMap;
+              const serviceUrlKeys: string[] = Object.keys(urlMap);
+              if (serviceUrlKeys && serviceUrlKeys[0]) {
+                this.serviceUrl = urlMap[serviceUrlKeys[0]];
+              } else {
+                this.serviceUrl = '';
+              }
             }
           }
         }

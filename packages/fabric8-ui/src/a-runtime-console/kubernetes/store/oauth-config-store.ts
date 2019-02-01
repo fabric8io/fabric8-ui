@@ -152,9 +152,11 @@ export class OAuthConfigStore {
       .subscribe((res: HttpResponse<any>) => {
         const data = res;
         for (const key in data) {
-          const value = data[key];
-          if (value === 'undefined') {
-            data[key] = '';
+          if (key && data[key]) {
+            const value = data[key];
+            if (value === 'undefined') {
+              data[key] = '';
+            }
           }
         }
         _latestOAuthConfig = new OAuthConfig(data);

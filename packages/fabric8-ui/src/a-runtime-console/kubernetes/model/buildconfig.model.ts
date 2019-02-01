@@ -30,15 +30,15 @@ export class BuildConfig extends KubernetesSpecResource {
 
   iconStyle: string;
 
-  private _builds: Array<Build> = new Array<Build>();
+  private _builds: Array<Build> = [];
 
-  interestingBuilds: Array<Build> = new Array<Build>();
+  interestingBuilds: Array<Build> = [];
 
   private _lastBuild: Build;
 
   get serviceUrls(): Array<ServiceUrl> {
     const last = this.lastBuild;
-    return last ? last.serviceUrls : new Array<ServiceUrl>();
+    return last ? last.serviceUrls : [];
   }
 
   get builds(): Array<Build> {
@@ -137,9 +137,11 @@ export class BuildConfig extends KubernetesSpecResource {
       const map = previousBuild.serviceEnvironmentMap;
       if (map) {
         for (const key in map) {
-          const value = map[key];
-          if (!answer[key]) {
-            answer[key] = value;
+          if (key && map[key]) {
+            const value = map[key];
+            if (!answer[key]) {
+              answer[key] = value;
+            }
           }
         }
       }
@@ -156,10 +158,12 @@ export class BuildConfig extends KubernetesSpecResource {
     const name = this.name;
     if (map && name) {
       for (const environmentKey in map) {
-        const value = map[environmentKey];
-        const appInfo = value.toAppInfo(name);
-        if (appInfo) {
-          answer[environmentKey] = appInfo;
+        if (environmentKey && map[environmentKey]) {
+          const value = map[environmentKey];
+          const appInfo = value.toAppInfo(name);
+          if (appInfo) {
+            answer[environmentKey] = appInfo;
+          }
         }
       }
     }
@@ -247,7 +251,7 @@ export function combineBuildConfigAndBuilds(
       if (bcName) {
         let list = bcBuilds[bcName];
         if (!list) {
-          list = new Array<Build>();
+          list = [];
           bcBuilds[bcName] = list;
         }
         list.push(s);
@@ -295,16 +299,18 @@ export function appInfos(buildConfigs: BuildConfigs): Map<string, EnvironmentApp
   buildConfigs.forEach((bc) => {
     const appEnv = bc.environmentApp;
     for (const environmentKey in appEnv) {
-      const app = appEnv[environmentKey];
-      let env = answer[environmentKey];
-      if (!env) {
-        env = new EnvironmentApps();
-        answer[environmentKey] = env;
+      if (environmentKey && appEnv[environmentKey]) {
+        const app = appEnv[environmentKey];
+        let env = answer[environmentKey];
+        if (!env) {
+          env = new EnvironmentApps();
+          answer[environmentKey] = env;
+        }
+        if (!env.name) {
+          env.name = app.environmentName;
+        }
+        env.apps[app.name] = app;
       }
-      if (!env.name) {
-        env.name = app.environmentName;
-      }
-      env.apps[app.name] = app;
     }
   });
   return answer;

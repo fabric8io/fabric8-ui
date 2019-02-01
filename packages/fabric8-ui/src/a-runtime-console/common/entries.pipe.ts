@@ -8,7 +8,7 @@ export class Entry {
  * Creates an array of entries from the given map
  */
 export function createEntryArray(labels: Map<string, string>): Array<Entry> {
-  const entries = new Array<Entry>();
+  const entries: Array<Entry> = [];
   if (labels) {
     Object.keys(labels).forEach((k) => entries.push(new Entry(k, labels[k])));
   }

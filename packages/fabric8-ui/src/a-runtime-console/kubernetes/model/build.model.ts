@@ -9,7 +9,9 @@ const serviceEnvironmentsAnnotationPrefix = 'environment.services.fabric8.io/';
 export function sortedKeys(map: Map<String, any>): string[] {
   const answer = [];
   for (const key in map) {
-    answer.push(key);
+    if (key) {
+      answer.push(key);
+    }
   }
   answer.sort();
   return answer;
@@ -36,7 +38,7 @@ export class Build extends KubernetesSpecResource {
 
   private _pipelineStages: Array<PipelineStage>;
 
-  private _serviceUrls: Array<ServiceUrl> = new Array<ServiceUrl>();
+  private _serviceUrls: Array<ServiceUrl> = [];
 
   private _serviceEnvironmentsMap: Map<string, ServiceEnvironments> = new Map<
     string,
@@ -117,7 +119,7 @@ export class Build extends KubernetesSpecResource {
 
   get pipelineStages(): Array<PipelineStage> {
     if (!this._pipelineStages) {
-      this._pipelineStages = new Array<PipelineStage>();
+      this._pipelineStages = [];
       // lets parse the annotation from Jenkins sync plugin
       const json = this.annotations['openshift.io/jenkins-status-json'];
       if (json) {

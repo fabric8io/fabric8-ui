@@ -24,7 +24,7 @@ export abstract class KubernetesResourceStore<
     service: R,
     private initialList: L,
     initialCurrent: T,
-    protected type: { new (): T },
+    protected Type: { new (): T },
   ) {
     super(service, initialList, initialCurrent);
   }
@@ -34,7 +34,7 @@ export abstract class KubernetesResourceStore<
    */
   instantiate(resource: any): T {
     if (resource) {
-      const item = new this.type();
+      const item = new this.Type();
       item.setResource(resource);
       // lets add the Restangular crack
       return this.service.restangularize(item);
@@ -191,7 +191,7 @@ export abstract class KubernetesResourceStore<
       }
 
       // now lets add the new item!
-      let item = new this.type();
+      let item = new this.Type();
       item.setResource(resource);
       // lets add the Restangular crack
       item = this.service.restangularize(item);

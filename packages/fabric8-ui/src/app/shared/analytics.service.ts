@@ -39,7 +39,8 @@ export class AnalyticService {
 
   public initialize(apiWriteKey: string) {
     // THIS CODE IS DIRECTLY PASTED FROM SEGMENT
-    const analytics = (window.analytics = window.analytics || []);
+    const analytics = window.analytics || [];
+    window.analytics = window.analytics || [];
     if (!analytics.initialize) {
       if (analytics.invoked) {
         window.console && console.error && console.error('Segment snippet included twice.');

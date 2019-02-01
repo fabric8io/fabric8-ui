@@ -43,16 +43,20 @@ export class AbstractWatchComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     for (const key in this.subjectCache) {
-      const subject = this.subjectCache[key];
-      if (subject) {
-        subject.unsubscribe();
+      if (key && this.subjectCache[key]) {
+        const subject = this.subjectCache[key];
+        if (subject) {
+          subject.unsubscribe();
+        }
       }
     }
     this.subjectCache.clear();
     for (const key in this.watchCache) {
-      const watch = this.watchCache[key];
-      if (watch) {
-        watch.close();
+      if (key && this.watchCache[key]) {
+        const watch = this.watchCache[key];
+        if (watch) {
+          watch.close();
+        }
       }
     }
     this.watchCache.clear();
@@ -233,7 +237,7 @@ export class AbstractWatchComponent implements OnDestroy {
     array: L,
     resource: any,
     service: NamespacedResourceService<T, L>,
-    type: { new (): T },
+    Type: { new (): T },
   ): L {
     const n = this.nameOfResource(resource);
     if (array && n) {
@@ -247,7 +251,7 @@ export class AbstractWatchComponent implements OnDestroy {
       }
 
       // now lets add the new item!
-      let item = new type();
+      let item = new Type();
       item.setResource(resource);
       // lets add the Restangular crack
       item = service.restangularize(item);

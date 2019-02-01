@@ -41,7 +41,7 @@ export class ReplicaSetView {
     if (service) {
       this.exposeUrl = service.exposeUrl;
     }
-    this.images = new Array<String>();
+    this.images = [];
     const spec = replicaset.spec;
     if (spec) {
       const template = spec.template;

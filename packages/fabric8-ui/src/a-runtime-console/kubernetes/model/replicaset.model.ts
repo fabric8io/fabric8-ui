@@ -25,7 +25,9 @@ export function combineReplicaSets(
   }
   const answer = new ReplicaSets();
   for (const key in map) {
-    answer.push(map[key]);
+    if (key && map[key]) {
+      answer.push(map[key]);
+    }
   }
 
   answer.sort((a: ReplicaSet, b: ReplicaSet) => {

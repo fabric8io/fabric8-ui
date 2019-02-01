@@ -82,7 +82,10 @@ export class WorkItemWidgetComponent implements OnInit {
   }
 
   private resetWorkItemCounts(): void {
-    this.myWorkItemsCount = this.myWorkItemsOpen = this.myWorkItemsInProgress = this.myWorkItemsResolved = 0;
+    this.myWorkItemsCount = 0;
+    this.myWorkItemsOpen = 0;
+    this.myWorkItemsInProgress = 0;
+    this.myWorkItemsResolved = 0;
   }
 
   private updateWorkItems(): void {

@@ -5,8 +5,10 @@ function extractParams(from) {
   from = from.split('?').pop();
   from = from.split('&');
   for (const i in from) {
-    const t = from[i].split('=');
-    params[t[0]] = t[1];
+    if (i && from[i]) {
+      const t = from[i].split('=');
+      params[t[0]] = t[1];
+    }
   }
   return params;
 }

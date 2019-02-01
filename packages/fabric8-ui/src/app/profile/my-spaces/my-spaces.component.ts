@@ -171,7 +171,8 @@ export class MySpacesComponent implements OnDestroy, OnInit {
           )
           .subscribe(
             (mySpaces: Space[]): void => {
-              this._spaces = this.mySpaces = mySpaces;
+              this._spaces = mySpaces;
+              this.mySpaces = mySpaces;
               this.updateSpaces();
             },
           ),

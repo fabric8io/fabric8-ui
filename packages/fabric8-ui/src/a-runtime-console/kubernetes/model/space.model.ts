@@ -218,22 +218,22 @@ export class Spaces extends Array<Space> {
   /**
    * All the spaces whether a development Space a runtime Environment or a namespace for Secrets
    */
-  all = new Array<Space>();
+  all: Array<Space> = [];
 
   /**
    * All the environments for all spaces
    */
-  environments = new Array<Environment>();
+  environments: Array<Environment> = [];
 
   /**
    * All the namespaces used for storing user Secrets
    */
-  secretNamespaces = new Array<Space>();
+  secretNamespaces: Array<Space> = [];
 
   /**
    * System namespaces
    */
-  systemNamespaces = new Array<Space>();
+  systemNamespaces: Array<Space> = [];
 }
 
 export function createEmptySpace(): Space {
