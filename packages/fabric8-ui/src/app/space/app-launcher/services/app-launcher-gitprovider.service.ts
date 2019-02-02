@@ -165,15 +165,16 @@ export class AppLauncherGitproviderService implements GitProviderService {
   }
 
   private getRepositories(org: string = ''): Observable<string[]> {
-    if (org === this.gitHubUserLogin) {
-      org = '';
+    let o = org;
+    if (o === this.gitHubUserLogin) {
+      o = '';
     }
-    if (this.repositories[org]) {
-      return of(this.repositories[org]);
+    if (this.repositories[o]) {
+      return of(this.repositories[o]);
     }
-    return this.http.get<string[]>(this.createUrl(org), { headers: this.headers }).pipe(
+    return this.http.get<string[]>(this.createUrl(o), { headers: this.headers }).pipe(
       map((json) => (json ? (json as string[]) : [])),
-      tap((repositories) => (this.repositories[org] = repositories)),
+      tap((repositories) => (this.repositories[o] = repositories)),
       catchError((error: HttpErrorResponse) => throwError(error)),
     );
   }

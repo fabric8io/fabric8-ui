@@ -7,21 +7,22 @@ export function pathJoin(...paths: string[]): string {
   const tmp = [];
   const length = paths.length - 1;
   paths.forEach((path, index) => {
-    if (isBlank(path)) {
+    let p = path;
+    if (isBlank(p)) {
       return;
     }
-    if (path === '/') {
+    if (p === '/') {
       tmp.push('');
       return;
     }
-    if (index !== 0 && path.match(/^\//)) {
-      path = path.slice(1);
+    if (index !== 0 && p.match(/^\//)) {
+      p = p.slice(1);
     }
-    if (index !== length && path.match(/\/$/)) {
-      path = path.slice(0, path.length - 1);
+    if (index !== length && p.match(/\/$/)) {
+      p = p.slice(0, p.length - 1);
     }
-    if (!isBlank(path)) {
-      tmp.push(path);
+    if (!isBlank(p)) {
+      tmp.push(p);
     }
   });
   const rc = tmp.join('/');

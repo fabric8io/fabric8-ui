@@ -95,10 +95,11 @@ export abstract class NamespacedResourceService<
   }
 
   protected urlForObject(obj: T, namespace: string = '') {
-    if (!namespace) {
-      namespace = obj.namespace;
+    let ns = namespace;
+    if (!ns) {
+      ns = obj.namespace;
     }
-    const url = namespace ? this.serviceUrlForNamespace(namespace) : this.serviceUrl;
+    const url = ns ? this.serviceUrlForNamespace(ns) : this.serviceUrl;
     return url;
   }
 

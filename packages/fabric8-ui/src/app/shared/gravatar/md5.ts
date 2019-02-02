@@ -2,6 +2,7 @@
 // MD5 (Message-Digest Algorithm) by WebToolkit
 
 export function md5(s) {
+  let s0 = s;
   function L(k, d) {
     return (k << d) | (k >>> (32 - d));
   }
@@ -35,20 +36,24 @@ export function md5(s) {
     return F ^ (d | ~k);
   }
   function u(G, F, aa, Z, k, H, I) {
-    G = K(G, K(K(r(F, aa, Z), k), I));
-    return K(L(G, H), F);
+    let g = G;
+    g = K(g, K(K(r(F, aa, Z), k), I));
+    return K(L(g, H), F);
   }
   function f(G, F, aa, Z, k, H, I) {
-    G = K(G, K(K(q(F, aa, Z), k), I));
-    return K(L(G, H), F);
+    let g = G;
+    g = K(g, K(K(q(F, aa, Z), k), I));
+    return K(L(g, H), F);
   }
   function D(G, F, aa, Z, k, H, I) {
-    G = K(G, K(K(p(F, aa, Z), k), I));
-    return K(L(G, H), F);
+    let g = G;
+    g = K(g, K(K(p(F, aa, Z), k), I));
+    return K(L(g, H), F);
   }
   function t(G, F, aa, Z, k, H, I) {
-    G = K(G, K(K(n(F, aa, Z), k), I));
-    return K(L(G, H), F);
+    let g = G;
+    g = K(g, K(K(n(F, aa, Z), k), I));
+    return K(L(g, H), F);
   }
   function e(G) {
     let Z;
@@ -88,10 +93,11 @@ export function md5(s) {
     return k;
   }
   function J(k) {
-    k = k.replace(/rn/g, 'n');
+    let K = k;
+    K = K.replace(/rn/g, 'n');
     let d = '';
     for (let F = 0; F < k.length; F++) {
-      const x = k.charCodeAt(F);
+      const x = K.charCodeAt(F);
       if (x < 128) {
         d += String.fromCharCode(x);
       } else if (x > 127 && x < 2048) {
@@ -143,7 +149,7 @@ export function md5(s) {
   const R = 15;
 
   const O = 21;
-  s = J(s);
+  s0 = J(s);
   C = e(s);
   Y = 1732584193;
   X = 4023233417;

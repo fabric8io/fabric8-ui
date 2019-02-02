@@ -6,7 +6,6 @@
     "eqeqeq": "off",
     "no-bitwise": "off",
     "no-console": "off",
-    "no-param-reassign": "off",
     "no-return-assign": "off",
     "no-prototype-builtins": "off",
     "no-restricted-properties": "off",
@@ -18,6 +17,8 @@
     "prefer-rest-params": "off",
     "radix": "off",
     "vars-on-top": "off",
+
+    "react/no-this-in-sfc": "off",
 
     "jest/lowercase-name": "off",
     "jest/no-disabled-tests": "off",

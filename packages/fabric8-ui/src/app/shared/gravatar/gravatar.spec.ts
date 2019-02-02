@@ -1,12 +1,13 @@
 import { gravatar } from './gravatar';
 
 function extractParams(from) {
+  let f = from;
   const params: object = {};
-  from = from.split('?').pop();
-  from = from.split('&');
-  for (const i in from) {
-    if (i && from[i]) {
-      const t = from[i].split('=');
+  f = f.split('?').pop();
+  f = f.split('&');
+  for (const i in f) {
+    if (i && f[i]) {
+      const t = f[i].split('=');
       params[t[0]] = t[1];
     }
   }

@@ -186,10 +186,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   private stripQueryFromUrl(url: string) {
-    if (url.indexOf('?q=') !== -1) {
-      url = url.substring(0, url.indexOf('?q='));
+    let u = url;
+    if (u.indexOf('?q=') !== -1) {
+      u = u.substring(0, u.indexOf('?q='));
     }
-    return url;
+    return u;
   }
 
   private updateMenus(): void {

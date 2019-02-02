@@ -58,14 +58,15 @@ export class InputActionDialog implements OnDestroy {
   }
 
   invokeUrl(url: string) {
-    if (url) {
-      if (url.startsWith('//')) {
-        url = url.substring(1);
+    let u = url;
+    if (u) {
+      if (u.startsWith('//')) {
+        u = u.substring(1);
       }
       // lets replace URL which doesn't seem to work right ;)
       const postfix = '/wfapi/inputSubmit?inputId=Proceed';
-      if (url.endsWith(postfix)) {
-        url = `${url.substring(0, url.length - postfix.length)}/input/Proceed/proceedEmpty`;
+      if (u.endsWith(postfix)) {
+        u = `${u.substring(0, u.length - postfix.length)}/input/Proceed/proceedEmpty`;
       }
 
       const jenkinsNamespace = this.build.jenkinsNamespace;
@@ -75,13 +76,13 @@ export class InputActionDialog implements OnDestroy {
       } else if (!jenkinsNamespace) {
         console.log('Warning no jenkinsNamespace on the Build!');
       } else {
-        url = pathJoin(forgeUrl, '/api/openshift/services/jenkins/', jenkinsNamespace, url);
+        u = pathJoin(forgeUrl, '/api/openshift/services/jenkins/', jenkinsNamespace, u);
         const headers = new HttpHeaders({
           Authorization: `Bearer ${this.authService.getToken()}`,
           'X-App': 'OSIO',
         });
         const body = null;
-        this.http.post(url, body, { headers }).subscribe(() => {});
+        this.http.post(u, body, { headers }).subscribe(() => {});
       }
     }
     this.close();

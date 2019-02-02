@@ -18,10 +18,11 @@ export class NamespaceScope implements INamespaceScope {
       filter((event) => event instanceof NavigationEnd),
       map(() => this.activatedRoute),
       map((route) => {
-        while (route.firstChild) {
-          route = route.firstChild;
+        let r = route;
+        while (r.firstChild) {
+          r = r.firstChild;
         }
-        return route;
+        return r;
       }),
       filter((route) => route.outlet === 'primary'),
       mergeMap((route) => route.params),

@@ -45,8 +45,10 @@ export function openShiftBrowseResourceUrl(
   kinds: string = null,
 ): string {
   if (resource) {
+    let oscUrl: string = openShiftConsoleUrl;
+    let k: string = kinds;
     if (!openShiftConsoleUrl) {
-      openShiftConsoleUrl = oauthConfig.openshiftConsoleUrl;
+      oscUrl = oauthConfig.openshiftConsoleUrl;
     }
     if (!kinds) {
       let kind = resource.defaultKind();
@@ -57,36 +59,29 @@ export function openShiftBrowseResourceUrl(
         }
       }
       if (kind) {
-        kinds =
+        k =
           resourceKindToOpenShiftConsoleCollectionName[kind] || resourceKindToCollectionName[kind];
-        if (!kinds) {
+        if (!k) {
           console.log(`Could not find collection name for kind: ${kind}`);
-          kinds = kind.toLowerCase();
-          if (!kinds.endsWith('s')) {
-            kinds += 's';
+          k = kind.toLowerCase();
+          if (!k.endsWith('s')) {
+            k += 's';
           }
         }
       }
     }
     const name = resource.name;
     const namespace = resource.namespace;
-    if (kinds === 'builds' && name && namespace) {
+    if (k === 'builds' && name && namespace) {
       const pipelineName = resource['buildConfigName'] || name;
-      return pathJoin(
-        openShiftConsoleUrl,
-        '/project/',
-        namespace,
-        '/browse/pipelines',
-        pipelineName,
-        name,
-      );
+      return pathJoin(oscUrl, '/project/', namespace, '/browse/pipelines', pipelineName, name);
     }
-    if (kinds === 'spaces' || kinds === 'projects') {
+    if (k === 'spaces' || k === 'projects') {
       if (name) {
-        return pathJoin(openShiftConsoleUrl, '/project/', name, '/overview');
+        return pathJoin(oscUrl, '/project/', name, '/overview');
       }
-    } else if (resource && openShiftConsoleUrl && namespace && name) {
-      return pathJoin(openShiftConsoleUrl, '/project/', namespace, '/browse', kinds, name);
+    } else if (resource && oscUrl && namespace && name) {
+      return pathJoin(oscUrl, '/project/', namespace, '/browse', k, name);
     }
   }
   return '';

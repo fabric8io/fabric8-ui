@@ -117,12 +117,13 @@ export class AppComponent {
           filter((event) => event instanceof NavigationEnd),
           map(() => this.activatedRoute),
           map((route) => {
+            let r = route;
             // reset all experimental feature flag properties
             this.featureConfig = null;
-            while (route.firstChild) {
-              route = route.firstChild;
+            while (r.firstChild) {
+              r = r.firstChild;
             }
-            return route;
+            return r;
           }),
           filter((route) => route.outlet === 'primary'),
           mergeMap((route) => route.data),

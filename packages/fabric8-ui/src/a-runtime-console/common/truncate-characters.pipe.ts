@@ -9,10 +9,9 @@ export class TruncateCharactersPipe {
       return '';
     }
     if (limit < 0) {
-      limit *= -1;
-      return value.length > limit
-        ? trail + value.substring(value.length - limit, value.length)
-        : value;
+      let l = limit;
+      l *= -1;
+      return value.length > l ? trail + value.substring(value.length - l, value.length) : value;
     }
     return value.length > limit ? value.substring(0, limit) + trail : value;
   }
