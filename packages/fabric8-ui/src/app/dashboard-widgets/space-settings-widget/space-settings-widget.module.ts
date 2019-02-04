@@ -6,6 +6,7 @@ import { NgArrayPipesModule } from 'angular-pipes';
 import { PlannerListModule, WorkItemDetailModule } from 'fabric8-planner';
 import { FeatureFlagModule } from 'ngx-feature-flag';
 import { WidgetsModule } from 'ngx-widgets';
+import { TruncateModule } from 'ng2-truncate';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { LoadingWidgetModule } from '../loading-widget/loading-widget.module';
 import { WorkItemBarchartModule } from '../work-item-widget/work-item-barchart/work-item-barchart.module';
@@ -19,13 +20,9 @@ import { AddCollaboratorsDialogModule } from '../../space/settings/collaborators
     ModalModule,
     CommonModule,
     FeatureFlagModule,
-    FormsModule,
+    TruncateModule,
     LoadingWidgetModule,
-    WidgetsModule,
-    PlannerListModule,
     NgArrayPipesModule,
-    WorkItemBarchartModule,
-    WorkItemDetailModule,
     AddCollaboratorsDialogModule,
     EditSpaceDescriptionWidgetModule,
   ],

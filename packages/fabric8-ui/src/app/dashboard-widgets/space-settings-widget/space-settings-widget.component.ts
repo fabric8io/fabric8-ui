@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewEncapsulation, ViewChild, ElementRef } from '@angular/core';
 import { Broadcaster } from 'ngx-base';
 import { ModalDirective } from 'ngx-bootstrap';
 import { uniqBy } from 'lodash';
@@ -19,7 +19,7 @@ export class SpaceSettingsWidgetComponent implements OnInit {
   @Input() userIsSpaceAdmin: boolean;
   @Input() user: User;
   @Input() space: Space;
-  @ViewChild('spaceDescription') description: any;
+  @ViewChild('spaceDescription') description: ElementRef;
   @ViewChild('modalAdd') modalAdd: ModalDirective;
 
   private subscriptions: Subscription[] = [];
@@ -61,20 +61,16 @@ export class SpaceSettingsWidgetComponent implements OnInit {
     );
   }
 
-  get UserEmail() {
+  get UserEmail(): string {
     return this._currentUser.attributes.email;
   }
 
-  get UserName() {
+  get UserName(): string {
     return this._currentUser.attributes.username;
   }
 
-  shorten(str, maxLen = 75, ending = '...'): string {
-    if (str.length <= maxLen) return str;
-    return str.substr(0, maxLen - ending.length) + ending;
-  }
-  get SpaceDescription() {
-    return this.shorten(this._currentSpace.attributes.description);
+  get SpaceDescription(): string {
+    return this._currentSpace.attributes.description;
   }
 
   ngOnDestroy(): void {
@@ -83,7 +79,7 @@ export class SpaceSettingsWidgetComponent implements OnInit {
     });
   }
 
-  updateDescription(description: string) {
+  updateDescription(description: string): void {
     let patch = {
       attributes: {
         description: description,
