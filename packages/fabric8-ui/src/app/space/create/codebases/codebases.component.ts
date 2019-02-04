@@ -62,7 +62,12 @@ export class CodebasesComponent implements OnDestroy, OnInit {
     private router: Router,
     private providerService: ProviderService,
   ) {
-    this.subscriptions.push(this.contexts.current.subscribe((val) => (this.context = val)));
+    this.subscriptions.push(
+      this.contexts.current.subscribe((val) => {
+        this.context = val;
+        this.updateCodebases();
+      }),
+    );
     this.gitHubService.clearCache();
     this.subscriptions.push(
       this.broadcaster.on('codebaseAdded').subscribe((codebase: Codebase) => {

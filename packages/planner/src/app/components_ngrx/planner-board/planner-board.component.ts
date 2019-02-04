@@ -88,9 +88,10 @@ export class PlannerBoardComponent implements AfterViewChecked, OnInit, OnDestro
     );
   }
 
-  setDefaultUrl(groupType: GroupTypeUI) {
+  setDefaultUrl(groupType: GroupTypeUI, url?) {
     const queryParams = this.constructUrl(groupType);
-    this.router.navigate([], {
+    const setUrl = url === undefined ? [] : [url];
+    this.router.navigate(setUrl, {
       relativeTo: this.route,
       queryParams: { q: queryParams },
     });
@@ -116,7 +117,7 @@ export class PlannerBoardComponent implements AfterViewChecked, OnInit, OnDestro
         )
         .subscribe((url) => {
           if (url.indexOf('?q') === -1 && url.indexOf('/plan/board') > -1) {
-            this.setDefaultUrl(groupType);
+            this.setDefaultUrl(groupType, url);
           }
         }),
     );
