@@ -31,6 +31,8 @@ export class SpaceSettingsWidgetComponent implements OnInit {
   collaborators: User[] = [];
   filteredCollaborators: User[] = [];
   collaboratorCount: number = 0;
+  disableSaveButton: boolean = true;
+
 
   constructor(
     private areaService: AreaService,
@@ -114,6 +116,12 @@ export class SpaceSettingsWidgetComponent implements OnInit {
 
   saveDescription(): void {
     this._descriptionUpdater.next(this.description.nativeElement.value);
+  }
+  onChangeDescription(description): void {
+    this.disableSaveButton = true;
+    if(description && description.trim().length) {
+      this.disableSaveButton = false;
+    }
   }
 
   stopEditingDescription(): void {

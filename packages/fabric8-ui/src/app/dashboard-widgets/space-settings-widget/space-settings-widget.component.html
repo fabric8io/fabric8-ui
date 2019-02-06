@@ -29,7 +29,8 @@
                 placeholder="Description goes here"
                 class="space-description form-control"
                 *ngIf="isEditing && isEditable()"
-                (keyup.enter)="onUpdateDescription(description.value)"
+                (keyup)="onChangeDescription(spaceDescription.value)"
+                (keyup.enter)="onUpdateDescription(spaceDescription.value)"
                 (keydown.enter)="preventDef($event)"
                 #spaceDescription
                 >{{ space?.attributes.description }}</textarea
@@ -46,6 +47,7 @@
                 <button
                   id="workItemTitle_btn_save_description"
                   class="pull-right btn btn-primary edit-space-description-btn "
+                  [disabled]="disableSaveButton"
                   (click)="saveDescription()"
                 >
                   Save
