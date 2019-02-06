@@ -4,9 +4,9 @@ jest.mock('../internal/api.config.ts');
 
 describe('api.urls', () => {
   it('should get logout url', () => {
-    expect(urls.getLogoutUrl('')).toBe('/auth-api-url/logout');
-    expect(urls.getLogoutUrl('foobar')).toBe('/auth-api-url/logout?redirect=foobar');
-    expect(urls.getLogoutUrl('foo&bar')).toBe('/auth-api-url/logout?redirect=foo%26bar');
+    expect(urls.getLogoutUrl('')).toBe('/auth-api-url/logout/v2');
+    expect(urls.getLogoutUrl('foobar')).toBe('/auth-api-url/logout/v2?redirect=foobar');
+    expect(urls.getLogoutUrl('foo&bar')).toBe('/auth-api-url/logout/v2?redirect=foo%26bar');
   });
 
   it('should get login authorize url', () => {

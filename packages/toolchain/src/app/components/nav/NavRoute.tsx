@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { RouteComponentProps, withRouter, matchPath } from 'react-router';
-import { NavItem } from '@talamer/widgets';
+import { NavItem } from '@talamer/react-widgets';
 
 export type NavRouteProps = {
   children?: ReactNode | string;

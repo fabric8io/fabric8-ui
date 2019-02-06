@@ -1,0 +1,23 @@
+{
+  "name": "@talamer/angular-widgets",
+  "version": "0.0.0",
+  "description": "CodeReady Toolchain common angular components.",
+  "keywords": [
+    "angular",
+    "pure",
+    "components"
+  ],
+  "author": "Rohit Rai <rohitkrai03@gmail.com>",
+  "homepage": "https://github.com/fabric8-ui/fabric8-ui/tree/master/packages/components/angular-widgets#readme",
+  "license": "Apache-2.0",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fabric8-ui/fabric8-ui.git"
+  },
+  "scripts": {},
+  "bugs": {
+    "url": "https://github.com/fabric8-ui/fabric8-ui/issues"
+  }
+}

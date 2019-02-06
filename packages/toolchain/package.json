@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@talamer/scripts": "0.0.1",
-    "@talamer/widgets": "0.0.1",
+    "@talamer/react-widgets": "0.0.1",
     "@types/react-redux": "6.0.11",
     "axios": "0.18.0",
     "connected-react-router": "6.1.0",

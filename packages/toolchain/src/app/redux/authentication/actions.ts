@@ -1,4 +1,5 @@
 import { push } from 'connected-react-router';
+import { fetch } from '../../api/http.client';
 import { getLoginAuthorizeUrl, getLogoutUrl } from '../../api/api-urls';
 import {
   setAuthToken,
@@ -75,8 +76,10 @@ export function login(url: string = `${window.location.pathname}${location.searc
 }
 
 export function logout(): ThunkAction {
-  return function(dispatch) {
+  return async function(dispatch) {
+    const logoutUrl = getLogoutUrl(window.location.origin);
+    const result = await fetch<{ redirect_location: string }>(logoutUrl);
     setAuthToken(null);
-    dispatch(redirect(getLogoutUrl(window.location.origin)));
+    dispatch(redirect(result.redirect_location));
   };
 }

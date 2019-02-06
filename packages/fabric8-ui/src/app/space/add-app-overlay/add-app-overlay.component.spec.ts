@@ -14,8 +14,8 @@ import { ContextService } from '../../shared/context.service';
 import { SpaceNamespaceService } from '../../shared/runtime-console/space-namespace.service';
 import { SpaceTemplateService } from '../../shared/space-template.service';
 import { SpacesService } from '../../shared/spaces.service';
-import { DeploymentApiService } from '../create/deployments/services/deployment-api.service';
 import { AddAppOverlayComponent } from './add-app-overlay.component';
+import {PipelinesService} from "../../shared/runtime-console/pipelines.service";
 
 export class BroadcasterTestProvider {
   private _eventBus: Subject<any>;
@@ -66,25 +66,23 @@ describe('AddAppOverlayComponent', () => {
       return pattern.test(projectName);
     },
   };
-  let mockDeploymentApiService: any = jasmine.createSpyObj('DeploymentApiService', [
-    'getApplications',
-  ]);
-  mockDeploymentApiService.getApplications.and.returnValue(
-    observableOf([
-      {
-        attributes: { name: 'app-apr-10-2018-4-25' },
-      },
-      {
-        attributes: { name: 'app-may-11-2018' },
-      },
-      {
-        attributes: { name: 'app-may-14-1-04' },
-      },
-    ]),
-  );
 
-  let mockApplications: string[] = ['app-apr-10-2018-4-25', 'app-may-11-2018', 'app-may-14-1-04'];
-
+  const mockApplicationNames = [
+      {
+        name: 'app-apr-10-2018-4-25',
+      },
+      {
+        name: 'app-may-11-2018',
+      },
+      {
+        name: 'app-may-14-1-04',
+      },
+    ];
+  class MockPipelinesService {
+    get current(): Observable<any> {
+      return observableOf(mockApplicationNames);
+    }
+  }
   let mockContext: any;
 
   let mockProfile: Profile = {
@@ -188,7 +186,7 @@ describe('AddAppOverlayComponent', () => {
       imports: [FormsModule, ModalModule.forRoot(), PopoverModule.forRoot()],
       declarations: [AddAppOverlayComponent],
       providers: [
-        { provide: DeploymentApiService, useValue: mockDeploymentApiService },
+        { provide: PipelinesService, useClass: MockPipelinesService },
         { provide: DependencyCheckService, useValue: mockDependencyCheckService },
         PopoverConfig,
         { provide: Broadcaster, useValue: new BroadcasterTestProvider() },
@@ -207,23 +205,12 @@ describe('AddAppOverlayComponent', () => {
   });
 
   describe('#constructor', () => {
-    it('should not have applications if the current space is not defined', () => {
+    it('should not have applications if when the component is created', () => {
       mockContext.space = null;
       fixture = TestBed.createComponent(AddAppOverlayComponent);
       component = fixture.componentInstance;
       fixture.detectChanges();
-      expect(mockDeploymentApiService.getApplications).toHaveBeenCalledTimes(0);
       expect(component.applications).toEqual([]);
-    });
-
-    it('should retieve applications if the current space is defined', () => {
-      mockContext.space.id = 'mock-space-id';
-      fixture = TestBed.createComponent(AddAppOverlayComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-      expect(mockDeploymentApiService.getApplications).toHaveBeenCalledTimes(1);
-      expect(mockDeploymentApiService.getApplications).toHaveBeenCalledWith('mock-space-id');
-      expect(component.applications).toEqual(mockApplications);
     });
   });
 
@@ -248,25 +235,29 @@ describe('AddAppOverlayComponent', () => {
       expect(btnElem.hasAttribute('disabled')).toBeTruthy();
     });
 
-    it('application is not available', () => {
-      component.projectName = 'app-may-11-2018';
-      component.validateProjectName();
-      expect(component.isProjectNameAvailable).toBeFalsy();
-    });
-
-    it('application is available', () => {
-      component.projectName = 'app-may-11-2018-1';
-      component.validateProjectName();
-      expect(component.isProjectNameAvailable).toBeTruthy();
-    });
-
     it('application is not valid', () => {
+      component.showModal();
       component.projectName = '#app-may-11-2018-1';
       component.validateProjectName();
       expect(component.isProjectNameValid).toBeFalsy();
     });
 
+    it('application is not available', () => {
+      component.showModal();
+      component.projectName = 'app-may-11-2018';
+      component.validateProjectName();
+      expect(component.isProjectNameAvailable).toBeFalsy();
+    });
+  
+    it('application is available', () => {
+      component.showModal();
+      component.projectName = 'app-may-11-2018-1';
+      component.validateProjectName();
+      expect(component.isProjectNameAvailable).toBeTruthy();
+    });
+
     it('application is valid', () => {
+      component.showModal();
       component.projectName = 'app-may-11-2018-1';
       component.validateProjectName();
       expect(component.isProjectNameValid).toBeTruthy();

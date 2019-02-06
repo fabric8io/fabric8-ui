@@ -6,6 +6,7 @@ import { AUTH_API_URL, AuthenticationService, UserService } from 'ngx-login-clie
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { WindowService } from './window.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class LoginService {
@@ -23,6 +24,7 @@ export class LoginService {
   constructor(
     windowService: WindowService,
     private router: Router,
+    private http: HttpClient,
     private localStorage: LocalStorageService,
     @Inject(AUTH_API_URL) private apiUrl: string,
     private broadcaster: Broadcaster,
@@ -71,9 +73,13 @@ export class LoginService {
   }
 
   public logout() {
-    this.authService.logout();
-    this.window.location.href =
-      this.apiUrl + 'logout?redirect=' + encodeURIComponent(this.window.location.origin);
+    const logoutUrl =
+      this.apiUrl + 'logout/v2?redirect=' + encodeURIComponent(this.window.location.origin);
+
+    this.http.get(logoutUrl).subscribe((res: { redirect_location: string }) => {
+      this.authService.logout();
+      window.location.href = res.redirect_location;
+    });
   }
 
   public login() {

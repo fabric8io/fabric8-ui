@@ -6,10 +6,16 @@ import { AuthenticationActionTypes } from '../actionTypes';
 import { RedirectActionTypes } from '../../middleware/redirect';
 import { LocalStorageActionTypes } from '../../middleware/localStorage';
 import * as token from '../../../api/token';
-import { getLoginAuthorizeUrl, getLogoutUrl } from '../../../api/api-urls';
+import { getLoginAuthorizeUrl } from '../../../api/api-urls';
 import { AppState } from '../../appState';
 
 jest.mock('../../wit/actions');
+
+jest.mock('../../../api/http.client', () => ({
+  fetch: jest.fn((url) => ({
+    redirect_location: 'foobar',
+  })),
+}));
 
 let mockToken;
 let mockParsedToken;
@@ -48,7 +54,7 @@ describe('authentication actions', () => {
     expect(await getAction(store, RedirectActionTypes.REDIRECT)).toEqual({
       type: RedirectActionTypes.REDIRECT,
       payload: {
-        url: getLogoutUrl('foobar'),
+        url: 'foobar',
       },
     });
     expect(token.setAuthToken).toHaveBeenCalledWith(null);

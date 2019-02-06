@@ -1,5 +1,5 @@
 import React from 'react';
-import { AboutModal, Content } from '@talamer/widgets';
+import { AboutModal, Content } from '@talamer/react-widgets';
 import heroImg from '../../../assets/images/bg1/pfbg_768.jpg';
 import brand from '../../../brand';
 

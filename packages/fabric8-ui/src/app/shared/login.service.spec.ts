@@ -8,11 +8,12 @@ import { never as observableNever, of } from 'rxjs';
 import { createMock } from 'testing/mock';
 import { LoginService } from './login.service';
 import { WindowService } from './window.service';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 describe('LoginService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([])],
+      imports: [RouterTestingModule.withRoutes([]), HttpClientTestingModule],
       providers: [
         LoginService,
         {
@@ -24,7 +25,7 @@ describe('LoginService', () => {
           },
         },
         { provide: LocalStorageService, useValue: createMock(LocalStorageService) },
-        { provide: AUTH_API_URL, useValue: 'http://example.com' },
+        { provide: AUTH_API_URL, useValue: 'http://example.com/' },
         {
           provide: Broadcaster,
           useFactory: () => {
@@ -103,6 +104,33 @@ describe('LoginService', () => {
         expect(authService.onLogIn).toHaveBeenCalled();
         expect(loginService.openShiftToken).toEqual('mock-openshift-token');
       });
+    });
+  });
+
+  describe('logout', () => {
+    // Fix the test warning related to ngzone.
+    it('should handle logout', () => {
+      const windowService: jasmine.SpyObj<WindowService> = TestBed.get(WindowService);
+      windowService.getNativeWindow.and.returnValue({
+        location: {
+          origin: 'mock-origin',
+          href: '',
+        },
+      });
+
+      const loginService: LoginService = TestBed.get(LoginService);
+      loginService.logout();
+
+      const authService: jasmine.SpyObj<AuthenticationService> = TestBed.get(AuthenticationService);
+      authService.logout.and.stub();
+
+      const controller = TestBed.get(HttpTestingController);
+
+      const req = controller.expectOne('http://example.com/logout/v2?redirect=mock-origin');
+      expect(req.request.method).toEqual('GET');
+      req.flush({ redirect_location: 'mock-location' });
+
+      expect(authService.logout).toBeCalled();
     });
   });
 });

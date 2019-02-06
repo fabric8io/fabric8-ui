@@ -1,7 +1,7 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Dropdown, DropdownItem, DropdownPosition, Button } from '@talamer/widgets';
+import { Dropdown, DropdownItem, DropdownPosition, Button } from '@talamer/react-widgets';
 import { ThunkDispatch } from '../../redux/utils';
 import { getLoginAuthorizeUrl } from '../../api/api-urls';
 import DropdownItemRoute from '../DropdownItemRoute';

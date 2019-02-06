@@ -16,9 +16,7 @@
     "lint:js": "eslint '**/*.{js,ts,tsx}' --max-warnings 0 --format codeframe",
     "lint:html": "htmlhint **/*.html",
     "reinstall": "npm run clean && npm install",
-    "start": "npm run tmp_e2e_workaround",
-    "test": "CI=1 lerna run test --stream",
-    "tmp_e2e_workaround": "npm run bootstrap && npm start --prefix packages/toolchain"
+    "test": "CI=1 lerna run test --stream"
   },
   "engines": {
     "node": "= 8.3.0",

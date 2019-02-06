@@ -9,9 +9,6 @@
     <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
       <a [routerLink]="['/' + loggedInUserName + '/_settings/feature-opt-in']"> Features Opt-in </a>
     </li>
-    <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-      <a [routerLink]="['/' + loggedInUserName + '/_settings/resources']"> Resources </a>
-    </li>
   </ul>
 </div>
 <router-outlet></router-outlet>

@@ -9,8 +9,6 @@ import { ApplicationsWidgetModule } from '../../../dashboard-widgets/application
 import { CreateWorkItemWidgetModule } from '../../../dashboard-widgets/create-work-item-widget/create-work-item-widget.module';
 import { EditSpaceDescriptionWidgetOldModule } from '../../../dashboard-widgets/edit-space-description-widget-old/edit-space-description-widget-old.module';
 import { EditSpaceDescriptionWidgetModule } from '../../../dashboard-widgets/edit-space-description-widget/edit-space-description-widget.module';
-import { EnvironmentWidgetComponent } from '../../../dashboard-widgets/environment-widget/environment-widget.component';
-import { EnvironmentWidgetModule } from '../../../dashboard-widgets/environment-widget/environment-widget.module';
 import { PipelinesWidgetModule } from '../../../dashboard-widgets/pipelines-widget/pipelines-widget.module';
 import { WorkItemWidgetModule } from '../../../dashboard-widgets/work-item-widget/work-item-widget.module';
 import { SpaceSettingsWidgetModule } from '../../../dashboard-widgets/space-settings-widget/space-settings-widget.module';
@@ -27,7 +25,6 @@ import { AnalyzeOverviewComponent } from './analyze-overview.component';
     FormsModule,
     EditSpaceDescriptionWidgetOldModule,
     EditSpaceDescriptionWidgetModule,
-    EnvironmentWidgetModule,
     AnalyticalReportWidgetModule,
     CreateWorkItemWidgetModule,
     AddCodebaseWidgetModule,
@@ -38,7 +35,6 @@ import { AnalyzeOverviewComponent } from './analyze-overview.component';
     SpaceSettingsWidgetModule,
   ],
   declarations: [AnalyzeOverviewComponent],
-  entryComponents: [EnvironmentWidgetComponent],
 })
 export class AnalyzeOverviewModule {
   constructor() {}

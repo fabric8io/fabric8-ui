@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dropdown, DropdownItem, DropdownPosition } from '@talamer/widgets';
+import { Dropdown, DropdownItem, DropdownPosition } from '@talamer/react-widgets';
 import brand from '../../../brand';
 import ProductAboutModal from './ProductAboutModal';
 

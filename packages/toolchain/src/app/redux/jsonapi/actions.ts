@@ -1,6 +1,6 @@
 import { ThunkAction } from 'redux-thunk';
 import { DataDocument, ErrorObject, JsonApiError } from '../../api/models/jsonapi';
-import { fetchDocument as fetchDocumentApi } from '../../api/jsonapi.client';
+import { fetchDocument as fetchDocumentApi } from '../../api/http.client';
 import { AppState } from '../appState';
 import { createAction, ActionsUnion } from '../utils';
 import { JsonapiActionTypes } from './actionTypes';

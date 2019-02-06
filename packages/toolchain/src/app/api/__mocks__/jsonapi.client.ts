@@ -1,4 +1,4 @@
-import { JsonApiError } from '../jsonapi.client';
+import { JsonApiError } from '../http.client';
 
 export const fetchDocument = (url: string) => {
   if (url.indexOf('throwError') >= 0) {

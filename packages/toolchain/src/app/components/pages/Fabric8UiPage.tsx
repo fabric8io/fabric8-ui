@@ -1,5 +1,5 @@
 import React from 'react';
-import { asyncComponent, PageSection, PageSectionVariants } from '@talamer/widgets';
+import { asyncComponent, PageSection, PageSectionVariants } from '@talamer/react-widgets';
 
 const AsyncEmbedAngularFabric8UI = asyncComponent({
   loader: () => import('../f8ui/EmbedAngularFabric8UI'),

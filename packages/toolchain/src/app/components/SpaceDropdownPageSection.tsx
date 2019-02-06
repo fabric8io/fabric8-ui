@@ -1,5 +1,5 @@
 import React from 'react';
-import { PageSection, PageSectionVariants, Dropdown } from '@talamer/widgets';
+import { PageSection, PageSectionVariants, Dropdown } from '@talamer/react-widgets';
 import { connect } from 'react-redux';
 import DropdownItemRoute from './DropdownItemRoute';
 import { AppState } from '../redux/appState';
