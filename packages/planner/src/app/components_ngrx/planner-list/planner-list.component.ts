@@ -220,7 +220,7 @@ export class PlannerListComponent implements OnInit, OnDestroy, AfterViewChecked
             event.url.indexOf('/plan/query') === -1 &&
             event.url.indexOf('/plan') > -1
           ) {
-            this.setDefaultUrl();
+            this.setDefaultUrl(event.url);
           }
           if (event.url.indexOf('/plan/detail/') > -1) {
             // It's going to the detail page
@@ -277,12 +277,11 @@ export class PlannerListComponent implements OnInit, OnDestroy, AfterViewChecked
     }, 500);
   }
 
-  setDefaultUrl() {
+  setDefaultUrl(url?) {
     //redirect to default type group
     //get space id
     this.spaceSource.pipe(take(1)).subscribe((space) => {
       if (space) {
-        const spaceId = space.id;
         //get groupsgroups
         this.groupTypeQuery.getFirstGroupType.pipe(take(1)).subscribe((groupType) => {
           const defaultGroupName = groupType.name;
@@ -298,9 +297,9 @@ export class PlannerListComponent implements OnInit, OnDestroy, AfterViewChecked
           //const third_join = this.filterService.queryJoiner(second_join);
           //second_join gives json object
           let query = this.filterService.jsonToQuery(first_join);
-          console.log('query is ', query);
           // { queryParams : {q: query}
-          this.router.navigate([], {
+          const setUrl = url === undefined ? [] : [url];
+          this.router.navigate(setUrl, {
             relativeTo: this.route,
             queryParams: { q: query, showTree: true },
           });
