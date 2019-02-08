@@ -37,6 +37,7 @@ export class CreateAppComponent implements OnDestroy, OnInit {
   }
 
   ngOnDestroy(): void {
+    this.projectile.resetState();
     this.subscriptions.forEach((sub) => {
       sub.unsubscribe();
     });
