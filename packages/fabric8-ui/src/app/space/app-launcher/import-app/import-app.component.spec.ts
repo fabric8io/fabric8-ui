@@ -11,8 +11,6 @@ import {
   Pipeline,
   PipelineService,
   ProjectSummaryService,
-  Projectile,
-  StepState,
 } from 'ngx-launcher';
 import { of } from 'rxjs';
 import { createMock } from 'testing/mock';
@@ -21,30 +19,7 @@ import { AppLauncherGitproviderService } from '../services/app-launcher-gitprovi
 import { AppLauncherPipelineService } from '../services/app-launcher-pipeline.service';
 import { ImportAppComponent } from './import-app.component';
 
-class TestableStepState<T> extends StepState<T> {
-  restore() {}
-}
-
-class TestableProjectile<T> extends Projectile<T> {
-  restore(): TestableStepState<any> {
-    const newState = {
-      _state: {
-        param1: 'value1',
-      },
-      _filters: [
-        {
-          name: 'p1',
-          value: 'param1',
-        },
-      ],
-    };
-    return newState as any;
-  }
-  protected searchParams() {
-    return new URLSearchParams(this.toUrl());
-  }
-}
-describe('CreateAppComponent', () => {
+describe('ImportAppComponent', () => {
   let component: ImportAppComponent;
   let fixture: ComponentFixture<ImportAppComponent>;
   const mockFeature: Feature = {
@@ -150,39 +125,4 @@ describe('CreateAppComponent', () => {
     const query = { q: '{"application":["' + component.projectName + '"]}' };
     expect(component.addQuery()).toEqual(query);
   }));
-
-  it('should reset the state', (done: DoneFn) => {
-    const projectile = new TestableProjectile<any>();
-    projectile.setState(
-      'newState',
-      new TestableStepState<any>(
-        {
-          param1: 'value1',
-        },
-        [
-          {
-            name: 'p1',
-            value: 'param1',
-          },
-        ],
-      ),
-    );
-    const newState = {
-      _state: {
-        param1: 'value1',
-      },
-      _filters: [
-        {
-          name: 'p1',
-          value: 'param1',
-        },
-      ],
-    };
-    const _newState = projectile.getState('newState');
-    expect(_newState).toEqual(newState);
-    projectile.resetState();
-    const currentState = projectile.getState('newState');
-    expect(currentState).toBeUndefined();
-    done();
-  });
 });
