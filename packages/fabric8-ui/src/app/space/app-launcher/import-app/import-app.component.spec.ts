@@ -19,7 +19,7 @@ import { AppLauncherGitproviderService } from '../services/app-launcher-gitprovi
 import { AppLauncherPipelineService } from '../services/app-launcher-pipeline.service';
 import { ImportAppComponent } from './import-app.component';
 
-describe('CreateAppComponent', () => {
+describe('ImportAppComponent', () => {
   let component: ImportAppComponent;
   let fixture: ComponentFixture<ImportAppComponent>;
   const mockFeature: Feature = {

@@ -17,15 +17,16 @@
     <div class="editor-icon-container">
       <i *ngIf="editAllow" (click)="activeEditor()" class="pficon-edit edit-icon"></i>
     </div>
-    <p
+    <textarea
       almEditable
+      textAreaResize
       #editorInput
       *ngIf="viewType === 'markdown'"
       [editable]="true"
       class="editor-box editor-markdown"
       (keyup)="editorKeyUp($event)"
-      [innerText]="rawText"
-    ></p>
+      [value]="rawText"
+    ></textarea>
     <div
       #editorBox
       #previewArea
