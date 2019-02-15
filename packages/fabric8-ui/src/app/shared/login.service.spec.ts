@@ -6,9 +6,9 @@ import { Broadcaster, Notifications } from 'ngx-base';
 import { AUTH_API_URL, AuthenticationService, UserService } from 'ngx-login-client';
 import { never as observableNever, of } from 'rxjs';
 import { createMock } from 'testing/mock';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { LoginService } from './login.service';
 import { WindowService } from './window.service';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 describe('LoginService', () => {
   beforeEach(() => {

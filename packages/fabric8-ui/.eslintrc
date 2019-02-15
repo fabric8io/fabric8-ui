@@ -4,6 +4,7 @@
     "consistent-return": "off",
     "dot-notation": "off",
     "eqeqeq": "off",
+    "global-require": "off",
     "no-bitwise": "off",
     "no-console": "off",
     "no-return-assign": "off",

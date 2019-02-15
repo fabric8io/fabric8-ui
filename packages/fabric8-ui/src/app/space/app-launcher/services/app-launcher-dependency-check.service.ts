@@ -2,7 +2,6 @@ import { Injectable, Injector } from '@angular/core';
 import { Context } from 'ngx-fabric8-wit';
 import { DependencyCheck, DependencyCheckService } from 'ngx-launcher';
 import { Observable, of as observableOf } from 'rxjs';
-import { of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ContextService } from '../../../shared/context.service';
 import { PipelinesService } from '../../../shared/runtime-console/pipelines.service';
