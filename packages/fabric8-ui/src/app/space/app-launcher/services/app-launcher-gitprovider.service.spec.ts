@@ -66,10 +66,6 @@ describe('Service: AppLauncherGitproviderService', () => {
     expect(req1.request.method).toBe('GET');
     expect(req1.request.headers.get('Authorization')).toEqual('Bearer mock-token');
     req1.flush(user);
-    const req2: TestRequest = controller.expectOne('http://example.com/services/git/organizations');
-    expect(req2.request.method).toBe('GET');
-    expect(req2.request.headers.get('Authorization')).toEqual('Bearer mock-token');
-    req2.flush(orgs);
   }));
 
   it('should get user orgs', (done: DoneFn) => {
