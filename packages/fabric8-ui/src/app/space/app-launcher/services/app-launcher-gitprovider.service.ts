@@ -3,7 +3,7 @@ import { Injectable, Inject } from '@angular/core';
 import { GitHubDetails, GitProviderService, HelperService, BuildTool } from 'ngx-launcher';
 import { AuthenticationService } from 'ngx-login-client';
 import { EMPTY, Observable, of, throwError } from 'rxjs';
-import { catchError, map, mergeMap, tap } from 'rxjs/operators';
+import { catchError, map, mergeMap, tap, retry } from 'rxjs/operators';
 
 import { cloneDeep } from 'lodash';
 import { ProviderService } from '../../../shared/account/provider.service';
@@ -60,7 +60,10 @@ export class AppLauncherGitproviderService implements GitProviderService {
     const url = `${this.END_POINT + this.API_BASE}user`;
     return this.http
       .get(url, { headers: this.headers })
-      .pipe(catchError((error: HttpErrorResponse) => throwError(error)));
+      .pipe(
+        retry(3),
+        catchError((error: HttpErrorResponse) => throwError(error)),
+      );
   }
 
   /**
