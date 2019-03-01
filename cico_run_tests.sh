@@ -73,4 +73,25 @@ echo 'CICO: unit tests OK'
 
 ## All ok, build prod version
 docker exec fabric8-ui-builder npm run build --prefix ${APP_DIR}
-echo "Build Complete: $(date)"
+# docker exec -u root "${BUILDER_CONT}" cp -r ${HOME_DIR}/${APP_DIR}/build /
+echo 'CICO: build OK'
+
+## Deploy
+
+TAG="PR"$(echo $GIT_COMMIT | cut -c1-${DEVSHIFT_TAG_LEN})
+DEPLOY_CONT="fabric8-ui-deploy"
+
+
+docker build -t "${DEPLOY_CONT}" -f "${DOCKERFILE_DEPLOY}" . && \
+docker tag "${DEPLOY_CONT}" "${REGISTRY_URL}:$TAG" && \
+docker push "${REGISTRY_URL}:$TAG" && \
+docker tag "${DEPLOY_CONT}" "${REGISTRY_URL}:latest" && \
+docker push "${REGISTRY_URL}:latest"
+
+if [ $? -eq 0 ]; then
+  echo 'CICO: image pushed, npmjs published, ready to update deployed app'
+  exit 0
+else
+  echo 'CICO: Image push to registry failed'
+  exit 2
+fi
