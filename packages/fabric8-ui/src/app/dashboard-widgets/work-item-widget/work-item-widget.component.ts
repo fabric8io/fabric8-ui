@@ -49,7 +49,7 @@ export class WorkItemWidgetComponent implements OnInit {
   chartConfig: WorkItemBarchartConfig = {
     chartId: uniqueId('work-item-chart'),
     size: {
-      height: 275,
+      height: 200,
       width: 130,
     },
   };

@@ -1,0 +1,96 @@
+<f8-feature-toggle featureName="Overview.SpaceSettingCard" [userLevel]="user"></f8-feature-toggle>
+<ng-template #user>
+  <div id="spacehome-workitems-card" class="space-settings-widget card-pf f8-small-card">
+    <div class="card-pf-heading f8-card-heading"><h2 class="card-pf-title">Space settings</h2></div>
+    <div class="card-pf-body f8-small-card-body">
+      <div class="">
+        <p>{{ UserEmail }} ({{ UserName }})</p>
+        <ul class="f8-space-settings-data-links">
+          <li>
+            <span class="pficon pficon-info pficon-users fa-sm"> </span>
+            {{ collaboratorCount }} Collaborators |
+            <a class="add-collaborators-link" (click)="launchAddCollaborators()">
+              <span class="pficon pficon-add-circle-o fa-lg"></span> Add Collaborators
+            </a>
+          </li>
+          <li></li>
+          <li><span class="fa fa-life-saver fa-sm"></span> {{ areaCount }} Areas</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card-pf-footer space-description-footer">
+      <div class=" f8-space-masthead-description">
+        <!-- There must be no spaces here, otherwise we end up with random whitespace in the editable-->
+        <div *ngIf="userOwnsSpace; else userDoesNotOwnSpaceDescription" class="form-group">
+          <div class="row form-group" *ngIf="isEditing && isEditable()">
+            <div class="col-md-12 col-sm-12">
+              <textarea
+                row="1"
+                placeholder="Description goes here"
+                class="space-description form-control"
+                *ngIf="isEditing && isEditable()"
+                (keyup)="onChangeDescription(spaceDescription.value)"
+                (keyup.enter)="onUpdateDescription(spaceDescription.value)"
+                (keydown.enter)="preventDef($event)"
+                #spaceDescription
+                >{{ space?.attributes.description }}</textarea
+              >
+              <div class="f8-space-masthead-description-edit-buttons" *ngIf="isEditing">
+                <button
+                  id="_btn_cancel_description"
+                  class="pull-right btn btn-default edit-space-description-btn"
+                  (click)="stopEditingDescription()"
+                >
+                  Cancel
+                </button>
+                <!--Save icon-->
+                <button
+                  id="workItemTitle_btn_save_description"
+                  class="pull-right btn btn-primary edit-space-description-btn "
+                  [disabled]="disableSaveButton"
+                  (click)="saveDescription()"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+          <div
+            *ngIf="!isEditing || !isEditable()"
+            (click)="startEditingDescription()"
+            class="f8-space-masthead-description-body edit-space-description-pencil truncate-multiline"
+          >
+            <span *ngIf="SpaceDescription.length; else enterDescription">
+              {{ SpaceDescription | truncate: 70 }}
+            </span>
+            <ng-template #enterDescription>
+              <span class="description-help-text">Enter a description</span>
+            </ng-template>
+          </div>
+        </div>
+        <ng-template #userDoesNotOwnSpaceDescription>
+          <p class="truncate-multiline">
+            <span *ngIf="SpaceDescription.length; else noDescription">
+              {{ SpaceDescription | truncate: 75 }}
+            </span>
+            <ng-template #noDescription>
+              <span class="description-help-text">No description available</span>
+            </ng-template>
+          </p>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<div class="modal fade" bsModal #modalAdd="bs-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <add-collaborators-dialog
+        #addCollabDialog
+        [host]="modalAdd"
+        [spaceId]="space.id"
+        (onAdded)="refreshCollaboratorCount(); addCollaboratorsToParent($event)"
+      ></add-collaborators-dialog>
+    </div>
+  </div>
+</div>

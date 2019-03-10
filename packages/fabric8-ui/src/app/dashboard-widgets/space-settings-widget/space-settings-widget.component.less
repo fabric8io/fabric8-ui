@@ -1,0 +1,60 @@
+@import (reference) '../../../assets/stylesheets/shared/osio.less';
+
+.f8-small-card {
+  &-body {
+    min-height: 130px;
+  }
+  .card-pf-footer.space-description-footer {
+    background: @color-pf-white;
+    padding: 0 20px;
+  }
+}
+
+.description-help-text {
+  font-style: italic;
+  color: grey;
+}
+
+.f8-space-settings {
+  &-data-links {
+    margin-top: 10px;
+    > li {
+      margin-top: 10px;
+    }
+  }
+}
+
+.edit-space-description {
+  &-widget {
+    display: flex;
+    align-items: center;
+    height: 130px;
+    color: @color-pf-black-200;
+    .space-description {
+      position: relative;
+      top: 10px;
+      height: 70px;
+      margin: 5px 0;
+      resize: none;
+      line-height: 1.5;
+    }
+  }
+  &-btn {
+    font-size: 12px !important;
+  }
+  &-pencil {
+    padding-top: 8px;
+    line-height: 1.5;
+    &:hover {
+      &:after {
+        position: absolute;
+        padding-right: 10px;
+        padding-left: 10px;
+        background: @color-pf-white;
+        font-family: PatternFlyIcons-webfont;
+        content: '\e60a';
+        color: @color-pf-black-900;
+      }
+    }
+  }
+}

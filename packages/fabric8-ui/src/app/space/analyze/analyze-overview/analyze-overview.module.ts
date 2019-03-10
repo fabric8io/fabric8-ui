@@ -11,6 +11,7 @@ import { EditSpaceDescriptionWidgetOldModule } from '../../../dashboard-widgets/
 import { EditSpaceDescriptionWidgetModule } from '../../../dashboard-widgets/edit-space-description-widget/edit-space-description-widget.module';
 import { PipelinesWidgetModule } from '../../../dashboard-widgets/pipelines-widget/pipelines-widget.module';
 import { WorkItemWidgetModule } from '../../../dashboard-widgets/work-item-widget/work-item-widget.module';
+import { SpaceSettingsWidgetModule } from '../../../dashboard-widgets/space-settings-widget/space-settings-widget.module';
 import { AddCollaboratorsDialogModule } from '../../settings/collaborators/add-collaborators-dialog/add-collaborators-dialog.module';
 import { AnalyzeOverviewRoutingModule } from './analyze-overview-routing.module';
 import { AnalyzeOverviewComponent } from './analyze-overview.component';
@@ -31,6 +32,7 @@ import { AnalyzeOverviewComponent } from './analyze-overview.component';
     AddCollaboratorsDialogModule,
     ModalModule.forRoot(),
     WorkItemWidgetModule,
+    SpaceSettingsWidgetModule,
   ],
   declarations: [AnalyzeOverviewComponent],
 })

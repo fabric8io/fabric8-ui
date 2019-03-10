@@ -149,12 +149,15 @@ describe('AnalyzeOverviewComponent', () => {
     } as Context);
 
     testContext.detectChanges();
-
-    expect(
-      testContext.fixture.debugElement.query(
-        By.css('#user-level-analyze-overview-dashboard-create-space-button'),
-      ),
-    ).not.toBeNull();
+    const oldNavigation = testContext.fixture.debugElement.query(By.css('#old-navigation'));
+    const applicationButton = testContext.fixture.debugElement.query(
+      By.css('#user-level-analyze-overview-dashboard-create-space-button'),
+    );
+    if (oldNavigation) {
+      expect(applicationButton).not.toBeNull();
+    } else {
+      expect(applicationButton).toBeNull();
+    }
   });
 
   it('should hide the Create an Application button if the user does not own the space', () => {
